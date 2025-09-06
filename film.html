@@ -347,7 +347,6 @@ body.loaded {
 
 /* For skjermer under 768px (mobil og små nettbrett) */
 @media (max-width: 768px) {
-  /* Navigasjon: flyttes til bunn */
   .vertical-nav {
     flex-direction: row;
     width: 100%;
@@ -367,10 +366,14 @@ body.loaded {
     display: none;
   }
 
+  /* Hero fyller hele skjermen */
   .hero {
     margin-left: 0;
     margin-top: 0;
-    min-height: 100vh; /* Viktig: full høyde på mobil */
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start; /* bildet øverst */
   }
 
   .content-wrapper {
@@ -381,15 +384,17 @@ body.loaded {
     padding: 20px;
     display: flex;
     flex-direction: column;
-    align-items: center;
+    justify-content: flex-end; /* skyver innholdet ned */
+    height: 100%; /* fyller hero */
+    width: 100%;
+    z-index: 2;
   }
 
-  /* Logo rett over knappene */
+  /* Logo og knapper nederst */
   .logo-container {
-    order: -1;
-    margin: 0 auto 20px auto;
+    margin: 0 auto 10px auto;
     max-width: 70%;
-    height: auto;
+    order: 0;
   }
 
   .film-logo {
@@ -397,28 +402,22 @@ body.loaded {
     height: auto;
   }
 
-  .left-content {
-    margin-top: 20px;
-    min-height: auto;
-    width: 100%;
-  }
-
   .text-button-container {
     flex-direction: column;
-    gap: 20px;
-    padding: 10px;
+    gap: 15px;
     align-items: center;
     width: 100%;
+    order: 1;
   }
 
   .buttons-column {
-    order: 0;
-    align-items: center;
     width: 100%;
+    align-items: center;
   }
 
-  .watch-button {
-    width: 100%;
+  .watch-button,
+  #addToListBtn {
+    width: 80%;
     font-size: 16px;
     padding: 12px;
   }
@@ -426,10 +425,13 @@ body.loaded {
   /* Beskrivelse og metadata under knappene */
   .text-container,
   .cast-info {
-    order: 1;
+    order: 2;
     text-align: center;
     font-size: 14px;
     margin-top: 12px;
+    width: 90%;
+    margin-left: auto;
+    margin-right: auto;
   }
 
   .metadata {
@@ -458,28 +460,6 @@ body.loaded {
     height: 180px;
   }
 }
-
-/* Ekstra små skjermer (under 480px) */
-@media (max-width: 480px) {
-  .watch-button {
-    font-size: 14px;
-    padding: 10px;
-  }
-
-  .film-logo {
-    max-width: 150px;
-  }
-
-  .description {
-    font-size: 14px;
-  }
-
-  .gallery img {
-    width: 100px;
-    height: 150px;
-  }
-}
-
 
   </style>
 </head>
