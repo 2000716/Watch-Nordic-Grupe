@@ -32,6 +32,7 @@
     .info-section {
       max-width: 400px;
       flex: 1;
+      order: 1;
     }
 
     .info-section h4 {
@@ -89,14 +90,14 @@
     }
 
     .profil-section {
-  flex: 0 0 auto;
-  display: flex;
-  justify-content: center;
-  align-items: flex-start; /* <– Dette flytter bildet opp */
-  margin-left: 30px;
-  margin-top: 10px; /* <– Juster høyden slik du ønsker */
-}
-
+      flex: 0 0 auto;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      margin-left: 30px;
+      margin-top: 10px;
+      order: 2;
+    }
 
     .profilbilde-wrapper {
       position: relative;
@@ -166,6 +167,26 @@
 
     .modal-content .ja { background-color: red; color: white; }
     .modal-content .nei { background-color: gray; color: white; }
+
+    /* Mobilvisning */
+    @media (max-width: 768px) {
+      .konto-container {
+        flex-direction: column;
+        align-items: center;
+        padding: 20px;
+      }
+
+      .profil-section {
+        order: -1; /* Flytter profilbildet øverst */
+        margin: 0 0 20px 0;
+      }
+
+      .info-section {
+        order: 2;
+        width: 100%;
+        max-width: 400px;
+      }
+    }
   </style>
 </head>
 <body>
@@ -173,6 +194,15 @@
   <h1>Administrer profilen</h1>
 
   <div class="konto-container">
+    <div class="profil-section">
+      <div class="profilbilde-wrapper">
+        <div class="profilbilde-container" onclick="velgProfil()">
+          <img id="profilbilde" src="https://via.placeholder.com/160" alt="Profilbilde" />
+        </div>
+        <div class="edit-icon-rund" onclick="velgProfil()" title="Endre profilbilde">✎</div>
+      </div>
+    </div>
+
     <div class="info-section">
       <h4>Navn</h4>
       <div class="info-box">
@@ -194,15 +224,6 @@
       <a href="Hovedside.html" class="knapp">Ferdig</a>
       <button class="knapp" onclick="bekreftSlettBruker()">Slett bruker</button>
       <button class="knapp" onclick="loggUt()">Logg ut</button>
-    </div>
-
-    <div class="profil-section">
-      <div class="profilbilde-wrapper">
-        <div class="profilbilde-container" onclick="velgProfil()">
-          <img id="profilbilde" src="https://via.placeholder.com/160" alt="Profilbilde" />
-        </div>
-        <div class="edit-icon-rund" onclick="velgProfil()" title="Endre profilbilde">✎</div>
-      </div>
     </div>
   </div>
 
