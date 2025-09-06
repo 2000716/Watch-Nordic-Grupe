@@ -2,6 +2,7 @@
 <html lang="no">
 <head>
   <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Viktig for mobil -->
   <title>Velg Profilbilde – Watch Nordic</title>
   <style>
     body {
@@ -15,60 +16,89 @@
 
     h1 {
       margin-bottom: 30px;
+      font-size: 2rem;
     }
 
     .rad-container {
       margin: 0 auto 40px;
-      max-width: 700px;
+      max-width: 900px;
     }
 
     .rad-tittel {
-      font-size: 18px;
-      margin-bottom: 10px;
+      font-size: 1.2rem;
+      margin-bottom: 15px;
       font-weight: bold;
     }
 
     .bilder-rad {
       display: grid;
-      grid-template-columns: repeat(5, 1fr);
+      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
       gap: 20px;
       justify-items: center;
     }
 
     .profilbilde-valg {
-      width: 120px;
-      height: 120px;
+      width: 140px;
+      height: 140px;
       border-radius: 50%;
+      object-fit: cover;
       overflow: hidden;
       border: 3px solid transparent;
-      transition: border 0.3s ease, box-shadow 0.3s ease;
+      transition: border 0.3s ease, box-shadow 0.3s ease, transform 0.2s ease;
       cursor: pointer;
     }
 
     .profilbilde-valg:hover {
       border-color: white;
+      transform: scale(1.05);
     }
 
     .profilbilde-valg.selected {
       border-color: white;
-      box-shadow: 0 0 10px white;
+      box-shadow: 0 0 12px white;
     }
 
     .tilbake-knapp {
       margin-top: 40px;
       background-color: white;
       color: #0d1117;
-      padding: 12px 24px;
-      font-size: 16px;
+      padding: 14px 28px;
+      font-size: 1rem;
+      font-weight: bold;
       border: none;
-      border-radius: 8px;
+      border-radius: 10px;
       cursor: pointer;
       text-decoration: none;
-      transition: background-color 0.3s ease;
+      transition: background-color 0.3s ease, transform 0.2s ease;
     }
 
     .tilbake-knapp:hover {
       background-color: #e1e1e1;
+      transform: scale(1.05);
+    }
+
+    /* Responsiv tilpasning */
+    @media (max-width: 768px) {
+      h1 {
+        font-size: 1.6rem;
+      }
+      .profilbilde-valg {
+        width: 110px;
+        height: 110px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      h1 {
+        font-size: 1.4rem;
+      }
+      .profilbilde-valg {
+        width: 90px;
+        height: 90px;
+      }
+      .bilder-rad {
+        gap: 15px;
+      }
     }
   </style>
 </head>
@@ -102,13 +132,12 @@
           'https://static.wixstatic.com/media/fd2fb2_14eb770398864dcb835a9f40727ea8e0~mv2.png'
         ]
       },
-       {
+      {
         tittel: "Corpse bride",
         bilder: [
           'https://static.wixstatic.com/media/fd2fb2_a59115fdde5f427a8f4ef746c6d2a110~mv2.jpg',
           'https://static.wixstatic.com/media/fd2fb2_b5e07231a79b4b9bb6f12790c3160216~mv2.jpg',
-          'https://static.wixstatic.com/media/fd2fb2_be285b95911e4afab861aaba9bcb33ef~mv2.jpg',
-
+          'https://static.wixstatic.com/media/fd2fb2_be285b95911e4afab861aaba9bcb33ef~mv2.jpg'
         ]
       }
     ];
@@ -165,4 +194,5 @@
 
 </body>
 </html>
+
 
