@@ -5,198 +5,500 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Filmvisning</title>
 
-  <!-- Favicon -->
+   <!-- Favicon -->
   <link rel="icon" type="image/png" href="https://static.wixstatic.com/media/fd2fb2_39376e4ee55b460ab7a3ebbfcf35fef7~mv2.png" />
 
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { background: #000; font-family: Arial, sans-serif; overflow-x: hidden; }
+* { margin: 0; padding: 0; box-sizing: border-box; }
+* { margin: 0; padding: 0; box-sizing: border-box; }
+* { margin: 0; padding: 0; box-sizing: border-box; }
+* { margin: 0; padding: 0; box-sizing: border-box; }
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { background: #000; font-family: Arial, sans-serif; overflow: hidden; }
 
-    /* ===== Container ===== */
-    .video-container {
-      position: relative;
-      width: 100vw;
-      max-width: 100%;
-      background: black;
-    }
+.container { position: relative; width: 100vw; height: 100vh; overflow: hidden; }
 
-    /* Video */
-    #videoPlayer {
-      width: 100%;
-      height: auto;
-      object-fit: cover;
-    }
+video {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 100%;       /* Alltid fyll bredden */
+  height: auto;      /* Skaler høyden etter bredde */
+  transform: translateY(-50%); /* Sentrer vertikalt */
+  background: #000;  /* Gir sorte striper oppe/nede */
+  z-index: 1;
+}
 
-    /* Movie title */
-    .movie-title {
-      position: absolute;
-      top: 20px;
-      left: 20px;
-      color: white;
-      font-size: 28px;
-      font-weight: bold;
-      text-shadow: 2px 2px 5px rgba(0,0,0,0.8);
-      z-index: 10;
-    }
+/* Undertekster */
+video::cue {
+  font-size: 28px !important;
+  font-weight: 600;
+  color: #FFFFFF;
+  text-shadow:
+    1px 1px 2px rgba(0,0,0,0.8),
+   -1px -1px 2px rgba(0,0,0,0.8),
+    1px -1px 2px rgba(0,0,0,0.8),
+   -1px 1px 2px rgba(0,0,0,0.8);
+  padding: 0;
+  background: none;
+  border-radius: 0;
+  line-height: 1.3;
+  white-space: pre-wrap;
+  position: relative;
+  bottom: 8%;  
+  transition: bottom 0.5s ease;
+}
 
-    /* Subtitles overlay */
-    .subtitle-overlay {
-      position: absolute;
-      bottom: 8%;
-      width: 100%;
-      text-align: center;
-      color: white;
-      font-size: 28px;
-      text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
-      z-index: 10;
-    }
+/* UI container */
+.ui {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  pointer-events: none;
+  opacity: 1;
+  transition: opacity 0.5s ease;
+  z-index: 10;
+}
 
-    /* Progress */
-    .progress-container {
-      width: 100%;
-      margin: 5px 0;
-      padding: 0 10px;
-    }
-    .progress {
-      width: 100%;
-      height: 6px;
-      background: #333;
-      border-radius: 5px;
-      position: relative;
-      cursor: pointer;
-    }
-    .progress-filled {
-      width: 0%;
-      height: 100%;
-      background: #0fddcb;
-      border-radius: 5px;
-    }
-    .thumb {
-      position: absolute;
-      top: 50%;
-      width: 12px;
-      height: 12px;
-      background: #fff;
-      border-radius: 50%;
-      transform: translate(-50%, -50%);
-      cursor: pointer;
-    }
+.ui.hidden { opacity: 0; pointer-events: none; }
 
-    /* Time display */
-    .time-display {
-      text-align: right;
-      font-size: 14px;
-      color: white;
-      margin-top: 4px;
-    }
+.ui:not(.hidden) .top-bar,
+.ui:not(.hidden) .controls,
+.ui:not(.hidden) .progress-container,
+.ui:not(.hidden) .caption-menu {
+  pointer-events: auto;
+}
 
-    /* Controls */
-    .controls {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 10px;
-      background: rgba(0,0,0,0.7);
-      flex-wrap: wrap;
-    }
-    .left-controls, .center-controls, .right-controls {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
+/* Øverste bar med fade */
+.top-bar {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%;
+  padding: 10px 20px;
+  background: linear-gradient(to bottom, rgb(0, 0, 0), rgba(0, 0, 0, 0));
+  display: flex;
+  align-items: center;
+}
 
-    /* Buttons */
-    .btn {
-      background: none;
-      border: none;
-      color: white;
-      font-size: 18px;
-      cursor: pointer;
-    }
-    .like-btn {
-      font-size: 14px;
-      padding: 6px 12px;
-      border-radius: 20px;
-      background: rgba(255,255,255,0.1);
-    }
+/* Tilbakeknapp */
+.back-button { background: none; border: none; cursor: pointer; }
+.back-button img { width: 50px; height: 50px; }
 
-    /* ===== Mobil horisontal ===== */
-    @media (max-width: 768px) {
-      .video-container {
-        height: 56.25vw; /* 16:9 ratio */
-      }
+/* Kontroller nederst */
+.controls {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  display: flex;
+  justify-content: space-between; /* venstre - midten - høyre */
+  align-items: center;
+  padding: 15px 20px;
+  background: linear-gradient(to top, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0) 90%);
+}
 
-      .movie-title {
-        font-size: 18px;
-        top: 10px;
-        left: 10px;
-      }
+.left-controls,
+.right-controls {
+  display: flex;
+  gap: 25px; /* Økt mellomrom mellom lyd, undertekst og fullskjerm */
+  align-items: center;
+}
 
-      .subtitle-overlay {
-        font-size: 16px;
-        bottom: 12%;
-      }
+.center-controls {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%); /* sørger for at play/pause er helt i midten av skjermen */
+  display: flex;
+  align-items: center;
+  gap: 30px; /* mellomrom mellom rewind - play - forward */
+}
 
-      .time-display {
-        font-size: 12px;
-      }
+.btn { background: none; border: none; cursor: pointer; }
+.btn img { width: 32px; }
 
-      .btn {
-        font-size: 16px;
-      }
+/* Progress bar */
+.progress-container {
+  position: absolute;
+  bottom: 75px;
+  left: 0;
+  width: 100%;
+  display: flex;
+  padding: 0 20px;
+  z-index: 12;
+}
 
-      .like-btn {
-        font-size: 12px;
-        padding: 5px 10px;
-      }
+.progress {
+  flex: 1;
+  height: 6px;
+  background: #333;
+  border-radius: 5px;
+  position: relative;
+  cursor: pointer;
+}
 
-      .controls {
-        flex-direction: row;
-        justify-content: space-around;
-      }
-    }
+.progress:hover { height: 10px; }
+
+.progress-filled {
+  width: 0%;
+  height: 100%;
+  background: #0fddcb;
+  border-radius: 5px;
+}
+
+.thumb {
+  position: absolute;
+  top: 50%;
+  width: 12px;
+  height: 12px;
+  background: #fff;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  cursor: pointer;
+  z-index: 13;
+}
+
+.time-display {
+  position: absolute;
+  bottom: 87px;
+  right: 20px;
+  color: #fff;
+  font-size: 14px;
+  z-index: 12;
+}
+
+/* Undertekst- og lydmeny */
+.caption-menu {
+  position: absolute;
+  bottom: 120px;
+  right: 20px; /* flyttet til høyre */
+  background: rgba(9, 27, 30, 0.95);
+  border-radius: 10px;
+  padding: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6);
+  display: none;
+  min-width: 180px;
+  z-index: 10000;
+}
+
+
+.caption-menu strong {
+  display: block;
+  margin: 8px 0 5px;
+  font-size: 14px;
+  font-weight: bold;
+  color: #fff;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  padding-bottom: 4px;
+}
+
+.caption-menu button {
+  display: block;
+  width: 100%;
+  padding: 8px 12px;
+  margin: 2px 0;
+  background-color: transparent;
+  color: #ddd;
+  border: none;
+  text-align: left;
+  font-size: 14px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.caption-menu button:hover,
+.caption-menu button.active {
+  background-color: #0fddcb;
+  color: #000;
+  font-weight: bold;
+}
+
+.watermark {
+  position: absolute;  /* ikke fixed, så følger med inn i fullscreen */
+  top: 20px;
+  right: 20px;
+  width: 60px;
+  z-index: 1000000; /* høyere enn UI og captions */
+  pointer-events: none; /* gjør at den ikke kan klikkes */
+}
+
+
+/* Filmtittel */
+.movie-title {
+  position: absolute;
+  bottom: 100px;
+  left: 30px;
+  color: white;
+  font-size: 28px;
+  font-weight: bold;
+  text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.8);
+  z-index: 12;
+}
+
+/* Loading spinner */
+.loading-spinner {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 60px;
+  height: 60px;
+  margin: -30px 0 0 -30px;
+  border: 6px solid #333;
+  border-top: 6px solid #00FFCC;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  z-index: 10000;
+  display: none;
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* Preview-boks */
+.preview-box {
+  position: absolute;
+  bottom: 120px;
+  width: 240px;
+  height: 135px;
+  background: #000;
+  border: 2px solid #0fddcb;
+  border-radius: 10px;
+  overflow: hidden;
+  display: none;
+  z-index: 20;
+  pointer-events: none;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.6);
+  text-align: center;
+}
+
+.preview-box img { width: 100%; height: auto; display: block; }
+
+.preview-time {
+  color: #fff;
+  font-size: 14px;
+  font-weight: bold;
+  padding: 4px 0;
+  background: rgba(0,0,0,0.6);
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+}
+
+/* Resume overlay */
+.resume-overlay {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(0,0,0,0.7);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 999999;
+}
+
+.resume-box {
+  background: none;
+  padding: 30px;
+  border-radius: 12px;
+  text-align: center;
+  color: white;
+}
+
+.resume-box p { font-size: 18px; margin-bottom: 20px; }
+
+.resume-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+}
+
+.resume-buttons button {
+  padding: 10px 20px;
+  font-size: 16px;
+  font-weight: bold;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+/* Mini-player modus */
+.miniplayer {
+  position: fixed !important;
+  width: 320px !important;
+  height: 180px !important;
+  bottom: 20px;
+  right: 20px;
+  z-index: 99999 !important;
+  cursor: move;
+  border: 2px solid #0fddcb;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.7);
+  background: black;
+}
+
+#continueBtn { background: #0fddcb; color: #000; }
+#continueBtn:hover { background: #0bbba5; }
+
+#restartBtn { background: #444; color: #fff; }
+#restartBtn:hover { background: #666; }
+
+.like-btn {
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 18px;       /* Litt større tekst */
+  font-weight: bold;     /* Fet skrift */
+  cursor: pointer;
+  padding: 10px 20px;
+  border-radius: 50px;   /* Gjør knappen "pill-formet" */
+  transition: all 0.3s ease;
+}
+
+.like-btn:hover {
+  background: rgba(255, 255, 255, 0.15); /* Lys rund bakgrunn */
+  color: #0fddcb;  /* Endre tekstfargen ved hover */
+}
+
+.subtitle-overlay {
+  position: absolute;
+  bottom: 5%;
+  width: 100%;
+  text-align: center;
+  pointer-events: none;
+  z-index: 5;
+  font-size: 28px;
+  font-weight: 600;
+  color: #FFFFFF;
+  text-shadow:
+    1px 1px 2px rgba(0,0,0,0.8),
+   -1px -1px 2px rgba(0,0,0,0.8),
+    1px -1px 2px rgba(0,0,0,0.8),
+   -1px 1px 2px rgba(0,0,0,0.8);
+  line-height: 1.3;
+  white-space: pre-wrap;
+  transition: bottom 0.5s ease; /* smooth animasjon */
+}
+
+.subtitle-overlay.subtitle-up {
+  bottom: 15%; /* flytter opp når kontroller vises */
+}
+
+/* UI container (kontroller) */
+#ui {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  z-index: 10; /* Høyere enn underteksten */
+}
+
+
   </style>
 </head>
 <body>
+  <div class="container" id="container">
+    <video id="video" preload="metadata">
+      <source src="" type="video/mp4">
+      <track label="Norsk" kind="subtitles" srclang="no" src="" default>
+      Din nettleser støtter ikke videoavspilling.
+    </video>
+    <div class="subtitle-overlay" id="subtitleOverlay"></div>
 
-<div class="video-container">
-  <video id="videoPlayer" preload="metadata" playsinline webkit-playsinline>
-    <source src="FILM_URL_HER.mp4" type="video/mp4">
-    <track label="Norsk" kind="subtitles" srclang="no" src="SUBTITLE_URL_HER.vtt" default>
-    Din nettleser støtter ikke videoavspilling.
-  </video>
 
-  <div class="movie-title" id="movieTitle">FILM TITTEL</div>
-  <div class="subtitle-overlay" id="subtitleOverlay"></div>
-
-  <!-- Progress og tid -->
-  <div class="progress-container">
-    <div class="progress" id="progress">
-      <div class="progress-filled" id="progressFilled"></div>
-      <div class="thumb" id="thumb"></div>
-    </div>
-    <div class="time-display" id="timeDisplay">00:00 / 00:00</div>
-  </div>
-
-  <!-- Kontroller -->
-  <div class="controls">
-    <div class="left-controls">
-      <button class="btn like-btn">Kanskje du også vil like?</button>
-    </div>
-
-    <div class="center-controls">
-      <button class="btn" id="rewindBtn">⏪</button>
-      <button class="btn" id="playPauseBtn">▶️</button>
-      <button class="btn" id="forwardBtn">⏩</button>
-    </div>
-
-    <div class="right-controls">
-      <button class="btn" id="muteBtn">🔇</button>
-      <button class="btn" id="captionsBtn">💬</button>
-      <button class="btn" id="fullscreenBtn">⛶</button>
+    <div id="resumeOverlay" class="resume-overlay">
+  <div class="resume-box">
+    <p>Vil du fortsette der du slapp?</p>
+    <div class="resume-buttons">
+      <button id="continueBtn">Fortsett</button>
+      <button id="restartBtn">Start på nytt</button>
     </div>
   </div>
 </div>
+
+    <div class="loading-spinner" id="loadingSpinner"></div>
+
+    <div class="preview-box" id="previewBox">
+  <img id="previewImage" src="" alt="Preview">
+</div>
+
+    <div class="ui" id="ui">
+      <div class="top-bar">
+        <a href="#" class="back-button" id="backButton">
+          <img src="https://static.wixstatic.com/media/fd2fb2_59ea5a2a1ff34303a71a369537dd62c3~mv2.png" alt="Back">
+        </a>
+      </div>
+
+      <div class="movie-title">The Curse of the Were-Rabbit</div>
+
+      <div class="progress-container">
+        <div class="progress" id="progress">
+          <div class="progress-filled" id="progressFilled"></div>
+          <div class="thumb" id="thumb"></div>
+        </div>
+      </div>
+
+      <!-- Preview-boksen med bilde + teller -->
+      <div class="preview-box" id="previewBox">
+       <img id="previewImage" src="" alt="Preview">
+        <div class="preview-time" id="previewTime">00:00</div>
+       </div>
+
+      
+      <span class="time-display" id="timeDisplay">00:00</span>
+      
+<div class="controls">
+  <!-- Venstre (tom her) -->
+   <div class="left-controls">
+  <button class="btn like-btn">Kanskje du også vil like?</button>
+</div>
+
+  <div class="left-controls"></div>
+
+
+  <!-- Midten: Rewind - Play/Pause - Forward -->
+  <div class="center-controls">
+    <button class="btn" id="rewindBtn">
+      <img src="https://static.wixstatic.com/media/fd2fb2_a6f7229c8e994a75a12d5849e71156a9~mv2.png" alt="Rewind">
+    </button>
+    <button class="btn" id="playPauseBtn">
+      <img id="playIcon" src="https://static.wixstatic.com/media/fd2fb2_f6f25f56b00e49eea8dc4f811b50bb5c~mv2.png" alt="Play/Pause">
+    </button>
+    <button class="btn" id="forwardBtn">
+      <img src="https://static.wixstatic.com/media/fd2fb2_08262621a72944c498e8124d461ce786~mv2.png" alt="Forward">
+    </button>
+  </div>
+
+  <!-- Høyre: Mute - Captions - Fullscreen -->
+  <div class="right-controls">
+    <button class="btn" id="muteBtn">
+      <img id="muteIcon" src="https://static.wixstatic.com/media/fd2fb2_5c4fab8430e94d2381fc487b1654191d~mv2.png" alt="Mute">
+    </button>
+    <button class="btn" id="captionsBtn">
+      <img src="https://static.wixstatic.com/media/fd2fb2_25072ee44a734507912f0b65f9fc9b0e~mv2.png" alt="Captions">
+    </button>
+    <button class="btn" id="fullscreenBtn" title="Fullskjerm">
+      <img src="https://static.wixstatic.com/media/fd2fb2_3fa37682b3b34c04a2cd08ffcde2763a~mv2.png" alt="Fullscreen">
+   
+    </button>
+  </div>
+</div>
+
+
+    <div class="caption-menu" id="captionMenu">
+        <strong>Lydspråk</strong>
+        <div id="audioTracks">
+          <button data-audio="en">English</button>
+        </div>
+        <strong>Undertekster</strong>
+        <div id="subtitleTracks">
+          <button data-lang="no">Norsk</button>
+          <button data-lang="off">Av</button>
+        </div>
+      </div>
+    </div>
+
+    <img class="watermark" src="https://static.wixstatic.com/media/fd2fb2_c21ec9ad924c4357b54e65f2557872c5~mv2.png" alt="Watermark">
+  </div>
 
 <script>
 const filmer = {
