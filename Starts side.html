@@ -1,4 +1,4 @@
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="no">
 <head>
   <meta charset="UTF-8" />
@@ -7,7 +7,6 @@
   <link rel="icon" type="image/png" href="https://static.wixstatic.com/media/fd2fb2_39376e4ee55b460ab7a3ebbfcf35fef7~mv2.png" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
   <style>
-    
     * {
       box-sizing: border-box;
       margin: 0;
@@ -91,6 +90,11 @@
       position: relative;
       z-index: 2;
       max-width: 480px;
+    }
+
+    .hero-logo {
+      width: 120px;
+      margin-bottom: 20px;
     }
 
     .hero-small-text {
@@ -268,6 +272,10 @@
 <div class="hero">
   <div class="overlay"></div>
   <div class="main-content">
+    <!-- Logo over teksten -->
+    <img src="https://static.wixstatic.com/media/fd2fb2_a4b2ace62dff4605a0387f46aad8a404~mv2.png" 
+         alt="Watch Nordic logo" 
+         class="hero-logo" />
     <p class="hero-small-text">Start din prøveperiode Gratis*</p>
     <p class="tagline">Begynn å strømme med en Watch Nordic-konto og få tilgang til hundrevis av filmer og serier.</p>
     <button class="cta-button" onclick="window.location.href='Innloggings side.html'">REGISTRER DEG NÅ!</button>
