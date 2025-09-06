@@ -392,6 +392,106 @@ video::cue {
   z-index: 10; /* Høyere enn underteksten */
 }
 
+    /* ===== Mobiltilpasning ===== */
+@media (max-width: 768px) {
+  .controls {
+    padding: 10px;
+    gap: 10px;
+  }
+
+  .btn img {
+    width: 26px; /* større treffområde */
+  }
+
+  .like-btn {
+    font-size: 14px;
+    padding: 6px 12px;
+  }
+
+  .center-controls {
+    gap: 20px;
+  }
+
+  .left-controls,
+  .right-controls {
+    gap: 15px;
+  }
+
+  .progress-container {
+    bottom: 60px; /* litt høyere */
+    padding: 0 10px;
+  }
+
+  .progress {
+    height: 8px;
+  }
+
+  .time-display {
+    font-size: 12px;
+    bottom: 72px;
+    right: 10px;
+  }
+
+  .movie-title {
+    font-size: 18px;
+    bottom: 80px;
+    left: 15px;
+  }
+
+  .subtitle-overlay {
+    font-size: 18px;
+    bottom: 8%;
+  }
+
+  .watermark {
+    width: 40px;
+    top: 10px;
+    right: 10px;
+  }
+
+  .caption-menu {
+    bottom: 100px;
+    right: 10px;
+    min-width: 140px;
+    padding: 8px;
+  }
+
+  .caption-menu button {
+    font-size: 12px;
+    padding: 6px 8px;
+  }
+
+  .resume-box p {
+    font-size: 16px;
+  }
+
+  .resume-buttons button {
+    font-size: 14px;
+    padding: 8px 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  .btn img {
+    width: 22px;
+  }
+
+  .like-btn {
+    font-size: 12px;
+    padding: 5px 10px;
+  }
+
+  .subtitle-overlay {
+    font-size: 16px;
+  }
+
+  .movie-title {
+    font-size: 16px;
+    bottom: 70px;
+  }
+}
+
+
 
   </style>
 </head>
@@ -1037,4 +1137,5 @@ subtitleTracksDiv.querySelectorAll("button").forEach(btn => {
 });
 
 </script>
+
 
