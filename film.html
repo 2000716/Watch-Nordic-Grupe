@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+kan du fikse denne koden med at den blir mer mobilvennlig, jeg vil at bakgrunnsbildet skal øverst og etter at bildet vises mer fram så vil logoen være nederst på siden og knappene er nederst under logoen osv... akuratt samme oppsett som disnye plus eller HBO MAX. men skal være akuratt samme stil som er brukt.  <!DOCTYPE html>
 <html lang="no">
 <head>
   <meta charset="UTF-8" />
@@ -25,7 +25,7 @@ body.loaded {
   opacity: 1;
 }
 
-/* Navigasjon (desktop) */
+/* Navigasjon */
 .vertical-nav {
   width: 70px;
   height: 100vh;
@@ -36,6 +36,7 @@ body.loaded {
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
   z-index: 100;
   transition: transform 0.3s ease;
   padding-top: 16px;
@@ -45,12 +46,38 @@ body.loaded {
   transform: translateX(-100%);
 }
 
+.nav-icons-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.profilmeny {
+  margin-bottom: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+.profilmeny img {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #fff;
+}
+
 .nav-icon {
   color: white;
   font-size: 22px;
   padding: 16px 0;
-  width: 100%;
+  text-decoration: none;
   text-align: center;
+  width: 100%;
+  transition: color 0.3s ease;
   cursor: pointer;
   background: none;
   border: none;
@@ -61,12 +88,29 @@ body.loaded {
   color: #00FFCC;
 }
 
-.profilmeny img {
-  width: 48px;
-  height: 48px;
-  border-radius: 50%;
-  object-fit: cover;
-  border: 2px solid #fff;
+.menu-toggle {
+  position: fixed;
+  top: 50%;
+  left: 70px;
+  transform: translateY(-50%);
+  z-index: 101;
+  background-color: #091b1e;
+  border: none;
+  border-radius: 0 12px 12px 0;
+  padding: 12px 16px;
+  color: white;
+  cursor: pointer;
+  transition: left 0.3s ease;
+  width: 50px;
+  height: 120px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+}
+
+.vertical-nav.collapsed + .menu-toggle {
+  left: 0;
 }
 
 /* Hero-seksjon */
@@ -89,8 +133,10 @@ body.loaded {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  filter: brightness(0.6);
   z-index: 0;
+  transition: opacity 1s ease-in-out;
+  opacity: 1;
+  filter: brightness(0.6);
 }
 
 .overlay {
@@ -101,105 +147,190 @@ body.loaded {
   z-index: 1;
 }
 
+.bottom-fade {
+  position: absolute; 
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 200px;
+  background: linear-gradient(to top, rgba(0, 0, 0, 1), transparent);
+  z-index: 1;
+}
+
 .content-wrapper {
-  position: relative;
+  position: absolute;
+  top: 60px;
+  left: 60px;
+  right: 60px;
   display: flex;
   flex-direction: column;
-  justify-content: flex-end;
-  align-items: center;
-  height: 100%;
-  padding: 20px;
   z-index: 2;
 }
 
 .logo-container {
-  width: 240px;
-  margin-bottom: 20px;
+  width: 260px;
+  height: 100px;
+  margin-bottom: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
 }
 
 .film-logo {
   max-width: 100%;
-  height: auto;
+  max-height: 100%;
   object-fit: contain;
 }
 
-.buttons-column {
+/* Innhold venstre side */
+.left-content {
   display: flex;
   flex-direction: column;
-  gap: 12px;
-  width: 100%;
-  max-width: 300px;
-  margin-bottom: 20px;
+  align-items: flex-start;
+  margin-top: 170px;
+  min-height: 400px;
+}
+
+.text-button-container {
+  display: flex;
+  align-items: stretch;
+  gap: 40px;
+  padding: 30px;
+  border-radius: 12px;
+}
+
+.text-container {
+  flex: 2;
+  min-width: 300px;
+  text-align: left;
+  color: white;
+}
+
+.description {
+  font-size: 16px;
+  line-height: 1.6;
+  margin-bottom: 8px;
+}
+
+/* Metadata med IMDB-logo sentrert */
+.metadata {
+  margin-top: 14px;
+  color: #ddd;
+  font-size: 13px;
+  line-height: 1.4;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: center;
+}
+
+.metadata span,
+.metadata .imdb-link {
+  display: inline-flex;
+  align-items: center;
+}
+
+.metadata span:nth-child(even) {
+  color: #ddd;
+  user-select: none;
+  font-weight: bold;
+  font-size: 16px;
+}
+
+.imdb-logo {
+  width: 28px;
+  margin-left: 4px;
+  cursor: pointer;
+  filter: brightness(100%) contrast(100%);
+  transition: filter 0.3s ease;
+}
+
+.imdb-logo:hover {
+  filter: brightness(80%) contrast(120%);
+}
+
+.cast-info {
+  flex: 0 0 200px;
+  font-size: 13px;
+  color: #aaa;
+  line-height: 1.6;
+}
+
+.cast-info strong {
+  color: #fff;
 }
 
 .watch-button {
   background: #fff;
   color: #000;
-  font-size: 16px;
+  font-size: 18px;
   font-weight: bold;
-  padding: 12px;
+  padding: 10px 50px;
   border: none;
-  border-radius: 8px;
+  border-radius: 10px;
   cursor: pointer;
+  transition: transform 0.2s ease;
+  width: 280px;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
-  transition: transform 0.2s ease;
+  white-space: nowrap;
 }
 
 .watch-button:hover {
   transform: scale(1.05);
 }
 
-/* Info (desktop) */
-.text-button-container {
+.buttons-column {
   display: flex;
-  gap: 40px;
-  margin-top: 20px;
+  flex-direction: column;
+  gap: 15px;
 }
 
-.text-container {
-  flex: 1;
-  font-size: 14px;
+.icon-animate {
+  display: inline-block;
+  animation: fadePop 0.4s ease forwards;
 }
 
-.metadata {
-  margin-top: 10px;
-  font-size: 12px;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
+@keyframes fadePop {
+  0%   { opacity: 0; transform: scale(0.6); }
+  60%  { opacity: 1; transform: scale(1.2); }
+  100% { opacity: 1; transform: scale(1); }
 }
 
-.cast-info {
-  font-size: 12px;
-  color: #aaa;
-}
-
-/* Anbefalinger */
 .recommendations {
   margin-left: 70px;
-  padding: 40px 20px;
+  padding: 40px 60px 20px 60px; /* behold normal padding */
   background: black;
   transition: margin-left 0.3s ease;
+  margin-top: -80px;
 }
 
 .vertical-nav.collapsed ~ .recommendations {
   margin-left: 0;
+  padding: 40px 60px 20px 60px;
 }
 
 .recommendations h2 {
   font-size: 24px;
   margin-bottom: 18px;
+  margin-left: 40px; /* flytter kun tittelen like mye som galleriet */
 }
 
 .gallery {
   display: flex;
-  flex-wrap: nowrap;
+  flex-wrap: nowrap;          /* alt på én rad */
   gap: 16px;
-  overflow-x: auto;
-  padding-bottom: 10px;
+  justify-content: flex-start;
+  margin-left: 30px;          /* skyver til høyre */
+  overflow-x: auto;           /* scroll hvis det ikke er plass */
+  padding-bottom: 10px;       /* litt luft under */
+}
+
+.gallery::-webkit-scrollbar {
+  height: 6px;                /* liten scrollbar */
 }
 
 .gallery img {
@@ -209,91 +340,72 @@ body.loaded {
   object-fit: cover;
   cursor: pointer;
   transition: transform 0.3s;
-  flex: 0 0 auto;
+  flex: 0 0 auto;             /* behold fast bredde */
 }
 
-.gallery img:hover {
-  transform: scale(1.05);
-}
 
-/* Mobilstil */
-@media (max-width: 768px) {
-  .vertical-nav, .menu-toggle, .text-button-container, .cast-info {
-    display: none;
-  }
-
-  .hero {
-    margin-left: 0;
-    height: 100vh;
-  }
-
-  .content-wrapper {
-    justify-content: flex-end;
-    text-align: center;
-  }
-
-  .logo-container {
-    margin-bottom: 15px;
-    width: 200px;
-  }
-
-  .buttons-column {
-    width: 100%;
-  }
-
-  .recommendations {
-    margin-left: 0;
-  }
-}
   </style>
 </head>
 <body>
-  <div class="vertical-nav" id="verticalNav">
-    <div class="profilmeny">
-      <a href="konto.html"><img id="menyProfilbilde" src="https://via.placeholder.com/100" alt="Min profil" /></a>
-    </div>
-    <a href="Søk.html" class="nav-icon"><i class="fas fa-search"></i></a>
-    <a href="Hovedside.html" class="nav-icon"><i class="fas fa-house"></i></a>
-    <a href="Film.html" class="nav-icon"><i class="fas fa-film"></i></a>
-    <a href="Serier" class="nav-icon"><i class="fas fa-tv"></i></a>
-    <a href="Min-Liste.html" class="nav-icon"><i class="fas fa-bookmark"></i></a>
+
+<div class="vertical-nav" id="verticalNav">
+  <div class="profilmeny">
+    <a href="konto.html">
+      <img id="menyProfilbilde" src="https://via.placeholder.com/100" alt="Min profil" />
+    </a>
   </div>
+  <a href="Søk.html" class="nav-icon"><i class="fas fa-search"></i></a>
+  <a href="Hovedside.html" class="nav-icon"><i class="fas fa-house"></i></a>
+  <a href="Film.html" class="nav-icon"><i class="fas fa-film"></i></a>
+  <a href="Serier" class="nav-icon"><i class="fas fa-tv"></i></a>
+  <a href="Min-Liste.html" class="nav-icon"><i class="fas fa-bookmark"></i></a>
+</div>
 
-  <div class="hero">
-    <img class="background-image" id="backgroundImage" src="https://via.placeholder.com/1920x1080/000000/FFFFFF?text=Ingen+bilde" alt="Bakgrunnsbilde" />
-    <div class="overlay"></div>
+<button class="menu-toggle" id="menuToggle"><i class="fas fa-chevron-left"></i></button>
 
-    <div class="content-wrapper">
-      <div class="logo-container">
-        <img class="film-logo" src="" alt="Filmlogo" />
-      </div>
+<div class="hero">
+  <img class="background-image" id="backgroundImage" src="" alt="Bakgrunnsbilde" />
 
-      <div class="buttons-column">
-        <button class="watch-button" id="watchBtn">
-          <i class="fas fa-play"></i><span>Se nå</span>
-        </button>
-        <button class="watch-button" id="addToListBtn">
-          <i class="fas fa-plus"></i><span>Legg til i Min liste</span>
-        </button>
-      </div>
+  <div class="overlay"></div>
+  <div class="bottom-fade"></div>
 
+  <div class="content-wrapper">
+    <div class="logo-container">
+      <img class="film-logo" src="" alt="Filmlogo" />
+    </div>
+
+  <div class="left-content">
       <div class="text-button-container">
+        <div class="buttons-column">
+<button class="watch-button" id="watchBtn">
+  <i class="fas fa-play"></i><span> Se nå</span>
+</button>
+
+<button class="watch-button" id="addToListBtn">
+  <i class="fas fa-plus"></i><span> Legg til i Min liste</span>
+</button>
+
+        </div>
+
         <div class="text-container">
           <p class="description"></p>
           <div class="metadata"></div>
         </div>
+
         <div class="cast-info"></div>
       </div>
     </div>
   </div>
+</div>
 
-  <div class="recommendations">
-    <h2>Filmer du kanskje vil like</h2>
-    <div class="gallery" id="recommendationGallery"></div>
-  </div>
+<div class="recommendations">
+  <h2>Filmer du kanskje vil like</h2>
+  <div class="gallery" id="recommendationGallery"></div>
+</div>
 
-  <script src="Filmdata.js"></script>
-  <script>
+
+<script src="Filmdata.js"></script>
+<script>
 const params = new URLSearchParams(window.location.search);
 const filmNavn = params.get("navn");
 const data = filmer[filmNavn];
@@ -305,22 +417,22 @@ if (!data) {
 
 // Sett tittel, bilder og tekst
 document.title = data.tittel;
-document.getElementById("backgroundImage").src = data.bakgrunn || "https://via.placeholder.com/1920x1080/000000/FFFFFF?text=Ingen+bilde";
-document.querySelector(".film-logo").src = data.logo || "https://via.placeholder.com/400x200/000000/FFFFFF?text=Ingen+logo";
+document.getElementById("backgroundImage").src = data.bakgrunn;
+document.querySelector(".film-logo").src = data.logo;
 document.querySelector(".description").textContent = data.beskrivelse;
 
-// Metadata og IMDB-lenke
+// Bygg metadata og IMDB-lenke
 const metadataEl = document.querySelector(".metadata");
 const metaHTML = data.metadata.map((m) => `<span>${m}</span><span>•</span>`).join("");
 const imdbHTML = `
   <span class="imdb-link">
-    <a href="${data.imdb}" target="_blank" style="display:inline-flex;align-items:center;">
+    <a href="${data.imdb}" target="_blank" style="display: inline-flex; align-items: center;">
       <img class="imdb-logo" src="https://static.wixstatic.com/media/fd2fb2_f544f361fa8f4349a4e538b2d50c219e~mv2.png" alt="IMDB-logo" />
     </a>
   </span>`;
 metadataEl.innerHTML = metaHTML + imdbHTML;
 
-// Cast-info
+// Medvirkende og regissør
 document.querySelector(".cast-info").innerHTML = `
   <p><strong>Medvirkende:</strong> ${data.skuespillere}</p>
   <p><strong>Regissør:</strong> ${data.regissor}</p>
@@ -347,10 +459,10 @@ watchBtn.addEventListener("click", () => {
   localStorage.setItem(`${filmNavn}-status`, "påbegynt");
   filmStatus = "påbegynt";
   oppdaterKnapp();
-  window.location.href = data.watchUrl;
+  window.location.href = data.watchUrl; // Sender til videospilleren
 });
 
-// Video slutt = ferdig
+// Hvis filmen har <video>-tag på watchUrl-siden
 const videoEl = document.querySelector("video");
 if (videoEl) {
   videoEl.addEventListener("ended", () => {
@@ -360,7 +472,7 @@ if (videoEl) {
   });
 }
 
-// ---- Min liste ----
+// ---- Legg til i min liste ----
 const addToListBtn = document.getElementById("addToListBtn");
 let minListe = JSON.parse(localStorage.getItem("minListe")) || [];
 
@@ -392,18 +504,34 @@ addToListBtn.addEventListener("click", () => {
   oppdaterListeKnapp();
 });
 
-// ---- Last inn profilbilde ----
+// ---- Last inn profilbilde hvis lagret ----
 const lagretBilde = localStorage.getItem("profilbilde");
 if (lagretBilde) {
   document.getElementById("menyProfilbilde").src = lagretBilde;
 }
 
-// ---- Fade-in effekt ----
+// ---- Meny-knapp logikk ----
+const menuToggle = document.getElementById("menuToggle");
+const verticalNav = document.getElementById("verticalNav");
+
+menuToggle.addEventListener("click", () => {
+  verticalNav.classList.toggle("collapsed");
+  menuToggle.classList.toggle("collapsed");
+
+  const icon = menuToggle.querySelector("i");
+  if (verticalNav.classList.contains("collapsed")) {
+    icon.classList.replace("fa-chevron-left", "fa-chevron-right");
+  } else {
+    icon.classList.replace("fa-chevron-right", "fa-chevron-left");
+  }
+});
+
+// ---- Fade-in effekt på siden ----
 window.addEventListener('DOMContentLoaded', () => {
   document.body.classList.add('loaded');
 });
 
-// ---- Anbefalinger ----
+// ---- Dynamisk anbefalings-galleri ----
 function hentTilfeldigeFilmer(antall) {
   const alleFilmer = Object.keys(filmer).filter(f => f !== filmNavn);
   const valgt = [];
@@ -421,6 +549,7 @@ anbefalte.forEach(navn => {
   const film = filmer[navn];
   const img = document.createElement("img");
 
+  // Bruk posterVertikal hvis tilgjengelig
   img.src = film.posterVertikal || film.poster || film.bakgrunn;
   img.alt = film.tittel;
 
@@ -430,9 +559,8 @@ anbefalte.forEach(navn => {
 
   gallery.appendChild(img);
 });
-  </script>
-</body>
-</html>
+
+</script>
 
 
 
