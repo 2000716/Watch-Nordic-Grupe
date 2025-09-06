@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Serie mal</title>
+  <link rel="icon" type="image/png" href="https://static.wixstatic.com/media/fd2fb2_39376e4ee55b460ab7a3ebbfcf35fef7~mv2.png" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <style>
+   * {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: #091b1e;
+  color: #fff;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+/* Navigasjon */
+.vertical-nav {
+  width: 70px;
+  height: 100vh;
+  background-color: #091B1E;
+  position: fixed;
+  top: 0;
+  left: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  transition: transform 0.3s ease;
+  padding-top: 16px;
+}
+
+.vertical-nav.collapsed {
+  transform: translateX(-100%);
+}
+
+.profilmeny {
+  margin-bottom: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+.profilmeny img {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #fff;
+}
+
+.nav-icon {
+  color: white;
+  font-size: 22px;
+  padding: 16px 0;
+  text-decoration: none;
+  text-align: center;
+  width: 100%;
+  transition: color 0.3s ease;
+  cursor: pointer;
+  background: none;
+  border: none;
+}
+
+.nav-icon:hover,
+.nav-icon.active {
+  color: #00FFCC;
+}
+
+.menu-toggle {
+  position: fixed;
+  top: 50%;
+  left: 70px;
+  transform: translateY(-50%);
+  z-index: 101;
+  background-color: #091B1E;
+  border: none;
+  border-radius: 0 12px 12px 0;
+  padding: 12px 16px;
+  color: white;
+  cursor: pointer;
+  transition: left 0.3s ease;
+  width: 50px;
+  height: 120px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+}
+
+.vertical-nav.collapsed + .menu-toggle {
+  left: 0;
+}
+
+/* Hero-seksjon */
+.hero {
+  margin-left: 70px;
+  position: relative;
+  height: 100vh;
+  overflow: hidden;
+  transition: margin-left 0.3s ease;
+}
+
+.vertical-nav.collapsed ~ .hero {
+  margin-left: 0;
+}
+
+.background-image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 0;
+  transition: opacity 1s ease-in-out;
+  opacity: 1;
+  filter: brightness(0.6); /* 0.6 gjør bildet mørkere */
+}
+
+
+.overlay {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(to top, #091b1e 0%, rgba(9, 27, 30, 0) 60%);
+  z-index: 1;
+}
+
+.bottom-fade {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 200px;
+  background: linear-gradient(to top,#091b1e rgba(0, 0, 0, 1), transparent);
+  z-index: 1;
+}
+
+.content-wrapper {
+  position: absolute;
+  top: 60px;
+  left: 60px;
+  right: 60px;
+  display: flex;
+  flex-direction: column;
+  z-index: 2;
+}
+
+.logo-container {
+  width: 260px;
+  height: 100px;
+  margin-bottom: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.film-logo {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+/* Innhold venstre side */
+.left-content {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin-top: 170px;
+  min-height: 400px;
+}
+
+.text-button-container {
+  display: flex;
+  align-items: stretch;
+  gap: 40px;
+  padding: 30px;
+  border-radius: 12px;
+}
+
+.text-container {
+  flex: 2;
+  min-width: 300px;
+  text-align: left;
+  color: white;
+}
+
+.description {
+  font-size: 16px;
+  line-height: 1.6;
+  margin-bottom: 8px;
+}
+
+.metadata {
+  margin-top: 14px;
+  color: #ddd;
+  font-size: 13px;
+  line-height: 1.4;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: center;
+}
+
+.metadata span:nth-child(even) {
+  color: #ddd;
+  user-select: none;
+  font-weight: bold;
+  font-size: 16px;
+}
+
+.imdb-logo {
+  width: 28px;
+  margin-left: 4px;
+  cursor: pointer;
+  filter: brightness(100%) contrast(100%);
+  transition: filter 0.3s ease;
+}
+
+.imdb-logo:hover {
+  filter: brightness(80%) contrast(120%);
+}
+
+.cast-info {
+  flex: 0 0 200px;
+  font-size: 13px;
+  color: #aaa;
+  line-height: 1.6;
+}
+
+.cast-info strong {
+  color: #fff;
+}
+
+/* Knapper */
+.watch-button {
+  background: #fff;
+  color: none;
+  font-size: 18px;
+  font-weight: bold;
+  padding: 10px 50px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+  min-width: 240px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.watch-button:hover {
+  transform: scale(1.05);
+}
+
+.buttons-column {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+/* Episode-galleri for serier */
+.episode-gallery {
+  margin-left: 90px; /* litt mer til høyre for menyen */
+  padding: 20px 40px;
+  background: none;
+  color: white;
+  transition: margin-left 0.3s ease;
+}
+
+.vertical-nav.collapsed ~ .episode-gallery {
+  margin-left: 20px; /* trekker seg mot venstre når menyen er lukket */
+}
+
+.episode-gallery h2 {
+  font-size: 22px;
+  margin-bottom: 14px;
+}
+
+.episodes-container {
+  display: flex;
+  gap: 14px;
+  overflow-x: auto;
+  padding-bottom: 10px;
+}
+
+.episode-card {
+  background-color: none;
+  border-radius: 8px;
+  flex: 0 0 200px;
+  overflow: hidden;
+  cursor: pointer;
+  /* Fjern overgang */
+  transition: none;
+  color: white;
+}
+
+/* Fjern hover-effekt */
+.episode-card:hover {
+  transform: none;
+}
+
+.episode-card img {
+  width: 100%;
+  height: 120px;
+  object-fit: cover;
+}
+
+.episode-info {
+  padding: 8px;
+  font-size: 14px;
+}
+
+.episode-info strong {
+  display: block;
+  margin-bottom: 4px;
+}
+
+/* Kontrollknapper (pause, mute) */
+.controls {
+  position: absolute;
+  top: 10px;
+  right: 20px;
+  z-index: 10;
+  display: flex;
+  gap: 10px;
+}
+
+.controls button {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 20px;
+  padding: 8px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.controls button:hover {
+  background: rgba(0,255,204,0.8);
+  color: #091b1e;
+}
+
+  </style>
+</head>
+<body>
+
+<div class="vertical-nav" id="verticalNav">
+  <div class="profilmeny">
+    <a href="Konto.html">
+      <img id="menyProfilbilde" src="https://via.placeholder.com/100" alt="Min profil" />
+    </a>
+  </div>
+  <a href="Søk.html" class="nav-icon"><i class="fas fa-search"></i></a>
+  <a href="Hovedside.html" class="nav-icon"><i class="fas fa-house"></i></a>
+  <a href="Film.html" class="nav-icon"><i class="fas fa-film"></i></a>
+  <a href="Serier" class="nav-icon"><i class="fas fa-tv"></i></a>
+  <a href="Min liste" class="nav-icon"><i class="fas fa-bookmark"></i></a>
+  <a href="Innstillinger" class="nav-icon"><i class="fas fa-gear"></i></a>
+</div>
+
+<button class="menu-toggle" id="menuToggle"><i class="fas fa-chevron-left"></i></button>
+
+<div class="hero">
+  <img class="background-image" id="backgroundImage" src="" alt="Bakgrunnsbilde" />
+
+  <div class="overlay"></div>
+  <div class="bottom-fade"></div>
+
+  <div class="content-wrapper">
+    <div class="logo-container">
+      <img class="film-logo" src="" alt="Filmlogo" />
+    </div>
+
+  <div class="left-content">
+      <div class="text-button-container">
+        <div class="buttons-column">
+          <button class="watch-button" id="watchBtn"><i class="fas fa-play"></i> Se nå</button>
+          <button class="watch-button" id="addToListBtn"><i class="fas fa-plus"></i> Legg til i Min liste</button>
+        </div>
+
+        <div class="text-container">
+          <p class="description"></p>
+          <div class="metadata"></div>
+        </div>
+
+        <div class="cast-info"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="episode-gallery">
+  <h2>Episoder</h2>
+  <div class="episodes-container" id="episodesContainer"></div>
+</div>
+
+
+<script src="Seriedata.js"></script>
+<script>
+  const params = new URLSearchParams(window.location.search);
+  const serieNavn = params.get("navn") || "bear-in-the-big-blue-house";
+
+  const data = serier[serieNavn]; // <-- endret fra filmer til serier
+
+  if (!data) {
+    alert("Serien/filmen finnes ikke.");
+    window.location.href = "Hovedside.html";
+  }
+
+  // Sett tittel, bakgrunn og logo
+  document.title = data.tittel;
+  document.getElementById("backgroundImage").src = data.bakgrunn;
+  document.querySelector(".film-logo").src = data.logo;
+  document.querySelector(".description").textContent = data.beskrivelse;
+
+  // Bygg metadata og IMDB-lenke
+  const metadataEl = document.querySelector(".metadata");
+  const metaHTML = data.metadata.map((m, i) => `<span>${m}</span>${i < data.metadata.length - 1 ? '<span>•</span>' : ''}`).join("");
+  const imdbHTML = `
+     <span>•</span>
+  <span class="imdb-link">
+      <a href="${data.imdb}" target="_blank" style="display: inline-flex; align-items: center;">
+        <img class="imdb-logo" src="https://static.wixstatic.com/media/fd2fb2_f544f361fa8f4349a4e538b2d50c219e~mv2.png" alt="IMDB-logo" />
+      </a>
+    </span>`;
+  metadataEl.innerHTML = metaHTML + imdbHTML;
+
+  // Medvirkende og regissør
+  document.querySelector(".cast-info").innerHTML = `
+    <p><strong>Medvirkende:</strong> ${data.skuespillere}</p>
+    <p><strong>Regissør:</strong> ${data.regissor}</p>
+  `;
+
+  // Se nå-knapp
+  document.getElementById("watchBtn").addEventListener("click", () => {
+    localStorage.setItem(`${filmNavn}-status`, "påbegynt");
+    window.location.href = data.watchUrl;
+  });
+
+  // Legg til i min liste
+  document.getElementById("addToListBtn").addEventListener("click", () => {
+    alert("Lagt til i Min liste!");
+  });
+
+  // Last inn profilbilde hvis lagret
+  const lagretBilde = localStorage.getItem("profilbilde");
+  if (lagretBilde) {
+    document.getElementById("menyProfilbilde").src = lagretBilde;
+  }
+
+  // Meny-knapp logikk
+  const menuToggle = document.getElementById("menuToggle");
+  const verticalNav = document.getElementById("verticalNav");
+
+  menuToggle.addEventListener("click", () => {
+    verticalNav.classList.toggle("collapsed");
+    menuToggle.classList.toggle("collapsed");
+
+    const icon = menuToggle.querySelector("i");
+    if (verticalNav.classList.contains("collapsed")) {
+      icon.classList.replace("fa-chevron-left", "fa-chevron-right");
+    } else {
+      icon.classList.replace("fa-chevron-right", "fa-chevron-left");
+    }
+  });
+
+  /* === Episode-galleri for serier === */
+  if (data.episoder && data.episoder.length > 0) {
+    const episodesContainer = document.getElementById("episodesContainer");
+
+    data.episoder.forEach((episode) => {
+      const episodeCard = document.createElement("div");
+      episodeCard.className = "episode-card";
+
+      episodeCard.innerHTML = `
+        <img src="${episode.bilde}" alt="Episode ${episode.nr} bilde" />
+        <div class="episode-info">
+          <strong>Episode ${episode.nr}: ${episode.tittel}</strong>
+          <p>${episode.beskrivelse}</p>
+        </div>
+      `;
+
+      episodeCard.addEventListener("click", () => {
+        window.location.href = episode.watchUrl;
+      });
+
+      episodesContainer.appendChild(episodeCard);
+    });
+  }
+</script>
+
+</body>
+</html>

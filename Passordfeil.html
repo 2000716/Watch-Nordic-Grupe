@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Glemt Passord</title>
+  <style>
+    body {
+      background: url('https://static.wixstatic.com/media/fd2fb2_bf19d53fcc3e45c8bb84ef61b0e5eb1f~mv2.jpg') no-repeat center center fixed;
+      background-size: cover;
+      font-family: Arial, sans-serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      color: white;
+      margin: 0;
+    }
+
+    .container {
+      background-color: rgba(15, 42, 46, 0.6);
+      padding: 40px;
+      border-radius: 12px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.6);
+      max-width: 400px;
+      width: 100%;
+      text-align: center;
+    }
+
+    label {
+      display: block;
+      text-align: left;
+      margin-top: 15px;
+      margin-bottom: 5px;
+      font-size: 14px;
+    }
+
+    input {
+      width: 100%;
+      padding: 12px;
+      border: none;
+      border-radius: 6px;
+      font-size: 16px;
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      background-color: #1b5457;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 16px;
+      margin-top: 20px;
+    }
+
+    button:hover {
+      background-color: #247274;
+    }
+
+    .error, .success {
+      margin-top: 15px;
+      min-height: 20px;
+      font-size: 14px;
+    }
+
+    .error {
+      color: #ff4c4c;
+    }
+
+    .success {
+      color: #7CFC00;
+    }
+
+    a {
+      color: #00bfff;
+      cursor: pointer;
+      text-decoration: underline;
+      margin-top: 20px;
+      display: inline-block;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Glemt passord</h2>
+    <form onsubmit="return oppdaterPassord()">
+      <label for="epost">E-post</label>
+      <input type="email" id="epost" placeholder="Skriv inn din registrerte e-post" required />
+
+      <label for="nyttPassord">Nytt passord</label>
+      <input type="password" id="nyttPassord" placeholder="Skriv inn nytt passord" required />
+
+      <button type="submit">Oppdater passord</button>
+    </form>
+
+    <div class="error" id="feilmelding"></div>
+    <div class="success" id="suksessmelding"></div>
+
+    <a href="Registreringsside.html">Tilbake til innlogging</a>
+  </div>
+
+  <script>
+    function oppdaterPassord() {
+      const epost = document.getElementById("epost").value.trim().toLowerCase();
+      const nyttPassord = document.getElementById("nyttPassord").value.trim();
+      const feilmelding = document.getElementById("feilmelding");
+      const suksessmelding = document.getElementById("suksessmelding");
+
+      feilmelding.textContent = "";
+      suksessmelding.textContent = "";
+
+      if (!epost || !nyttPassord) {
+        feilmelding.textContent = "Vennligst fyll ut alle felt.";
+        return false;
+      }
+
+      let brukere = JSON.parse(localStorage.getItem("brukere") || "{}");
+
+      if (!brukere[epost]) {
+        feilmelding.textContent = "Fant ikke bruker med denne e-posten.";
+        return false;
+      }
+
+      // Oppdater passordet for brukeren
+      brukere[epost].passord = nyttPassord;
+      localStorage.setItem("brukere", JSON.stringify(brukere));
+
+      suksessmelding.textContent = "Passordet er oppdatert! Du kan nå logge inn med nytt passord.";
+
+      // Tøm feltene
+      document.getElementById("epost").value = "";
+      document.getElementById("nyttPassord").value = "";
+
+      return false;  // Forhindre at skjemaet submitter på vanlig måte
+    }
+  </script>
+</body>
+</html>

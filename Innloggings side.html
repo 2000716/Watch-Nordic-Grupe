@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Innlogging / Registrering</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+   body {
+  background: 
+    linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)),
+    url('https://static.wixstatic.com/media/fd2fb2_cb01bba1adf84bf1aa5ef6ec7cb2f055~mv2.png') 
+    no-repeat center center fixed;
+  background-size: cover;
+  font-family: Arial, sans-serif;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  color: white;
+}
+
+
+    .container {
+      background-color: rgba(15, 42, 46, 0.5);
+      padding: 40px;
+      border-radius: 12px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.6);
+      max-width: 400px;
+      width: 100%;
+      text-align: center;
+    }
+
+    h2 { margin-bottom: 20px; }
+    label { display: block; text-align: left; margin-top: 15px; margin-bottom: 5px; font-size: 14px; }
+    input { width: 100%; padding: 12px; border: none; border-radius: 6px; }
+
+    button {
+      width: 100%; padding: 12px; background-color: #1b5457;
+      color: white; border: none; border-radius: 6px;
+      cursor: pointer; font-size: 16px; margin-top: 20px;
+    }
+    button:hover { background-color: #247274; }
+
+    .error { color: #ff4c4c; margin-top: 10px; min-height: 20px; }
+    .toggle-text, .forgot-text { margin-top: 15px; font-size: 14px; }
+    .toggle-text a, .forgot-text a { color: #00bfff; cursor: pointer; text-decoration: underline; }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h2 id="formTitle">Logg inn</h2>
+
+    <form onsubmit="return handterSkjema()">
+      <div id="navnGruppe" style="display: none;">
+        <label for="navn">Navn</label>
+        <input type="text" id="navn" placeholder="Fullt navn" autocomplete="name" />
+      </div>
+
+      <label for="epost">E-post</label>
+      <input type="email" id="epost" placeholder="E-post" autocomplete="email" required />
+
+      <label for="passord">Passord</label>
+      <input type="password" id="passord" placeholder="Passord" autocomplete="current-password" required />
+
+      <button type="submit" id="submitKnapp">Fortsett</button>
+      <div class="error" id="feilmelding"></div>
+    </form>
+
+    <div class="forgot-text">
+      <a href="Passordfeil.html">Glemt passord?</a>
+    </div>
+
+    <div class="toggle-text" id="toggleText">
+      Er du ikke medlem? <a onclick="visRegistrering()">Registrer deg</a>
+    </div>
+  </div>
+
+  <script>
+    let registreringsmodus = false;
+
+    window.addEventListener("DOMContentLoaded", () => {
+      const lagretEpost = localStorage.getItem("epost");
+      const lagretPassord = localStorage.getItem("passord");
+
+      if (lagretEpost) document.getElementById("epost").value = lagretEpost;
+      if (lagretPassord) document.getElementById("passord").value = lagretPassord;
+    });
+
+    function handterSkjema() {
+      const epost = document.getElementById("epost").value.trim().toLowerCase();
+      const passord = document.getElementById("passord").value.trim();
+      const navn = document.getElementById("navn").value.trim();
+      const feilmelding = document.getElementById("feilmelding");
+      feilmelding.textContent = "";
+
+      let brukere = JSON.parse(localStorage.getItem("brukere") || "{}");
+
+      if (!epost || !passord || (registreringsmodus && !navn)) {
+        feilmelding.textContent = registreringsmodus
+          ? "Fyll ut navn, e-post og passord."
+          : "Fyll ut e-post og passord.";
+        return false;
+      }
+
+      if (registreringsmodus) {
+        if (brukere[epost]) {
+          feilmelding.textContent = "E-posten er allerede registrert.";
+          return false;
+        }
+
+        // Lagre ny bruker
+        brukere[epost] = { navn, passord };
+        localStorage.setItem("brukere", JSON.stringify(brukere));
+        localStorage.setItem("epost", epost);
+        localStorage.setItem("passord", passord);
+        localStorage.setItem("navn", navn);
+
+        window.location.href = "Hovedside.html";
+      } else {
+        const bruker = brukere[epost];
+
+        if (bruker && bruker.passord === passord) {
+          localStorage.setItem("epost", epost);
+          localStorage.setItem("passord", passord);
+          localStorage.setItem("navn", bruker.navn);
+
+          window.location.href = "Hovedside.html";
+        } else {
+          feilmelding.textContent = "Feil e-post eller passord.";
+        }
+      }
+
+      return false;
+    }
+
+    function visRegistrering() {
+      registreringsmodus = true;
+      document.getElementById("formTitle").textContent = "Registrer deg";
+      document.getElementById("submitKnapp").textContent = "Registrer";
+      document.getElementById("toggleText").innerHTML =
+        'Allerede medlem? <a onclick="visInnlogging()">Logg inn</a>';
+      document.getElementById("navnGruppe").style.display = "block";
+      document.getElementById("feilmelding").textContent = "";
+      document.getElementById("passord").setAttribute("autocomplete", "new-password");
+    }
+
+    function visInnlogging() {
+      registreringsmodus = false;
+      document.getElementById("formTitle").textContent = "Logg inn";
+      document.getElementById("submitKnapp").textContent = "Fortsett";
+      document.getElementById("toggleText").innerHTML =
+        'Er du ikke medlem? <a onclick="visRegistrering()">Registrer deg</a>';
+      document.getElementById("navnGruppe").style.display = "none";
+      document.getElementById("feilmelding").textContent = "";
+      document.getElementById("passord").setAttribute("autocomplete", "current-password");
+    }
+  </script>
+
+</body>
+</html>

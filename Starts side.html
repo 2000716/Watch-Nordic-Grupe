@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Watch Nordic – Strømmetjeneste</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html, body {
+      font-family: 'Arial', sans-serif;
+      background-color: #061113;
+      color: white;
+    }
+
+    body {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .top-bar {
+      background-color: #061113;
+      color: white;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 30px;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 9999;
+    }
+
+    .top-bar img {
+      height: 35px;
+    }
+
+    .auth-buttons button {
+      background-color: transparent;
+      color: white;
+      border: 1px solid white;
+      padding: 6px 14px;
+      margin-left: 10px;
+      border-radius: 4px;
+      font-size: 14px;
+      cursor: pointer;
+    }
+
+    .auth-buttons button:hover {
+      background-color: white;
+      color: black;
+    }
+
+    .hero {
+      background: url('https://static.wixstatic.com/media/fd2fb2_cb01bba1adf84bf1aa5ef6ec7cb2f055~mv2.png') no-repeat center center / cover;
+      height: 100vh;
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+      position: relative;
+      padding-left: 60px;
+      padding-top: 60px;
+      text-align: left;
+    }
+
+    .overlay {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 150px;
+      background: linear-gradient(to bottom, rgba(6, 17, 19, 0) 0%, #061113 100%);
+      z-index: 1;
+    }
+
+    .main-content {
+      position: relative;
+      z-index: 2;
+      max-width: 500px;
+    }
+
+    .hero-small-text {
+      font-size: 0.9rem;
+      margin-bottom: 10px;
+      color: #aaa;
+    }
+
+    .tagline {
+      font-size: 1.6rem;
+      margin-bottom: 25px;
+      font-weight: 400;
+      color: #ddd;
+    }
+
+    .cta-button {
+      background-color: #fff;
+      color: black;
+      padding: 12px 28px;
+      font-size: 16px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .section {
+      padding: 60px 30px;
+      background-color: #061113;
+    }
+
+    .section h2 {
+      font-size: 2rem;
+      margin-bottom: 20px;
+    }
+
+    .section p {
+      font-size: 1.1rem;
+      color: #ccc;
+    }
+
+    .section-2 {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 40px;
+      padding: 60px 30px;
+    }
+
+    .section-2 img {
+      max-width: 400px;
+      border-radius: 8px;
+    }
+
+    .section-2-text {
+      max-width: 500px;
+    }
+
+    .accordion {
+      background-color: #222;
+      color: white;
+      cursor: pointer;
+      padding: 18px;
+      width: 100%;
+      text-align: left;
+      border: none;
+      outline: none;
+      transition: background 0.3s;
+    }
+
+    .accordion:hover {
+      background-color: #333;
+    }
+
+    .panel {
+      padding: 0 18px;
+      background-color: #061113;
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.2s ease-out;
+    }
+
+    .footer-links {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 20px;
+      padding: 30px;
+      background-color: #061113;
+      font-size: 14px;
+    }
+
+    .footer-links a {
+      color: #888;
+      text-decoration: none;
+    }
+
+    .footer-links a:hover {
+      text-decoration: underline;
+    }
+
+    .footer {
+      text-align: center;
+      padding: 20px;
+      font-size: 14px;
+      color: #888;
+      background-color: #061113;
+    }
+
+    @media (max-width: 768px) {
+      .section-2 {
+        flex-direction: column;
+        text-align: center;
+      }
+
+      .hero {
+        padding-left: 30px;
+        padding-right: 30px;
+        justify-content: center;
+        text-align: center;
+      }
+
+      .main-content {
+        max-width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Top-bar -->
+<div class="top-bar">
+  <img src="https://static.wixstatic.com/media/fd2fb2_a4b2ace62dff4605a0387f46aad8a404~mv2.png" alt="Watch Nordic logo" />
+  <div class="auth-buttons">
+    <button onclick="window.location.href='Innloggings side.html'">Logg inn</button>
+    <button>Registrer</button>
+  </div>
+</div>
+
+<!-- Hero -->
+<div class="hero">
+  <div class="overlay"></div>
+  <div class="main-content">
+    <p class="hero-small-text">Start din prøveperiode Gratis*</p>
+    <p class="tagline">Begynn å strømme med en Watch Nordic-konto og få tilgang til hundrevis av filmer og serier.</p>
+    <button class="cta-button" onclick="window.location.href='Innloggings side.html'">REGISTRER DEG NÅ!</button>
+  </div>
+</div>
+
+<!-- Seksjon 2 -->
+<div class="section section-2">
+  <img src="https://static.wixstatic.com/media/fd2fb2_fde5e13505db4f0daaae406aaa3a3090~mv2.png" alt="Se alt du vil" />
+  <div class="section-2-text">
+    <h2>Se alt du vil, <br> når du vil</h2>
+    <p>Uansett tid på døgnet – se dine favorittfilmer og serier uten avbrudd. Oppdag nytt innhold hver uke.</p>
+  </div>
+</div>
+
+<!-- Ny seksjon – Opprett profil -->
+<div class="section section-2">
+  <div class="section-2-text">
+    <h2>Opprett en profil<br> og strøm dine favoritter</h2>
+    <p>Med din egen konto får du personlig tilpassede anbefalinger og kan fortsette der du slapp.</p>
+  </div>
+  <img src="https://static.wixstatic.com/media/fd2fb2_228d8218cca5424d8d1ff36c7ee8ffd1~mv2.png" alt="Opprett profil" />
+</div>
+
+<!-- Seksjon 3 – FAQ -->
+<div class="section">
+  <h2>Ofte stilte spørsmål</h2>
+  <button class="accordion">Hva er Watch Nordic?</button>
+  <div class="panel">
+    <p>Watch Nordic er en nordisk strømmetjeneste med filmer, serier og dokumentarer på ett sted.</p>
+  </div>
+
+  <button class="accordion">Hvor mye koster det?</button>
+  <div class="panel">
+    <p>Vi tilbyr en gratis prøveperiode. Etter det kan du velge mellom fleksible abonnement.</p>
+  </div>
+
+  <button class="accordion">Kan jeg si opp når som helst?</button>
+  <div class="panel">
+    <p>Ja! Det er ingen bindingstid. Du kan avslutte abonnementet når som helst.</p>
+  </div>
+</div>
+
+<!-- Footer lenker -->
+<div class="footer-links">
+  <a href="#">Support</a>
+  <a href="#">Om Watch Nordic</a>
+  <a href="#">Personvern</a>
+  <a href="#">Vilkår</a>
+  <a href="#">Kontakt</a>
+</div>
+
+<!-- Footer -->
+<div class="footer">
+  &copy; 2025 Watch Nordic. Alle rettigheter reservert.
+</div>
+
+<script>
+  const acc = document.querySelectorAll(".accordion");
+  acc.forEach(btn => {
+    btn.addEventListener("click", function () {
+      this.classList.toggle("active");
+      const panel = this.nextElementSibling;
+      if (panel.style.maxHeight) {
+        panel.style.maxHeight = null;
+      } else {
+        panel.style.maxHeight = panel.scrollHeight + "px";
+      }
+    });
+  });
+</script>
+
+</body>
+</html>

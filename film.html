@@ -1,0 +1,563 @@
+ <!DOCTYPE html>
+<html lang="no">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Film mal</title>
+  <link rel="icon" type="image/png" href="https://static.wixstatic.com/media/fd2fb2_39376e4ee55b460ab7a3ebbfcf35fef7~mv2.png" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <style>
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: #091B1E;
+  color: #fff;
+  font-family: 'Segoe UI', sans-serif;
+  opacity: 0;
+  transition: opacity 1s ease;
+}
+
+body.loaded {
+  opacity: 1;
+}
+
+/* Navigasjon */
+.vertical-nav {
+  width: 70px;
+  height: 100vh;
+  background-color: #091B1E;
+  position: fixed;
+  top: 0;
+  left: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  transition: transform 0.3s ease;
+  padding-top: 16px;
+}
+
+.vertical-nav.collapsed {
+  transform: translateX(-100%);
+}
+
+.nav-icons-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.profilmeny {
+  margin-bottom: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+.profilmeny img {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #fff;
+}
+
+.nav-icon {
+  color: white;
+  font-size: 22px;
+  padding: 16px 0;
+  text-decoration: none;
+  text-align: center;
+  width: 100%;
+  transition: color 0.3s ease;
+  cursor: pointer;
+  background: none;
+  border: none;
+}
+
+.nav-icon:hover,
+.nav-icon.active {
+  color: #00FFCC;
+}
+
+.menu-toggle {
+  position: fixed;
+  top: 50%;
+  left: 70px;
+  transform: translateY(-50%);
+  z-index: 101;
+  background-color: #091b1e;
+  border: none;
+  border-radius: 0 12px 12px 0;
+  padding: 12px 16px;
+  color: white;
+  cursor: pointer;
+  transition: left 0.3s ease;
+  width: 50px;
+  height: 120px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+}
+
+.vertical-nav.collapsed + .menu-toggle {
+  left: 0;
+}
+
+/* Hero-seksjon */
+.hero {
+  margin-left: 70px;
+  position: relative;
+  height: 100vh;
+  overflow: hidden;
+  transition: margin-left 0.3s ease;
+}
+
+.vertical-nav.collapsed ~ .hero {
+  margin-left: 0;
+}
+
+.background-image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 0;
+  transition: opacity 1s ease-in-out;
+  opacity: 1;
+  filter: brightness(0.6);
+}
+
+.overlay {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(to top, #091b1e 0%, rgba(9, 27, 30, 0) 60%);
+  z-index: 1;
+}
+
+.bottom-fade {
+  position: absolute; 
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 200px;
+  background: linear-gradient(to top, rgba(0, 0, 0, 1), transparent);
+  z-index: 1;
+}
+
+.content-wrapper {
+  position: absolute;
+  top: 60px;
+  left: 60px;
+  right: 60px;
+  display: flex;
+  flex-direction: column;
+  z-index: 2;
+}
+
+.logo-container {
+  width: 260px;
+  height: 100px;
+  margin-bottom: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.film-logo {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+/* Innhold venstre side */
+.left-content {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin-top: 170px;
+  min-height: 400px;
+}
+
+.text-button-container {
+  display: flex;
+  align-items: stretch;
+  gap: 40px;
+  padding: 30px;
+  border-radius: 12px;
+}
+
+.text-container {
+  flex: 2;
+  min-width: 300px;
+  text-align: left;
+  color: white;
+}
+
+.description {
+  font-size: 16px;
+  line-height: 1.6;
+  margin-bottom: 8px;
+}
+
+/* Metadata med IMDB-logo sentrert */
+.metadata {
+  margin-top: 14px;
+  color: #ddd;
+  font-size: 13px;
+  line-height: 1.4;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: center;
+}
+
+.metadata span,
+.metadata .imdb-link {
+  display: inline-flex;
+  align-items: center;
+}
+
+.metadata span:nth-child(even) {
+  color: #ddd;
+  user-select: none;
+  font-weight: bold;
+  font-size: 16px;
+}
+
+.imdb-logo {
+  width: 28px;
+  margin-left: 4px;
+  cursor: pointer;
+  filter: brightness(100%) contrast(100%);
+  transition: filter 0.3s ease;
+}
+
+.imdb-logo:hover {
+  filter: brightness(80%) contrast(120%);
+}
+
+.cast-info {
+  flex: 0 0 200px;
+  font-size: 13px;
+  color: #aaa;
+  line-height: 1.6;
+}
+
+.cast-info strong {
+  color: #fff;
+}
+
+.watch-button {
+  background: #fff;
+  color: #000;
+  font-size: 18px;
+  font-weight: bold;
+  padding: 10px 50px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+  width: 280px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  white-space: nowrap;
+}
+
+.watch-button:hover {
+  transform: scale(1.05);
+}
+
+.buttons-column {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.icon-animate {
+  display: inline-block;
+  animation: fadePop 0.4s ease forwards;
+}
+
+@keyframes fadePop {
+  0%   { opacity: 0; transform: scale(0.6); }
+  60%  { opacity: 1; transform: scale(1.2); }
+  100% { opacity: 1; transform: scale(1); }
+}
+
+.recommendations {
+  margin-left: 70px;
+  padding: 40px 60px 20px 60px; /* behold normal padding */
+  background: black;
+  transition: margin-left 0.3s ease;
+  margin-top: -80px;
+}
+
+.vertical-nav.collapsed ~ .recommendations {
+  margin-left: 0;
+  padding: 40px 60px 20px 60px;
+}
+
+.recommendations h2 {
+  font-size: 24px;
+  margin-bottom: 18px;
+  margin-left: 40px; /* flytter kun tittelen like mye som galleriet */
+}
+
+.gallery {
+  display: flex;
+  flex-wrap: nowrap;          /* alt på én rad */
+  gap: 16px;
+  justify-content: flex-start;
+  margin-left: 30px;          /* skyver til høyre */
+  overflow-x: auto;           /* scroll hvis det ikke er plass */
+  padding-bottom: 10px;       /* litt luft under */
+}
+
+.gallery::-webkit-scrollbar {
+  height: 6px;                /* liten scrollbar */
+}
+
+.gallery img {
+  width: 160px;
+  height: 240px;
+  border-radius: 6px;
+  object-fit: cover;
+  cursor: pointer;
+  transition: transform 0.3s;
+  flex: 0 0 auto;             /* behold fast bredde */
+}
+
+
+  </style>
+</head>
+<body>
+
+<div class="vertical-nav" id="verticalNav">
+  <div class="profilmeny">
+    <a href="konto.html">
+      <img id="menyProfilbilde" src="https://via.placeholder.com/100" alt="Min profil" />
+    </a>
+  </div>
+  <a href="Søk.html" class="nav-icon"><i class="fas fa-search"></i></a>
+  <a href="Hovedside.html" class="nav-icon"><i class="fas fa-house"></i></a>
+  <a href="Film.html" class="nav-icon"><i class="fas fa-film"></i></a>
+  <a href="Serier" class="nav-icon"><i class="fas fa-tv"></i></a>
+  <a href="Min-Liste.html" class="nav-icon"><i class="fas fa-bookmark"></i></a>
+</div>
+
+<button class="menu-toggle" id="menuToggle"><i class="fas fa-chevron-left"></i></button>
+
+<div class="hero">
+  <img class="background-image" id="backgroundImage" src="" alt="Bakgrunnsbilde" />
+
+  <div class="overlay"></div>
+  <div class="bottom-fade"></div>
+
+  <div class="content-wrapper">
+    <div class="logo-container">
+      <img class="film-logo" src="" alt="Filmlogo" />
+    </div>
+
+  <div class="left-content">
+      <div class="text-button-container">
+        <div class="buttons-column">
+<button class="watch-button" id="watchBtn">
+  <i class="fas fa-play"></i><span> Se nå</span>
+</button>
+
+<button class="watch-button" id="addToListBtn">
+  <i class="fas fa-plus"></i><span> Legg til i Min liste</span>
+</button>
+
+        </div>
+
+        <div class="text-container">
+          <p class="description"></p>
+          <div class="metadata"></div>
+        </div>
+
+        <div class="cast-info"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="recommendations">
+  <h2>Filmer du kanskje vil like</h2>
+  <div class="gallery" id="recommendationGallery"></div>
+</div>
+
+
+<script src="Filmdata.js"></script>
+<script>
+const params = new URLSearchParams(window.location.search);
+const filmNavn = params.get("navn");
+const data = filmer[filmNavn];
+
+if (!data) {
+  alert("Filmen finnes ikke.");
+  window.location.href = "Hovedside.html";
+}
+
+// Sett tittel, bilder og tekst
+document.title = data.tittel;
+document.getElementById("backgroundImage").src = data.bakgrunn;
+document.querySelector(".film-logo").src = data.logo;
+document.querySelector(".description").textContent = data.beskrivelse;
+
+// Bygg metadata og IMDB-lenke
+const metadataEl = document.querySelector(".metadata");
+const metaHTML = data.metadata.map((m) => `<span>${m}</span><span>•</span>`).join("");
+const imdbHTML = `
+  <span class="imdb-link">
+    <a href="${data.imdb}" target="_blank" style="display: inline-flex; align-items: center;">
+      <img class="imdb-logo" src="https://static.wixstatic.com/media/fd2fb2_f544f361fa8f4349a4e538b2d50c219e~mv2.png" alt="IMDB-logo" />
+    </a>
+  </span>`;
+metadataEl.innerHTML = metaHTML + imdbHTML;
+
+// Medvirkende og regissør
+document.querySelector(".cast-info").innerHTML = `
+  <p><strong>Medvirkende:</strong> ${data.skuespillere}</p>
+  <p><strong>Regissør:</strong> ${data.regissor}</p>
+`;
+
+// ---- Se nå-knappen ----
+const watchBtn = document.getElementById("watchBtn");
+let filmStatus = localStorage.getItem(`${filmNavn}-status`);
+
+function oppdaterKnapp() {
+  const icon = watchBtn.querySelector("i");
+  const text = watchBtn.querySelector("span");
+  if (filmStatus === "påbegynt") {
+    icon.className = "fas fa-play";
+    text.textContent = " Gjenoppta";
+  } else {
+    icon.className = "fas fa-play";
+    text.textContent = " Se nå";
+  }
+}
+oppdaterKnapp();
+
+watchBtn.addEventListener("click", () => {
+  localStorage.setItem(`${filmNavn}-status`, "påbegynt");
+  filmStatus = "påbegynt";
+  oppdaterKnapp();
+  window.location.href = data.watchUrl; // Sender til videospilleren
+});
+
+// Hvis filmen har <video>-tag på watchUrl-siden
+const videoEl = document.querySelector("video");
+if (videoEl) {
+  videoEl.addEventListener("ended", () => {
+    localStorage.setItem(`${filmNavn}-status`, "ferdig");
+    filmStatus = "ferdig";
+    oppdaterKnapp();
+  });
+}
+
+// ---- Legg til i min liste ----
+const addToListBtn = document.getElementById("addToListBtn");
+let minListe = JSON.parse(localStorage.getItem("minListe")) || [];
+
+function oppdaterListeKnapp() {
+  const icon = addToListBtn.querySelector("i");
+  const text = addToListBtn.querySelector("span");
+
+  if (minListe.includes(filmNavn)) {
+    icon.className = "fas fa-check";
+    text.textContent = " Lagt til i Min liste";
+  } else {
+    icon.className = "fas fa-plus";
+    text.textContent = " Legg til i Min liste";
+  }
+
+  icon.classList.remove("icon-animate"); 
+  void icon.offsetWidth; 
+  icon.classList.add("icon-animate");
+}
+oppdaterListeKnapp();
+
+addToListBtn.addEventListener("click", () => {
+  if (!minListe.includes(filmNavn)) {
+    minListe.push(filmNavn);
+  } else {
+    minListe = minListe.filter(f => f !== filmNavn);
+  }
+  localStorage.setItem("minListe", JSON.stringify(minListe));
+  oppdaterListeKnapp();
+});
+
+// ---- Last inn profilbilde hvis lagret ----
+const lagretBilde = localStorage.getItem("profilbilde");
+if (lagretBilde) {
+  document.getElementById("menyProfilbilde").src = lagretBilde;
+}
+
+// ---- Meny-knapp logikk ----
+const menuToggle = document.getElementById("menuToggle");
+const verticalNav = document.getElementById("verticalNav");
+
+menuToggle.addEventListener("click", () => {
+  verticalNav.classList.toggle("collapsed");
+  menuToggle.classList.toggle("collapsed");
+
+  const icon = menuToggle.querySelector("i");
+  if (verticalNav.classList.contains("collapsed")) {
+    icon.classList.replace("fa-chevron-left", "fa-chevron-right");
+  } else {
+    icon.classList.replace("fa-chevron-right", "fa-chevron-left");
+  }
+});
+
+// ---- Fade-in effekt på siden ----
+window.addEventListener('DOMContentLoaded', () => {
+  document.body.classList.add('loaded');
+});
+
+// ---- Dynamisk anbefalings-galleri ----
+function hentTilfeldigeFilmer(antall) {
+  const alleFilmer = Object.keys(filmer).filter(f => f !== filmNavn);
+  const valgt = [];
+  while (valgt.length < antall && alleFilmer.length > 0) {
+    const randomIndex = Math.floor(Math.random() * alleFilmer.length);
+    valgt.push(alleFilmer.splice(randomIndex, 1)[0]);
+  }
+  return valgt;
+}
+
+const anbefalte = hentTilfeldigeFilmer(6);
+const gallery = document.getElementById("recommendationGallery");
+
+anbefalte.forEach(navn => {
+  const film = filmer[navn];
+  const img = document.createElement("img");
+
+  // Bruk posterVertikal hvis tilgjengelig
+  img.src = film.posterVertikal || film.poster || film.bakgrunn;
+  img.alt = film.tittel;
+
+  img.addEventListener("click", () => {
+    window.location.href = `film.html?navn=${navn}`;
+  });
+
+  gallery.appendChild(img);
+});
+
+</script>

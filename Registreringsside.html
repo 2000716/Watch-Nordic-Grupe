@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+  <meta charset="UTF-8" />
+  <title>Velg Profilbilde – Watch Nordic</title>
+  <style>
+    body {
+      background: #0d1117;
+      color: white;
+      font-family: sans-serif;
+      margin: 0;
+      padding: 20px;
+      text-align: center;
+    }
+
+    h1 {
+      margin-bottom: 30px;
+    }
+
+    .rad-container {
+      margin: 0 auto 40px;
+      max-width: 700px;
+    }
+
+    .rad-tittel {
+      font-size: 18px;
+      margin-bottom: 10px;
+      font-weight: bold;
+    }
+
+    .bilder-rad {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 20px;
+      justify-items: center;
+    }
+
+    .profilbilde-valg {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      overflow: hidden;
+      border: 3px solid transparent;
+      transition: border 0.3s ease, box-shadow 0.3s ease;
+      cursor: pointer;
+    }
+
+    .profilbilde-valg:hover {
+      border-color: white;
+    }
+
+    .profilbilde-valg.selected {
+      border-color: white;
+      box-shadow: 0 0 10px white;
+    }
+
+    .tilbake-knapp {
+      margin-top: 40px;
+      background-color: white;
+      color: #0d1117;
+      padding: 12px 24px;
+      font-size: 16px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      text-decoration: none;
+      transition: background-color 0.3s ease;
+    }
+
+    .tilbake-knapp:hover {
+      background-color: #e1e1e1;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Velg Profilbilde</h1>
+
+  <div id="hoved-container"></div>
+
+  <button class="tilbake-knapp" onclick="tilbakeTilKonto()">Lagre og tilbake</button>
+
+  <script>
+    const rader = [
+      {
+        tittel: "Kaptein Sabeltann og Den magiske Diamant",
+        bilder: [
+          'https://static.wixstatic.com/media/fd2fb2_89e699632a954b6c9c9de1e396c1912f~mv2.png',
+          'https://static.wixstatic.com/media/fd2fb2_d68db668b4ba470986be0c5c5de18026~mv2.png',
+          'https://static.wixstatic.com/media/fd2fb2_7911eeae09f54d35a1428754cfe67c95~mv2.png',
+          'https://static.wixstatic.com/media/fd2fb2_6887d3f645364d4998b5a53e5b8e53e5~mv2.png',
+          'https://static.wixstatic.com/media/fd2fb2_c70a83fcf51345ff9668d75a657c476d~mv2.png'
+        ]
+      },
+      {
+        tittel: "Klassikere",
+        bilder: [
+          'https://static.wixstatic.com/media/fd2fb2_3df40a7e62c545afa3918fc10393284d~mv2.png',
+          'https://static.wixstatic.com/media/fd2fb2_4c90736292b44b59929074fa97b847b3~mv2.png',
+          'https://static.wixstatic.com/media/fd2fb2_bda02652f6384ce59dfaf168afecdb64~mv2.png',
+          'https://static.wixstatic.com/media/fd2fb2_a793394d6c31430a801aba3d5fee94a4~mv2.png',
+          'https://static.wixstatic.com/media/fd2fb2_14eb770398864dcb835a9f40727ea8e0~mv2.png'
+        ]
+      },
+       {
+        tittel: "Corpse bride",
+        bilder: [
+          'https://static.wixstatic.com/media/fd2fb2_a59115fdde5f427a8f4ef746c6d2a110~mv2.jpg',
+          'https://static.wixstatic.com/media/fd2fb2_b5e07231a79b4b9bb6f12790c3160216~mv2.jpg',
+          'https://static.wixstatic.com/media/fd2fb2_be285b95911e4afab861aaba9bcb33ef~mv2.jpg',
+
+        ]
+      }
+    ];
+
+    const hovedContainer = document.getElementById('hoved-container');
+    let valgtBilde = localStorage.getItem('profilbilde') || null;
+
+    function oppdaterValg() {
+      document.querySelectorAll('.profilbilde-valg').forEach(img => {
+        img.classList.toggle('selected', img.src === valgtBilde);
+      });
+    }
+
+    function lagRader() {
+      rader.forEach(rad => {
+        const radWrapper = document.createElement('div');
+        radWrapper.className = 'rad-container';
+
+        const tittelEl = document.createElement('div');
+        tittelEl.className = 'rad-tittel';
+        tittelEl.textContent = rad.tittel;
+
+        const bilderRad = document.createElement('div');
+        bilderRad.className = 'bilder-rad';
+
+        rad.bilder.forEach(url => {
+          const img = document.createElement('img');
+          img.src = url;
+          img.alt = `Profilbilde fra ${rad.tittel}`;
+          img.className = 'profilbilde-valg';
+          img.addEventListener('click', () => {
+            valgtBilde = url;
+            oppdaterValg();
+          });
+          bilderRad.appendChild(img);
+        });
+
+        radWrapper.appendChild(tittelEl);
+        radWrapper.appendChild(bilderRad);
+        hovedContainer.appendChild(radWrapper);
+      });
+    }
+
+    function tilbakeTilKonto() {
+      if (valgtBilde) {
+        localStorage.setItem('Profilbilde', valgtBilde);
+      }
+      window.location.href = 'Konto.html';
+    }
+
+    lagRader();
+    oppdaterValg();
+  </script>
+
+</body>
+</html>
