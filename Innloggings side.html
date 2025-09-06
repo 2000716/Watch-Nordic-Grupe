@@ -21,7 +21,6 @@
   color: white;
 }
 
-
     .container {
       background-color: rgba(15, 42, 46, 0.5);
       padding: 40px;
@@ -82,11 +81,14 @@
     let registreringsmodus = false;
 
     window.addEventListener("DOMContentLoaded", () => {
-      const lagretEpost = localStorage.getItem("epost");
-      const lagretPassord = localStorage.getItem("passord");
+      const innloggetBruker = localStorage.getItem("innloggetBruker");
+      const brukere = JSON.parse(localStorage.getItem("brukere") || "{}");
 
-      if (lagretEpost) document.getElementById("epost").value = lagretEpost;
-      if (lagretPassord) document.getElementById("passord").value = lagretPassord;
+      if (innloggetBruker && brukere[innloggetBruker]) {
+        // Autofylt epost og passord fra brukere
+        document.getElementById("epost").value = innloggetBruker;
+        document.getElementById("passord").value = brukere[innloggetBruker].passord;
+      }
     });
 
     function handterSkjema() {
@@ -114,19 +116,14 @@
         // Lagre ny bruker
         brukere[epost] = { navn, passord };
         localStorage.setItem("brukere", JSON.stringify(brukere));
-        localStorage.setItem("epost", epost);
-        localStorage.setItem("passord", passord);
-        localStorage.setItem("navn", navn);
+        localStorage.setItem("innloggetBruker", epost);
 
         window.location.href = "Hovedside.html";
       } else {
         const bruker = brukere[epost];
 
         if (bruker && bruker.passord === passord) {
-          localStorage.setItem("epost", epost);
-          localStorage.setItem("passord", passord);
-          localStorage.setItem("navn", bruker.navn);
-
+          localStorage.setItem("innloggetBruker", epost);
           window.location.href = "Hovedside.html";
         } else {
           feilmelding.textContent = "Feil e-post eller passord.";
@@ -161,3 +158,4 @@
 
 </body>
 </html>
+
