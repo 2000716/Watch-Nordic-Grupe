@@ -136,14 +136,14 @@ body.loaded {
   z-index: 0;
   transition: opacity 1s ease-in-out;
   opacity: 1;
-  filter: brightness(0.4) contrast(1.1); /* mørkere, mer dramatisk */
+  filter: brightness(0.6);
 }
 
 .overlay {
   position: absolute;
   width: 100%;
   height: 100%;
-  background: linear-gradient(to top, #000 0%, rgba(9, 27, 30, 0.2) 70%);
+  background: linear-gradient(to top, #091b1e 0%, rgba(9, 27, 30, 0) 60%);
   z-index: 1;
 }
 
@@ -261,18 +261,17 @@ body.loaded {
   color: #fff;
 }
 
-/* Knappestil inspirert av Netflix/HBO */
 .watch-button {
-  background: #e50914; /* Netflix-rød */
-  color: #fff;
-  font-size: 20px;
+  background: #fff;
+  color: #000;
+  font-size: 18px;
   font-weight: bold;
-  padding: 14px 60px;
+  padding: 10px 50px;
   border: none;
-  border-radius: 12px;
+  border-radius: 10px;
   cursor: pointer;
-  transition: transform 0.2s ease, background 0.3s ease;
-  width: 320px;
+  transition: transform 0.2s ease;
+  width: 280px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -281,17 +280,7 @@ body.loaded {
 }
 
 .watch-button:hover {
-  transform: scale(1.08);
-  background: #f40612;
-}
-
-#addToListBtn {
-  background: rgba(109, 109, 110, 0.7);
-  color: #fff;
-}
-
-#addToListBtn:hover {
-  background: rgba(109, 109, 110, 0.9);
+  transform: scale(1.05);
 }
 
 .buttons-column {
@@ -354,7 +343,7 @@ body.loaded {
   flex: 0 0 auto;             /* behold fast bredde */
 }
 
-/* --- RESPONSIVE HBO/NETFLIX-STIL --- */
+/* --- RESPONSIVE TILPASNING --- */
 
 /* For skjermer under 768px (mobil og små nettbrett) */
 @media (max-width: 768px) {
@@ -381,91 +370,104 @@ body.loaded {
   .hero {
     margin-left: 0;
     margin-top: 0;
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-end;
-    padding-bottom: 100px;
+    min-height: 100vh; /* Viktig: full høyde på mobil */
   }
 
   .content-wrapper {
     position: relative;
+    top: auto;
+    left: auto;
+    right: auto;
     padding: 20px;
-    background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, transparent 80%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
   }
 
+  /* Logo rett over knappene */
   .logo-container {
+    order: -1;
+    margin: 0 auto 20px auto;
     max-width: 70%;
-    margin: 0 0 20px 0;
+    height: auto;
+  }
+
+  .film-logo {
+    max-width: 100%;
+    height: auto;
   }
 
   .left-content {
-    margin-top: 10px;
+    margin-top: 20px;
     min-height: auto;
+    width: 100%;
   }
 
   .text-button-container {
     flex-direction: column;
-    gap: 25px;
-    padding: 0;
+    gap: 20px;
+    padding: 10px;
+    align-items: center;
+    width: 100%;
   }
 
   .buttons-column {
+    order: 0;
+    align-items: center;
     width: 100%;
-    gap: 18px;
   }
 
   .watch-button {
     width: 100%;
-    font-size: 18px;
-    padding: 14px;
-    border-radius: 8px;
+    font-size: 16px;
+    padding: 12px;
   }
 
-  .description {
-    font-size: 15px;
+  /* Beskrivelse og metadata under knappene */
+  .text-container,
+  .cast-info {
+    order: 1;
+    text-align: center;
+    font-size: 14px;
     margin-top: 12px;
-    color: #ddd;
   }
 
   .metadata {
-    font-size: 13px;
-    color: #aaa;
+    font-size: 12px;
+    gap: 4px;
+    justify-content: center;
   }
 
   .recommendations {
-    background: #141414;
-    padding: 20px 15px;
+    margin: 0;
+    padding: 20px;
   }
 
   .recommendations h2 {
     font-size: 20px;
-    margin-bottom: 12px;
-    font-weight: 600;
+    margin-left: 0;
   }
 
   .gallery {
-    gap: 8px;
-    margin: 0;
-    padding: 0 0 10px 0;
+    margin-left: 0;
+    gap: 10px;
   }
 
   .gallery img {
     width: 120px;
     height: 180px;
-    border-radius: 4px;
   }
 }
 
 /* Ekstra små skjermer (under 480px) */
 @media (max-width: 480px) {
   .watch-button {
-    font-size: 16px;
-    padding: 12px;
+    font-size: 14px;
+    padding: 10px;
   }
 
   .film-logo {
-    max-width: 140px;
+    max-width: 150px;
   }
 
   .description {
@@ -696,3 +698,4 @@ anbefalte.forEach(navn => {
 });
 
 </script>
+
