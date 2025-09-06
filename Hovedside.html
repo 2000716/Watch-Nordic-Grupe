@@ -637,17 +637,17 @@ main {
 
 </main>
 <script>
-// Autentisering
-const epost = localStorage.getItem("epost");
-const passord = localStorage.getItem("passord");
-if (!epost || !passord) window.location.href = "Starts side.html";
+// === Autentisering ===
+const innloggetBruker = localStorage.getItem("innloggetBruker");
+if (!innloggetBruker) {
+  window.location.href = "Starts side.html"; // Send til start hvis ikke logget inn
+}
 
-window.addEventListener("storage", () => {
-  if (!localStorage.getItem("epost") || !localStorage.getItem("passord")) {
-    window.location.href = "Starts side.html";
-  }
-});
+// Hent brukerdata hvis nødvendig
+const brukere = JSON.parse(localStorage.getItem("brukere") || "{}");
+const bruker = brukere[innloggetBruker];
 
+// === Navigasjon ===
 function gåTilKonto() {
   window.location.href = "konto.html";
 }
@@ -658,7 +658,7 @@ if (lagretBilde) {
   document.getElementById("menyProfilbilde").src = lagretBilde;
 }
 
-// Jevn scroll-funksjon for gallerier
+// === Scroll-funksjon for gallerier ===
 function scrollGallery(button, direction) {
   const gallery = button.closest('.gallery-wrapper').querySelector('.image-gallery');
   const scrollAmount = 250;
@@ -705,7 +705,7 @@ function updateScrollButtons(gallery) {
   fadeRight.classList.toggle('fade-hidden', atEnd);
 }
 
-// Render "Fortsett å se"
+// === Fortsett å se ===
 function renderFortsettÅSe() {
   const galleri = document.getElementById("fortsettGalleri");
   galleri.innerHTML = "";
@@ -743,7 +743,7 @@ function renderFortsettÅSe() {
   });
 }
 
-// Lagre film til localStorage når den startes
+// === Start film og lagre i localStorage ===
 function startFilm(filmData) {
   let filmer = JSON.parse(localStorage.getItem("fortsettFilmer") || "[]");
   const index = filmer.findIndex(f => f.link === filmData.link);
@@ -781,7 +781,7 @@ function leggTilAutoStartFilm() {
   });
 }
 
-// Cookie-banner
+// === Cookie-banner ===
 function visCookieBanner() {
   const banner = document.getElementById("cookieBanner");
   if (!banner) return;
@@ -796,7 +796,7 @@ function godtaCookies() {
   if (banner) banner.style.display = "none";
 }
 
-// === Ny funksjon: Marker valgt bilde med flerfarget ramme ===
+// === Marker valgt bilde ===
 function leggTilBildeMarkering() {
   document.querySelectorAll(".image-gallery a").forEach(link => {
     link.addEventListener("click", (e) => {
@@ -806,14 +806,15 @@ function leggTilBildeMarkering() {
   });
 }
 
-// Når siden er lastet
+// === Når siden er lastet ===
 document.addEventListener("DOMContentLoaded", () => {
+  // Oppdater scroll-knapper
   const galleries = document.querySelectorAll('.image-gallery');
   galleries.forEach(gallery => {
     updateScrollButtons(gallery);
     gallery.addEventListener('scroll', () => updateScrollButtons(gallery));
   });
-gi
+
   renderFortsettÅSe();
   visCookieBanner();
   leggTilAutoStartFilm();
@@ -821,6 +822,7 @@ gi
 });
 
 </script>
+
 
 
 
