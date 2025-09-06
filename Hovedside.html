@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<DOCTYPE html>
 <html lang="no">
 <head>
   <meta charset="UTF-8" />
@@ -637,25 +637,20 @@ main {
 
 </main>
 <script>
-// === Autentisering ===
-const innloggetBruker = localStorage.getItem("innloggetBruker");
-if (!innloggetBruker) {
-  window.location.href = "Starts side.html"; // Send til start hvis ikke logget inn
-}
+// Autentisering
+const epost = localStorage.getItem("epost");
+const passord = localStorage.getItem("passord");
+if (!epost || !passord) window.location.href = "Starts side.html";
 
-// Hent brukerdata hvis nødvendig
-const brukere = JSON.parse(localStorage.getItem("brukere") || "{}");
-const bruker = brukere[innloggetBruker];
-
-// === Navigasjon ===
-document.addEventListener("DOMContentLoaded", () => {
-  const profilDiv = document.querySelector(".profilmeny");
-  if (profilDiv) {
-    profilDiv.addEventListener("click", () => {
-      window.location.href = "konto.html";
-    });
+window.addEventListener("storage", () => {
+  if (!localStorage.getItem("epost") || !localStorage.getItem("passord")) {
+    window.location.href = "Starts side.html";
   }
 });
+
+function gåTilKonto() {
+  window.location.href = "konto.html";
+}
 
 // Profilbilde fra localStorage
 const lagretBilde = localStorage.getItem("profilbilde");
@@ -663,7 +658,7 @@ if (lagretBilde) {
   document.getElementById("menyProfilbilde").src = lagretBilde;
 }
 
-// === Scroll-funksjon for gallerier ===
+// Jevn scroll-funksjon for gallerier
 function scrollGallery(button, direction) {
   const gallery = button.closest('.gallery-wrapper').querySelector('.image-gallery');
   const scrollAmount = 250;
@@ -710,7 +705,7 @@ function updateScrollButtons(gallery) {
   fadeRight.classList.toggle('fade-hidden', atEnd);
 }
 
-// === Fortsett å se ===
+// Render "Fortsett å se"
 function renderFortsettÅSe() {
   const galleri = document.getElementById("fortsettGalleri");
   galleri.innerHTML = "";
@@ -748,7 +743,7 @@ function renderFortsettÅSe() {
   });
 }
 
-// === Start film og lagre i localStorage ===
+// Lagre film til localStorage når den startes
 function startFilm(filmData) {
   let filmer = JSON.parse(localStorage.getItem("fortsettFilmer") || "[]");
   const index = filmer.findIndex(f => f.link === filmData.link);
@@ -786,7 +781,7 @@ function leggTilAutoStartFilm() {
   });
 }
 
-// === Cookie-banner ===
+// Cookie-banner
 function visCookieBanner() {
   const banner = document.getElementById("cookieBanner");
   if (!banner) return;
@@ -801,7 +796,7 @@ function godtaCookies() {
   if (banner) banner.style.display = "none";
 }
 
-// === Marker valgt bilde ===
+// === Ny funksjon: Marker valgt bilde med flerfarget ramme ===
 function leggTilBildeMarkering() {
   document.querySelectorAll(".image-gallery a").forEach(link => {
     link.addEventListener("click", (e) => {
@@ -811,15 +806,14 @@ function leggTilBildeMarkering() {
   });
 }
 
-// === Når siden er lastet ===
+// Når siden er lastet
 document.addEventListener("DOMContentLoaded", () => {
-  // Oppdater scroll-knapper
   const galleries = document.querySelectorAll('.image-gallery');
   galleries.forEach(gallery => {
     updateScrollButtons(gallery);
     gallery.addEventListener('scroll', () => updateScrollButtons(gallery));
   });
-
+gi
   renderFortsettÅSe();
   visCookieBanner();
   leggTilAutoStartFilm();
@@ -827,6 +821,7 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 </script>
+
 
 
 
