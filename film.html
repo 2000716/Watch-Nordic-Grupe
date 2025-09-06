@@ -45,21 +45,6 @@ body.loaded {
   transform: translateX(-100%);
 }
 
-.nav-icons-wrapper {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 10px;
-}
-
-.profilmeny img {
-  width: 48px;
-  height: 48px;
-  border-radius: 50%;
-  object-fit: cover;
-  border: 2px solid #fff;
-}
-
 .nav-icon {
   color: white;
   font-size: 22px;
@@ -74,6 +59,14 @@ body.loaded {
 .nav-icon:hover,
 .nav-icon.active {
   color: #00FFCC;
+}
+
+.profilmeny img {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #fff;
 }
 
 /* Hero-seksjon */
@@ -121,7 +114,6 @@ body.loaded {
 
 .logo-container {
   width: 240px;
-  height: auto;
   margin-bottom: 20px;
 }
 
@@ -160,7 +152,7 @@ body.loaded {
   transform: scale(1.05);
 }
 
-/* Info (kun synlig desktop) */
+/* Info (desktop) */
 .text-button-container {
   display: flex;
   gap: 40px;
@@ -169,7 +161,6 @@ body.loaded {
 
 .text-container {
   flex: 1;
-  color: white;
   font-size: 14px;
 }
 
@@ -184,6 +175,45 @@ body.loaded {
 .cast-info {
   font-size: 12px;
   color: #aaa;
+}
+
+/* Anbefalinger */
+.recommendations {
+  margin-left: 70px;
+  padding: 40px 20px;
+  background: black;
+  transition: margin-left 0.3s ease;
+}
+
+.vertical-nav.collapsed ~ .recommendations {
+  margin-left: 0;
+}
+
+.recommendations h2 {
+  font-size: 24px;
+  margin-bottom: 18px;
+}
+
+.gallery {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 16px;
+  overflow-x: auto;
+  padding-bottom: 10px;
+}
+
+.gallery img {
+  width: 160px;
+  height: 240px;
+  border-radius: 6px;
+  object-fit: cover;
+  cursor: pointer;
+  transition: transform 0.3s;
+  flex: 0 0 auto;
+}
+
+.gallery img:hover {
+  transform: scale(1.05);
 }
 
 /* Mobilstil */
@@ -210,6 +240,10 @@ body.loaded {
   .buttons-column {
     width: 100%;
   }
+
+  .recommendations {
+    margin-left: 0;
+  }
 }
   </style>
 </head>
@@ -226,7 +260,7 @@ body.loaded {
   </div>
 
   <div class="hero">
-    <img class="background-image" id="backgroundImage" src="" alt="Bakgrunnsbilde" />
+    <img class="background-image" id="backgroundImage" src="https://via.placeholder.com/1920x1080/000000/FFFFFF?text=Ingen+bilde" alt="Bakgrunnsbilde" />
     <div class="overlay"></div>
 
     <div class="content-wrapper">
@@ -252,17 +286,14 @@ body.loaded {
       </div>
     </div>
   </div>
-</body>
-</html>
 
-<div class="recommendations">
-  <h2>Filmer du kanskje vil like</h2>
-  <div class="gallery" id="recommendationGallery"></div>
-</div>
+  <div class="recommendations">
+    <h2>Filmer du kanskje vil like</h2>
+    <div class="gallery" id="recommendationGallery"></div>
+  </div>
 
-
-<script src="Filmdata.js"></script>
-<script>
+  <script src="Filmdata.js"></script>
+  <script>
 const params = new URLSearchParams(window.location.search);
 const filmNavn = params.get("navn");
 const data = filmer[filmNavn];
@@ -274,22 +305,22 @@ if (!data) {
 
 // Sett tittel, bilder og tekst
 document.title = data.tittel;
-document.getElementById("backgroundImage").src = data.bakgrunn;
-document.querySelector(".film-logo").src = data.logo;
+document.getElementById("backgroundImage").src = data.bakgrunn || "https://via.placeholder.com/1920x1080/000000/FFFFFF?text=Ingen+bilde";
+document.querySelector(".film-logo").src = data.logo || "https://via.placeholder.com/400x200/000000/FFFFFF?text=Ingen+logo";
 document.querySelector(".description").textContent = data.beskrivelse;
 
-// Bygg metadata og IMDB-lenke
+// Metadata og IMDB-lenke
 const metadataEl = document.querySelector(".metadata");
 const metaHTML = data.metadata.map((m) => `<span>${m}</span><span>•</span>`).join("");
 const imdbHTML = `
   <span class="imdb-link">
-    <a href="${data.imdb}" target="_blank" style="display: inline-flex; align-items: center;">
+    <a href="${data.imdb}" target="_blank" style="display:inline-flex;align-items:center;">
       <img class="imdb-logo" src="https://static.wixstatic.com/media/fd2fb2_f544f361fa8f4349a4e538b2d50c219e~mv2.png" alt="IMDB-logo" />
     </a>
   </span>`;
 metadataEl.innerHTML = metaHTML + imdbHTML;
 
-// Medvirkende og regissør
+// Cast-info
 document.querySelector(".cast-info").innerHTML = `
   <p><strong>Medvirkende:</strong> ${data.skuespillere}</p>
   <p><strong>Regissør:</strong> ${data.regissor}</p>
@@ -316,10 +347,10 @@ watchBtn.addEventListener("click", () => {
   localStorage.setItem(`${filmNavn}-status`, "påbegynt");
   filmStatus = "påbegynt";
   oppdaterKnapp();
-  window.location.href = data.watchUrl; // Sender til videospilleren
+  window.location.href = data.watchUrl;
 });
 
-// Hvis filmen har <video>-tag på watchUrl-siden
+// Video slutt = ferdig
 const videoEl = document.querySelector("video");
 if (videoEl) {
   videoEl.addEventListener("ended", () => {
@@ -329,7 +360,7 @@ if (videoEl) {
   });
 }
 
-// ---- Legg til i min liste ----
+// ---- Min liste ----
 const addToListBtn = document.getElementById("addToListBtn");
 let minListe = JSON.parse(localStorage.getItem("minListe")) || [];
 
@@ -361,34 +392,18 @@ addToListBtn.addEventListener("click", () => {
   oppdaterListeKnapp();
 });
 
-// ---- Last inn profilbilde hvis lagret ----
+// ---- Last inn profilbilde ----
 const lagretBilde = localStorage.getItem("profilbilde");
 if (lagretBilde) {
   document.getElementById("menyProfilbilde").src = lagretBilde;
 }
 
-// ---- Meny-knapp logikk ----
-const menuToggle = document.getElementById("menuToggle");
-const verticalNav = document.getElementById("verticalNav");
-
-menuToggle.addEventListener("click", () => {
-  verticalNav.classList.toggle("collapsed");
-  menuToggle.classList.toggle("collapsed");
-
-  const icon = menuToggle.querySelector("i");
-  if (verticalNav.classList.contains("collapsed")) {
-    icon.classList.replace("fa-chevron-left", "fa-chevron-right");
-  } else {
-    icon.classList.replace("fa-chevron-right", "fa-chevron-left");
-  }
-});
-
-// ---- Fade-in effekt på siden ----
+// ---- Fade-in effekt ----
 window.addEventListener('DOMContentLoaded', () => {
   document.body.classList.add('loaded');
 });
 
-// ---- Dynamisk anbefalings-galleri ----
+// ---- Anbefalinger ----
 function hentTilfeldigeFilmer(antall) {
   const alleFilmer = Object.keys(filmer).filter(f => f !== filmNavn);
   const valgt = [];
@@ -406,7 +421,6 @@ anbefalte.forEach(navn => {
   const film = filmer[navn];
   const img = document.createElement("img");
 
-  // Bruk posterVertikal hvis tilgjengelig
   img.src = film.posterVertikal || film.poster || film.bakgrunn;
   img.alt = film.tittel;
 
@@ -416,7 +430,9 @@ anbefalte.forEach(navn => {
 
   gallery.appendChild(img);
 });
+  </script>
+</body>
+</html>
 
-</script>
 
 
