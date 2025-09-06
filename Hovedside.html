@@ -648,9 +648,14 @@ const brukere = JSON.parse(localStorage.getItem("brukere") || "{}");
 const bruker = brukere[innloggetBruker];
 
 // === Navigasjon ===
-function gåTilKonto() {
-  window.location.href = "konto.html";
-}
+document.addEventListener("DOMContentLoaded", () => {
+  const profilDiv = document.querySelector(".profilmeny");
+  if (profilDiv) {
+    profilDiv.addEventListener("click", () => {
+      window.location.href = "konto.html";
+    });
+  }
+});
 
 // Profilbilde fra localStorage
 const lagretBilde = localStorage.getItem("profilbilde");
@@ -822,6 +827,7 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 </script>
+
 
 
 
