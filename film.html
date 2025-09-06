@@ -347,25 +347,6 @@ body.loaded {
 
 /* For skjermer under 768px (mobil og små nettbrett) */
 @media (max-width: 768px) {
-  .vertical-nav {
-    flex-direction: row;
-    width: 100%;
-    height: 60px;
-    bottom: 0;
-    top: auto;
-    left: 0;
-    padding: 0 10px;
-    justify-content: space-around;
-  }
-
-  .profilmeny {
-    display: none;
-  }
-
-  .menu-toggle {
-    display: none;
-  }
-
   /* Hero fyller hele skjermen */
   .hero {
     margin-left: 0;
@@ -376,25 +357,25 @@ body.loaded {
     justify-content: flex-start; /* bildet øverst */
   }
 
+  /* Wrapper for innholdet – skyver alt ned */
   .content-wrapper {
     position: relative;
-    top: auto;
-    left: auto;
-    right: auto;
-    padding: 20px;
     display: flex;
     flex-direction: column;
-    justify-content: flex-end; /* skyver innholdet ned */
-    height: 100%; /* fyller hero */
+    justify-content: flex-end; /* skyver innholdet til bunn */
+    height: 100%; /* fyller hele hero */
     width: 100%;
+    padding: 20px;
+    align-items: center;
     z-index: 2;
   }
 
-  /* Logo og knapper nederst */
+  /* Logo rett over knappene */
   .logo-container {
-    margin: 0 auto 10px auto;
+    margin: 0 0 10px 0;
     max-width: 70%;
-    order: 0;
+    display: flex;
+    justify-content: center;
   }
 
   .film-logo {
@@ -402,22 +383,25 @@ body.loaded {
     height: auto;
   }
 
+  /* Knappene under logoen */
   .text-button-container {
     flex-direction: column;
-    gap: 15px;
     align-items: center;
+    gap: 10px;
     width: 100%;
-    order: 1;
   }
 
   .buttons-column {
-    width: 100%;
+    width: 80%;
+    display: flex;
+    flex-direction: column;
     align-items: center;
+    gap: 10px;
   }
 
   .watch-button,
   #addToListBtn {
-    width: 80%;
+    width: 100%;
     font-size: 16px;
     padding: 12px;
   }
@@ -425,7 +409,6 @@ body.loaded {
   /* Beskrivelse og metadata under knappene */
   .text-container,
   .cast-info {
-    order: 2;
     text-align: center;
     font-size: 14px;
     margin-top: 12px;
@@ -439,27 +422,8 @@ body.loaded {
     gap: 4px;
     justify-content: center;
   }
-
-  .recommendations {
-    margin: 0;
-    padding: 20px;
-  }
-
-  .recommendations h2 {
-    font-size: 20px;
-    margin-left: 0;
-  }
-
-  .gallery {
-    margin-left: 0;
-    gap: 10px;
-  }
-
-  .gallery img {
-    width: 120px;
-    height: 180px;
-  }
 }
+
 
   </style>
 </head>
