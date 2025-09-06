@@ -2,7 +2,7 @@
 <html lang="no">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Viktig for mobil -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Velg Profilbilde – Watch Nordic</title>
   <style>
     body {
@@ -35,6 +35,19 @@
       grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
       gap: 20px;
       justify-items: center;
+    }
+
+    .bilde-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .bilde-navn {
+      margin-top: 8px;
+      font-size: 0.9rem;
+      text-align: center;
+      word-break: break-word;
     }
 
     .profilbilde-valg {
@@ -97,6 +110,7 @@
         height: 90px;
       }
       .bilder-rad {
+        grid-template-columns: repeat(3, 1fr); /* Maks 3 per rad på mobil */
         gap: 15px;
       }
     }
@@ -138,7 +152,7 @@
           'https://static.wixstatic.com/media/fd2fb2_a59115fdde5f427a8f4ef746c6d2a110~mv2.jpg',
           'https://static.wixstatic.com/media/fd2fb2_b5e07231a79b4b9bb6f12790c3160216~mv2.jpg',
           'https://static.wixstatic.com/media/fd2fb2_be285b95911e4afab861aaba9bcb33ef~mv2.jpg'
-         ]
+        ]
       },
       {
         tittel: "Dyrene i Hakkebakke Skogen",
@@ -172,6 +186,9 @@
         bilderRad.className = 'bilder-rad';
 
         rad.bilder.forEach(url => {
+          const container = document.createElement('div');
+          container.className = 'bilde-container';
+
           const img = document.createElement('img');
           img.src = url;
           img.alt = `Profilbilde fra ${rad.tittel}`;
@@ -180,7 +197,14 @@
             valgtBilde = url;
             oppdaterValg();
           });
-          bilderRad.appendChild(img);
+
+          const navn = document.createElement('div');
+          navn.className = 'bilde-navn';
+          navn.textContent = url.split('/').pop().split('~')[0]; // Enkel automatisk navn
+
+          container.appendChild(img);
+          container.appendChild(navn);
+          bilderRad.appendChild(container);
         });
 
         radWrapper.appendChild(tittelEl);
