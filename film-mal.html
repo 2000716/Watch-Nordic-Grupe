@@ -15,10 +15,13 @@
 * { margin: 0; padding: 0; box-sizing: border-box; }
 * { margin: 0; padding: 0; box-sizing: border-box; }
 * { margin: 0; padding: 0; box-sizing: border-box; }
+/* === GLOBAL STIL === */
 body {
   margin: 0;
-  font-family: Arial, sans-serif;
+  padding: 0;
   background: #000;
+  font-family: Arial, sans-serif;
+  color: #fff;
   overflow: hidden;
 }
 
@@ -32,178 +35,376 @@ body {
   align-items: center;
 }
 
-video {
+#video {
   width: 100%;
   height: 100%;
-  object-fit: contain;
+  object-fit: cover;
   background: #000;
 }
 
-.ui {
+.back-button {
   position: absolute;
-  width: 100%;
-  height: 100%;
-  top: 0;
-  left: 0;
-  pointer-events: none;
+  top: 20px;
+  left: 20px;
+  z-index: 10;
 }
 
-.controls {
-  position: absolute;
-  bottom: 10px;
-  left: 0;
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 15px;
-  opacity: 1;
-  transition: opacity 0.3s;
-  pointer-events: auto;
-  background: rgba(0, 0, 0, 0.4);
-  padding: 8px;
-}
-
-.controls button {
-  background: rgba(255, 255, 255, 0.2);
-  border: none;
-  color: white;
-  font-size: 18px;
-  padding: 8px 12px;
-  border-radius: 5px;
+.back-button img {
+  width: 40px;
+  height: 40px;
   cursor: pointer;
-  transition: background 0.3s;
 }
 
-.controls button:hover {
-  background: rgba(255, 255, 255, 0.4);
-}
-
-.hidden .controls,
-.hidden .progress-container,
-.hidden .time-display,
-.hidden .movie-title {
-  opacity: 0;
-  pointer-events: none;
-}
-
-.progress-container {
-  position: absolute;
-  bottom: 50px;
-  left: 0;
-  width: 100%;
-  padding: 0 15px;
-  pointer-events: auto;
-}
-
-.progress-bar {
-  width: 100%;
-}
-
-.time-display {
+/* === FILMTITTEL === */
+.movie-title {
   position: absolute;
   bottom: 80px;
-  right: 15px;
-  font-size: 14px;
+  left: 20px;
+  font-size: 24px;
+  font-weight: bold;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+  z-index: 10;
+}
+
+/* === KONTROLLER === */
+.controls {
+  position: absolute;
+  bottom: 20px;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 20px;
+  z-index: 10;
+}
+
+.center-controls,
+.left-controls,
+.right-controls {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.btn img {
+  width: 28px;
+  height: 28px;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.btn img:hover {
+  transform: scale(1.2);
+}
+
+.like-btn {
+  font-size: 16px;
+  padding: 6px 12px;
+  border: none;
+  border-radius: 6px;
+  background: #444;
   color: #fff;
-  background: rgba(0, 0, 0, 0.4);
-  padding: 4px 8px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.like-btn.liked {
+  background: #e50914;
+}
+
+/* === PROGRESSBAR === */
+.progress-container {
+  position: absolute;
+  bottom: 60px;
+  left: 0;
+  right: 0;
+  padding: 0 20px;
+  z-index: 10;
+}
+
+.progress {
+  width: 100%;
+  height: 6px;
+  background: #444;
+  border-radius: 3px;
+  position: relative;
+  cursor: pointer;
+  transition: height 0.2s;
+}
+
+.progress:hover {
+  height: 10px;
+}
+
+.progress-filled {
+  width: 0%;
+  height: 100%;
+  background: #e50914;
+  border-radius: 3px;
+}
+
+.thumb {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #fff;
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  display: none;
+}
+
+.progress:hover .thumb {
+  display: block;
+}
+
+.preview-box {
+  position: absolute;
+  bottom: 25px;
+  width: 160px;
+  background: rgba(0, 0, 0, 0.85);
+  border: 1px solid #555;
+  border-radius: 4px;
+  padding: 5px;
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  pointer-events: none;
+}
+
+.preview-box img {
+  width: 100%;
+  height: auto;
   border-radius: 4px;
 }
 
-.movie-title {
-  position: absolute;
-  bottom: 120px;
-  left: 15px;
-  font-size: 24px;
-  font-weight: bold;
+.preview-box span {
+  font-size: 12px;
+  margin-top: 4px;
   color: #fff;
-  background: rgba(0, 0, 0, 0.4);
-  padding: 6px 10px;
-  border-radius: 6px;
 }
 
+/* === TIDSVISNING === */
+.time-display {
+  position: absolute;
+  bottom: 65px;
+  right: 20px;
+  font-size: 14px;
+  z-index: 10;
+}
+
+/* === UNDERTEKSTER === */
+.caption-menu {
+  position: absolute;
+  bottom: 100px;
+  right: 20px;
+  background: rgba(0, 0, 0, 0.9);
+  border: 1px solid #444;
+  border-radius: 6px;
+  padding: 10px;
+  display: none;
+  flex-direction: column;
+  gap: 8px;
+  z-index: 15;
+}
+
+.caption-menu button {
+  background: #333;
+  color: #fff;
+  border: none;
+  padding: 8px 14px;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: background 0.2s;
+  text-align: left;
+}
+
+.caption-menu button:hover {
+  background: #555;
+}
+
+.subtitle-overlay {
+  position: absolute;
+  bottom: 10%;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 28px;
+  text-align: center;
+  text-shadow: 2px 2px 6px #000;
+  line-height: 1.4;
+  max-width: 90%;
+  z-index: 12;
+}
+
+.subtitle-overlay.subtitle-up {
+  bottom: 20%;
+}
+
+/* === WATERMARK === */
 .watermark {
   position: absolute;
-  top: 10px;
-  right: 10px;
-  font-size: 14px;
-  font-weight: bold;
-  color: rgba(255, 255, 255, 0.7);
+  top: 20px;
+  right: 20px;
+  width: 60px;
+  opacity: 0.7;
   pointer-events: none;
+  z-index: 20;
 }
 
-.subtitles {
+/* === LOADING SPINNER === */
+.loading-spinner {
   position: absolute;
-  bottom: 15%;
-  width: 100%;
+  top: 50%;
+  left: 50%;
+  width: 50px;
+  height: 50px;
+  margin: -25px 0 0 -25px;
+  border: 6px solid rgba(255, 255, 255, 0.3);
+  border-top: 6px solid #fff;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  z-index: 25;
+  display: none;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* === RESUME BOX === */
+.resume-box {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: rgba(0, 0, 0, 0.95);
+  padding: 20px;
+  border-radius: 8px;
   text-align: center;
-  font-size: 22px;
+  z-index: 30;
+  display: none;
+}
+
+.resume-box p {
+  font-size: 18px;
+  margin-bottom: 15px;
+}
+
+.resume-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+}
+
+.resume-buttons button {
+  padding: 10px 16px;
+  font-size: 15px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+#resumeYes {
+  background: #e50914;
   color: #fff;
-  text-shadow: 2px 2px 4px #000;
-  pointer-events: none;
-  transition: bottom 0.3s;
 }
 
-.subtitle-up {
-  bottom: 25%;
+#resumeNo {
+  background: #444;
+  color: #fff;
 }
 
-/* 🎥 MOBILTILPASNING */
+/* === MOBILVENNLIG TILPASNING === */
 @media (max-width: 768px) {
-  .container {
-    height: auto;
-    max-height: 100vh;
-    overflow: hidden;
-    position: relative;
-  }
 
-  video {
-    width: 100%;
-    height: auto;
-    display: block;
+  .back-button img { width: 32px; height: 32px; }
+
+  .movie-title {
+    font-size: 18px;
+    bottom: 70px;
+    left: 15px;
   }
 
   .controls {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    background: rgba(0, 0, 0, 0.6);
-    padding: 8px;
-    opacity: 1;
+    padding: 10px;
+    gap: 10px;
+  }
+
+  .center-controls .btn img,
+  .left-controls .btn img,
+  .right-controls .btn img {
+    width: 24px;
+  }
+
+  .like-btn {
+    font-size: 14px;
+    padding: 6px 12px;
   }
 
   .progress-container {
-    position: absolute;
-    bottom: 45px;
-    left: 0;
-    width: 100%;
+    bottom: 55px;
     padding: 0 10px;
   }
 
+  .progress {
+    height: 10px; /* litt tykkere for touch */
+  }
+
+  .progress:hover { height: 10px; } /* deaktiver hover-effekt */
+  
+  .thumb {
+    width: 16px;
+    height: 16px;
+  }
+
   .time-display {
-    position: absolute;
-    bottom: 75px;
+    font-size: 12px;
+    bottom: 65px;
     right: 10px;
-    background: rgba(0,0,0,0.6);
-    padding: 2px 6px;
-    border-radius: 4px;
   }
 
-  .movie-title {
-    position: absolute;
+  .caption-menu {
+    right: 10px;
+    bottom: 90px;
+    min-width: 150px;
+    padding: 8px;
+  }
+
+  .caption-menu button {
+    font-size: 12px;
+    padding: 6px 10px;
+  }
+
+  .subtitle-overlay {
+    font-size: 20px;
+    bottom: 8%;
+  }
+
+  .subtitle-overlay.subtitle-up {
+    bottom: 18%;
+  }
+
+  .preview-box {
+    display: none !important; /* Skjul preview på mobil */
+  }
+
+  .watermark {
+    width: 40px;
     top: 10px;
-    left: 10px;
-    margin: 0;
-    font-size: 18px;
-    text-align: left;
-    background: rgba(0,0,0,0.6);
-    padding: 4px 8px;
-    border-radius: 6px;
+    right: 10px;
   }
-}
 
+  .loading-spinner {
+    width: 40px;
+    height: 40px;
+    border-width: 4px;
+  }
+
+  .resume-box p { font-size: 16px; }
+  .resume-buttons button { font-size: 14px; padding: 8px 12px; }
+}
 
   </style>
 </head>
@@ -689,16 +890,14 @@ progress.addEventListener("mouseleave", hidePreview);
 function showUI() {
   ui.classList.remove('hidden');
   subtitleOverlay.classList.add("subtitle-up");
-
   clearTimeout(hideTimeout);
   hideTimeout = setTimeout(() => {
     if (!video.paused) {
       ui.classList.add('hidden');
       subtitleOverlay.classList.remove("subtitle-up");
     }
-  }, 3000); // auto-hide uansett skjermstørrelse
+  }, 3000);
 }
-
 
 document.addEventListener('mousemove', showUI);
 document.addEventListener('keydown', showUI);
