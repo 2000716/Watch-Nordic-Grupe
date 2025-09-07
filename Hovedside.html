@@ -610,190 +610,90 @@ main {
 
 </main>
 <script>
-// Autentisering
+// ==================== AUTENTISERING ==================== //
 const epost = localStorage.getItem("epost");
 const passord = localStorage.getItem("passord");
-if (!epost || !passord) window.location.href = "Starts side.html";
 
+// Hvis ingen epost/passord er lagret, send brukeren tilbake til startsiden
+if (!epost || !passord) {
+  window.location.href = "Starts side.html";
+}
+
+// Lytt etter endringer i localStorage (f.eks. hvis brukeren logger ut i en annen fane)
 window.addEventListener("storage", () => {
   if (!localStorage.getItem("epost") || !localStorage.getItem("passord")) {
     window.location.href = "Starts side.html";
   }
 });
 
+// ==================== NAVIGASJON ==================== //
 function gåTilKonto() {
   window.location.href = "konto.html";
 }
 
-// Profilbilde fra localStorage
+// ==================== PROFILBILDE ==================== //
+// Hent profilbilde fra localStorage
 const lagretBilde = localStorage.getItem("profilbilde");
 if (lagretBilde) {
-  document.getElementById("menyProfilbilde").src = lagretBilde;
+  // Oppdater meny-profil
+  const menyProfil = document.getElementById("menyProfilbilde");
+  if (menyProfil) menyProfil.src = lagretBilde;
+
+  // Oppdater header-profil (på mobil)
+  const headerProfil = document.getElementById("headerProfilbilde");
+  if (headerProfil) headerProfil.src = lagretBilde;
 }
 
-// Jevn scroll-funksjon for gallerier
-function scrollGallery(button, direction) {
-  const gallery = button.closest('.gallery-wrapper').querySelector('.image-gallery');
-  const scrollAmount = 250;
-  const start = gallery.scrollLeft;
-  const target = start + scrollAmount * direction;
-  const duration = 300;
+// ==================== GALLERI-SCROLL ==================== //
+document.querySelectorAll(".gallery-wrapper").forEach(wrapper => {
+  const gallery = wrapper.querySelector(".image-gallery");
+  const leftBtn = wrapper.querySelector(".scroll-button.left");
+  const rightBtn = wrapper.querySelector(".scroll-button.right");
+  const fadeLeft = wrapper.querySelector(".fade-left");
+  const fadeRight = wrapper.querySelector(".fade-right");
 
-  let startTime = null;
+  // Funksjon for å oppdatere knappene og fade-effektene
+  function updateScrollState() {
+    const scrollLeft = gallery.scrollLeft;
+    const maxScroll = gallery.scrollWidth - gallery.clientWidth;
 
-  function animateScroll(time) {
-    if (!startTime) startTime = time;
-    const progress = Math.min((time - startTime) / duration, 1);
-    gallery.scrollLeft = start + (target - start) * easeInOutCubic(progress);
-
-    if (progress < 1) {
-      requestAnimationFrame(animateScroll);
-    } else {
-      updateScrollButtons(gallery);
-    }
+    if (leftBtn) leftBtn.classList.toggle("hidden", scrollLeft <= 0);
+    if (rightBtn) rightBtn.classList.toggle("hidden", scrollLeft >= maxScroll);
+    if (fadeLeft) fadeLeft.classList.toggle("fade-hidden", scrollLeft <= 0);
+    if (fadeRight) fadeRight.classList.toggle("fade-hidden", scrollLeft >= maxScroll);
   }
 
-  requestAnimationFrame(animateScroll);
-}
-
-function easeInOutCubic(t) {
-  return t < 0.5
-    ? 4 * t * t * t
-    : 1 - Math.pow(-2 * t + 2, 3) / 2;
-}
-
-function updateScrollButtons(gallery) {
-  const wrapper = gallery.closest('.gallery-wrapper');
-  const leftBtn = wrapper.querySelector('.scroll-button.left');
-  const rightBtn = wrapper.querySelector('.scroll-button.right');
-  const fadeLeft = wrapper.querySelector('.fade-left');
-  const fadeRight = wrapper.querySelector('.fade-right');
-
-  const atStart = gallery.scrollLeft <= 0;
-  const atEnd = Math.ceil(gallery.scrollLeft + gallery.clientWidth) >= gallery.scrollWidth;
-
-  leftBtn.classList.toggle('hidden', atStart);
-  rightBtn.classList.toggle('hidden', atEnd);
-  fadeLeft.classList.toggle('fade-hidden', atStart);
-  fadeRight.classList.toggle('fade-hidden', atEnd);
-}
-
-// Render "Fortsett å se"
-function renderFortsettÅSe() {
-  const galleri = document.getElementById("fortsettGalleri");
-  galleri.innerHTML = "";
-
-  let filmer = JSON.parse(localStorage.getItem("fortsettFilmer") || "[]");
-  const ikkeFerdige = filmer.filter(f => f.lastWatched < 95);
-
-  if (ikkeFerdige.length === 0) {
-    document.getElementById("fortsettÅSe").style.display = "none";
-    return;
-  }
-
-  ikkeFerdige.forEach(film => {
-    const lenke = document.createElement("a");
-    lenke.href = film.link.includes("?")
-      ? `${film.link}&start=${film.lastWatched}`
-      : `${film.link}?start=${film.lastWatched}`;
-    lenke.style.display = "block";
-
-    const wrapper = document.createElement("div");
-    wrapper.className = "image-with-progress";
-
-    const bilde = document.createElement("img");
-    bilde.src = film.poster || film.thumbnail || "https://via.placeholder.com/220x124?text=Film";
-    bilde.alt = film.title;
-
-    const progressBar = document.createElement("div");
-    progressBar.className = "progress-bar";
-    progressBar.style.setProperty("--progress", `${Math.min(film.lastWatched, 100)}%`);
-
-    wrapper.appendChild(bilde);
-    wrapper.appendChild(progressBar);
-    lenke.appendChild(wrapper);
-    galleri.appendChild(lenke);
-  });
-}
-
-// Lagre film til localStorage når den startes
-function startFilm(filmData) {
-  let filmer = JSON.parse(localStorage.getItem("fortsettFilmer") || "[]");
-  const index = filmer.findIndex(f => f.link === filmData.link);
-  if (index !== -1) filmer.splice(index, 1);
-  filmer.unshift(filmData);
-  localStorage.setItem("fortsettFilmer", JSON.stringify(filmer));
-}
-
-// Automatisk registrering når bruker klikker "Se film"
-function leggTilAutoStartFilm() {
-  const knapper = document.querySelectorAll(".watch-button");
-
-  knapper.forEach(knapp => {
-    knapp.addEventListener("click", () => {
-      const href = knapp.getAttribute("href");
-      if (!href || !href.includes("film.html?navn=")) return;
-
-      const navn = new URLSearchParams(href.split("?")[1]).get("navn");
-      const filmTittel = navn.replace(/-/g, " ").replace(/\b\w/g, l => l.toUpperCase());
-
-      const heroBanner = knapp.closest(".hero-banner");
-      let posterBilde = null;
-      if (heroBanner) {
-        const bilde = heroBanner.querySelector(".banner-image");
-        if (bilde) posterBilde = bilde.src;
-      }
-
-      startFilm({
-        title: filmTittel,
-        link: href,
-        poster: posterBilde,
-        lastWatched: 0
-      });
+  // Scroll med knappene
+  if (leftBtn) {
+    leftBtn.addEventListener("click", () => {
+      gallery.scrollBy({ left: -300, behavior: "smooth" });
     });
-  });
-}
-
-// Cookie-banner
-function visCookieBanner() {
-  const banner = document.getElementById("cookieBanner");
-  if (!banner) return;
-  if (!localStorage.getItem("cookiesGodtatt")) {
-    banner.style.display = "block";
   }
-}
-
-function godtaCookies() {
-  localStorage.setItem("cookiesGodtatt", true);
-  const banner = document.getElementById("cookieBanner");
-  if (banner) banner.style.display = "none";
-}
-
-// === Ny funksjon: Marker valgt bilde med flerfarget ramme ===
-function leggTilBildeMarkering() {
-  document.querySelectorAll(".image-gallery a").forEach(link => {
-    link.addEventListener("click", (e) => {
-      document.querySelectorAll(".image-gallery a").forEach(l => l.classList.remove("selected"));
-      link.classList.add("selected");
+  if (rightBtn) {
+    rightBtn.addEventListener("click", () => {
+      gallery.scrollBy({ left: 300, behavior: "smooth" });
     });
-  });
-}
+  }
 
-// Når siden er lastet
-document.addEventListener("DOMContentLoaded", () => {
-  const galleries = document.querySelectorAll('.image-gallery');
-  galleries.forEach(gallery => {
-    updateScrollButtons(gallery);
-    gallery.addEventListener('scroll', () => updateScrollButtons(gallery));
-  });
-gi
-  renderFortsettÅSe();
-  visCookieBanner();
-  leggTilAutoStartFilm();
-  leggTilBildeMarkering();
+  // Oppdater status ved scrolling
+  gallery.addEventListener("scroll", updateScrollState);
+
+  // Initielt oppsett
+  updateScrollState();
 });
 
+// ==================== FREMDIRFTSLINJER ==================== //
+// Oppdater fremdriftslinjer dynamisk basert på data-progress attributt
+document.querySelectorAll(".progress-bar").forEach(bar => {
+  const progress = bar.getAttribute("data-progress");
+  if (progress) {
+    bar.style.setProperty("--progress", progress + "%");
+  }
+});
 </script>
+
+
+
 
 
 
