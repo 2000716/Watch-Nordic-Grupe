@@ -559,8 +559,9 @@ document.querySelector(".cast-info").innerHTML = `
   <p><strong>Regissør:</strong> ${data.regissor}</p>
 `;
 
-// ---- Innloggingsstatus ----
-let isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
+// ---- Innloggingsstatus = finnes profilbilde ----
+const lagretBilde = localStorage.getItem("profilbilde");
+let isLoggedIn = !!lagretBilde;
 
 // ---- Se nå / Logg inn-knappen ----
 const watchBtn = document.getElementById("watchBtn");
@@ -573,7 +574,7 @@ function oppdaterKnapp() {
   if (!isLoggedIn) {
     icon.className = "fas fa-lock";      // lås-ikon
     text.textContent = " Logg inn";      // endret tekst
-    watchBtn.onclick = () => window.location.href = "login.html"; // send til login
+    watchBtn.onclick = () => window.location.href = "konto.html"; // sender til profilsiden
   } else {
     if (filmStatus === "påbegynt") {
       icon.className = "fas fa-play";
@@ -586,13 +587,13 @@ function oppdaterKnapp() {
       localStorage.setItem(`${filmNavn}-status`, "påbegynt");
       filmStatus = "påbegynt";
       oppdaterKnapp();
-      window.location.href = data.watchUrl; // Sender til videospilleren
+      window.location.href = data.watchUrl;
     };
   }
 }
 oppdaterKnapp();
 
-// Hvis filmen har <video>-tag på watchUrl-siden
+// ---- Video ferdig-spilt ----
 const videoEl = document.querySelector("video");
 if (videoEl) {
   videoEl.addEventListener("ended", () => {
@@ -635,7 +636,6 @@ addToListBtn.addEventListener("click", () => {
 });
 
 // ---- Last inn profilbilde hvis lagret ----
-const lagretBilde = localStorage.getItem("profilbilde");
 if (lagretBilde) {
   document.getElementById("menyProfilbilde").src = lagretBilde;
 }
@@ -692,6 +692,7 @@ anbefalte.forEach(navn => {
 </script>
 </body>
 </html>
+
 
 
 
