@@ -559,29 +559,38 @@ document.querySelector(".cast-info").innerHTML = `
   <p><strong>Regissør:</strong> ${data.regissor}</p>
 `;
 
-// ---- Se nå-knappen ----
+// ---- Innloggingsstatus ----
+let isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
+
+// ---- Se nå / Logg inn-knappen ----
 const watchBtn = document.getElementById("watchBtn");
 let filmStatus = localStorage.getItem(`${filmNavn}-status`);
 
 function oppdaterKnapp() {
   const icon = watchBtn.querySelector("i");
   const text = watchBtn.querySelector("span");
-  if (filmStatus === "påbegynt") {
-    icon.className = "fas fa-play";
-    text.textContent = " Gjenoppta";
+
+  if (!isLoggedIn) {
+    icon.className = "fas fa-lock";      // lås-ikon
+    text.textContent = " Logg inn";      // endret tekst
+    watchBtn.onclick = () => window.location.href = "login.html"; // send til login
   } else {
-    icon.className = "fas fa-play";
-    text.textContent = " Se nå";
+    if (filmStatus === "påbegynt") {
+      icon.className = "fas fa-play";
+      text.textContent = " Gjenoppta";
+    } else {
+      icon.className = "fas fa-play";
+      text.textContent = " Se nå";
+    }
+    watchBtn.onclick = () => {
+      localStorage.setItem(`${filmNavn}-status`, "påbegynt");
+      filmStatus = "påbegynt";
+      oppdaterKnapp();
+      window.location.href = data.watchUrl; // Sender til videospilleren
+    };
   }
 }
 oppdaterKnapp();
-
-watchBtn.addEventListener("click", () => {
-  localStorage.setItem(`${filmNavn}-status`, "påbegynt");
-  filmStatus = "påbegynt";
-  oppdaterKnapp();
-  window.location.href = data.watchUrl;
-});
 
 // Hvis filmen har <video>-tag på watchUrl-siden
 const videoEl = document.querySelector("video");
@@ -669,16 +678,21 @@ const gallery = document.getElementById("recommendationGallery");
 anbefalte.forEach(navn => {
   const film = filmer[navn];
   const img = document.createElement("img");
+
   img.src = film.posterVertikal || film.poster || film.bakgrunn;
   img.alt = film.tittel;
+
   img.addEventListener("click", () => {
     window.location.href = `film.html?navn=${navn}`;
   });
+
   gallery.appendChild(img);
 });
+
 </script>
 </body>
 </html>
+
 
 
 
