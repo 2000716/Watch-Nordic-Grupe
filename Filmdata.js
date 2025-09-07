@@ -189,8 +189,9 @@ const filmer = {
     beskrivelse: "Når Gammelsmurf blir tatt av de onde trollmennene Razamel og Gargamel, leder Smurfette Smurfene på et oppdrag til den virkelige verden for å redde ham.",
     metadata: ["USA", "2025", "7+", "Animasjon / Familie", "1 t 29 min"],
     imdb: "https://www.imdb.com/title/tt18069420/",
-    skuespillere: "Aksel Hennie, Agnes Kittelsen, Nicolai Cleve Broch",
-    regissor: "Joachim Rønning, Espen Sandberg",
-    watchUrl: "film-mal.html?id=max-manus"
+    skuespillere: "Rihanna, Natasha Lyonne, Hannah Waddingham, Kurt Russell, Nick Offerman,",
+    regissor: " Chris Miller",
+    watchUrl: "film-mal.html?id=smurfs"
   },
 };
+
