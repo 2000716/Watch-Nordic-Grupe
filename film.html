@@ -7,6 +7,7 @@
   <link rel="icon" type="image/png" href="https://static.wixstatic.com/media/fd2fb2_39376e4ee55b460ab7a3ebbfcf35fef7~mv2.png" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
   <style>
+/* --- Globalt --- */
 * {
   box-sizing: border-box;
   margin: 0;
@@ -25,7 +26,7 @@ body.loaded {
   opacity: 1;
 }
 
-/* Navigasjon (desktop) */
+/* --- Navigasjon (desktop) --- */
 .vertical-nav {
   width: 70px;
   height: 100vh;
@@ -113,7 +114,7 @@ body.loaded {
   left: 0;
 }
 
-/* Hero-seksjon */
+/* --- Hero-seksjon --- */
 .hero {
   margin-left: 70px;
   position: relative;
@@ -183,7 +184,7 @@ body.loaded {
   object-fit: contain;
 }
 
-/* Innhold venstre side */
+/* --- Innhold venstre side --- */
 .left-content {
   display: flex;
   flex-direction: column;
@@ -213,7 +214,6 @@ body.loaded {
   margin-bottom: 8px;
 }
 
-/* Metadata med IMDB-logo sentrert */
 .metadata {
   margin-top: 14px;
   color: #ddd;
@@ -300,6 +300,7 @@ body.loaded {
   100% { opacity: 1; transform: scale(1); }
 }
 
+/* --- Anbefalinger --- */
 .recommendations {
   margin-left: 70px;
   padding: 40px 60px 20px 60px;
@@ -326,21 +327,27 @@ body.loaded {
   justify-content: flex-start;
   margin-left: 30px;
   overflow-x: auto;
+  scroll-snap-type: x mandatory;
   padding-bottom: 10px;
-}
-
-.gallery::-webkit-scrollbar {
-  height: 6px;
+  padding-left: 16px;
+  padding-right: 16px;
 }
 
 .gallery img {
   width: 160px;
   height: 240px;
-  border-radius: 6px;
+  border-radius: 8px;
   object-fit: cover;
   cursor: pointer;
-  transition: transform 0.3s;
+  transition: transform 0.3s, box-shadow 0.3s;
   flex: 0 0 auto;
+  scroll-snap-align: start;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+}
+
+.gallery img:hover {
+  transform: scale(1.05);
+  box-shadow: 0 6px 16px rgba(0,0,0,0.6);
 }
 
 /* --- Mobiltilpasning --- */
@@ -436,14 +443,9 @@ body.loaded {
     text-align: center;
   }
 
-  .gallery {
-    margin-left: 0;
-    gap: 12px;
-  }
-
   .gallery img {
-    width: 120px;
-    height: 180px;
+    width: 140px;
+    height: 210px;
   }
 }
 
@@ -458,10 +460,11 @@ body.loaded {
   }
 
   .gallery img {
-    width: 100px;
-    height: 150px;
+    width: 120px;
+    height: 180px;
   }
 }
+
   </style>
 </head>
 <body>
@@ -676,6 +679,7 @@ anbefalte.forEach(navn => {
 </script>
 </body>
 </html>
+
 
 
 
