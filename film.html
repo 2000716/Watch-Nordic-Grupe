@@ -302,7 +302,7 @@ body.loaded {
 
 .recommendations {
   margin-left: 70px;
-  padding: 40px 60px 20px 60px; /* behold normal padding */
+  padding: 40px 60px 20px 60px;
   background: black;
   transition: margin-left 0.3s ease;
   margin-top: -80px;
@@ -316,21 +316,21 @@ body.loaded {
 .recommendations h2 {
   font-size: 24px;
   margin-bottom: 18px;
-  margin-left: 40px; /* flytter kun tittelen like mye som galleriet */
+  margin-left: 40px;
 }
 
 .gallery {
   display: flex;
-  flex-wrap: nowrap;          /* alt på én rad */
+  flex-wrap: nowrap;
   gap: 16px;
   justify-content: flex-start;
-  margin-left: 30px;          /* skyver til høyre */
-  overflow-x: auto;           /* scroll hvis det ikke er plass */
-  padding-bottom: 10px;       /* litt luft under */
+  margin-left: 30px;
+  overflow-x: auto;
+  padding-bottom: 10px;
 }
 
 .gallery::-webkit-scrollbar {
-  height: 6px;                /* liten scrollbar */
+  height: 6px;
 }
 
 .gallery img {
@@ -340,10 +340,104 @@ body.loaded {
   object-fit: cover;
   cursor: pointer;
   transition: transform 0.3s;
-  flex: 0 0 auto;             /* behold fast bredde */
+  flex: 0 0 auto;
 }
 
+/* ---- Mobiltilpasning ---- */
+@media (max-width: 768px) {
+  .vertical-nav,
+  .menu-toggle {
+    display: none;
+  }
 
+  .hero {
+    margin-left: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    height: auto;
+    min-height: 100vh;
+    padding: 0;
+  }
+
+  .background-image {
+    position: relative;
+    height: 40vh;
+    filter: brightness(0.7);
+  }
+
+  .overlay,
+  .bottom-fade {
+    display: none;
+  }
+
+  .mobile-exit {
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    z-index: 10;
+    font-size: 26px;
+    color: white;
+    background: rgba(0,0,0,0.5);
+    border-radius: 50%;
+    padding: 10px;
+    cursor: pointer;
+  }
+
+  .logo-container {
+    margin: 20px auto;
+    width: 60%;
+    height: auto;
+  }
+
+  .text-button-container {
+    flex-direction: column-reverse;
+    align-items: center;
+    gap: 20px;
+    padding: 20px;
+  }
+
+  .text-container {
+    text-align: center;
+  }
+
+  .cast-info {
+    text-align: center;
+  }
+
+  .buttons-column {
+    width: 100%;
+    max-width: 320px;
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 20;
+  }
+
+  .watch-button {
+    width: 100%;
+    padding: 12px;
+    font-size: 16px;
+  }
+
+  .recommendations {
+    margin-left: 0;
+    padding: 20px;
+    margin-top: 20px;
+  }
+
+  .recommendations h2 {
+    margin-left: 0;
+    text-align: center;
+  }
+
+  .gallery {
+    margin-left: 0;
+    justify-content: center;
+  }
+}
   </style>
 </head>
 <body>
@@ -364,8 +458,11 @@ body.loaded {
 <button class="menu-toggle" id="menuToggle"><i class="fas fa-chevron-left"></i></button>
 
 <div class="hero">
-  <img class="background-image" id="backgroundImage" src="" alt="Bakgrunnsbilde" />
+  <div class="mobile-exit" onclick="window.history.back()">
+    <i class="fas fa-arrow-left"></i>
+  </div>
 
+  <img class="background-image" id="backgroundImage" src="" alt="Bakgrunnsbilde" />
   <div class="overlay"></div>
   <div class="bottom-fade"></div>
 
@@ -374,17 +471,16 @@ body.loaded {
       <img class="film-logo" src="" alt="Filmlogo" />
     </div>
 
-  <div class="left-content">
+    <div class="left-content">
       <div class="text-button-container">
         <div class="buttons-column">
-<button class="watch-button" id="watchBtn">
-  <i class="fas fa-play"></i><span> Se nå</span>
-</button>
+          <button class="watch-button" id="watchBtn">
+            <i class="fas fa-play"></i><span> Se nå</span>
+          </button>
 
-<button class="watch-button" id="addToListBtn">
-  <i class="fas fa-plus"></i><span> Legg til i Min liste</span>
-</button>
-
+          <button class="watch-button" id="addToListBtn">
+            <i class="fas fa-plus"></i><span> Legg til i Min liste</span>
+          </button>
         </div>
 
         <div class="text-container">
@@ -403,7 +499,6 @@ body.loaded {
   <div class="gallery" id="recommendationGallery"></div>
 </div>
 
-
 <script src="Filmdata.js"></script>
 <script>
 const params = new URLSearchParams(window.location.search);
@@ -415,13 +510,11 @@ if (!data) {
   window.location.href = "Hovedside.html";
 }
 
-// Sett tittel, bilder og tekst
 document.title = data.tittel;
 document.getElementById("backgroundImage").src = data.bakgrunn;
 document.querySelector(".film-logo").src = data.logo;
 document.querySelector(".description").textContent = data.beskrivelse;
 
-// Bygg metadata og IMDB-lenke
 const metadataEl = document.querySelector(".metadata");
 const metaHTML = data.metadata.map((m) => `<span>${m}</span><span>•</span>`).join("");
 const imdbHTML = `
@@ -432,13 +525,11 @@ const imdbHTML = `
   </span>`;
 metadataEl.innerHTML = metaHTML + imdbHTML;
 
-// Medvirkende og regissør
 document.querySelector(".cast-info").innerHTML = `
   <p><strong>Medvirkende:</strong> ${data.skuespillere}</p>
   <p><strong>Regissør:</strong> ${data.regissor}</p>
 `;
 
-// ---- Se nå-knappen ----
 const watchBtn = document.getElementById("watchBtn");
 let filmStatus = localStorage.getItem(`${filmNavn}-status`);
 
@@ -459,10 +550,9 @@ watchBtn.addEventListener("click", () => {
   localStorage.setItem(`${filmNavn}-status`, "påbegynt");
   filmStatus = "påbegynt";
   oppdaterKnapp();
-  window.location.href = data.watchUrl; // Sender til videospilleren
+  window.location.href = data.watchUrl;
 });
 
-// Hvis filmen har <video>-tag på watchUrl-siden
 const videoEl = document.querySelector("video");
 if (videoEl) {
   videoEl.addEventListener("ended", () => {
@@ -472,7 +562,6 @@ if (videoEl) {
   });
 }
 
-// ---- Legg til i min liste ----
 const addToListBtn = document.getElementById("addToListBtn");
 let minListe = JSON.parse(localStorage.getItem("minListe")) || [];
 
@@ -504,13 +593,11 @@ addToListBtn.addEventListener("click", () => {
   oppdaterListeKnapp();
 });
 
-// ---- Last inn profilbilde hvis lagret ----
 const lagretBilde = localStorage.getItem("profilbilde");
 if (lagretBilde) {
   document.getElementById("menyProfilbilde").src = lagretBilde;
 }
 
-// ---- Meny-knapp logikk ----
 const menuToggle = document.getElementById("menuToggle");
 const verticalNav = document.getElementById("verticalNav");
 
@@ -526,12 +613,10 @@ menuToggle.addEventListener("click", () => {
   }
 });
 
-// ---- Fade-in effekt på siden ----
 window.addEventListener('DOMContentLoaded', () => {
   document.body.classList.add('loaded');
 });
 
-// ---- Dynamisk anbefalings-galleri ----
 function hentTilfeldigeFilmer(antall) {
   const alleFilmer = Object.keys(filmer).filter(f => f !== filmNavn);
   const valgt = [];
@@ -548,19 +633,17 @@ const gallery = document.getElementById("recommendationGallery");
 anbefalte.forEach(navn => {
   const film = filmer[navn];
   const img = document.createElement("img");
-
-  // Bruk posterVertikal hvis tilgjengelig
   img.src = film.posterVertikal || film.poster || film.bakgrunn;
   img.alt = film.tittel;
-
   img.addEventListener("click", () => {
     window.location.href = `film.html?navn=${navn}`;
   });
-
   gallery.appendChild(img);
 });
-
 </script>
+</body>
+</html>
+
 
 
 
