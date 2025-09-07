@@ -183,7 +183,7 @@ const filmer = {
        "smurfs": {
     tittel: "Smurfs",
     bakgrunn: "https://image.tmdb.org/t/p/original/9whEVuKte4Qi0LI4TzPf7glinJW.jpg",
-    logo: "https://static.wikia.nocookie.net/international-entertainment-project/images/2/21/Smurfs_%282025%29_-_logo_%28English%29.png/revision/latest/scale-to-width-down/1200?cb=20250207014554",
+    logo: "https://static.wixstatic.com/media/fd2fb2_ce3b62cfdc2945d49deb2e0cf8f0684a~mv2.png",
     poster: "https://hype.my/wp-content/uploads/2025/07/Smurfs-Header.png",
     posterVertikal: "https://image.tmdb.org/t/p/original/3dwNXK6A5Jmw7h4JRqsq2tQIreQ.jpg", // portrett
     beskrivelse: "Når Gammelsmurf blir tatt av de onde trollmennene Razamel og Gargamel, leder Smurfette Smurfene på et oppdrag til den virkelige verden for å redde ham.",
@@ -194,4 +194,5 @@ const filmer = {
     watchUrl: "film-mal.html?id=smurfs"
   },
 };
+
 
