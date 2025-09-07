@@ -87,7 +87,7 @@ main {
   margin: 0 auto;
 }
 
-/* Topp-logo */
+/* Topp-logo + profil */
 .top-header {
   display: flex;
   justify-content: space-between;
@@ -95,10 +95,23 @@ main {
   margin-bottom: 20px;
 }
 
-.top-header img {
+.top-header .watch-logo {
   width: 200px;
 }
 
+.header-profil {
+  display: none; /* skjules på desktop */
+}
+
+.header-profil img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #fff;
+}
+
+/* Hero-banner */
 .hero-banner {
   position: relative;
   height: 350px;
@@ -107,10 +120,8 @@ main {
   margin-bottom: 30px;
   margin-left: 16px;
   width: calc(100% - 16px);
-
-  /* fjernet glow */
   box-shadow: none;
-  border: 2px solid #00FFCC; /* tynn ramme */
+  border: 2px solid #00FFCC;
 }
 
 .banner-image {
@@ -214,14 +225,11 @@ main {
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.3s ease;
-
-  /* Hindre tekstvalg i alle nettlesere */
-  -webkit-user-select: none; /* Safari / iOS */
-  -moz-user-select: none;    /* Firefox */
-  -ms-user-select: none;     /* gammel IE/Edge */
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
   user-select: none;
 }
-
 
 .scroll-button.left {
   left: 0;
@@ -250,25 +258,17 @@ main {
   -ms-overflow-style: none;
 }
 
-/* Skjul scrollbar i Chrome, Safari og nyere Edge */
 .image-gallery::-webkit-scrollbar {
   display: none;
 }
 
-
-.image-gallery::-webkit-scrollbar {
-  display: none;
-}
-
-/* Ramme og hover-effekt uten hakking */
 .image-gallery a {
   display: inline-block;
   position: relative;
   border-radius: 5px;
   background: transparent;
   overflow: visible;
-
-  border: 2px solid transparent; /* usynlig ramme hele tiden */
+  border: 2px solid transparent;
   transition: border 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
 }
 
@@ -280,7 +280,6 @@ main {
   display: block;
   transition: transform 0.3s ease;
 }
-
 
 .image-gallery a:hover img {
   transform: scale(1.05);
@@ -350,11 +349,11 @@ main {
   color: #00FFCC;
 }
 
-/* Sjanger-galleri med ikon */
+/* Sjanger-galleri */
 .genre-gallery a {
   display: flex;
   align-items: center;
-  justify-content: space-between;  /* tekst til venstre, ikon til høyre */
+  justify-content: space-between;
   min-width: 160px;
   height: 60px;
   border-radius: 30px;
@@ -382,7 +381,6 @@ main {
 
 /* ===== Mobilvennlig tilpasning ===== */
 @media (max-width: 768px) {
-  /* Navigasjon */
   .vertical-nav {
     width: 100%;
     height: 60px;
@@ -403,28 +401,29 @@ main {
     margin-bottom: 0;
   }
 
-  .profilmeny img {
-    width: 40px;
-    height: 40px;
-  }
-
   .nav-icon {
     font-size: 20px;
     padding: 8px;
   }
 
-  /* Hovedinnhold */
   main {
     margin-left: 0;
-    margin-bottom: 70px; /* plass til bunnmeny */
+    margin-bottom: 70px;
     padding: 10px;
   }
 
-  .top-header img {
+  .top-header .watch-logo {
     width: 140px;
   }
 
-  /* Hero-banner */
+  .header-profil {
+    display: block;
+  }
+
+  .vertical-nav .profilmeny {
+    display: none; /* skjul i bunnmenyen */
+  }
+
   .hero-banner {
     height: 200px;
     margin-left: 0;
@@ -440,7 +439,6 @@ main {
     font-size: 14px;
   }
 
-  /* Gallerier */
   .image-gallery a img,
   .image-with-progress {
     width: 160px;
@@ -482,8 +480,6 @@ main {
     padding: 15px 5px;
   }
 }
-
-
 </style>
 </head>
 <body>
@@ -503,8 +499,10 @@ main {
   <main>
     <div class="content-wrapper">
       <div class="top-header">
-        <div></div>
-        <img src="https://static.wixstatic.com/media/fd2fb2_a4b2ace62dff4605a0387f46aad8a404~mv2.png" alt="Watch Logo" />
+        <img class="watch-logo" src="https://static.wixstatic.com/media/fd2fb2_a4b2ace62dff4605a0387f46aad8a404~mv2.png" alt="Watch Logo" />
+        <div class="profilmeny header-profil" onclick="gåTilKonto()">
+          <img id="headerProfilbilde" src="https://via.placeholder.com/100" alt="Min profil" />
+        </div>
       </div>
 
       <!-- Hero Banner -->
@@ -514,7 +512,6 @@ main {
           <img class="film-logo" src="https://image.tmdb.org/t/p/original/vJ8klKeBNrUkgUq6mnsWHOakgCk.png" alt="Film Logo">
         </div>
       </section>
-
      
     <section class="gallery-section">
       <h2>Nye filmer på Watch</h2>
@@ -797,6 +794,7 @@ gi
 });
 
 </script>
+
 
 
 
