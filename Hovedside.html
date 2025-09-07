@@ -87,13 +87,14 @@ main {
   margin: 0 auto;
 }
 
-/* Topp-logo + profil */
 .top-header {
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-end; /* skyver innholdet til høyre */
   align-items: center;
   margin-bottom: 20px;
+  gap: 16px; /* gir litt luft mellom logo og profilbilde */
 }
+
 
 .top-header .watch-logo {
   width: 200px;
@@ -698,6 +699,7 @@ document.querySelectorAll(".progress-bar").forEach(bar => {
   }
 });
 </script>
+
 
 
 
