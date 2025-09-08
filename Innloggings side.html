@@ -5,7 +5,46 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Innlogging / Registrering</title>
   <style>
-    /* ... behold samme CSS som du har ... */
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: 
+        linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)),
+        url('https://static.wixstatic.com/media/fd2fb2_cb01bba1adf84bf1aa5ef6ec7cb2f055~mv2.png') 
+        no-repeat center center fixed;
+      background-size: cover;
+      font-family: Arial, sans-serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      color: white;
+    }
+
+    .container {
+      background-color: rgba(15, 42, 46, 0.5);
+      padding: 40px;
+      border-radius: 12px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.6);
+      max-width: 400px;
+      width: 100%;
+      text-align: center;
+    }
+
+    h2 { margin-bottom: 20px; }
+    label { display: block; text-align: left; margin-top: 15px; margin-bottom: 5px; font-size: 14px; }
+    input { width: 100%; padding: 12px; border: none; border-radius: 6px; }
+
+    button {
+      width: 100%; padding: 12px; background-color: #1b5457;
+      color: white; border: none; border-radius: 6px;
+      cursor: pointer; font-size: 16px; margin-top: 20px;
+    }
+    button:hover { background-color: #247274; }
+
+    .error { color: #ff4c4c; margin-top: 10px; min-height: 20px; }
+    .toggle-text, .forgot-text { margin-top: 15px; font-size: 14px; }
+    .toggle-text a, .forgot-text a { color: #00bfff; cursor: pointer; text-decoration: underline; }
   </style>
 </head>
 <body>
@@ -45,11 +84,10 @@
       getAuth, 
       createUserWithEmailAndPassword, 
       signInWithEmailAndPassword,
-      onAuthStateChanged,
-      signOut
+      onAuthStateChanged
     } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
-    // 🔧 Bytt ut med din egen Firebase config (fra Firebase Console)
+    // 🔧 Bytt ut med din egen Firebase-konfigurasjon
     const firebaseConfig = {
       apiKey: "DIN_API_KEY",
       authDomain: "DITT_PROSJEKT.firebaseapp.com",
@@ -72,14 +110,20 @@
       feilmelding.textContent = "";
 
       if (registreringsmodus) {
+        if (!navn) {
+          feilmelding.textContent = "Fyll ut navn, e-post og passord.";
+          return false;
+        }
+
         createUserWithEmailAndPassword(auth, epost, passord)
           .then(() => {
-            // Registrert → gå til hovedside
             window.location.href = "Hovedside.html";
           })
           .catch(error => {
             if (error.code === "auth/email-already-in-use") {
               feilmelding.textContent = "E-posten er allerede registrert.";
+            } else if (error.code === "auth/weak-password") {
+              feilmelding.textContent = "Passordet må være minst 6 tegn.";
             } else {
               feilmelding.textContent = error.message;
             }
@@ -87,7 +131,6 @@
       } else {
         signInWithEmailAndPassword(auth, epost, passord)
           .then(() => {
-            // Logget inn → gå til hovedside
             window.location.href = "Hovedside.html";
           })
           .catch(() => {
@@ -105,6 +148,7 @@
         'Allerede medlem? <a onclick="visInnlogging()">Logg inn</a>';
       document.getElementById("navnGruppe").style.display = "block";
       document.getElementById("feilmelding").textContent = "";
+      document.getElementById("passord").setAttribute("autocomplete", "new-password");
     }
 
     function visInnlogging() {
@@ -115,16 +159,17 @@
         'Er du ikke medlem? <a onclick="visRegistrering()">Registrer deg</a>';
       document.getElementById("navnGruppe").style.display = "none";
       document.getElementById("feilmelding").textContent = "";
+      document.getElementById("passord").setAttribute("autocomplete", "current-password");
     }
 
     // Husk brukeren automatisk
     onAuthStateChanged(auth, (user) => {
       if (user) {
-        // Brukeren er allerede innlogget, send videre
         window.location.href = "Hovedside.html";
       }
     });
   </script>
+
 </body>
 </html>
 
