@@ -7,19 +7,20 @@
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
-    body {
-      background: 
-        linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)),
-        url('https://static.wixstatic.com/media/fd2fb2_cb01bba1adf84bf1aa5ef6ec7cb2f055~mv2.png') 
-        no-repeat center center fixed;
-      background-size: cover;
-      font-family: Arial, sans-serif;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      height: 100vh;
-      color: white;
-    }
+   body {
+  background: 
+    linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)),
+    url('https://static.wixstatic.com/media/fd2fb2_cb01bba1adf84bf1aa5ef6ec7cb2f055~mv2.png') 
+    no-repeat center center fixed;
+  background-size: cover;
+  font-family: Arial, sans-serif;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  color: white;
+}
+
 
     .container {
       background-color: rgba(15, 42, 46, 0.5);
@@ -69,7 +70,7 @@
     </form>
 
     <div class="forgot-text">
-      <a href="#">Glemt passord?</a>
+      <a href="Passordfeil.html">Glemt passord?</a>
     </div>
 
     <div class="toggle-text" id="toggleText">
@@ -77,30 +78,16 @@
     </div>
   </div>
 
-  <!-- Firebase SDK -->
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-    import { 
-      getAuth, 
-      createUserWithEmailAndPassword, 
-      signInWithEmailAndPassword,
-      onAuthStateChanged
-    } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-
-    // 🔧 Bytt ut med din egen Firebase-konfigurasjon
-    const firebaseConfig = {
-      apiKey: "DIN_API_KEY",
-      authDomain: "DITT_PROSJEKT.firebaseapp.com",
-      projectId: "DITT_PROSJEKT",
-      storageBucket: "DITT_PROSJEKT.appspot.com",
-      messagingSenderId: "XXX",
-      appId: "XXX"
-    };
-
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-
+  <script>
     let registreringsmodus = false;
+
+    window.addEventListener("DOMContentLoaded", () => {
+      const lagretEpost = localStorage.getItem("epost");
+      const lagretPassord = localStorage.getItem("passord");
+
+      if (lagretEpost) document.getElementById("epost").value = lagretEpost;
+      if (lagretPassord) document.getElementById("passord").value = lagretPassord;
+    });
 
     function handterSkjema() {
       const epost = document.getElementById("epost").value.trim().toLowerCase();
@@ -109,34 +96,43 @@
       const feilmelding = document.getElementById("feilmelding");
       feilmelding.textContent = "";
 
+      let brukere = JSON.parse(localStorage.getItem("brukere") || "{}");
+
+      if (!epost || !passord || (registreringsmodus && !navn)) {
+        feilmelding.textContent = registreringsmodus
+          ? "Fyll ut navn, e-post og passord."
+          : "Fyll ut e-post og passord.";
+        return false;
+      }
+
       if (registreringsmodus) {
-        if (!navn) {
-          feilmelding.textContent = "Fyll ut navn, e-post og passord.";
+        if (brukere[epost]) {
+          feilmelding.textContent = "E-posten er allerede registrert.";
           return false;
         }
 
-        createUserWithEmailAndPassword(auth, epost, passord)
-          .then(() => {
-            window.location.href = "Hovedside.html";
-          })
-          .catch(error => {
-            if (error.code === "auth/email-already-in-use") {
-              feilmelding.textContent = "E-posten er allerede registrert.";
-            } else if (error.code === "auth/weak-password") {
-              feilmelding.textContent = "Passordet må være minst 6 tegn.";
-            } else {
-              feilmelding.textContent = error.message;
-            }
-          });
+        // Lagre ny bruker
+        brukere[epost] = { navn, passord };
+        localStorage.setItem("brukere", JSON.stringify(brukere));
+        localStorage.setItem("epost", epost);
+        localStorage.setItem("passord", passord);
+        localStorage.setItem("navn", navn);
+
+        window.location.href = "Hovedside.html";
       } else {
-        signInWithEmailAndPassword(auth, epost, passord)
-          .then(() => {
-            window.location.href = "Hovedside.html";
-          })
-          .catch(() => {
-            feilmelding.textContent = "Feil e-post eller passord.";
-          });
+        const bruker = brukere[epost];
+
+        if (bruker && bruker.passord === passord) {
+          localStorage.setItem("epost", epost);
+          localStorage.setItem("passord", passord);
+          localStorage.setItem("navn", bruker.navn);
+
+          window.location.href = "Hovedside.html";
+        } else {
+          feilmelding.textContent = "Feil e-post eller passord.";
+        }
       }
+
       return false;
     }
 
@@ -161,17 +157,13 @@
       document.getElementById("feilmelding").textContent = "";
       document.getElementById("passord").setAttribute("autocomplete", "current-password");
     }
-
-    // Husk brukeren automatisk
-    onAuthStateChanged(auth, (user) => {
-      if (user) {
-        window.location.href = "Hovedside.html";
-      }
-    });
   </script>
 
 </body>
 </html>
+
+
+
 
 
 
