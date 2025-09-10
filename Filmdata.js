@@ -202,13 +202,14 @@ const filmer = {
     poster: "https://static.wixstatic.com/media/fd2fb2_591857f6d2d643e9be3de342acde9761~mv2.jpg",
     posterVertikal: "https://image.tmdb.org/t/p/w780/lfToeZDzH6dlQNkUgP20X5H1fhD.jpg", // portrett
     beskrivelse: "Mummitrollene setter seil til Rivieraen, hvor Snorkmøen, etter en reise fylt med stormer og farer på øde øyer, blir blendet av oppmerksomheten til en playboy.",
-    metadata: ["Finland / Frankriket", "2015", "Alle", "Animasjon / Familie", "1 t 20 min"],
+    metadata: ["Finland", "2015", "Alle", "Animasjon / Familie", "1 t 20 min"],
     imdb: "https://www.imdb.com/title/tt2371399/",
     skuespillere: "Maria Sid, Russell Tovey, Mats Långbacka",
     regissor: "Xavier Picard",
     watchUrl: "film-mal.html?id=mummitrollet-på-rivieraen"
   },
 };
+
 
 
 
