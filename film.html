@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!DOCTYPE html> 
 <html lang="no">
 <head>
   <meta charset="UTF-8" />
@@ -374,6 +374,27 @@ body.loaded {
 .video-controls button:hover {
   background: rgba(255,255,255,0.2);
 }
+
+/* Bunntekst */
+.site-footer {
+  background-color: #000;
+  color: #aaa;
+  text-align: center;
+  padding: 20px 10px;
+  font-size: 14px;
+  margin-top: 40px;
+}
+
+.site-footer a {
+  color: #00FFCC;
+  text-decoration: none;
+  margin: 0 8px;
+  transition: color 0.3s ease;
+}
+
+.site-footer a:hover {
+  color: #fff;
+}
   </style>
 </head>
 <body>
@@ -436,6 +457,16 @@ body.loaded {
   <h2>Filmer du kanskje vil like</h2>
   <div class="gallery" id="recommendationGallery"></div>
 </div>
+
+<!-- Bunntekst -->
+<footer class="site-footer">
+  <p>&copy; 2025 FilmNet. Alle rettigheter reservert.</p>
+  <div class="footer-links">
+    <a href="Om-oss.html">Om oss</a> |
+    <a href="Kontakt.html">Kontakt</a> |
+    <a href="Personvern.html">Personvern</a>
+  </div>
+</footer>
 
 <script src="Filmdata.js"></script>
 <script>
@@ -640,6 +671,7 @@ if (data.trailer && data.trailer.trim() !== "") {
 </script>
 
 </html>
+
 
 
 
