@@ -14,7 +14,7 @@
 }
 
 body {
-  background-color: Black;
+  background-color: #091B1E;
   color: #fff;
   font-family: 'Segoe UI', sans-serif;
   opacity: 0;
@@ -470,6 +470,7 @@ body.loaded {
 
 <script src="Filmdata.js"></script>
 <script>
+// ---- All JS fra originalfilen beholdes uendret ----
 const params = new URLSearchParams(window.location.search);
 const filmNavn = params.get("navn");
 const data = filmer[filmNavn];
@@ -626,12 +627,10 @@ const videoControls = document.getElementById("videoControls");
 const pauseBtn = document.getElementById("pauseBtn");
 const soundBtn = document.getElementById("soundBtn");
 
-// Sjekk om filmen har trailer
 if (data.trailer && data.trailer.trim() !== "") {
   trailerVideo.src = data.trailer;
   trailerVideo.preload = "auto";
 
-  // Bytt til trailer etter 10 sekunder
   setTimeout(() => {
     backgroundImage.style.opacity = "0"; 
     trailerVideo.style.opacity = "1";
@@ -664,14 +663,13 @@ if (data.trailer && data.trailer.trim() !== "") {
     }
   });
 } else {
-  // Ingen trailer → bare vis bakgrunnsbildet
   trailerVideo.style.display = "none";
   videoControls.style.display = "none";
 }
 </script>
 
+</body>
 </html>
-
 
 
 
