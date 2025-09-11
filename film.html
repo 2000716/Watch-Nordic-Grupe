@@ -309,10 +309,10 @@ body.loaded {
 /* Anbefalinger */
 .recommendations {
   margin-left: 70px;
-  padding: 40px 60px 60px 60px; /* ekstra padding-bottom for å dekke gap */
+  padding: 40px 60px 60px 60px;
   background: black;
   transition: margin-left 0.3s ease;
-  margin-top: 0; /* fjernet negativ margin */
+  margin-top: 0;
 }
 
 .vertical-nav.collapsed ~ .recommendations {
@@ -382,7 +382,7 @@ body.loaded {
   text-align: center;
   padding: 20px 10px;
   font-size: 14px;
-  margin-top: 0; /* fjernet gap */
+  margin-top: 0;
 }
 
 .site-footer a {
@@ -396,6 +396,95 @@ body.loaded {
   color: #fff;
 }
 
+/* Tilbakepil mobil */
+.mobile-back {
+  display: none;
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  z-index: 200;
+  background: rgba(0,0,0,0.6);
+  color: white;
+  border: none;
+  padding: 10px 14px;
+  border-radius: 50%;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+/* Mobiltilpasning */
+@media (max-width: 768px) {
+  .vertical-nav,
+  .menu-toggle {
+    display: none !important;
+  }
+
+  .mobile-back {
+    display: block;
+  }
+
+  .hero {
+    margin-left: 0 !important;
+    height: 100vh;
+  }
+
+  .content-wrapper {
+    position: absolute;
+    bottom: 0;
+    top: auto;
+    left: 0;
+    right: 0;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    animation: slideUp 0.6s ease;
+  }
+
+  @keyframes slideUp {
+    from { transform: translateY(100%); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+  }
+
+  .logo-container {
+    width: 180px;
+    height: auto;
+    margin: 0 0 20px 0;
+  }
+
+  .left-content {
+    margin-top: 0;
+    width: 100%;
+    align-items: center;
+  }
+
+  .text-button-container {
+    flex-direction: column;
+    gap: 20px;
+    padding: 0;
+    align-items: center;
+  }
+
+  .buttons-column {
+    width: 100%;
+    align-items: center;
+  }
+
+  .watch-button {
+    width: 100%;
+    max-width: 320px;
+  }
+
+  .text-container,
+  .cast-info {
+    text-align: center;
+    width: 100%;
+  }
+
+  .description {
+    font-size: 14px;
+  }
+}
   </style>
 </head>
 <body>
@@ -671,6 +760,7 @@ if (data.trailer && data.trailer.trim() !== "") {
 
 </body>
 </html>
+
 
 
 
