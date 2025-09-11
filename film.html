@@ -165,7 +165,7 @@ body.loaded {
 
 .content-wrapper {
   position: absolute;
-  bottom: 80px; /* flyttet ned for bedre bildevisning */
+  top: 60px;
   left: 60px;
   right: 60px;
   display: flex;
@@ -176,7 +176,7 @@ body.loaded {
 .logo-container {
   width: 260px;
   height: 100px;
-  margin-bottom: 60px; /* mindre avstand så alt passer */
+  margin-bottom: 100px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -194,23 +194,36 @@ body.loaded {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  margin-top: 40px;
-  min-height: 300px;
+  margin-top: 170px;
+  min-height: 400px;
 }
 
 .text-button-container {
   display: flex;
   align-items: stretch;
   gap: 40px;
-  padding: 20px;
+  padding: 30px;
   border-radius: 12px;
 }
 
-/* Metadata nå OVER info */
+.text-container {
+  flex: 2;
+  min-width: 300px;
+  text-align: left;
+  color: white;
+}
+
+.description {
+  font-size: 16px;
+  line-height: 1.6;
+  margin-bottom: 8px;
+}
+
+/* Metadata */
 .metadata {
-  margin-bottom: 14px;
+  margin-top: 14px;
   color: #ddd;
-  font-size: clamp(12px, 1.5vw, 15px); /* skalerer med skjerm */
+  font-size: 13px;
   line-height: 1.4;
   display: flex;
   flex-wrap: wrap;
@@ -241,19 +254,6 @@ body.loaded {
 
 .imdb-logo:hover {
   filter: brightness(80%) contrast(120%);
-}
-
-.text-container {
-  flex: 2;
-  min-width: 300px;
-  text-align: left;
-  color: white;
-}
-
-.description {
-  font-size: clamp(14px, 1.8vw, 18px); /* bedre tilpasning skjerm */
-  line-height: 1.6;
-  margin-bottom: 8px;
 }
 
 .cast-info {
@@ -309,9 +309,10 @@ body.loaded {
 /* Anbefalinger */
 .recommendations {
   margin-left: 70px;
-  padding: 40px 60px 80px 60px;
+  padding: 40px 60px 60px 60px;
   background: black;
   transition: margin-left 0.3s ease;
+  margin-top: 0;
 }
 
 .vertical-nav.collapsed ~ .recommendations {
@@ -319,19 +320,19 @@ body.loaded {
 }
 
 .recommendations h2 {
-  font-size: 28px;
-  margin-bottom: 22px;
+  font-size: 24px;
+  margin-bottom: 18px;
   margin-left: 40px;
 }
 
 .gallery {
   display: flex;
   flex-wrap: nowrap;
-  gap: 20px;
+  gap: 16px;
   justify-content: flex-start;
   margin-left: 30px;
   overflow-x: auto;
-  padding-bottom: 14px;
+  padding-bottom: 10px;
 }
 
 .gallery::-webkit-scrollbar {
@@ -339,17 +340,13 @@ body.loaded {
 }
 
 .gallery img {
-  width: 200px; /* større */
-  height: 300px; /* større høyde */
-  border-radius: 8px;
+  width: 160px;
+  height: 240px;
+  border-radius: 6px;
   object-fit: cover;
   cursor: pointer;
   transition: transform 0.3s;
   flex: 0 0 auto;
-}
-
-.gallery img:hover {
-  transform: scale(1.08);
 }
 
 /* Video kontrollknapper */
@@ -385,6 +382,7 @@ body.loaded {
   text-align: center;
   padding: 20px 10px;
   font-size: 14px;
+  margin-top: 0;
 }
 
 .site-footer a {
@@ -431,7 +429,8 @@ body.loaded {
   }
 
   .content-wrapper {
-    bottom: 40px; /* flyttet litt opp på mobil */
+    position: absolute;
+    bottom: 0;
     top: auto;
     left: 0;
     right: 0;
@@ -484,11 +483,6 @@ body.loaded {
 
   .description {
     font-size: 14px;
-  }
-
-  .gallery img {
-    width: 160px;
-    height: 240px;
   }
 }
 
@@ -767,6 +761,7 @@ if (data.trailer && data.trailer.trim() !== "") {
 
 </body>
 </html>
+
 
 
 
