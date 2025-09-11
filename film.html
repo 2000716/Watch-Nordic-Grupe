@@ -412,7 +412,7 @@ body.loaded {
   cursor: pointer;
 }
 
-/* Mobiltilpasning */
+/* --- Mobiltilpasning HBO Max-stil --- */
 @media (max-width: 768px) {
   .vertical-nav,
   .menu-toggle {
@@ -428,9 +428,10 @@ body.loaded {
     height: 100vh;
   }
 
+  /* Hele innholdet nederst */
   .content-wrapper {
     position: absolute;
-    bottom: 5%; /* flyttet lenger ned */
+    bottom: 0;
     top: auto;
     left: 0;
     right: 0;
@@ -438,38 +439,25 @@ body.loaded {
     display: flex;
     flex-direction: column;
     align-items: center;
-    animation: slideUp 0.6s ease;
+    justify-content: flex-end;
+    background: linear-gradient(to top, rgba(0,0,0,0.85), transparent 70%);
   }
 
-  @keyframes slideUp {
-    from { transform: translateY(100%); opacity: 0; }
-    to { transform: translateY(0); opacity: 1; }
-  }
-
+  /* Logo over knappene */
   .logo-container {
-    width: 200px;
-    margin: 0 0 20px 0;
+    width: 180px;
+    margin-bottom: 15px;
     display: flex;
     justify-content: center;
   }
 
-  .left-content {
-    margin-top: 0;
-    width: 100%;
-    align-items: center;
-  }
-
-  .text-button-container {
-    flex-direction: column;
-    gap: 20px;
-    padding: 0;
-    align-items: center;
-  }
-
+  /* Knappene under logoen */
   .buttons-column {
     width: 100%;
+    max-width: 320px;
     align-items: center;
-    order: 2; /* under logoen */
+    margin-bottom: 15px;
+    order: 2;
   }
 
   .watch-button {
@@ -477,44 +465,68 @@ body.loaded {
     max-width: 320px;
   }
 
-  .text-container,
-  .cast-info {
-    text-align: center;
-    width: 100%;
+  /* Metadata mellom knapper og tekst */
+  .metadata {
+    order: 3;
+    margin: 10px 0;
+    font-size: 14px;
+    justify-content: center;
+    flex-wrap: wrap;
   }
 
-  /* metadata over beskrivelse */
-  .metadata {
-    order: -1;
-    margin-bottom: 8px;
-    justify-content: center;
+  .metadata .imdb-link img {
+    width: 36px;
+  }
+
+  /* Beskrivelse */
+  .text-container {
+    order: 4;
+    text-align: center;
+    width: 100%;
+    margin-bottom: 10px;
   }
 
   .description {
     font-size: 14px;
   }
 
-  /* galleriet nederst og større */
+  .cast-info {
+    text-align: center;
+    font-size: 13px;
+    order: 5;
+    margin-bottom: 20px;
+  }
+
+  /* Galleriet på mobil */
   .recommendations {
     margin: 0;
-    padding: 20px 10px 40px 10px;
+    padding: 15px 0 30px 0;
   }
 
   .recommendations h2 {
+    font-size: 18px;
     text-align: center;
-    margin: 10px 0 20px 0;
+    margin-bottom: 10px;
   }
 
   .gallery {
-    justify-content: center;
-    gap: 20px;
-    padding: 0 10px;
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    justify-content: flex-start;
+    gap: 12px;
+    padding: 0 15px;
   }
 
   .gallery img {
-    width: 200px;
-    height: 300px;
+    width: 140px;
+    height: 210px;
     border-radius: 10px;
+    flex: 0 0 auto;
+  }
+
+  .gallery::-webkit-scrollbar {
+    display: none;
   }
 }
 
@@ -793,6 +805,7 @@ if (data.trailer && data.trailer.trim() !== "") {
 
 </body>
 </html>
+
 
 
 
