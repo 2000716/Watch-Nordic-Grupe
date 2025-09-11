@@ -14,7 +14,7 @@
 }
 
 body {
-  background-color: #091B1E;
+  background-color: black;
   color: #fff;
   font-family: 'Segoe UI', sans-serif;
   opacity: 0;
@@ -309,10 +309,10 @@ body.loaded {
 /* Anbefalinger */
 .recommendations {
   margin-left: 70px;
-  padding: 40px 60px 20px 60px;
+  padding: 40px 60px 60px 60px; /* ekstra padding-bottom for å dekke gap */
   background: black;
   transition: margin-left 0.3s ease;
-  margin-top: -80px;
+  margin-top: 0; /* fjernet negativ margin */
 }
 
 .vertical-nav.collapsed ~ .recommendations {
@@ -377,12 +377,12 @@ body.loaded {
 
 /* Bunntekst */
 .site-footer {
-  background-color: #000;
+  background-color: black;
   color: #aaa;
   text-align: center;
   padding: 20px 10px;
   font-size: 14px;
-  margin-top: 40px;
+  margin-top: 0; /* fjernet gap */
 }
 
 .site-footer a {
@@ -395,6 +395,7 @@ body.loaded {
 .site-footer a:hover {
   color: #fff;
 }
+
   </style>
 </head>
 <body>
@@ -670,6 +671,7 @@ if (data.trailer && data.trailer.trim() !== "") {
 
 </body>
 </html>
+
 
 
 
