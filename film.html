@@ -595,43 +595,52 @@ const videoControls = document.getElementById("videoControls");
 const pauseBtn = document.getElementById("pauseBtn");
 const soundBtn = document.getElementById("soundBtn");
 
-trailerVideo.src = data.trailer;
-trailerVideo.preload = "auto";
+// Sjekk om filmen har trailer
+if (data.trailer && data.trailer.trim() !== "") {
+  trailerVideo.src = data.trailer;
+  trailerVideo.preload = "auto";
 
-setTimeout(() => {
-  backgroundImage.style.opacity = "0"; 
-  trailerVideo.style.opacity = "1";
-  trailerVideo.play();
-  videoControls.style.opacity = "1";
-}, 10000);
-
-trailerVideo.addEventListener("ended", () => {
-  trailerVideo.style.opacity = "0";
-  backgroundImage.style.opacity = "1";
-  videoControls.style.opacity = "0";
-});
-
-pauseBtn.addEventListener("click", () => {
-  if (trailerVideo.paused) {
+  // Bytt til trailer etter 10 sekunder
+  setTimeout(() => {
+    backgroundImage.style.opacity = "0"; 
+    trailerVideo.style.opacity = "1";
     trailerVideo.play();
-    pauseBtn.innerHTML = '<i class="fas fa-pause"></i>';
-  } else {
-    trailerVideo.pause();
-    pauseBtn.innerHTML = '<i class="fas fa-play"></i>';
-  }
-});
+    videoControls.style.opacity = "1";
+  }, 10000);
 
-soundBtn.addEventListener("click", () => {
-  trailerVideo.muted = !trailerVideo.muted;
-  if (trailerVideo.muted) {
-    soundBtn.innerHTML = '<i class="fas fa-volume-mute"></i>';
-  } else {
-    soundBtn.innerHTML = '<i class="fas fa-volume-up"></i>';
-  }
-});
+  trailerVideo.addEventListener("ended", () => {
+    trailerVideo.style.opacity = "0";
+    backgroundImage.style.opacity = "1";
+    videoControls.style.opacity = "0";
+  });
+
+  pauseBtn.addEventListener("click", () => {
+    if (trailerVideo.paused) {
+      trailerVideo.play();
+      pauseBtn.innerHTML = '<i class="fas fa-pause"></i>';
+    } else {
+      trailerVideo.pause();
+      pauseBtn.innerHTML = '<i class="fas fa-play"></i>';
+    }
+  });
+
+  soundBtn.addEventListener("click", () => {
+    trailerVideo.muted = !trailerVideo.muted;
+    if (trailerVideo.muted) {
+      soundBtn.innerHTML = '<i class="fas fa-volume-mute"></i>';
+    } else {
+      soundBtn.innerHTML = '<i class="fas fa-volume-up"></i>';
+    }
+  });
+} else {
+  // Ingen trailer → bare vis bakgrunnsbildet
+  trailerVideo.style.display = "none";
+  videoControls.style.display = "none";
+}
 </script>
-</body>
+
 </html>
+
 
 
 
