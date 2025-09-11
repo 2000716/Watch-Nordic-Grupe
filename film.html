@@ -430,7 +430,7 @@ body.loaded {
 
   .content-wrapper {
     position: absolute;
-    bottom: 0;
+    bottom: 5%; /* flyttet lenger ned */
     top: auto;
     left: 0;
     right: 0;
@@ -447,9 +447,10 @@ body.loaded {
   }
 
   .logo-container {
-    width: 180px;
-    height: auto;
+    width: 200px;
     margin: 0 0 20px 0;
+    display: flex;
+    justify-content: center;
   }
 
   .left-content {
@@ -468,6 +469,7 @@ body.loaded {
   .buttons-column {
     width: 100%;
     align-items: center;
+    order: 2; /* under logoen */
   }
 
   .watch-button {
@@ -481,8 +483,38 @@ body.loaded {
     width: 100%;
   }
 
+  /* metadata over beskrivelse */
+  .metadata {
+    order: -1;
+    margin-bottom: 8px;
+    justify-content: center;
+  }
+
   .description {
     font-size: 14px;
+  }
+
+  /* galleriet nederst og større */
+  .recommendations {
+    margin: 0;
+    padding: 20px 10px 40px 10px;
+  }
+
+  .recommendations h2 {
+    text-align: center;
+    margin: 10px 0 20px 0;
+  }
+
+  .gallery {
+    justify-content: center;
+    gap: 20px;
+    padding: 0 10px;
+  }
+
+  .gallery img {
+    width: 200px;
+    height: 300px;
+    border-radius: 10px;
   }
 }
 
@@ -761,6 +793,7 @@ if (data.trailer && data.trailer.trim() !== "") {
 
 </body>
 </html>
+
 
 
 
