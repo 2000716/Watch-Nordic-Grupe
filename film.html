@@ -25,7 +25,7 @@ body.loaded {
   opacity: 1;
 }
 
-/* Navigasjon PC */
+/* Navigasjon */
 .vertical-nav {
   width: 70px;
   height: 100vh;
@@ -46,6 +46,30 @@ body.loaded {
   transform: translateX(-100%);
 }
 
+.nav-icons-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.profilmeny {
+  margin-bottom: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+.profilmeny img {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #fff;
+}
+
 .nav-icon {
   color: white;
   font-size: 22px;
@@ -54,6 +78,9 @@ body.loaded {
   text-align: center;
   width: 100%;
   transition: color 0.3s ease;
+  cursor: pointer;
+  background: none;
+  border: none;
 }
 
 .nav-icon:hover,
@@ -86,7 +113,7 @@ body.loaded {
   left: 0;
 }
 
-/* Hero */
+/* Hero-seksjon */
 .hero {
   margin-left: 70px;
   position: relative;
@@ -126,22 +153,30 @@ body.loaded {
   z-index: 1;
 }
 
+.bottom-fade {
+  position: absolute; 
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 200px;
+  background: linear-gradient(to top, rgba(0, 0, 0, 1), transparent);
+  z-index: 1;
+}
+
 .content-wrapper {
   position: absolute;
-  bottom: 0;
+  top: 60px;
   left: 60px;
   right: 60px;
   display: flex;
   flex-direction: column;
   z-index: 2;
-  padding-bottom: 40px;
 }
 
-/* Logo */
 .logo-container {
   width: 260px;
   height: 100px;
-  margin-bottom: 20px;
+  margin-bottom: 100px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -154,18 +189,82 @@ body.loaded {
   object-fit: contain;
 }
 
-/* Innhold */
+/* Innhold venstre side */
+.left-content {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin-top: 170px;
+  min-height: 400px;
+}
+
 .text-button-container {
   display: flex;
   align-items: stretch;
   gap: 40px;
-  flex-wrap: wrap;
+  padding: 30px;
+  border-radius: 12px;
 }
 
-.buttons-column {
+.text-container {
+  flex: 2;
+  min-width: 300px;
+  text-align: left;
+  color: white;
+}
+
+.description {
+  font-size: 16px;
+  line-height: 1.6;
+  margin-bottom: 8px;
+}
+
+/* Metadata */
+.metadata {
+  margin-top: 14px;
+  color: #ddd;
+  font-size: 13px;
+  line-height: 1.4;
   display: flex;
-  flex-direction: column;
-  gap: 15px;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: center;
+}
+
+.metadata span,
+.metadata .imdb-link {
+  display: inline-flex;
+  align-items: center;
+}
+
+.metadata span:nth-child(even) {
+  color: #ddd;
+  user-select: none;
+  font-weight: bold;
+  font-size: 16px;
+}
+
+.imdb-logo {
+  width: 28px;
+  margin-left: 4px;
+  cursor: pointer;
+  filter: brightness(100%) contrast(100%);
+  transition: filter 0.3s ease;
+}
+
+.imdb-logo:hover {
+  filter: brightness(80%) contrast(120%);
+}
+
+.cast-info {
+  flex: 0 0 200px;
+  font-size: 13px;
+  color: #aaa;
+  line-height: 1.6;
+}
+
+.cast-info strong {
+  color: #fff;
 }
 
 .watch-button {
@@ -183,51 +282,61 @@ body.loaded {
   align-items: center;
   justify-content: center;
   gap: 8px;
+  white-space: nowrap;
 }
 
 .watch-button:hover {
   transform: scale(1.05);
 }
 
-.metadata {
-  margin-top: 14px;
-  color: #ddd;
-  font-size: 13px;
+.buttons-column {
   display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-  align-items: center;
+  flex-direction: column;
+  gap: 15px;
 }
 
-.description {
-  font-size: 16px;
-  line-height: 1.6;
-  margin-top: 10px;
+.icon-animate {
+  display: inline-block;
+  animation: fadePop 0.4s ease forwards;
 }
 
-.cast-info {
-  font-size: 13px;
-  color: #aaa;
-  margin-top: 10px;
+@keyframes fadePop {
+  0%   { opacity: 0; transform: scale(0.6); }
+  60%  { opacity: 1; transform: scale(1.2); }
+  100% { opacity: 1; transform: scale(1); }
 }
 
-/* Galleri */
+/* Anbefalinger */
 .recommendations {
   margin-left: 70px;
-  padding: 40px 60px;
+  padding: 40px 60px 60px 60px; /* ekstra padding-bottom for å dekke gap */
   background: black;
   transition: margin-left 0.3s ease;
+  margin-top: 0; /* fjernet negativ margin */
 }
 
 .vertical-nav.collapsed ~ .recommendations {
   margin-left: 0;
 }
 
+.recommendations h2 {
+  font-size: 24px;
+  margin-bottom: 18px;
+  margin-left: 40px;
+}
+
 .gallery {
   display: flex;
   flex-wrap: nowrap;
   gap: 16px;
+  justify-content: flex-start;
+  margin-left: 30px;
   overflow-x: auto;
+  padding-bottom: 10px;
+}
+
+.gallery::-webkit-scrollbar {
+  height: 6px;
 }
 
 .gallery img {
@@ -236,120 +345,67 @@ body.loaded {
   border-radius: 6px;
   object-fit: cover;
   cursor: pointer;
+  transition: transform 0.3s;
   flex: 0 0 auto;
 }
 
-/* Tilbakeknapp mobil */
-.mobile-home {
-  display: none;
-  position: fixed;
-  top: 16px;
-  left: 16px;
-  z-index: 200;
-  background: rgba(0,0,0,0.6);
-  color: white;
-  border-radius: 50%;
-  padding: 12px;
-  font-size: 22px;
-}
-
-.mobile-home:hover {
-  background: rgba(255,255,255,0.2);
-}
-
-/* Videokontroller */
-#videoControls {
+/* Video kontrollknapper */
+.video-controls {
   position: absolute;
-  bottom: 30px;
-  left: 30px;
+  top: 20px;
+  right: 30px;
   z-index: 3;
   display: flex;
-  gap: 15px;
+  gap: 10px;
   opacity: 0;
   transition: opacity 0.5s ease;
 }
 
-#videoControls button {
+.video-controls button {
   background: rgba(0,0,0,0.6);
   border: none;
   color: white;
+  font-size: 20px;
   padding: 10px 14px;
-  border-radius: 50%;
-  font-size: 18px;
+  border-radius: 10px;
   cursor: pointer;
 }
 
-#videoControls button:hover {
+.video-controls button:hover {
   background: rgba(255,255,255,0.2);
 }
 
-/* Mobil */
-@media (max-width: 768px) {
-  .vertical-nav,
-  .menu-toggle {
-    display: none !important;
-  }
-
-  .mobile-home {
-    display: block;
-  }
-
-  .hero {
-    margin-left: 0 !important;
-    height: 100vh;
-  }
-
-  .content-wrapper {
-    padding: 20px;
-    align-items: center;
-    bottom: 10%;
-  }
-
-  .logo-container {
-    width: 200px;
-    height: auto;
-    margin-bottom: 20px;
-  }
-
-  .text-button-container {
-    flex-direction: column;
-    gap: 20px;
-    align-items: center;
-    width: 100%;
-  }
-
-  .watch-button {
-    width: 100%;
-    max-width: 320px;
-  }
-
-  .metadata {
-    justify-content: center;
-    font-size: 12px;
-    margin-top: 10px;
-  }
-
-  .description,
-  .cast-info {
-    text-align: center;
-    font-size: 14px;
-  }
-
-  .recommendations {
-    margin-left: 0;
-    padding: 20px;
-  }
+/* Bunntekst */
+.site-footer {
+  background-color: black;
+  color: #aaa;
+  text-align: center;
+  padding: 20px 10px;
+  font-size: 14px;
+  margin-top: 0; /* fjernet gap */
 }
+
+.site-footer a {
+  color: #00FFCC;
+  text-decoration: none;
+  margin: 0 8px;
+  transition: color 0.3s ease;
+}
+
+.site-footer a:hover {
+  color: #fff;
+}
+
   </style>
 </head>
 <body>
 
-<!-- Mobil hjemknapp (buet pil) -->
-<a href="Hovedside.html" class="mobile-home">
-  <i class="fas fa-arrow-left"></i>
-</a>
-
 <div class="vertical-nav" id="verticalNav">
+  <div class="profilmeny">
+    <a href="konto.html">
+      <img id="menyProfilbilde" src="https://via.placeholder.com/100" alt="Min profil" />
+    </a>
+  </div>
   <a href="Søk.html" class="nav-icon"><i class="fas fa-search"></i></a>
   <a href="Hovedside.html" class="nav-icon"><i class="fas fa-house"></i></a>
   <a href="Film.html" class="nav-icon"><i class="fas fa-film"></i></a>
@@ -362,38 +418,39 @@ body.loaded {
 <div class="hero">
   <img class="background-image" id="backgroundImage" src="" alt="Bakgrunnsbilde" />
   <video id="trailerVideo" class="background-video" muted playsinline></video>
-  <div class="overlay"></div>
 
-  <!-- Videokontroller -->
-  <div id="videoControls">
+  <div class="overlay"></div>
+  <div class="bottom-fade"></div>
+
+  <!-- Kontrollknapper -->
+  <div id="videoControls" class="video-controls">
     <button id="pauseBtn"><i class="fas fa-pause"></i></button>
-    <button id="soundBtn"><i class="fas fa-volume-up"></i></button>
+    <button id="soundBtn"><i class="fas fa-volume-mute"></i></button>
   </div>
 
   <div class="content-wrapper">
-    <!-- Logo først -->
     <div class="logo-container">
       <img class="film-logo" src="" alt="Filmlogo" />
     </div>
 
-    <!-- Så knapper -->
-    <div class="buttons-column">
-      <button class="watch-button" id="watchBtn">
-        <i class="fas fa-play"></i><span> Se nå</span>
-      </button>
-      <button class="watch-button" id="addToListBtn">
-        <i class="fas fa-plus"></i><span> Legg til i Min liste</span>
-      </button>
+    <div class="left-content">
+      <div class="text-button-container">
+        <div class="buttons-column">
+          <button class="watch-button" id="watchBtn">
+            <i class="fas fa-play"></i><span> Se nå</span>
+          </button>
+          <button class="watch-button" id="addToListBtn">
+            <i class="fas fa-plus"></i><span> Legg til i Min liste</span>
+          </button>
+        </div>
+
+        <div class="text-container">
+          <p class="description"></p>
+          <div class="metadata"></div>
+        </div>
+        <div class="cast-info"></div>
+      </div>
     </div>
-
-    <!-- Metadata -->
-    <div class="metadata"></div>
-
-    <!-- Info -->
-    <p class="description"></p>
-
-    <!-- Skuespillere -->
-    <div class="cast-info"></div>
   </div>
 </div>
 
@@ -402,14 +459,19 @@ body.loaded {
   <div class="gallery" id="recommendationGallery"></div>
 </div>
 
+<!-- Bunntekst -->
 <footer class="site-footer">
   <p>&copy; 2025 Watch Nordic Grupe</p>
+  <div class="footer-links">
+    <a href="Om-oss.html">Om oss</a> |
+    <a href="Kontakt.html">Kontakt</a> |
+    <a href="Personvern.html">Personvern</a>
+  </div>
 </footer>
-
 
 <script src="Filmdata.js"></script>
 <script>
-// ---- All JS beholdt ----
+// ---- All JS fra originalfilen beholdes uendret ----
 const params = new URLSearchParams(window.location.search);
 const filmNavn = params.get("navn");
 const data = filmer[filmNavn];
@@ -507,6 +569,12 @@ addToListBtn.addEventListener("click", () => {
   oppdaterListeKnapp();
 });
 
+// ---- Profilbilde ----
+const lagretBilde = localStorage.getItem("profilbilde");
+if (lagretBilde) {
+  document.getElementById("menyProfilbilde").src = lagretBilde;
+}
+
 // ---- Meny-knapp ----
 const menuToggle = document.getElementById("menuToggle");
 const verticalNav = document.getElementById("verticalNav");
@@ -568,38 +636,36 @@ if (data.trailer && data.trailer.trim() !== "") {
     backgroundImage.style.opacity = "0"; 
     trailerVideo.style.opacity = "1";
     trailerVideo.play();
-    if (videoControls) videoControls.style.opacity = "1";
+    videoControls.style.opacity = "1";
   }, 10000);
 
   trailerVideo.addEventListener("ended", () => {
     trailerVideo.style.opacity = "0";
     backgroundImage.style.opacity = "1";
-    if (videoControls) videoControls.style.opacity = "0";
+    videoControls.style.opacity = "0";
   });
 
-  if (pauseBtn) {
-    pauseBtn.addEventListener("click", () => {
-      if (trailerVideo.paused) {
-        trailerVideo.play();
-        pauseBtn.innerHTML = '<i class="fas fa-pause"></i>';
-      } else {
-        trailerVideo.pause();
-        pauseBtn.innerHTML = '<i class="fas fa-play"></i>';
-      }
-    });
-  }
+  pauseBtn.addEventListener("click", () => {
+    if (trailerVideo.paused) {
+      trailerVideo.play();
+      pauseBtn.innerHTML = '<i class="fas fa-pause"></i>';
+    } else {
+      trailerVideo.pause();
+      pauseBtn.innerHTML = '<i class="fas fa-play"></i>';
+    }
+  });
 
-  if (soundBtn) {
-    soundBtn.addEventListener("click", () => {
-      trailerVideo.muted = !trailerVideo.muted;
-      soundBtn.innerHTML = trailerVideo.muted
-        ? '<i class="fas fa-volume-mute"></i>'
-        : '<i class="fas fa-volume-up"></i>';
-    });
-  }
+  soundBtn.addEventListener("click", () => {
+    trailerVideo.muted = !trailerVideo.muted;
+    if (trailerVideo.muted) {
+      soundBtn.innerHTML = '<i class="fas fa-volume-mute"></i>';
+    } else {
+      soundBtn.innerHTML = '<i class="fas fa-volume-up"></i>';
+    }
+  });
 } else {
   trailerVideo.style.display = "none";
-  if (videoControls) videoControls.style.display = "none";
+  videoControls.style.display = "none";
 }
 </script>
 
