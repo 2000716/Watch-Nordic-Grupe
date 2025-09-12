@@ -257,6 +257,32 @@ body.loaded {
   background: rgba(255,255,255,0.2);
 }
 
+/* Videokontroller */
+#videoControls {
+  position: absolute;
+  bottom: 30px;
+  left: 30px;
+  z-index: 3;
+  display: flex;
+  gap: 15px;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+#videoControls button {
+  background: rgba(0,0,0,0.6);
+  border: none;
+  color: white;
+  padding: 10px 14px;
+  border-radius: 50%;
+  font-size: 18px;
+  cursor: pointer;
+}
+
+#videoControls button:hover {
+  background: rgba(255,255,255,0.2);
+}
+
 /* Mobil */
 @media (max-width: 768px) {
   .vertical-nav,
@@ -338,6 +364,12 @@ body.loaded {
   <video id="trailerVideo" class="background-video" muted playsinline></video>
   <div class="overlay"></div>
 
+  <!-- Videokontroller -->
+  <div id="videoControls">
+    <button id="pauseBtn"><i class="fas fa-pause"></i></button>
+    <button id="soundBtn"><i class="fas fa-volume-up"></i></button>
+  </div>
+
   <div class="content-wrapper">
     <!-- Logo først -->
     <div class="logo-container">
@@ -377,7 +409,7 @@ body.loaded {
 
 <script src="Filmdata.js"></script>
 <script>
-// ---- All JS fra originalfilen beholdes uendret ----
+// ---- All JS beholdt ----
 const params = new URLSearchParams(window.location.search);
 const filmNavn = params.get("navn");
 const data = filmer[filmNavn];
@@ -475,12 +507,6 @@ addToListBtn.addEventListener("click", () => {
   oppdaterListeKnapp();
 });
 
-// ---- Profilbilde ----
-const lagretBilde = localStorage.getItem("profilbilde");
-if (lagretBilde) {
-  document.getElementById("menyProfilbilde").src = lagretBilde;
-}
-
 // ---- Meny-knapp ----
 const menuToggle = document.getElementById("menuToggle");
 const verticalNav = document.getElementById("verticalNav");
@@ -542,36 +568,38 @@ if (data.trailer && data.trailer.trim() !== "") {
     backgroundImage.style.opacity = "0"; 
     trailerVideo.style.opacity = "1";
     trailerVideo.play();
-    videoControls.style.opacity = "1";
+    if (videoControls) videoControls.style.opacity = "1";
   }, 10000);
 
   trailerVideo.addEventListener("ended", () => {
     trailerVideo.style.opacity = "0";
     backgroundImage.style.opacity = "1";
-    videoControls.style.opacity = "0";
+    if (videoControls) videoControls.style.opacity = "0";
   });
 
-  pauseBtn.addEventListener("click", () => {
-    if (trailerVideo.paused) {
-      trailerVideo.play();
-      pauseBtn.innerHTML = '<i class="fas fa-pause"></i>';
-    } else {
-      trailerVideo.pause();
-      pauseBtn.innerHTML = '<i class="fas fa-play"></i>';
-    }
-  });
+  if (pauseBtn) {
+    pauseBtn.addEventListener("click", () => {
+      if (trailerVideo.paused) {
+        trailerVideo.play();
+        pauseBtn.innerHTML = '<i class="fas fa-pause"></i>';
+      } else {
+        trailerVideo.pause();
+        pauseBtn.innerHTML = '<i class="fas fa-play"></i>';
+      }
+    });
+  }
 
-  soundBtn.addEventListener("click", () => {
-    trailerVideo.muted = !trailerVideo.muted;
-    if (trailerVideo.muted) {
-      soundBtn.innerHTML = '<i class="fas fa-volume-mute"></i>';
-    } else {
-      soundBtn.innerHTML = '<i class="fas fa-volume-up"></i>';
-    }
-  });
+  if (soundBtn) {
+    soundBtn.addEventListener("click", () => {
+      trailerVideo.muted = !trailerVideo.muted;
+      soundBtn.innerHTML = trailerVideo.muted
+        ? '<i class="fas fa-volume-mute"></i>'
+        : '<i class="fas fa-volume-up"></i>';
+    });
+  }
 } else {
   trailerVideo.style.display = "none";
-  videoControls.style.display = "none";
+  if (videoControls) videoControls.style.display = "none";
 }
 </script>
 
