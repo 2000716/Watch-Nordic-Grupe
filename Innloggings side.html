@@ -21,7 +21,6 @@
   color: white;
 }
 
-
     .container {
       background-color: rgba(15, 42, 46, 0.5);
       padding: 40px;
@@ -44,7 +43,7 @@
     button:hover { background-color: #247274; }
 
     .error { color: #ff4c4c; margin-top: 10px; min-height: 20px; }
-    .toggle-text, .forgot-text { margin-top: 15px; font-size: 14px; }
+    .toggle-text, .forgot-text, .sync-section { margin-top: 15px; font-size: 14px; }
     .toggle-text a, .forgot-text a { color: #00bfff; cursor: pointer; text-decoration: underline; }
   </style>
 </head>
@@ -75,6 +74,12 @@
 
     <div class="toggle-text" id="toggleText">
       Er du ikke medlem? <a onclick="visRegistrering()">Registrer deg</a>
+    </div>
+
+    <div class="sync-section">
+      <p>Vil du bruke samme innlogging på flere enheter?</p>
+      <button onclick="eksporterBrukere()">Eksporter kode</button>
+      <button onclick="importerBrukere()">Importer kode</button>
     </div>
   </div>
 
@@ -157,10 +162,35 @@
       document.getElementById("feilmelding").textContent = "";
       document.getElementById("passord").setAttribute("autocomplete", "current-password");
     }
+
+    // Eksporter/importer funksjon for å dele mellom enheter
+    function eksporterBrukere() {
+      const brukere = localStorage.getItem("brukere");
+      if (!brukere) {
+        alert("Ingen brukere å eksportere.");
+        return;
+      }
+      const kode = btoa(brukere); // base64
+      prompt("Kopier denne koden og lim den inn på en annen enhet:", kode);
+    }
+
+    function importerBrukere() {
+      const kode = prompt("Lim inn eksportert kode her:");
+      if (!kode) return;
+      try {
+        const json = atob(kode);
+        const brukere = JSON.parse(json);
+        localStorage.setItem("brukere", JSON.stringify(brukere));
+        alert("Brukere importert! Du kan nå logge inn.");
+      } catch (e) {
+        alert("Ugyldig kode.");
+      }
+    }
   </script>
 
 </body>
 </html>
+
 
 
 
