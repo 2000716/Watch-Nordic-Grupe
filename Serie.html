@@ -7,7 +7,394 @@
   <link rel="icon" type="image/png" href="https://static.wixstatic.com/media/fd2fb2_39376e4ee55b460ab7a3ebbfcf35fef7~mv2.png" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
   <style>
-/* ---- Alt fra din CSS beholdes ---- */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: black;
+  color: #fff;
+  font-family: 'Segoe UI', sans-serif;
+  opacity: 0;
+  transition: opacity 1s ease;
+}
+
+body.loaded {
+  opacity: 1;
+}
+
+/* Navigasjon */
+.vertical-nav {
+  width: 70px;
+  height: 100vh;
+  background-color: #091B1E;
+  position: fixed;
+  top: 0;
+  left: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  transition: transform 0.3s ease;
+  padding-top: 16px;
+}
+
+.vertical-nav.collapsed {
+  transform: translateX(-100%);
+}
+
+.nav-icons-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.profilmeny {
+  margin-bottom: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+.profilmeny img {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #fff;
+}
+
+.nav-icon {
+  color: white;
+  font-size: 22px;
+  padding: 16px 0;
+  text-decoration: none;
+  text-align: center;
+  width: 100%;
+  transition: color 0.3s ease;
+  cursor: pointer;
+  background: none;
+  border: none;
+}
+
+.nav-icon:hover,
+.nav-icon.active {
+  color: #00FFCC;
+}
+
+.menu-toggle {
+  position: fixed;
+  top: 50%;
+  left: 70px;
+  transform: translateY(-50%);
+  z-index: 101;
+  background-color: #091b1e;
+  border: none;
+  border-radius: 0 12px 12px 0;
+  padding: 12px 16px;
+  color: white;
+  cursor: pointer;
+  transition: left 0.3s ease;
+  width: 50px;
+  height: 120px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+}
+
+.vertical-nav.collapsed + .menu-toggle {
+  left: 0;
+}
+
+/* Hero-seksjon */
+.hero {
+  margin-left: 70px;
+  position: relative;
+  height: 100vh;
+  overflow: hidden;
+  transition: margin-left 0.3s ease;
+}
+
+.vertical-nav.collapsed ~ .hero {
+  margin-left: 0;
+}
+
+.background-image,
+.background-video {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 0;
+  transition: opacity 1s ease-in-out;
+  opacity: 1;
+  filter: brightness(0.6);
+}
+
+.background-video {
+  opacity: 0;
+  filter: brightness(0.8);
+}
+
+.overlay {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(to top, #091b1e 0%, rgba(9, 27, 30, 0) 60%);
+  z-index: 1;
+}
+
+.bottom-fade {
+  position: absolute; 
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 200px;
+  background: linear-gradient(to top, rgba(0, 0, 0, 1), transparent);
+  z-index: 1;
+}
+
+.content-wrapper {
+  position: absolute;
+  top: 60px;
+  left: 60px;
+  right: 60px;
+  display: flex;
+  flex-direction: column;
+  z-index: 2;
+}
+
+.logo-container {
+  width: 260px;
+  height: 100px;
+  margin-bottom: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.film-logo {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+/* Innhold venstre side */
+.left-content {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin-top: 170px;
+  min-height: 400px;
+}
+
+.text-button-container {
+  display: flex;
+  align-items: stretch;
+  gap: 40px;
+  padding: 30px;
+  border-radius: 12px;
+}
+
+.text-container {
+  flex: 2;
+  min-width: 300px;
+  text-align: left;
+  color: white;
+}
+
+.description {
+  font-size: 16px;
+  line-height: 1.6;
+  margin-bottom: 8px;
+}
+
+/* Metadata */
+.metadata {
+  margin-top: 14px;
+  color: #ddd;
+  font-size: 13px;
+  line-height: 1.4;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: center;
+}
+
+.metadata span,
+.metadata .imdb-link {
+  display: inline-flex;
+  align-items: center;
+}
+
+.metadata span:nth-child(even) {
+  color: #ddd;
+  user-select: none;
+  font-weight: bold;
+  font-size: 16px;
+}
+
+.imdb-logo {
+  width: 28px;
+  margin-left: 4px;
+  cursor: pointer;
+  filter: brightness(100%) contrast(100%);
+  transition: filter 0.3s ease;
+}
+
+.imdb-logo:hover {
+  filter: brightness(80%) contrast(120%);
+}
+
+.cast-info {
+  flex: 0 0 200px;
+  font-size: 13px;
+  color: #aaa;
+  line-height: 1.6;
+}
+
+.cast-info strong {
+  color: #fff;
+}
+
+.watch-button {
+  background: #fff;
+  color: #000;
+  font-size: 18px;
+  font-weight: bold;
+  padding: 10px 50px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+  width: 280px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  white-space: nowrap;
+}
+
+.watch-button:hover {
+  transform: scale(1.05);
+}
+
+.buttons-column {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.icon-animate {
+  display: inline-block;
+  animation: fadePop 0.4s ease forwards;
+}
+
+@keyframes fadePop {
+  0%   { opacity: 0; transform: scale(0.6); }
+  60%  { opacity: 1; transform: scale(1.2); }
+  100% { opacity: 1; transform: scale(1); }
+}
+
+/* Anbefalinger */
+.recommendations {
+  margin-left: 70px;
+  padding: 40px 60px 60px 60px; /* ekstra padding-bottom for å dekke gap */
+  background: black;
+  transition: margin-left 0.3s ease;
+  margin-top: 0; /* fjernet negativ margin */
+}
+
+.vertical-nav.collapsed ~ .recommendations {
+  margin-left: 0;
+}
+
+.recommendations h2 {
+  font-size: 24px;
+  margin-bottom: 18px;
+  margin-left: 40px;
+}
+
+.gallery {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 16px;
+  justify-content: flex-start;
+  margin-left: 30px;
+  overflow-x: auto;
+  padding-bottom: 10px;
+}
+
+.gallery::-webkit-scrollbar {
+  height: 6px;
+}
+
+.gallery img {
+  width: 160px;
+  height: 240px;
+  border-radius: 6px;
+  object-fit: cover;
+  cursor: pointer;
+  transition: transform 0.3s;
+  flex: 0 0 auto;
+}
+
+/* Video kontrollknapper */
+.video-controls {
+  position: absolute;
+  top: 20px;
+  right: 30px;
+  z-index: 3;
+  display: flex;
+  gap: 10px;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+.video-controls button {
+  background: rgba(0,0,0,0.6);
+  border: none;
+  color: white;
+  font-size: 20px;
+  padding: 10px 14px;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.video-controls button:hover {
+  background: rgba(255,255,255,0.2);
+}
+
+/* Bunntekst */
+.site-footer {
+  background-color: black;
+  color: #aaa;
+  text-align: center;
+  padding: 20px 10px;
+  font-size: 14px;
+  margin-top: 0; /* fjernet gap */
+}
+
+.site-footer a {
+  color: #00FFCC;
+  text-decoration: none;
+  margin: 0 8px;
+  transition: color 0.3s ease;
+}
+
+.site-footer a:hover {
+  color: #fff;
+}
 
 /* Endringer for episodemal */
 .episodes-section {
@@ -269,3 +656,4 @@ if (lagretBilde) {
 </script>
 </body>
 </html>
+
