@@ -1,7 +1,7 @@
 const serier = {
-  "MinSerie": {
-    tittel: "Min Store Serie",
-    bakgrunn: "bakgrunn.jpg",
+  "mummitrollet": {
+    tittel: "Mummitrollet",
+    bakgrunn: "https://assets.moomin.com/uploads/2019/08/Adventures_from_Moominvalley_1990_Moomin_TV-960x502.jpg",
     logo: "logo.png",
     beskrivelse: "En spennende serie med mange episoder.",
     metadata: ["2025", "Action", "10 sesonger"],
@@ -31,5 +31,6 @@ const serier = {
     ]
   }
 };
+
 
 
