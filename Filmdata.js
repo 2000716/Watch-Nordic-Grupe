@@ -208,7 +208,23 @@ const filmer = {
     regissor: "Xavier Picard",
     watchUrl: "film-mal.html?id=mummitrollet-på-rivieraen"
   },
+
+     "pirates": {
+    tittel: "Pirates",
+    bakgrunn: "https://imageservice.sky.com/uuid/24859a07-faf9-40f6-83ec-ff8fe241f850/background/2000",
+    logo: "https://static.wikia.nocookie.net/logopedia/images/8/82/PiratesMovie.png/revision/latest?cb=20211208225523",
+    poster: "https://images-prod.ai.tv2.no/v2/image-packs/pfimg_pack_01k4s3f8b5fn1bgb8e5qjzjtmy?height=630",
+    posterVertikal: "https://i-viaplay-com.akamaized.net/viaplay-prod/889/480/1463401854-6df2cdc3059ce11d81d81c205d50aacae15211e8.jpg?width=400&height=600", // portrett
+    beskrivelse: "En gjeng pirater reiser til London og møter Charles Darwin, en snakkende ape og en fiende som prøver å utslette dem.",
+    metadata: ["Storbritannia", "2012", "6+", "Animasjon / Familie", "1 t 24 min"],
+    imdb: "https://www.imdb.com/title/tt1430626/",
+    skuespillere: "Hugh Grant, Salma Hayek, Jeremy Piven",
+    regissor: "Peter Lord, Jeff Newitt",
+    watchUrl: "film-mal.html?id=Pirates"
+  },
+  
 };
+
 
 
 
