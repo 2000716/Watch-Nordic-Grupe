@@ -212,7 +212,7 @@ const filmer = {
      "pirates": {
     tittel: "Pirates",
     bakgrunn: "https://imageservice.sky.com/uuid/24859a07-faf9-40f6-83ec-ff8fe241f850/background/2000",
-    logo: "https://occ-0-8407-116.1.nflxso.net/dnm/api/v6/S4oi7EPZbv2UEPaukW54OORa0S8/AAAABSIgtJLTKfdEughLNbzy82Wqd8Kl46Se-AN2nHuvmBc-XWV0uk7VOrH2GMJYrpS-FHXI1bfeDZflhQKfgwztI_xXYgxLqNelAos.png?r=c1b",
+    logo: "https://is1-ssl.mzstatic.com/image/thumb/3nF2miHjl6Hnyq0m-aN57A/760x286.png",
     poster: "https://images-prod.ai.tv2.no/v2/image-packs/pfimg_pack_01k4s3f8b5fn1bgb8e5qjzjtmy?height=630",
     posterVertikal: "https://i-viaplay-com.akamaized.net/viaplay-prod/889/480/1463401854-6df2cdc3059ce11d81d81c205d50aacae15211e8.jpg?width=400&height=600", // portrett
     beskrivelse: "En gjeng pirater reiser til London og møter Charles Darwin, en snakkende ape og en fiende som prøver å utslette dem.",
@@ -224,6 +224,7 @@ const filmer = {
   },
   
 };
+
 
 
 
