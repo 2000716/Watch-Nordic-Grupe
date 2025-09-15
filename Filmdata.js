@@ -197,7 +197,7 @@ const filmer = {
    "mummitrollet-på-rivieraen": {
     tittel: "Mummitrollet på Rivieraen",
     bakgrunn: "https://image.tmdb.org/t/p/w1280/z80RWUg5fs0wxx43jDSkaJvln0m.jpg",
-    logo: "https://static.wixstatic.com/media/fd2fb2_cb58ab8385504c98900985c1a30b4b3b~mv2.png",
+    logo: "https://static.wixstatic.com/media/fd2fb2_07694b24ac324ebd81c9e202bb6b31f4~mv2.png",
     trailer: "https://video.wixstatic.com/video/fd2fb2_5343c88a14624075b13ad824e79d429d/1080p/mp4/file.mp4", // 🎥 NY
     poster: "https://static.wixstatic.com/media/fd2fb2_591857f6d2d643e9be3de342acde9761~mv2.jpg",
     posterVertikal: "https://image.tmdb.org/t/p/w780/lfToeZDzH6dlQNkUgP20X5H1fhD.jpg", // portrett
@@ -224,6 +224,7 @@ const filmer = {
   },
   
 };
+
 
 
 
