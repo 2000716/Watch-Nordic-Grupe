@@ -88,6 +88,7 @@ main {
   justify-content: space-between;
   align-items: center;
   margin-bottom: 20px;
+  flex-direction: row-reverse; /* logo til høyre på desktop */
 }
 
 .top-header .watch-logo {
@@ -374,7 +375,7 @@ main {
   color: #00FFCC;
 }
 
-/* ===== Kommende filmer – horisontalt galleri ===== */
+/* Kommende filmer – horisontalt galleri */
 .coming-soon-gallery {
   display: flex;
   gap: 12px;
@@ -394,8 +395,8 @@ main {
 }
 
 .coming-card img {
-  width: 80px;    /* mindre poster */
-  height: 120px;  /* stående */
+  width: 80px;    
+  height: 120px;  
   object-fit: cover;
   border-radius: 4px;
   flex-shrink: 0;
@@ -403,12 +404,12 @@ main {
 
 .coming-info {
   flex: 1;
-  max-width: 200px;   /* fast bredde på tekstområdet */
+  max-width: 200px;   
   display: flex;
   flex-direction: column;
   justify-content: center;
-  overflow: hidden;   /* skjul eventuell overflow */
-  word-wrap: break-word; /* bryt lange ord */
+  overflow: hidden;   
+  word-wrap: break-word; 
 }
 
 .coming-info h3 {
@@ -428,7 +429,6 @@ main {
   color: #b1b1b1;
   line-height: 1.3;
 }
-
 
 /* ===== Mobilvennlig tilpasning ===== */
 @media (max-width: 768px) {
@@ -461,6 +461,10 @@ main {
     margin-left: 0;
     margin-bottom: 70px;
     padding: 10px;
+  }
+
+  .top-header {
+    flex-direction: row; /* logo til venstre på mobil */
   }
 
   .top-header .watch-logo {
@@ -789,6 +793,7 @@ document.querySelectorAll(".progress-bar").forEach(bar => {
   }
 });
 </script>
+
 
 
 
