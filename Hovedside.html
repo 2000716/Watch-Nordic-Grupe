@@ -386,16 +386,11 @@ main {
   flex-direction: row; /* bilde til venstre, tekst til høyre */
   align-items: center;
   min-width: 280px;
-  background: #0d2c30;
+  background: None;
   border-radius: 8px;
   padding: 8px;
   gap: 10px;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.coming-card:hover {
-  transform: scale(1.02);
-  box-shadow: 0 0 10px rgba(0, 255, 204, 0.4);
 }
 
 .coming-card img {
@@ -403,8 +398,7 @@ main {
   height: 120px;  /* stående */
   object-fit: cover;
   border-radius: 4px;
-  flex-shrink: 0;
-  border: 2px solid #00FFCC;
+  flex-shrink: 0;,
 }
 
 .coming-info {
@@ -791,6 +785,7 @@ document.querySelectorAll(".progress-bar").forEach(bar => {
   }
 });
 </script>
+
 
 
 
