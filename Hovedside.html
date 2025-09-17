@@ -8,7 +8,6 @@
   <link rel="icon" type="image/png" href="https://static.wixstatic.com/media/fd2fb2_39376e4ee55b460ab7a3ebbfcf35fef7~mv2.png" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
 
-<style>
 * {
   box-sizing: border-box;
   margin: 0;
@@ -379,6 +378,64 @@ main {
   color: #00FFCC;
 }
 
+/* ===== Kommende filmer – horisontalt galleri ===== */
+.coming-soon-gallery {
+  display: flex;
+  gap: 12px;
+  padding: 10px 16px;
+}
+
+.coming-card {
+  display: flex;
+  flex-direction: row; /* bilde til venstre, tekst til høyre */
+  align-items: center;
+  min-width: 280px;
+  background: #0d2c30;
+  border-radius: 8px;
+  padding: 8px;
+  gap: 10px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.coming-card:hover {
+  transform: scale(1.02);
+  box-shadow: 0 0 10px rgba(0, 255, 204, 0.4);
+}
+
+.coming-card img {
+  width: 80px;    /* mindre poster */
+  height: 120px;  /* stående */
+  object-fit: cover;
+  border-radius: 4px;
+  flex-shrink: 0;
+  border: 2px solid #00FFCC;
+}
+
+.coming-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.coming-info h3 {
+  font-size: 16px;
+  margin-bottom: 4px;
+  color: #fff;
+}
+
+.coming-info .date {
+  font-size: 13px;
+  color: #00FFCC;
+  margin-bottom: 4px;
+}
+
+.coming-info .desc {
+  font-size: 13px;
+  color: #b1b1b1;
+  line-height: 1.3;
+}
+
 /* ===== Mobilvennlig tilpasning ===== */
 @media (max-width: 768px) {
   .vertical-nav {
@@ -479,60 +536,7 @@ main {
     font-size: 12px;
     padding: 15px 5px;
   }
-/* Kommende filmer – horisontalt galleri */
-.coming-soon-gallery {
-  display: flex;
-  gap: 12px;
-  padding: 10px 16px;
 }
-
-.coming-card {
-  display: flex;
-  flex-direction: row; /* bilde til venstre, tekst til høyre */
-  align-items: center;
-  min-width: 280px;
-  background: #0d2c30;
-  border-radius: 8px;
-  padding: 8px;
-  gap: 10px;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.coming-card:hover {
-  transform: scale(1.02);
-  box-shadow: 0 0 10px rgba(0, 255, 204, 0.4);
-}
-
-.coming-card img {
-  width: 80px;    /* mindre poster */
-  height: 120px;  /* stående */
-  object-fit: cover;
-  border-radius: 4px;
-  flex-shrink: 0;
-  border: 2px solid #00FFCC;
-}
-
-.coming-info {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-}
-
-.coming-info h3 {
-  font-size: 16px;
-  margin-bottom: 4px;
-  color: #fff;
-}
-
-.coming-info .date {
-  font-size: 13px;
-  color: #00FFCC;
-  margin-bottom: 4px;
-}
-
-.coming-info .desc {
-  font-size:
 
 
 </style>
@@ -791,6 +795,7 @@ document.querySelectorAll(".progress-bar").forEach(bar => {
   }
 });
 </script>
+
 
 
 
