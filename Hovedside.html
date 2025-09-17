@@ -494,19 +494,18 @@ main {
   background: #0d2c30;
   border-radius: 10px;
   padding: 10px;
-  text-decoration: none;
   color: white;
   gap: 14px;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .coming-card:hover {
-  transform: scale(1.03);
+  transform: scale(1.02);
   box-shadow: 0 0 12px rgba(0, 255, 204, 0.4);
 }
 
 .coming-card img {
-  width: 120px;       /* vertikal poster */
+  width: 120px;       /* vertikal plakat */
   height: 180px;
   object-fit: cover;
   border-radius: 6px;
@@ -660,34 +659,34 @@ main {
 
     <div class="image-gallery coming-soon-gallery">
       <!-- Film 1 -->
-      <a href="film.html?navn=inside-out-2" class="coming-card">
+      <div class="coming-card">
         <img src="https://images-prod.ai.tv2.no/v2/image-packs/pfimg_pack_01k56k23f0e8prk91pvye2ejfe?location=moviePoster&width=672" alt="Inside Out 2">
         <div class="coming-info">
-          <h3>Kaptein Sabeltann og Grevinnen av Gral</h3>
+          <h3>Inside Out 2</h3>
           <p class="date">Premiere: 15. oktober 2025</p>
-          <p class="desc">Sett seilene for et helt nytt og spennende sjørøvereventyr. </p>
+          <p class="desc">Pixar tar oss tilbake inn i følelsenes verden.</p>
         </div>
-      </a>
+      </div>
 
       <!-- Film 2 -->
-      <a href="film.html?navn=dune-part-two" class="coming-card">
+      <div class="coming-card">
         <img src="https://upload.wikimedia.org/wikipedia/en/3/3a/Dune_Part_Two_poster.jpg" alt="Dune Part Two">
         <div class="coming-info">
           <h3>Dune: Part Two</h3>
           <p class="date">Premiere: 20. november 2025</p>
           <p class="desc">Den episke sci-fi-historien fortsetter.</p>
         </div>
-      </a>
+      </div>
 
       <!-- Film 3 -->
-      <a href="film.html?navn=avatar-3" class="coming-card">
+      <div class="coming-card">
         <img src="https://upload.wikimedia.org/wikipedia/en/f/f9/Avatar_The_Way_of_Water_poster.jpg" alt="Avatar 3">
         <div class="coming-info">
           <h3>Avatar 3</h3>
           <p class="date">Premiere: 25. desember 2025</p>
           <p class="desc">James Cameron tar oss tilbake til Pandora.</p>
         </div>
-      </a>
+      </div>
     </div>
 
     <button class="scroll-button right" onclick="scrollGallery(this, 1)">❯</button>
@@ -811,6 +810,7 @@ document.querySelectorAll(".progress-bar").forEach(bar => {
   }
 });
 </script>
+
 
 
 
