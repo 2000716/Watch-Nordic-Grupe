@@ -480,74 +480,79 @@ main {
     padding: 15px 5px;
   }
 
-  /* Kommende filmer galleri */
+/* Kommende filmer – horisontalt galleri */
 .coming-soon-gallery {
   display: flex;
-  flex-direction: column;
-  gap: 20px;
-  padding: 0 16px;
+  gap: 16px;
+  padding: 10px 16px;
 }
 
-.coming-soon-item {
+.coming-card {
   display: flex;
   align-items: flex-start;
-  gap: 16px;
+  min-width: 320px;
   background: #0d2c30;
   border-radius: 10px;
-  padding: 12px;
+  padding: 10px;
+  text-decoration: none;
+  color: white;
+  gap: 12px;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-.coming-soon-item:hover {
-  transform: scale(1.02);
+.coming-card:hover {
+  transform: scale(1.03);
   box-shadow: 0 0 12px rgba(0, 255, 204, 0.4);
 }
 
-.coming-soon-item img {
-  width: 120px;
-  height: 180px;
+.coming-card img {
+  width: 100px;
+  height: 150px;
   object-fit: cover;
   border-radius: 6px;
   flex-shrink: 0;
   border: 2px solid #00FFCC;
 }
 
-.coming-soon-info {
+.coming-info {
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
 }
 
-.coming-soon-info h3 {
+.coming-info h3 {
+  font-size: 16px;
   margin-bottom: 6px;
-  font-size: 18px;
   color: #fff;
 }
 
-.coming-soon-info .date {
-  font-size: 14px;
+.coming-info .date {
+  font-size: 13px;
   color: #00FFCC;
   margin-bottom: 6px;
 }
 
-.coming-soon-info .desc {
-  font-size: 14px;
+.coming-info .desc {
+  font-size: 13px;
   color: #b1b1b1;
+  line-height: 1.3;
 }
 
-/* Responsiv tilpasning */
+/* Mobil */
 @media (max-width: 768px) {
-  .coming-soon-item {
+  .coming-card {
+    min-width: 240px;
     flex-direction: column;
     align-items: center;
     text-align: center;
   }
 
-  .coming-soon-item img {
-    width: 160px;
+  .coming-card img {
+    width: 120px;
     height: auto;
   }
 }
+
 
 </style>
 </head>
@@ -646,41 +651,48 @@ main {
       </div>
     </section>
 
-      <section class="gallery-section coming-soon-section">
+ <section class="gallery-section">
   <h2>Kommende filmer</h2>
-  <div class="coming-soon-gallery">
-    <!-- Film 1 -->
-    <div class="coming-soon-item">
-      <img src="https://images-prod.ai.tv2.no/v2/image-packs/pfimg_pack_01k56k23f0e8prk91pvye2ejfe?location=moviePoster&width=672" alt="Kaptein sabeltann">
-      <div class="coming-soon-info">
-        <h3>Kaptein Sabeltann og Grevinnen av Gral</h3>
-        <p class="date">Kommer: 2. Des 2025</p>
-        <p class="desc">Sett seilene for et helt nytt og spennende sjørøvereventyr. </p>
-      </div>
+  <div class="gallery-wrapper">
+    <div class="fade-left"></div>
+    <button class="scroll-button left" onclick="scrollGallery(this, -1)">❮</button>
+
+    <div class="image-gallery coming-soon-gallery">
+      <!-- Film 1 -->
+      <a href="film.html?navn=inside-out-2" class="coming-card">
+        <img src="https://images-prod.ai.tv2.no/v2/image-packs/pfimg_pack_01k56k23f0e8prk91pvye2ejfe?location=moviePoster&width=672" alt="Inside Out 2">
+        <div class="coming-info">
+          <h3>Kaptein Sabeltann og Grevinnen av Gral</h3>
+          <p class="date">2. Des. 2025</p>
+          <p class="desc">Sett seilene for et helt nytt og spennende sjørøvereventyr.</p>
+        </div>
+      </a>
+
+      <!-- Film 2 -->
+      <a href="film.html?navn=dune-part-two" class="coming-card">
+        <img src="https://upload.wikimedia.org/wikipedia/en/3/3a/Dune_Part_Two_poster.jpg" alt="Dune Part Two">
+        <div class="coming-info">
+          <h3>Dune: Part Two</h3>
+          <p class="date">Premiere: 20. november 2025</p>
+          <p class="desc">Den episke sci-fi-historien fortsetter.</p>
+        </div>
+      </a>
+
+      <!-- Film 3 -->
+      <a href="film.html?navn=avatar-3" class="coming-card">
+        <img src="https://upload.wikimedia.org/wikipedia/en/f/f9/Avatar_The_Way_of_Water_poster.jpg" alt="Avatar 3">
+        <div class="coming-info">
+          <h3>Avatar 3</h3>
+          <p class="date">Premiere: 25. desember 2025</p>
+          <p class="desc">James Cameron tar oss tilbake til Pandora.</p>
+        </div>
+      </a>
     </div>
 
-    <!-- Film 2 -->
-    <div class="coming-soon-item">
-      <img src="https://upload.wikimedia.org/wikipedia/en/3/3a/Dune_Part_Two_poster.jpg" alt="Dune Part Two">
-      <div class="coming-soon-info">
-        <h3>Dune: Part Two</h3>
-        <p class="date">Premiere: 20. november 2025</p>
-        <p class="desc">Fortsettelsen på den episke sci-fi-historien av Denis Villeneuve.</p>
-      </div>
-    </div>
-
-    <!-- Film 3 -->
-    <div class="coming-soon-item">
-      <img src="https://upload.wikimedia.org/wikipedia/en/f/f9/Avatar_The_Way_of_Water_poster.jpg" alt="Avatar 3">
-      <div class="coming-soon-info">
-        <h3>Avatar 3</h3>
-        <p class="date">Premiere: 25. desember 2025</p>
-        <p class="desc">James Cameron fortsetter reisen på Pandora med nye eventyr.</p>
-      </div>
-    </div>
+    <button class="scroll-button right" onclick="scrollGallery(this, 1)">❯</button>
+    <div class="fade-right"></div>
   </div>
 </section>
-
 
         <section class="gallery-section">
       <h2>Barn</h2>
@@ -798,6 +810,7 @@ document.querySelectorAll(".progress-bar").forEach(bar => {
   }
 });
 </script>
+
 
 
 
