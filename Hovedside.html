@@ -479,7 +479,76 @@ main {
     font-size: 12px;
     padding: 15px 5px;
   }
+
+  /* Kommende filmer galleri */
+.coming-soon-gallery {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 0 16px;
 }
+
+.coming-soon-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  background: #0d2c30;
+  border-radius: 10px;
+  padding: 12px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.coming-soon-item:hover {
+  transform: scale(1.02);
+  box-shadow: 0 0 12px rgba(0, 255, 204, 0.4);
+}
+
+.coming-soon-item img {
+  width: 120px;
+  height: 180px;
+  object-fit: cover;
+  border-radius: 6px;
+  flex-shrink: 0;
+  border: 2px solid #00FFCC;
+}
+
+.coming-soon-info {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.coming-soon-info h3 {
+  margin-bottom: 6px;
+  font-size: 18px;
+  color: #fff;
+}
+
+.coming-soon-info .date {
+  font-size: 14px;
+  color: #00FFCC;
+  margin-bottom: 6px;
+}
+
+.coming-soon-info .desc {
+  font-size: 14px;
+  color: #b1b1b1;
+}
+
+/* Responsiv tilpasning */
+@media (max-width: 768px) {
+  .coming-soon-item {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .coming-soon-item img {
+    width: 160px;
+    height: auto;
+  }
+}
+
 </style>
 </head>
 <body>
@@ -576,6 +645,42 @@ main {
         <div class="fade-right"></div>
       </div>
     </section>
+
+      <section class="gallery-section coming-soon-section">
+  <h2>Kommende filmer</h2>
+  <div class="coming-soon-gallery">
+    <!-- Film 1 -->
+    <div class="coming-soon-item">
+      <img src="https://images-prod.ai.tv2.no/v2/image-packs/pfimg_pack_01k56k23f0e8prk91pvye2ejfe?location=moviePoster&width=672" alt="Kaptein sabeltann">
+      <div class="coming-soon-info">
+        <h3>Kaptein Sabeltann og Grevinnen av Gral</h3>
+        <p class="date">Kommer: 2. Des 2025</p>
+        <p class="desc">Sett seilene for et helt nytt og spennende sjørøvereventyr. </p>
+      </div>
+    </div>
+
+    <!-- Film 2 -->
+    <div class="coming-soon-item">
+      <img src="https://upload.wikimedia.org/wikipedia/en/3/3a/Dune_Part_Two_poster.jpg" alt="Dune Part Two">
+      <div class="coming-soon-info">
+        <h3>Dune: Part Two</h3>
+        <p class="date">Premiere: 20. november 2025</p>
+        <p class="desc">Fortsettelsen på den episke sci-fi-historien av Denis Villeneuve.</p>
+      </div>
+    </div>
+
+    <!-- Film 3 -->
+    <div class="coming-soon-item">
+      <img src="https://upload.wikimedia.org/wikipedia/en/f/f9/Avatar_The_Way_of_Water_poster.jpg" alt="Avatar 3">
+      <div class="coming-soon-info">
+        <h3>Avatar 3</h3>
+        <p class="date">Premiere: 25. desember 2025</p>
+        <p class="desc">James Cameron fortsetter reisen på Pandora med nye eventyr.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
 
         <section class="gallery-section">
       <h2>Barn</h2>
@@ -693,6 +798,7 @@ document.querySelectorAll(".progress-bar").forEach(bar => {
   }
 });
 </script>
+
 
 
 
