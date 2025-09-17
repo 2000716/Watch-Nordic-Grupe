@@ -482,33 +482,32 @@ main {
 /* Kommende filmer – horisontalt galleri */
 .coming-soon-gallery {
   display: flex;
-  gap: 16px;
+  gap: 12px;
   padding: 10px 16px;
 }
 
 .coming-card {
   display: flex;
-  flex-direction: row; /* bilde venstre, tekst høyre */
-  align-items: flex-start;
-  min-width: 360px;
+  flex-direction: row; /* bilde til venstre, tekst til høyre */
+  align-items: center;
+  min-width: 280px;
   background: #0d2c30;
-  border-radius: 10px;
-  padding: 10px;
-  color: white;
-  gap: 14px;
+  border-radius: 8px;
+  padding: 8px;
+  gap: 10px;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .coming-card:hover {
   transform: scale(1.02);
-  box-shadow: 0 0 12px rgba(0, 255, 204, 0.4);
+  box-shadow: 0 0 10px rgba(0, 255, 204, 0.4);
 }
 
 .coming-card img {
-  width: 120px;       /* vertikal plakat */
-  height: 180px;
+  width: 80px;    /* mindre poster */
+  height: 120px;  /* stående */
   object-fit: cover;
-  border-radius: 6px;
+  border-radius: 4px;
   flex-shrink: 0;
   border: 2px solid #00FFCC;
 }
@@ -517,41 +516,23 @@ main {
   flex: 1;
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
+  justify-content: center;
 }
 
 .coming-info h3 {
-  font-size: 18px;
-  margin-bottom: 8px;
+  font-size: 16px;
+  margin-bottom: 4px;
   color: #fff;
 }
 
 .coming-info .date {
-  font-size: 14px;
+  font-size: 13px;
   color: #00FFCC;
-  margin-bottom: 8px;
+  margin-bottom: 4px;
 }
 
 .coming-info .desc {
-  font-size: 14px;
-  color: #b1b1b1;
-  line-height: 1.4;
-}
-
-/* Mobil */
-@media (max-width: 768px) {
-  .coming-card {
-    min-width: 240px;
-    flex-direction: column; /* bilde over tekst */
-    align-items: center;
-    text-align: center;
-  }
-
-  .coming-card img {
-    width: 140px;
-    height: auto;
-  }
-}
+  font-size:
 
 
 </style>
@@ -810,6 +791,7 @@ document.querySelectorAll(".progress-bar").forEach(bar => {
   }
 });
 </script>
+
 
 
 
