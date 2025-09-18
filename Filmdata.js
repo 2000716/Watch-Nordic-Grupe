@@ -25,6 +25,16 @@ const filmer = {
 
   "hook": {
     tittel: "Hook",
+    watchUrl: "film-mal.html?id=hook",
+    videoUrl: "https://video.wixstatic.com/video/fd2fb2_4900b93cc027487693fc66246b1ae100/720p/mp4/file.mp4",
+    subtitleUrl: "Hook.VTT",
+    tilbakeUrl: "film.html?navn=hook",
+    audioLanguages: [{ code: "en", label: "Engelsk" }],
+    subtitleLanguages: [
+      { code: "no", label: "Norsk" },
+      { code: "off", label: "Av" }
+    ],
+    
     bakgrunn: "https://d32qys9a6wm9no.cloudfront.net/images/movies/backdrop/ae/3d838f72e7bea39f327766bd55957a15_1280x720.jpg?t=1636109773",
     logo: "https://static.wixstatic.com/media/fd2fb2_dac88f2b81fb43858c47fc29a2fe3952~mv2.png",
     poster: "https://static.wixstatic.com/media/fd2fb2_3b5f5cd114b746e8b05881724a22a0e5~mv2.jpg",
@@ -34,7 +44,6 @@ const filmer = {
     imdb: "https://www.imdb.com/title/tt0102057/?ref_=nv_sr_srsg_1_tt_5_nm_2_in_0_q_HOOK",
     skuespillere: "Dustin Hoffman, Robin Williams, Julia Roberts",
     regissor: "Steven Spielberg",
-    watchUrl: "film-mal.html?id=hook"
   },
 
   "kaptein-sabeltann": {
@@ -238,18 +247,8 @@ const filmer = {
 
 
 
-  "corpse-bride": {
-    tittel: "Corpse Bride",
-    watchUrl: "film-mal.html?id=corpse-bride",
-    videoUrl: "https://video.wixstatic.com/video/fd2fb2_a659818165894e4894228ad4804060f4/1080p/mp4/file.mp4",
-    subtitleUrl: "Corpse-bride.VTT",
-    tilbakeUrl: "film.html?navn=corpse-bride",
-    audioLanguages: [{ code: "en", label: "Engelsk" }],
-    subtitleLanguages: [
-      { code: "no", label: "Norsk" },
-      { code: "off", label: "Av" }
-    ]
-  },
+ 
+  
   "hook": {
     tittel: "Hook",
     watchUrl: "film-mal.html?id=hook",
@@ -423,6 +422,7 @@ const filmer = {
   },
 
 };
+
 
 
 
