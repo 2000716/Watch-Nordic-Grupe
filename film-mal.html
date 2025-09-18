@@ -499,11 +499,7 @@ video::cue {
 
     <img class="watermark" src="https://static.wixstatic.com/media/fd2fb2_c21ec9ad924c4357b54e65f2557872c5~mv2.png" alt="Watermark">
   </div>
-<!-- Last inn filmdata -->
-<script src="filmdata.js"></script>
-
-<!-- Spilleren og logikken -->
-<script>
+// player.js
 document.addEventListener("DOMContentLoaded", () => {
   // Hent film-id fra URL
   const urlParams = new URLSearchParams(window.location.search);
@@ -816,7 +812,9 @@ document.addEventListener("DOMContentLoaded", () => {
   // Skjul alle spor (vi bruker overlay)
   for (let i = 0; i < video.textTracks.length; i++) video.textTracks[i].mode = "hidden";
 });
+
 </script>
+
 
 
 
