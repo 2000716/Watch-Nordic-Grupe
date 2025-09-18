@@ -117,7 +117,6 @@ const filmer = {
     tilbakeUrl: "film.html?navn=dyrene-i-hakkabakkeskogen",
     audioLanguages: [{ code: "no", label: "Norsk" }],
     subtitleLanguages: [],
-    
     bakgrunn: "https://images.squarespace-cdn.com/content/v1/582b59736b8f5b751a0cf841/1483043813486-L79UYGV3MT4F5744E5JV/image-asset.jpeg",
     logo: "https://is1-ssl.mzstatic.com/image/thumb/Features113/v4/15/0e/02/150e0271-d537-03c1-fcce-c94654692013/hqd8703496463884450421.png/760x286.png",
     poster: "https://is1-ssl.mzstatic.com/image/thumb/Video113/v4/b1/96/ac/b196acbf-3010-b760-3193-702c340000f0/1181928424-WW-AMP_SF.lsr/1200x675.jpg",
@@ -127,10 +126,9 @@ const filmer = {
     imdb: "https://www.imdb.com/title/tt5804324/?ref_=nv_sr_srsg_0",
     skuespillere: "Odd-Magnus Williamson, Ingar Helge Gimle, Anette Hoff",
     regissor: "Rasmus A. Sivertsen"
-  }
-};
+  },
 
- "jul-i-flåklypa": {
+  "jul-i-flåklypa": {
     tittel: "Jul i Flåklypa",
     watchUrl: "film-mal.html?id=jul-i-flåklypa",
     videoUrl: "https://video.wixstatic.com/video/fd2fb2_26bfed9bfc254af8b14f41820a066eec/720p/mp4/file.mp4",
@@ -152,3 +150,4 @@ const filmer = {
     regissor: "Rasmus A. Sivertsen"
   }
 };
+
