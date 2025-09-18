@@ -141,28 +141,14 @@ const filmer = {
       { code: "no", label: "Norsk" },
       { code: "off", label: "Av" }
     ],
- 
     bakgrunn: "https://occ-0-8407-2218.1.nflxso.net/dnm/api/v6/E8vDc_W8CLv7-yMQu8KMEC7Rrr8/AAAABf_jXS7fg-ggm0v_ygwinuf9ZAf46TiEnc5yHc9if-TcxcEsEh_RIDErLYQpvhnosZF6f3oXPzEdY7xdP0XOSM2xcPDK0s6Ix0HM.jpg?r=9e5",
     logo: "https://occ-0-3668-38.1.nflxso.net/dnm/api/v6/S4oi7EPZbv2UEPaukW54OORa0S8/AAAABW5AdcvFX4G8XnB_b3uQRtZgvyU3QTyH4uSjNdDIANcjK_MlWXdMffH6J7JaKlt3Xj4_YKWusqEWZ9Xo1CkqN2_OYV51oVqvhw.webp?r=97e",
     poster: "https://sumo.cdn.tv2.no/imageapi/v3/img/5dbc0a4f498e1dc3eb8394b3-1700644038168",
-    posterVertikal: "https://i-viaplay-com.akamaized.net/viaplay-prod/908/1012/1460156915-30c59a4bbbfa5b5e2995b36a67da4d63eb0efb42.jpg?width=400&height=600", // portrett
+    posterVertikal: "https://i-viaplay-com.akamaized.net/viaplay-prod/908/1012/1460156915-30c59a4bbbfa5b5e2995b36a67da4d63eb0efb42.jpg?width=400&height=600",
     beskrivelse: "En desperat avisredaktør med planer om å sette en ny snørekord, får tak i en kraftig snøkanon, alt for å prøve å lage store avisoverskrifter før jul.",
     metadata: ["Norge", "2013", "7+", "Barn / Familie", "1 t 17 min"],
     imdb: "https://www.imdb.com/title/tt2769896/?ref_=nv_sr_srsg_0_tt_2_nm_0_in_0_q_JUl%2520i%2520fl%25C3%25A5klypa",
     skuespillere: "Trond Brænne, Kari Ann Grønsund, Trond Høvik, Kåre Conradi, John F. Brungot",
-    regissor: "Rasmus A. Sivertsen",
-    watchUrl: "film-mal.html?id=jul-i-flåklypa"
-  },
-
-
-
-
-
-
-
-
-
-
-
-
-
+    regissor: "Rasmus A. Sivertsen"
+  }
+};
