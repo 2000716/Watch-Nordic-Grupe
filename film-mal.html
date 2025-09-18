@@ -500,14 +500,17 @@ video::cue {
     <img class="watermark" src="https://static.wixstatic.com/media/fd2fb2_c21ec9ad924c4357b54e65f2557872c5~mv2.png" alt="Watermark">
   </div>
 
-<script>
+<!-- Last inn filmdata -->
 <script src="filmdata.js"></script>
 
+<!-- Spilleren og logikken -->
+<script>
 // Hent film-id fra URL
 const urlParams = new URLSearchParams(window.location.search);
-const filmId = urlParams.get('id')?.toLowerCase().replace(/\s+/g, '-');
+const filmId = urlParams.get("id")?.toLowerCase().replace(/\s+/g, "-");
 
-if (!filmer[filmId]) {
+// Sjekk at filmen finnes
+if (!filmer || !filmer[filmId]) {
   alert("Denne filmen finnes ikke.");
   window.location.href = "index.html";
 }
@@ -516,38 +519,38 @@ const film = filmer[filmId];
 document.title = film.tittel;
 
 // DOM-elementer
-const video = document.getElementById('video');
-const source = video.querySelector('source');
-const track = video.querySelector('track');
+const video = document.getElementById("video");
+const source = video.querySelector("source");
+const track = video.querySelector("track");
 source.src = film.videoUrl;
-track.src = film.subtitleUrl;
+if (film.subtitleUrl) track.src = film.subtitleUrl;
 video.load();
 
-const titleElement = document.querySelector('.movie-title');
+const titleElement = document.querySelector(".movie-title");
 if (titleElement) titleElement.textContent = film.tittel;
 
-const backButton = document.getElementById('backButton');
-if (backButton && film.tilbakeUrl) backButton.setAttribute('href', film.tilbakeUrl);
+const backButton = document.getElementById("backButton");
+if (backButton && film.tilbakeUrl) backButton.setAttribute("href", film.tilbakeUrl);
 
-const ui = document.getElementById('ui');
-const playBtn = document.getElementById('playPauseBtn');
-const playIcon = document.getElementById('playIcon');
-const muteBtn = document.getElementById('muteBtn');
-const muteIcon = document.getElementById('muteIcon');
-const rewindBtn = document.getElementById('rewindBtn');
-const forwardBtn = document.getElementById('forwardBtn');
-const progress = document.getElementById('progress');
-const progressFilled = document.getElementById('progressFilled');
-const thumb = document.getElementById('thumb');
-const timeDisplay = document.getElementById('timeDisplay');
-const captionsBtn = document.getElementById('captionsBtn');
-const captionMenu = document.getElementById('captionMenu');
-const fullscreenBtn = document.getElementById('fullscreenBtn');
-const container = document.getElementById('container');
-const loadingSpinner = document.getElementById('loadingSpinner');
-const previewBox = document.getElementById('previewBox');
-const previewImage = document.getElementById('previewImage');
-const previewTime = document.getElementById('previewTime');
+const ui = document.getElementById("ui");
+const playBtn = document.getElementById("playPauseBtn");
+const playIcon = document.getElementById("playIcon");
+const muteBtn = document.getElementById("muteBtn");
+const muteIcon = document.getElementById("muteIcon");
+const rewindBtn = document.getElementById("rewindBtn");
+const forwardBtn = document.getElementById("forwardBtn");
+const progress = document.getElementById("progress");
+const progressFilled = document.getElementById("progressFilled");
+const thumb = document.getElementById("thumb");
+const timeDisplay = document.getElementById("timeDisplay");
+const captionsBtn = document.getElementById("captionsBtn");
+const captionMenu = document.getElementById("captionMenu");
+const fullscreenBtn = document.getElementById("fullscreenBtn");
+const container = document.getElementById("container");
+const loadingSpinner = document.getElementById("loadingSpinner");
+const previewBox = document.getElementById("previewBox");
+const previewImage = document.getElementById("previewImage");
+const previewTime = document.getElementById("previewTime");
 
 // Resume overlay
 const resumeOverlay = document.getElementById("resumeOverlay");
@@ -566,43 +569,54 @@ let subtitlesEnabled = true; // styrer om undertekster skal vises
 function formatTime(time) {
   const m = Math.floor(time / 60);
   const s = Math.floor(time % 60);
-  return `${m}:${s < 10 ? '0' + s : s}`;
+  return `${m}:${s < 10 ? "0" + s : s}`;
 }
 
 // Oppdater progress-bar
 function updateProgress() {
   if (!isDragging) {
     const percent = (video.currentTime / video.duration) * 100;
-    progressFilled.style.width = percent + '%';
-    thumb.style.left = percent + '%';
+    progressFilled.style.width = percent + "%";
+    thumb.style.left = percent + "%";
   }
-  timeDisplay.textContent = `${formatTime(video.currentTime)} / ${formatTime(video.duration)}`;
+  timeDisplay.textContent = `${formatTime(video.currentTime)} / ${formatTime(
+    video.duration
+  )}`;
 }
 
-video.addEventListener('timeupdate', updateProgress);
-video.addEventListener('loadedmetadata', updateProgress);
+video.addEventListener("timeupdate", updateProgress);
+video.addEventListener("loadedmetadata", updateProgress);
 
 // Play/pause
-playBtn.addEventListener('click', () => video.paused ? video.play() : video.pause());
-video.addEventListener('click', () => video.paused ? video.play() : video.pause());
+playBtn.addEventListener("click", () =>
+  video.paused ? video.play() : video.pause()
+);
+video.addEventListener("click", () =>
+  video.paused ? video.play() : video.pause()
+);
 
-document.addEventListener('keydown', e => {
-  if (e.code === 'Space') { e.preventDefault(); video.paused ? video.play() : video.pause(); }
-  if (e.key === 'ArrowRight') video.currentTime += 10;
-  if (e.key === 'ArrowLeft') video.currentTime -= 10;
+document.addEventListener("keydown", (e) => {
+  if (e.code === "Space") {
+    e.preventDefault();
+    video.paused ? video.play() : video.pause();
+  }
+  if (e.key === "ArrowRight") video.currentTime += 10;
+  if (e.key === "ArrowLeft") video.currentTime -= 10;
 });
 
-video.addEventListener('play', () => { 
-  playIcon.src = "https://static.wixstatic.com/media/fd2fb2_f4658d43d3204506948e5c5ab65461d7~mv2.png"; 
-  showUI(); 
+video.addEventListener("play", () => {
+  playIcon.src =
+    "https://static.wixstatic.com/media/fd2fb2_f4658d43d3204506948e5c5ab65461d7~mv2.png";
+  showUI();
 });
-video.addEventListener('pause', () => { 
-  playIcon.src = "https://static.wixstatic.com/media/fd2fb2_f6f25f56b00e49eea8dc4f811b50bb5c~mv2.png"; 
-  showUI(); 
+video.addEventListener("pause", () => {
+  playIcon.src =
+    "https://static.wixstatic.com/media/fd2fb2_f6f25f56b00e49eea8dc4f811b50bb5c~mv2.png";
+  showUI();
 });
 
 // Mute
-muteBtn.addEventListener('click', () => {
+muteBtn.addEventListener("click", () => {
   video.muted = !video.muted;
   muteIcon.src = video.muted
     ? "https://static.wixstatic.com/media/fd2fb2_e7e7e77a59964f018d9e2d4605a047db~mv2.png"
@@ -610,19 +624,26 @@ muteBtn.addEventListener('click', () => {
 });
 
 // Rewind/forward
-rewindBtn.addEventListener('click', () => video.currentTime = Math.max(0, video.currentTime - 10));
-forwardBtn.addEventListener('click', () => video.currentTime = Math.min(video.duration, video.currentTime + 10));
+rewindBtn.addEventListener(
+  "click",
+  () => (video.currentTime = Math.max(0, video.currentTime - 10))
+);
+forwardBtn.addEventListener(
+  "click",
+  () => (video.currentTime = Math.min(video.duration, video.currentTime + 10))
+);
 
 // Captions meny
-captionsBtn.addEventListener('click', () => {
-  captionMenu.style.display = captionMenu.style.display === 'block' ? 'none' : 'block';
+captionsBtn.addEventListener("click", () => {
+  captionMenu.style.display =
+    captionMenu.style.display === "block" ? "none" : "block";
 });
 
 // Dynamiske lydknapper
 const audioTracksDiv = document.getElementById("audioTracks");
 audioTracksDiv.innerHTML = "";
 if (film.audioLanguages && film.audioLanguages.length > 0) {
-  film.audioLanguages.forEach(lang => {
+  film.audioLanguages.forEach((lang) => {
     const btn = document.createElement("button");
     btn.textContent = lang.label;
     btn.dataset.audio = lang.code;
@@ -632,13 +653,15 @@ if (film.audioLanguages && film.audioLanguages.length > 0) {
     });
     audioTracksDiv.appendChild(btn);
   });
-} else { audioTracksDiv.innerHTML = "<em style='color:gray;'>Ingen valg</em>"; }
+} else {
+  audioTracksDiv.innerHTML = "<em style='color:gray;'>Ingen valg</em>";
+}
 
 // Dynamiske undertekstknapper
 const subtitleTracksDiv = document.getElementById("subtitleTracks");
 subtitleTracksDiv.innerHTML = "";
 if (film.subtitleLanguages && film.subtitleLanguages.length > 0) {
-  film.subtitleLanguages.forEach(sub => {
+  film.subtitleLanguages.forEach((sub) => {
     const btn = document.createElement("button");
     btn.textContent = sub.label;
     btn.dataset.lang = sub.code;
@@ -646,21 +669,26 @@ if (film.subtitleLanguages && film.subtitleLanguages.length > 0) {
       const selectedLang = sub.code;
       if (selectedLang === "off") {
         subtitlesEnabled = false;
-        for (let i = 0; i < video.textTracks.length; i++) video.textTracks[i].mode = "hidden";
+        for (let i = 0; i < video.textTracks.length; i++)
+          video.textTracks[i].mode = "hidden";
         subtitleOverlay.textContent = "";
       } else {
         subtitlesEnabled = true;
         for (let i = 0; i < video.textTracks.length; i++) {
           const track = video.textTracks[i];
-          if (track.language === selectedLang || track.label.toLowerCase() === selectedLang) {
-            track.mode = "hidden"; 
+          if (
+            track.language === selectedLang ||
+            track.label.toLowerCase() === selectedLang
+          ) {
+            track.mode = "hidden";
             track.addEventListener("cuechange", () => {
               if (!subtitlesEnabled) {
                 subtitleOverlay.textContent = "";
                 return;
               }
               const cues = track.activeCues;
-              subtitleOverlay.textContent = cues && cues.length > 0 ? cues[0].text : "";
+              subtitleOverlay.textContent =
+                cues && cues.length > 0 ? cues[0].text : "";
             });
           }
         }
@@ -669,29 +697,43 @@ if (film.subtitleLanguages && film.subtitleLanguages.length > 0) {
     });
     subtitleTracksDiv.appendChild(btn);
   });
-} else { subtitleTracksDiv.innerHTML = "<em style='color:gray;'>Ingen undertekster</em>"; }
+} else {
+  subtitleTracksDiv.innerHTML =
+    "<em style='color:gray;'>Ingen undertekster</em>";
+}
 
 // Scrub-funksjon
 function scrubTo(e) {
   const rect = progress.getBoundingClientRect();
   const x = e.clientX - rect.left;
   const percent = Math.min(Math.max(0, x / rect.width), 1);
-  progressFilled.style.width = percent * 100 + '%';
-  thumb.style.left = percent * 100 + '%';
+  progressFilled.style.width = percent * 100 + "%";
+  thumb.style.left = percent * 100 + "%";
   return percent;
 }
 
-progress.addEventListener('mousedown', e => { isDragging = true; scrubTo(e); });
-document.addEventListener('mouseup', e => { 
-  if (isDragging) { 
-    const percent = scrubTo(e); 
-    video.currentTime = percent * video.duration; 
-    isDragging = false; 
-    hidePreview(); 
-  } 
+progress.addEventListener("mousedown", (e) => {
+  isDragging = true;
+  scrubTo(e);
 });
-document.addEventListener('mousemove', e => { if (isDragging) { scrubTo(e); showPreview(e); } });
-thumb.addEventListener('mousedown', e => { e.preventDefault(); isDragging = true; });
+document.addEventListener("mouseup", (e) => {
+  if (isDragging) {
+    const percent = scrubTo(e);
+    video.currentTime = percent * video.duration;
+    isDragging = false;
+    hidePreview();
+  }
+});
+document.addEventListener("mousemove", (e) => {
+  if (isDragging) {
+    scrubTo(e);
+    showPreview(e);
+  }
+});
+thumb.addEventListener("mousedown", (e) => {
+  e.preventDefault();
+  isDragging = true;
+});
 
 // Preview-bilde
 const hiddenVideo = document.createElement("video");
@@ -721,76 +763,81 @@ function showPreview(e) {
   });
 }
 
-function hidePreview() { previewBox.style.display = "none"; }
+function hidePreview() {
+  previewBox.style.display = "none";
+}
 
 progress.addEventListener("mousemove", showPreview);
 progress.addEventListener("mouseleave", hidePreview);
 
 // UI vis/skjul
 function showUI() {
-  ui.classList.remove('hidden');
+  ui.classList.remove("hidden");
   subtitleOverlay.classList.add("subtitle-up");
   clearTimeout(hideTimeout);
   hideTimeout = setTimeout(() => {
     if (!video.paused) {
-      ui.classList.add('hidden');
+      ui.classList.add("hidden");
       subtitleOverlay.classList.remove("subtitle-up");
     }
   }, 3000);
 }
 
-document.addEventListener('mousemove', showUI);
-document.addEventListener('keydown', showUI);
+document.addEventListener("mousemove", showUI);
+document.addEventListener("keydown", showUI);
 
 // Fullscreen
-fullscreenBtn.addEventListener('click', () => {
-  if (!document.fullscreenElement) { container.requestFullscreen(); }
-  else { document.exitFullscreen(); }
+fullscreenBtn.addEventListener("click", () => {
+  if (!document.fullscreenElement) {
+    container.requestFullscreen();
+  } else {
+    document.exitFullscreen();
+  }
 });
 
-document.addEventListener('fullscreenchange', () => {
-  fullscreenBtn.querySelector('img').src = document.fullscreenElement
+document.addEventListener("fullscreenchange", () => {
+  fullscreenBtn.querySelector("img").src = document.fullscreenElement
     ? "https://static.wixstatic.com/media/fd2fb2_c9b139f2774c4bf7b32c7271fd6c1c1a~mv2.png"
     : "https://static.wixstatic.com/media/fd2fb2_3fa37682b3b34c04a2cd08ffcde2763a~mv2.png";
 });
 
 // Loading spinner
-video.addEventListener('waiting', () => loadingSpinner.style.display = 'block');
-video.addEventListener('playing', () => loadingSpinner.style.display = 'none');
-video.addEventListener('canplay', () => loadingSpinner.style.display = 'none');
+video.addEventListener("waiting", () => (loadingSpinner.style.display = "block"));
+video.addEventListener("playing", () => (loadingSpinner.style.display = "none"));
+video.addEventListener("canplay", () => (loadingSpinner.style.display = "none"));
 
 // Lagre/gjenoppta
 const storageKey = filmId;
 const savedTime = parseFloat(localStorage.getItem(`${storageKey}-lastPosition`));
 
-video.addEventListener('loadedmetadata', () => {
+video.addEventListener("loadedmetadata", () => {
   if (!isNaN(savedTime) && savedTime > 10 && video.duration > savedTime) {
     video.currentTime = savedTime;
     resumeOverlay.style.display = "flex";
 
     continueBtn.addEventListener("click", () => {
       resumeOverlay.style.display = "none";
-      video.play().catch(err => console.warn("Autoplay blokkert:", err));
+      video.play().catch((err) => console.warn("Autoplay blokkert:", err));
     });
 
     restartBtn.addEventListener("click", () => {
       video.currentTime = 0;
       resumeOverlay.style.display = "none";
-      video.play().catch(err => console.warn("Autoplay blokkert:", err));
+      video.play().catch((err) => console.warn("Autoplay blokkert:", err));
     });
   } else {
     video.currentTime = 0;
     video.muted = false;
-    video.play().catch(err => console.warn("Autoplay blokkert:", err));
+    video.play().catch((err) => console.warn("Autoplay blokkert:", err));
   }
 });
 
-window.addEventListener('beforeunload', () => {
+window.addEventListener("beforeunload", () => {
   localStorage.setItem(`${storageKey}-lastPosition`, video.currentTime);
 });
 
 // Ferdig
-video.addEventListener('ended', () => {
+video.addEventListener("ended", () => {
   localStorage.removeItem(`${storageKey}-lastPosition`);
   localStorage.setItem(`${storageKey}-status`, "ferdig");
   window.location.href = film.tilbakeUrl;
@@ -800,12 +847,16 @@ video.addEventListener('ended', () => {
 let mouseTimer;
 const hideCursorDelay = 3000;
 function showCursor() {
-  document.body.style.cursor = 'default';
+  document.body.style.cursor = "default";
   clearTimeout(mouseTimer);
-  mouseTimer = setTimeout(() => { document.body.style.cursor = 'none'; }, hideCursorDelay);
+  mouseTimer = setTimeout(() => {
+    document.body.style.cursor = "none";
+  }, hideCursorDelay);
 }
-document.addEventListener('mousemove', showCursor);
-mouseTimer = setTimeout(() => { document.body.style.cursor = 'none'; }, hideCursorDelay);
+document.addEventListener("mousemove", showCursor);
+mouseTimer = setTimeout(() => {
+  document.body.style.cursor = "none";
+}, hideCursorDelay);
 
 // Skjul alle spor, vi viser manuelt i overlay
 for (let i = 0; i < video.textTracks.length; i++) {
@@ -820,7 +871,7 @@ let globalSubtitleSetting = localStorage.getItem(subtitleSettingKey) || "off";
 
 // Funksjon for å oppdatere knappene i menyen
 function updateSubtitleButtons(activeLang) {
-  document.querySelectorAll("#subtitleTracks button").forEach(btn => {
+  document.querySelectorAll("#subtitleTracks button").forEach((btn) => {
     if (btn.dataset.lang === activeLang) {
       btn.classList.add("active");
     } else {
@@ -833,13 +884,17 @@ function updateSubtitleButtons(activeLang) {
 video.addEventListener("loadedmetadata", () => {
   if (globalSubtitleSetting === "off") {
     subtitlesEnabled = false;
-    for (let i = 0; i < video.textTracks.length; i++) video.textTracks[i].mode = "hidden";
+    for (let i = 0; i < video.textTracks.length; i++)
+      video.textTracks[i].mode = "hidden";
     subtitleOverlay.textContent = "";
   } else {
     subtitlesEnabled = true;
     for (let i = 0; i < video.textTracks.length; i++) {
       const track = video.textTracks[i];
-      if (track.language === globalSubtitleSetting || track.label.toLowerCase() === globalSubtitleSetting) {
+      if (
+        track.language === globalSubtitleSetting ||
+        track.label.toLowerCase() === globalSubtitleSetting
+      ) {
         track.mode = "hidden";
         track.addEventListener("cuechange", () => {
           if (!subtitlesEnabled) {
@@ -847,7 +902,8 @@ video.addEventListener("loadedmetadata", () => {
             return;
           }
           const cues = track.activeCues;
-          subtitleOverlay.textContent = cues && cues.length > 0 ? cues[0].text : "";
+          subtitleOverlay.textContent =
+            cues && cues.length > 0 ? cues[0].text : "";
         });
       }
     }
@@ -856,7 +912,7 @@ video.addEventListener("loadedmetadata", () => {
 });
 
 // Når bruker klikker på en undertekst-knapp
-subtitleTracksDiv.querySelectorAll("button").forEach(btn => {
+subtitleTracksDiv.querySelectorAll("button").forEach((btn) => {
   btn.addEventListener("click", () => {
     const selectedLang = btn.dataset.lang;
     globalSubtitleSetting = selectedLang;
@@ -864,13 +920,17 @@ subtitleTracksDiv.querySelectorAll("button").forEach(btn => {
 
     if (selectedLang === "off") {
       subtitlesEnabled = false;
-      for (let i = 0; i < video.textTracks.length; i++) video.textTracks[i].mode = "hidden";
+      for (let i = 0; i < video.textTracks.length; i++)
+        video.textTracks[i].mode = "hidden";
       subtitleOverlay.textContent = "";
     } else {
       subtitlesEnabled = true;
       for (let i = 0; i < video.textTracks.length; i++) {
         const track = video.textTracks[i];
-        if (track.language === selectedLang || track.label.toLowerCase() === selectedLang) {
+        if (
+          track.language === selectedLang ||
+          track.label.toLowerCase() === selectedLang
+        ) {
           track.mode = "hidden";
           track.addEventListener("cuechange", () => {
             if (!subtitlesEnabled) {
@@ -878,7 +938,8 @@ subtitleTracksDiv.querySelectorAll("button").forEach(btn => {
               return;
             }
             const cues = track.activeCues;
-            subtitleOverlay.textContent = cues && cues.length > 0 ? cues[0].text : "";
+            subtitleOverlay.textContent =
+              cues && cues.length > 0 ? cues[0].text : "";
           });
         }
       }
@@ -888,10 +949,7 @@ subtitleTracksDiv.querySelectorAll("button").forEach(btn => {
     captionMenu.style.display = "none";
   });
 });
-
 </script>
-
-
 
 
 
