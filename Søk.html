@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+  <meta charset="UTF-8">
+  <title>Søk etter filmer</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    /* GLOBALT */
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { font-family: Arial, sans-serif; background: #091B1E; color: white; overflow-x: hidden; }
+
+    /* NAVIGASJON TIL VENSTRE */
+    .vertical-nav {
+      width: 70px; height: 100vh;
+      background-color: transparent;
+      position: fixed; top: 0; left: 0;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      z-index: 100;
+    }
+    .nav-icons-wrapper {
+      display: flex; flex-direction: column; align-items: center; gap: 10px;
+    }
+    .profilmeny { cursor: pointer; margin-bottom: 20px; }
+    .profilmeny img {
+      width: 48px; height: 48px;
+      border-radius: 50%; object-fit: cover;
+      border: 2px solid white; transition: transform 0.2s ease;
+    }
+    .profilmeny img:hover { transform: scale(1.1); }
+    .nav-icon {
+      color: white; font-size: 22px; padding: 16px 0;
+      text-decoration: none; text-align: center; width: 100%;
+      transition: color 0.3s ease; cursor: pointer; background: none; border: none;
+    }
+    .nav-icon:hover, .nav-icon.active { color: #00FFCC; }
+
+    main { margin-left: 70px; padding: 20px; }
+    .content-wrapper { max-width: 1200px; margin: 0 auto; }
+
+    h1 { margin-bottom: 20px; color: #00FFCC; font-size: 28px; }
+
+    /* SØKEFELT */
+    .search-box {
+      margin-bottom: 20px;
+      display: flex; justify-content: center;
+    }
+    .search-box input {
+      width: 100%; max-width: 500px;
+      padding: 10px 15px;
+      border-radius: 5px;
+      border: none;
+      font-size: 16px;
+    }
+
+    /* FILM GRID */
+    .film-grid { display: flex; flex-wrap: wrap; gap: 20px; justify-content: center; }
+    .film-card {
+      width: 200px; aspect-ratio: 2 / 3;
+      cursor: pointer; transition: transform 0.2s ease, box-shadow 0.3s ease;
+      border-radius: 10px; overflow: hidden; position: relative; background: #111;
+    }
+    .film-card img {
+      width: 100%; height: 100%; object-fit: cover; display: block;
+    }
+    .film-card:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 15px #00FFCC;
+    }
+
+    /* FOOTER */
+    .footer { margin-top: 40px; padding: 20px; text-align: center; color: #515151; font-size: 14px; }
+    .footer a { color: #b1b1b1; margin: 0 10px; text-decoration: none; transition: color 0.2s; }
+    .footer a:hover { color: #00FFCC; }
+  </style>
+</head>
+<body>
+
+<!-- VENSTRE MENY -->
+<div class="vertical-nav" id="verticalNav">
+  <div class="profilmeny">
+    <a href="Konto.html">
+      <img id="menyProfilbilde" src="https://via.placeholder.com/100" alt="Min profil" />
+    </a>
+  </div>
+  <div class="nav-icons-wrapper">
+    <a href="Søk.html" class="nav-icon active"><i class="fas fa-search"></i></a>
+    <a href="Hovedside.html" class="nav-icon"><i class="fas fa-house"></i></a>
+    <a href="Film.html" class="nav-icon"><i class="fas fa-film"></i></a>
+    <a href="Serier.html" class="nav-icon"><i class="fas fa-tv"></i></a>
+    <a href="Min-Liste.html" class="nav-icon"><i class="fas fa-bookmark"></i></a>
+  </div>
+</div>
+
+<main>
+  <h1>Søk etter filmer</h1>
+  <div class="search-box">
+    <input type="text" id="searchInput" placeholder="Skriv inn tittel, sjanger eller år...">
+  </div>
+  <div id="filmGrid" class="film-grid"></div>
+</main>
+
+<footer class="footer">
+  <div class="footer-links">
+    <a href="#">Hjelp</a> | <a href="#">Kontakt</a> | <a href="#">Om</a>
+  </div>
+  <div class="footer-copy">&copy; 2025 Min Strømmetjeneste</div>
+</footer>
+
+<script src="Filmdata.js"></script>
+<script>
+  // Autentisering
+  const epost = localStorage.getItem("epost");
+  const passord = localStorage.getItem("passord");
+  if (!epost || !passord) window.location.href = "Startside.html";
+
+  // Profilbilde
+  const lagretBilde = localStorage.getItem("profilbilde");
+  if (lagretBilde) document.getElementById("menyProfilbilde").src = lagretBilde;
+
+  // Filmvisning
+  const filmGrid = document.getElementById("filmGrid");
+  const searchInput = document.getElementById("searchInput");
+
+  function visFilmer(filter = "") {
+    filmGrid.innerHTML = "";
+    if (typeof filmer === "undefined") {
+      filmGrid.innerHTML = "<p>Kunne ikke laste filmer (mangler filmdata.js).</p>";
+      return;
+    }
+
+    const lowerFilter = filter.toLowerCase();
+    const treff = Object.keys(filmer).filter(filmNavn => {
+      const data = filmer[filmNavn];
+      return (
+        data.tittel.toLowerCase().includes(lowerFilter) ||
+        (data.sjanger && data.sjanger.toLowerCase().includes(lowerFilter)) ||
+        (data.år && data.år.toString().includes(lowerFilter))
+      );
+    });
+
+    if (treff.length === 0) {
+      filmGrid.innerHTML = "<p>Ingen filmer funnet.</p>";
+    } else {
+      treff.forEach(filmNavn => {
+        const data = filmer[filmNavn];
+        const card = document.createElement("div");
+        card.className = "film-card";
+        card.innerHTML = `<img src="${data.poster || 'default-poster.jpg'}" alt="${data.tittel}">`;
+        card.addEventListener("click", () => {
+          window.location.href = `film.html?navn=${filmNavn}`;
+        });
+        filmGrid.appendChild(card);
+      });
+    }
+  }
+
+  // Initielt vis alle filmer
+  visFilmer();
+
+  // Søk mens man skriver
+  searchInput.addEventListener("input", e => visFilmer(e.target.value));
+</script>
+
+</body>
+</html>
