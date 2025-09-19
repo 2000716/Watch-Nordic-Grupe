@@ -234,9 +234,11 @@ const filmer = {
     imdb: "https://www.imdb.com/title/tt14806994/",
     skuespillere: "Anders Baasmo, John Carew, Elias Holmen Sørensen",
     regissor: "Hallvard Bræin",
-    watchUrl: "film-mal.html?id=olsenbanden – siste skrik"
+    watchUrl: "film-mal.html?id=olsenbanden – siste skrik",
+    publishDate: "2025-09-23" // ISO datoformat
   },
 };
+
 
 
 
