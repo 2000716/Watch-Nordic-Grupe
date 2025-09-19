@@ -49,14 +49,19 @@
       width: 100%; max-width: 500px;
       padding: 10px 15px;
       border-radius: 5px;
-      border: none;
+      border: 1px solid #00FFCC;
+      background: rgba(9, 27, 30, 0.6); /* gjennomsiktig */
+      color: white;
       font-size: 16px;
+    }
+    .search-box input::placeholder {
+      color: #bbb;
     }
 
     /* FILM GRID */
     .film-grid { display: flex; flex-wrap: wrap; gap: 20px; justify-content: center; }
     .film-card {
-      width: 200px; aspect-ratio: 2 / 3;
+      width: 300px; aspect-ratio: 16 / 9; /* horisontal */
       cursor: pointer; transition: transform 0.2s ease, box-shadow 0.3s ease;
       border-radius: 10px; overflow: hidden; position: relative; background: #111;
     }
@@ -66,6 +71,30 @@
     .film-card:hover {
       transform: scale(1.05);
       box-shadow: 0 0 15px #00FFCC;
+    }
+
+    /* HISTORIKK */
+    .history {
+      margin: 20px auto;
+      max-width: 500px;
+      color: #ccc;
+    }
+    .history h2 {
+      font-size: 18px;
+      color: #00FFCC;
+      margin-bottom: 10px;
+    }
+    .history-list {
+      list-style: none;
+    }
+    .history-list li {
+      cursor: pointer;
+      padding: 5px 0;
+      border-bottom: 1px solid #333;
+      transition: color 0.2s;
+    }
+    .history-list li:hover {
+      color: #00FFCC;
     }
 
     /* FOOTER */
@@ -97,6 +126,12 @@
   <div class="search-box">
     <input type="text" id="searchInput" placeholder="Skriv inn tittel, sjanger eller år...">
   </div>
+
+  <div class="history">
+    <h2>Tidligere søk</h2>
+    <ul id="historyList" class="history-list"></ul>
+  </div>
+
   <div id="filmGrid" class="film-grid"></div>
 </main>
 
@@ -118,12 +153,37 @@
   const lagretBilde = localStorage.getItem("profilbilde");
   if (lagretBilde) document.getElementById("menyProfilbilde").src = lagretBilde;
 
-  // Filmvisning
+  // Elementer
   const filmGrid = document.getElementById("filmGrid");
   const searchInput = document.getElementById("searchInput");
+  const historyList = document.getElementById("historyList");
 
+  // Laste inn søkehistorikk fra localStorage
+  let historikk = JSON.parse(localStorage.getItem("søkehistorikk")) || [];
+
+  function oppdaterHistorikk() {
+    historyList.innerHTML = "";
+    if (historikk.length === 0) {
+      historyList.innerHTML = "<li>Ingen tidligere søk</li>";
+      return;
+    }
+    historikk.forEach(entry => {
+      const li = document.createElement("li");
+      li.textContent = entry;
+      li.addEventListener("click", () => {
+        searchInput.value = entry;
+        visFilmer(entry);
+      });
+      historyList.appendChild(li);
+    });
+  }
+
+  // Vise filmer basert på søk
   function visFilmer(filter = "") {
     filmGrid.innerHTML = "";
+
+    if (!filter) return; // ikke vis filmer hvis søket er tomt
+
     if (typeof filmer === "undefined") {
       filmGrid.innerHTML = "<p>Kunne ikke laste filmer (mangler filmdata.js).</p>";
       return;
@@ -155,12 +215,23 @@
     }
   }
 
-  // Initielt vis alle filmer
-  visFilmer();
+  // Når man skriver i søkefeltet
+  searchInput.addEventListener("input", e => {
+    const søk = e.target.value.trim();
+    visFilmer(søk);
 
-  // Søk mens man skriver
-  searchInput.addEventListener("input", e => visFilmer(e.target.value));
+    if (søk && !historikk.includes(søk)) {
+      historikk.unshift(søk);
+      if (historikk.length > 10) historikk.pop(); // maks 10 søk lagres
+      localStorage.setItem("søkehistorikk", JSON.stringify(historikk));
+      oppdaterHistorikk();
+    }
+  });
+
+  // Start med å vise historikk
+  oppdaterHistorikk();
 </script>
 
 </body>
 </html>
+
