@@ -209,7 +209,7 @@ const filmer = {
     watchUrl: "film-mal.html?id=Pirates"
   },
 
-    "olsenbanden – siste skrik": {
+    "olsenbanden–siste-skrik": {
     tittel: "Olsenbanden – siste skrik",
     bakgrunn: "https://m.media-amazon.com/images/S/pv-target-images/4bd1963cf9f762b03a589381a8b251276a08cf729d41954fa94377708341e6ea._SX1080_FMjpg_.jpg",
     logo: "https://is1-ssl.mzstatic.com/image/thumb/Video112/v4/6b/78/55/6b7855a8-e2b6-d224-a556-cd570919fbd3/nqn4984686859219504186.png/760x286.png",
@@ -220,7 +220,7 @@ const filmer = {
     imdb: "https://www.imdb.com/title/tt14806994/",
     skuespillere: "Anders Baasmo, John Carew, Elias Holmen Sørensen",
     regissor: "Hallvard Bræin",
-    watchUrl: "film-mal.html?id=olsenbanden – siste skrik",
+    watchUrl: "film-mal.html?id=olsenbanden–siste-skrik",
     publishDate: "2025-09-23" // ISO datoformat
   },
 
@@ -239,6 +239,7 @@ const filmer = {
     publishDate: "2025-10-25" // ISO datoformat
   },
 };
+
 
 
 
