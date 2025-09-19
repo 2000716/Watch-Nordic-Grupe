@@ -324,12 +324,14 @@ main {
 
 /* Footer */
 .footer {
+  width: 100%;              /* Sørger for full bredde */
   margin-top: 50px;
   padding: 30px 20px 15px;
   text-align: center;
-  background: #0d2c30; /* litt lysere enn bakgrunn */
-  border-top: 2px solid #00FFCC;
+  background: #0d2c30;      /* Lysere bakgrunn enn hovedsiden */
+  box-sizing: border-box;
 }
+
 
 .footer-content {
   display: flex;
@@ -826,6 +828,7 @@ document.querySelectorAll(".progress-bar").forEach(bar => {
   }
 });
 </script>
+
 
 
 
