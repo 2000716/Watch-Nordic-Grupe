@@ -237,7 +237,23 @@ const filmer = {
     watchUrl: "film-mal.html?id=olsenbanden – siste skrik",
     publishDate: "2025-09-23" // ISO datoformat
   },
+
+   "sauen-shaun–filmen": {
+    tittel: "Sauen Shaun – Filmen",
+    bakgrunn: "https://image.tmdb.org/t/p/original/27LJejNKvrtGca0Woc4oEBvh1Xs.jpg",
+    logo: "https://image.tmdb.org/t/p/original/camSNGn7WGX34TjGmTCHPqJp2Hb.png",
+    poster: "https://sumo.cdn.tv2.no/imageapi/v3/img/59677ff90cf25438151a6a48-1708671818935",
+    posterVertikal: "https://play-lh.googleusercontent.com/fC14EKuDp10UJmJmNoj-iIxo29_R-9JCF5d10XpsaAEh2n0DWm5Oda6HzkHB6wcm4bTAlg", // portrett
+    beskrivelse: "På bondegården Mossy Bottom bor den lure sauen Shaun og flokken hans under tilsyn av bonden og gjeterhunden, Blitzer. Shaun ønsker seg en fridag og legger en plan som får fatale konsekvenser. Sauene må raskt reise inn til storbyen på et stort redningsoppdrag.",
+    metadata: ["Storbritannia", "2015", "Alle", "Animasjon / Familie", "1 t 21 min"],
+    imdb: "https://www.imdb.com/title/tt2872750/",
+    skuespillere: "Justin Fletcher, John Sparkes, Omid Djalili",
+    regissor: "Mark Burton, Richard Starzak",
+    watchUrl: "film-mal.html?id=sauen-shaun–filmen",
+    publishDate: "2025-10-25" // ISO datoformat
+  },
 };
+
 
 
 
