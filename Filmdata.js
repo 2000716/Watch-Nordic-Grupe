@@ -236,21 +236,8 @@ const filmer = {
     regissor: "Hallvard Bræin",
     watchUrl: "film-mal.html?id=olsenbanden – siste skrik"
   },
-
-   "kaptein-sabeltann-og-grevinnen-av-gral": {
-    tittel: "Kaptein Sabeltann og Grevinnen av Gral",
-    bakgrunn: "https://image.tmdb.org/t/p/w1280/eL8fgEK8mgDcJZRHzuxbLwevCcr.jpg",
-    logo: "https://images-0.rakuten.tv/storage/global-movie/translation/title-treatment/8a102351-3b9a-44c9-a65a-af813b796717-width410-quality90.png",
-    poster: "https://i-viaplay-com.akamaized.net/viaplay-prod/56/292/1745495165-cda4689af1b0dbc9eaf51174b6a05361954a57ff.jpg?width=448&height=252",
-    posterVertikal: "https://images-prod.ai.tv2.no/v2/image-packs/pfimg_pack_01k56k23f0e8prk91pvye2ejfe?location=moviePoster&width=672", // portrett
-    beskrivelse: "Sett seilene for et helt nytt og spennende sjørøvereventyr. Bli med Kaptein Sabeltann og hans beryktede mannskap i et heftig oppgjør med Grevinnen av Gral.",
-    metadata: ["Norge", "2025", "6+", "Animasjon / Familie", "1 t 13 min"],
-    imdb: "https://www.imdb.com/title/tt33540970?ref_ext_viaplay",
-    skuespillere: "Kyrre Haugen Sydness, Lisa Stokke, Are Austnes, Rasmus Sivertsen",
-    regissor: "Are Austnes, Rasmus Sivertsen, Yaprak Morali, Rune Spaans",
-    watchUrl: "film-mal.html?id=kaptein-sabeltann-og-grevinnen-av-gral"
-  },
 };
+
 
 
 
