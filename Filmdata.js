@@ -222,6 +222,20 @@ const filmer = {
     regissor: "Peter Lord, Jeff Newitt",
     watchUrl: "film-mal.html?id=Pirates"
   },
-  
+
+    "olsenbanden – siste skrik": {
+    tittel: "Olsenbanden – siste skrik",
+    bakgrunn: "https://m.media-amazon.com/images/S/pv-target-images/4bd1963cf9f762b03a589381a8b251276a08cf729d41954fa94377708341e6ea._SX1080_FMjpg_.jpg",
+    logo: "https://is1-ssl.mzstatic.com/image/thumb/Video112/v4/6b/78/55/6b7855a8-e2b6-d224-a556-cd570919fbd3/nqn4984686859219504186.png/760x286.png",
+    poster: "https://m.media-amazon.com/images/S/pv-target-images/655d6047ab5856c332c15b8c37193249890ad13bb41e6c93c8acf954b8b07dc9.jpg",
+    posterVertikal: "https://images-prod.ai.tv2.no/v2/image-packs/pfimg_pack_01k4x47bkjfh49pt3vs51bnwxm?location=moviePoster&width=672", // portrett
+    beskrivelse: "Oslo er blitt en moderne by, men Egon, Benny og Kjell er stadig på jakt etter det store kuppet som skal gjøre dem til millionærer.",
+    metadata: ["Norge", "2022", "6+", "Familie", "1 t 27 min"],
+    imdb: "https://www.imdb.com/title/tt14806994/",
+    skuespillere: "Anders Baasmo, John Carew, Elias Holmen Sørensen",
+    regissor: "Hallvard Bræin",
+    watchUrl: "film-mal.html?id=olsenbanden – siste skrik"
+  },
 };
+
 
