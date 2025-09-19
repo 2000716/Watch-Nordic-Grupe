@@ -5,7 +5,6 @@
   <title>Søk etter filmer</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <style>
-    /* GLOBALT */
     * { box-sizing: border-box; margin: 0; padding: 0; }
     html, body { font-family: Arial, sans-serif; background: #091B1E; color: white; overflow-x: hidden; }
 
@@ -18,13 +17,10 @@
       align-items: center; justify-content: center;
       z-index: 100;
     }
-    .nav-icons-wrapper {
-      display: flex; flex-direction: column; align-items: center; gap: 10px;
-    }
+    .nav-icons-wrapper { display: flex; flex-direction: column; align-items: center; gap: 10px; }
     .profilmeny { cursor: pointer; margin-bottom: 20px; }
     .profilmeny img {
-      width: 48px; height: 48px;
-      border-radius: 50%; object-fit: cover;
+      width: 48px; height: 48px; border-radius: 50%; object-fit: cover;
       border: 2px solid white; transition: transform 0.2s ease;
     }
     .profilmeny img:hover { transform: scale(1.1); }
@@ -36,66 +32,29 @@
     .nav-icon:hover, .nav-icon.active { color: #00FFCC; }
 
     main { margin-left: 70px; padding: 20px; }
-    .content-wrapper { max-width: 1200px; margin: 0 auto; }
-
     h1 { margin-bottom: 20px; color: #00FFCC; font-size: 28px; }
 
     /* SØKEFELT */
     .search-box {
-      margin-bottom: 20px;
-      display: flex; justify-content: center;
+      margin-bottom: 20px; display: flex; justify-content: center;
     }
     .search-box input {
       width: 100%; max-width: 500px;
       padding: 10px 15px;
-      border-radius: 5px;
-      border: 1px solid #00FFCC;
-      background: rgba(9, 27, 30, 0.6); /* gjennomsiktig */
-      color: white;
-      font-size: 16px;
+      border-radius: 5px; border: 1px solid #00FFCC;
+      background: rgba(9,27,30,0.6); color: white; font-size: 16px;
     }
-    .search-box input::placeholder {
-      color: #bbb;
-    }
+    .search-box input::placeholder { color: #bbb; }
 
     /* FILM GRID */
     .film-grid { display: flex; flex-wrap: wrap; gap: 20px; justify-content: center; }
     .film-card {
-      width: 300px; aspect-ratio: 16 / 9; /* horisontal */
-      cursor: pointer; transition: transform 0.2s ease, box-shadow 0.3s ease;
+      width: 300px; aspect-ratio: 16 / 9; cursor: pointer;
+      transition: transform 0.2s ease, box-shadow 0.3s ease;
       border-radius: 10px; overflow: hidden; position: relative; background: #111;
     }
-    .film-card img {
-      width: 100%; height: 100%; object-fit: cover; display: block;
-    }
-    .film-card:hover {
-      transform: scale(1.05);
-      box-shadow: 0 0 15px #00FFCC;
-    }
-
-    /* HISTORIKK */
-    .history {
-      margin: 20px auto;
-      max-width: 500px;
-      color: #ccc;
-    }
-    .history h2 {
-      font-size: 18px;
-      color: #00FFCC;
-      margin-bottom: 10px;
-    }
-    .history-list {
-      list-style: none;
-    }
-    .history-list li {
-      cursor: pointer;
-      padding: 5px 0;
-      border-bottom: 1px solid #333;
-      transition: color 0.2s;
-    }
-    .history-list li:hover {
-      color: #00FFCC;
-    }
+    .film-card img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .film-card:hover { transform: scale(1.05); box-shadow: 0 0 15px #00FFCC; }
 
     /* FOOTER */
     .footer { margin-top: 40px; padding: 20px; text-align: center; color: #515151; font-size: 14px; }
@@ -105,12 +64,9 @@
 </head>
 <body>
 
-<!-- VENSTRE MENY -->
 <div class="vertical-nav" id="verticalNav">
   <div class="profilmeny">
-    <a href="Konto.html">
-      <img id="menyProfilbilde" src="https://via.placeholder.com/100" alt="Min profil" />
-    </a>
+    <a href="Konto.html"><img id="menyProfilbilde" src="https://via.placeholder.com/100" alt="Min profil" /></a>
   </div>
   <div class="nav-icons-wrapper">
     <a href="Søk.html" class="nav-icon active"><i class="fas fa-search"></i></a>
@@ -126,112 +82,79 @@
   <div class="search-box">
     <input type="text" id="searchInput" placeholder="Skriv inn tittel, sjanger eller år...">
   </div>
-
-  <div class="history">
-    <h2>Tidligere søk</h2>
-    <ul id="historyList" class="history-list"></ul>
-  </div>
-
   <div id="filmGrid" class="film-grid"></div>
 </main>
 
 <footer class="footer">
-  <div class="footer-links">
-    <a href="#">Hjelp</a> | <a href="#">Kontakt</a> | <a href="#">Om</a>
-  </div>
+  <div class="footer-links"><a href="#">Hjelp</a> | <a href="#">Kontakt</a> | <a href="#">Om</a></div>
   <div class="footer-copy">&copy; 2025 Min Strømmetjeneste</div>
 </footer>
 
 <script src="Filmdata.js"></script>
 <script>
-  // Autentisering
+  // Autentisering og profilbilde
   const epost = localStorage.getItem("epost");
   const passord = localStorage.getItem("passord");
   if (!epost || !passord) window.location.href = "Startside.html";
 
-  // Profilbilde
   const lagretBilde = localStorage.getItem("profilbilde");
   if (lagretBilde) document.getElementById("menyProfilbilde").src = lagretBilde;
 
-  // Elementer
   const filmGrid = document.getElementById("filmGrid");
   const searchInput = document.getElementById("searchInput");
-  const historyList = document.getElementById("historyList");
 
-  // Laste inn søkehistorikk fra localStorage
-  let historikk = JSON.parse(localStorage.getItem("søkehistorikk")) || [];
+  // Last tidligere søk fra localStorage
+  let tidligereSøk = JSON.parse(localStorage.getItem("tidligereSøk")) || [];
 
-  function oppdaterHistorikk() {
-    historyList.innerHTML = "";
-    if (historikk.length === 0) {
-      historyList.innerHTML = "<li>Ingen tidligere søk</li>";
-      return;
-    }
-    historikk.forEach(entry => {
-      const li = document.createElement("li");
-      li.textContent = entry;
-      li.addEventListener("click", () => {
-        searchInput.value = entry;
-        visFilmer(entry);
-      });
-      historyList.appendChild(li);
-    });
-  }
-
-  // Vise filmer basert på søk
-  function visFilmer(filter = "") {
+  function visFilmer(filmListe) {
     filmGrid.innerHTML = "";
-
-    if (!filter) return; // ikke vis filmer hvis søket er tomt
-
-    if (typeof filmer === "undefined") {
-      filmGrid.innerHTML = "<p>Kunne ikke laste filmer (mangler filmdata.js).</p>";
-      return;
-    }
-
-    const lowerFilter = filter.toLowerCase();
-    const treff = Object.keys(filmer).filter(filmNavn => {
+    if (filmListe.length === 0) return;
+    filmListe.forEach(filmNavn => {
       const data = filmer[filmNavn];
-      return (
-        data.tittel.toLowerCase().includes(lowerFilter) ||
-        (data.sjanger && data.sjanger.toLowerCase().includes(lowerFilter)) ||
-        (data.år && data.år.toString().includes(lowerFilter))
-      );
-    });
-
-    if (treff.length === 0) {
-      filmGrid.innerHTML = "<p>Ingen filmer funnet.</p>";
-    } else {
-      treff.forEach(filmNavn => {
-        const data = filmer[filmNavn];
+      if (data) {
         const card = document.createElement("div");
         card.className = "film-card";
         card.innerHTML = `<img src="${data.poster || 'default-poster.jpg'}" alt="${data.tittel}">`;
-        card.addEventListener("click", () => {
-          window.location.href = `film.html?navn=${filmNavn}`;
-        });
+        card.addEventListener("click", () => window.location.href = `film.html?navn=${filmNavn}`);
         filmGrid.appendChild(card);
-      });
-    }
+      }
+    });
   }
 
-  // Når man skriver i søkefeltet
+  // Vis tidligere søk først
+  visFilmer(tidligereSøk);
+
+  // Søke-funksjon
   searchInput.addEventListener("input", e => {
-    const søk = e.target.value.trim();
-    visFilmer(søk);
-
-    if (søk && !historikk.includes(søk)) {
-      historikk.unshift(søk);
-      if (historikk.length > 10) historikk.pop(); // maks 10 søk lagres
-      localStorage.setItem("søkehistorikk", JSON.stringify(historikk));
-      oppdaterHistorikk();
+    const søk = e.target.value.trim().toLowerCase();
+    if (!søk) {
+      // Vis kun tidligere søk hvis søkefeltet er tomt
+      visFilmer(tidligereSøk);
+      return;
     }
-  });
 
-  // Start med å vise historikk
-  oppdaterHistorikk();
+    // Finn filmer som matcher søket
+    const treff = Object.keys(filmer).filter(filmNavn => {
+      const data = filmer[filmNavn];
+      return data.tittel.toLowerCase().includes(søk) ||
+             (data.sjanger && data.sjanger.toLowerCase().includes(søk)) ||
+             (data.år && data.år.toString().includes(søk));
+    });
+
+    visFilmer(treff);
+
+    // Legg søket til tidligere søk hvis det ikke finnes allerede
+    treff.forEach(filmNavn => {
+      if (!tidligereSøk.includes(filmNavn)) {
+        tidligereSøk.unshift(filmNavn);
+      }
+    });
+
+    // Hold max 10 filmer i tidligere søk
+    tidligereSøk = tidligereSøk.slice(0,10);
+    localStorage.setItem("tidligereSøk", JSON.stringify(tidligereSøk));
+  });
 </script>
 
 </body>
 </html>
-
