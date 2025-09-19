@@ -125,20 +125,6 @@ const filmer = {
     watchUrl: "film-mal.html?id=elio"
   },
 
-  "elvis": {
-    tittel: "Elvis",
-    bakgrunn: "https://beam-images.warnermediacdn.com/BEAM_LWM_DELIVERABLES/70b04aa5-5a83-4236-8212-a8fedd40a909/ffb7c539224df8be6babe981435998cba6a26af6.jpg?host=wbd-images.prod-vod.h264.io&partner=beamcom",
-    logo: "https://images.cdn.prd.api.discomax.com/rJRVh/3YrKVjDLFbjKTSAzA.png?w=600&f=webp",
-    poster: "https://m.media-amazon.com/images/M/MV5BMTk0ODgyOTk0MV5BMl5BanBnXkFtZTgwMzY0MTI4NjE@._V1_FMjpg_UX1000_.jpg",
-    posterVertikal: "https://i-viaplay-com.akamaized.net/viaplay-prod/46/296/1664191298-ec1b5dc6156f9832974044dde6bbf7ca43d92a9b.jpg?width=400&height=600", // portrett
-    beskrivelse: "Elvis' historie skildres gjennom det kompliserte forholdet til hans manager, oberst Tom Parker. Det var en innfløkt dynamikk mellom dem i over 20 år.",
-    metadata: ["USA", "2022", "12+", "Drama / Historie", "2 t 40 min"],
-    imdb: "https://www.imdb.com/title/tt3704428/?ref_=nv_sr_srsg_0_tt_4_nm_4_in_0_q_Elvis",
-    skuespillere: "Austin Butler, Tom Hanks, Olivia DeJonge, Richard Roxburgh, Helen Thomson",
-    regissor: "Baz Luhrmann",
-    watchUrl: "film-mal.html?id=elvis"
-  },
-
   "comet-in-moominland": {
     tittel: "Comet in Moominland",
     bakgrunn: "https://assets.mubicdn.net/images/film/95372/image-w1280.jpg",
@@ -253,6 +239,7 @@ const filmer = {
     publishDate: "2025-10-25" // ISO datoformat
   },
 };
+
 
 
 
