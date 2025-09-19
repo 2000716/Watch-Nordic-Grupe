@@ -471,13 +471,18 @@ body.loaded {
 
 <script src="Filmdata.js"></script>
 <script>
-// ---- All JS fra originalfilen beholdes uendret ----
 const params = new URLSearchParams(window.location.search);
 const filmNavn = params.get("navn");
 const data = filmer[filmNavn];
 
 if (!data) {
   alert("Filmen finnes ikke.");
+  window.location.href = "Hovedside.html";
+}
+
+// 🕒 Publiseringsdato-sjekk
+if (data.publishDate && new Date(data.publishDate) > new Date()) {
+  alert("Denne filmen er ikke tilgjengelig ennå.");
   window.location.href = "Hovedside.html";
 }
 
@@ -598,7 +603,14 @@ window.addEventListener('DOMContentLoaded', () => {
 
 // ---- Anbefalinger ----
 function hentTilfeldigeFilmer(antall) {
-  const alleFilmer = Object.keys(filmer).filter(f => f !== filmNavn);
+  const now = new Date();
+  const alleFilmer = Object.keys(filmer).filter(f => {
+    if (f === filmNavn) return false; // ikke vis samme film
+    const film = filmer[f];
+    if (film.publishDate && new Date(film.publishDate) > now) return false; // skjul framtidige
+    return true;
+  });
+
   const valgt = [];
   while (valgt.length < antall && alleFilmer.length > 0) {
     const randomIndex = Math.floor(Math.random() * alleFilmer.length);
@@ -671,11 +683,6 @@ if (data.trailer && data.trailer.trim() !== "") {
 
 </body>
 </html>
-
-
-
-
-
 
 
 
