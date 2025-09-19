@@ -10,6 +10,12 @@
 
 <style> * { box-sizing: border-box; margin: 0; padding: 0; }
 
+* { 
+  box-sizing: border-box; 
+  margin: 0; 
+  padding: 0; 
+}
+
 html, body {
   font-family: Arial, sans-serif;
   background: #091B1E;
@@ -318,22 +324,38 @@ main {
 
 /* Footer */
 .footer {
-  margin-top: 40px;
-  padding: 20px 10px;
+  margin-top: 50px;
+  padding: 30px 20px 15px;
   text-align: center;
-  color: #515151;
-  font-size: 14px;
+  background: #0d2c30; /* litt lysere enn bakgrunn */
+  border-top: 2px solid #00FFCC;
+}
+
+.footer-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+
+.footer-logo {
+  width: 120px;
+  opacity: 0.9;
 }
 
 .footer-links {
-  margin-bottom: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 15px;
 }
 
 .footer-links a {
   color: #b1b1b1;
-  margin: 0 10px;
+  font-size: 14px;
   text-decoration: none;
-  transition: color 0.2s ease;
+  transition: color 0.3s ease;
 }
 
 .footer-links a:hover {
@@ -342,7 +364,8 @@ main {
 
 .footer-copy {
   font-size: 13px;
-  color: #00FFCC;
+  color: #888;
+  margin-top: 8px;
 }
 
 /* Sjanger-galleri */
@@ -506,6 +529,15 @@ main {
     font-size: 14px;
     padding: 0 12px;
   }
+
+  .footer {
+    font-size: 12px;
+    padding: 20px 10px;
+  }
+
+  .footer-logo {
+    width: 100px;
+  }
 }
 
 @media (max-width: 480px) {
@@ -531,8 +563,12 @@ main {
   }
 
   .footer {
-    font-size: 12px;
+    font-size: 11px;
     padding: 15px 5px;
+  }
+
+  .footer-logo {
+    width: 80px;
   }
 }
 
@@ -689,17 +725,23 @@ main {
         </section>
     
 
-    <footer class="footer">
-  <div class="footer-links">
-    <a href="kontakt.html">Kontakt oss</a>
-    <a href="personvern.html">Personvern</a>
-    <a href="vilkar.html">Vilkår for bruk</a>
-    <a href="hjelp.html">Hjelp</a>
+<footer class="footer">
+  <div class="footer-content">
+    <img class="footer-logo" src="https://static.wixstatic.com/media/fd2fb2_a4b2ace62dff4605a0387f46aad8a404~mv2.png" alt="Watch Logo" />
+    
+    <div class="footer-links">
+      <a href="kontakt.html">Kontakt oss</a>
+      <a href="personvern.html">Personvern</a>
+      <a href="vilkar.html">Vilkår for bruk</a>
+      <a href="hjelp.html">Hjelp</a>
+    </div>
   </div>
+  
   <div class="footer-copy">
-    © 2025 Watch Nordic Grupe
+    © 2025 Watch Nordic Gruppe
   </div>
 </footer>
+
 
 </main>
 <script>
@@ -784,6 +826,7 @@ document.querySelectorAll(".progress-bar").forEach(bar => {
   }
 });
 </script>
+
 
 
 
