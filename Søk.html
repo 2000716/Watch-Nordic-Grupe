@@ -121,40 +121,41 @@
     });
   }
 
-  // Vis tidligere søk først
+  // --- Endring: vis tidligere søk på venstre side ---
+  filmGrid.style.justifyContent = "flex-start";
   visFilmer(tidligereSøk);
 
-  // Søke-funksjon
+  // --- Søke-funksjon ---
   searchInput.addEventListener("input", e => {
     const søk = e.target.value.trim().toLowerCase();
     if (!søk) {
-      // Vis kun tidligere søk hvis søkefeltet er tomt
       visFilmer(tidligereSøk);
       return;
     }
 
-    // Finn filmer som matcher søket
+    // --- Endring: søk i flere felter ---
     const treff = Object.keys(filmer).filter(filmNavn => {
       const data = filmer[filmNavn];
-      return data.tittel.toLowerCase().includes(søk) ||
-             (data.sjanger && data.sjanger.toLowerCase().includes(søk)) ||
-             (data.år && data.år.toString().includes(søk));
+      return (
+        (data.tittel && data.tittel.toLowerCase().includes(søk)) ||
+        (data.sjanger && data.sjanger.toLowerCase().includes(søk)) ||
+        (data.år && data.år.toString().includes(søk)) ||
+        (data.skuespillere && data.skuespillere.some(s => s.toLowerCase().includes(søk))) ||
+        (data.regissør && data.regissør.toLowerCase().includes(søk))
+      );
     });
 
     visFilmer(treff);
 
-    // Legg søket til tidligere søk hvis det ikke finnes allerede
+    // Legg søkede filmer i tidligere søk
     treff.forEach(filmNavn => {
       if (!tidligereSøk.includes(filmNavn)) {
         tidligereSøk.unshift(filmNavn);
       }
     });
 
-    // Hold max 10 filmer i tidligere søk
-    tidligereSøk = tidligereSøk.slice(0,10);
+    // Maks 10 lagrede
+    tidligereSøk = tidligereSøk.slice(0, 10);
     localStorage.setItem("tidligereSøk", JSON.stringify(tidligereSøk));
   });
 </script>
-
-</body>
-</html>
