@@ -47,7 +47,7 @@
     .search-box input::placeholder { color: #bbb; }
 
     /* FILM GRID */
-    .film-grid { display: flex; flex-wrap: wrap; gap: 20px; justify-content: center; }
+    .film-grid { display: flex; flex-wrap: wrap; gap: 20px; justify-content: flex-start; }
     .film-card {
       width: 300px; aspect-ratio: 16 / 9; cursor: pointer;
       transition: transform 0.2s ease, box-shadow 0.3s ease;
@@ -80,7 +80,7 @@
 <main>
   <h1>Søk etter filmer</h1>
   <div class="search-box">
-    <input type="text" id="searchInput" placeholder="Skriv inn tittel, sjanger eller år...">
+    <input type="text" id="searchInput" placeholder="Skriv inn tittel, skuespiller, sjanger eller år...">
   </div>
   <div id="filmGrid" class="film-grid"></div>
 </main>
@@ -121,11 +121,10 @@
     });
   }
 
-  // --- Endring: vis tidligere søk på venstre side ---
-  filmGrid.style.justifyContent = "flex-start";
+  // Vis tidligere søk først (starter på venstre side)
   visFilmer(tidligereSøk);
 
-  // --- Søke-funksjon ---
+  // Søke-funksjon
   searchInput.addEventListener("input", e => {
     const søk = e.target.value.trim().toLowerCase();
     if (!søk) {
@@ -133,7 +132,7 @@
       return;
     }
 
-    // --- Endring: søk i flere felter ---
+    // Finn filmer som matcher søket (tittel, sjanger, år, skuespillere, regissør)
     const treff = Object.keys(filmer).filter(filmNavn => {
       const data = filmer[filmNavn];
       return (
@@ -147,12 +146,22 @@
 
     visFilmer(treff);
 
-    // Legg søkede filmer i tidligere søk
+    // Oppdater tidligere søk
     treff.forEach(filmNavn => {
       if (!tidligereSøk.includes(filmNavn)) {
         tidligereSøk.unshift(filmNavn);
       }
     });
+
+    // Hold maks 10 filmer i tidligere søk
+    tidligereSøk = tidligereSøk.slice(0, 10);
+    localStorage.setItem("tidligereSøk", JSON.stringify(tidligereSøk));
+  });
+</script>
+
+</body>
+</html>
+
 
     // Maks 10 lagrede
     tidligereSøk = tidligereSøk.slice(0, 10);
