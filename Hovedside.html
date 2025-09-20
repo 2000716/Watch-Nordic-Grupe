@@ -707,10 +707,18 @@ main {
 </footer>
 
 
+<main>
+  <!-- Innhold for filmseksjonene her -->
+  <div id="nye-filmer"></div>
+  <div id="populære-filmer"></div>
+  <div id="kommende-filmer"></div>
+  <div id="barn-filmer"></div>
 </main>
+
 <script type="module">
 import filmer from "./Filmdata.js";
 
+// ==================== FUNKSJONER ==================== //
 function lagFilmElement(film) {
   const a = document.createElement("a");
   a.href = `film.html?navn=${film.navn}`;
@@ -742,6 +750,7 @@ function lagKommendeElement(film) {
   return card;
 }
 
+// ==================== FILMSEKSJONER ==================== //
 // Nye filmer (publisert)
 filmer.filter(f => f.publisert && !f.kommer).forEach(film => {
   document.getElementById("nye-filmer").appendChild(lagFilmElement(film));
@@ -761,18 +770,15 @@ filmer.filter(f => f.kommer).forEach(film => {
 filmer.filter(f => f.sjanger === "barn").forEach(film => {
   document.getElementById("barn-filmer").appendChild(lagFilmElement(film));
 });
-</script>
 
 // ==================== AUTENTISERING ==================== //
 const epost = localStorage.getItem("epost");
 const passord = localStorage.getItem("passord");
 
-// Hvis ingen epost/passord er lagret, send brukeren tilbake til startsiden
 if (!epost || !passord) {
   window.location.href = "Starts side.html";
 }
 
-// Lytt etter endringer i localStorage (f.eks. hvis brukeren logger ut i en annen fane)
 window.addEventListener("storage", () => {
   if (!localStorage.getItem("epost") || !localStorage.getItem("passord")) {
     window.location.href = "Starts side.html";
@@ -785,14 +791,11 @@ function gåTilKonto() {
 }
 
 // ==================== PROFILBILDE ==================== //
-// Hent profilbilde fra localStorage
 const lagretBilde = localStorage.getItem("profilbilde");
 if (lagretBilde) {
-  // Oppdater meny-profil
   const menyProfil = document.getElementById("menyProfilbilde");
   if (menyProfil) menyProfil.src = lagretBilde;
 
-  // Oppdater header-profil (på mobil)
   const headerProfil = document.getElementById("headerProfilbilde");
   if (headerProfil) headerProfil.src = lagretBilde;
 }
@@ -805,7 +808,6 @@ document.querySelectorAll(".gallery-wrapper").forEach(wrapper => {
   const fadeLeft = wrapper.querySelector(".fade-left");
   const fadeRight = wrapper.querySelector(".fade-right");
 
-  // Funksjon for å oppdatere knappene og fade-effektene
   function updateScrollState() {
     const scrollLeft = gallery.scrollLeft;
     const maxScroll = gallery.scrollWidth - gallery.clientWidth;
@@ -816,27 +818,19 @@ document.querySelectorAll(".gallery-wrapper").forEach(wrapper => {
     if (fadeRight) fadeRight.classList.toggle("fade-hidden", scrollLeft >= maxScroll);
   }
 
-  // Scroll med knappene
-  if (leftBtn) {
-    leftBtn.addEventListener("click", () => {
-      gallery.scrollBy({ left: -300, behavior: "smooth" });
-    });
-  }
-  if (rightBtn) {
-    rightBtn.addEventListener("click", () => {
-      gallery.scrollBy({ left: 300, behavior: "smooth" });
-    });
-  }
+  if (leftBtn) leftBtn.addEventListener("click", () => {
+    gallery.scrollBy({ left: -300, behavior: "smooth" });
+  });
 
-  // Oppdater status ved scrolling
+  if (rightBtn) rightBtn.addEventListener("click", () => {
+    gallery.scrollBy({ left: 300, behavior: "smooth" });
+  });
+
   gallery.addEventListener("scroll", updateScrollState);
-
-  // Initielt oppsett
   updateScrollState();
 });
 
 // ==================== FREMDIRFTSLINJER ==================== //
-// Oppdater fremdriftslinjer dynamisk basert på data-progress attributt
 document.querySelectorAll(".progress-bar").forEach(bar => {
   const progress = bar.getAttribute("data-progress");
   if (progress) {
