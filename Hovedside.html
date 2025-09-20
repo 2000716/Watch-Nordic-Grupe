@@ -220,68 +220,71 @@
       gallery.addEventListener("scroll", updateScrollState);
       updateScrollState();
     });
-  </script>
+<script type="module">
+  import { filmer } from "./Filmdata.js";
 
-  <script type="module">
-    import { filmer } from "./Filmdata.js";
+  // gjør om til array
+  const filmListe = Object.entries(filmer).map(([id, f]) => ({ id, ...f }));
 
-    function lagFilmLenke(film) {
-      const a = document.createElement("a");
-      a.href = `film.html?navn=${encodeURIComponent(film.navn)}`;
-      const img = document.createElement("img");
-      img.src = film.bilde;
-      img.alt = film.tittel;
-      a.appendChild(img);
-      return a;
-    }
+  function lagFilmLenke(film) {
+    const a = document.createElement("a");
+    a.href = film.watchUrl || `film.html?id=${film.id}`;
+    const img = document.createElement("img");
+    img.src = film.poster || film.posterVertikal || film.bakgrunn;
+    img.alt = film.tittel;
+    a.appendChild(img);
+    return a;
+  }
 
-    // Nye filmer
-    const nyeGalleri = document.querySelector("#nye-filmer .image-gallery");
-    filmer.filter(f => !f.kommer && new Date(f.publisert) <= new Date())
-      .sort((a,b)=>new Date(b.publisert)-new Date(a.publisert))
-      .slice(0,12).forEach(f => nyeGalleri.appendChild(lagFilmLenke(f)));
+  // === Nye filmer ===
+  const nyeGalleri = document.querySelector("#nye-filmer .image-gallery");
+  filmListe
+    .filter(f => !f.kommer)
+    .sort((a, b) => new Date(b.metadata?.[1] || 0) - new Date(a.metadata?.[1] || 0)) // årstall i metadata[1]
+    .slice(0, 12)
+    .forEach(f => nyeGalleri.appendChild(lagFilmLenke(f)));
 
-    // Populære
-    const popGalleri = document.querySelector("#populære .image-gallery");
-    filmer.filter(f => !f.kommer)
-      .sort((a,b)=>(b.popularitet||0)-(a.popularitet||0))
-      .slice(0,12).forEach(f => popGalleri.appendChild(lagFilmLenke(f)));
+  // === Populære === (her må du bruke en `popularitet`-verdi i Filmdata.js, ellers bare tilfeldig sortering)
+  const popGalleri = document.querySelector("#populære .image-gallery");
+  filmListe
+    .sort((a, b) => (b.popularitet || 0) - (a.popularitet || 0))
+    .slice(0, 12)
+    .forEach(f => popGalleri.appendChild(lagFilmLenke(f)));
 
-    // Kommer snart
-    const kommGalleri = document.querySelector("#kommer-snart .coming-soon-gallery");
-    filmer.filter(f => f.kommer || new Date(f.publisert) > new Date())
-      .forEach(f => {
-        const card=document.createElement("div");
-        card.className="coming-card";
-        card.innerHTML=`
-          <img src="${f.bilde}" alt="${f.tittel}">
-          <div class="coming-info">
-            <p class="date">${new Date(f.publisert).toLocaleDateString("no-NO",{day:"2-digit",month:"short",year:"numeric"})}</p>
-            <h3>${f.tittel}</h3>
-            <p>${f.beskrivelse||""}</p>
-          </div>`;
-        kommGalleri.appendChild(card);
-      });
-
-    // Barn
-    const barnGalleri = document.querySelector("#barn .image-gallery");
-    filmer.filter(f => f.sjanger && f.sjanger.includes("barn"))
-      .forEach(f => barnGalleri.appendChild(lagFilmLenke(f)));
-
-    // Sjangere
-    const sjangerGalleri = document.querySelector("#sjangere .genre-gallery");
-    const unikeSjangere = [...new Set(filmer.flatMap(f => f.sjanger||[]))];
-    unikeSjangere.forEach(s => {
-      const link=document.createElement("a");
-      link.href=`sjanger.html?navn=${encodeURIComponent(s)}`;
-      link.textContent=s.charAt(0).toUpperCase()+s.slice(1);
-      sjangerGalleri.appendChild(link);
+  // === Kommer snart ===
+  const kommGalleri = document.querySelector("#kommer-snart .coming-soon-gallery");
+  filmListe
+    .filter(f => f.kommer)
+    .forEach(f => {
+      const card = document.createElement("div");
+      card.className = "coming-card";
+      card.innerHTML = `
+        <img src="${f.poster || f.posterVertikal || f.bakgrunn}" alt="${f.tittel}">
+        <div class="coming-info">
+          <p class="date">${f.metadata?.[1] || ""}</p>
+          <h3>${f.tittel}</h3>
+          <p>${f.beskrivelse || ""}</p>
+        </div>`;
+      kommGalleri.appendChild(card);
     });
-  </script>
-</body>
-</html>
 
+  // === Barn === (henter basert på metadata som inneholder "Barn" eller "Animasjon")
+  const barnGalleri = document.querySelector("#barn .image-gallery");
+  filmListe
+    .filter(f => (f.metadata || []).some(m => /barn|animasjon/i.test(m)))
+    .forEach(f => barnGalleri.appendChild(lagFilmLenke(f)));
 
+  // === Sjangere === (lager fra metadata-feltet som inneholder sjanger)
+  const sjangerGalleri = document.querySelector("#sjangere .genre-gallery");
+  const unikeSjangere = [...new Set(filmListe.flatMap(f => f.metadata || [])
+    .filter(m => /action|komedie|drama|grøsser|barn|fantasi|thriller|romantikk/i.test(m)))];
+  unikeSjangere.forEach(s => {
+    const link = document.createElement("a");
+    link.href = `sjanger.html?navn=${encodeURIComponent(s)}`;
+    link.textContent = s;
+    sjangerGalleri.appendChild(link);
+  });
+</script>
 
 
 
