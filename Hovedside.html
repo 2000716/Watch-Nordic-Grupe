@@ -90,7 +90,7 @@ main {
 /* Topp-logo + profil */
 .top-header {
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-end; /* Logo til høyre på PC */
   align-items: center;
   margin-bottom: 20px;
 }
@@ -310,7 +310,7 @@ main {
 }
 
 .progress-bar::after {
-  content: '';
+  content: '''''';
   position: absolute;
   height: 100%;
   left: 0;
@@ -410,6 +410,10 @@ main {
     margin-left: 0;
     margin-bottom: 70px;
     padding: 10px;
+  }
+  
+  .top-header {
+    justify-content: space-between; /* Logo til venstre på mobil */
   }
 
   .top-header .watch-logo {
@@ -641,7 +645,7 @@ function renderGallery(galleryId, filterFunction) {
   if (!gallery) return;
 
   // Clear existing content
-  gallery.innerHTML = '';
+  gallery.innerHTML = '''''';
 
   const filmKeys = Object.keys(filmer);
   const filteredKeys = filterFunction ? filmKeys.filter(filterFunction) : filmKeys;
