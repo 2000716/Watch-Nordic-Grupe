@@ -608,30 +608,16 @@ main {
         </div>
       </section>
      
-    <section class="gallery-section">
-      <h2>Nye filmer på Watch</h2>
-      <div class="gallery-wrapper">
-        <div class="fade-left"></div>
-        <button class="scroll-button left" onclick="scrollGallery(this, -1)">❮</button>
-       <div class="image-gallery">
-  <a href="film.html?navn=mummitrollet-på-rivieraen"><img src="https://static.wixstatic.com/media/fd2fb2_591857f6d2d643e9be3de342acde9761~mv2.jpg" alt="Mummitrollet på Rivieraen"></a>
-  <a href="film.html?navn=smurfs"><img src="https://hype.my/wp-content/uploads/2025/07/Smurfs-Header.png" alt="Smurfs"></a>
-  <a href="film.html?navn=max-manus"><img src="https://i-viaplay-com.akamaized.net/viaplay-prod/715/824/1635457989-6442d347e20c906721b462aa98a8195bb362abba.jpg?width=448&height=252" alt="Max Manus"></a>
-  <a href="film.html?navn=kongens-nei"><img src="https://i-viaplay-com.akamaized.net/viaplay-prod/440/136/1481804637-d3396e82d915956b7b435991d4b13d7b0113256a.jpg?width=448&height=252" alt="Kongens nei"></a>
-  <a href="film.html?navn=comet-in-moominland"><img src="https://static.wixstatic.com/media/fd2fb2_0639d85789b84e0b84e29d09a21632e2~mv2.jpg" alt="Comet in Moominland"></a>
-  <a href="film.html?navn=elio"><img src="https://disney.images.edge.bamgrid.com/ripcut-delivery/v2/variant/disney/ea82917b-65b0-4634-8943-6f13d5a8b368/compose?aspectRatio=1.78&format=webp&width=1200" alt="Elio"></a>
-   <a href="film.html?navn=dog-man"><img src="https://m.media-amazon.com/images/S/pv-target-images/44839e4a60bb8205258ba5fb43d1369c8a3cdd27f628692f6d0bd5c6c0c35ca6.jpg" alt="Dog man"></a>
-  <a href="film.html?navn=bamse-og-dunderklokken"><img src="https://beam-images.warnermediacdn.com/BEAM_LWM_DELIVERABLES/dbc86275-72ef-4012-a80e-4851224eb8bf/b00246ed-8e34-466b-84cd-340c02e2c6b1?host=wbd-images.prod-vod.h264.io&partner=beamcom&w=500" alt="Bamse og Dunderklokkene"></a>
-  <a href="film.html?navn=dyrene-i-hakkabakkeskogen"><img src="https://is1-ssl.mzstatic.com/image/thumb/Video113/v4/b1/96/ac/b196acbf-3010-b760-3193-702c340000f0/1181928424-WW-AMP_SF.lsr/1200x675.jpg" alt="Dyrene i Hakkebakkeskogen"></a>
-  <a href="film.html?navn=jul-i-flåklypa"><img src="https://sumo.cdn.tv2.no/imageapi/v3/img/5dbc0a4f498e1dc3eb8394b3-1700644038168" alt="Jul I Flåklypa"></a>
-  <a href="film.html?navn=burlesque"><img src="https://static.wixstatic.com/media/fd2fb2_c85b71dfd8bc4cc6ae7ac39b8513370d~mv2.jpg" alt="burlesque"></a>
-</div>
-
-        <button class="scroll-button right" onclick="scrollGallery(this, 1)">❯</button>
-        <div class="fade-right"></div>
-      </div>
-
-    </section>
+   <section class="gallery-section">
+  <h2>Nye filmer på Watch</h2>
+  <div class="gallery-wrapper">
+    <div class="fade-left"></div>
+    <button class="scroll-button left">❮</button>
+    <div class="image-gallery" id="nye-filmer"></div>
+    <button class="scroll-button right">❯</button>
+    <div class="fade-right"></div>
+  </div>
+</section>
 
    <section class="gallery-section">
   <h2>Sjangere</h2>
@@ -675,56 +661,23 @@ main {
   <h2>Kommende filmer</h2>
   <div class="gallery-wrapper">
     <div class="fade-left"></div>
-    <button class="scroll-button left" onclick="scrollGallery(this, -1)">❮</button>
-
-    <div class="image-gallery coming-soon-gallery">
-
-        <!-- Film 1 -->
-      <div class="coming-card">
-        <img src="https://images-prod.ai.tv2.no/v2/image-packs/pfimg_pack_01k4x47bkjfh49pt3vs51bnwxm?location=moviePoster&width=672" alt="Dune Part Two">
-        <div class="coming-info">
-           <p class="date">23. sep. 2025</p>
-          <h3>Olsenbanden – siste skrik</h3>
-          <p class="desc">Egon, Benny og Kjell er stadig på jakt etter store kuppet.</p>
-        </div>
-      </div>
-
-       <!-- Film 2 -->
-      <div class="coming-card">
-        <img src="https://images-prod.ai.tv2.no/v2/image-packs/pfimg_pack_01k4cxrc3wfs19b23b0yg60xae?location=moviePoster&width=672" alt="Avatar 3">
-        <div class="coming-info">
-          <p class="date"> 25. Okt. 2025</p>
-          <h3>Sauen Shaun – Filmen</h3>
-          <p class="desc">Den lure sauen Shaun og flokken hans under tilsyn av bonden og gjeterhunden, Blitzer.</p>
-        </div>
-      </div>
-    </div>
-
-    <button class="scroll-button right" onclick="scrollGallery(this, 1)">❯</button>
+    <button class="scroll-button left">❮</button>
+    <div class="image-gallery coming-soon-gallery" id="kommende-filmer"></div>
+    <button class="scroll-button right">❯</button>
     <div class="fade-right"></div>
   </div>
 </section>
 
-        <section class="gallery-section">
-      <h2>Barn</h2>
-      <div class="gallery-wrapper">
-        <div class="fade-left"></div>
-        <button class="scroll-button left" onclick="scrollGallery(this, -1)">❮</button>
-       <div class="image-gallery">
-  <a href="film.html?navn=comet-in-moominland"><img src="https://static.wixstatic.com/media/fd2fb2_0639d85789b84e0b84e29d09a21632e2~mv2.jpg" alt="Comet in Moominland"></a>
-  <a href="film.html?navn=elio"><img src="https://disney.images.edge.bamgrid.com/ripcut-delivery/v2/variant/disney/ea82917b-65b0-4634-8943-6f13d5a8b368/compose?aspectRatio=1.78&format=webp&width=1200" alt="Elio"></a>
-   <a href="film.html?navn=dog-man"><img src="https://m.media-amazon.com/images/S/pv-target-images/44839e4a60bb8205258ba5fb43d1369c8a3cdd27f628692f6d0bd5c6c0c35ca6.jpg" alt="Dog man"></a>
-  <a href="film.html?navn=bamse-og-dunderklokken"><img src="https://beam-images.warnermediacdn.com/BEAM_LWM_DELIVERABLES/dbc86275-72ef-4012-a80e-4851224eb8bf/b00246ed-8e34-466b-84cd-340c02e2c6b1?host=wbd-images.prod-vod.h264.io&partner=beamcom&w=500" alt="Bamse og Dunderklokkene"></a>
-  <a href="film.html?navn=dyrene-i-hakkabakkeskogen"><img src="https://is1-ssl.mzstatic.com/image/thumb/Video113/v4/b1/96/ac/b196acbf-3010-b760-3193-702c340000f0/1181928424-WW-AMP_SF.lsr/1200x675.jpg" alt="Dyrene i Hakkebakkeskogen"></a>
-  <a href="film.html?navn=jul-i-flåklypa"><img src="https://sumo.cdn.tv2.no/imageapi/v3/img/5dbc0a4f498e1dc3eb8394b3-1700644038168" alt="Jul I Flåklypa"></a>
-</div>
-
-        <button class="scroll-button right" onclick="scrollGallery(this, 1)">❯</button>
-        <div class="fade-right"></div>
-      </div>
-
-        </section>
-    
+     <section class="gallery-section">
+  <h2>Barn</h2>
+  <div class="gallery-wrapper">
+    <div class="fade-left"></div>
+    <button class="scroll-button left">❮</button>
+    <div class="image-gallery" id="barn-filmer"></div>
+    <button class="scroll-button right">❯</button>
+    <div class="fade-right"></div>
+  </div>
+</section>
 
 <footer class="footer">
   <div class="footer-content">
@@ -745,7 +698,9 @@ main {
 
 
 </main>
-<script>
+<script type="module">
+import { filmer } from "./filmdata.js";
+
 // ==================== AUTENTISERING ==================== //
 const epost = localStorage.getItem("epost");
 const passord = localStorage.getItem("passord");
@@ -766,6 +721,7 @@ window.addEventListener("storage", () => {
 function gåTilKonto() {
   window.location.href = "konto.html";
 }
+window.gåTilKonto = gåTilKonto; // eksporter til global scope for HTML onclick
 
 // ==================== PROFILBILDE ==================== //
 // Hent profilbilde fra localStorage
@@ -824,6 +780,59 @@ document.querySelectorAll(".progress-bar").forEach(bar => {
   const progress = bar.getAttribute("data-progress");
   if (progress) {
     bar.style.setProperty("--progress", progress + "%");
+  }
+});
+
+// ==================== FILMGALLERI ==================== //
+function lagFilmElement(id, film) {
+  const a = document.createElement("a");
+  a.href = film.watchUrl;
+  const img = document.createElement("img");
+  img.src = film.poster;
+  img.alt = film.tittel;
+  a.appendChild(img);
+  return a;
+}
+
+function lagKommendeElement(id, film) {
+  const card = document.createElement("div");
+  card.className = "coming-card";
+
+  const img = document.createElement("img");
+  img.src = film.poster;
+  img.alt = film.tittel;
+
+  const info = document.createElement("div");
+  info.className = "coming-info";
+  info.innerHTML = `
+    <p class="date">${new Date(film.publishDate).toLocaleDateString("no-NO", { day: "numeric", month: "short", year: "numeric" })}</p>
+    <h3>${film.tittel}</h3>
+    <p class="desc">${film.beskrivelse}</p>
+  `;
+
+  card.appendChild(img);
+  card.appendChild(info);
+  return card;
+}
+
+// Nye filmer (alt uten publishDate frem i tid)
+Object.entries(filmer).forEach(([id, film]) => {
+  if (!film.publishDate || new Date(film.publishDate) <= new Date()) {
+    document.getElementById("nye-filmer")?.appendChild(lagFilmElement(id, film));
+  }
+});
+
+// Kommende filmer (med publishDate i fremtiden)
+Object.entries(filmer).forEach(([id, film]) => {
+  if (film.publishDate && new Date(film.publishDate) > new Date()) {
+    document.getElementById("kommende-filmer")?.appendChild(lagKommendeElement(id, film));
+  }
+});
+
+// Barn / Familie
+Object.entries(filmer).forEach(([id, film]) => {
+  if (film.metadata.some(m => /barn|familie/i.test(m))) {
+    document.getElementById("barn-filmer")?.appendChild(lagFilmElement(id, film));
   }
 });
 </script>
