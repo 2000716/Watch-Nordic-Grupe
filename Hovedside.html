@@ -177,53 +177,54 @@
     </div>
   </main>
 
-  <!-- === SCRIPT === -->
-  <script>
-    // === AUTENTISERING ===
-    const epost = localStorage.getItem("epost");
-    const passord = localStorage.getItem("passord");
-    if (!epost || !passord) window.location.href = "Starts side.html";
-    window.addEventListener("storage", () => {
-      if (!localStorage.getItem("epost") || !localStorage.getItem("passord")) {
-        window.location.href = "Starts side.html";
-      }
-    });
-
-    // === NAVIGASJON ===
-    function gåTilKonto() { window.location.href = "konto.html"; }
-
-    // === PROFILBILDE ===
-    const lagretBilde = localStorage.getItem("profilbilde");
-    if (lagretBilde) {
-      document.getElementById("menyProfilbilde").src = lagretBilde;
-      document.getElementById("headerProfilbilde").src = lagretBilde;
-    }
-
-    // === GALLERI SCROLL ===
-    document.querySelectorAll(".gallery-wrapper").forEach(wrapper => {
-      const gallery = wrapper.querySelector(".image-gallery");
-      const leftBtn = wrapper.querySelector(".scroll-button.left");
-      const rightBtn = wrapper.querySelector(".scroll-button.right");
-      const fadeLeft = wrapper.querySelector(".fade-left");
-      const fadeRight = wrapper.querySelector(".fade-right");
-
-      function updateScrollState() {
-        const scrollLeft = gallery.scrollLeft;
-        const maxScroll = gallery.scrollWidth - gallery.clientWidth;
-        leftBtn.style.display = scrollLeft <= 0 ? "none" : "block";
-        rightBtn.style.display = scrollLeft >= maxScroll ? "none" : "block";
-        fadeLeft.style.display = scrollLeft <= 0 ? "none" : "block";
-        fadeRight.style.display = scrollLeft >= maxScroll ? "none" : "block";
-      }
-      leftBtn.addEventListener("click", () => gallery.scrollBy({ left: -300, behavior: "smooth" }));
-      rightBtn.addEventListener("click", () => gallery.scrollBy({ left: 300, behavior: "smooth" }));
-      gallery.addEventListener("scroll", updateScrollState);
-      updateScrollState();
-    });
+<!-- === SCRIPT === -->
 <script type="module">
   import { filmer } from "./Filmdata.js";
 
-  // gjør om til array
+  // === AUTENTISERING ===
+  const epost = localStorage.getItem("epost");
+  const passord = localStorage.getItem("passord");
+  if (!epost || !passord) window.location.href = "Starts side.html";
+  window.addEventListener("storage", () => {
+    if (!localStorage.getItem("epost") || !localStorage.getItem("passord")) {
+      window.location.href = "Starts side.html";
+    }
+  });
+
+  // === NAVIGASJON ===
+  function gåTilKonto() { window.location.href = "konto.html"; }
+  window.gåTilKonto = gåTilKonto; // gjør funksjonen tilgjengelig globalt
+
+  // === PROFILBILDE ===
+  const lagretBilde = localStorage.getItem("profilbilde");
+  if (lagretBilde) {
+    document.getElementById("menyProfilbilde").src = lagretBilde;
+    document.getElementById("headerProfilbilde").src = lagretBilde;
+  }
+
+  // === GALLERI SCROLL ===
+  document.querySelectorAll(".gallery-wrapper").forEach(wrapper => {
+    const gallery = wrapper.querySelector(".image-gallery");
+    const leftBtn = wrapper.querySelector(".scroll-button.left");
+    const rightBtn = wrapper.querySelector(".scroll-button.right");
+    const fadeLeft = wrapper.querySelector(".fade-left");
+    const fadeRight = wrapper.querySelector(".fade-right");
+
+    function updateScrollState() {
+      const scrollLeft = gallery.scrollLeft;
+      const maxScroll = gallery.scrollWidth - gallery.clientWidth;
+      leftBtn.style.display = scrollLeft <= 0 ? "none" : "block";
+      rightBtn.style.display = scrollLeft >= maxScroll ? "none" : "block";
+      fadeLeft.style.display = scrollLeft <= 0 ? "none" : "block";
+      fadeRight.style.display = scrollLeft >= maxScroll ? "none" : "block";
+    }
+    leftBtn.addEventListener("click", () => gallery.scrollBy({ left: -300, behavior: "smooth" }));
+    rightBtn.addEventListener("click", () => gallery.scrollBy({ left: 300, behavior: "smooth" }));
+    gallery.addEventListener("scroll", updateScrollState);
+    updateScrollState();
+  });
+
+  // === FILMDATA FRA Filmdata.js ===
   const filmListe = Object.entries(filmer).map(([id, f]) => ({ id, ...f }));
 
   function lagFilmLenke(film) {
@@ -240,11 +241,11 @@
   const nyeGalleri = document.querySelector("#nye-filmer .image-gallery");
   filmListe
     .filter(f => !f.kommer)
-    .sort((a, b) => new Date(b.metadata?.[1] || 0) - new Date(a.metadata?.[1] || 0)) // årstall i metadata[1]
+    .sort((a, b) => new Date(b.metadata?.[1] || 0) - new Date(a.metadata?.[1] || 0)) // bruker årstall i metadata
     .slice(0, 12)
     .forEach(f => nyeGalleri.appendChild(lagFilmLenke(f)));
 
-  // === Populære === (her må du bruke en `popularitet`-verdi i Filmdata.js, ellers bare tilfeldig sortering)
+  // === Populære ===
   const popGalleri = document.querySelector("#populære .image-gallery");
   filmListe
     .sort((a, b) => (b.popularitet || 0) - (a.popularitet || 0))
@@ -268,16 +269,18 @@
       kommGalleri.appendChild(card);
     });
 
-  // === Barn === (henter basert på metadata som inneholder "Barn" eller "Animasjon")
+  // === Barn ===
   const barnGalleri = document.querySelector("#barn .image-gallery");
   filmListe
     .filter(f => (f.metadata || []).some(m => /barn|animasjon/i.test(m)))
     .forEach(f => barnGalleri.appendChild(lagFilmLenke(f)));
 
-  // === Sjangere === (lager fra metadata-feltet som inneholder sjanger)
+  // === Sjangere ===
   const sjangerGalleri = document.querySelector("#sjangere .genre-gallery");
-  const unikeSjangere = [...new Set(filmListe.flatMap(f => f.metadata || [])
-    .filter(m => /action|komedie|drama|grøsser|barn|fantasi|thriller|romantikk/i.test(m)))];
+  const unikeSjangere = [...new Set(
+    filmListe.flatMap(f => f.metadata || [])
+      .filter(m => /action|komedie|drama|grøsser|barn|fantasi|thriller|romantikk/i.test(m))
+  )];
   unikeSjangere.forEach(s => {
     const link = document.createElement("a");
     link.href = `sjanger.html?navn=${encodeURIComponent(s)}`;
@@ -285,25 +288,3 @@
     sjangerGalleri.appendChild(link);
   });
 </script>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
