@@ -716,6 +716,27 @@ document.querySelectorAll(".gallery-wrapper").forEach(wrapper => {
   }
 
   // Oppdater status ved scrolling
+  if(gallery) {
+    gallery.addEventListener("scroll", updateScrollState);
+  }
+  
+
+  // Initielt oppsett
+  updateScrollState();
+});
+
+// ==================== FREMDIRFTSLINJER ==================== //
+// Oppdater fremdriftslinjer dynamisk basert på data-progress attributt
+document.querySelectorAll(".progress-bar").forEach(bar => {
+  const progress = bar.getAttribute("data-progress");
+  if (progress) {
+    bar.style.setProperty("--progress", progress + "%");
+  }
+});
+</script>
+
+</body>
+</html>
 
 
 
