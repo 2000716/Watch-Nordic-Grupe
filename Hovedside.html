@@ -62,8 +62,8 @@
     .coming-info h3 { margin:4px 0; }
 
     /* === SJANGER === */
-    .genre-gallery { display:flex; flex-wrap:wrap; gap:10px; padding:10px 16px; }
-    .genre-gallery a { background:#00FFCC; color:black; padding:6px 12px; border-radius:4px; text-decoration:none; }
+    .genre-gallery { display:flex; flex-direction:column; gap:20px; padding:10px 16px; }
+    .genre-gallery .image-gallery a img { width:220px; height:124px; }
 
     /* === FOOTER === */
     .footer { text-align:center; margin-top:40px; padding:20px; }
@@ -177,114 +177,139 @@
     </div>
   </main>
 
-<!-- === SCRIPT === -->
 <script type="module">
-  import { filmer } from "./Filmdata.js";
+import { filmer } from "./Filmdata.js";
 
-  // === AUTENTISERING ===
-  const epost = localStorage.getItem("epost");
-  const passord = localStorage.getItem("passord");
-  if (!epost || !passord) window.location.href = "Starts side.html";
-  window.addEventListener("storage", () => {
-    if (!localStorage.getItem("epost") || !localStorage.getItem("passord")) {
-      window.location.href = "Starts side.html";
-    }
-  });
+// === AUTENTISERING ===
+const epost = localStorage.getItem("epost");
+const passord = localStorage.getItem("passord");
+if (!epost || !passord) window.location.href = "Starts side.html";
+window.addEventListener("storage", () => {
+  if (!localStorage.getItem("epost") || !localStorage.getItem("passord")) {
+    window.location.href = "Starts side.html";
+  }
+});
 
-  // === NAVIGASJON ===
-  function gåTilKonto() { window.location.href = "konto.html"; }
-  window.gåTilKonto = gåTilKonto; // gjør funksjonen tilgjengelig globalt
+// === NAVIGASJON ===
+function gåTilKonto() { window.location.href = "konto.html"; }
+window.gåTilKonto = gåTilKonto;
 
-  // === PROFILBILDE ===
-  const lagretBilde = localStorage.getItem("profilbilde");
-  if (lagretBilde) {
-    document.getElementById("menyProfilbilde").src = lagretBilde;
-    document.getElementById("headerProfilbilde").src = lagretBilde;
+// === PROFILBILDE ===
+const lagretBilde = localStorage.getItem("profilbilde");
+if (lagretBilde) {
+  document.getElementById("menyProfilbilde").src = lagretBilde;
+  document.getElementById("headerProfilbilde").src = lagretBilde;
+}
+
+// === GALLERI SCROLL ===
+function initScroll(wrapper) {
+  const gallery = wrapper.querySelector(".image-gallery");
+  const leftBtn = wrapper.querySelector(".scroll-button.left");
+  const rightBtn = wrapper.querySelector(".scroll-button.right");
+  const fadeLeft = wrapper.querySelector(".fade-left");
+  const fadeRight = wrapper.querySelector(".fade-right");
+
+  function updateScrollState() {
+    const scrollLeft = gallery.scrollLeft;
+    const maxScroll = gallery.scrollWidth - gallery.clientWidth;
+    leftBtn.style.display = scrollLeft <= 0 ? "none" : "block";
+    rightBtn.style.display = scrollLeft >= maxScroll ? "none" : "block";
+    fadeLeft.style.display = scrollLeft <= 0 ? "none" : "block";
+    fadeRight.style.display = scrollLeft >= maxScroll ? "none" : "block";
   }
 
-  // === GALLERI SCROLL ===
-  document.querySelectorAll(".gallery-wrapper").forEach(wrapper => {
-    const gallery = wrapper.querySelector(".image-gallery");
-    const leftBtn = wrapper.querySelector(".scroll-button.left");
-    const rightBtn = wrapper.querySelector(".scroll-button.right");
-    const fadeLeft = wrapper.querySelector(".fade-left");
-    const fadeRight = wrapper.querySelector(".fade-right");
+  leftBtn.addEventListener("click", () => gallery.scrollBy({ left: -300, behavior: "smooth" }));
+  rightBtn.addEventListener("click", () => gallery.scrollBy({ left: 300, behavior: "smooth" }));
+  gallery.addEventListener("scroll", updateScrollState);
+  updateScrollState();
+}
 
-    function updateScrollState() {
-      const scrollLeft = gallery.scrollLeft;
-      const maxScroll = gallery.scrollWidth - gallery.clientWidth;
-      leftBtn.style.display = scrollLeft <= 0 ? "none" : "block";
-      rightBtn.style.display = scrollLeft >= maxScroll ? "none" : "block";
-      fadeLeft.style.display = scrollLeft <= 0 ? "none" : "block";
-      fadeRight.style.display = scrollLeft >= maxScroll ? "none" : "block";
-    }
-    leftBtn.addEventListener("click", () => gallery.scrollBy({ left: -300, behavior: "smooth" }));
-    rightBtn.addEventListener("click", () => gallery.scrollBy({ left: 300, behavior: "smooth" }));
-    gallery.addEventListener("scroll", updateScrollState);
-    updateScrollState();
+document.querySelectorAll(".gallery-wrapper").forEach(initScroll);
+
+// === FILMDATA FRA Filmdata.js ===
+const filmListe = Object.entries(filmer).map(([id, f]) => ({ id, ...f }));
+
+function lagFilmLenke(film) {
+  const a = document.createElement("a");
+  a.href = film.watchUrl || `film.html?id=${film.id}`;
+  const img = document.createElement("img");
+  img.src = film.poster || film.posterVertikal || film.bakgrunn;
+  img.alt = film.tittel;
+  a.appendChild(img);
+  return a;
+}
+
+// === Nye filmer ===
+const nyeGalleri = document.querySelector("#nye-filmer .image-gallery");
+filmListe
+  .filter(f => !f.kommer)
+  .sort((a, b) => new Date(b.metadata?.[1] || 0) - new Date(a.metadata?.[1] || 0))
+  .slice(0, 12)
+  .forEach(f => nyeGalleri.appendChild(lagFilmLenke(f)));
+
+// === Populære ===
+const popGalleri = document.querySelector("#populære .image-gallery");
+filmListe
+  .sort((a, b) => (b.popularitet || 0) - (a.popularitet || 0))
+  .slice(0, 12)
+  .forEach(f => popGalleri.appendChild(lagFilmLenke(f)));
+
+// === Kommer snart ===
+const kommGalleri = document.querySelector("#kommer-snart .coming-soon-gallery");
+filmListe
+  .filter(f => f.kommer)
+  .forEach(f => {
+    const card = document.createElement("div");
+    card.className = "coming-card";
+    card.innerHTML = `
+      <img src="${f.poster || f.posterVertikal || f.bakgrunn}" alt="${f.tittel}">
+      <div class="coming-info">
+        <p class="date">${f.metadata?.[1] || ""}</p>
+        <h3>${f.tittel}</h3>
+        <p>${f.beskrivelse || ""}</p>
+      </div>`;
+    kommGalleri.appendChild(card);
   });
 
-  // === FILMDATA FRA Filmdata.js ===
-  const filmListe = Object.entries(filmer).map(([id, f]) => ({ id, ...f }));
+// === Barn ===
+const barnGalleri = document.querySelector("#barn .image-gallery");
+filmListe
+  .filter(f => (f.metadata || []).some(m => /barn|animasjon/i.test(m)))
+  .forEach(f => barnGalleri.appendChild(lagFilmLenke(f)));
 
-  function lagFilmLenke(film) {
-    const a = document.createElement("a");
-    a.href = film.watchUrl || `film.html?id=${film.id}`;
-    const img = document.createElement("img");
-    img.src = film.poster || film.posterVertikal || film.bakgrunn;
-    img.alt = film.tittel;
-    a.appendChild(img);
-    return a;
-  }
+// === Sjangere ===
+const sjangerContainer = document.querySelector("#sjangere .genre-gallery");
+sjangerContainer.innerHTML = ""; // tømmes først
 
-  // === Nye filmer ===
-  const nyeGalleri = document.querySelector("#nye-filmer .image-gallery");
+const alleSjangere = [...new Set(
+  filmListe.flatMap(f => f.metadata || [])
+    .filter(m => /action|komedie|drama|grøsser|barn|fantasi|thriller|romantikk/i.test(m.toLowerCase()))
+)];
+
+alleSjangere.forEach(sjanger => {
+  const section = document.createElement("div");
+  section.className = "gallery-section";
+
+  section.innerHTML = `
+    <h2>${sjanger}</h2>
+    <div class="gallery-wrapper">
+      <button class="scroll-button left">❮</button>
+      <div class="image-gallery"></div>
+      <button class="scroll-button right">❯</button>
+      <div class="fade-left"></div>
+      <div class="fade-right"></div>
+    </div>
+  `;
+
+  const galleri = section.querySelector(".image-gallery");
   filmListe
-    .filter(f => !f.kommer)
-    .sort((a, b) => new Date(b.metadata?.[1] || 0) - new Date(a.metadata?.[1] || 0)) // bruker årstall i metadata
-    .slice(0, 12)
-    .forEach(f => nyeGalleri.appendChild(lagFilmLenke(f)));
+    .filter(f => (f.metadata || []).some(m => m.toLowerCase().includes(sjanger.toLowerCase())))
+    .forEach(f => galleri.appendChild(lagFilmLenke(f)));
 
-  // === Populære ===
-  const popGalleri = document.querySelector("#populære .image-gallery");
-  filmListe
-    .sort((a, b) => (b.popularitet || 0) - (a.popularitet || 0))
-    .slice(0, 12)
-    .forEach(f => popGalleri.appendChild(lagFilmLenke(f)));
-
-  // === Kommer snart ===
-  const kommGalleri = document.querySelector("#kommer-snart .coming-soon-gallery");
-  filmListe
-    .filter(f => f.kommer)
-    .forEach(f => {
-      const card = document.createElement("div");
-      card.className = "coming-card";
-      card.innerHTML = `
-        <img src="${f.poster || f.posterVertikal || f.bakgrunn}" alt="${f.tittel}">
-        <div class="coming-info">
-          <p class="date">${f.metadata?.[1] || ""}</p>
-          <h3>${f.tittel}</h3>
-          <p>${f.beskrivelse || ""}</p>
-        </div>`;
-      kommGalleri.appendChild(card);
-    });
-
-  // === Barn ===
-  const barnGalleri = document.querySelector("#barn .image-gallery");
-  filmListe
-    .filter(f => (f.metadata || []).some(m => /barn|animasjon/i.test(m)))
-    .forEach(f => barnGalleri.appendChild(lagFilmLenke(f)));
-
-  // === Sjangere ===
-  const sjangerGalleri = document.querySelector("#sjangere .genre-gallery");
-  const unikeSjangere = [...new Set(
-    filmListe.flatMap(f => f.metadata || [])
-      .filter(m => /action|komedie|drama|grøsser|barn|fantasi|thriller|romantikk/i.test(m))
-  )];
-  unikeSjangere.forEach(s => {
-    const link = document.createElement("a");
-    link.href = `sjanger.html?navn=${encodeURIComponent(s)}`;
-    link.textContent = s;
-    sjangerGalleri.appendChild(link);
-  });
+  initScroll(section.querySelector(".gallery-wrapper"));
+  sjangerContainer.appendChild(section);
+});
 </script>
+
+</body>
+</html>
