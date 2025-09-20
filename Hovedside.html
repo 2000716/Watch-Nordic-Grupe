@@ -9,71 +9,219 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
 
   <style>
-    /* (Samme CSS som tidligere eksempel – kortet ned her for plass) */
-    body { font-family: Arial, sans-serif; background: #091B1E; color: white; margin:0; }
-    .vertical-nav{ width:70px; height:100vh; position:fixed; top:0; left:0; display:flex; flex-direction:column; align-items:center; justify-content:center; }
-    .nav-icon{ color:white; font-size:22px; margin:10px 0; }
-    main{ margin-left:70px; padding:20px; }
-    .gallery-section{ margin-bottom:30px; }
-    .gallery-section h2{ color:#00FFCC; margin-bottom:10px; }
-    .gallery-wrapper{ position:relative; display:flex; align-items:center; }
-    .image-gallery{ display:flex; overflow-x:auto; gap:12px; padding:10px; scroll-behavior:smooth; }
+    /* === RESET === */
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body { font-family:Arial,sans-serif; background:#091B1E; color:white; }
+
+    /* === VERTICAL NAV === */
+    .vertical-nav {
+      width:70px; height:100vh; position:fixed; top:0; left:0;
+      display:flex; flex-direction:column; align-items:center; justify-content:center;
+      z-index:100;
+    }
+    .nav-icons-wrapper { display:flex; flex-direction:column; align-items:center; gap:10px; }
+    .profilmeny img { width:48px; height:48px; border-radius:50%; border:2px solid #fff; object-fit:cover; cursor:pointer; }
+    .nav-icon { color:white; font-size:22px; padding:16px 0; cursor:pointer; }
+    .nav-icon:hover, .nav-icon.active { color:#00FFCC; }
+
+    /* === MAIN === */
+    main { margin-left:70px; padding:20px 10px; }
+    .content-wrapper { max-width:1100px; margin:0 auto; }
+
+    /* === TOP HEADER === */
+    .top-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; flex-direction:row-reverse; }
+    .top-header .watch-logo { width:200px; }
+    .header-profil img { width:40px; height:40px; border-radius:50%; border:2px solid #fff; object-fit:cover; }
+
+    /* === HERO === */
+    .hero-banner { position:relative; height:350px; border-radius:12px; overflow:hidden; margin-bottom:30px; border:2px solid #00FFCC; }
+    .banner-image { width:100%; height:100%; object-fit:cover; }
+    .banner-content { position:absolute; top:50%; left:30px; transform:translateY(-50%); display:flex; flex-direction:column; gap:10px; }
+    .film-logo { width:300px; }
+
+    /* === GALLERI === */
+    .gallery-section { margin-bottom:30px; }
+    .gallery-section h2 { font-size:18px; margin-bottom:12px; color:#00FFCC; padding-left:16px; }
+    .gallery-wrapper { position:relative; display:flex; align-items:center; }
+    .fade-left,.fade-right { position:absolute; top:0; bottom:0; width:70px; pointer-events:none; opacity:0; transition:opacity .3s; z-index:1; }
+    .fade-left { left:0; background:linear-gradient(to right,#091B1E,transparent); }
+    .fade-right { right:0; background:linear-gradient(to left,#091B1E,transparent); }
+    .scroll-button { position:absolute; top:50%; transform:translateY(-50%); background:none; border:none; color:white; font-size:28px; cursor:pointer; opacity:0; pointer-events:none; transition:.3s; z-index:2; }
+    .scroll-button.left { left:0; }
+    .scroll-button.right { right:0; }
+    .gallery-wrapper:hover .scroll-button, .gallery-wrapper:hover .fade-left, .gallery-wrapper:hover .fade-right { opacity:1; pointer-events:auto; }
+    .image-gallery { display:flex; overflow-x:auto; gap:16px; padding:10px 16px; scroll-behavior:smooth; }
     .image-gallery::-webkit-scrollbar{ display:none; }
-    .image-gallery a img{ width:200px; height:120px; object-fit:cover; border-radius:6px; }
-    .coming-soon-gallery{ display:grid; grid-template-columns:repeat(auto-fill, minmax(220px,1fr)); gap:20px; }
-    .coming-card img{ width:100%; border-radius:6px; }
-    .coming-info{ padding:6px 0; }
-    .genre-gallery{ display:flex; flex-wrap:wrap; gap:10px; padding:10px; }
-    .genre-gallery a{ background:#00FFCC; color:black; padding:6px 12px; border-radius:4px; text-decoration:none; }
+    .image-gallery a img { width:220px; height:124px; border-radius:6px; object-fit:cover; transition:transform .3s; }
+    .image-gallery a:hover img { transform:scale(1.05); }
+
+    /* === KOMMER SNART === */
+    .coming-soon-gallery { display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:20px; padding:10px 16px; }
+    .coming-card img { width:100%; border-radius:6px; }
+    .coming-info { padding:6px 0; }
+    .coming-info h3 { margin:4px 0; }
+
+    /* === SJANGER === */
+    .genre-gallery { display:flex; flex-wrap:wrap; gap:10px; padding:10px 16px; }
+    .genre-gallery a { background:#00FFCC; color:black; padding:6px 12px; border-radius:4px; text-decoration:none; }
+
+    /* === FOOTER === */
+    .footer { text-align:center; margin-top:40px; padding:20px; }
+    .footer-links { display:flex; flex-wrap:wrap; justify-content:center; gap:15px; margin:10px 0; }
+    .footer-links a { color:#b1b1b1; font-size:14px; text-decoration:none; }
+    .footer-links a:hover { color:#00FFCC; }
+    .footer-copy { font-size:13px; color:#888; }
+
+    /* === MOBIL === */
+    @media(max-width:768px){
+      .vertical-nav{ width:100%; height:60px; flex-direction:row; bottom:0; top:auto; background:rgba(9,27,30,.95); }
+      main{ margin-left:0; margin-bottom:70px; }
+      .top-header .watch-logo{ width:140px; }
+      .film-logo{ width:180px; }
+      .image-gallery a img{ width:160px; height:90px; }
+      .hero-banner{ height:200px; }
+    }
   </style>
 </head>
 <body>
 
-  <!-- NAV -->
+  <!-- === NAVIGASJON === -->
   <div class="vertical-nav">
-    <a href="Søk.html" class="nav-icon"><i class="fas fa-search"></i></a>
-    <a href="Hovedside.html" class="nav-icon active"><i class="fas fa-house"></i></a>
-    <a href="Film.html" class="nav-icon"><i class="fas fa-film"></i></a>
-    <a href="Serier.html" class="nav-icon"><i class="fas fa-tv"></i></a>
-    <a href="Min-Liste.html" class="nav-icon"><i class="fas fa-bookmark"></i></a>
+    <div class="nav-icons-wrapper">
+      <div class="profilmeny" onclick="gåTilKonto()">
+        <img id="menyProfilbilde" src="https://via.placeholder.com/100" alt="Min profil" />
+      </div>
+      <a href="Søk.html" class="nav-icon"><i class="fas fa-search"></i></a>
+      <a href="Hovedside.html" class="nav-icon active"><i class="fas fa-house"></i></a>
+      <a href="Film.html" class="nav-icon"><i class="fas fa-film"></i></a>
+      <a href="Serier.html" class="nav-icon"><i class="fas fa-tv"></i></a>
+      <a href="Min-Liste.html" class="nav-icon"><i class="fas fa-bookmark"></i></a>
+    </div>
   </div>
 
   <main>
-    <h1>Velkommen til Watch</h1>
+    <div class="content-wrapper">
 
-    <section class="gallery-section" id="nye-filmer">
-      <h2>Nye filmer på Watch</h2>
-      <div class="gallery-wrapper">
-        <div class="image-gallery"></div>
+      <!-- === TOP HEADER === -->
+      <div class="top-header">
+        <img class="watch-logo" src="https://static.wixstatic.com/media/fd2fb2_a4b2ace62dff4605a0387f46aad8a404~mv2.png" alt="Watch Logo" />
+        <div class="profilmeny header-profil" onclick="gåTilKonto()">
+          <img id="headerProfilbilde" src="https://via.placeholder.com/100" alt="Min profil" />
+        </div>
       </div>
-    </section>
 
-    <section class="gallery-section" id="populære">
-      <h2>Populære nå</h2>
-      <div class="gallery-wrapper">
-        <div class="image-gallery"></div>
-      </div>
-    </section>
+      <!-- === HERO === -->
+      <section class="hero-banner">
+        <img class="banner-image" src="https://images.justwatch.com/backdrop/302954938/s640/olsenbanden-siste-skrik" alt="Film Banner">
+        <div class="banner-content">
+          <img class="film-logo" src="https://static.wixstatic.com/media/fd2fb2_8511f368adb94b0f861f4ee2485d04de~mv2.png" alt="Film Logo">
+        </div>
+      </section>
 
-    <section class="gallery-section" id="kommer-snart">
-      <h2>Kommende filmer</h2>
-      <div class="coming-soon-gallery"></div>
-    </section>
+      <!-- === GALLERIER === -->
+      <section class="gallery-section" id="nye-filmer">
+        <h2>Nye filmer på Watch</h2>
+        <div class="gallery-wrapper">
+          <button class="scroll-button left">❮</button>
+          <div class="image-gallery"></div>
+          <button class="scroll-button right">❯</button>
+          <div class="fade-left"></div>
+          <div class="fade-right"></div>
+        </div>
+      </section>
 
-    <section class="gallery-section" id="barn">
-      <h2>Barn</h2>
-      <div class="gallery-wrapper">
-        <div class="image-gallery"></div>
-      </div>
-    </section>
+      <section class="gallery-section" id="populære">
+        <h2>Populære nå</h2>
+        <div class="gallery-wrapper">
+          <button class="scroll-button left">❮</button>
+          <div class="image-gallery"></div>
+          <button class="scroll-button right">❯</button>
+          <div class="fade-left"></div>
+          <div class="fade-right"></div>
+        </div>
+      </section>
 
-    <section class="gallery-section" id="sjangere">
-      <h2>Sjangere</h2>
-      <div class="genre-gallery"></div>
-    </section>
+      <section class="gallery-section" id="kommer-snart">
+        <h2>Kommende filmer</h2>
+        <div class="coming-soon-gallery"></div>
+      </section>
+
+      <section class="gallery-section" id="barn">
+        <h2>Barn</h2>
+        <div class="gallery-wrapper">
+          <button class="scroll-button left">❮</button>
+          <div class="image-gallery"></div>
+          <button class="scroll-button right">❯</button>
+          <div class="fade-left"></div>
+          <div class="fade-right"></div>
+        </div>
+      </section>
+
+      <section class="gallery-section" id="sjangere">
+        <h2>Sjangere</h2>
+        <div class="genre-gallery"></div>
+      </section>
+
+      <!-- === FOOTER === -->
+      <footer class="footer">
+        <img class="footer-logo" src="https://static.wixstatic.com/media/fd2fb2_a4b2ace62dff4605a0387f46aad8a404~mv2.png" alt="Watch Logo" />
+        <div class="footer-links">
+          <a href="#">Om Watch Nordic</a>
+          <a href="#">Personvern</a>
+          <a href="#">Vilkår</a>
+          <a href="#">Hjelp</a>
+        </div>
+        <div class="footer-copy">© 2025 Watch Nordic Group</div>
+      </footer>
+
+    </div>
   </main>
 
   <!-- === SCRIPT === -->
+  <script>
+    // === AUTENTISERING ===
+    const epost = localStorage.getItem("epost");
+    const passord = localStorage.getItem("passord");
+    if (!epost || !passord) window.location.href = "Starts side.html";
+    window.addEventListener("storage", () => {
+      if (!localStorage.getItem("epost") || !localStorage.getItem("passord")) {
+        window.location.href = "Starts side.html";
+      }
+    });
+
+    // === NAVIGASJON ===
+    function gåTilKonto() { window.location.href = "konto.html"; }
+
+    // === PROFILBILDE ===
+    const lagretBilde = localStorage.getItem("profilbilde");
+    if (lagretBilde) {
+      document.getElementById("menyProfilbilde").src = lagretBilde;
+      document.getElementById("headerProfilbilde").src = lagretBilde;
+    }
+
+    // === GALLERI SCROLL ===
+    document.querySelectorAll(".gallery-wrapper").forEach(wrapper => {
+      const gallery = wrapper.querySelector(".image-gallery");
+      const leftBtn = wrapper.querySelector(".scroll-button.left");
+      const rightBtn = wrapper.querySelector(".scroll-button.right");
+      const fadeLeft = wrapper.querySelector(".fade-left");
+      const fadeRight = wrapper.querySelector(".fade-right");
+
+      function updateScrollState() {
+        const scrollLeft = gallery.scrollLeft;
+        const maxScroll = gallery.scrollWidth - gallery.clientWidth;
+        leftBtn.style.display = scrollLeft <= 0 ? "none" : "block";
+        rightBtn.style.display = scrollLeft >= maxScroll ? "none" : "block";
+        fadeLeft.style.display = scrollLeft <= 0 ? "none" : "block";
+        fadeRight.style.display = scrollLeft >= maxScroll ? "none" : "block";
+      }
+      leftBtn.addEventListener("click", () => gallery.scrollBy({ left: -300, behavior: "smooth" }));
+      rightBtn.addEventListener("click", () => gallery.scrollBy({ left: 300, behavior: "smooth" }));
+      gallery.addEventListener("scroll", updateScrollState);
+      updateScrollState();
+    });
+  </script>
+
   <script type="module">
     import { filmer } from "./Filmdata.js";
 
@@ -89,83 +237,49 @@
 
     // Nye filmer
     const nyeGalleri = document.querySelector("#nye-filmer .image-gallery");
-    filmer
-      .filter(f => !f.kommer && new Date(f.publisert) <= new Date())
-      .sort((a, b) => new Date(b.publisert) - new Date(a.publisert))
-      .slice(0, 12)
-      .forEach(f => nyeGalleri.appendChild(lagFilmLenke(f)));
+    filmer.filter(f => !f.kommer && new Date(f.publisert) <= new Date())
+      .sort((a,b)=>new Date(b.publisert)-new Date(a.publisert))
+      .slice(0,12).forEach(f => nyeGalleri.appendChild(lagFilmLenke(f)));
 
     // Populære
     const popGalleri = document.querySelector("#populære .image-gallery");
-    filmer
-      .filter(f => !f.kommer)
-      .sort((a, b) => (b.popularitet || 0) - (a.popularitet || 0))
-      .slice(0, 12)
-      .forEach(f => popGalleri.appendChild(lagFilmLenke(f)));
+    filmer.filter(f => !f.kommer)
+      .sort((a,b)=>(b.popularitet||0)-(a.popularitet||0))
+      .slice(0,12).forEach(f => popGalleri.appendChild(lagFilmLenke(f)));
 
     // Kommer snart
     const kommGalleri = document.querySelector("#kommer-snart .coming-soon-gallery");
-    filmer
-      .filter(f => f.kommer || new Date(f.publisert) > new Date())
+    filmer.filter(f => f.kommer || new Date(f.publisert) > new Date())
       .forEach(f => {
-        const card = document.createElement("div");
-        card.className = "coming-card";
-        card.innerHTML = `
+        const card=document.createElement("div");
+        card.className="coming-card";
+        card.innerHTML=`
           <img src="${f.bilde}" alt="${f.tittel}">
           <div class="coming-info">
-            <p class="date">${new Date(f.publisert).toLocaleDateString("no-NO", { day:"2-digit", month:"short", year:"numeric" })}</p>
+            <p class="date">${new Date(f.publisert).toLocaleDateString("no-NO",{day:"2-digit",month:"short",year:"numeric"})}</p>
             <h3>${f.tittel}</h3>
-            <p>${f.beskrivelse || ""}</p>
+            <p>${f.beskrivelse||""}</p>
           </div>`;
         kommGalleri.appendChild(card);
       });
 
     // Barn
     const barnGalleri = document.querySelector("#barn .image-gallery");
-    filmer
-      .filter(f => f.sjanger && f.sjanger.includes("barn"))
+    filmer.filter(f => f.sjanger && f.sjanger.includes("barn"))
       .forEach(f => barnGalleri.appendChild(lagFilmLenke(f)));
 
     // Sjangere
     const sjangerGalleri = document.querySelector("#sjangere .genre-gallery");
-    const unikeSjangere = [...new Set(filmer.flatMap(f => f.sjanger || []))];
+    const unikeSjangere = [...new Set(filmer.flatMap(f => f.sjanger||[]))];
     unikeSjangere.forEach(s => {
-      const link = document.createElement("a");
-      link.href = `sjanger.html?navn=${encodeURIComponent(s)}`;
-      link.textContent = s.charAt(0).toUpperCase() + s.slice(1);
+      const link=document.createElement("a");
+      link.href=`sjanger.html?navn=${encodeURIComponent(s)}`;
+      link.textContent=s.charAt(0).toUpperCase()+s.slice(1);
       sjangerGalleri.appendChild(link);
     });
   </script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
