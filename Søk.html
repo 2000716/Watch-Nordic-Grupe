@@ -80,7 +80,7 @@
 <main>
   <h1>Søk etter filmer</h1>
   <div class="search-box">
-    <input type="text" id="searchInput" placeholder="Skriv inn tittel, skuespiller, sjanger eller år...">
+    <input type="text" id="searchInput" placeholder="Skriv inn tittel, skuespiller, regissør eller metadata...">
   </div>
   <div id="filmGrid" class="film-grid"></div>
 </main>
@@ -116,13 +116,14 @@
         const card = document.createElement("div");
         card.className = "film-card";
         card.innerHTML = `<img src="${data.poster || 'default-poster.jpg'}" alt="${data.tittel}">`;
-        card.addEventListener("click", () => window.location.href = data.watchUrl);
+        // Klikk fører til film.html?id=<filmNavn>
+        card.addEventListener("click", () => window.location.href = `film.html?id=${filmNavn}`);
         filmGrid.appendChild(card);
       }
     });
   }
 
-  // Vis tidligere søk først (starter på venstre side)
+  // Vis tidligere søk først
   filmGrid.style.justifyContent = "flex-start";
   visFilmer(tidligereSøk);
 
@@ -147,15 +148,18 @@
 
     visFilmer(treff);
 
-    // Oppdater tidligere søk (lagres som filmNavn)
+    // Oppdater tidligere søk
     treff.forEach(filmNavn => {
       if (!tidligereSøk.includes(filmNavn)) {
         tidligereSøk.unshift(filmNavn);
       }
     });
 
-    // Hold maks 10 filmer i tidligere søk
+    // Maks 10 i listen
     tidligereSøk = tidligereSøk.slice(0, 10);
     localStorage.setItem("tidligereSøk", JSON.stringify(tidligereSøk));
   });
 </script>
+
+</body>
+</html>
