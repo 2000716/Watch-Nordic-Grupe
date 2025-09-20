@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<DOCTYPE html>
 <html lang="no">
 <head>
   <meta charset="UTF-8" />
@@ -8,101 +8,591 @@
   <link rel="icon" type="image/png" href="https://static.wixstatic.com/media/fd2fb2_39376e4ee55b460ab7a3ebbfcf35fef7~mv2.png" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
 
-  <style>
-    /* === RESET === */
-    * { margin:0; padding:0; box-sizing:border-box; }
-    body { font-family:Arial,sans-serif; background:#091B1E; color:white; }
+<style> * { box-sizing: border-box; margin: 0; padding: 0; }
 
-    /* === VERTICAL NAV === */
-    .vertical-nav {
-      width:70px; height:100vh; position:fixed; top:0; left:0;
-      display:flex; flex-direction:column; align-items:center; justify-content:center;
-      z-index:100;
-    }
-    .nav-icons-wrapper { display:flex; flex-direction:column; align-items:center; gap:10px; }
-    .profilmeny img { width:48px; height:48px; border-radius:50%; border:2px solid #fff; object-fit:cover; cursor:pointer; }
-    .nav-icon { color:white; font-size:22px; padding:16px 0; cursor:pointer; }
-    .nav-icon:hover, .nav-icon.active { color:#00FFCC; }
+* { 
+  box-sizing: border-box; 
+  margin: 0; 
+  padding: 0; 
+}
 
-    /* === MAIN === */
-    main { margin-left:70px; padding:20px 10px; }
-    .content-wrapper { max-width:1100px; margin:0 auto; }
+html, body {
+  font-family: Arial, sans-serif;
+  background: #091B1E;
+  color: white;
+  overflow-x: hidden;
+}
 
-    /* === TOP HEADER === */
-    .top-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; flex-direction:row-reverse; }
-    .top-header .watch-logo { width:200px; }
-    .header-profil img { width:40px; height:40px; border-radius:50%; border:2px solid #fff; object-fit:cover; }
+/* Navigasjon til venstre */
+.vertical-nav {
+  width: 70px;
+  height: 100vh;
+  background-color: transparent;
+  position: fixed;
+  top: 0;
+  left: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+}
 
-    /* === HERO === */
-    .hero-banner { position:relative; height:350px; border-radius:12px; overflow:hidden; margin-bottom:30px; border:2px solid #00FFCC; }
-    .banner-image { width:100%; height:100%; object-fit:cover; }
-    .banner-content { position:absolute; top:50%; left:30px; transform:translateY(-50%); display:flex; flex-direction:column; gap:10px; }
-    .film-logo { width:300px; }
+.nav-icons-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
 
-    /* === GALLERI === */
-    .gallery-section { margin-bottom:30px; }
-    .gallery-section h2 { font-size:18px; margin-bottom:12px; color:#00FFCC; padding-left:16px; }
-    .gallery-wrapper { position:relative; display:flex; align-items:center; }
-    .fade-left,.fade-right { position:absolute; top:0; bottom:0; width:70px; pointer-events:none; opacity:0; transition:opacity .3s; z-index:1; }
-    .fade-left { left:0; background:linear-gradient(to right,#091B1E,transparent); }
-    .fade-right { right:0; background:linear-gradient(to left,#091B1E,transparent); }
-    .scroll-button { position:absolute; top:50%; transform:translateY(-50%); background:none; border:none; color:white; font-size:28px; cursor:pointer; opacity:0; pointer-events:none; transition:.3s; z-index:2; }
-    .scroll-button.left { left:0; }
-    .scroll-button.right { right:0; }
-    .gallery-wrapper:hover .scroll-button, .gallery-wrapper:hover .fade-left, .gallery-wrapper:hover .fade-right { opacity:1; pointer-events:auto; }
-    .image-gallery { display:flex; overflow-x:auto; gap:16px; padding:10px 16px; scroll-behavior:smooth; }
-    .image-gallery::-webkit-scrollbar{ display:none; }
-    .image-gallery a img { width:220px; height:124px; border-radius:6px; object-fit:cover; transition:transform .3s; }
-    .image-gallery a:hover img { transform:scale(1.05); }
+.profilmeny {
+  cursor: pointer;
+  margin-bottom: 10px;
+}
 
-    /* === KOMMER SNART === */
-    .coming-soon-gallery { display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:20px; padding:10px 16px; }
-    .coming-card img { width:100%; border-radius:6px; }
-    .coming-info { padding:6px 0; }
-    .coming-info h3 { margin:4px 0; }
+.profilmeny img {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #fff;
+}
 
-    /* === SJANGER === */
-    .genre-gallery { display:flex; flex-direction:column; gap:20px; padding:10px 16px; }
-    .genre-gallery .image-gallery a img { width:220px; height:124px; }
+.nav-icon {
+  color: white;
+  font-size: 22px;
+  padding: 16px 0;
+  text-decoration: none;
+  text-align: center;
+  width: 100%;
+  transition: color 0.3s ease;
+  cursor: pointer;
+  background: none;
+  border: none;
+}
 
-    /* === FOOTER === */
-    .footer { text-align:center; margin-top:40px; padding:20px; }
-    .footer-links { display:flex; flex-wrap:wrap; justify-content:center; gap:15px; margin:10px 0; }
-    .footer-links a { color:#b1b1b1; font-size:14px; text-decoration:none; }
-    .footer-links a:hover { color:#00FFCC; }
-    .footer-copy { font-size:13px; color:#888; }
+.nav-icon:hover,
+.nav-icon.active {
+  color: #00FFCC;
+}
 
-    /* === MOBIL === */
-    @media(max-width:768px){
-      .vertical-nav{ width:100%; height:60px; flex-direction:row; bottom:0; top:auto; background:rgba(9,27,30,.95); }
-      main{ margin-left:0; margin-bottom:70px; }
-      .top-header .watch-logo{ width:140px; }
-      .film-logo{ width:180px; }
-      .image-gallery a img{ width:160px; height:90px; }
-      .hero-banner{ height:200px; }
-    }
-  </style>
+/* Hovedinnhold */
+main {
+  margin-left: 60px;
+  padding: 20px 10px 10px 10px;
+}
+
+.content-wrapper {
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+/* Topp-logo + profil */
+.top-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  flex-direction: row-reverse; /* logo til høyre på desktop */
+}
+
+.top-header .watch-logo {
+  width: 200px;
+}
+
+.header-profil {
+  display: none; /* skjules på desktop */
+}
+
+.header-profil img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #fff;
+}
+
+/* Hero-banner */
+.hero-banner {
+  position: relative;
+  height: 350px;
+  border-radius: 12px;
+  overflow: hidden;
+  margin-bottom: 30px;
+  margin-left: 16px;
+  width: calc(100% - 16px);
+  box-shadow: none;
+  border: 2px solid #00FFCC;
+}
+
+.banner-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.banner-content {
+  position: absolute;
+  top: 50%;
+  left: 30px;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.film-logo {
+  width: 300px;
+}
+
+.watch-button {
+  text-decoration: none;
+  background-color: white;
+  color: black;
+  padding: 10px 80px;
+  border: none;
+  border-radius: 4px;
+  font-weight: bold;
+  display: inline-block;
+}
+
+.watch-button:hover {
+  background-color: #f2f2f2;
+}
+
+/* Gallerier */
+.gallery-section {
+  margin-bottom: 20px;
+}
+
+.gallery-section h2 {
+  font-size: 18px;
+  margin-bottom: 12px;
+  color: #00FFCC;
+  padding-left: 16px;
+}
+
+.gallery-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.fade-left,
+.fade-right {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 70px;
+  z-index: 1;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.fade-left {
+  left: 0;
+  background: linear-gradient(to right, #091B1E, rgba(9, 27, 30, 0));
+}
+
+.fade-right {
+  right: 0;
+  background: linear-gradient(to left, #091B1E, rgba(9, 27, 30, 0));
+}
+
+.gallery-wrapper:hover .scroll-button:not(.hidden),
+.gallery-wrapper:hover .fade-left:not(.fade-hidden),
+.gallery-wrapper:hover .fade-right:not(.fade-hidden) {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.fade-hidden {
+  display: none;
+}
+
+.scroll-button {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: white;
+  font-size: 28px;
+  cursor: pointer;
+  z-index: 2;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.scroll-button.left {
+  left: 0;
+}
+
+.scroll-button.right {
+  right: 0;
+}
+
+.scroll-button.hidden {
+  display: none;
+}
+
+.scroll-button:hover {
+  color: #00FFCC;
+}
+
+/* Selve bilde-galleriet */
+.image-gallery {
+  flex: 1;
+  display: flex;
+  overflow-x: auto;
+  gap: 16px;
+  padding: 10px 16px;
+  scroll-behavior: smooth;
+  -ms-overflow-style: none;
+}
+
+.image-gallery::-webkit-scrollbar {
+  display: none;
+}
+
+.image-gallery a {
+  display: inline-block;
+  position: relative;
+  border-radius: 5px;
+  background: transparent;
+  overflow: visible;
+  border: 2px solid transparent;
+  transition: border 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
+}
+
+.image-gallery a img {
+  width: 220px;
+  height: 124px;
+  object-fit: cover;
+  border-radius: 5px;
+  display: block;
+  transition: transform 0.3s ease;
+}
+
+.image-gallery a:hover img {
+  transform: scale(1.05);
+}
+
+/* Fremdriftslinje på filmer */
+.image-with-progress {
+  position: relative;
+  width: 220px;
+  height: 124px;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.image-with-progress img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.progress-bar {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 4px;
+  width: 100%;
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+.progress-bar::after {
+  content: '';
+  position: absolute;
+  height: 100%;
+  left: 0;
+  top: 0;
+  background-color: #00FFCC;
+  width: var(--progress, 0%);
+  transition: width 0.3s ease;
+}
+
+/* Footer */
+.footer {
+  width: 100%;              /* Sørger for full bredde */
+  margin-top: 50px;
+  padding: 30px 20px 15px;
+  text-align: center;
+  background: None;      /* Lysere bakgrunn enn hovedsiden */
+  box-sizing: border-box;
+}
+
+
+.footer-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+
+.footer-logo {
+  width: 120px;
+  opacity: 0.9;
+}
+
+.footer-links {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 15px;
+}
+
+.footer-links a {
+  color: #b1b1b1;
+  font-size: 14px;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.footer-links a:hover {
+  color: #00FFCC;
+}
+
+.footer-copy {
+  font-size: 13px;
+  color: #888;
+  margin-top: 8px;
+}
+
+/* Sjanger-galleri */
+.genre-gallery a {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-width: 160px;
+  height: 60px;
+  border-radius: 30px;
+  background: #0d2c30;
+  color: white;
+  font-size: 16px;
+  font-weight: bold;
+  text-decoration: none;
+  border: 2px solid transparent;
+  transition: all 0.3s ease;
+  padding: 0 18px;
+}
+
+.genre-gallery a i {
+  margin-left: 8px;
+  font-size: 18px;
+}
+
+.genre-gallery a:hover {
+  border: 2px solid #00FFCC;
+  box-shadow: 0 0 10px rgba(0, 255, 204, 0.6);
+  transform: scale(1.05);
+  color: #00FFCC;
+}
+
+/* Kommende filmer – horisontalt galleri */
+.coming-soon-gallery {
+  display: flex;
+  gap: 12px;
+  padding: 10px 16px;
+}
+
+.coming-card {
+  display: flex;
+  flex-direction: row; /* bilde til venstre, tekst til høyre */
+  align-items: center;
+  min-width: 280px;
+  background: none;
+  border-radius: 8px;
+  padding: 8px;
+  gap: 10px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.coming-card img {
+  width: 80px;    
+  height: 120px;  
+  object-fit: cover;
+  border-radius: 4px;
+  flex-shrink: 0;
+}
+
+.coming-info {
+  flex: 1;
+  max-width: 200px;   
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  overflow: hidden;   
+  word-wrap: break-word; 
+}
+
+.coming-info h3 {
+  font-size: 16px;
+  margin-bottom: 4px;
+  color: #fff;
+}
+
+.coming-info .date {
+  font-size: 13px;
+  color: #00FFCC;
+  margin-bottom: 4px;
+}
+
+.coming-info .desc {
+  font-size: 13px;
+  color: #b1b1b1;
+  line-height: 1.3;
+}
+
+/* ===== Mobilvennlig tilpasning ===== */
+@media (max-width: 768px) {
+  .vertical-nav {
+    width: 100%;
+    height: 60px;
+    flex-direction: row;
+    justify-content: space-around;
+    position: fixed;
+    bottom: 0;
+    top: auto;
+    background: rgba(9, 27, 30, 0.95);
+  }
+
+  .nav-icons-wrapper {
+    flex-direction: row;
+    gap: 20px;
+  }
+
+  .profilmeny {
+    margin-bottom: 0;
+  }
+
+  .nav-icon {
+    font-size: 20px;
+    padding: 8px;
+  }
+
+  main {
+    margin-left: 0;
+    margin-bottom: 70px;
+    padding: 10px;
+  }
+
+  .top-header {
+    flex-direction: row; /* logo til venstre på mobil */
+  }
+
+  .top-header .watch-logo {
+    width: 140px;
+  }
+
+  .header-profil {
+    display: block;
+  }
+
+  .vertical-nav .profilmeny {
+    display: none; /* skjul i bunnmenyen */
+  }
+
+  .hero-banner {
+    height: 200px;
+    margin-left: 0;
+    width: 100%;
+  }
+
+  .film-logo {
+    width: 180px;
+  }
+
+  .watch-button {
+    padding: 8px 30px;
+    font-size: 14px;
+  }
+
+  .image-gallery a img,
+  .image-with-progress {
+    width: 160px;
+    height: 90px;
+  }
+
+  .genre-gallery a {
+    min-width: 120px;
+    height: 50px;
+    font-size: 14px;
+    padding: 0 12px;
+  }
+
+  .footer {
+    font-size: 12px;
+    padding: 20px 10px;
+  }
+
+  .footer-logo {
+    width: 100px;
+  }
+}
+
+@media (max-width: 480px) {
+  .film-logo {
+    width: 140px;
+  }
+
+  .watch-button {
+    padding: 6px 20px;
+    font-size: 12px;
+  }
+
+  .image-gallery a img,
+  .image-with-progress {
+    width: 130px;
+    height: 72px;
+  }
+
+  .genre-gallery a {
+    font-size: 12px;
+    min-width: 100px;
+    height: 44px;
+  }
+
+  .footer {
+    font-size: 11px;
+    padding: 15px 5px;
+  }
+
+  .footer-logo {
+    width: 80px;
+  }
+}
+
+
+</style>
 </head>
 <body>
-
-  <!-- === NAVIGASJON === -->
-  <div class="vertical-nav">
+  <div class="vertical-nav" id="verticalNav">
     <div class="nav-icons-wrapper">
       <div class="profilmeny" onclick="gåTilKonto()">
         <img id="menyProfilbilde" src="https://via.placeholder.com/100" alt="Min profil" />
       </div>
-      <a href="Søk.html" class="nav-icon"><i class="fas fa-search"></i></a>
-      <a href="Hovedside.html" class="nav-icon active"><i class="fas fa-house"></i></a>
-      <a href="Film.html" class="nav-icon"><i class="fas fa-film"></i></a>
-      <a href="Serier.html" class="nav-icon"><i class="fas fa-tv"></i></a>
-      <a href="Min-Liste.html" class="nav-icon"><i class="fas fa-bookmark"></i></a>
+      <a href="Søk.html" class="nav-icon" title="Søk"><i class="fas fa-search"></i></a>
+      <a href="Hovedside.html" class="nav-icon active" title="Hjem"><i class="fas fa-house"></i></a>
+      <a href="Film.html" class="nav-icon" title="Film"><i class="fas fa-film"></i></a>
+      <a href="Serier.html" class="nav-icon" title="Serier"><i class="fas fa-tv"></i></a>
+      <a href="Min-Liste.html" class="nav-icon" title="Min liste"><i class="fas fa-bookmark"></i></a>
     </div>
   </div>
 
   <main>
     <div class="content-wrapper">
-
-      <!-- === TOP HEADER === -->
       <div class="top-header">
         <img class="watch-logo" src="https://static.wixstatic.com/media/fd2fb2_a4b2ace62dff4605a0387f46aad8a404~mv2.png" alt="Watch Logo" />
         <div class="profilmeny header-profil" onclick="gåTilKonto()">
@@ -110,206 +600,234 @@
         </div>
       </div>
 
-      <!-- === HERO === -->
+      <!-- Hero Banner -->
       <section class="hero-banner">
         <img class="banner-image" src="https://images.justwatch.com/backdrop/302954938/s640/olsenbanden-siste-skrik" alt="Film Banner">
         <div class="banner-content">
           <img class="film-logo" src="https://static.wixstatic.com/media/fd2fb2_8511f368adb94b0f861f4ee2485d04de~mv2.png" alt="Film Logo">
         </div>
       </section>
+     
+    <section class="gallery-section">
+      <h2>Nye filmer på Watch</h2>
+      <div class="gallery-wrapper">
+        <div class="fade-left"></div>
+        <button class="scroll-button left" onclick="scrollGallery(this, -1)">❮</button>
+       <div class="image-gallery">
+  <a href="film.html?navn=mummitrollet-på-rivieraen"><img src="https://static.wixstatic.com/media/fd2fb2_591857f6d2d643e9be3de342acde9761~mv2.jpg" alt="Mummitrollet på Rivieraen"></a>
+  <a href="film.html?navn=smurfs"><img src="https://hype.my/wp-content/uploads/2025/07/Smurfs-Header.png" alt="Smurfs"></a>
+  <a href="film.html?navn=max-manus"><img src="https://i-viaplay-com.akamaized.net/viaplay-prod/715/824/1635457989-6442d347e20c906721b462aa98a8195bb362abba.jpg?width=448&height=252" alt="Max Manus"></a>
+  <a href="film.html?navn=kongens-nei"><img src="https://i-viaplay-com.akamaized.net/viaplay-prod/440/136/1481804637-d3396e82d915956b7b435991d4b13d7b0113256a.jpg?width=448&height=252" alt="Kongens nei"></a>
+  <a href="film.html?navn=comet-in-moominland"><img src="https://static.wixstatic.com/media/fd2fb2_0639d85789b84e0b84e29d09a21632e2~mv2.jpg" alt="Comet in Moominland"></a>
+  <a href="film.html?navn=elio"><img src="https://disney.images.edge.bamgrid.com/ripcut-delivery/v2/variant/disney/ea82917b-65b0-4634-8943-6f13d5a8b368/compose?aspectRatio=1.78&format=webp&width=1200" alt="Elio"></a>
+   <a href="film.html?navn=dog-man"><img src="https://m.media-amazon.com/images/S/pv-target-images/44839e4a60bb8205258ba5fb43d1369c8a3cdd27f628692f6d0bd5c6c0c35ca6.jpg" alt="Dog man"></a>
+  <a href="film.html?navn=bamse-og-dunderklokken"><img src="https://beam-images.warnermediacdn.com/BEAM_LWM_DELIVERABLES/dbc86275-72ef-4012-a80e-4851224eb8bf/b00246ed-8e34-466b-84cd-340c02e2c6b1?host=wbd-images.prod-vod.h264.io&partner=beamcom&w=500" alt="Bamse og Dunderklokkene"></a>
+  <a href="film.html?navn=dyrene-i-hakkabakkeskogen"><img src="https://is1-ssl.mzstatic.com/image/thumb/Video113/v4/b1/96/ac/b196acbf-3010-b760-3193-702c340000f0/1181928424-WW-AMP_SF.lsr/1200x675.jpg" alt="Dyrene i Hakkebakkeskogen"></a>
+  <a href="film.html?navn=jul-i-flåklypa"><img src="https://sumo.cdn.tv2.no/imageapi/v3/img/5dbc0a4f498e1dc3eb8394b3-1700644038168" alt="Jul I Flåklypa"></a>
+  <a href="film.html?navn=burlesque"><img src="https://static.wixstatic.com/media/fd2fb2_c85b71dfd8bc4cc6ae7ac39b8513370d~mv2.jpg" alt="burlesque"></a>
+</div>
 
-      <!-- === GALLERIER === -->
-      <section class="gallery-section" id="nye-filmer">
-        <h2>Nye filmer på Watch</h2>
-        <div class="gallery-wrapper">
-          <button class="scroll-button left">❮</button>
-          <div class="image-gallery"></div>
-          <button class="scroll-button right">❯</button>
-          <div class="fade-left"></div>
-          <div class="fade-right"></div>
-        </div>
-      </section>
+        <button class="scroll-button right" onclick="scrollGallery(this, 1)">❯</button>
+        <div class="fade-right"></div>
+      </div>
 
-      <section class="gallery-section" id="populære">
-        <h2>Populære nå</h2>
-        <div class="gallery-wrapper">
-          <button class="scroll-button left">❮</button>
-          <div class="image-gallery"></div>
-          <button class="scroll-button right">❯</button>
-          <div class="fade-left"></div>
-          <div class="fade-right"></div>
-        </div>
-      </section>
+    </section>
 
-      <section class="gallery-section" id="kommer-snart">
-        <h2>Kommende filmer</h2>
-        <div class="coming-soon-gallery"></div>
-      </section>
-
-      <section class="gallery-section" id="barn">
-        <h2>Barn</h2>
-        <div class="gallery-wrapper">
-          <button class="scroll-button left">❮</button>
-          <div class="image-gallery"></div>
-          <button class="scroll-button right">❯</button>
-          <div class="fade-left"></div>
-          <div class="fade-right"></div>
-        </div>
-      </section>
-
-      <section class="gallery-section" id="sjangere">
-        <h2>Sjangere</h2>
-        <div class="genre-gallery"></div>
-      </section>
-
-      <!-- === FOOTER === -->
-      <footer class="footer">
-        <img class="footer-logo" src="https://static.wixstatic.com/media/fd2fb2_a4b2ace62dff4605a0387f46aad8a404~mv2.png" alt="Watch Logo" />
-        <div class="footer-links">
-          <a href="#">Om Watch Nordic</a>
-          <a href="#">Personvern</a>
-          <a href="#">Vilkår</a>
-          <a href="#">Hjelp</a>
-        </div>
-        <div class="footer-copy">© 2025 Watch Nordic Group</div>
-      </footer>
-
+   <section class="gallery-section">
+  <h2>Sjangere</h2>
+  <div class="gallery-wrapper">
+    <div class="fade-left"></div>
+    <button class="scroll-button left" onclick="scrollGallery(this, -1)">❮</button>
+    <div class="image-gallery genre-gallery">
+    <a href="sjanger.html?navn=barn">Barn / Familie <i class="fas fa-rocket"></i></a>
+      <a href="sjanger.html?navn=komedie">Komedie <i class="fas fa-laugh"></i></a>
+      <a href="sjanger.html?navn=skrekk">Skrekk <i class="fas fa-ghost"></i></a>
+      <a href="sjanger.html?navn=drama">Drama <i class="fas fa-theater-masks"></i></a>
+      <a href="sjanger.html?navn=romantikk">Romantikk <i class="fas fa-heart"></i></a>
+      <a href="sjanger.html?navn=action">Action <i class="fas fa-bolt"></i></a>
     </div>
-  </main>
+    <button class="scroll-button right" onclick="scrollGallery(this, 1)">❯</button>
+    <div class="fade-right"></div>
+  </div>
+</section>
 
-<script type="module">
-import { filmer } from "./Filmdata.js";
 
-// === AUTENTISERING ===
+    
+
+      <section class="gallery-section">
+      <h2>Populære nå</h2>
+      <div class="gallery-wrapper">
+        <div class="fade-left"></div>
+        <button class="scroll-button left" onclick="scrollGallery(this, -1)">❮</button>
+        <div class="image-gallery">
+  <a href="film.html?navn=dyrene-i-hakkabakkeskogen"><img src="https://is1-ssl.mzstatic.com/image/thumb/Video113/v4/b1/96/ac/b196acbf-3010-b760-3193-702c340000f0/1181928424-WW-AMP_SF.lsr/1200x675.jpg" alt="Dog Man"></a>
+  <a href="film.html?navn=jul-i-flåklypa"><img src="https://sumo.cdn.tv2.no/imageapi/v3/img/5dbc0a4f498e1dc3eb8394b3-1700644038168" alt="Dog Man"></a>
+  <a href="film.html?navn=corpse-bride"><img src="https://is1-ssl.mzstatic.com/image/thumb/Video124/v4/4b/f6/66/4bf66634-eace-f237-8991-a383189e2b03/pr_source.lsr/392x220.webp" alt="Corpse Bride"></a>
+  <a href="film.html?navn=kaptein-sabeltann"><img src="https://beam-images.warnermediacdn.com/BEAM_LWM_DELIVERABLES/500cfa5c-264b-4366-9264-342b1569605e/32dcbd1e-b23c-4acd-ba97-2e6b6a42a620?host=wbd-images.prod-vod.h264.io&partner=beamcom&w=500" alt="Kaptein Sabeltann"></a>
+  <a href="film.html?navn=hook"><img src="https://static.wixstatic.com/media/fd2fb2_3b5f5cd114b746e8b05881724a22a0e5~mv2.jpg" alt="Hook"></a>
+        </div>
+        <button class="scroll-button right" onclick="scrollGallery(this, 1)">❯</button>
+        <div class="fade-right"></div>
+      </div>
+    </section>
+
+<section class="gallery-section">
+  <h2>Kommende filmer</h2>
+  <div class="gallery-wrapper">
+    <div class="fade-left"></div>
+    <button class="scroll-button left" onclick="scrollGallery(this, -1)">❮</button>
+
+    <div class="image-gallery coming-soon-gallery">
+
+        <!-- Film 1 -->
+      <div class="coming-card">
+        <img src="https://images-prod.ai.tv2.no/v2/image-packs/pfimg_pack_01k4x47bkjfh49pt3vs51bnwxm?location=moviePoster&width=672" alt="Dune Part Two">
+        <div class="coming-info">
+           <p class="date">23. sep. 2025</p>
+          <h3>Olsenbanden – siste skrik</h3>
+          <p class="desc">Egon, Benny og Kjell er stadig på jakt etter store kuppet.</p>
+        </div>
+      </div>
+
+       <!-- Film 2 -->
+      <div class="coming-card">
+        <img src="https://images-prod.ai.tv2.no/v2/image-packs/pfimg_pack_01k4cxrc3wfs19b23b0yg60xae?location=moviePoster&width=672" alt="Avatar 3">
+        <div class="coming-info">
+          <p class="date"> 25. Okt. 2025</p>
+          <h3>Sauen Shaun – Filmen</h3>
+          <p class="desc">Den lure sauen Shaun og flokken hans under tilsyn av bonden og gjeterhunden, Blitzer.</p>
+        </div>
+      </div>
+    </div>
+
+    <button class="scroll-button right" onclick="scrollGallery(this, 1)">❯</button>
+    <div class="fade-right"></div>
+  </div>
+</section>
+
+        <section class="gallery-section">
+      <h2>Barn</h2>
+      <div class="gallery-wrapper">
+        <div class="fade-left"></div>
+        <button class="scroll-button left" onclick="scrollGallery(this, -1)">❮</button>
+       <div class="image-gallery">
+  <a href="film.html?navn=comet-in-moominland"><img src="https://static.wixstatic.com/media/fd2fb2_0639d85789b84e0b84e29d09a21632e2~mv2.jpg" alt="Comet in Moominland"></a>
+  <a href="film.html?navn=elio"><img src="https://disney.images.edge.bamgrid.com/ripcut-delivery/v2/variant/disney/ea82917b-65b0-4634-8943-6f13d5a8b368/compose?aspectRatio=1.78&format=webp&width=1200" alt="Elio"></a>
+   <a href="film.html?navn=dog-man"><img src="https://m.media-amazon.com/images/S/pv-target-images/44839e4a60bb8205258ba5fb43d1369c8a3cdd27f628692f6d0bd5c6c0c35ca6.jpg" alt="Dog man"></a>
+  <a href="film.html?navn=bamse-og-dunderklokken"><img src="https://beam-images.warnermediacdn.com/BEAM_LWM_DELIVERABLES/dbc86275-72ef-4012-a80e-4851224eb8bf/b00246ed-8e34-466b-84cd-340c02e2c6b1?host=wbd-images.prod-vod.h264.io&partner=beamcom&w=500" alt="Bamse og Dunderklokkene"></a>
+  <a href="film.html?navn=dyrene-i-hakkabakkeskogen"><img src="https://is1-ssl.mzstatic.com/image/thumb/Video113/v4/b1/96/ac/b196acbf-3010-b760-3193-702c340000f0/1181928424-WW-AMP_SF.lsr/1200x675.jpg" alt="Dyrene i Hakkebakkeskogen"></a>
+  <a href="film.html?navn=jul-i-flåklypa"><img src="https://sumo.cdn.tv2.no/imageapi/v3/img/5dbc0a4f498e1dc3eb8394b3-1700644038168" alt="Jul I Flåklypa"></a>
+</div>
+
+        <button class="scroll-button right" onclick="scrollGallery(this, 1)">❯</button>
+        <div class="fade-right"></div>
+      </div>
+
+        </section>
+    
+
+<footer class="footer">
+  <div class="footer-content">
+    <img class="footer-logo" src="https://static.wixstatic.com/media/fd2fb2_a4b2ace62dff4605a0387f46aad8a404~mv2.png" alt="Watch Logo" />
+    
+    <div class="footer-links">
+      <a href="Om Watch Nordic">Om Watch Nordic</a>
+      <a href="personvern.html">Personvern</a>
+      <a href="vilkar.html">Vilkår for bruk</a>
+      <a href="hjelp.html">Hjelp</a>
+    </div>
+  </div>
+  
+  <div class="footer-copy">
+    © 2025 Watch Nordic Group
+  </div>
+</footer>
+
+
+</main>
+<script>
+// ==================== AUTENTISERING ==================== //
 const epost = localStorage.getItem("epost");
 const passord = localStorage.getItem("passord");
-if (!epost || !passord) window.location.href = "Starts side.html";
+
+// Hvis ingen epost/passord er lagret, send brukeren tilbake til startsiden
+if (!epost || !passord) {
+  window.location.href = "Starts side.html";
+}
+
+// Lytt etter endringer i localStorage (f.eks. hvis brukeren logger ut i en annen fane)
 window.addEventListener("storage", () => {
   if (!localStorage.getItem("epost") || !localStorage.getItem("passord")) {
     window.location.href = "Starts side.html";
   }
 });
 
-// === NAVIGASJON ===
-function gåTilKonto() { window.location.href = "konto.html"; }
-window.gåTilKonto = gåTilKonto;
-
-// === PROFILBILDE ===
-const lagretBilde = localStorage.getItem("profilbilde");
-if (lagretBilde) {
-  document.getElementById("menyProfilbilde").src = lagretBilde;
-  document.getElementById("headerProfilbilde").src = lagretBilde;
+// ==================== NAVIGASJON ==================== //
+function gåTilKonto() {
+  window.location.href = "konto.html";
 }
 
-// === GALLERI SCROLL ===
-function initScroll(wrapper) {
+// ==================== PROFILBILDE ==================== //
+// Hent profilbilde fra localStorage
+const lagretBilde = localStorage.getItem("profilbilde");
+if (lagretBilde) {
+  // Oppdater meny-profil
+  const menyProfil = document.getElementById("menyProfilbilde");
+  if (menyProfil) menyProfil.src = lagretBilde;
+
+  // Oppdater header-profil (på mobil)
+  const headerProfil = document.getElementById("headerProfilbilde");
+  if (headerProfil) headerProfil.src = lagretBilde;
+}
+
+// ==================== GALLERI-SCROLL ==================== //
+document.querySelectorAll(".gallery-wrapper").forEach(wrapper => {
   const gallery = wrapper.querySelector(".image-gallery");
   const leftBtn = wrapper.querySelector(".scroll-button.left");
   const rightBtn = wrapper.querySelector(".scroll-button.right");
   const fadeLeft = wrapper.querySelector(".fade-left");
   const fadeRight = wrapper.querySelector(".fade-right");
 
+  // Funksjon for å oppdatere knappene og fade-effektene
   function updateScrollState() {
     const scrollLeft = gallery.scrollLeft;
     const maxScroll = gallery.scrollWidth - gallery.clientWidth;
-    leftBtn.style.display = scrollLeft <= 0 ? "none" : "block";
-    rightBtn.style.display = scrollLeft >= maxScroll ? "none" : "block";
-    fadeLeft.style.display = scrollLeft <= 0 ? "none" : "block";
-    fadeRight.style.display = scrollLeft >= maxScroll ? "none" : "block";
+
+    if (leftBtn) leftBtn.classList.toggle("hidden", scrollLeft <= 0);
+    if (rightBtn) rightBtn.classList.toggle("hidden", scrollLeft >= maxScroll);
+    if (fadeLeft) fadeLeft.classList.toggle("fade-hidden", scrollLeft <= 0);
+    if (fadeRight) fadeRight.classList.toggle("fade-hidden", scrollLeft >= maxScroll);
   }
 
-  leftBtn.addEventListener("click", () => gallery.scrollBy({ left: -300, behavior: "smooth" }));
-  rightBtn.addEventListener("click", () => gallery.scrollBy({ left: 300, behavior: "smooth" }));
+  // Scroll med knappene
+  if (leftBtn) {
+    leftBtn.addEventListener("click", () => {
+      gallery.scrollBy({ left: -300, behavior: "smooth" });
+    });
+  }
+  if (rightBtn) {
+    rightBtn.addEventListener("click", () => {
+      gallery.scrollBy({ left: 300, behavior: "smooth" });
+    });
+  }
+
+  // Oppdater status ved scrolling
   gallery.addEventListener("scroll", updateScrollState);
+
+  // Initielt oppsett
   updateScrollState();
-}
+});
 
-document.querySelectorAll(".gallery-wrapper").forEach(initScroll);
-
-// === FILMDATA FRA Filmdata.js ===
-const filmListe = Object.entries(filmer).map(([id, f]) => ({ id, ...f }));
-
-function lagFilmLenke(film) {
-  const a = document.createElement("a");
-  a.href = film.watchUrl || `film.html?id=${film.id}`;
-  const img = document.createElement("img");
-  img.src = film.poster || film.posterVertikal || film.bakgrunn;
-  img.alt = film.tittel;
-  a.appendChild(img);
-  return a;
-}
-
-// === Nye filmer ===
-const nyeGalleri = document.querySelector("#nye-filmer .image-gallery");
-filmListe
-  .filter(f => !f.kommer)
-  .sort((a, b) => new Date(b.metadata?.[1] || 0) - new Date(a.metadata?.[1] || 0))
-  .slice(0, 12)
-  .forEach(f => nyeGalleri.appendChild(lagFilmLenke(f)));
-
-// === Populære ===
-const popGalleri = document.querySelector("#populære .image-gallery");
-filmListe
-  .sort((a, b) => (b.popularitet || 0) - (a.popularitet || 0))
-  .slice(0, 12)
-  .forEach(f => popGalleri.appendChild(lagFilmLenke(f)));
-
-// === Kommer snart ===
-const kommGalleri = document.querySelector("#kommer-snart .coming-soon-gallery");
-filmListe
-  .filter(f => f.kommer)
-  .forEach(f => {
-    const card = document.createElement("div");
-    card.className = "coming-card";
-    card.innerHTML = `
-      <img src="${f.poster || f.posterVertikal || f.bakgrunn}" alt="${f.tittel}">
-      <div class="coming-info">
-        <p class="date">${f.metadata?.[1] || ""}</p>
-        <h3>${f.tittel}</h3>
-        <p>${f.beskrivelse || ""}</p>
-      </div>`;
-    kommGalleri.appendChild(card);
-  });
-
-// === Barn ===
-const barnGalleri = document.querySelector("#barn .image-gallery");
-filmListe
-  .filter(f => (f.metadata || []).some(m => /barn|animasjon/i.test(m)))
-  .forEach(f => barnGalleri.appendChild(lagFilmLenke(f)));
-
-// === Sjangere ===
-const sjangerContainer = document.querySelector("#sjangere .genre-gallery");
-sjangerContainer.innerHTML = ""; // tømmes først
-
-const alleSjangere = [...new Set(
-  filmListe.flatMap(f => f.metadata || [])
-    .filter(m => /action|komedie|drama|grøsser|barn|fantasi|thriller|romantikk/i.test(m.toLowerCase()))
-)];
-
-alleSjangere.forEach(sjanger => {
-  const section = document.createElement("div");
-  section.className = "gallery-section";
-
-  section.innerHTML = `
-    <h2>${sjanger}</h2>
-    <div class="gallery-wrapper">
-      <button class="scroll-button left">❮</button>
-      <div class="image-gallery"></div>
-      <button class="scroll-button right">❯</button>
-      <div class="fade-left"></div>
-      <div class="fade-right"></div>
-    </div>
-  `;
-
-  const galleri = section.querySelector(".image-gallery");
-  filmListe
-    .filter(f => (f.metadata || []).some(m => m.toLowerCase().includes(sjanger.toLowerCase())))
-    .forEach(f => galleri.appendChild(lagFilmLenke(f)));
-
-  initScroll(section.querySelector(".gallery-wrapper"));
-  sjangerContainer.appendChild(section);
+// ==================== FREMDIRFTSLINJER ==================== //
+// Oppdater fremdriftslinjer dynamisk basert på data-progress attributt
+document.querySelectorAll(".progress-bar").forEach(bar => {
+  const progress = bar.getAttribute("data-progress");
+  if (progress) {
+    bar.style.setProperty("--progress", progress + "%");
+  }
 });
 </script>
 
-</body>
-</html>
+
+
+
