@@ -645,7 +645,7 @@ function renderGallery(galleryId, filterFunction) {
   if (!gallery) return;
 
   // Clear existing content
-  gallery.innerHTML = '''''';
+  gallery.innerHTML = '';
 
   const filmKeys = Object.keys(filmer);
   const filteredKeys = filterFunction ? filmKeys.filter(filterFunction) : filmKeys;
@@ -741,7 +741,6 @@ document.querySelectorAll(".progress-bar").forEach(bar => {
 
 </body>
 </html>
-
 
 
 
