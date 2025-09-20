@@ -608,6 +608,7 @@ main {
         </div>
       </section>
      
+<!-- Nye filmer -->
 <section class="gallery-section">
   <h2>Nye filmer på Watch</h2>
   <div class="gallery-wrapper">
@@ -617,6 +618,7 @@ main {
     <button class="scroll-button right">❯</button>
     <div class="fade-right"></div>
   </div>
+
         <button class="scroll-button right" onclick="scrollGallery(this, 1)">❯</button>
         <div class="fade-right"></div>
       </div>
@@ -644,7 +646,8 @@ main {
 
     
 
-     <section class="gallery-section">
+   <!-- Populære nå -->
+<section class="gallery-section">
   <h2>Populære nå</h2>
   <div class="gallery-wrapper">
     <div class="fade-left"></div>
@@ -658,6 +661,7 @@ main {
       </div>
     </section>
 
+<!-- Kommende filmer -->
 <section class="gallery-section">
   <h2>Kommende filmer</h2>
   <div class="gallery-wrapper">
@@ -673,7 +677,8 @@ main {
   </div>
 </section>
 
-       <section class="gallery-section">
+    <!-- Barn -->
+<section class="gallery-section">
   <h2>Barn</h2>
   <div class="gallery-wrapper">
     <div class="fade-left"></div>
@@ -846,6 +851,7 @@ document.querySelectorAll(".progress-bar").forEach(bar => {
     .filter(f => f.sjanger && f.sjanger.includes("barn"))
     .forEach(f => barn.appendChild(lagFilmLenke(f)));
 </script>
+
 
 
 
