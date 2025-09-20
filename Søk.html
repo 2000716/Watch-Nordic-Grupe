@@ -116,8 +116,8 @@
         const card = document.createElement("div");
         card.className = "film-card";
         card.innerHTML = `<img src="${data.poster || 'default-poster.jpg'}" alt="${data.tittel}">`;
-        // Klikk fører til film.html?id=<filmNavn>
-        card.addEventListener("click", () => window.location.href = `film.html?id=${filmNavn}`);
+        // Klikk fører til film.html?navn=<filmNavn>
+        card.addEventListener("click", () => window.location.href = `film.html?navn=${filmNavn}`);
         filmGrid.appendChild(card);
       }
     });
