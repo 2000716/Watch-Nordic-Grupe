@@ -113,7 +113,7 @@ h1 {
   display: flex; 
   flex-wrap: wrap; 
   gap: 20px; 
-  justify-content: center; /* sentrerer alle filmkort */
+  justify-content: center; /* sentrerer filmkort */
   align-items: flex-start;
 }
 
@@ -159,7 +159,6 @@ h1 {
 .footer a:hover { 
   color: #00FFCC; 
 }
-
   </style>
 </head>
 <body>
@@ -206,25 +205,29 @@ h1 {
   // Last tidligere søk fra localStorage
   let tidligereSøk = JSON.parse(localStorage.getItem("tidligereSøk")) || [];
 
+  // Slett søk eldre enn 48 timer
+  const nå = Date.now();
+  tidligereSøk = tidligereSøk.filter(item => nå - item.timestamp < 48 * 60 * 60 * 1000);
+  localStorage.setItem("tidligereSøk", JSON.stringify(tidligereSøk));
+
   // Funksjon for å vise filmer
   function visFilmer(filmListe) {
     filmGrid.innerHTML = "";
     if (filmListe.length === 0) return;
-    filmListe.forEach(filmNavn => {
+    filmListe.forEach(obj => {
+      const filmNavn = obj.navn || obj; // kompatibilitet
       const data = filmer[filmNavn];
       if (data) {
         const card = document.createElement("div");
         card.className = "film-card";
         card.innerHTML = `<img src="${data.poster || 'default-poster.jpg'}" alt="${data.tittel}">`;
-        // Klikk fører til film.html?navn=<filmNavn>
         card.addEventListener("click", () => window.location.href = `film.html?navn=${filmNavn}`);
         filmGrid.appendChild(card);
       }
     });
   }
 
-  // Vis tidligere søk først
-  filmGrid.style.justifyContent = "flex-start";
+  // Vis tidligere søk først (sentrert)
   visFilmer(tidligereSøk);
 
   // Søke-funksjon
@@ -235,7 +238,6 @@ h1 {
       return;
     }
 
-    // Finn filmer som matcher søket
     const treff = Object.keys(filmer).filter(filmNavn => {
       const data = filmer[filmNavn];
       return (
@@ -246,12 +248,12 @@ h1 {
       );
     });
 
-    visFilmer(treff);
+    visFilmer(treff.map(navn => ({ navn })));
 
     // Oppdater tidligere søk
     treff.forEach(filmNavn => {
-      if (!tidligereSøk.includes(filmNavn)) {
-        tidligereSøk.unshift(filmNavn);
+      if (!tidligereSøk.some(item => item.navn === filmNavn)) {
+        tidligereSøk.unshift({ navn: filmNavn, timestamp: Date.now() });
       }
     });
 
