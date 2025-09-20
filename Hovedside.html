@@ -1,4 +1,4 @@
- <DOCTYPE html>
+<DOCTYPE html>
 <html lang="no">
 <head>
   <meta charset="UTF-8" />
@@ -8,12 +8,11 @@
   <link rel="icon" type="image/png" href="https://static.wixstatic.com/media/fd2fb2_39376e4ee55b460ab7a3ebbfcf35fef7~mv2.png" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
 
-<style> * { box-sizing: border-box; margin: 0; padding: 0; }
-
-* { 
-  box-sizing: border-box; 
-  margin: 0; 
-  padding: 0; 
+<style>
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
 html, body {
@@ -94,7 +93,6 @@ main {
   justify-content: space-between;
   align-items: center;
   margin-bottom: 20px;
-  flex-direction: row-reverse; /* logo til høyre på desktop */
 }
 
 .top-header .watch-logo {
@@ -324,40 +322,22 @@ main {
 
 /* Footer */
 .footer {
-  width: 100%;              /* Sørger for full bredde */
-  margin-top: 50px;
-  padding: 30px 20px 15px;
+  margin-top: 40px;
+  padding: 20px 10px;
   text-align: center;
-  background: None;      /* Lysere bakgrunn enn hovedsiden */
-  box-sizing: border-box;
-}
-
-
-.footer-content {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 12px;
-  margin-bottom: 10px;
-}
-
-.footer-logo {
-  width: 120px;
-  opacity: 0.9;
+  color: #515151;
+  font-size: 14px;
 }
 
 .footer-links {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 15px;
+  margin-bottom: 10px;
 }
 
 .footer-links a {
   color: #b1b1b1;
-  font-size: 14px;
+  margin: 0 10px;
   text-decoration: none;
-  transition: color 0.3s ease;
+  transition: color 0.2s ease;
 }
 
 .footer-links a:hover {
@@ -366,8 +346,7 @@ main {
 
 .footer-copy {
   font-size: 13px;
-  color: #888;
-  margin-top: 8px;
+  color: #00FFCC;
 }
 
 /* Sjanger-galleri */
@@ -398,61 +377,6 @@ main {
   box-shadow: 0 0 10px rgba(0, 255, 204, 0.6);
   transform: scale(1.05);
   color: #00FFCC;
-}
-
-/* Kommende filmer – horisontalt galleri */
-.coming-soon-gallery {
-  display: flex;
-  gap: 12px;
-  padding: 10px 16px;
-}
-
-.coming-card {
-  display: flex;
-  flex-direction: row; /* bilde til venstre, tekst til høyre */
-  align-items: center;
-  min-width: 280px;
-  background: none;
-  border-radius: 8px;
-  padding: 8px;
-  gap: 10px;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.coming-card img {
-  width: 80px;    
-  height: 120px;  
-  object-fit: cover;
-  border-radius: 4px;
-  flex-shrink: 0;
-}
-
-.coming-info {
-  flex: 1;
-  max-width: 200px;   
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  overflow: hidden;   
-  word-wrap: break-word; 
-}
-
-.coming-info h3 {
-  font-size: 16px;
-  margin-bottom: 4px;
-  color: #fff;
-}
-
-.coming-info .date {
-  font-size: 13px;
-  color: #00FFCC;
-  margin-bottom: 4px;
-}
-
-.coming-info .desc {
-  font-size: 13px;
-  color: #b1b1b1;
-  line-height: 1.3;
 }
 
 /* ===== Mobilvennlig tilpasning ===== */
@@ -486,10 +410,6 @@ main {
     margin-left: 0;
     margin-bottom: 70px;
     padding: 10px;
-  }
-
-  .top-header {
-    flex-direction: row; /* logo til venstre på mobil */
   }
 
   .top-header .watch-logo {
@@ -531,15 +451,6 @@ main {
     font-size: 14px;
     padding: 0 12px;
   }
-
-  .footer {
-    font-size: 12px;
-    padding: 20px 10px;
-  }
-
-  .footer-logo {
-    width: 100px;
-  }
 }
 
 @media (max-width: 480px) {
@@ -565,16 +476,10 @@ main {
   }
 
   .footer {
-    font-size: 11px;
+    font-size: 12px;
     padding: 15px 5px;
   }
-
-  .footer-logo {
-    width: 80px;
-  }
 }
-
-
 </style>
 </head>
 <body>
@@ -602,178 +507,100 @@ main {
 
       <!-- Hero Banner -->
       <section class="hero-banner">
-        <img class="banner-image" src="https://images.justwatch.com/backdrop/302954938/s640/olsenbanden-siste-skrik" alt="Film Banner">
+        <img class="banner-image" src="https://static.wixstatic.com/media/fd2fb2_1982414673a94a7b9eb2be3874ff8d8c~mv2.jpg" alt="Film Banner">
         <div class="banner-content">
-          <img class="film-logo" src="https://static.wixstatic.com/media/fd2fb2_8511f368adb94b0f861f4ee2485d04de~mv2.png" alt="Film Logo">
+          <img class="film-logo" src="https://image.tmdb.org/t/p/original/vJ8klKeBNrUkgUq6mnsWHOakgCk.png" alt="Film Logo">
         </div>
       </section>
      
-<section class="gallery-section">
-  <h2>Nye filmer på Watch</h2>
-  <div class="gallery-wrapper">
-    <div class="fade-left"></div>
-    <button class="scroll-button left">❮</button>
-    <div class="image-gallery" id="nye-filmer"></div>
-    <button class="scroll-button right">❯</button>
-    <div class="fade-right"></div>
-  </div>
-
-        <button class="scroll-button right" onclick="scrollGallery(this, 1)">❯</button>
-        <div class="fade-right"></div>
-      </div>
-
-    </section>
-
-   <section class="gallery-section">
-  <h2>Sjangere</h2>
-  <div class="gallery-wrapper">
-    <div class="fade-left"></div>
-    <button class="scroll-button left" onclick="scrollGallery(this, -1)">❮</button>
-    <div class="image-gallery genre-gallery">
-    <a href="sjanger.html?navn=barn">Barn / Familie <i class="fas fa-rocket"></i></a>
-      <a href="sjanger.html?navn=komedie">Komedie <i class="fas fa-laugh"></i></a>
-      <a href="sjanger.html?navn=skrekk">Skrekk <i class="fas fa-ghost"></i></a>
-      <a href="sjanger.html?navn=drama">Drama <i class="fas fa-theater-masks"></i></a>
-      <a href="sjanger.html?navn=romantikk">Romantikk <i class="fas fa-heart"></i></a>
-      <a href="sjanger.html?navn=action">Action <i class="fas fa-bolt"></i></a>
-    </div>
-    <button class="scroll-button right" onclick="scrollGallery(this, 1)">❯</button>
-    <div class="fade-right"></div>
-  </div>
-</section>
-
-
-    
-
-<section class="gallery-section">
-  <h2>Populære nå</h2>
-  <div class="gallery-wrapper">
-    <div class="fade-left"></div>
-    <button class="scroll-button left">❮</button>
-    <div class="image-gallery" id="populære-filmer"></div>
-    <button class="scroll-button right">❯</button>
-    <div class="fade-right"></div>
-  </div>
-        <button class="scroll-button right" onclick="scrollGallery(this, 1)">❯</button>
-        <div class="fade-right"></div>
-      </div>
-    </section>
-
-<section class="gallery-section">
-  <h2>Kommende filmer</h2>
-  <div class="gallery-wrapper">
-    <div class="fade-left"></div>
-    <button class="scroll-button left">❮</button>
-    <div class="image-gallery coming-soon-gallery" id="kommende-filmer"></div>
-    <button class="scroll-button right">❯</button>
-    <div class="fade-right"></div>
-  </div>
-    <button class="scroll-button right" onclick="scrollGallery(this, 1)">❯</button>
-    <div class="fade-right"></div>
-  </div>
-</section>
+      <section class="gallery-section">
+        <h2>Nye filmer på Watch</h2>
+        <div class="gallery-wrapper">
+          <div class="fade-left"></div>
+          <button class="scroll-button left" onclick="scrollGallery(this, -1)">❮</button>
+          <div class="image-gallery" id="nye-filmer-galleri"></div>
+          <button class="scroll-button right" onclick="scrollGallery(this, 1)">❯</button>
+          <div class="fade-right"></div>
+        </div>
+      </section>
 
       <section class="gallery-section">
-  <h2>Barn</h2>
-  <div class="gallery-wrapper">
-    <div class="fade-left"></div>
-    <button class="scroll-button left">❮</button>
-    <div class="image-gallery" id="barn-filmer"></div>
-    <button class="scroll-button right">❯</button>
-    <div class="fade-right"></div>
-  </div>
-        <button class="scroll-button right" onclick="scrollGallery(this, 1)">❯</button>
-        <div class="fade-right"></div>
-      </div>
+        <h2>Sjangere</h2>
+        <div class="gallery-wrapper">
+          <div class="fade-left"></div>
+          <button class="scroll-button left" onclick="scrollGallery(this, -1)">❮</button>
+          <div class="image-gallery genre-gallery">
+            <a href="sjanger.html?navn=barn">Barn / Familie <i class="fas fa-rocket"></i></a>
+            <a href="sjanger.html?navn=komedie">Komedie <i class="fas fa-laugh"></i></a>
+            <a href="sjanger.html?navn=skrekk">Skrekk <i class="fas fa-ghost"></i></a>
+            <a href="sjanger.html?navn=drama">Drama <i class="fas fa-theater-masks"></i></a>
+            <a href="sjanger.html?navn=romantikk">Romantikk <i class="fas fa-heart"></i></a>
+            <a href="sjanger.html?navn=action">Action <i class="fas fa-bolt"></i></a>
+          </div>
+          <button class="scroll-button right" onclick="scrollGallery(this, 1)">❯</button>
+          <div class="fade-right"></div>
+        </div>
+      </section>
 
-        </section>
-    
+      <section class="gallery-section">
+        <h2>Populære nå</h2>
+        <div class="gallery-wrapper">
+          <div class="fade-left"></div>
+          <button class="scroll-button left" onclick="scrollGallery(this, -1)">❮</button>
+          <div class="image-gallery" id="populaere-naa-galleri"></div>
+          <button class="scroll-button right" onclick="scrollGallery(this, 1)">❯</button>
+          <div class="fade-right"></div>
+        </div>
+      </section>
 
-<footer class="footer">
-  <div class="footer-content">
-    <img class="footer-logo" src="https://static.wixstatic.com/media/fd2fb2_a4b2ace62dff4605a0387f46aad8a404~mv2.png" alt="Watch Logo" />
-    
-    <div class="footer-links">
-      <a href="Om Watch Nordic">Om Watch Nordic</a>
-      <a href="personvern.html">Personvern</a>
-      <a href="vilkar.html">Vilkår for bruk</a>
-      <a href="hjelp.html">Hjelp</a>
+      <section class="gallery-section">
+        <h2>Barn</h2>
+        <div class="gallery-wrapper">
+          <div class="fade-left"></div>
+          <button class="scroll-button left" onclick="scrollGallery(this, -1)">❮</button>
+          <div class="image-gallery" id="barn-galleri"></div>
+          <button class="scroll-button right" onclick="scrollGallery(this, 1)">❯</button>
+          <div class="fade-right"></div>
+        </div>
+      </section>
+
+      <section class="gallery-section">
+        <h2>Kommer snart</h2>
+        <div class="gallery-wrapper">
+          <div class="fade-left"></div>
+          <button class="scroll-button left" onclick="scrollGallery(this, -1)">❮</button>
+          <div class="image-gallery" id="kommer-snart-galleri"></div>
+          <button class="scroll-button right" onclick="scrollGallery(this, 1)">❯</button>
+          <div class="fade-right"></div>
+        </div>
+      </section>
     </div>
-  </div>
-  
-  <div class="footer-copy">
-    © 2025 Watch Nordic Group
-  </div>
-</footer>
 
+    <footer class="footer">
+      <div class="footer-links">
+        <a href="kontakt.html">Kontakt oss</a>
+        <a href="personvern.html">Personvern</a>
+        <a href="vilkar.html">Vilkår for bruk</a>
+        <a href="hjelp.html">Hjelp</a>
+      </div>
+      <div class="footer-copy">
+        © 2025 Watch Nordic Grupe
+      </div>
+    </footer>
+  </main>
 
-
-</main>
-
-<script type="module">
-import filmer from "./Filmdata.js";
-
-// ==================== FUNKSJONER ==================== //
-function lagFilmElement(film) {
-  const a = document.createElement("a");
-  a.href = `film.html?navn=${film.navn}`;
-  const img = document.createElement("img");
-  img.src = film.bilde;
-  img.alt = film.tittel;
-  a.appendChild(img);
-  return a;
-}
-
-function lagKommendeElement(film) {
-  const card = document.createElement("div");
-  card.className = "coming-card";
-
-  const img = document.createElement("img");
-  img.src = film.bilde;
-  img.alt = film.tittel;
-
-  const info = document.createElement("div");
-  info.className = "coming-info";
-  info.innerHTML = `
-    <p class="date">${film.dato}</p>
-    <h3>${film.tittel}</h3>
-    <p class="desc">${film.beskrivelse}</p>
-  `;
-
-  card.appendChild(img);
-  card.appendChild(info);
-  return card;
-}
-
-// ==================== FILMSEKSJONER ==================== //
-// Nye filmer (publisert)
-filmer.filter(f => f.publisert && !f.kommer).forEach(film => {
-  document.getElementById("nye-filmer").appendChild(lagFilmElement(film));
-});
-
-// Populære filmer
-filmer.filter(f => f.populær).forEach(film => {
-  document.getElementById("populære-filmer").appendChild(lagFilmElement(film));
-});
-
-// Kommende filmer
-filmer.filter(f => f.kommer).forEach(film => {
-  document.getElementById("kommende-filmer").appendChild(lagKommendeElement(film));
-});
-
-// Barn / Familie
-filmer.filter(f => f.sjanger === "barn").forEach(film => {
-  document.getElementById("barn-filmer").appendChild(lagFilmElement(film));
-});
-
+<script src="Filmdata.js"></script>
+<script>
 // ==================== AUTENTISERING ==================== //
 const epost = localStorage.getItem("epost");
 const passord = localStorage.getItem("passord");
 
+// Hvis ingen epost/passord er lagret, send brukeren tilbake til startsiden
 if (!epost || !passord) {
   window.location.href = "Starts side.html";
 }
 
+// Lytt etter endringer i localStorage (f.eks. hvis brukeren logger ut i en annen fane)
 window.addEventListener("storage", () => {
   if (!localStorage.getItem("epost") || !localStorage.getItem("passord")) {
     window.location.href = "Starts side.html";
@@ -786,14 +613,75 @@ function gåTilKonto() {
 }
 
 // ==================== PROFILBILDE ==================== //
+// Hent profilbilde fra localStorage
 const lagretBilde = localStorage.getItem("profilbilde");
 if (lagretBilde) {
+  // Oppdater meny-profil
   const menyProfil = document.getElementById("menyProfilbilde");
   if (menyProfil) menyProfil.src = lagretBilde;
 
+  // Oppdater header-profil (på mobil)
   const headerProfil = document.getElementById("headerProfilbilde");
   if (headerProfil) headerProfil.src = lagretBilde;
 }
+
+// ==================== DYNAMISK GALLERI-LASTING ==================== //
+function createMovieElement(filmKey, film) {
+  const link = document.createElement('a');
+  link.href = `film.html?navn=${filmKey}`;
+  const img = document.createElement('img');
+  img.src = film.poster;
+  img.alt = film.tittel;
+  link.appendChild(img);
+  return link;
+}
+
+function renderGallery(galleryId, filterFunction) {
+  const gallery = document.getElementById(galleryId);
+  if (!gallery) return;
+
+  // Clear existing content
+  gallery.innerHTML = '';
+
+  const filmKeys = Object.keys(filmer);
+  const filteredKeys = filterFunction ? filmKeys.filter(filterFunction) : filmKeys;
+
+  filteredKeys.forEach(key => {
+    const film = filmer[key];
+    const movieElement = createMovieElement(key, film);
+    gallery.appendChild(movieElement);
+  });
+}
+
+// --- Render "Nye filmer på Watch" ---
+// For now, just show the first 10.
+renderGallery('nye-filmer-galleri', key => Object.keys(filmer).indexOf(key) < 10);
+
+// --- Render "Populære nå" ---
+// For now, let's show a different set of 5 movies.
+renderGallery('populaere-naa-galleri', key => {
+    const index = Object.keys(filmer).indexOf(key);
+    return index >= 10 && index < 15;
+});
+
+// --- Render "Barn" ---
+renderGallery('barn-galleri', key => {
+  const film = filmer[key];
+  return film.metadata.some(meta => meta.toLowerCase().includes('barn') || meta.toLowerCase().includes('familie'));
+});
+
+// --- Render "Kommer snart" ---
+const currentYear = new Date().getFullYear();
+renderGallery('kommer-snart-galleri', key => {
+    const film = filmer[key];
+    const yearString = film.metadata.find(meta => /^\d{4}$/.test(meta));
+    if (yearString) {
+        const year = parseInt(yearString, 10);
+        return year > currentYear;
+    }
+    return false;
+});
+
 
 // ==================== GALLERI-SCROLL ==================== //
 document.querySelectorAll(".gallery-wrapper").forEach(wrapper => {
@@ -803,7 +691,9 @@ document.querySelectorAll(".gallery-wrapper").forEach(wrapper => {
   const fadeLeft = wrapper.querySelector(".fade-left");
   const fadeRight = wrapper.querySelector(".fade-right");
 
+  // Funksjon for å oppdatere knappene og fade-effektene
   function updateScrollState() {
+    if (!gallery) return;
     const scrollLeft = gallery.scrollLeft;
     const maxScroll = gallery.scrollWidth - gallery.clientWidth;
 
@@ -813,26 +703,19 @@ document.querySelectorAll(".gallery-wrapper").forEach(wrapper => {
     if (fadeRight) fadeRight.classList.toggle("fade-hidden", scrollLeft >= maxScroll);
   }
 
-  if (leftBtn) leftBtn.addEventListener("click", () => {
-    gallery.scrollBy({ left: -300, behavior: "smooth" });
-  });
-
-  if (rightBtn) rightBtn.addEventListener("click", () => {
-    gallery.scrollBy({ left: 300, behavior: "smooth" });
-  });
-
-  gallery.addEventListener("scroll", updateScrollState);
-  updateScrollState();
-});
-
-// ==================== FREMDIRFTSLINJER ==================== //
-document.querySelectorAll(".progress-bar").forEach(bar => {
-  const progress = bar.getAttribute("data-progress");
-  if (progress) {
-    bar.style.setProperty("--progress", progress + "%");
+  // Scroll med knappene
+  if (leftBtn) {
+    leftBtn.addEventListener("click", () => {
+      gallery.scrollBy({ left: -300, behavior: "smooth" });
+    });
   }
-});
-</script>
+  if (rightBtn) {
+    rightBtn.addEventListener("click", () => {
+      gallery.scrollBy({ left: 300, behavior: "smooth" });
+    });
+  }
+
+  // Oppdater status ved scrolling
 
 
 
