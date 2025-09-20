@@ -213,6 +213,7 @@ const filmer = {
     tittel: "Olsenbanden – siste skrik",
     bakgrunn: "https://premium.vgc.no/v2/images/36afaa19-0fd7-49de-9935-7a7f935426c6?fit=crop&format=auto&h=1365&w=2048&s=e8b2dd662135d9f6e51e3e133ef829be689b04df",
     logo: "https://static.wixstatic.com/media/fd2fb2_8511f368adb94b0f861f4ee2485d04de~mv2.png",
+    trailer: "https://youtu.be/FvH4FPBQV_8?si=LXiL809t6TLGPyC1", // 🎥 NY
     poster: "https://m.media-amazon.com/images/S/pv-target-images/655d6047ab5856c332c15b8c37193249890ad13bb41e6c93c8acf954b8b07dc9.jpg",
     posterVertikal: "https://images-prod.ai.tv2.no/v2/image-packs/pfimg_pack_01k4x47bkjfh49pt3vs51bnwxm?location=moviePoster&width=672", // portrett
     beskrivelse: "Oslo er blitt en moderne by, men Egon, Benny og Kjell er stadig på jakt etter det store kuppet som skal gjøre dem til millionærer.",
@@ -239,6 +240,7 @@ const filmer = {
     publishDate: "2025-10-25" // ISO datoformat
   },
 };
+
 
 
 
