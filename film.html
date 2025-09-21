@@ -309,10 +309,10 @@ body.loaded {
 /* Anbefalinger */
 .recommendations {
   margin-left: 70px;
-  padding: 40px 60px 60px 60px; /* ekstra padding-bottom for å dekke gap */
+  padding: 40px 60px 60px 60px;
   background: black;
   transition: margin-left 0.3s ease;
-  margin-top: 0; /* fjernet negativ margin */
+  margin-top: 0;
 }
 
 .vertical-nav.collapsed ~ .recommendations {
@@ -333,6 +333,8 @@ body.loaded {
   margin-left: 30px;
   overflow-x: auto;
   padding-bottom: 10px;
+  -webkit-overflow-scrolling: touch;
+  scroll-behavior: smooth;
 }
 
 .gallery::-webkit-scrollbar {
@@ -382,7 +384,7 @@ body.loaded {
   text-align: center;
   padding: 20px 10px;
   font-size: 14px;
-  margin-top: 0; /* fjernet gap */
+  margin-top: 0;
 }
 
 .site-footer a {
@@ -396,6 +398,70 @@ body.loaded {
   color: #fff;
 }
 
+/* === iPad og mindre skjermer === */
+@media (max-width: 1024px) {
+  .vertical-nav {
+    width: 60px;
+    padding-top: 12px;
+  }
+
+  .nav-icon {
+    font-size: 20px;
+    padding: 12px 0;
+  }
+
+  .menu-toggle {
+    width: 45px;
+    height: 100px;
+    font-size: 24px;
+  }
+
+  .hero {
+    margin-left: 60px;
+  }
+
+  .content-wrapper {
+    top: 40px;
+    left: 20px;
+    right: 20px;
+  }
+
+  .logo-container {
+    width: 200px;
+    height: 80px;
+    margin-bottom: 60px;
+  }
+
+  .left-content {
+    margin-top: 100px;
+  }
+
+  .text-button-container {
+    flex-direction: column;
+    gap: 20px;
+    padding: 20px;
+  }
+
+  .text-container {
+    font-size: 15px;
+  }
+
+  .watch-button {
+    width: 100%;
+    font-size: 16px;
+    padding: 12px 20px;
+  }
+
+  .gallery img {
+    width: 140px;
+    height: 210px;
+  }
+
+  .video-controls button {
+    font-size: 24px;
+    padding: 14px 18px;
+  }
+}
   </style>
 </head>
 <body>
@@ -471,6 +537,7 @@ body.loaded {
 
 <script src="Filmdata.js"></script>
 <script>
+/* === JS beholdt som i original === */
 const params = new URLSearchParams(window.location.search);
 const filmNavn = params.get("navn");
 const data = filmer[filmNavn];
@@ -633,9 +700,9 @@ window.addEventListener('DOMContentLoaded', () => {
 function hentTilfeldigeFilmer(antall) {
   const now = new Date();
   const alleFilmer = Object.keys(filmer).filter(f => {
-    if (f === filmNavn) return false; // ikke vis samme film
+    if (f === filmNavn) return false;
     const film = filmer[f];
-    if (film.publishDate && new Date(film.publishDate) > now) return false; // skjul framtidige
+    if (film.publishDate && new Date(film.publishDate) > now) return false;
     return true;
   });
 
@@ -709,7 +776,8 @@ if (data.trailer && data.trailer.trim() !== "") {
 }
 </script>
 
-
+</body>
+</html>
 
 
 
