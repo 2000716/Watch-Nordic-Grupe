@@ -385,7 +385,7 @@ main {
 
 .coming-movie-item {
   display: flex;
-  align-items: center;
+  align-items: flex-start; /* Teksten øverst */
   gap: 16px;
   background: #0d2c30;
   border-radius: 12px;
@@ -393,7 +393,11 @@ main {
   border: 2px solid transparent;
   transition: all 0.3s ease;
   width: 320px;
+  cursor: pointer; /* Indikerer at boksen kan klikkes */
+  text-decoration: none; /* Fjern underline på lenken */
+  color: inherit; /* Arver tekstfarge */
 }
+
 
 .coming-movie-item:hover {
   border-color: #00FFCC;
@@ -851,6 +855,7 @@ document.querySelectorAll(".progress-bar").forEach((bar) => {
 </script>
 
  
+
 
 
 
