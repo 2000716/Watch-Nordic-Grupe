@@ -310,7 +310,7 @@ main {
 }
 
 .progress-bar::after {
-  content: '''''';
+  content: '';
   position: absolute;
   height: 100%;
   left: 0;
@@ -377,6 +377,53 @@ main {
   box-shadow: 0 0 10px rgba(0, 255, 204, 0.6);
   transform: scale(1.05);
   color: #00FFCC;
+}
+
+/* ===== NY SEKSJON: Kommende filmer ===== */
+.coming-movies-gallery {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 10px 16px;
+}
+
+.coming-movie-item {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  background: #0d2c30;
+  border-radius: 12px;
+  padding: 10px;
+  border: 2px solid transparent;
+  transition: all 0.3s ease;
+}
+
+.coming-movie-item:hover {
+  border-color: #00FFCC;
+  box-shadow: 0 0 10px rgba(0, 255, 204, 0.4);
+}
+
+.coming-movie-item img {
+  width: 100px;
+  height: 150px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.coming-movie-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.coming-movie-info h3 {
+  margin-bottom: 6px;
+  font-size: 16px;
+  color: #00FFCC;
+}
+
+.coming-movie-info p {
+  font-size: 14px;
+  color: #ccc;
 }
 
 /* ===== Mobilvennlig tilpasning ===== */
@@ -455,6 +502,11 @@ main {
     font-size: 14px;
     padding: 0 12px;
   }
+
+  .coming-movie-item img {
+    width: 80px;
+    height: 120px;
+  }
 }
 
 @media (max-width: 480px) {
@@ -483,7 +535,16 @@ main {
     font-size: 12px;
     padding: 15px 5px;
   }
+
+  .coming-movie-info h3 {
+    font-size: 14px;
+  }
+
+  .coming-movie-info p {
+    font-size: 12px;
+  }
 }
+
 </style>
 </head>
 <body>
@@ -618,7 +679,7 @@ if (lagretBilde) {
   if (headerProfil) headerProfil.src = lagretBilde;
 }
 
-// ==================== DYNAMISK GALLERI-LASTING ==================== //
+// ==================== GALLERI-RENDERING ==================== //
 function createMovieElement(filmKey, film) {
   const link = document.createElement('a');
   link.href = `film.html?navn=${filmKey}`;
@@ -629,52 +690,108 @@ function createMovieElement(filmKey, film) {
   return link;
 }
 
-function renderGallery(galleryId, filterFunction) {
+/**
+ * Render galleri
+ * @param {string} galleryId - id til galleriet
+ * @param {function|null} filterFunction - funksjon for å filtrere filmer
+ * @param {boolean} sortByYearDesc - om filmene skal sorteres etter årstall i metadata
+ * @param {boolean} sortByPublishDate - om filmene skal sorteres etter publiseringsdato
+ */
+function renderGallery(galleryId, filterFunction, sortByYearDesc = false, sortByPublishDate = false) {
   const gallery = document.getElementById(galleryId);
   if (!gallery) return;
 
-  // Clear existing content
   gallery.innerHTML = '';
+  let filmKeys = Object.keys(filmer);
+  if (filterFunction) {
+    filmKeys = filmKeys.filter(filterFunction);
+  }
 
-  const filmKeys = Object.keys(filmer);
-  const filteredKeys = filterFunction ? filmKeys.filter(filterFunction) : filmKeys;
+  if (sortByYearDesc) {
+    filmKeys.sort((a, b) => {
+      const yearA = parseInt(filmer[a].metadata.find(meta => /^\d{4}$/.test(meta)) || 0, 10);
+      const yearB = parseInt(filmer[b].metadata.find(meta => /^\d{4}$/.test(meta)) || 0, 10);
+      return yearB - yearA;
+    });
+  }
 
-  filteredKeys.forEach(key => {
+  if (sortByPublishDate) {
+    filmKeys.sort((a, b) => {
+      const dateA = new Date(filmer[a].publisert || 0);
+      const dateB = new Date(filmer[b].publisert || 0);
+      return dateB - dateA; // nyeste først
+    });
+  }
+
+  filmKeys.forEach(key => {
     const film = filmer[key];
     const movieElement = createMovieElement(key, film);
     gallery.appendChild(movieElement);
   });
 }
 
-// --- Render "Nye filmer på Watch" ---
-// For now, just show the first 10.
-renderGallery('nye-filmer-galleri', key => Object.keys(filmer).indexOf(key) < 10);
+// Funksjon for kommende filmer (liste med poster + info)
+function renderComingMovies(galleryId) {
+  const gallery = document.getElementById(galleryId);
+  if (!gallery) return;
 
-// --- Render "Populære nå" ---
-// For now, let's show a different set of 5 movies.
+  gallery.innerHTML = '';
+  const currentYear = new Date().getFullYear();
+
+  const coming = Object.keys(filmer).filter(key => {
+    const film = filmer[key];
+    const yearString = film.metadata.find(meta => /^\d{4}$/.test(meta));
+    if (yearString) {
+      const year = parseInt(yearString, 10);
+      return year > currentYear;
+    }
+    return false;
+  });
+
+  coming.forEach(key => {
+    const film = filmer[key];
+    const item = document.createElement('div');
+    item.className = 'coming-movie-item';
+
+    const img = document.createElement('img');
+    img.src = film.poster;
+    img.alt = film.tittel;
+
+    const info = document.createElement('div');
+    info.className = 'coming-movie-info';
+    const title = document.createElement('h3');
+    title.textContent = film.tittel;
+    const release = document.createElement('p');
+    release.textContent = `Kommer ${film.metadata.find(meta => /^\d{4}$/.test(meta))}`;
+
+    info.appendChild(title);
+    info.appendChild(release);
+
+    item.appendChild(img);
+    item.appendChild(info);
+    gallery.appendChild(item);
+  });
+}
+
+// ==================== INIT RENDER ==================== //
+
+// Nye filmer sorteres på publiseringsdato (nyeste først)
+renderGallery('nye-filmer-galleri', null, false, true);
+
+// Populære nå → en fast "chunk"
 renderGallery('populaere-naa-galleri', key => {
     const index = Object.keys(filmer).indexOf(key);
     return index >= 10 && index < 15;
 });
 
-// --- Render "Barn" ---
+// Barn → filtreres på metadata
 renderGallery('barn-galleri', key => {
   const film = filmer[key];
   return film.metadata.some(meta => meta.toLowerCase().includes('barn') || meta.toLowerCase().includes('familie'));
 });
 
-// --- Render "Kommer snart" ---
-const currentYear = new Date().getFullYear();
-renderGallery('kommer-snart-galleri', key => {
-    const film = filmer[key];
-    const yearString = film.metadata.find(meta => /^\d{4}$/.test(meta));
-    if (yearString) {
-        const year = parseInt(yearString, 10);
-        return year > currentYear;
-    }
-    return false;
-});
-
+// Kommende filmer → ny seksjon
+renderComingMovies('kommer-snart-galleri');
 
 // ==================== GALLERI-SCROLL ==================== //
 document.querySelectorAll(".gallery-wrapper").forEach(wrapper => {
@@ -684,7 +801,6 @@ document.querySelectorAll(".gallery-wrapper").forEach(wrapper => {
   const fadeLeft = wrapper.querySelector(".fade-left");
   const fadeRight = wrapper.querySelector(".fade-right");
 
-  // Funksjon for å oppdatere knappene og fade-effektene
   function updateScrollState() {
     if (!gallery) return;
     const scrollLeft = gallery.scrollLeft;
@@ -696,7 +812,6 @@ document.querySelectorAll(".gallery-wrapper").forEach(wrapper => {
     if (fadeRight) fadeRight.classList.toggle("fade-hidden", scrollLeft >= maxScroll);
   }
 
-  // Scroll med knappene
   if (leftBtn) {
     leftBtn.addEventListener("click", () => {
       gallery.scrollBy({ left: -300, behavior: "smooth" });
@@ -708,18 +823,14 @@ document.querySelectorAll(".gallery-wrapper").forEach(wrapper => {
     });
   }
 
-  // Oppdater status ved scrolling
-  if(gallery) {
+  if (gallery) {
     gallery.addEventListener("scroll", updateScrollState);
   }
-  
 
-  // Initielt oppsett
   updateScrollState();
 });
 
 // ==================== FREMDIRFTSLINJER ==================== //
-// Oppdater fremdriftslinjer dynamisk basert på data-progress attributt
 document.querySelectorAll(".progress-bar").forEach(bar => {
   const progress = bar.getAttribute("data-progress");
   if (progress) {
@@ -727,9 +838,6 @@ document.querySelectorAll(".progress-bar").forEach(bar => {
   }
 });
 </script>
-
-</body>
-</html>
 
 
 
