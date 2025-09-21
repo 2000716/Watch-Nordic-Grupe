@@ -714,9 +714,30 @@ function createUpcomingMovieElement(filmKey, film) {
   info.appendChild(title);
 
   const release = document.createElement("p");
-  release.textContent = "Kommer: " + (film.publishDate || "Ukjent");
-  info.appendChild(release);
 
+  if (film.publishDate) {
+    const releaseDate = new Date(film.publishDate);
+    const today = new Date();
+
+    // Nullstill klokkeslett for sammenligning
+    today.setHours(0, 0, 0, 0);
+    releaseDate.setHours(0, 0, 0, 0);
+
+    const tomorrow = new Date(today);
+    tomorrow.setDate(today.getDate() + 1);
+
+    if (releaseDate.getTime() === tomorrow.getTime()) {
+      release.textContent = "Kommer i morgen";
+    } else {
+      const options = { day: "numeric", month: "long", year: "numeric" };
+      const formattedDate = releaseDate.toLocaleDateString("no-NO", options);
+      release.textContent = "Kommer: " + formattedDate;
+    }
+  } else {
+    release.textContent = "Kommer: Ukjent";
+  }
+
+  info.appendChild(release);
   link.appendChild(info);
   return link;
 }
@@ -853,10 +874,8 @@ document.querySelectorAll(".progress-bar").forEach((bar) => {
     bar.style.setProperty("--progress", progress + "%");
   }
 });
-
 </script>
 
- 
 
 
 
