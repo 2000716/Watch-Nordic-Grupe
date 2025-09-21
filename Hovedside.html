@@ -537,13 +537,12 @@ main {
   }
 
 
-
 /* ==================== KOMMENDE FILMER ==================== */
 .coming-movies-gallery {
   display: flex;
   overflow-x: auto;
   gap: 16px;
-  padding: 10px 16px;
+  padding: 20px;
   scroll-behavior: smooth;
 }
 
@@ -556,9 +555,9 @@ main {
   align-items: center;
   background: #0d2c30;
   border-radius: 12px;
-  overflow: hidden;
-  min-width: 280px;
-  max-width: 320px;
+  padding: 10px;
+  min-width: 250px;
+  max-width: 280px;
   flex-shrink: 0;
   border: 2px solid transparent;
   transition: transform 0.3s ease, border 0.3s ease, box-shadow 0.3s ease;
@@ -571,32 +570,32 @@ main {
 }
 
 .coming-movie-item img {
-  width: 100px;
-  height: 150px;
+  width: 80px;
+  height: 120px;
   object-fit: cover;
+  border-radius: 8px;
   flex-shrink: 0;
 }
 
 .coming-movie-info {
-  padding: 10px;
+  padding-left: 12px;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  text-align: left;
 }
 
 .coming-movie-info h3 {
-  font-size: 16px;
-  margin-bottom: 6px;
+  font-size: 14px;
+  margin-bottom: 4px;
   color: #00FFCC;
 }
 
 .coming-movie-info p {
-  font-size: 14px;
+  font-size: 12px;
   color: #ccc;
 }
 
-/* Mobilvennlig justering */
+/* Mobilvennlig tilpasning */
 @media (max-width: 768px) {
   .coming-movie-item {
     min-width: 200px;
@@ -604,16 +603,16 @@ main {
   }
 
   .coming-movie-item img {
-    width: 80px;
-    height: 120px;
+    width: 70px;
+    height: 105px;
   }
 
   .coming-movie-info h3 {
-    font-size: 14px;
+    font-size: 13px;
   }
 
   .coming-movie-info p {
-    font-size: 12px;
+    font-size: 11px;
   }
 }
 
@@ -938,6 +937,7 @@ document.querySelectorAll(".progress-bar").forEach((bar) => {
 });
 
 </script>
+
 
 
 
