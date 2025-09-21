@@ -1,115 +1,104 @@
-<DOCTYPE html>
-  <html lang=\"no\">
-  <head>
-    <meta charset=\"UTF-8\" />
-    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\" />
-    <title>Hovedsiden</title>
-  
-    <link rel=\"icon\" type=\"image/png\" href=\"https://static.wixstatic.com/media/fd2fb2_39376e4ee55b460ab7a3ebbfcf35fef7~mv2.png\" />
-    <link rel=\"stylesheet\" href=\"https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css\" />
-  
-  <style>
-  * {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-  }
-  
-  html, body {
-    font-family: Arial, sans-serif;
-    background: #091B1E;
-    color: white;
-    overflow-x: hidden;
-  }
-  
-  /* Navigasjon til venstre */
-  .vertical-nav {
-    width: 70px;
-    height: 100vh;
-    background-color: transparent;
-    position: fixed;
-    top: 0;
-    left: 0;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    z-index: 100;
-  }
-  
-  .nav-icons-wrapper {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-  }
-  
-  .profilmeny {
-    cursor: pointer;
-    margin-bottom: 10px;
-  }
-  
-  .profilmeny img {
-    width: 48px;
-    height: 48px;
-    border-radius: 50%;
-    object-fit: cover;
-    border: 2px solid #fff;
-  }
-  
-  .nav-icon {
-    color: white;
-    font-size: 22px;
-    padding: 16px 0;
-    text-decoration: none;
-    text-align: center;
-    width: 100%;
-    transition: color 0.3s ease;
-    cursor: pointer;
-    background: none;
-    border: none;
-  }
-  
-  .nav-icon:hover,
-  .nav-icon.active {
-    color: #00FFCC;
-  }
-  
-  /* Hovedinnhold */
-  main {
-    margin-left: 60px;
-    padding: 20px 10px 10px 10px;
-  }
-  
-  .content-wrapper {
-    max-width: 1100px;
-    margin: 0 auto;
-  }
-  
-  /* Topp-logo + profil */
-  .top-header {
-    display: flex;
-    justify-content: flex-end; /* Logo til høyre på PC */
-    align-items: center;
-    margin-bottom: 20px;
-  }
-  
-  .top-header .watch-logo {
-    width: 200px;
-  }
-  
-  .header-profil {
-    display: none; /* skjules på desktop */
-  }
-  
-  .header-profil img {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    object-fit: cover;
-    border: 2px solid #fff;
-  }
+<!DOCTYPE html>
+<html lang="no">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Hovedsiden</title>
+
+  <link rel="icon" type="image/png" href="https://static.wixstatic.com/media/fd2fb2_39376e4ee55b460ab7a3ebbfcf35fef7~mv2.png" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+
+<style>
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  font-family: Arial, sans-serif;
+  background: #091B1E;
+  color: white;
+  overflow-x: hidden;
+}
+
+/* Navigasjon til venstre */
+.vertical-nav {
+  width: 70px;
+  height: 100vh;
+  background-color: transparent;
+  position: fixed;
+  top: 0;
+  left: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+}
+
+.nav-icons-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.profilmeny {
+  cursor: pointer;
+  margin-bottom: 10px;
+}
+
+.profilmeny img {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #fff;
+}
+
+.nav-icon {
+  color: white;
+  font-size: 22px;
+  padding: 16px 0;
+  text-decoration: none;
+  text-align: center;
+  width: 100%;
+  transition: color 0.3s ease;
+  cursor: pointer;
+  background: none;
+  border: none;
+}
+
+.nav-icon:hover,
+.nav-icon.active {
+  color: #00FFCC;
+}
+
+/* Hovedinnhold */
+main {
+  margin-left: 60px;
+  padding: 20px 10px 10px 10px;
+}
+
+.content-wrapper {
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+/* Topp-logo */
+.top-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.top-header img {
+  width: 200px;
+}
+
   
   /* Hero-banner */
   .hero-banner {
@@ -848,6 +837,7 @@
   
   
  
+
 
 
 
