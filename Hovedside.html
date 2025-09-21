@@ -729,7 +729,15 @@ function createUpcomingMovieElement(filmKey, film) {
     if (releaseDate.getTime() === tomorrow.getTime()) {
       release.textContent = "Kommer i morgen";
     } else {
-      const options = { day: "numeric", month: "long", year: "numeric" };
+      const currentYear = today.getFullYear();
+      const releaseYear = releaseDate.getFullYear();
+
+      // Vis måned og dag (og år hvis det ikke er samme år som nå)
+      let options = { day: "numeric", month: "long" };
+      if (releaseYear !== currentYear) {
+        options.year = "numeric";
+      }
+
       const formattedDate = releaseDate.toLocaleDateString("no-NO", options);
       release.textContent = "Kommer: " + formattedDate;
     }
@@ -875,7 +883,6 @@ document.querySelectorAll(".progress-bar").forEach((bar) => {
   }
 });
 </script>
-
 
 
 
