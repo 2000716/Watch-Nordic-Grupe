@@ -212,7 +212,7 @@ const filmer = {
      "pirates": {
     tittel: "Pirates",
     bakgrunn: "https://imageservice.sky.com/uuid/24859a07-faf9-40f6-83ec-ff8fe241f850/background/2000",
-    banner: "link-til-bredt-bilde.jpg", // <- brukes til hero-banner
+    banner: "https://imageservice.sky.com/uuid/24859a07-faf9-40f6-83ec-ff8fe241f850/background/2000", // <- brukes til hero-banner
     logo: "https://occ-0-8407-116.1.nflxso.net/dnm/api/v6/S4oi7EPZbv2UEPaukW54OORa0S8/AAAABSIgtJLTKfdEughLNbzy82Wqd8Kl46Se-AN2nHuvmBc-XWV0uk7VOrH2GMJYrpS-FHXI1bfeDZflhQKfgwztI_xXYgxLqNelAos.png?r=c1b",
     poster: "https://images-prod.ai.tv2.no/v2/image-packs/pfimg_pack_01k4s3f8b5fn1bgb8e5qjzjtmy?height=630",
     posterVertikal: "https://i-viaplay-com.akamaized.net/viaplay-prod/889/480/1463401854-6df2cdc3059ce11d81d81c205d50aacae15211e8.jpg?width=400&height=600", // portrett
@@ -243,7 +243,7 @@ const filmer = {
    "sauen-shaun–filmen": {
     tittel: "Sauen Shaun – Filmen",
     bakgrunn: "https://image.tmdb.org/t/p/original/27LJejNKvrtGca0Woc4oEBvh1Xs.jpg",
-    banner: "link-til-bredt-bilde.jpg", // <- brukes til hero-banner
+    banner: "https://image.tmdb.org/t/p/original/27LJejNKvrtGca0Woc4oEBvh1Xs.jpg", // <- brukes til hero-banner
     logo: "https://image.tmdb.org/t/p/original/camSNGn7WGX34TjGmTCHPqJp2Hb.png",
     poster: "https://sumo.cdn.tv2.no/imageapi/v3/img/59677ff90cf25438151a6a48-1708671818935",
     posterVertikal: "https://play-lh.googleusercontent.com/fC14EKuDp10UJmJmNoj-iIxo29_R-9JCF5d10XpsaAEh2n0DWm5Oda6HzkHB6wcm4bTAlg", // portrett
@@ -259,7 +259,7 @@ const filmer = {
    "the-crow": {
     tittel: "The Crow",
     bakgrunn: "https://m.media-amazon.com/images/S/pv-target-images/ab2bc9008076a8baa8e4bdfd475a69a4dc4080bb367dd55a9b69fb177ae014c4._SX1080_FMjpg_.jpg",
-    banner: "link-til-bredt-bilde.jpg", // <- brukes til hero-banner
+    banner: "https://m.media-amazon.com/images/S/pv-target-images/ab2bc9008076a8baa8e4bdfd475a69a4dc4080bb367dd55a9b69fb177ae014c4._SX1080_FMjpg_.jpg", // <- brukes til hero-banner
     logo: "https://image.tmdb.org/t/p/original/1sXiIPwiZV0Cwnz6JVzlcKZNoi8.png",
     poster: "https://images-prod.ai.tv2.no/v2/image-packs/pfimg_pack_01k4smcq77e7kteq3f44bh67cf?height=630",
     posterVertikal: "https://images-prod.ai.tv2.no/v2/image-packs/pfimg_pack_01k4smcq77e7kteq3f44bh67cf?location=moviePoster&width=128", // portrett
@@ -272,6 +272,7 @@ const filmer = {
     publishDate: "2025-09-21" // ISO datoformat
   },
 };
+
 
 
 
