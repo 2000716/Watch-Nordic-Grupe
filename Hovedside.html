@@ -539,7 +539,19 @@ main {
 
 
 /* ==================== KOMMENDE FILMER ==================== */
-.upcoming-item {
+.coming-movies-gallery {
+  display: flex;
+  overflow-x: auto;
+  gap: 16px;
+  padding: 10px 16px;
+  scroll-behavior: smooth;
+}
+
+.coming-movies-gallery::-webkit-scrollbar {
+  display: none;
+}
+
+.coming-movie-item {
   display: flex;
   align-items: center;
   background: #0d2c30;
@@ -552,21 +564,20 @@ main {
   transition: transform 0.3s ease, border 0.3s ease, box-shadow 0.3s ease;
 }
 
-.upcoming-item:hover {
-  transform: scale(1.05);
+.coming-movie-item:hover {
+  transform: scale(1.03);
   border-color: #00FFCC;
   box-shadow: 0 0 12px rgba(0, 255, 204, 0.4);
 }
 
-.upcoming-item img {
-  width: 120px;
-  height: 180px;
+.coming-movie-item img {
+  width: 100px;
+  height: 150px;
   object-fit: cover;
-  border-radius: 0;
   flex-shrink: 0;
 }
 
-.upcoming-info {
+.coming-movie-info {
   padding: 10px;
   display: flex;
   flex-direction: column;
@@ -574,33 +585,57 @@ main {
   text-align: left;
 }
 
-.upcoming-info h3 {
+.coming-movie-info h3 {
   font-size: 16px;
   margin-bottom: 6px;
-  color: white;
-}
-
-.upcoming-info p {
-  font-size: 14px;
   color: #00FFCC;
 }
 
-/* ==================== PROGRESS-BARER ==================== */
-.progress-bar {
-  height: 6px;
-  background: #333;
-  border-radius: 4px;
-  margin: 6px 0;
-  overflow: hidden;
+.coming-movie-info p {
+  font-size: 14px;
+  color: #ccc;
 }
 
-.progress {
-  height: 100%;
-  background: #00FFCC;
-  width: 0%;
-  transition: width 0.4s ease;
+/* Mobilvennlig justering */
+@media (max-width: 768px) {
+  .coming-movie-item {
+    min-width: 200px;
+    max-width: 220px;
+  }
+
+  .coming-movie-item img {
+    width: 80px;
+    height: 120px;
+  }
+
+  .coming-movie-info h3 {
+    font-size: 14px;
+  }
+
+  .coming-movie-info p {
+    font-size: 12px;
+  }
 }
 
+@media (max-width: 480px) {
+  .coming-movie-item {
+    min-width: 160px;
+    max-width: 180px;
+    gap: 8px;
+  }
+
+  .coming-movie-item img {
+    width: 60px;
+    height: 90px;
+  }
+
+  .coming-movie-info h3 {
+    font-size: 12px;
+  }
+
+  .coming-movie-info p {
+    font-size: 10px;
+  }
 }
 
 </style>
@@ -903,6 +938,7 @@ document.querySelectorAll(".progress-bar").forEach((bar) => {
 });
 
 </script>
+
 
 
 
