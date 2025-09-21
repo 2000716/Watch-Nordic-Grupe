@@ -697,13 +697,14 @@ function createMovieElement(filmKey, film) {
 }
 
 function createUpcomingMovieElement(filmKey, film) {
-  const wrapper = document.createElement("div");
-  wrapper.classList.add("coming-movie-item");
+  const link = document.createElement("a");
+  link.classList.add("coming-movie-item");
+  link.href = `film.html?navn=${filmKey}`;
 
   const poster = document.createElement("img");
   poster.src = film.posterVertikal || film.poster;
   poster.alt = film.tittel;
-  wrapper.appendChild(poster);
+  link.appendChild(poster);
 
   const info = document.createElement("div");
   info.classList.add("coming-movie-info");
@@ -716,8 +717,8 @@ function createUpcomingMovieElement(filmKey, film) {
   release.textContent = "Kommer: " + (film.publishDate || "Ukjent");
   info.appendChild(release);
 
-  wrapper.appendChild(info);
-  return wrapper;
+  link.appendChild(info);
+  return link;
 }
 
 function renderGallery(galleryId, filterFunction, sortByPublishDate = false, limit = null) {
@@ -852,9 +853,11 @@ document.querySelectorAll(".progress-bar").forEach((bar) => {
     bar.style.setProperty("--progress", progress + "%");
   }
 });
+
 </script>
 
  
+
 
 
 
