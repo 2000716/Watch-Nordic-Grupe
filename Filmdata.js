@@ -238,7 +238,23 @@ const filmer = {
     watchUrl: "film-mal.html?id=sauen-shaun–filmen",
     publishDate: "2025-10-25" // ISO datoformat
   },
+
+   "the-crow": {
+    tittel: "The Crow",
+    bakgrunn: "https://m.media-amazon.com/images/S/pv-target-images/ab2bc9008076a8baa8e4bdfd475a69a4dc4080bb367dd55a9b69fb177ae014c4._SX1080_FMjpg_.jpg",
+    logo: "https://image.tmdb.org/t/p/original/1sXiIPwiZV0Cwnz6JVzlcKZNoi8.png",
+    poster: "https://images-prod.ai.tv2.no/v2/image-packs/pfimg_pack_01k4smcq77e7kteq3f44bh67cf?height=630",
+    posterVertikal: "https://images-prod.ai.tv2.no/v2/image-packs/pfimg_pack_01k4smcq77e7kteq3f44bh67cf?location=moviePoster&width=128", // portrett
+    beskrivelse: "Sjelevennene Eric og Shelly blir brutalt drept når demonene fra hennes mørke fortid innhenter dem.",
+    metadata: ["USA", "2024", "15+", "Action", "1 t 51 min"],
+    imdb: "https://www.imdb.com/title/tt1340094/",
+    skuespillere: "Bill Skarsgård, FKA twigs, Danny Huston",
+    regissor: "Rupert Sanders",
+    watchUrl: "film-mal.html?id=the-crow",
+    publishDate: "2025-09-22" // ISO datoformat
+  },
 };
+
 
 
 
