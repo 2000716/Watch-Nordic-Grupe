@@ -685,6 +685,39 @@ if (lagretBilde) {
   if (headerProfil) headerProfil.src = lagretBilde;
 }
 
+// ==================== HERO-BANNER ==================== //
+function oppdaterBanner() {
+  const filmKeys = Object.keys(filmer);
+  if (filmKeys.length === 0) return;
+
+  // Velg en tilfeldig film
+  const randomKey = filmKeys[Math.floor(Math.random() * filmKeys.length)];
+  const film = filmer[randomKey];
+
+  // Oppdater banner-bildet
+  const bannerImage = document.querySelector(".hero-banner .banner-image");
+  if (film.banner) {
+    bannerImage.src = film.banner;
+    bannerImage.alt = film.tittel;
+  }
+
+  // Oppdater logo (hvis den finnes i filmdata)
+  const bannerLogo = document.querySelector(".hero-banner .film-logo");
+  if (film.logo) {
+    bannerLogo.src = film.logo;
+    bannerLogo.alt = film.tittel + " Logo";
+    bannerLogo.style.display = "block";
+  } else {
+    bannerLogo.style.display = "none"; // skjul hvis ingen logo
+  }
+
+  // Klikk på banneret sender deg til filmens side
+  const bannerSection = document.querySelector(".hero-banner");
+  bannerSection.onclick = () => {
+    window.location.href = `film.html?navn=${randomKey}`;
+  };
+}
+
 // ==================== DYNAMISK GALLERI-LASTING ==================== //
 function createMovieElement(filmKey, film) {
   const link = document.createElement("a");
@@ -838,6 +871,9 @@ renderGallery("barn-galleri", (key) => {
 // --- Render "Kommende filmer" ---
 renderUpcoming("kommer-snart-galleri");
 
+// --- Oppdater Hero Banner ---
+oppdaterBanner();
+
 // ==================== GALLERI-SCROLL ==================== //
 document.querySelectorAll(".gallery-wrapper").forEach((wrapper) => {
   const gallery = wrapper.querySelector(".image-gallery, .coming-movies-gallery");
@@ -883,6 +919,7 @@ document.querySelectorAll(".progress-bar").forEach((bar) => {
   }
 });
 </script>
+
 
 
 
