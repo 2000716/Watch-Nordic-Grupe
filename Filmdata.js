@@ -251,9 +251,10 @@ const filmer = {
     skuespillere: "Bill Skarsgård, FKA twigs, Danny Huston",
     regissor: "Rupert Sanders",
     watchUrl: "film-mal.html?id=the-crow",
-    publishDate: "2025-09-22" // ISO datoformat
+    publishDate: "2025-09-21" // ISO datoformat
   },
 };
+
 
 
 
