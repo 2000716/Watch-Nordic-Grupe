@@ -87,23 +87,23 @@ main {
   margin: 0 auto;
 }
 
-/* Topp-logo og profilbilde */
+/* === Header PC === */
 .top-header {
   display: flex;
   align-items: center;
+  width: 100%;
   margin-bottom: 20px;
-  gap: 20px;
 }
 
-/* PC: logo til høyre, profilbilde skjult */
 .top-header .watch-logo {
-  order: 2;
+  margin-left: auto; /* flytter logo til høyre */
+  width: 200px;
 }
 
 .top-header .header-profil {
-  order: 1;
-  display: none; /* kun mobil viser profilbildet her */
+  display: none; /* skjul profilbilde på PC */
 }
+
 
 .top-header img.watch-logo {
   width: 200px;
@@ -841,6 +841,7 @@ main {
   
   
  
+
 
 
 
