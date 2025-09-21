@@ -673,140 +673,128 @@ function gåTilKonto() {
 }
 
 // ==================== PROFILBILDE ==================== //
-// Hent profilbilde fra localStorage
 const lagretBilde = localStorage.getItem("profilbilde");
 if (lagretBilde) {
-  // Oppdater meny-profil
   const menyProfil = document.getElementById("menyProfilbilde");
   if (menyProfil) menyProfil.src = lagretBilde;
 
-  // Oppdater header-profil (på mobil)
   const headerProfil = document.getElementById("headerProfilbilde");
   if (headerProfil) headerProfil.src = lagretBilde;
 }
 
-// ==================== GALLERI-RENDERING ==================== //
+// ==================== DYNAMISK GALLERI-LASTING ==================== //
 function createMovieElement(filmKey, film) {
-  const link = document.createElement('a');
+  const link = document.createElement("a");
   link.href = `film.html?navn=${filmKey}`;
-  const img = document.createElement('img');
+  const img = document.createElement("img");
   img.src = film.poster;
   img.alt = film.tittel;
   link.appendChild(img);
   return link;
 }
 
-/**
- * Render galleri
- * @param {string} galleryId - id til galleriet
- * @param {function|null} filterFunction - funksjon for å filtrere filmer
- * @param {boolean} sortByYearDesc - om filmene skal sorteres etter årstall i metadata
- * @param {boolean} sortByPublishDate - om filmene skal sorteres etter publiseringsdato
- */
-function renderGallery(galleryId, filterFunction, sortByYearDesc = false, sortByPublishDate = false) {
+function createUpcomingMovieElement(filmKey, film) {
+  const wrapper = document.createElement("div");
+  wrapper.classList.add("upcoming-item");
+
+  const poster = document.createElement("img");
+  poster.src = film.posterVertikal || film.poster;
+  poster.alt = film.tittel;
+  wrapper.appendChild(poster);
+
+  const info = document.createElement("div");
+  info.classList.add("upcoming-info");
+
+  const title = document.createElement("h3");
+  title.textContent = film.tittel;
+  info.appendChild(title);
+
+  const release = document.createElement("p");
+  release.textContent = "Kommer: " + (film.publishDate || "Ukjent");
+  info.appendChild(release);
+
+  wrapper.appendChild(info);
+  return wrapper;
+}
+
+function renderGallery(galleryId, filterFunction, sortByPublishDate = false) {
   const gallery = document.getElementById(galleryId);
   if (!gallery) return;
 
-  gallery.innerHTML = '';
+  gallery.innerHTML = "";
+
   let filmKeys = Object.keys(filmer);
   if (filterFunction) {
     filmKeys = filmKeys.filter(filterFunction);
   }
 
-  if (sortByYearDesc) {
-    filmKeys.sort((a, b) => {
-      const yearA = parseInt(filmer[a].metadata.find(meta => /^\d{4}$/.test(meta)) || 0, 10);
-      const yearB = parseInt(filmer[b].metadata.find(meta => /^\d{4}$/.test(meta)) || 0, 10);
-      return yearB - yearA;
-    });
-  }
-
+  // Sorter etter publishDate hvis ønsket
   if (sortByPublishDate) {
     filmKeys.sort((a, b) => {
-      const dateA = new Date(filmer[a].publisert || 0);
-      const dateB = new Date(filmer[b].publisert || 0);
+      const dateA = new Date(filmer[a].publishDate || 0);
+      const dateB = new Date(filmer[b].publishDate || 0);
       return dateB - dateA; // nyeste først
     });
   }
 
-  filmKeys.forEach(key => {
+  filmKeys.forEach((key) => {
     const film = filmer[key];
     const movieElement = createMovieElement(key, film);
     gallery.appendChild(movieElement);
   });
 }
 
-// Funksjon for kommende filmer (liste med poster + info)
-function renderComingMovies(galleryId) {
+function renderUpcoming(galleryId) {
   const gallery = document.getElementById(galleryId);
   if (!gallery) return;
 
-  gallery.innerHTML = '';
-  const currentYear = new Date().getFullYear();
+  gallery.innerHTML = "";
 
-  const coming = Object.keys(filmer).filter(key => {
+  const currentDate = new Date();
+
+  const upcomingFilms = Object.keys(filmer).filter((key) => {
     const film = filmer[key];
-    const yearString = film.metadata.find(meta => /^\d{4}$/.test(meta));
-    if (yearString) {
-      const year = parseInt(yearString, 10);
-      return year > currentYear;
-    }
-    return false;
+    if (!film.publishDate) return false;
+    return new Date(film.publishDate) > currentDate;
   });
 
-  coming.forEach(key => {
+  upcomingFilms.sort((a, b) => {
+    const dateA = new Date(filmer[a].publishDate);
+    const dateB = new Date(filmer[b].publishDate);
+    return dateA - dateB; // eldste fremtidige først
+  });
+
+  upcomingFilms.forEach((key) => {
     const film = filmer[key];
-    const item = document.createElement('div');
-    item.className = 'coming-movie-item';
-
-    const img = document.createElement('img');
-    img.src = film.poster;
-    img.alt = film.tittel;
-
-    const info = document.createElement('div');
-    info.className = 'coming-movie-info';
-    const title = document.createElement('h3');
-    title.textContent = film.tittel;
-    const release = document.createElement('p');
-    release.textContent = `Kommer ${film.metadata.find(meta => /^\d{4}$/.test(meta))}`;
-
-    info.appendChild(title);
-    info.appendChild(release);
-
-    item.appendChild(img);
-    item.appendChild(info);
-    gallery.appendChild(item);
+    const element = createUpcomingMovieElement(key, film);
+    gallery.appendChild(element);
   });
 }
 
-// ==================== INIT RENDER ==================== //
+// --- Render "Nye filmer på Watch" (sortert på publishDate) ---
+renderGallery("nye-filmer-galleri", null, true);
 
-// Nye filmer sorteres på publiseringsdato (nyeste først)
-renderGallery('nye-filmer-galleri', null, false, true);
-
-// Populære nå → en fast "chunk"
-renderGallery('populaere-naa-galleri', key => {
-    const index = Object.keys(filmer).indexOf(key);
-    return index >= 10 && index < 15;
+// --- Render "Populære nå" (dummy-filter, tilpass ved behov) ---
+renderGallery("populaere-naa-galleri", (key) => {
+  const index = Object.keys(filmer).indexOf(key);
+  return index >= 10 && index < 15;
 });
 
-// Barn → filtreres på metadata
-renderGallery('barn-galleri', key => {
+// --- Render "Barn" ---
+renderGallery("barn-galleri", (key) => {
   const film = filmer[key];
-  return film.metadata.some(meta => meta.toLowerCase().includes('barn') || meta.toLowerCase().includes('familie'));
+  return film.metadata.some(
+    (meta) =>
+      meta.toLowerCase().includes("barn") ||
+      meta.toLowerCase().includes("familie")
+  );
 });
 
-if (sortByPublishDate) {
-  // sortering på publishDate
-  filmKeys.sort((a, b) => {
-    const dateA = new Date(filmer[a].publishDate || 0);
-    const dateB = new Date(filmer[b].publishDate || 0);
-    return dateB - dateA; // nyeste først
-  });
-}
+// --- Render "Kommende filmer" ---
+renderUpcoming("kommer-snart-galleri");
 
 // ==================== GALLERI-SCROLL ==================== //
-document.querySelectorAll(".gallery-wrapper").forEach(wrapper => {
+document.querySelectorAll(".gallery-wrapper").forEach((wrapper) => {
   const gallery = wrapper.querySelector(".image-gallery");
   const leftBtn = wrapper.querySelector(".scroll-button.left");
   const rightBtn = wrapper.querySelector(".scroll-button.right");
@@ -843,13 +831,15 @@ document.querySelectorAll(".gallery-wrapper").forEach(wrapper => {
 });
 
 // ==================== FREMDIRFTSLINJER ==================== //
-document.querySelectorAll(".progress-bar").forEach(bar => {
+document.querySelectorAll(".progress-bar").forEach((bar) => {
   const progress = bar.getAttribute("data-progress");
   if (progress) {
     bar.style.setProperty("--progress", progress + "%");
   }
 });
+
 </script>
+
 
 
 
