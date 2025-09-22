@@ -2,7 +2,7 @@ const filmer = {
   "corpse-bride": {
     tittel: "Corpse Bride",
     bakgrunn: "https://beam-images.warnermediacdn.com/BEAM_LWM_DELIVERABLES/d28771bd-73ed-49a7-9259-bdb33a115cbc/c628867cbdcd9987018dd7e994bde435f4725dac.jpg?host=wbd-images.prod-vod.h264.io&partner=beamcom",
-    banner: "link-til-bredt-bilde.jpg", // <- brukes til hero-banner
+    banner: "https://image.tmdb.org/t/p/original//jQ1T7mThUYEFhQrfOFCRepVGe1v.jpg", // <- brukes til hero-banner
     logo: "https://occ-0-8407-92.1.nflxso.net/dnm/api/v6/S4oi7EPZbv2UEPaukW54OORa0S8/AAAABXsHIUIEsoNXp18ZFMeNZGV2VDqmkxZieG_LfgHTMtvUNwYCxJXmI4SMgxIdomfNtMLREHe7vqwoceGjEqzTsD-aHT8veWO5GKQ.png?r=e74",
     poster: "https://is1-ssl.mzstatic.com/image/thumb/Video124/v4/4b/f6/66/4bf66634-eace-f237-8991-a383189e2b03/pr_source.lsr/392x220.webp",
     posterVertikal: "https://image.tmdb.org/t/p/w780/isb2Qow76GpqYmsSyfdMfsYAjts.jpg", // portrett
@@ -17,7 +17,7 @@ const filmer = {
   "hook": {
     tittel: "Hook",
     bakgrunn: "https://d32qys9a6wm9no.cloudfront.net/images/movies/backdrop/ae/3d838f72e7bea39f327766bd55957a15_1280x720.jpg?t=1636109773",
-    banner: "link-til-bredt-bilde.jpg", // <- brukes til hero-banner
+    banner: "https://m.media-amazon.com/images/S/pv-target-images/00a1b5585c5f18f826d4c7b6c28374ecc3619a771839100cf3b0f4d158463429._SX1080_FMjpg_.jpg", // <- brukes til hero-banner
     logo: "https://static.wixstatic.com/media/fd2fb2_dac88f2b81fb43858c47fc29a2fe3952~mv2.png",
     poster: "https://static.wixstatic.com/media/fd2fb2_3b5f5cd114b746e8b05881724a22a0e5~mv2.jpg",
     posterVertikal: "https://image.tmdb.org/t/p/original/a8xMPQUw8h7E3bJ9Dw596SD8p3v.jpg", // portrett
@@ -272,6 +272,7 @@ const filmer = {
     publishDate: "2025-09-21" // ISO datoformat
   },
 };
+
 
 
 
