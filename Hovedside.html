@@ -96,14 +96,13 @@ main {
 }
 
 .top-header .watch-logo {
-  margin-left: auto; /* flytter logo til høyre */
+  margin-left: auto;
   width: 200px;
 }
 
 .top-header .header-profil {
-  display: none; /* skjul profilbilde på PC */
+  display: none;
 }
-
 
 .top-header img.watch-logo {
   width: 200px;
@@ -385,7 +384,7 @@ main {
 
 .coming-movie-item {
   display: flex;
-  align-items: flex-start; /* Teksten øverst */
+  align-items: flex-start;
   gap: 16px;
   background: #0d2c30;
   border-radius: 12px;
@@ -393,11 +392,10 @@ main {
   border: 2px solid transparent;
   transition: all 0.3s ease;
   width: 320px;
-  cursor: pointer; /* Indikerer at boksen kan klikkes */
-  text-decoration: none; /* Fjern underline på lenken */
-  color: inherit; /* Arver tekstfarge */
+  cursor: pointer;
+  text-decoration: none;
+  color: inherit;
 }
-
 
 .coming-movie-item:hover {
   border-color: #00FFCC;
@@ -438,6 +436,61 @@ main {
   overflow: hidden;
 }
 
+/* === Topp 10 filmer === */
+.top10-gallery {
+  flex: 1;
+  display: flex;
+  overflow-x: auto;
+  gap: 20px;
+  padding: 10px 16px;
+  scroll-behavior: smooth;
+}
+
+.top10-gallery::-webkit-scrollbar {
+  display: none;
+}
+
+.top10-item {
+  position: relative;
+  display: inline-block;
+  border-radius: 8px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+.top10-item img {
+  width: 180px;
+  height: 270px;
+  object-fit: cover;
+  border-radius: 8px;
+  display: block;
+}
+
+.top10-item:hover {
+  transform: scale(1.05);
+}
+
+/* Nummer bak bildet */
+.top10-number {
+  position: absolute;
+  right: -15px;
+  bottom: -15px;
+  font-size: 140px;
+  font-weight: 900;
+  line-height: 1;
+  color: transparent;
+  -webkit-text-stroke: 4px #00FFCC;
+  z-index: 0;
+  transition: all 0.3s ease;
+  pointer-events: none;
+}
+
+.top10-item:hover .top10-number {
+  color: #00FFCC;
+  -webkit-text-stroke: 0;
+}
+
 /* ===== Mobilvennlig tilpasning ===== */
 @media (max-width: 768px) {
   .vertical-nav {
@@ -472,7 +525,7 @@ main {
   }
 
   .top-header {
-    justify-content: space-between; /* logo venstre, profil høyre */
+    justify-content: space-between;
   }
 
   .top-header .watch-logo {
@@ -512,6 +565,15 @@ main {
     font-size: 14px;
     padding: 0 12px;
   }
+
+  .top10-item img {
+    width: 140px;
+    height: 210px;
+  }
+
+  .top10-number {
+    font-size: 100px;
+  }
 }
 
 @media (max-width: 480px) {
@@ -539,6 +601,15 @@ main {
   .footer {
     font-size: 12px;
     padding: 15px 5px;
+  }
+
+  .top10-item img {
+    width: 120px;
+    height: 180px;
+  }
+
+  .top10-number {
+    font-size: 80px;
   }
 }
 
@@ -605,15 +676,16 @@ main {
         </section>
   
         <section class="gallery-section">
-          <h2>Populære nå</h2>
-          <div class="gallery-wrapper">
-            <div class="fade-left"></div>
-            <button class="scroll-button left" onclick="scrollGallery(this, -1)">❮</button>
-            <div class="image-gallery" id="populaere-naa-galleri"></div>
-            <button class="scroll-button right" onclick="scrollGallery(this, 1)">❯</button>
-            <div class="fade-right"></div>
-          </div>
-        </section>
+  <h2>Topp 10 filmer nå</h2>
+  <div class="gallery-wrapper">
+    <div class="fade-left"></div>
+    <button class="scroll-button left" onclick="scrollGallery(this, -1)">❮</button>
+    <div class="top10-gallery" id="topp10-filmer-galleri"></div>
+    <button class="scroll-button right" onclick="scrollGallery(this, 1)">❯</button>
+    <div class="fade-right"></div>
+  </div>
+</section>
+
   
      <section class="gallery-section">
     <h2>Kommende filmer</h2>
@@ -658,12 +730,10 @@ main {
 const epost = localStorage.getItem("epost");
 const passord = localStorage.getItem("passord");
 
-// Hvis ingen epost/passord er lagret, send brukeren tilbake til startsiden
 if (!epost || !passord) {
   window.location.href = "Starts side.html";
 }
 
-// Lytt etter endringer i localStorage (f.eks. hvis brukeren logger ut i en annen fane)
 window.addEventListener("storage", () => {
   if (!localStorage.getItem("epost") || !localStorage.getItem("passord")) {
     window.location.href = "Starts side.html";
@@ -690,18 +760,15 @@ function oppdaterBanner() {
   const filmKeys = Object.keys(filmer);
   if (filmKeys.length === 0) return;
 
-  // Velg en tilfeldig film
   const randomKey = filmKeys[Math.floor(Math.random() * filmKeys.length)];
   const film = filmer[randomKey];
 
-  // Oppdater banner-bildet
   const bannerImage = document.querySelector(".hero-banner .banner-image");
   if (bannerImage && film.banner) {
     bannerImage.src = film.banner;
     bannerImage.alt = film.tittel;
   }
 
-  // Oppdater logo (hvis den finnes i filmdata)
   const bannerLogo = document.querySelector(".hero-banner .film-logo");
   if (bannerLogo) {
     if (film.logo) {
@@ -713,7 +780,6 @@ function oppdaterBanner() {
     }
   }
 
-  // Klikk på banneret sender deg til filmens side
   const bannerSection = document.querySelector(".hero-banner");
   if (bannerSection) {
     bannerSection.onclick = () => {
@@ -755,7 +821,6 @@ function createUpcomingMovieElement(filmKey, film) {
   if (film.publishDate) {
     const releaseDate = new Date(film.publishDate);
     const today = new Date();
-
     today.setHours(0, 0, 0, 0);
     releaseDate.setHours(0, 0, 0, 0);
 
@@ -794,7 +859,7 @@ function renderGallery(galleryId, filterFunction, sortByPublishDate = false, lim
 
   let filmKeys = Object.keys(filmer);
 
-  // Filtrer ut filmer som ikke er lansert enda
+  // Filtrer bort fremtidige filmer
   filmKeys = filmKeys.filter((key) => {
     const film = filmer[key];
     if (!film.publishDate) return true;
@@ -809,7 +874,7 @@ function renderGallery(galleryId, filterFunction, sortByPublishDate = false, lim
     filmKeys.sort((a, b) => {
       const dateA = new Date(filmer[a].publishDate || 0);
       const dateB = new Date(filmer[b].publishDate || 0);
-      return dateB - dateA; // nyeste først
+      return dateB - dateA;
     });
   }
 
@@ -840,7 +905,7 @@ function renderUpcoming(galleryId) {
   upcomingFilms.sort((a, b) => {
     const dateA = new Date(filmer[a].publishDate);
     const dateB = new Date(filmer[b].publishDate);
-    return dateA - dateB; // eldste fremtidige først
+    return dateA - dateB;
   });
 
   upcomingFilms.forEach((key) => {
@@ -850,12 +915,38 @@ function renderUpcoming(galleryId) {
   });
 }
 
+// ==================== TOPP 10 FILMER ==================== //
+function renderTop10(galleryId) {
+  const gallery = document.getElementById(galleryId);
+  if (!gallery) return;
+
+  gallery.innerHTML = "";
+  const filmKeys = Object.keys(filmer).slice(0, 10);
+
+  filmKeys.forEach((key, index) => {
+    const film = filmer[key];
+
+    const wrapper = document.createElement("a");
+    wrapper.href = `film.html?navn=${key}`;
+    wrapper.classList.add("top10-item");
+
+    const img = document.createElement("img");
+    img.src = film.posterVertikal || film.poster;
+    img.alt = film.tittel;
+
+    const number = document.createElement("div");
+    number.classList.add("top10-number");
+    number.textContent = index + 1;
+
+    wrapper.appendChild(img);
+    wrapper.appendChild(number);
+    gallery.appendChild(wrapper);
+  });
+}
+
 // --- Render seksjoner på hovedsiden ---
 renderGallery("nye-filmer-galleri", null, true, 10); // Nye filmer
-renderGallery("populaere-naa-galleri", (key) => {
-  const index = Object.keys(filmer).indexOf(key);
-  return index >= 10 && index < 15;
-}); // Populære nå
+renderTop10("topp10-filmer-galleri"); // Topp 10 filmer
 renderGallery("barn-galleri", (key) => {
   const film = filmer[key];
   return film.metadata.some(
@@ -863,15 +954,15 @@ renderGallery("barn-galleri", (key) => {
       meta.toLowerCase().includes("barn") ||
       meta.toLowerCase().includes("familie")
   );
-}); // Barn
-renderUpcoming("kommer-snart-galleri"); // Kommende filmer
+});
+renderUpcoming("kommer-snart-galleri");
 
 // --- Oppdater Hero Banner ---
 oppdaterBanner();
 
 // ==================== GALLERI-SCROLL ==================== //
 document.querySelectorAll(".gallery-wrapper").forEach((wrapper) => {
-  const gallery = wrapper.querySelector(".image-gallery, .coming-movies-gallery");
+  const gallery = wrapper.querySelector(".image-gallery, .coming-movies-gallery, .top10-gallery");
   const leftBtn = wrapper.querySelector(".scroll-button.left");
   const rightBtn = wrapper.querySelector(".scroll-button.right");
   const fadeLeft = wrapper.querySelector(".fade-left");
@@ -913,31 +1004,4 @@ document.querySelectorAll(".progress-bar").forEach((bar) => {
     bar.style.setProperty("--progress", progress + "%");
   }
 });
-
 </script>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
