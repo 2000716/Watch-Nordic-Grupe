@@ -443,7 +443,10 @@ main {
   gap: 16px;
   padding: 10px 16px;
   overflow-x: auto;
+  overflow-y: hidden; /* viktig! */
+  -webkit-overflow-scrolling: touch; /* myk scrolling på iOS */
 }
+
 
 .top10-gallery::-webkit-scrollbar {
   display: none;
@@ -1003,6 +1006,7 @@ document.querySelectorAll(".progress-bar").forEach((bar) => {
   }
 });
 </script>
+
 
 
 
