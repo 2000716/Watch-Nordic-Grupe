@@ -438,13 +438,13 @@ main {
 
 /* === Topp 10 filmer === */
 .top10-gallery {
+  flex: 1;
   display: flex;
-  flex-wrap: wrap;   /* bryter til ny linje i stedet for horisontal scroll */
-  gap: 20px;
+  overflow-x: auto;
+  gap: 20px; /* litt mindre luft */
   padding: 10px 16px;
-  justify-content: center; /* midtstiller galleriet */
+  scroll-behavior: smooth;
 }
-
 
 .top10-gallery::-webkit-scrollbar {
   display: none;
@@ -1004,6 +1004,7 @@ document.querySelectorAll(".progress-bar").forEach((bar) => {
   }
 });
 </script>
+
 
 
 
