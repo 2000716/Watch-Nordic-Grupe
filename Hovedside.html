@@ -441,7 +441,7 @@ main {
   flex: 1;
   display: flex;
   overflow-x: auto;
-  gap: 30px; /* litt mer luft mellom */
+  gap: 20px;
   padding: 10px 16px;
   scroll-behavior: smooth;
 }
@@ -454,41 +454,33 @@ main {
   position: relative;
   display: inline-block;
   border-radius: 8px;
-  overflow: visible; /* gjør at tallene kan stikke utenfor */
   cursor: pointer;
   transition: transform 0.3s ease;
 }
 
 .top10-item img {
-  width: 200px;   /* bredere */
-  height: 300px;  /* høyere = "tykkere" posterformat */
+  width: 150px;   /* litt mindre */
+  height: 225px;  /* posterformat */
   border-radius: 8px;
-  position: relative;
-  z-index: 1; /* sørger for at bildet er foran tallene */
+  display: block;
 }
 
 .top10-item:hover {
   transform: scale(1.05);
 }
 
+/* Tallene som "badge" */
 .top10-number {
   position: absolute;
-  left: -120px;   /* flytter tallene mye mer ut */
-  bottom: -15px;
-  font-size: 160px;
-  font-weight: 900;
-  line-height: 1;
-  color: transparent;
-  -webkit-text-stroke: 5px #00FFCC;
-  z-index: 0; /* bak bildet */
-  transition: all 0.3s ease;
-  pointer-events: none;
-}
-
-
-.top10-item:hover .top10-number {
+  top: 8px;
+  left: 8px;
+  background: rgba(0, 0, 0, 0.7);
   color: #00FFCC;
-  -webkit-text-stroke: 0;
+  font-size: 20px;
+  font-weight: bold;
+  padding: 4px 8px;
+  border-radius: 6px;
+  z-index: 2; /* foran bildet */
 }
 
 /* ===== Mobilvennlig tilpasning ===== */
@@ -1005,6 +997,7 @@ document.querySelectorAll(".progress-bar").forEach((bar) => {
   }
 });
 </script>
+
 
 
 
