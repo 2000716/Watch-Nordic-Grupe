@@ -441,7 +441,7 @@ main {
   flex: 1;
   display: flex;
   overflow-x: auto;
-  gap: 20px;
+  gap: 30px; /* litt mer luft mellom */
   padding: 10px 16px;
   scroll-behavior: smooth;
 }
@@ -454,17 +454,18 @@ main {
   position: relative;
   display: inline-block;
   border-radius: 8px;
-  overflow: hidden;
+  overflow: visible; /* gjør at tallene kan stikke utenfor */
   cursor: pointer;
   transition: transform 0.3s ease;
 }
 
 .top10-item img {
-  width: 180px;  /* gjør plakatene tykkere */
-  height: auto;
+  width: 200px;   /* bredere */
+  height: 300px;  /* høyere = "tykkere" posterformat */
   border-radius: 8px;
+  position: relative;
+  z-index: 1; /* sørger for at bildet er foran tallene */
 }
-
 
 .top10-item:hover {
   transform: scale(1.05);
@@ -473,14 +474,14 @@ main {
 /* Nummer bak bildet */
 .top10-number {
   position: absolute;
-  right: -15px;
+  left: -25px;    /* flytt tallene til venstre */
   bottom: -15px;
-  font-size: 140px;
+  font-size: 160px;
   font-weight: 900;
   line-height: 1;
   color: transparent;
-  -webkit-text-stroke: 4px #00FFCC;
-  z-index: 0;
+  -webkit-text-stroke: 5px #00FFCC;
+  z-index: 0; /* legger tallet bak bildet */
   transition: all 0.3s ease;
   pointer-events: none;
 }
@@ -1004,4 +1005,5 @@ document.querySelectorAll(".progress-bar").forEach((bar) => {
   }
 });
 </script>
+
 
