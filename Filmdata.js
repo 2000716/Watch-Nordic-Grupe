@@ -237,7 +237,7 @@ const filmer = {
     skuespillere: "Anders Baasmo, John Carew, Elias Holmen Sørensen",
     regissor: "Hallvard Bræin",
     watchUrl: "film-mal.html?id=olsenbanden–siste-skrik",
-    publishDate: "2025-09-23" // ISO datoformat
+    publishDate: "2025-09-23T00:00:00" // ISO datoformat
   },
 
    "sauen-shaun–filmen": {
@@ -272,6 +272,7 @@ const filmer = {
     publishDate: "2025-09-21" // ISO datoformat
   },
 };
+
 
 
 
