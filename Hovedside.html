@@ -441,7 +441,7 @@ main {
   flex: 1;
   display: flex;
   overflow-x: auto;
-  gap: 30px; /* fortsatt litt luft */
+  gap: 20px;
   padding: 10px 16px;
   scroll-behavior: smooth;
 }
@@ -452,28 +452,29 @@ main {
 
 .top10-item {
   position: relative;
-  display: flex;       /* gjør det enklere å plassere tall + bilde side om side */
-  align-items: center; /* sentrerer tall og bilde vertikalt */
-  gap: 10px;           /* luft mellom tall og bilde */
+  display: inline-block;
+  border-radius: 8px;
   cursor: pointer;
   transition: transform 0.3s ease;
 }
 
 .top10-item img {
-  width: 150px;   /* litt mindre */
+  width: 150px;   /* mindre størrelse */
   height: 225px;
   border-radius: 8px;
-  position: relative;
-  z-index: 1;
+  display: block;
 }
 
 .top10-item:hover {
   transform: scale(1.05);
 }
 
-/* Tallene til venstre for bildet */
+/* Tallene nederst til venstre, litt ut på siden */
 .top10-number {
-  font-size: 80px; /* mindre enn før (var 160px) */
+  position: absolute;
+  bottom: -10px;      /* litt under kanten av bildet */
+  left: -15px;        /* litt ut på venstre side */
+  font-size: 70px;    /* justert størrelse */
   font-weight: 900;
   line-height: 1;
   color: transparent;
@@ -487,6 +488,7 @@ main {
   color: #00FFCC;
   -webkit-text-stroke: 0;
 }
+
 
 /* ===== Mobilvennlig tilpasning ===== */
 @media (max-width: 768px) {
@@ -1002,6 +1004,7 @@ document.querySelectorAll(".progress-bar").forEach((bar) => {
   }
 });
 </script>
+
 
 
 
