@@ -438,12 +438,11 @@ main {
 
 /* === Topp 10 filmer === */
 .top10-gallery {
-  flex: 1;
   display: flex;
-  overflow-x: auto;
-  gap: 20px; /* litt mindre luft */
+  flex-direction: row;
+  gap: 16px;
   padding: 10px 16px;
-  scroll-behavior: smooth;
+  overflow-x: auto;
 }
 
 .top10-gallery::-webkit-scrollbar {
@@ -1004,6 +1003,7 @@ document.querySelectorAll(".progress-bar").forEach((bar) => {
   }
 });
 </script>
+
 
 
 
