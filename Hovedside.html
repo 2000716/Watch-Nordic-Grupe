@@ -471,20 +471,20 @@ main {
   transform: scale(1.05);
 }
 
-/* Nummer bak bildet */
 .top10-number {
   position: absolute;
-  left: -25px;    /* flytt tallene til venstre */
+  left: -120px;   /* flytter tallene mye mer ut */
   bottom: -15px;
   font-size: 160px;
   font-weight: 900;
   line-height: 1;
   color: transparent;
   -webkit-text-stroke: 5px #00FFCC;
-  z-index: 0; /* legger tallet bak bildet */
+  z-index: 0; /* bak bildet */
   transition: all 0.3s ease;
   pointer-events: none;
 }
+
 
 .top10-item:hover .top10-number {
   color: #00FFCC;
@@ -1005,5 +1005,6 @@ document.querySelectorAll(".progress-bar").forEach((bar) => {
   }
 });
 </script>
+
 
 
