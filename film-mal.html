@@ -393,18 +393,15 @@ video::cue {
 }
 
 
-
   </style>
 </head>
 <body>
- <div class="video-wrapper">
-  <video id="video" preload="metadata">
-    <source src="" type="video/mp4">
-    <track label="Norsk" kind="subtitles" srclang="no" src="" default>
+  <div class="container" id="container">
+    <video id="video" preload="metadata">
+      <source src="" type="video/mp4">
+      <track label="Norsk" kind="subtitles" srclang="no" src="" default>
       Din nettleser støtter ikke videoavspilling.
     </video>
-    <img class="watermark" src="https://static.wixstatic.com/media/fd2fb2_c21ec9ad924c4357b54e65f2557872c5~mv2.png" alt="Watermark">
-</div>
     <div class="subtitle-overlay" id="subtitleOverlay"></div>
 
 
@@ -499,6 +496,10 @@ video::cue {
         </div>
       </div>
     </div>
+
+    <img class="watermark" src="https://static.wixstatic.com/media/fd2fb2_c21ec9ad924c4357b54e65f2557872c5~mv2.png" alt="Watermark">
+  </div>
+
 <script>
 const filmer = {
   "corpse-bride": {
@@ -1098,6 +1099,7 @@ subtitleTracksDiv.querySelectorAll("button").forEach(btn => {
 });
 
 </script>
+
 
 
 
