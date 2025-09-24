@@ -925,8 +925,16 @@ function renderTop10(galleryId) {
 
   let filmKeys = Object.keys(filmer);
 
-  // --- Bland rekkefølgen ut fra dagens dato ---
   const today = new Date();
+
+  // --- Fjern filmer som ikke har kommet ennå ---
+  filmKeys = filmKeys.filter((key) => {
+    const film = filmer[key];
+    if (!film.publishDate) return true; // hvis ingen dato, behold
+    return new Date(film.publishDate) <= today;
+  });
+
+  // --- Bland rekkefølgen ut fra dagens dato ---
   const seed = today.getFullYear() * 1000 + today.getMonth() * 50 + today.getDate();
 
   function seededRandom(seed) {
@@ -960,6 +968,7 @@ function renderTop10(galleryId) {
     gallery.appendChild(wrapper);
   });
 }
+
 
 // --- Render seksjoner på hovedsiden ---
 renderGallery("nye-filmer-galleri", null, true, 10); // Nye filmer
@@ -1022,6 +1031,7 @@ document.querySelectorAll(".progress-bar").forEach((bar) => {
   }
 });
 </script>
+
 
 
 
