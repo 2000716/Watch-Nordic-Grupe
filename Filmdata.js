@@ -253,7 +253,7 @@ const filmer = {
     skuespillere: "Justin Fletcher, John Sparkes, Omid Djalili",
     regissor: "Mark Burton, Richard Starzak",
     watchUrl: "film-mal.html?id=sauen-shaun–filmen",
-    publishDate: "2025-10-25T00:00:00" // ISO datoformat
+    publishDate: "2025-10-02T00:00:00" // ISO datoformat
   },
 
    "the-crow": {
@@ -272,6 +272,7 @@ const filmer = {
     publishDate: "2025-09-21" // ISO datoformat
   },
 };
+
 
 
 
