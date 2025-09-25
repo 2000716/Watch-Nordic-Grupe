@@ -1066,7 +1066,7 @@ function renderContinueWatching() {
     const progress = localStorage.getItem("progress_" + key);
 
     const link = document.createElement("a");
-    link.href = `film.html?navn=${key}`;
+    link.href = `film-mal.html?id=${key}`;
     link.classList.add("image-with-progress");
 
     const img = document.createElement("img");
@@ -1101,6 +1101,7 @@ document.querySelectorAll(".progress-bar").forEach((bar) => {
 
 
 </script>
+
 
 
 
