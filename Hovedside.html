@@ -657,6 +657,19 @@ main {
             <div class="fade-right"></div>
           </div>
         </section>
+
+        <!-- ===== Fortsett å se ===== -->
+<section class="gallery-section" id="fortsett-section" style="display:none;">
+  <h2>Fortsett å se</h2>
+  <div class="gallery-wrapper">
+    <div class="fade-left"></div>
+    <button class="scroll-button left" onclick="scrollGallery(this, -1)">❮</button>
+    <div class="image-gallery" id="fortsett-galleri"></div>
+    <button class="scroll-button right" onclick="scrollGallery(this, 1)">❯</button>
+    <div class="fade-right"></div>
+  </div>
+</section>
+
   
         <section class="gallery-section">
           <h2>Sjangere</h2>
@@ -1023,6 +1036,58 @@ document.querySelectorAll(".gallery-wrapper").forEach((wrapper) => {
   updateScrollState();
 });
 
+  // ==================== FORTSETT Å SE ==================== //
+// forventer at progresjon lagres i localStorage som:
+// progress_[filmKey] = tall mellom 0 og 100
+
+function renderContinueWatching() {
+  const section = document.getElementById("fortsett-section");
+  const gallery = document.getElementById("fortsett-galleri");
+  if (!section || !gallery) return;
+
+  gallery.innerHTML = "";
+  let filmKeys = Object.keys(filmer);
+
+  // finn filmer med lagret progresjon (mellom 1 og 99%)
+  let fortsettFilmer = filmKeys.filter((key) => {
+    const progress = localStorage.getItem("progress_" + key);
+    return progress && progress > 0 && progress < 100;
+  });
+
+  if (fortsettFilmer.length === 0) {
+    section.style.display = "none";
+    return;
+  }
+
+  section.style.display = "block";
+
+  fortsettFilmer.forEach((key) => {
+    const film = filmer[key];
+    const progress = localStorage.getItem("progress_" + key);
+
+    const link = document.createElement("a");
+    link.href = `film.html?navn=${key}`;
+    link.classList.add("image-with-progress");
+
+    const img = document.createElement("img");
+    img.src = film.poster;
+    img.alt = film.tittel;
+
+    const progressBar = document.createElement("div");
+    progressBar.classList.add("progress-bar");
+    progressBar.setAttribute("data-progress", progress);
+    progressBar.style.setProperty("--progress", progress + "%");
+
+    link.appendChild(img);
+    link.appendChild(progressBar);
+    gallery.appendChild(link);
+  });
+}
+
+// kall funksjonen på load
+renderContinueWatching();
+
+
 // ==================== FREMDIRFTSLINJER ==================== //
 document.querySelectorAll(".progress-bar").forEach((bar) => {
   const progress = bar.getAttribute("data-progress");
@@ -1031,6 +1096,7 @@ document.querySelectorAll(".progress-bar").forEach((bar) => {
   }
 });
 </script>
+
 
 
 
