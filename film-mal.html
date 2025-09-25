@@ -712,10 +712,9 @@ const filmer = {
 
 };
 
-
-// ==================== HENT FILM-ID ==================== //
+// Hent film-id fra URL
 const urlParams = new URLSearchParams(window.location.search);
-const filmId = urlParams.get('navn')?.toLowerCase().replace(/\s+/g, '-');
+const filmId = urlParams.get('id')?.toLowerCase().replace(/\s+/g, '-');
 
 if (!filmer[filmId]) {
   alert("Denne filmen finnes ikke.");
@@ -725,7 +724,7 @@ if (!filmer[filmId]) {
 const film = filmer[filmId];
 document.title = film.tittel;
 
-// ==================== DOM-ELEMENTER ==================== //
+// DOM-elementer
 const video = document.getElementById('video');
 const source = video.querySelector('source');
 const track = video.querySelector('track');
@@ -1070,6 +1069,7 @@ video.addEventListener("loadedmetadata", () => {
   updateSubtitleButtons(globalSubtitleSetting);
 });
 </script>
+
 
 
 
