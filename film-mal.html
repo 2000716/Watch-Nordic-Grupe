@@ -788,7 +788,16 @@ function updateProgress() {
   timeDisplay.textContent = `${formatTime(video.currentTime)} / ${formatTime(video.duration)}`;
 }
 
+// === Ny funksjon: lagre progresjon ===
+function saveProgress() {
+  if (video.duration > 0) {
+    const percent = (video.currentTime / video.duration) * 100;
+    localStorage.setItem(`${storageKey}-progress`, percent.toFixed(1));
+  }
+}
+
 video.addEventListener('timeupdate', updateProgress);
+video.addEventListener('timeupdate', saveProgress);
 video.addEventListener('loadedmetadata', updateProgress);
 
 // Play/pause
@@ -996,12 +1005,14 @@ video.addEventListener('loadedmetadata', () => {
 
 window.addEventListener('beforeunload', () => {
   localStorage.setItem(`${storageKey}-lastPosition`, video.currentTime);
+  saveProgress();
 });
 
 // Ferdig
 video.addEventListener('ended', () => {
   localStorage.removeItem(`${storageKey}-lastPosition`);
   localStorage.setItem(`${storageKey}-status`, "ferdig");
+  localStorage.setItem(`${storageKey}-progress`, "100"); // marker ferdig
   window.location.href = film.tilbakeUrl;
 });
 
@@ -1099,6 +1110,7 @@ subtitleTracksDiv.querySelectorAll("button").forEach(btn => {
 });
 
 </script>
+
 
 
 
