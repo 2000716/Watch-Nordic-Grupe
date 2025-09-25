@@ -712,9 +712,10 @@ const filmer = {
 
 };
 
-// Hent film-id fra URL
+
+// ==================== HENT FILM-ID ==================== //
 const urlParams = new URLSearchParams(window.location.search);
-const filmId = urlParams.get('id')?.toLowerCase().replace(/\s+/g, '-');
+const filmId = urlParams.get('navn')?.toLowerCase().replace(/\s+/g, '-');
 
 if (!filmer[filmId]) {
   alert("Denne filmen finnes ikke.");
@@ -724,7 +725,7 @@ if (!filmer[filmId]) {
 const film = filmer[filmId];
 document.title = film.tittel;
 
-// DOM-elementer
+// ==================== DOM-ELEMENTER ==================== //
 const video = document.getElementById('video');
 const source = video.querySelector('source');
 const track = video.querySelector('track');
@@ -766,11 +767,12 @@ const restartBtn = document.getElementById("restartBtn");
 // Undertekster overlay
 const subtitleOverlay = document.getElementById("subtitleOverlay");
 
-// Variabler
+// ==================== VARIABLER ==================== //
 let isDragging = false;
 let hideTimeout;
 let subtitlesEnabled = true; // styrer om undertekster skal vises
 
+// ==================== FUNKSJONER ==================== //
 // Format tid til mm:ss
 function formatTime(time) {
   const m = Math.floor(time / 60);
@@ -786,18 +788,16 @@ function updateProgress() {
     thumb.style.left = percent + '%';
   }
   timeDisplay.textContent = `${formatTime(video.currentTime)} / ${formatTime(video.duration)}`;
-}
 
-// === Ny funksjon: lagre progresjon ===
-function saveProgress() {
-  if (video.duration > 0) {
+  // --- LAGRE PROGRESJON --- //
+  if (!isNaN(video.duration) && video.duration > 0) {
     const percent = (video.currentTime / video.duration) * 100;
-    localStorage.setItem(`${storageKey}-progress`, percent.toFixed(1));
+    localStorage.setItem("progress_" + filmId, percent.toFixed(1));
   }
 }
 
+// ==================== EVENTS ==================== //
 video.addEventListener('timeupdate', updateProgress);
-video.addEventListener('timeupdate', saveProgress);
 video.addEventListener('loadedmetadata', updateProgress);
 
 // Play/pause
@@ -862,6 +862,9 @@ if (film.subtitleLanguages && film.subtitleLanguages.length > 0) {
     btn.dataset.lang = sub.code;
     btn.addEventListener("click", () => {
       const selectedLang = sub.code;
+      globalSubtitleSetting = selectedLang;
+      localStorage.setItem(subtitleSettingKey, selectedLang);
+
       if (selectedLang === "off") {
         subtitlesEnabled = false;
         for (let i = 0; i < video.textTracks.length; i++) video.textTracks[i].mode = "hidden";
@@ -883,6 +886,7 @@ if (film.subtitleLanguages && film.subtitleLanguages.length > 0) {
           }
         }
       }
+      updateSubtitleButtons(selectedLang);
       captionMenu.style.display = "none";
     });
     subtitleTracksDiv.appendChild(btn);
@@ -938,7 +942,6 @@ function showPreview(e) {
     hiddenVideo.removeEventListener("seeked", handler);
   });
 }
-
 function hidePreview() { previewBox.style.display = "none"; }
 
 progress.addEventListener("mousemove", showPreview);
@@ -956,7 +959,6 @@ function showUI() {
     }
   }, 3000);
 }
-
 document.addEventListener('mousemove', showUI);
 document.addEventListener('keydown', showUI);
 
@@ -965,7 +967,6 @@ fullscreenBtn.addEventListener('click', () => {
   if (!document.fullscreenElement) { container.requestFullscreen(); }
   else { document.exitFullscreen(); }
 });
-
 document.addEventListener('fullscreenchange', () => {
   fullscreenBtn.querySelector('img').src = document.fullscreenElement
     ? "https://static.wixstatic.com/media/fd2fb2_c9b139f2774c4bf7b32c7271fd6c1c1a~mv2.png"
@@ -977,9 +978,8 @@ video.addEventListener('waiting', () => loadingSpinner.style.display = 'block');
 video.addEventListener('playing', () => loadingSpinner.style.display = 'none');
 video.addEventListener('canplay', () => loadingSpinner.style.display = 'none');
 
-// Lagre/gjenoppta
-const storageKey = filmId;
-const savedTime = parseFloat(localStorage.getItem(`${storageKey}-lastPosition`));
+// ==================== RESUME ==================== //
+const savedTime = parseFloat(localStorage.getItem(`${filmId}-lastPosition`));
 
 video.addEventListener('loadedmetadata', () => {
   if (!isNaN(savedTime) && savedTime > 10 && video.duration > savedTime) {
@@ -1004,15 +1004,14 @@ video.addEventListener('loadedmetadata', () => {
 });
 
 window.addEventListener('beforeunload', () => {
-  localStorage.setItem(`${storageKey}-lastPosition`, video.currentTime);
-  saveProgress();
+  localStorage.setItem(`${filmId}-lastPosition`, video.currentTime);
 });
 
 // Ferdig
 video.addEventListener('ended', () => {
-  localStorage.removeItem(`${storageKey}-lastPosition`);
-  localStorage.setItem(`${storageKey}-status`, "ferdig");
-  localStorage.setItem(`${storageKey}-progress`, "100"); // marker ferdig
+  localStorage.removeItem(`${filmId}-lastPosition`);
+  localStorage.removeItem("progress_" + filmId); // fjern fra fortsett å se
+  localStorage.setItem(`${filmId}-status`, "ferdig");
   window.location.href = film.tilbakeUrl;
 });
 
@@ -1032,13 +1031,10 @@ for (let i = 0; i < video.textTracks.length; i++) {
   video.textTracks[i].mode = "hidden";
 }
 
-// Nøkkel for å lagre globalt subtitle-valg (på tvers av filmer)
+// ==================== GLOBAL SUBTITLE SETTING ==================== //
 const subtitleSettingKey = "global-subtitle-setting";
-
-// Hent lagret setting (standard: "off")
 let globalSubtitleSetting = localStorage.getItem(subtitleSettingKey) || "off";
 
-// Funksjon for å oppdatere knappene i menyen
 function updateSubtitleButtons(activeLang) {
   document.querySelectorAll("#subtitleTracks button").forEach(btn => {
     if (btn.dataset.lang === activeLang) {
@@ -1049,7 +1045,6 @@ function updateSubtitleButtons(activeLang) {
   });
 }
 
-// Når film lastes inn, sett undertekst etter lagret valg
 video.addEventListener("loadedmetadata", () => {
   if (globalSubtitleSetting === "off") {
     subtitlesEnabled = false;
@@ -1074,43 +1069,7 @@ video.addEventListener("loadedmetadata", () => {
   }
   updateSubtitleButtons(globalSubtitleSetting);
 });
-
-// Når bruker klikker på en undertekst-knapp
-subtitleTracksDiv.querySelectorAll("button").forEach(btn => {
-  btn.addEventListener("click", () => {
-    const selectedLang = btn.dataset.lang;
-    globalSubtitleSetting = selectedLang;
-    localStorage.setItem(subtitleSettingKey, selectedLang); // lagre globalt
-
-    if (selectedLang === "off") {
-      subtitlesEnabled = false;
-      for (let i = 0; i < video.textTracks.length; i++) video.textTracks[i].mode = "hidden";
-      subtitleOverlay.textContent = "";
-    } else {
-      subtitlesEnabled = true;
-      for (let i = 0; i < video.textTracks.length; i++) {
-        const track = video.textTracks[i];
-        if (track.language === selectedLang || track.label.toLowerCase() === selectedLang) {
-          track.mode = "hidden";
-          track.addEventListener("cuechange", () => {
-            if (!subtitlesEnabled) {
-              subtitleOverlay.textContent = "";
-              return;
-            }
-            const cues = track.activeCues;
-            subtitleOverlay.textContent = cues && cues.length > 0 ? cues[0].text : "";
-          });
-        }
-      }
-    }
-
-    updateSubtitleButtons(selectedLang);
-    captionMenu.style.display = "none";
-  });
-});
-
 </script>
-
 
 
 
