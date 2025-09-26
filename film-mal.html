@@ -22,14 +22,16 @@ body { background: #000; font-family: Arial, sans-serif; overflow: hidden; }
 
 video {
   position: absolute;
-  top: 0;
+  top: 50%;
   left: 0;
-  width: 100%;   /* fyller alltid bredden */
-  height: 100%;  /* fyller alltid høyden */
-  object-fit: contain; /* viser hele videoen uten å strekke den */
-  background: #000;    /* svarte striper hvis ikke fyller skjermen */
+  width: 100%;        /* fyller alltid bredden */
+  height: auto;       /* høyden følger proporsjonene */
+  transform: translateY(-50%); /* sentrerer vertikalt */
+  object-fit: contain;
+  background: black;  /* gir svarte striper oppe/nede hvis nødvendig */
   z-index: 1;
 }
+
 
 
 /* Undertekster */
@@ -1067,6 +1069,7 @@ video.addEventListener("loadedmetadata", () => {
   updateSubtitleButtons(globalSubtitleSetting);
 });
 </script>
+
 
 
 
