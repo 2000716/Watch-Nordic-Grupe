@@ -1068,7 +1068,20 @@ video.addEventListener("loadedmetadata", () => {
   }
   updateSubtitleButtons(globalSubtitleSetting);
 });
+
+  // Hindre høyreklikk på videoen
+video.addEventListener("contextmenu", (e) => {
+  e.preventDefault();
+  alert("Høyreklikk er deaktivert på filmen.");
+});
+
+// (valgfritt) – hindre høyreklikk på hele siden
+document.addEventListener("contextmenu", (e) => {
+  e.preventDefault();
+});
+
 </script>
+
 
 
 
