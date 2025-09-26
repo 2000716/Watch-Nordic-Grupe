@@ -271,7 +271,24 @@ const filmer = {
     watchUrl: "film-mal.html?id=the-crow",
     publishDate: "2025-09-21" // ISO datoformat
   },
+
+  "elizabeth": {
+    tittel: "Elizabeth",
+    bakgrunn: "https://image.tmdb.org/t/p/original/LTjGvAf92YLudl5zqJP9tHLuSo.jpg",
+    banner: "https://static.wixstatic.com/media/fd2fb2_6448e5596a9448e8be1f3e15252a8095~mv2.jpg", // <- brukes til hero-banner
+    logo: "https://is1-ssl.mzstatic.com/image/thumb/IFRN30OTap_9_Ya1ff397Q/432x162.png",
+    poster: "https://is1-ssl.mzstatic.com/image/thumb/9VuQDhYIYJIDBL7_fKU0XA/1200x675.jpg",
+    posterVertikal: "https://cdn.kinocheck.com/i/bwjvhhdy15.jpg", // portrett
+    beskrivelse: "Dette historiske dramaet skildrer den unge Elisabeth Tudors vei til tronen som Englands dronning, en regjeringstid fylt av intriger og bedrag.",
+    metadata: ["USA", "1998", "15+", "Drama", "1 t 58 min"],
+    imdb: "https://www.imdb.com/title/tt0127536?ref_ext_viaplay",
+    skuespillere: "Cate Blanchett, Geoffrey Rush, Christopher Eccleston",
+    regissor: "Shekhar Kapur",
+    watchUrl: "film-mal.html?id=elizabeth",
+    publishDate: "2025-09-26" // ISO datoformat
+  },
 };
+
 
 
 
