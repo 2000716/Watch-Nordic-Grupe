@@ -301,9 +301,10 @@ const filmer = {
     skuespillere: "Dick Van Dyke, Sally Ann Howes, Lionel Jeffries",
     regissor: "Ken Hughes",
     watchUrl: "film-mal.html?id=chitty-chitty-bang-bang",
-    publishDate: "2025-10-10" // ISO datoformat
+    publishDate: "2025-10-10T00:00:00" // ISO datoformat
   },
 };
+
 
 
 
