@@ -287,7 +287,24 @@ const filmer = {
     watchUrl: "film-mal.html?id=elizabeth",
     publishDate: "2025-09-26" // ISO datoformat
   },
+
+    "chitty-chitty-bang-bang": {
+    tittel: "Chitty Chitty Bang Bang",
+    bakgrunn: "https://is1-ssl.mzstatic.com/image/thumb/bH5SmieIfdD6oIVVwzxYkg/2400x1350sr.webp",
+    banner: "https://m.media-amazon.com/images/S/pv-target-images/fbb7d019ac94443df2f06f5ff9620267460fa808f463c82036f367013da15f5c.jpg", // <- brukes til hero-banner
+    logo: "https://image.tmdb.org/t/p/original/kEnMUrKAJ9a0V4Nerx5rPCUxl8r.png",
+    poster: "https://m.media-amazon.com/images/S/pv-target-images/fbb7d019ac94443df2f06f5ff9620267460fa808f463c82036f367013da15f5c.jpg",
+    posterVertikal: "https://images-prod.ai.tv2.no/v2/image-packs/pfimg_pack_01k4smakxkea6t9t5e1dg1nhy6?location=moviePoster&width=672", // portrett
+    beskrivelse: "En eksentrisk oppfinner bygger et fantastisk fartøy som kan fly og flyte. Sammen med familien styrer han bilen mot en magisk verden full endeløse eventyr.",
+    metadata: ["USA", "1968", "Alle", "Familie / Musikal", "2 t 25 min"],
+    imdb: "https://www.imdb.com/title/tt0062803/",
+    skuespillere: "Dick Van Dyke, Sally Ann Howes, Lionel Jeffries",
+    regissor: "Ken Hughes",
+    watchUrl: "film-mal.html?id=chitty-chitty-bang-bang",
+    publishDate: "2025-10-10" // ISO datoformat
+  },
 };
+
 
 
 
