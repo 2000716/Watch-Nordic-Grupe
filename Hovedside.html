@@ -574,6 +574,47 @@ main {
   -webkit-text-stroke: 0;
 }
 
+/* ===== Halloween-banner galleri (vertikale bilder) ===== */
+#halloween-gallery {
+  display: flex;
+  flex-direction: row;
+  gap: 12px;
+  overflow-x: auto;
+  padding: 10px 16px;
+  scroll-behavior: smooth;
+}
+
+#halloween-gallery a {
+  display: inline-block;
+  flex: 0 0 auto;
+  width: 120px;
+  height: 180px;
+  border-radius: 8px;
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+#halloween-gallery a img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 8px;
+  display: block;
+  transition: transform 0.3s ease;
+}
+
+#halloween-gallery a:hover img {
+  transform: scale(1.05);
+}
+
+#halloween-gallery a:hover {
+  box-shadow: 0 0 10px rgba(0, 255, 204, 0.5);
+}
+
+#halloween-gallery::-webkit-scrollbar {
+  display: none;
+}
+
 /* ===== Mobilvennlig tilpasning ===== */
 @media (max-width: 768px) {
   .vertical-nav {
@@ -676,45 +717,12 @@ main {
   .banner-left .film-logo {
     width: 200px;
   }
-}
 
-  /* ===== Halloween-banner galleri (vertikale bilder) ===== */
-#halloween-gallery {
-  display: flex;
-  flex-direction: row;
-  gap: 12px;
-  overflow-x: auto;
-  padding-bottom: 6px;
+  #halloween-gallery a {
+    width: 100px;
+    height: 150px;
+  }
 }
-
-#halloween-gallery a {
-  display: inline-block;
-  flex: 0 0 auto; /* Ikke krymp, ikke strekk */
-  width: 120px;
-  height: 180px;
-  border-radius: 8px;
-  overflow: hidden;
-  transition: transform 0.3s ease;
-}
-
-#halloween-gallery a img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  border-radius: 8px;
-  display: block;
-  transition: transform 0.3s ease;
-}
-
-#halloween-gallery a:hover img {
-  transform: scale(1.05);
-}
-
-/* Skjul scrollbar på banner-galleri */
-#halloween-gallery::-webkit-scrollbar {
-  display: none;
-}
-
 
 @media (max-width: 480px) {
   .film-logo {
@@ -750,6 +758,11 @@ main {
 
   .top10-number {
     font-size: 80px;
+  }
+
+  #halloween-gallery a {
+    width: 80px;
+    height: 120px;
   }
 }
 
@@ -1292,6 +1305,7 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 </script>
+
 
 
 
