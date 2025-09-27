@@ -612,7 +612,103 @@ main {
   .top10-number {
     font-size: 80px;
   }
+/* Spesifikt film-banner */
+.special-banner-section {
+  margin: 30px 16px;
 }
+
+.special-banner-section h2 {
+  font-size: 20px;
+  margin-bottom: 12px;
+  color: #00FFCC;
+}
+
+.special-banner {
+  display: flex;
+  justify-content: space-between;
+  background: #0d2c30;
+  border: 2px solid #00FFCC;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 0 12px rgba(0,255,204,0.3);
+  padding: 16px;
+  gap: 20px;
+  align-items: center;
+}
+
+/* Venstre: logo + knapp */
+.special-content {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.special-logo {
+  width: 280px;
+  max-width: 100%;
+}
+
+.see-more-btn {
+  text-decoration: none;
+  background: white;
+  color: black;
+  padding: 12px 40px;
+  border-radius: 6px;
+  font-weight: bold;
+  transition: background 0.3s ease;
+}
+
+.see-more-btn:hover {
+  background: #f2f2f2;
+}
+
+/* Høyre: horisontalt galleri */
+.special-gallery {
+  display: flex;
+  flex-direction: row;
+  gap: 12px;
+  overflow-x: auto;
+  padding-bottom: 6px;
+}
+
+.special-gallery img {
+  width: 120px;
+  height: 180px;
+  object-fit: cover;
+  border-radius: 8px;
+  transition: transform 0.3s ease;
+}
+
+.special-gallery img:hover {
+  transform: scale(1.05);
+}
+
+/* Mobiltilpasning */
+@media (max-width: 768px) {
+  .special-banner {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .special-content {
+    align-items: center;
+  }
+
+  .special-logo {
+    width: 200px;
+  }
+
+  .special-gallery {
+    justify-content: center;
+  }
+
+  .see-more-btn {
+    padding: 10px 30px;
+    font-size: 14px;
+  }
+}
+
 
   </style>
   </head>
@@ -711,7 +807,26 @@ main {
       <div class="fade-right"></div>
     </div>
   </section>
-  
+
+        <!-- Spesifikt film-banner -->
+<section class="special-banner-section">
+  <h2>happy Helloween</h2>
+  <div class="special-banner">
+    <!-- Venstre side: film-logo og knapp -->
+    <div class="special-content">
+      <img class="special-logo" src="https://via.placeholder.com/300x120?text=FILM+LOGO" alt="Film Logo">
+      <a href="film.html?navn=dinFilm" class="see-more-btn">SE MER</a>
+    </div>
+
+    <!-- Høyre side: horisontalt galleri -->
+    <div class="special-gallery">
+      <img src="https://via.placeholder.com/120x180" alt="Galleri-bilde 1">
+      <img src="https://via.placeholder.com/120x180" alt="Galleri-bilde 2">
+      <img src="https://via.placeholder.com/120x180" alt="Galleri-bilde 3">
+    </div>
+  </div>
+</section>
+
   
         <section class="gallery-section">
           <h2>Barn</h2>
@@ -1101,6 +1216,7 @@ document.querySelectorAll(".progress-bar").forEach((bar) => {
 
 
 </script>
+
 
 
 
