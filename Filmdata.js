@@ -295,7 +295,24 @@ const filmer = {
     watchUrl: "film-mal.html?id=chitty-chitty-bang-bang",
     publishDate: "2025-10-10T00:00:00" // ISO datoformat
   },
+
+   "muppet-treasure-island": {
+    tittel: "Muppet Treasure Island",
+    bakgrunn: "https://whatsondisneyplus.b-cdn.net/wp-content/uploads/2020/02/muppets-treasure-scaled.jpg",
+    logo: "https://static.wixstatic.com/media/fd2fb2_e15e70c9ef144f889e769fc5962803f9~mv2.png",
+    poster: "https://disney.images.edge.bamgrid.com/ripcut-delivery/v2/variant/disney/a02a8bb0-319d-459b-89ec-28ba8bbcff04/compose?aspectRatio=1.78&format=webp&width=1200",
+    posterVertikal: "https://lumiere-a.akamaihd.net/v1/images/p_muppettreasureisland_19640_a7d3ec93.jpeg?region=0%2C0%2C540%2C810", // portrett
+    beskrivelse: "Muppetene setter seil på jakt etter skatter, med Jim Hawkins og Long John Silver.",
+    metadata: ["USA", "1996", "7+", "Familie / Fantasy", "1 t 39 min"],
+    imdb: "https://www.imdb.com/title/tt0117110/",
+    skuespillere: "Billy Connolly, Jennifer Saunders, Dave Goelz, Steve Whitmire",
+    regissor: "Brian Henson",
+    watchUrl: "film-mal.html?id=muppet-treasure-island",
+    publishDate: "2025-09-29T00:00:00" // ISO datoformat
+  },
+  
 };
+
 
 
 
