@@ -1120,21 +1120,27 @@ function renderHalloweenBanner() {
   if (!halloweenFilmKey) return;
   const film = filmer[halloweenFilmKey];
 
+  // Oppdater banner-bildet og logo
   if (film.banner) bannerImage.src = film.banner;
   if (film.logo) bannerLogo.src = film.logo;
   bannerLink.href = `film.html?navn=${halloweenFilmKey}`;
 
+  // Bygg galleriet
   gallery.innerHTML = "";
   Object.keys(filmer).forEach(key => {
     const f = filmer[key];
-    if (f.banner && f.metadata.some(m =>
+    if (f.metadata.some(m =>
       m.toLowerCase().includes("halloween") || m.toLowerCase().includes("skrekk")
     )) {
+      const link = document.createElement("a");
+      link.href = `film.html?navn=${key}`;
+
       const img = document.createElement("img");
       img.src = f.posterVertikal || f.poster;
       img.alt = f.tittel;
-      img.onclick = () => window.location.href = `film.html?navn=${key}`;
-      gallery.appendChild(img);
+
+      link.appendChild(img);
+      gallery.appendChild(link);
     }
   });
 }
@@ -1248,6 +1254,7 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 </script>
+
 
 
 
