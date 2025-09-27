@@ -47,7 +47,7 @@ const filmer = {
   "burlesque": {
     tittel: "Burlesque",
     bakgrunn: "https://occ-0-8407-2218.1.nflxso.net/dnm/api/v6/E8vDc_W8CLv7-yMQu8KMEC7Rrr8/AAAABTbfoDZNprg4kKg_Azptknl68ULWGPAhGrKE9Z-7ZFiyg57lAt1CHnWYz8e8cWjI-oKpRnNMfMBKb7bFRi6mBtAdnqQ3rNanOmDC.jpg?r=210",
-    banner: "https://www.pluggedin.com/wp-content/uploads/2020/01/Burlesque.jpg", // <- brukes til hero-banner
+    banner: "https://static.wixstatic.com/media/fd2fb2_0efea4ff6f6b4073b0e64bb659e3d800~mv2.jpg", // <- brukes til hero-banner
     logo: "https://upload.wikimedia.org/wikipedia/fr/d/d0/Burlesque_%28film%2C_2010%29_Logo.png",
     poster: "https://static.wixstatic.com/media/fd2fb2_c85b71dfd8bc4cc6ae7ac39b8513370d~mv2.jpg",
     posterVertikal: "https://m.media-amazon.com/images/I/81qjANQ8iPL._UF894,1000_QL80_.jpg", // portrett
@@ -304,6 +304,7 @@ const filmer = {
     publishDate: "2025-10-10T00:00:00" // ISO datoformat
   },
 };
+
 
 
 
