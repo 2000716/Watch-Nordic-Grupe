@@ -461,7 +461,69 @@ body.loaded {
     font-size: 24px;
     padding: 14px 18px;
   }
+/* Kort beskrivelse */
+.description.short {
+  display: -webkit-box;
+  -webkit-line-clamp: 3; /* antall linjer som vises */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
+
+/* "Mer"-knapp */
+.more-btn {
+  color: #00FFCC;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+  margin-top: 6px;
+  padding: 0;
+  text-decoration: underline;
+}
+
+/* Popup-boks */
+.popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 200;
+}
+
+.popup-box {
+  background: #111;
+  color: white;
+  max-width: 600px;
+  max-height: 70vh;
+  overflow-y: auto;
+  padding: 20px;
+  border-radius: 12px;
+  position: relative;
+  text-align: left;
+}
+
+.popup-box .close-btn {
+  position: absolute;
+  top: 10px;
+  right: 14px;
+  background: none;
+  border: none;
+  font-size: 20px;
+  color: white;
+  cursor: pointer;
+}
+
+/* Galleriet nærmere */
+.recommendations {
+  margin-top: -40px; /* trekker galleriet oppover */
+}
+
   </style>
 </head>
 <body>
@@ -774,10 +836,43 @@ if (data.trailer && data.trailer.trim() !== "") {
   trailerVideo.style.display = "none";
   videoControls.style.display = "none";
 }
+  // -------------------- Begrenset beskrivelse --------------------
+const descEl = document.querySelector(".description");
+
+if (descEl.textContent.length > 200) { // grensen på antall tegn
+  const fullText = descEl.textContent;
+  descEl.classList.add("short");
+
+  const moreBtn = document.createElement("button");
+  moreBtn.className = "more-btn";
+  moreBtn.textContent = "Mer";
+  descEl.insertAdjacentElement("afterend", moreBtn);
+
+  moreBtn.addEventListener("click", () => {
+    const overlay = document.createElement("div");
+    overlay.className = "popup-overlay";
+
+    const box = document.createElement("div");
+    box.className = "popup-box";
+    box.innerHTML = `
+      <button class="close-btn">&times;</button>
+      <p>${fullText}</p>
+    `;
+
+    overlay.appendChild(box);
+    document.body.appendChild(overlay);
+
+    box.querySelector(".close-btn").addEventListener("click", () => {
+      overlay.remove();
+    });
+  });
+}
+
 </script>
 
 </body>
 </html>
+
 
 
 
