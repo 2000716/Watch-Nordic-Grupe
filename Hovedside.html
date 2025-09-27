@@ -612,44 +612,52 @@ main {
   .top10-number {
     font-size: 80px;
   }
-/* Spesifikt film-banner */
-.special-banner-section {
+/* Spesial hero banner med galleri */
+.special-hero-banner {
   margin: 30px 16px;
-}
-
-.special-banner-section h2 {
-  font-size: 20px;
-  margin-bottom: 12px;
-  color: #00FFCC;
-}
-
-.special-banner {
-  display: flex;
-  justify-content: space-between;
-  background: #0d2c30;
+  width: calc(100% - 32px);
   border: 2px solid #00FFCC;
   border-radius: 12px;
   overflow: hidden;
-  box-shadow: 0 0 12px rgba(0,255,204,0.3);
-  padding: 16px;
-  gap: 20px;
-  align-items: center;
+  position: relative;
+  height: 350px;
 }
 
-/* Venstre: logo + knapp */
-.special-content {
+.special-hero-banner .banner-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  filter: brightness(0.6);
+}
+
+.banner-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 30px;
+  box-sizing: border-box;
+}
+
+/* Venstre del */
+.banner-left {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
   gap: 16px;
+  z-index: 2;
 }
 
-.special-logo {
+.banner-left .film-logo {
   width: 280px;
   max-width: 100%;
 }
 
-.see-more-btn {
+.banner-left .watch-button {
   text-decoration: none;
   background: white;
   color: black;
@@ -659,20 +667,26 @@ main {
   transition: background 0.3s ease;
 }
 
-.see-more-btn:hover {
+.banner-left .watch-button:hover {
   background: #f2f2f2;
 }
 
-/* Høyre: horisontalt galleri */
-.special-gallery {
-  display: flex;
-  flex-direction: row;
-  gap: 12px;
+/* Høyre galleri */
+.banner-right {
+  max-width: 500px;
   overflow-x: auto;
+  display: flex;
+  gap: 12px;
   padding-bottom: 6px;
 }
 
-.special-gallery img {
+.banner-gallery {
+  display: flex;
+  flex-direction: row;
+  gap: 12px;
+}
+
+.banner-gallery img {
   width: 120px;
   height: 180px;
   object-fit: cover;
@@ -680,32 +694,29 @@ main {
   transition: transform 0.3s ease;
 }
 
-.special-gallery img:hover {
+.banner-gallery img:hover {
   transform: scale(1.05);
 }
 
 /* Mobiltilpasning */
 @media (max-width: 768px) {
-  .special-banner {
+  .special-hero-banner {
+    height: auto;
+  }
+
+  .banner-overlay {
     flex-direction: column;
     align-items: center;
+    gap: 20px;
   }
 
-  .special-content {
-    align-items: center;
-  }
-
-  .special-logo {
-    width: 200px;
-  }
-
-  .special-gallery {
+  .banner-right {
+    max-width: 100%;
     justify-content: center;
   }
 
-  .see-more-btn {
-    padding: 10px 30px;
-    font-size: 14px;
+  .banner-left .film-logo {
+    width: 200px;
   }
 }
 
@@ -808,21 +819,19 @@ main {
     </div>
   </section>
 
-        <!-- Spesifikt film-banner -->
-<section class="special-banner-section">
-  <h2>happy Helloween</h2>
-  <div class="special-banner">
-    <!-- Venstre side: film-logo og knapp -->
-    <div class="special-content">
-      <img class="special-logo" src="https://via.placeholder.com/300x120?text=FILM+LOGO" alt="Film Logo">
-      <a href="film.html?navn=dinFilm" class="see-more-btn">SE MER</a>
+<!-- Spesial Halloween-banner -->
+<section class="hero-banner special-hero-banner">
+  <img class="banner-image" src="" alt="Film Banner" id="special-banner-image">
+  <div class="banner-overlay">
+    <!-- Venstre side: logo + knapp -->
+    <div class="banner-left">
+      <img class="film-logo" src="" alt="Film Logo" id="special-banner-logo">
+      <a href="#" class="watch-button" id="special-banner-link">SE MER</a>
     </div>
 
-    <!-- Høyre side: horisontalt galleri -->
-    <div class="special-gallery">
-      <img src="https://via.placeholder.com/120x180" alt="Galleri-bilde 1">
-      <img src="https://via.placeholder.com/120x180" alt="Galleri-bilde 2">
-      <img src="https://via.placeholder.com/120x180" alt="Galleri-bilde 3">
+    <!-- Høyre side: galleri -->
+    <div class="banner-right">
+      <div class="banner-gallery" id="halloween-gallery"></div>
     </div>
   </div>
 </section>
@@ -1097,6 +1106,44 @@ function renderTop10(galleryId) {
   });
 }
 
+  // ===== Spesial Halloween-banner =====
+function renderHalloweenBanner() {
+  const bannerImage = document.getElementById("special-banner-image");
+  const bannerLogo = document.getElementById("special-banner-logo");
+  const bannerLink = document.getElementById("special-banner-link");
+  const gallery = document.getElementById("halloween-gallery");
+
+  // Velg en bestemt film som hovedbanner (f.eks. første med "halloween" i metadata)
+  const halloweenFilmKey = Object.keys(filmer).find(key =>
+    filmer[key].metadata.some(m => m.toLowerCase().includes("halloween"))
+  );
+
+  if (!halloweenFilmKey) return;
+  const film = filmer[halloweenFilmKey];
+
+  // Sett bannerbilde, logo og link
+  if (film.banner) bannerImage.src = film.banner;
+  if (film.logo) bannerLogo.src = film.logo;
+  bannerLink.href = `film.html?navn=${halloweenFilmKey}`;
+
+  // Lag galleri av alle filmer som matcher halloween/skrekk
+  gallery.innerHTML = "";
+  Object.keys(filmer).forEach(key => {
+    const f = filmer[key];
+    if (f.metadata.some(m => m.toLowerCase().includes("halloween") || m.toLowerCase().includes("skrekk"))) {
+      const img = document.createElement("img");
+      img.src = f.posterVertikal || f.poster;
+      img.alt = f.tittel;
+      img.onclick = () => window.location.href = `film.html?navn=${key}`;
+      gallery.appendChild(img);
+    }
+  });
+}
+
+// Kall funksjonen når siden lastes
+renderHalloweenBanner();
+
+
 
 // --- Render seksjoner på hovedsiden ---
 renderGallery("nye-filmer-galleri", null, true, 10); // Nye filmer
@@ -1216,6 +1263,7 @@ document.querySelectorAll(".progress-bar").forEach((bar) => {
 
 
 </script>
+
 
 
 
