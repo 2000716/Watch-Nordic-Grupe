@@ -1067,7 +1067,7 @@ function renderTop10(galleryId) {
   // --- Fjern filmer som ikke har kommet ennå ---
   filmKeys = filmKeys.filter((key) => {
     const film = filmer[key];
-    if (!film.publishDate) return true; // hvis ingen dato, behold
+    if (!film.publishDate) return true; 
     return new Date(film.publishDate) <= today;
   });
 
@@ -1106,31 +1106,32 @@ function renderTop10(galleryId) {
   });
 }
 
-  // ===== Spesial Halloween-banner =====
+// ==================== SPESIAL HALLOWEEN-BANNER ==================== //
 function renderHalloweenBanner() {
   const bannerImage = document.getElementById("special-banner-image");
   const bannerLogo = document.getElementById("special-banner-logo");
   const bannerLink = document.getElementById("special-banner-link");
   const gallery = document.getElementById("halloween-gallery");
 
-  // Velg en bestemt film som hovedbanner (f.eks. første med "halloween" i metadata)
   const halloweenFilmKey = Object.keys(filmer).find(key =>
-    filmer[key].metadata.some(m => m.toLowerCase().includes("halloween"))
+    filmer[key].metadata.some(m =>
+      m.toLowerCase().includes("halloween")
+    )
   );
 
   if (!halloweenFilmKey) return;
   const film = filmer[halloweenFilmKey];
 
-  // Sett bannerbilde, logo og link
   if (film.banner) bannerImage.src = film.banner;
   if (film.logo) bannerLogo.src = film.logo;
   bannerLink.href = `film.html?navn=${halloweenFilmKey}`;
 
-  // Lag galleri av alle filmer som matcher halloween/skrekk
   gallery.innerHTML = "";
   Object.keys(filmer).forEach(key => {
     const f = filmer[key];
-    if (f.metadata.some(m => m.toLowerCase().includes("halloween") || m.toLowerCase().includes("skrekk"))) {
+    if (f.metadata.some(m =>
+      m.toLowerCase().includes("halloween") || m.toLowerCase().includes("skrekk")
+    )) {
       const img = document.createElement("img");
       img.src = f.posterVertikal || f.poster;
       img.alt = f.tittel;
@@ -1140,68 +1141,7 @@ function renderHalloweenBanner() {
   });
 }
 
-// Kall funksjonen når siden lastes
-renderHalloweenBanner();
-
-
-
-// --- Render seksjoner på hovedsiden ---
-renderGallery("nye-filmer-galleri", null, true, 10); // Nye filmer
-renderTop10("topp10-filmer-galleri"); // Topp 10 filmer
-renderGallery("barn-galleri", (key) => {
-  const film = filmer[key];
-  return film.metadata.some(
-    (meta) =>
-      meta.toLowerCase().includes("barn") ||
-      meta.toLowerCase().includes("familie")
-  );
-});
-renderUpcoming("kommer-snart-galleri");
-
-// --- Oppdater Hero Banner ---
-oppdaterBanner();
-
-// ==================== GALLERI-SCROLL ==================== //
-document.querySelectorAll(".gallery-wrapper").forEach((wrapper) => {
-  const gallery = wrapper.querySelector(".image-gallery, .coming-movies-gallery, .top10-gallery");
-  const leftBtn = wrapper.querySelector(".scroll-button.left");
-  const rightBtn = wrapper.querySelector(".scroll-button.right");
-  const fadeLeft = wrapper.querySelector(".fade-left");
-  const fadeRight = wrapper.querySelector(".fade-right");
-
-  function updateScrollState() {
-    if (!gallery) return;
-    const scrollLeft = gallery.scrollLeft;
-    const maxScroll = gallery.scrollWidth - gallery.clientWidth;
-
-    if (leftBtn) leftBtn.classList.toggle("hidden", scrollLeft <= 0);
-    if (rightBtn) rightBtn.classList.toggle("hidden", scrollLeft >= maxScroll);
-    if (fadeLeft) fadeLeft.classList.toggle("fade-hidden", scrollLeft <= 0);
-    if (fadeRight) fadeRight.classList.toggle("fade-hidden", scrollLeft >= maxScroll);
-  }
-
-  if (leftBtn) {
-    leftBtn.addEventListener("click", () => {
-      gallery.scrollBy({ left: -300, behavior: "smooth" });
-    });
-  }
-  if (rightBtn) {
-    rightBtn.addEventListener("click", () => {
-      gallery.scrollBy({ left: 300, behavior: "smooth" });
-    });
-  }
-
-  if (gallery) {
-    gallery.addEventListener("scroll", updateScrollState);
-  }
-
-  updateScrollState();
-});
-
-  // ==================== FORTSETT Å SE ==================== //
-// forventer at progresjon lagres i localStorage som:
-// progress_[filmKey] = tall mellom 0 og 100
-
+// ==================== FORTSETT Å SE ==================== //
 function renderContinueWatching() {
   const section = document.getElementById("fortsett-section");
   const gallery = document.getElementById("fortsett-galleri");
@@ -1210,7 +1150,6 @@ function renderContinueWatching() {
   gallery.innerHTML = "";
   let filmKeys = Object.keys(filmer);
 
-  // finn filmer med lagret progresjon (mellom 1 og 99%)
   let fortsettFilmer = filmKeys.filter((key) => {
     const progress = localStorage.getItem("progress_" + key);
     return progress && progress > 0 && progress < 100;
@@ -1246,25 +1185,70 @@ function renderContinueWatching() {
   });
 }
 
-// kall funksjonen på load
-renderContinueWatching();
+// ==================== INIT ==================== //
+document.addEventListener("DOMContentLoaded", () => {
+  // Render seksjoner
+  renderGallery("nye-filmer-galleri", null, true, 10); 
+  renderTop10("topp10-filmer-galleri"); 
+  renderGallery("barn-galleri", (key) => {
+    const film = filmer[key];
+    return film.metadata.some(
+      (meta) =>
+        meta.toLowerCase().includes("barn") ||
+        meta.toLowerCase().includes("familie")
+    );
+  });
+  renderUpcoming("kommer-snart-galleri");
+  oppdaterBanner();
+  renderHalloweenBanner();
+  renderContinueWatching();
 
+  // Galleri-scroll
+  document.querySelectorAll(".gallery-wrapper").forEach((wrapper) => {
+    const gallery = wrapper.querySelector(".image-gallery, .coming-movies-gallery, .top10-gallery");
+    const leftBtn = wrapper.querySelector(".scroll-button.left");
+    const rightBtn = wrapper.querySelector(".scroll-button.right");
+    const fadeLeft = wrapper.querySelector(".fade-left");
+    const fadeRight = wrapper.querySelector(".fade-right");
 
-// ==================== FREMDIRFTSLINJER ==================== //
-document.querySelectorAll(".progress-bar").forEach((bar) => {
-  const progress = bar.getAttribute("data-progress");
-  if (progress) {
-    bar.style.setProperty("--progress", progress + "%");
-  }
+    function updateScrollState() {
+      if (!gallery) return;
+      const scrollLeft = gallery.scrollLeft;
+      const maxScroll = gallery.scrollWidth - gallery.clientWidth;
+
+      if (leftBtn) leftBtn.classList.toggle("hidden", scrollLeft <= 0);
+      if (rightBtn) rightBtn.classList.toggle("hidden", scrollLeft >= maxScroll);
+      if (fadeLeft) fadeLeft.classList.toggle("fade-hidden", scrollLeft <= 0);
+      if (fadeRight) fadeRight.classList.toggle("fade-hidden", scrollLeft >= maxScroll);
+    }
+
+    if (leftBtn) {
+      leftBtn.addEventListener("click", () => {
+        gallery.scrollBy({ left: -300, behavior: "smooth" });
+      });
+    }
+    if (rightBtn) {
+      rightBtn.addEventListener("click", () => {
+        gallery.scrollBy({ left: 300, behavior: "smooth" });
+      });
+    }
+
+    if (gallery) {
+      gallery.addEventListener("scroll", updateScrollState);
+    }
+
+    updateScrollState();
+  });
+
+  // Progress-bar init
+  document.querySelectorAll(".progress-bar").forEach((bar) => {
+    const progress = bar.getAttribute("data-progress");
+    if (progress) {
+      bar.style.setProperty("--progress", progress + "%");
+    }
+  });
 });
 </script>
-
-
-
-
-</script>
-
-
 
 
 
