@@ -890,14 +890,16 @@ if (lagretBilde) {
 
 // ==================== HERO-BANNER ==================== //
 function oppdaterBanner() {
-  const filmKeys = Object.keys(filmer);
-  if (filmKeys.length === 0) return;
+  // Filtrer ut filmer uten banner
+  const filmKeys = Object.keys(filmer).filter(key => filmer[key].banner);
+
+  if (filmKeys.length === 0) return; // ingen filmer med banner
 
   const randomKey = filmKeys[Math.floor(Math.random() * filmKeys.length)];
   const film = filmer[randomKey];
 
   const bannerImage = document.querySelector(".hero-banner .banner-image");
-  if (bannerImage && film.banner) {
+  if (bannerImage) {
     bannerImage.src = film.banner;
     bannerImage.alt = film.tittel;
   }
@@ -1108,9 +1110,10 @@ function renderHalloweenBanner() {
   const bannerLink = document.getElementById("special-banner-link");
   const gallery = document.getElementById("halloween-gallery");
 
+  // Finn første film med banner og Halloween/Skrekk metadata
   const halloweenFilmKey = Object.keys(filmer).find(key =>
-    filmer[key].metadata.some(m =>
-      m.toLowerCase().includes("halloween")
+    filmer[key].banner && filmer[key].metadata.some(m =>
+      m.toLowerCase().includes("halloween") || m.toLowerCase().includes("skrekk")
     )
   );
 
@@ -1124,7 +1127,7 @@ function renderHalloweenBanner() {
   gallery.innerHTML = "";
   Object.keys(filmer).forEach(key => {
     const f = filmer[key];
-    if (f.metadata.some(m =>
+    if (f.banner && f.metadata.some(m =>
       m.toLowerCase().includes("halloween") || m.toLowerCase().includes("skrekk")
     )) {
       const img = document.createElement("img");
@@ -1243,7 +1246,9 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 });
+
 </script>
+
 
 
 
