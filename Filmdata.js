@@ -32,7 +32,7 @@ const filmer = {
   "kaptein-sabeltann": {
     tittel: "Kaptein Sabeltann",
     bakgrunn: "https://iptvimagecache-playplus-prod-vip.han.telia.se/original/no/imgv3/GnP7NDuB0Rrw7IqKaTNuGddHmo9uH98LTuGRs8nsXJvIiNzbUb2LoKtBRiiR2Yg-OfX6odiC2nMHfm6XZuDZz-iivlYEPLXGpx3QZMpE21N2HaSNGxmn_HIyz30.jpeg",
-    banner: "https://static.wixstatic.com/media/fd2fb2_b65c1ef4e1de4cf2a5e5c8d985b84e50~mv2.jpg", // <- brukes til hero-banner
+    banner: "https://static.wixstatic.com/media/fd2fb2_a369b7c708c1447f97c0fb437472955a~mv2.jpg", // <- brukes til hero-banner
     logo: "https://static.wixstatic.com/media/fd2fb2_38bcd3561623467f8a05f8fb23488188~mv2.png",
     poster: "https://beam-images.warnermediacdn.com/BEAM_LWM_DELIVERABLES/500cfa5c-264b-4366-9264-342b1569605e/32dcbd1e-b23c-4acd-ba97-2e6b6a42a620?host=wbd-images.prod-vod.h264.io&partner=beamcom&w=500",
     posterVertikal: "https://i-viaplay-com.akamaized.net/viaplay-prod/316/184/1574841515-a8796d95201d56c1f26a231e3cad4ddd89e2bb01.jpg?width=400&height=600", // portrett
@@ -304,6 +304,7 @@ const filmer = {
     publishDate: "2025-10-10T00:00:00" // ISO datoformat
   },
 };
+
 
 
 
