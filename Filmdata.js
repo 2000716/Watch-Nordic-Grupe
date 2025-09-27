@@ -32,7 +32,7 @@ const filmer = {
   "kaptein-sabeltann": {
     tittel: "Kaptein Sabeltann",
     bakgrunn: "https://iptvimagecache-playplus-prod-vip.han.telia.se/original/no/imgv3/GnP7NDuB0Rrw7IqKaTNuGddHmo9uH98LTuGRs8nsXJvIiNzbUb2LoKtBRiiR2Yg-OfX6odiC2nMHfm6XZuDZz-iivlYEPLXGpx3QZMpE21N2HaSNGxmn_HIyz30.jpeg",
-    banner: "https://static.wixstatic.com/media/fd2fb2_a369b7c708c1447f97c0fb437472955a~mv2.jpg", // <- brukes til hero-banner
+    banner: "https://static.wixstatic.com/media/fd2fb2_0efea4ff6f6b4073b0e64bb659e3d800~mv2.jpg", // <- brukes til hero-banner
     logo: "https://static.wixstatic.com/media/fd2fb2_38bcd3561623467f8a05f8fb23488188~mv2.png",
     poster: "https://beam-images.warnermediacdn.com/BEAM_LWM_DELIVERABLES/500cfa5c-264b-4366-9264-342b1569605e/32dcbd1e-b23c-4acd-ba97-2e6b6a42a620?host=wbd-images.prod-vod.h264.io&partner=beamcom&w=500",
     posterVertikal: "https://i-viaplay-com.akamaized.net/viaplay-prod/316/184/1574841515-a8796d95201d56c1f26a231e3cad4ddd89e2bb01.jpg?width=400&height=600", // portrett
@@ -47,7 +47,6 @@ const filmer = {
   "burlesque": {
     tittel: "Burlesque",
     bakgrunn: "https://occ-0-8407-2218.1.nflxso.net/dnm/api/v6/E8vDc_W8CLv7-yMQu8KMEC7Rrr8/AAAABTbfoDZNprg4kKg_Azptknl68ULWGPAhGrKE9Z-7ZFiyg57lAt1CHnWYz8e8cWjI-oKpRnNMfMBKb7bFRi6mBtAdnqQ3rNanOmDC.jpg?r=210",
-    banner: "https://static.wixstatic.com/media/fd2fb2_0efea4ff6f6b4073b0e64bb659e3d800~mv2.jpg", // <- brukes til hero-banner
     logo: "https://upload.wikimedia.org/wikipedia/fr/d/d0/Burlesque_%28film%2C_2010%29_Logo.png",
     poster: "https://static.wixstatic.com/media/fd2fb2_c85b71dfd8bc4cc6ae7ac39b8513370d~mv2.jpg",
     posterVertikal: "https://m.media-amazon.com/images/I/81qjANQ8iPL._UF894,1000_QL80_.jpg", // portrett
@@ -62,7 +61,6 @@ const filmer = {
   "dog-man": {
     tittel: "Dog Man",
     bakgrunn: "https://andersonvision.com/wp-content/uploads/2025/03/Dog-Man-blu-ray-7-scaled.jpg",
-    banner: "link-til-bredt-bilde.jpg", // <- brukes til hero-banner
     logo: "https://www.universalpictures.co.uk/tl_files/content/movies/dog_man/title.png",
     poster: "https://m.media-amazon.com/images/S/pv-target-images/44839e4a60bb8205258ba5fb43d1369c8a3cdd27f628692f6d0bd5c6c0c35ca6.jpg",
     posterVertikal: "https://i-viaplay-com.akamaized.net/viaplay-prod/849/40/1740747124-2e6f862a9638dd9cefc70ddf014a388f6f2ada76.jpg?width=400&height=600", // portrett
@@ -137,7 +135,6 @@ const filmer = {
   "comet-in-moominland": {
     tittel: "Comet in Moominland",
     bakgrunn: "https://assets.mubicdn.net/images/film/95372/image-w1280.jpg",
-    banner: "link-til-bredt-bilde.jpg", // <- brukes til hero-banner
     logo: "https://static.wixstatic.com/media/fd2fb2_1c6bc07b8c5e40808ccc2a345870b061~mv2.png",
     poster: "https://static.wixstatic.com/media/fd2fb2_0639d85789b84e0b84e29d09a21632e2~mv2.jpg",
     posterVertikal: "https://m.media-amazon.com/images/M/MV5BYjVjZGViNmEtNmZmNS00OThjLWIxZWQtZjVhYmNmYWUzZDExXkEyXkFqcGc@._V1_.jpg", // portrett
@@ -167,7 +164,6 @@ const filmer = {
      "max-manus": {
     tittel: "Max Manus",
     bakgrunn: "https://image.tmdb.org/t/p/w1280/ji8AsF2vqsg88LzbOXakGGbRXSC.jpg",
-    banner: "https://a.ltrbxd.com/resized/sm/upload/cn/tz/mu/4c/max%20manus-1200-1200-675-675-crop-000000.jpg?v=293098bb03", // <- brukes til hero-banner
     logo: "https://occ-0-1165-38.1.nflxso.net/dnm/api/v6/S4oi7EPZbv2UEPaukW54OORa0S8/AAAABVm_bCxSsU6UwHkFG5da1LoOjS65NJzSrYA0Q_IWBV5k3_1_2Vrc5pDAPup2rhZHifNDclGG-3N1uUb-JwrYM20_xlVXLDyl-g.webp?r=04c",
     poster: "https://sumo.cdn.tv2.no/imageapi/v3/img/65c76cd7498e720ede899535-1738749898075/nfpluss?location=list&width=1200&height=630",
     posterVertikal: "https://i-viaplay-com.akamaized.net/viaplay-prod/715/824/1635457976-80bb0806bfbb1af04f28b7addedc4b5458878dd3.jpg?width=400&height=600", // portrett
@@ -196,7 +192,6 @@ const filmer = {
    "mummitrollet-på-rivieraen": {
     tittel: "Mummitrollet på Rivieraen",
     bakgrunn: "https://image.tmdb.org/t/p/w1280/z80RWUg5fs0wxx43jDSkaJvln0m.jpg",
-    banner: "link-til-bredt-bilde.jpg", // <- brukes til hero-banner
     logo: "https://static.wixstatic.com/media/fd2fb2_cb58ab8385504c98900985c1a30b4b3b~mv2.png",
     trailer: "https://video.wixstatic.com/video/fd2fb2_5343c88a14624075b13ad824e79d429d/1080p/mp4/file.mp4", // 🎥 NY
     poster: "https://static.wixstatic.com/media/fd2fb2_591857f6d2d643e9be3de342acde9761~mv2.jpg",
@@ -212,7 +207,6 @@ const filmer = {
      "pirates": {
     tittel: "Pirates",
     bakgrunn: "https://imageservice.sky.com/uuid/24859a07-faf9-40f6-83ec-ff8fe241f850/background/2000",
-    banner: "https://imageservice.sky.com/uuid/24859a07-faf9-40f6-83ec-ff8fe241f850/background/2000", // <- brukes til hero-banner
     logo: "https://occ-0-8407-116.1.nflxso.net/dnm/api/v6/S4oi7EPZbv2UEPaukW54OORa0S8/AAAABSIgtJLTKfdEughLNbzy82Wqd8Kl46Se-AN2nHuvmBc-XWV0uk7VOrH2GMJYrpS-FHXI1bfeDZflhQKfgwztI_xXYgxLqNelAos.png?r=c1b",
     poster: "https://images-prod.ai.tv2.no/v2/image-packs/pfimg_pack_01k4s3f8b5fn1bgb8e5qjzjtmy?height=630",
     posterVertikal: "https://i-viaplay-com.akamaized.net/viaplay-prod/889/480/1463401854-6df2cdc3059ce11d81d81c205d50aacae15211e8.jpg?width=400&height=600", // portrett
@@ -259,7 +253,6 @@ const filmer = {
    "the-crow": {
     tittel: "The Crow",
     bakgrunn: "https://m.media-amazon.com/images/S/pv-target-images/ab2bc9008076a8baa8e4bdfd475a69a4dc4080bb367dd55a9b69fb177ae014c4._SX1080_FMjpg_.jpg",
-    banner: "https://m.media-amazon.com/images/S/pv-target-images/ab2bc9008076a8baa8e4bdfd475a69a4dc4080bb367dd55a9b69fb177ae014c4._SX1080_FMjpg_.jpg", // <- brukes til hero-banner
     logo: "https://image.tmdb.org/t/p/original/1sXiIPwiZV0Cwnz6JVzlcKZNoi8.png",
     poster: "https://images-prod.ai.tv2.no/v2/image-packs/pfimg_pack_01k4smcq77e7kteq3f44bh67cf?height=630",
     posterVertikal: "https://images-prod.ai.tv2.no/v2/image-packs/pfimg_pack_01k4smcq77e7kteq3f44bh67cf?location=moviePoster&width=128", // portrett
@@ -291,7 +284,6 @@ const filmer = {
     "chitty-chitty-bang-bang": {
     tittel: "Chitty Chitty Bang Bang",
     bakgrunn: "https://is1-ssl.mzstatic.com/image/thumb/bH5SmieIfdD6oIVVwzxYkg/2400x1350sr.webp",
-    banner: "https://m.media-amazon.com/images/S/pv-target-images/fbb7d019ac94443df2f06f5ff9620267460fa808f463c82036f367013da15f5c.jpg", // <- brukes til hero-banner
     logo: "https://image.tmdb.org/t/p/original/kEnMUrKAJ9a0V4Nerx5rPCUxl8r.png",
     poster: "https://m.media-amazon.com/images/S/pv-target-images/fbb7d019ac94443df2f06f5ff9620267460fa808f463c82036f367013da15f5c.jpg",
     posterVertikal: "https://images-prod.ai.tv2.no/v2/image-packs/pfimg_pack_01k4smakxkea6t9t5e1dg1nhy6?location=moviePoster&width=672", // portrett
@@ -304,6 +296,7 @@ const filmer = {
     publishDate: "2025-10-10T00:00:00" // ISO datoformat
   },
 };
+
 
 
 
