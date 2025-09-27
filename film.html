@@ -694,6 +694,17 @@ function oppdaterListeKnapp() {
 }
 oppdaterListeKnapp();
 
+addToListBtn.addEventListener("click", () => {
+  if (erUpublisert) return; // blokkér hvis ikke lansert
+  if (!minListe.includes(filmNavn)) {
+    minListe.push(filmNavn);
+  } else {
+    minListe = minListe.filter(f => f !== filmNavn);
+  }
+  localStorage.setItem("minListe", JSON.stringify(minListe));
+  oppdaterListeKnapp();
+});
+
 // -------------------- Hvis filmen er upublisert --------------------
 if (erUpublisert) {
   // Sett inn "Kommer ..." tekst mellom beskrivelse og metadata
@@ -716,13 +727,12 @@ if (erUpublisert) {
   watchBtn.disabled = true;
   watchBtn.style.opacity = "0.5";
   watchBtn.style.cursor = "not-allowed";
-}
 
-// -------------------- Gjør "Legg til i Min liste"-knappen ubrukelig --------------------
-addToListBtn.disabled = true;
-addToListBtn.style.opacity = "0.5";
-addToListBtn.style.cursor = "not-allowed";
-addToListBtn.replaceWith(addToListBtn.cloneNode(true)); // fjerner eventlisteners
+  // Deaktiver Legg til i min liste-knappen
+  addToListBtn.disabled = true;
+  addToListBtn.style.opacity = "0.5";
+  addToListBtn.style.cursor = "not-allowed";
+}
 
 // -------------------- Profilbilde --------------------
 const lagretBilde = localStorage.getItem("profilbilde");
@@ -866,6 +876,7 @@ if (descEl.textContent.length > 200) {
 
 </body>
 </html>
+
 
 
 
