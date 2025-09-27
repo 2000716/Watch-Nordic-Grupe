@@ -656,7 +656,7 @@ function oppdaterKnapp() {
 oppdaterKnapp();
 
 watchBtn.addEventListener("click", () => {
-  if (erUpublisert) return; // blokkér
+  if (erUpublisert) return; // blokkér hvis ikke lansert
   localStorage.setItem(`${filmNavn}-status`, "påbegynt");
   filmStatus = "påbegynt";
   oppdaterKnapp();
@@ -688,14 +688,13 @@ function oppdaterListeKnapp() {
     text.textContent = " Legg til i Min liste";
   }
 
-  icon.classList.remove("icon-animate"); 
-  void icon.offsetWidth; 
+  icon.classList.remove("icon-animate");
+  void icon.offsetWidth;
   icon.classList.add("icon-animate");
 }
 oppdaterListeKnapp();
 
 addToListBtn.addEventListener("click", () => {
-  if (erUpublisert) return; // blokkér
   if (!minListe.includes(filmNavn)) {
     minListe.push(filmNavn);
   } else {
@@ -707,15 +706,15 @@ addToListBtn.addEventListener("click", () => {
 
 // -------------------- Hvis filmen er upublisert --------------------
 if (erUpublisert) {
-  watchBtn.disabled = true;
-  addToListBtn.disabled = true;
+  // Fjern "Se nå"-knappen
+  watchBtn.style.display = "none";
 
-  watchBtn.style.opacity = "0.5";
-  addToListBtn.style.opacity = "0.5";
-  watchBtn.style.cursor = "not-allowed";
-  addToListBtn.style.cursor = "not-allowed";
+  // Sett inn "Kommer ..." tekst der knappen pleide å være
+  const kommerTekst = document.createElement("p");
+  kommerTekst.style.color = "#ff6666";
+  kommerTekst.style.fontWeight = "bold";
+  kommerTekst.style.marginTop = "12px";
 
-  const desc = document.querySelector(".description");
   const publiseringsDato = new Date(data.publishDate);
   const datoFormatert = publiseringsDato.toLocaleDateString("no-NO", {
     year: "numeric",
@@ -723,12 +722,8 @@ if (erUpublisert) {
     day: "numeric"
   });
 
-  const info = document.createElement("p");
-  info.style.color = "#ff6666";
-  info.style.fontWeight = "bold";
-  info.style.marginTop = "12px";
-  info.textContent = `Tilgjengelig fra: ${datoFormatert}`;
-  desc.insertAdjacentElement("afterend", info);
+  kommerTekst.textContent = `Kommer ${datoFormatert}`;
+  watchBtn.parentElement.insertBefore(kommerTekst, addToListBtn);
 }
 
 // -------------------- Profilbilde --------------------
@@ -836,10 +831,11 @@ if (data.trailer && data.trailer.trim() !== "") {
   trailerVideo.style.display = "none";
   videoControls.style.display = "none";
 }
-  // -------------------- Begrenset beskrivelse --------------------
+
+// -------------------- Begrenset beskrivelse --------------------
 const descEl = document.querySelector(".description");
 
-if (descEl.textContent.length > 200) { // grensen på antall tegn
+if (descEl.textContent.length > 200) {
   const fullText = descEl.textContent;
   descEl.classList.add("short");
 
@@ -872,6 +868,7 @@ if (descEl.textContent.length > 200) { // grensen på antall tegn
 
 </body>
 </html>
+
 
 
 
