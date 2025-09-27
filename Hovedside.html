@@ -865,23 +865,17 @@ main {
     </div>
   </section>
 
-<!-- Spesial Halloween-banner -->
-<section class="hero-banner special-hero-banner">
-  <img class="banner-image" src="https://t3.ftcdn.net/jpg/02/22/61/88/360_F_222618827_0eyqcYch8nDsqVMrEINkppW9iXTZUDXK.jpg" alt="Film Banner" id="special-banner-image">
-  <div class="banner-overlay">
-    <!-- Venstre side: logo + knapp -->
-    <div class="banner-left">
-      <img class="film-logo" src="https://disney.images.edge.bamgrid.com/ripcut-delivery/v2/variant/disney/C369F39CA7F3B1EB5BA87B006FB73237CF5FA4AA12FE125BD4E9194F4CE6E16B/compose?format=webp&width=800" alt="Film Logo" id="special-banner-logo">
-      <a href="#" class="watch-button" id="special-banner-link">SE MER</a>
-    </div>
-
-    <!-- Høyre side: galleri -->
-    <div class="banner-right">
-      <div class="banner-gallery" id="halloween-gallery"></div>
-    </div>
-  </div>
-</section>
-
+         <section class="gallery-section">
+          <h2>Action</h2>
+          <div class="gallery-wrapper">
+            <div class="fade-left"></div>
+            <button class="scroll-button left" onclick="scrollGallery(this, -1)">❮</button>
+            <div class="image-gallery" id="action-galleri"></div>
+            <button class="scroll-button right" onclick="scrollGallery(this, 1)">❯</button>
+            <div class="fade-right"></div>
+          </div>
+        </section>
+         </div>
   
         <section class="gallery-section">
           <h2>Barn</h2>
@@ -1305,6 +1299,7 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 </script>
+
 
 
 
