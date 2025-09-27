@@ -599,7 +599,7 @@ body.loaded {
 
 <script src="Filmdata.js"></script>
 <script>
-/* === JS beholdt som i original === */
+/* === JS beholdt som i original med endringer === */
 const params = new URLSearchParams(window.location.search);
 const filmNavn = params.get("navn");
 const data = filmer[filmNavn];
@@ -694,26 +694,13 @@ function oppdaterListeKnapp() {
 }
 oppdaterListeKnapp();
 
-addToListBtn.addEventListener("click", () => {
-  if (!minListe.includes(filmNavn)) {
-    minListe.push(filmNavn);
-  } else {
-    minListe = minListe.filter(f => f !== filmNavn);
-  }
-  localStorage.setItem("minListe", JSON.stringify(minListe));
-  oppdaterListeKnapp();
-});
-
 // -------------------- Hvis filmen er upublisert --------------------
 if (erUpublisert) {
-  // Fjern "Se nå"-knappen
-  watchBtn.style.display = "none";
-
-  // Sett inn "Kommer ..." tekst der knappen pleide å være
+  // Sett inn "Kommer ..." tekst mellom beskrivelse og metadata
   const kommerTekst = document.createElement("p");
   kommerTekst.style.color = "#ff6666";
   kommerTekst.style.fontWeight = "bold";
-  kommerTekst.style.marginTop = "12px";
+  kommerTekst.style.margin = "8px 0";
 
   const publiseringsDato = new Date(data.publishDate);
   const datoFormatert = publiseringsDato.toLocaleDateString("no-NO", {
@@ -723,8 +710,19 @@ if (erUpublisert) {
   });
 
   kommerTekst.textContent = `Kommer ${datoFormatert}`;
-  watchBtn.parentElement.insertBefore(kommerTekst, addToListBtn);
+  document.querySelector(".kommer-info").appendChild(kommerTekst);
+
+  // Deaktiver Se nå-knappen
+  watchBtn.disabled = true;
+  watchBtn.style.opacity = "0.5";
+  watchBtn.style.cursor = "not-allowed";
 }
+
+// -------------------- Gjør "Legg til i Min liste"-knappen ubrukelig --------------------
+addToListBtn.disabled = true;
+addToListBtn.style.opacity = "0.5";
+addToListBtn.style.cursor = "not-allowed";
+addToListBtn.replaceWith(addToListBtn.cloneNode(true)); // fjerner eventlisteners
 
 // -------------------- Profilbilde --------------------
 const lagretBilde = localStorage.getItem("profilbilde");
@@ -868,6 +866,7 @@ if (descEl.textContent.length > 200) {
 
 </body>
 </html>
+
 
 
 
