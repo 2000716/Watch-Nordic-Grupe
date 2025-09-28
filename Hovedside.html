@@ -766,61 +766,6 @@ main {
   }
 }
 
-  /* Ny versjon av Special Hero Banner */
-.special-hero-banner {
-  margin: 30px 16px;
-  width: calc(100% - 32px);
-  border: 2px solid #00FFCC;
-  border-radius: 12px;
-  overflow: hidden;
-  position: relative;
-  height: 350px;
-}
-
-.special-hero-banner .banner-image {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-  filter: brightness(0.6);
-}
-
-.special-hero-banner .banner-overlay {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.banner-center {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 16px;
-  z-index: 2;
-}
-
-.banner-center .film-logo {
-  width: 280px;
-  max-width: 100%;
-}
-
-.banner-center .watch-button {
-  text-decoration: none;
-  background: white;
-  color: black;
-  padding: 12px 40px;
-  border-radius: 6px;
-  font-weight: bold;
-  transition: background 0.3s ease;
-}
-
-.banner-center .watch-button:hover {
-  background: #f2f2f2;
-}
-
-
 
   </style>
   </head>
@@ -921,15 +866,20 @@ main {
   </section>
 
         <!-- Special Hero Banner -->
-<!-- Special Hero Banner -->
 <section class="special-hero-banner">
   <img id="special-banner-image" class="banner-image" src="" alt="Special Banner" />
   <div class="banner-overlay">
-    <div class="banner-center">
+    <!-- Venstre del -->
+    <div class="banner-left">
       <a id="special-banner-link" href="#">
         <img id="special-banner-logo" class="film-logo" src="" alt="Film Logo" />
       </a>
       <a id="special-banner-button" class="watch-button" href="#">SE MER</a>
+    </div>
+
+    <!-- Høyre galleri -->
+    <div class="banner-right">
+      <div class="banner-gallery" id="special-banner-gallery"></div>
     </div>
   </div>
 </section>
@@ -1211,12 +1161,54 @@ function renderTop10(galleryId) {
     gallery.appendChild(wrapper);
   });
 }
+
+// ==================== SPESIAL HALLOWEEN-BANNER ==================== //
+function renderHalloweenBanner() {
+  const bannerImage = document.getElementById("special-banner-image");
+  const bannerLogo = document.getElementById("special-banner-logo");
+  const bannerLink = document.getElementById("special-banner-link");
+  const gallery = document.getElementById("halloween-gallery");
+
+  const halloweenFilmKey = Object.keys(filmer).find(key =>
+    filmer[key].banner && filmer[key].metadata.some(m =>
+      m.toLowerCase().includes("halloween") || m.toLowerCase().includes("skrekk")
+    )
+  );
+
+  if (!halloweenFilmKey) return;
+  const film = filmer[halloweenFilmKey];
+
+  if (film.banner) bannerImage.src = film.banner;
+  if (film.logo) bannerLogo.src = film.logo;
+  bannerLink.href = `film.html?navn=${halloweenFilmKey}`;
+
+  gallery.innerHTML = "";
+  Object.keys(filmer).forEach(key => {
+    const f = filmer[key];
+    if (f.metadata.some(m =>
+      m.toLowerCase().includes("halloween") || m.toLowerCase().includes("skrekk")
+    )) {
+      const link = document.createElement("a");
+      link.href = `film.html?navn=${key}`;
+
+      const img = document.createElement("img");
+      img.src = f.posterVertikal || f.poster;
+      img.alt = f.tittel;
+
+      link.appendChild(img);
+      gallery.appendChild(link);
+    }
+  });
+}
+
 // ==================== SPESIAL HERO-BANNER (under kommende filmer) ==================== //
 function renderSpecialHeroBanner() {
   const bannerImage = document.getElementById("special-banner-image");
   const bannerLogo = document.getElementById("special-banner-logo");
   const bannerLink = document.getElementById("special-banner-link");
   const bannerButton = document.getElementById("special-banner-button");
+  const galleryWrapper = document.getElementById("special-banner-gallery-wrapper");
+  const gallery = document.getElementById("special-banner-gallery");
 
   const filmKeys = Object.keys(filmer).filter(
     (key) => filmer[key].banner && filmer[key].logo
@@ -1226,15 +1218,30 @@ function renderSpecialHeroBanner() {
   const randomKey = filmKeys[Math.floor(Math.random() * filmKeys.length)];
   const film = filmer[randomKey];
 
+  // Banner venstre side
   bannerImage.src = film.banner;
   bannerImage.alt = film.tittel;
-
   bannerLogo.src = film.logo;
   bannerLogo.alt = film.tittel + " Logo";
-
   bannerLink.href = `film.html?navn=${randomKey}`;
   bannerButton.href = `film.html?navn=${randomKey}`;
-}
+
+  // Galleriet høyre side
+  gallery.innerHTML = "";
+  Object.keys(filmer).forEach((key) => {
+    const f = filmer[key];
+    if (f.posterVertikal) {
+      const link = document.createElement("a");
+      link.href = `film.html?navn=${key}`;
+
+      const img = document.createElement("img");
+      img.src = f.posterVertikal;
+      img.alt = f.tittel;
+
+      link.appendChild(img);
+      gallery.appendChild(link);
+    }
+  });
 
   // === Scroll-knapper og fade-effekter ===
   const leftBtn = galleryWrapper.querySelector(".scroll-button.left");
@@ -1373,6 +1380,11 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 });
 </script>
+
+
+
+
+
 
 
 
