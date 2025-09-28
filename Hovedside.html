@@ -865,6 +865,26 @@ main {
     </div>
   </section>
 
+        <!-- Special Hero Banner -->
+<section class="special-hero-banner">
+  <img id="special-banner-image" class="banner-image" src="" alt="Special Banner" />
+  <div class="banner-overlay">
+    <!-- Venstre del -->
+    <div class="banner-left">
+      <a id="special-banner-link" href="#">
+        <img id="special-banner-logo" class="film-logo" src="" alt="Film Logo" />
+      </a>
+      <a id="special-banner-button" class="watch-button" href="#">SE MER</a>
+    </div>
+
+    <!-- Høyre galleri -->
+    <div class="banner-right">
+      <div class="banner-gallery" id="special-banner-gallery"></div>
+    </div>
+  </div>
+</section>
+
+
          <section class="gallery-section">
           <h2>Action</h2>
           <div class="gallery-wrapper">
@@ -935,10 +955,9 @@ if (lagretBilde) {
 
 // ==================== HERO-BANNER ==================== //
 function oppdaterBanner() {
-  // Filtrer ut filmer uten banner
   const filmKeys = Object.keys(filmer).filter(key => filmer[key].banner);
 
-  if (filmKeys.length === 0) return; // ingen filmer med banner
+  if (filmKeys.length === 0) return;
 
   const randomKey = filmKeys[Math.floor(Math.random() * filmKeys.length)];
   const film = filmer[randomKey];
@@ -1039,7 +1058,6 @@ function renderGallery(galleryId, filterFunction, sortByPublishDate = false, lim
 
   let filmKeys = Object.keys(filmer);
 
-  // Filtrer bort fremtidige filmer
   filmKeys = filmKeys.filter((key) => {
     const film = filmer[key];
     if (!film.publishDate) return true;
@@ -1106,14 +1124,12 @@ function renderTop10(galleryId) {
 
   const today = new Date();
 
-  // --- Fjern filmer som ikke har kommet ennå ---
   filmKeys = filmKeys.filter((key) => {
     const film = filmer[key];
     if (!film.publishDate) return true; 
     return new Date(film.publishDate) <= today;
   });
 
-  // --- Bland rekkefølgen ut fra dagens dato ---
   const seed = today.getFullYear() * 1000 + today.getMonth() * 50 + today.getDate();
 
   function seededRandom(seed) {
@@ -1123,10 +1139,8 @@ function renderTop10(galleryId) {
 
   filmKeys.sort((a, b) => seededRandom(seed + a.length) - seededRandom(seed + b.length));
 
-  // --- Ta kun topp 10 ---
   filmKeys = filmKeys.slice(0, 10);
 
-  // --- Bygg elementene ---
   filmKeys.forEach((key, index) => {
     const film = filmer[key];
 
@@ -1155,7 +1169,6 @@ function renderHalloweenBanner() {
   const bannerLink = document.getElementById("special-banner-link");
   const gallery = document.getElementById("halloween-gallery");
 
-  // Finn første film med banner og Halloween/Skrekk metadata
   const halloweenFilmKey = Object.keys(filmer).find(key =>
     filmer[key].banner && filmer[key].metadata.some(m =>
       m.toLowerCase().includes("halloween") || m.toLowerCase().includes("skrekk")
@@ -1165,12 +1178,10 @@ function renderHalloweenBanner() {
   if (!halloweenFilmKey) return;
   const film = filmer[halloweenFilmKey];
 
-  // Oppdater banner-bildet og logo
   if (film.banner) bannerImage.src = film.banner;
   if (film.logo) bannerLogo.src = film.logo;
   bannerLink.href = `film.html?navn=${halloweenFilmKey}`;
 
-  // Bygg galleriet
   gallery.innerHTML = "";
   Object.keys(filmer).forEach(key => {
     const f = filmer[key];
@@ -1182,6 +1193,46 @@ function renderHalloweenBanner() {
 
       const img = document.createElement("img");
       img.src = f.posterVertikal || f.poster;
+      img.alt = f.tittel;
+
+      link.appendChild(img);
+      gallery.appendChild(link);
+    }
+  });
+}
+
+// ==================== SPESIAL HERO-BANNER (under kommende filmer) ==================== //
+function renderSpecialHeroBanner() {
+  const bannerImage = document.getElementById("special-banner-image");
+  const bannerLogo = document.getElementById("special-banner-logo");
+  const bannerLink = document.getElementById("special-banner-link");
+  const bannerButton = document.getElementById("special-banner-button");
+  const gallery = document.getElementById("special-banner-gallery");
+
+  const filmKeys = Object.keys(filmer).filter(
+    (key) => filmer[key].banner && filmer[key].logo
+  );
+
+  if (filmKeys.length === 0) return;
+  const randomKey = filmKeys[Math.floor(Math.random() * filmKeys.length)];
+  const film = filmer[randomKey];
+
+  bannerImage.src = film.banner;
+  bannerImage.alt = film.tittel;
+  bannerLogo.src = film.logo;
+  bannerLogo.alt = film.tittel + " Logo";
+  bannerLink.href = `film.html?navn=${randomKey}`;
+  bannerButton.href = `film.html?navn=${randomKey}`;
+
+  gallery.innerHTML = "";
+  Object.keys(filmer).forEach((key) => {
+    const f = filmer[key];
+    if (f.posterVertikal) {
+      const link = document.createElement("a");
+      link.href = `film.html?navn=${key}`;
+
+      const img = document.createElement("img");
+      img.src = f.posterVertikal;
       img.alt = f.tittel;
 
       link.appendChild(img);
@@ -1236,7 +1287,6 @@ function renderContinueWatching() {
 
 // ==================== INIT ==================== //
 document.addEventListener("DOMContentLoaded", () => {
-  // Render seksjoner
   renderGallery("nye-filmer-galleri", null, true, 10); 
   renderTop10("topp10-filmer-galleri"); 
   renderGallery("barn-galleri", (key) => {
@@ -1250,9 +1300,9 @@ document.addEventListener("DOMContentLoaded", () => {
   renderUpcoming("kommer-snart-galleri");
   oppdaterBanner();
   renderHalloweenBanner();
+  renderSpecialHeroBanner();
   renderContinueWatching();
 
-  // Galleri-scroll
   document.querySelectorAll(".gallery-wrapper").forEach((wrapper) => {
     const gallery = wrapper.querySelector(".image-gallery, .coming-movies-gallery, .top10-gallery");
     const leftBtn = wrapper.querySelector(".scroll-button.left");
@@ -1289,7 +1339,6 @@ document.addEventListener("DOMContentLoaded", () => {
     updateScrollState();
   });
 
-  // Progress-bar init
   document.querySelectorAll(".progress-bar").forEach((bar) => {
     const progress = bar.getAttribute("data-progress");
     if (progress) {
@@ -1297,8 +1346,10 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 });
-
 </script>
+
+
+
 
 
 
