@@ -1207,6 +1207,7 @@ function renderSpecialHeroBanner() {
   const bannerLogo = document.getElementById("special-banner-logo");
   const bannerLink = document.getElementById("special-banner-link");
   const bannerButton = document.getElementById("special-banner-button");
+  const galleryWrapper = document.getElementById("special-banner-gallery-wrapper");
   const gallery = document.getElementById("special-banner-gallery");
 
   const filmKeys = Object.keys(filmer).filter(
@@ -1217,6 +1218,7 @@ function renderSpecialHeroBanner() {
   const randomKey = filmKeys[Math.floor(Math.random() * filmKeys.length)];
   const film = filmer[randomKey];
 
+  // Banner venstre side
   bannerImage.src = film.banner;
   bannerImage.alt = film.tittel;
   bannerLogo.src = film.logo;
@@ -1224,6 +1226,7 @@ function renderSpecialHeroBanner() {
   bannerLink.href = `film.html?navn=${randomKey}`;
   bannerButton.href = `film.html?navn=${randomKey}`;
 
+  // Galleriet høyre side
   gallery.innerHTML = "";
   Object.keys(filmer).forEach((key) => {
     const f = filmer[key];
@@ -1239,6 +1242,36 @@ function renderSpecialHeroBanner() {
       gallery.appendChild(link);
     }
   });
+
+  // === Scroll-knapper og fade-effekter ===
+  const leftBtn = galleryWrapper.querySelector(".scroll-button.left");
+  const rightBtn = galleryWrapper.querySelector(".scroll-button.right");
+  const fadeLeft = galleryWrapper.querySelector(".fade-left");
+  const fadeRight = galleryWrapper.querySelector(".fade-right");
+
+  function updateScrollState() {
+    const scrollLeft = gallery.scrollLeft;
+    const maxScroll = gallery.scrollWidth - gallery.clientWidth;
+
+    if (leftBtn) leftBtn.classList.toggle("hidden", scrollLeft <= 0);
+    if (rightBtn) rightBtn.classList.toggle("hidden", scrollLeft >= maxScroll);
+    if (fadeLeft) fadeLeft.classList.toggle("fade-hidden", scrollLeft <= 0);
+    if (fadeRight) fadeRight.classList.toggle("fade-hidden", scrollLeft >= maxScroll);
+  }
+
+  if (leftBtn) {
+    leftBtn.addEventListener("click", () => {
+      gallery.scrollBy({ left: -300, behavior: "smooth" });
+    });
+  }
+  if (rightBtn) {
+    rightBtn.addEventListener("click", () => {
+      gallery.scrollBy({ left: 300, behavior: "smooth" });
+    });
+  }
+
+  gallery.addEventListener("scroll", updateScrollState);
+  updateScrollState();
 }
 
 // ==================== FORTSETT Å SE ==================== //
@@ -1347,6 +1380,7 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 });
 </script>
+
 
 
 
