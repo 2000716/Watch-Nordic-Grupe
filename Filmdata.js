@@ -322,11 +322,12 @@ const filmer = {
     imdb: "https://www.imdb.com/title/tt6348138?ref_ext_viaplay",
     skuespillere: "Hugh Jackman, Zoe Saldana, Zach Galifianakis, David Walliams",
     regissor: "Chris Butler",
-    watchUrl: "film-mal.html?id=missing-link":",
+    watchUrl: "film-mal.html?id=missing-link",
     publishDate: "2025-010-25T00:00:00" // ISO datoformat
   },
   
 };
+
 
 
 
