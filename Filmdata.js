@@ -303,15 +303,31 @@ const filmer = {
     poster: "https://disney.images.edge.bamgrid.com/ripcut-delivery/v2/variant/disney/a02a8bb0-319d-459b-89ec-28ba8bbcff04/compose?aspectRatio=1.78&format=webp&width=1200",
     posterVertikal: "https://lumiere-a.akamaihd.net/v1/images/p_muppettreasureisland_19640_a7d3ec93.jpeg?region=0%2C0%2C540%2C810", // portrett
     beskrivelse: "Muppetene setter seil på jakt etter skatter, med Jim Hawkins og Long John Silver.",
-    metadata: ["USA", "1996", "7+", "Familie / Fantasy", "1 t 39 min"],
+    metadata: ["USA", "1996", "7 år", "Familie / Fantasy", "1 t 39 min"],
     imdb: "https://www.imdb.com/title/tt0117110/",
     skuespillere: "Billy Connolly, Jennifer Saunders, Dave Goelz, Steve Whitmire",
     regissor: "Brian Henson",
     watchUrl: "film-mal.html?id=muppet-treasure-island",
     publishDate: "2025-09-29T00:00:00" // ISO datoformat
   },
+
+     "missing-link": {
+    tittel: "Missing Link",
+    bakgrunn: "https://is1-ssl.mzstatic.com/image/thumb/Features114/v4/ce/56/4d/ce564d94-0642-ea42-202c-c5dc4a1496ac/mzl.oflzllwl.png/2400x1350sr.webp",
+    logo: "https://is1-ssl.mzstatic.com/image/thumb/Features113/v4/41/a5/2e/41a52ead-d2a2-2b84-8fa9-b7fe7d0c7ba5/jsl18269134920746129241.png/432x162.png",
+    poster: "https://is1-ssl.mzstatic.com/image/thumb/Video124/v4/42/8b/f4/428bf4a6-e17c-5719-1c2f-dff378ec37ab/pr_source.lsr/1200x675.jpg",
+    posterVertikal: "https://play-lh.googleusercontent.com/XEfGdgtOLZyapSFAidkjyq03gHba_TAQWoSlgT-jiOCyl1a7TyRzjMMXiYAOEaA9vepd4_j8m7ix5Ke9SzCS", // portrett
+    beskrivelse: "Sir Lionel Frost er en modig og spektakulær eventyrer. Herr Link er nok den siste av sin art, han er ensom og han mener at Sir Lionel er den eneste som kan hjelpe ham.",
+    metadata: ["USA", "2019", "6 år", "Familie / Komedie ", "1 t 30 min"],
+    imdb: "https://www.imdb.com/title/tt6348138?ref_ext_viaplay",
+    skuespillere: "Hugh Jackman, Zoe Saldana, Zach Galifianakis, David Walliams",
+    regissor: "Chris Butler",
+    watchUrl: "film-mal.html?id=missing-link":",
+    publishDate: "2025-010-25T00:00:00" // ISO datoformat
+  },
   
 };
+
 
 
 
