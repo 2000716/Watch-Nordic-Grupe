@@ -11,7 +11,8 @@ const filmer = {
     imdb: "https://www.imdb.com/title/tt0121164/?ref_=nv_sr_srsg_1_tt_5_nm_3_in_0_q_corpse%2520",
     skuespillere: "Johnny Depp, Helena Bonham Carter, Emily Watson",
     regissor: "Tim Burton",
-    watchUrl: "film-mal.html?id=corpse-bride"
+    watchUrl: "film-mal.html?id=corpse-bride",
+    expireDate: "2026-11-15T23:59:59",
   },
 
   "hook": {
@@ -327,6 +328,7 @@ const filmer = {
   },
   
 };
+
 
 
 
