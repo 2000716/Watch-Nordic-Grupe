@@ -408,7 +408,7 @@ body.loaded {
 }
 
 .availability-info i {
-  color: #00FFCC;
+  color: #fff;   /* hvit klokke */
   font-size: 14px;
 }
 
@@ -863,15 +863,16 @@ if (data.expireDate) {
   const diffTid = expire - now;
   const ettÅr = 365 * 24 * 60 * 60 * 1000; // millisekunder i 1 år
 
-  if (diffTid > ettÅr) {
-    availabilityEl.innerHTML = `<i class="fas fa-clock"></i><span>Tilgjengelig lenger enn ett år</span>`;
-  } else if (diffTid > 0) {
-    const datoFormatert = expire.toLocaleDateString("no-NO", {
-      year: "numeric",
-      month: "short",
-      day: "numeric"
-    });
-    availabilityEl.innerHTML = `<i class="fas fa-clock"></i><span>Tilgjengelig til: ${datoFormatert}</span>`;
+ if (diffTid > ettÅr) {
+  availabilityEl.innerHTML = `<i class="far fa-clock"></i><span>Tilgjengelig lenger enn ett år</span>`;
+} else if (diffTid > 0) {
+  const datoFormatert = expire.toLocaleDateString("no-NO", {
+    year: "numeric",
+    month: "short",
+    day: "numeric"
+  });
+  availabilityEl.innerHTML = `<i class="far fa-clock"></i><span>Tilgjengelig til: ${datoFormatert}</span>`;
+
   }
 }
 
@@ -918,6 +919,7 @@ if (descEl.textContent.length > 200) { // grensen på antall tegn
 
 
  
+
 
 
 
