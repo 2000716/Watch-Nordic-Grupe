@@ -27,7 +27,8 @@ const filmer = {
     imdb: "https://www.imdb.com/title/tt0102057/?ref_=nv_sr_srsg_1_tt_5_nm_2_in_0_q_HOOK",
     skuespillere: "Dustin Hoffman, Robin Williams, Julia Roberts",
     regissor: "Steven Spielberg",
-    watchUrl: "film-mal.html?id=hook"
+    watchUrl: "film-mal.html?id=hook",
+    expireDate: "2027-10-10T23:59:59",
   },
 
   "kaptein-sabeltann": {
@@ -42,7 +43,8 @@ const filmer = {
     imdb: "https://www.imdb.com/title/tt8048384/?ref_=nv_sr_srsg_0_tt_8_nm_0_in_0_q_kaptein%2520sabeltann%2520og%2520den%2520",
     skuespillere: "Kyrre Haugen Sydness, Siri Skjeggedal, Leonard Valestrand Eike",
     regissor: "Marit Moum Aune, Rasmus A. Sivertsen",
-    watchUrl: "film-mal.html?id=kaptein-sabeltann"
+    watchUrl: "film-mal.html?id=kaptein-sabeltann",
+    expireDate: "2026-10-10T23:59:59",
   },
 
   "burlesque": {
@@ -56,7 +58,8 @@ const filmer = {
     imdb: "https://www.imdb.com/title/tt1126591/?ref_=nv_sr_srsg_0_tt_8_nm_0_in_0_q_burlesque",
     skuespillere: "Cher, Christina Aguilera, Alan Cumming",
     regissor: "Steve Antin",
-    watchUrl: "film-mal.html?id=burlesque"
+    watchUrl: "film-mal.html?id=burlesque",
+    expireDate: "2026-11-15T23:59:59",
   },
 
   "dog-man": {
@@ -70,7 +73,8 @@ const filmer = {
     imdb: "https://www.imdb.com/title/tt10954718/?ref_=nv_sr_srsg_1_tt_6_nm_1_in_0_q_dOg%2520man",
     skuespillere: "Pete Davidson, Poppy Liu, Lil Rel Howery",
     regissor: "Peter Hastings",
-    watchUrl: "film-mal.html?id=dog-man"
+    watchUrl: "film-mal.html?id=dog-man",
+    expireDate: "2026-01-01T23:59:59",
   },
 
   "dyrene-i-hakkabakkeskogen": {
@@ -85,7 +89,8 @@ const filmer = {
     imdb: "https://www.imdb.com/title/tt4730838/?ref_=nv_sr_srsg_0_tt_7_nm_1_in_0_q_dyrene%2520i%2520",
     skuespillere: "Espen Bråten Kristoffersen, Stig Henrik Hoff, Wenche Myhre",
     regissor: "Rasmus A. Sivertsen",
-    watchUrl: "film-mal.html?id=dyrene-i-hakkabakkeskogen"
+    watchUrl: "film-mal.html?id=dyrene-i-hakkabakkeskogen",
+    expireDate: "2026-11-15T23:59:59",
   },
 
   "jul-i-flåklypa": {
@@ -100,7 +105,8 @@ const filmer = {
     imdb: "https://www.imdb.com/title/tt2769896/?ref_=nv_sr_srsg_0_tt_2_nm_0_in_0_q_JUl%2520i%2520fl%25C3%25A5klypa",
     skuespillere: "Trond Brænne, Kari Ann Grønsund, Trond Høvik, Kåre Conradi, John F. Brungot",
     regissor: "Rasmus A. Sivertsen",
-    watchUrl: "film-mal.html?id=jul-i-flåklypa"
+    watchUrl: "film-mal.html?id=jul-i-flåklypa",
+    expireDate: "2027-01-01T23:59:59",
   },
 
   "bamse-og-dunderklokken": {
@@ -115,7 +121,8 @@ const filmer = {
     imdb: "https://www.imdb.com/title/tt9472442/?ref_=nv_sr_srsg_0_tt_1_nm_0_in_0_q_bamse%2520og%2520dunder",
     skuespillere: "Dennis Storhøi, Morten Røhrt, Jan Martin Johnsen, Morten Rudå",
     regissor: "Christian Ryltenius",
-    watchUrl: "film-mal.html?id=bamse-og-dunderklokken"
+    watchUrl: "film-mal.html?id=bamse-og-dunderklokken",
+    expireDate: "2027-10-15T23:59:59",
   },
 
   "elio": {
@@ -130,7 +137,8 @@ const filmer = {
     imdb: "https://www.imdb.com/title/tt4900148/?ref_=nv_sr_srsg_0_tt_2_nm_6_in_0_q_Elio",
     skuespillere: "Yonas Kibreab, Zoe Saldaña, Remy Edgerly",
     regissor: "Adrian Molina, Domee Shi, Madeline Sharafian",
-    watchUrl: "film-mal.html?id=elio"
+    watchUrl: "film-mal.html?id=elio",
+    expireDate: "2026-11-15T23:59:59",
   },
 
   "comet-in-moominland": {
@@ -144,7 +152,8 @@ const filmer = {
     imdb: "https://www.imdb.com/title/tt0240425/?ref_=nv_sr_srsg_0_tt_8_nm_0_in_0_q_Comet%2520in%2520moo",
     skuespillere: "Rabbe Smedlund, Jyrki Kovaleff, Elina Salo",
     regissor: "Hiroshi Saitô",
-    watchUrl: "film-mal.html?id=comet-in-moominland"
+    watchUrl: "film-mal.html?id=comet-in-moominland",
+    expireDate: "2028-10-15T23:59:59",
   },
 
     "kongens-nei": {
@@ -159,7 +168,8 @@ const filmer = {
     imdb: "https://www.imdb.com/title/tt4353996/",
     skuespillere: "Anders Baasmo Christiansen, Erik Hivju, Jesper Christensen, Rolf Kristian Larsen, Tuva Novotny",
     regissor: "Erik Poppe",
-    watchUrl: "film-mal.html?id=kongens-nei"
+    watchUrl: "film-mal.html?id=kongens-nei",
+    expireDate: "2026-11-15T23:59:59",
   },
 
      "max-manus": {
@@ -173,7 +183,8 @@ const filmer = {
     imdb: "https://www.imdb.com/title/tt1029235/",
     skuespillere: "Aksel Hennie, Agnes Kittelsen, Nicolai Cleve Broch",
     regissor: "Joachim Rønning, Espen Sandberg",
-    watchUrl: "film-mal.html?id=max-manus"
+    watchUrl: "film-mal.html?id=max-manus",
+    expireDate: "2026-11-15T23:59:59",
   },
        "smurfs": {
     tittel: "Smurfs",
@@ -187,7 +198,8 @@ const filmer = {
     imdb: "https://www.imdb.com/title/tt18069420/",
     skuespillere: "Rihanna, Natasha Lyonne, Hannah Waddingham, Kurt Russell, Nick Offerman,",
     regissor: " Chris Miller",
-    watchUrl: "film-mal.html?id=smurfs"
+    watchUrl: "film-mal.html?id=smurfs",
+    expireDate: "2026-11-15T23:59:59",
   },
 
    "mummitrollet-på-rivieraen": {
@@ -202,7 +214,8 @@ const filmer = {
     imdb: "https://www.imdb.com/title/tt2371399/",
     skuespillere: "Maria Sid, Russell Tovey, Mats Långbacka",
     regissor: "Xavier Picard",
-    watchUrl: "film-mal.html?id=mummitrollet-på-rivieraen"
+    watchUrl: "film-mal.html?id=mummitrollet-på-rivieraen",
+    expireDate: "2025-11-15T23:59:59",
   },
 
      "pirates": {
@@ -216,7 +229,8 @@ const filmer = {
     imdb: "https://www.imdb.com/title/tt1430626/",
     skuespillere: "Hugh Grant, Salma Hayek, Jeremy Piven",
     regissor: "Peter Lord, Jeff Newitt",
-    watchUrl: "film-mal.html?id=Pirates"
+    watchUrl: "film-mal.html?id=Pirates",
+    expireDate: "2028-11-15T23:59:59",
   },
 
     "olsenbanden–siste-skrik": {
@@ -232,7 +246,8 @@ const filmer = {
     skuespillere: "Anders Baasmo, John Carew, Elias Holmen Sørensen",
     regissor: "Hallvard Bræin",
     watchUrl: "film-mal.html?id=olsenbanden–siste-skrik",
-    publishDate: "2025-09-23T00:00:00" // ISO datoformat
+    publishDate: "2025-09-23T00:00:00", // ISO datoformat
+    expireDate: "2026-11-15T23:59:59",
   },
 
    "sauen-shaun–filmen": {
@@ -248,7 +263,8 @@ const filmer = {
     skuespillere: "Justin Fletcher, John Sparkes, Omid Djalili",
     regissor: "Mark Burton, Richard Starzak",
     watchUrl: "film-mal.html?id=sauen-shaun–filmen",
-    publishDate: "2025-10-02T00:00:00" // ISO datoformat
+    publishDate: "2025-10-02T00:00:00", // ISO datoformat
+    expireDate: "2027-11-15T23:59:59",
   },
 
    "the-crow": {
@@ -263,7 +279,8 @@ const filmer = {
     skuespillere: "Bill Skarsgård, FKA twigs, Danny Huston",
     regissor: "Rupert Sanders",
     watchUrl: "film-mal.html?id=the-crow",
-    publishDate: "2025-09-21" // ISO datoformat
+    publishDate: "2025-09-21", // ISO datoformat
+    expireDate: "2026-11-15T23:59:59",
   },
 
   "elizabeth": {
@@ -279,7 +296,8 @@ const filmer = {
     skuespillere: "Cate Blanchett, Geoffrey Rush, Christopher Eccleston",
     regissor: "Shekhar Kapur",
     watchUrl: "film-mal.html?id=elizabeth",
-    publishDate: "2025-09-26" // ISO datoformat
+    publishDate: "2025-09-26", // ISO datoformat
+    expireDate: "2026-11-15T23:59:59",
   },
 
     "chitty-chitty-bang-bang": {
@@ -294,7 +312,8 @@ const filmer = {
     skuespillere: "Dick Van Dyke, Sally Ann Howes, Lionel Jeffries",
     regissor: "Ken Hughes",
     watchUrl: "film-mal.html?id=chitty-chitty-bang-bang",
-    publishDate: "2025-10-10T00:00:00" // ISO datoformat
+    publishDate: "2025-10-10T00:00:00", // ISO datoformat
+    expireDate: "2029-11-15T23:59:59",
   },
 
    "muppet-treasure-island": {
@@ -309,7 +328,8 @@ const filmer = {
     skuespillere: "Billy Connolly, Jennifer Saunders, Dave Goelz, Steve Whitmire",
     regissor: "Brian Henson",
     watchUrl: "film-mal.html?id=muppet-treasure-island",
-    publishDate: "2025-09-29T00:00:00" // ISO datoformat
+    publishDate: "2025-09-29T00:00:00", // ISO datoformat
+    expireDate: "2027-11-15T23:59:59",
   },
 
      "missing-link": {
@@ -324,10 +344,12 @@ const filmer = {
     skuespillere: "Hugh Jackman, Zoe Saldana, Zach Galifianakis, David Walliams",
     regissor: "Chris Butler",
     watchUrl: "film-mal.html?id=missing-link",
-    publishDate: "2025-10-25T00:00:00" // ISO datoformat
+    publishDate: "2025-10-25T00:00:00", // ISO datoformat
+    expireDate: "2027-11-15T23:59:59",
   },
   
 };
+
 
 
 
