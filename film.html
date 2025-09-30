@@ -398,6 +398,21 @@ body.loaded {
   color: #fff;
 }
 
+    .availability-info {
+  margin-top: 10px;
+  font-size: 13px;
+  color: #ccc;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.availability-info i {
+  color: #00FFCC;
+  font-size: 14px;
+}
+
+
 /* === iPad og mindre skjermer === */
 @media (max-width: 1024px) {
   .vertical-nav {
@@ -575,6 +590,7 @@ body.loaded {
         <div class="text-container">
           <p class="description"></p>
           <div class="metadata"></div>
+          <div class="availability-info" id="availabilityInfo"></div>
         </div>
         <div class="cast-info"></div>
       </div>
@@ -836,6 +852,29 @@ if (data.trailer && data.trailer.trim() !== "") {
   trailerVideo.style.display = "none";
   videoControls.style.display = "none";
 }
+
+  // -------------------- Tilgjengelighetsinfo --------------------
+const availabilityEl = document.getElementById("availabilityInfo");
+
+if (data.expireDate) {
+  const now = new Date();
+  const expire = new Date(data.expireDate);
+
+  const diffTid = expire - now;
+  const ettÅr = 365 * 24 * 60 * 60 * 1000; // millisekunder i 1 år
+
+  if (diffTid > ettÅr) {
+    availabilityEl.innerHTML = `<i class="fas fa-clock"></i><span>Tilgjengelig lenger enn ett år</span>`;
+  } else if (diffTid > 0) {
+    const datoFormatert = expire.toLocaleDateString("no-NO", {
+      year: "numeric",
+      month: "short",
+      day: "numeric"
+    });
+    availabilityEl.innerHTML = `<i class="fas fa-clock"></i><span>Tilgjengelig til: ${datoFormatert}</span>`;
+  }
+}
+
   // -------------------- Begrenset beskrivelse --------------------
 const descEl = document.querySelector(".description");
 
@@ -867,6 +906,7 @@ if (descEl.textContent.length > 200) { // grensen på antall tegn
     });
   });
 }
+  
 
 </script>
 
@@ -878,6 +918,7 @@ if (descEl.textContent.length > 200) { // grensen på antall tegn
 
 
  
+
 
 
 
