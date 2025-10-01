@@ -502,28 +502,26 @@ main {
   transition: opacity 0.6s ease;
 }
 
-/* Logo – standardposisjon: nederst i midten */
+/* Logo-container nederst */
 .coming-movie-item .logo {
   position: absolute;
-  bottom: 15px;
+  bottom: 20px;       /* alltid samme avstand fra bunnen */
   left: 50%;
   transform: translateX(-50%);
-  height: 60px;            /* FAST høyde for alle logoer */
-  width: auto;             /* bredde justeres automatisk */
+  height: 60px;       /* alle logoer får samme høyde */
+  width: auto;
   object-fit: contain;
   z-index: 3;
   transition: all 0.4s ease;
 }
 
-/* Når item er utvidet → flytt logo til venstre, men behold samme høyde */
+/* Når utvidet → flyttes til venstre, men høyden er den samme */
 .coming-movie-item.expanded .logo {
   left: 20px;
-  bottom: 20px;
   transform: none;
-  height: 60px;            /* behold samme høyde */
+  height: 60px;       /* holder samme høyde */
   width: auto;
 }
-
 
 
 /* Utgivelsesdato nederst til høyre */
@@ -1356,6 +1354,7 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 });
 </script>
+
 
 
 
