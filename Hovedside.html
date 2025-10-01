@@ -954,10 +954,8 @@ if (lagretBilde) {
 
 // ==================== HERO-BANNER ==================== //
 function oppdaterBanner() {
-  // Filtrer ut filmer uten banner
   const filmKeys = Object.keys(filmer).filter(key => filmer[key].banner);
-
-  if (filmKeys.length === 0) return; // ingen filmer med banner
+  if (filmKeys.length === 0) return;
 
   const randomKey = filmKeys[Math.floor(Math.random() * filmKeys.length)];
   const film = filmer[randomKey];
@@ -1058,7 +1056,6 @@ function renderGallery(galleryId, filterFunction, sortByPublishDate = false, lim
 
   let filmKeys = Object.keys(filmer);
 
-  // Filtrer bort fremtidige filmer
   filmKeys = filmKeys.filter((key) => {
     const film = filmer[key];
     if (!film.publishDate) return true;
@@ -1122,17 +1119,14 @@ function renderTop10(galleryId) {
   gallery.innerHTML = "";
 
   let filmKeys = Object.keys(filmer);
-
   const today = new Date();
 
-  // --- Fjern filmer som ikke har kommet ennå ---
   filmKeys = filmKeys.filter((key) => {
     const film = filmer[key];
     if (!film.publishDate) return true; 
     return new Date(film.publishDate) <= today;
   });
 
-  // --- Bland rekkefølgen ut fra dagens dato ---
   const seed = today.getFullYear() * 1000 + today.getMonth() * 50 + today.getDate();
 
   function seededRandom(seed) {
@@ -1141,14 +1135,10 @@ function renderTop10(galleryId) {
   }
 
   filmKeys.sort((a, b) => seededRandom(seed + a.length) - seededRandom(seed + b.length));
-
-  // --- Ta kun topp 10 ---
   filmKeys = filmKeys.slice(0, 10);
 
-  // --- Bygg elementene ---
   filmKeys.forEach((key, index) => {
     const film = filmer[key];
-
     const wrapper = document.createElement("a");
     wrapper.href = `film.html?navn=${key}`;
     wrapper.classList.add("top10-item");
@@ -1174,7 +1164,6 @@ function renderHalloweenBanner() {
   const bannerLink = document.getElementById("special-banner-link");
   const gallery = document.getElementById("halloween-gallery");
 
-  // Finn første film med banner og Halloween/Skrekk metadata
   const halloweenFilmKey = Object.keys(filmer).find(key =>
     filmer[key].banner && filmer[key].metadata.some(m =>
       m.toLowerCase().includes("halloween") || m.toLowerCase().includes("skrekk")
@@ -1184,12 +1173,10 @@ function renderHalloweenBanner() {
   if (!halloweenFilmKey) return;
   const film = filmer[halloweenFilmKey];
 
-  // Oppdater banner-bildet og logo
   if (film.banner) bannerImage.src = film.banner;
   if (film.logo) bannerLogo.src = film.logo;
   bannerLink.href = `film.html?navn=${halloweenFilmKey}`;
 
-  // Bygg galleriet
   gallery.innerHTML = "";
   Object.keys(filmer).forEach(key => {
     const f = filmer[key];
@@ -1198,11 +1185,9 @@ function renderHalloweenBanner() {
     )) {
       const link = document.createElement("a");
       link.href = `film.html?navn=${key}`;
-
       const img = document.createElement("img");
       img.src = f.posterVertikal || f.poster;
       img.alt = f.tittel;
-
       link.appendChild(img);
       gallery.appendChild(link);
     }
@@ -1255,7 +1240,6 @@ function renderContinueWatching() {
 
 // ==================== INIT ==================== //
 document.addEventListener("DOMContentLoaded", () => {
-  // Render seksjoner
   renderGallery("nye-filmer-galleri", null, true, 10); 
   renderTop10("topp10-filmer-galleri"); 
   renderGallery("barn-galleri", (key) => {
@@ -1271,7 +1255,7 @@ document.addEventListener("DOMContentLoaded", () => {
   renderHalloweenBanner();
   renderContinueWatching();
 
-  // Galleri-scroll
+  // Scroll-piler & fades
   document.querySelectorAll(".gallery-wrapper").forEach((wrapper) => {
     const gallery = wrapper.querySelector(".image-gallery, .coming-movies-gallery, .top10-gallery");
     const leftBtn = wrapper.querySelector(".scroll-button.left");
@@ -1308,7 +1292,7 @@ document.addEventListener("DOMContentLoaded", () => {
     updateScrollState();
   });
 
-  // Progress-bar init
+  // Init progress-bar
   document.querySelectorAll(".progress-bar").forEach((bar) => {
     const progress = bar.getAttribute("data-progress");
     if (progress) {
@@ -1316,9 +1300,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 });
-
 </script>
-
 
 
 
