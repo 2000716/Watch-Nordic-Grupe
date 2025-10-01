@@ -508,8 +508,8 @@ main {
   bottom: 15px;
   left: 50%;
   transform: translateX(-50%);
-  max-width: 50%;
-  max-height: 60px;
+  width: 140px;            /* fast bredde */
+  height: 60px;            /* fast høyde */
   object-fit: contain;
   z-index: 3;
   transition: all 0.4s ease;
@@ -520,9 +520,10 @@ main {
   left: 20px;
   bottom: 20px;
   transform: none;
-  max-width: 40%;
-  max-height: 80px;
+  width: 160px;            /* samme bredde for alle */
+  height: 70px;            /* samme høyde for alle */
 }
+
 
 /* Utgivelsesdato nederst til høyre */
 .coming-movie-item .coming-movie-info {
@@ -1354,6 +1355,7 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 });
 </script>
+
 
 
 
