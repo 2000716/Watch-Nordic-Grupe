@@ -255,6 +255,7 @@ const filmer = {
     bakgrunn: "https://image.tmdb.org/t/p/original/27LJejNKvrtGca0Woc4oEBvh1Xs.jpg",
     banner: "https://image.tmdb.org/t/p/original/27LJejNKvrtGca0Woc4oEBvh1Xs.jpg", // <- brukes til hero-banner
     logo: "https://image.tmdb.org/t/p/original/camSNGn7WGX34TjGmTCHPqJp2Hb.png",
+    trailer: "https://video.wixstatic.com/video/fd2fb2_5343c88a14624075b13ad824e79d429d/1080p/mp4/file.mp4", // 🎥 NY
     poster: "https://sumo.cdn.tv2.no/imageapi/v3/img/59677ff90cf25438151a6a48-1708671818935",
     posterVertikal: "https://play-lh.googleusercontent.com/fC14EKuDp10UJmJmNoj-iIxo29_R-9JCF5d10XpsaAEh2n0DWm5Oda6HzkHB6wcm4bTAlg", // portrett
     beskrivelse: "Den lure sauen Shaun og flokken hans under tilsyn av bonden og gjeterhunden, Blitzer.",
@@ -305,6 +306,7 @@ const filmer = {
     bakgrunn: "https://is1-ssl.mzstatic.com/image/thumb/bH5SmieIfdD6oIVVwzxYkg/2400x1350sr.webp",
     banner: "https://static.wixstatic.com/media/fd2fb2_6448e5596a9448e8be1f3e15252a8095~mv2.jpg", // <- brukes til hero-banner
     logo: "https://image.tmdb.org/t/p/original/kEnMUrKAJ9a0V4Nerx5rPCUxl8r.png",
+    trailer: "https://video.wixstatic.com/video/fd2fb2_5343c88a14624075b13ad824e79d429d/1080p/mp4/file.mp4", // 🎥 NY
     poster: "https://m.media-amazon.com/images/S/pv-target-images/fbb7d019ac94443df2f06f5ff9620267460fa808f463c82036f367013da15f5c.jpg",
     posterVertikal: "https://images-prod.ai.tv2.no/v2/image-packs/pfimg_pack_01k4smakxkea6t9t5e1dg1nhy6?location=moviePoster&width=672", // portrett
     beskrivelse: "En eksentrisk oppfinner bygger et fantastisk fartøy som kan fly og flyte. Sammen med familien styrer han bilen mot en magisk verden full endeløse eventyr.",
@@ -338,6 +340,7 @@ const filmer = {
     bakgrunn: "https://is1-ssl.mzstatic.com/image/thumb/Features114/v4/ce/56/4d/ce564d94-0642-ea42-202c-c5dc4a1496ac/mzl.oflzllwl.png/2400x1350sr.webp",
     banner: "https://static.wixstatic.com/media/fd2fb2_6448e5596a9448e8be1f3e15252a8095~mv2.jpg", // <- brukes til hero-banner
     logo: "https://is1-ssl.mzstatic.com/image/thumb/Features113/v4/41/a5/2e/41a52ead-d2a2-2b84-8fa9-b7fe7d0c7ba5/jsl18269134920746129241.png/432x162.png",
+    trailer: "https://video.wixstatic.com/video/fd2fb2_5343c88a14624075b13ad824e79d429d/1080p/mp4/file.mp4", // 🎥 NY
     poster: "https://is1-ssl.mzstatic.com/image/thumb/Video124/v4/42/8b/f4/428bf4a6-e17c-5719-1c2f-dff378ec37ab/pr_source.lsr/1200x675.jpg",
     posterVertikal: "https://play-lh.googleusercontent.com/XEfGdgtOLZyapSFAidkjyq03gHba_TAQWoSlgT-jiOCyl1a7TyRzjMMXiYAOEaA9vepd4_j8m7ix5Ke9SzCS", // portrett
     beskrivelse: "Sir Lionel Frost er en modig og spektakulær eventyrer. Herr Link er nok den siste av sin art, han er ensom og han mener at Sir Lionel er den eneste som kan hjelpe ham.",
@@ -351,6 +354,7 @@ const filmer = {
   },
   
 };
+
 
 
 
