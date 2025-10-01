@@ -537,11 +537,23 @@ main {
   transition: opacity 0.3s ease;
 }
 
+/* Selve "taggen" */
+.coming-movie-item .coming-movie-info p {
+  display: inline-flex;
+  align-items: center;
+  background: rgba(0, 0, 0, 0.6);  /* mørk bakgrunn */
+  padding: 6px 10px;
+  border-radius: 8px;
+  backdrop-filter: blur(4px);      /* litt glass-effekt */
+}
+
+/* Ikonet */
 .coming-movie-item .coming-movie-info i {
-  color: #00FFCC;  /* turkis farge */
+  color: #00FFCC;   /* turkis ikon */
   margin-right: 6px;
   font-size: 14px;
 }
+
 
 
 .coming-movie-item.expanded .coming-movie-info {
@@ -1365,6 +1377,7 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 });
 </script>
+
 
 
 
