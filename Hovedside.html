@@ -1043,7 +1043,6 @@ function createUpcomingMovieElement(filmKey, film) {
   if (film.trailer) {
     video.src = film.trailer;
   }
-  video.muted = true;
   video.loop = true;
   video.playsInline = true;
   link.appendChild(video);
@@ -1377,6 +1376,7 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 });
 </script>
+
 
 
 
