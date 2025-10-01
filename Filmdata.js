@@ -304,7 +304,6 @@ const filmer = {
     "chitty-chitty-bang-bang": {
     tittel: "Chitty Chitty Bang Bang",
     bakgrunn: "https://is1-ssl.mzstatic.com/image/thumb/bH5SmieIfdD6oIVVwzxYkg/2400x1350sr.webp",
-    banner: "https://static.wixstatic.com/media/fd2fb2_6448e5596a9448e8be1f3e15252a8095~mv2.jpg", // <- brukes til hero-banner
     logo: "https://image.tmdb.org/t/p/original/kEnMUrKAJ9a0V4Nerx5rPCUxl8r.png",
     trailer: "https://video.wixstatic.com/video/fd2fb2_5343c88a14624075b13ad824e79d429d/1080p/mp4/file.mp4", // 🎥 NY
     poster: "https://m.media-amazon.com/images/S/pv-target-images/fbb7d019ac94443df2f06f5ff9620267460fa808f463c82036f367013da15f5c.jpg",
@@ -338,7 +337,6 @@ const filmer = {
      "missing-link": {
     tittel: "Missing Link",
     bakgrunn: "https://is1-ssl.mzstatic.com/image/thumb/Features114/v4/ce/56/4d/ce564d94-0642-ea42-202c-c5dc4a1496ac/mzl.oflzllwl.png/2400x1350sr.webp",
-    banner: "https://static.wixstatic.com/media/fd2fb2_6448e5596a9448e8be1f3e15252a8095~mv2.jpg", // <- brukes til hero-banner
     logo: "https://static.wikia.nocookie.net/logopedia/images/5/5f/Missing_Link_Logo_2.png/revision/latest/scale-to-width-down/313?cb=20240907004056",
     trailer: "https://video.wixstatic.com/video/fd2fb2_5343c88a14624075b13ad824e79d429d/1080p/mp4/file.mp4", // 🎥 NY
     poster: "https://is1-ssl.mzstatic.com/image/thumb/Video124/v4/42/8b/f4/428bf4a6-e17c-5719-1c2f-dff378ec37ab/pr_source.lsr/1200x675.jpg",
@@ -354,6 +352,7 @@ const filmer = {
   },
   
 };
+
 
 
 
