@@ -458,6 +458,16 @@ main {
   color: #00FFCC;
 }
 
+/* Kommende filmer nytt design */
+.coming-movies-gallery {
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+  padding: 20px 16px;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+}
+
 .coming-movie-item {
   position: relative;
   flex: 0 0 200px;
@@ -474,7 +484,6 @@ main {
   height: 100%;
   object-fit: cover;
   display: block;
-  transition: transform 0.4s ease;
 }
 
 .coming-movie-item video {
@@ -489,21 +498,30 @@ main {
   bottom: 15px;
   left: 50%;
   transform: translateX(-50%);
-  width: 70%;
+  width: 80%;
   max-height: 60px;
   object-fit: contain;
   z-index: 2;
   transition: all 0.5s ease;
 }
 
-.coming-movie-item.expanded {
+.coming-movie-item .overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.6);
+  opacity: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+  transition: opacity 0.3s ease;
+}
+
+.coming-movie-item:hover {
   flex: 0 0 500px;
 }
 
-.coming-movie-item.expanded img.banner {
-  transform: scale(1.1);
-}
-
+/* Når video vises */
 .coming-movie-item.show-video img.banner {
   display: none;
 }
@@ -512,12 +530,18 @@ main {
   display: block;
 }
 
+.coming-movie-item.show-video .overlay {
+  opacity: 1;
+}
+
+/* Logo flytter seg og blir mindre når video starter */
 .coming-movie-item.show-video .logo {
   bottom: 10px;
   left: 20px;
   transform: none;
-  width: 30%;
+  width: 35%;
 }
+
 
 /* === Topp 10 filmer === */
 .top10-gallery {
@@ -1318,6 +1342,7 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 });
 </script>
+
 
 
 
