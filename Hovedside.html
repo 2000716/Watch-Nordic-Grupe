@@ -458,16 +458,6 @@ main {
   color: #00FFCC;
 }
 
-/* Kommende filmer nytt design */
-.coming-movies-gallery {
-  display: flex;
-  flex-direction: row;
-  gap: 20px;
-  padding: 20px 16px;
-  overflow-x: auto;
-  scroll-behavior: smooth;
-}
-
 .coming-movie-item {
   position: relative;
   flex: 0 0 200px;
@@ -479,34 +469,12 @@ main {
   background-color: #000;
 }
 
-.coming-movie-item img {
+.coming-movie-item img.banner {
   width: 100%;
   height: 100%;
   object-fit: cover;
   display: block;
-}
-
-.coming-movie-item .logo {
-  position: absolute;
-  bottom: 15px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 80%;
-  max-height: 60px;
-  object-fit: contain;
-  z-index: 2;
-}
-
-.coming-movie-item .overlay {
-  position: absolute;
-  inset: 0;
-  background: rgba(0,0,0,0.6);
-  opacity: 0;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 20px;
-  transition: opacity 0.3s ease;
+  transition: transform 0.4s ease;
 }
 
 .coming-movie-item video {
@@ -516,37 +484,40 @@ main {
   display: none;
 }
 
-.coming-movie-item:hover {
+.coming-movie-item .logo {
+  position: absolute;
+  bottom: 15px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 70%;
+  max-height: 60px;
+  object-fit: contain;
+  z-index: 2;
+  transition: all 0.5s ease;
+}
+
+.coming-movie-item.expanded {
   flex: 0 0 500px;
 }
 
-.coming-movie-item:hover img {
+.coming-movie-item.expanded img.banner {
+  transform: scale(1.1);
+}
+
+.coming-movie-item.show-video img.banner {
   display: none;
 }
 
-.coming-movie-item:hover video {
+.coming-movie-item.show-video video {
   display: block;
 }
 
-.coming-movie-item:hover .overlay {
-  opacity: 1;
+.coming-movie-item.show-video .logo {
+  bottom: 10px;
+  left: 20px;
+  transform: none;
+  width: 30%;
 }
-
-.coming-movie-date {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  color: #00FFCC;
-  font-size: 16px;
-  font-weight: bold;
-}
-
-.coming-movie-text {
-  font-size: 18px;
-  font-weight: bold;
-  color: white;
-}
-
 
 /* === Topp 10 filmer === */
 .top10-gallery {
@@ -997,15 +968,36 @@ function createMovieElement(filmKey, film) {
 }
 
 function createUpcomingMovieElement(filmKey, film) {
-  const link = document.createElement("a");
+  const link = document.createElement("div"); // div i stedet for <a>, så video kan fungere
   link.classList.add("coming-movie-item");
-  link.href = `film.html?navn=${filmKey}`;
 
-  const poster = document.createElement("img");
-  poster.src = film.posterVertikal || film.poster;
-  poster.alt = film.tittel;
-  link.appendChild(poster);
+  // Bakgrunnsbanner
+  const banner = document.createElement("img");
+  banner.src = film.banner || film.poster;
+  banner.alt = film.tittel;
+  banner.classList.add("banner");
+  link.appendChild(banner);
 
+  // Trailer-video
+  const video = document.createElement("video");
+  if (film.trailer) {
+    video.src = film.trailer;
+  }
+  video.muted = true;
+  video.loop = true;
+  video.playsInline = true;
+  link.appendChild(video);
+
+  // Logo
+  if (film.logo) {
+    const logo = document.createElement("img");
+    logo.src = film.logo;
+    logo.alt = film.tittel + " Logo";
+    logo.classList.add("logo");
+    link.appendChild(logo);
+  }
+
+  // Utgivelsesinfo
   const info = document.createElement("div");
   info.classList.add("coming-movie-info");
 
@@ -1014,7 +1006,6 @@ function createUpcomingMovieElement(filmKey, film) {
   info.appendChild(title);
 
   const release = document.createElement("p");
-
   if (film.publishDate) {
     const releaseDate = new Date(film.publishDate);
     const today = new Date();
@@ -1044,6 +1035,32 @@ function createUpcomingMovieElement(filmKey, film) {
 
   info.appendChild(release);
   link.appendChild(info);
+
+  // Hover-effekt med 3 sek delay før video
+  let hoverTimeout;
+  link.addEventListener("mouseenter", () => {
+    link.classList.add("expanded");
+
+    hoverTimeout = setTimeout(() => {
+      if (film.trailer) {
+        link.classList.add("show-video");
+        video.play();
+      }
+    }, 3000);
+  });
+
+  link.addEventListener("mouseleave", () => {
+    clearTimeout(hoverTimeout);
+    link.classList.remove("expanded", "show-video");
+    video.pause();
+    video.currentTime = 0;
+  });
+
+  // Klikk = gå til film-siden
+  link.addEventListener("click", () => {
+    window.location.href = `film.html?navn=${filmKey}`;
+  });
+
   return link;
 }
 
@@ -1301,7 +1318,6 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 });
 </script>
-
 
 
 
