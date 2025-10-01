@@ -470,13 +470,17 @@ main {
 
 .coming-movie-item {
   position: relative;
-  flex: 0 0 200px;
+  flex: 0 0 160px;   /* <--- smalere standardbredde */
   height: 300px;
   border-radius: 12px;
   overflow: hidden;
   cursor: pointer;
   transition: all 0.4s ease;
   background-color: #000;
+}
+
+.coming-movie-item:hover {
+  flex: 0 0 500px;   /* <--- vokser mye mer når i fokus */
 }
 
 .coming-movie-item img.banner {
@@ -1342,6 +1346,7 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 });
 </script>
+
 
 
 
