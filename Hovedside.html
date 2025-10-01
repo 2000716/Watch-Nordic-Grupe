@@ -1043,9 +1043,11 @@ function createUpcomingMovieElement(filmKey, film) {
   if (film.trailer) {
     video.src = film.trailer;
   }
-  video.loop = true;
-  video.playsInline = true;
-  link.appendChild(video);
+ // video.muted = true; // fjernet muting
+video.loop = true;
+video.playsInline = true;
+link.appendChild(video);
+
 
   // 🎭 Logo (fra "logo")
   if (film.logo) {
@@ -1376,6 +1378,7 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 });
 </script>
+
 
 
 
