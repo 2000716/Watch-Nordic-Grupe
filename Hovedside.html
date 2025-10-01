@@ -537,6 +537,13 @@ main {
   transition: opacity 0.3s ease;
 }
 
+.coming-movie-item .coming-movie-info i {
+  color: #00FFCC;  /* turkis farge */
+  margin-right: 6px;
+  font-size: 14px;
+}
+
+
 .coming-movie-item.expanded .coming-movie-info {
   opacity: 1;
 }
@@ -1043,6 +1050,10 @@ function createUpcomingMovieElement(filmKey, film) {
   info.classList.add("coming-movie-info");
 
   const release = document.createElement("p");
+  const icon = document.createElement("i");
+  icon.classList.add("fas", "fa-calendar-alt"); // Font Awesome kalender
+  release.appendChild(icon);
+
   if (film.publishDate) {
     const releaseDate = new Date(film.publishDate);
     const today = new Date();
@@ -1053,7 +1064,7 @@ function createUpcomingMovieElement(filmKey, film) {
     tomorrow.setDate(today.getDate() + 1);
 
     if (releaseDate.getTime() === tomorrow.getTime()) {
-      release.textContent = "Kommer i morgen";
+      release.appendChild(document.createTextNode(" Kommer i morgen"));
     } else {
       const currentYear = today.getFullYear();
       const releaseYear = releaseDate.getFullYear();
@@ -1063,10 +1074,10 @@ function createUpcomingMovieElement(filmKey, film) {
         options.year = "numeric";
       }
 
-      release.textContent = releaseDate.toLocaleDateString("no-NO", options);
+      release.appendChild(document.createTextNode(" " + releaseDate.toLocaleDateString("no-NO", options)));
     }
   } else {
-    release.textContent = "Ukjent dato";
+    release.appendChild(document.createTextNode(" Ukjent dato"));
   }
 
   info.appendChild(release);
@@ -1354,6 +1365,7 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 });
 </script>
+
 
 
 
