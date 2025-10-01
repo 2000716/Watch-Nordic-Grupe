@@ -508,21 +508,22 @@ main {
   bottom: 15px;
   left: 50%;
   transform: translateX(-50%);
-  width: 140px;            /* fast bredde */
-  height: 60px;            /* fast høyde */
+  height: 60px;            /* FAST høyde for alle logoer */
+  width: auto;             /* bredde justeres automatisk */
   object-fit: contain;
   z-index: 3;
   transition: all 0.4s ease;
 }
 
-/* Når item er utvidet → flytt logo til venstre */
+/* Når item er utvidet → flytt logo til venstre, men behold samme høyde */
 .coming-movie-item.expanded .logo {
   left: 20px;
   bottom: 20px;
   transform: none;
-  width: 160px;            /* samme bredde for alle */
-  height: 70px;            /* samme høyde for alle */
+  height: 60px;            /* behold samme høyde */
+  width: auto;
 }
+
 
 
 /* Utgivelsesdato nederst til høyre */
@@ -1355,6 +1356,7 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 });
 </script>
+
 
 
 
