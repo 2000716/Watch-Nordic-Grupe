@@ -1031,14 +1031,14 @@ function createUpcomingMovieElement(filmKey, film) {
   const link = document.createElement("div");
   link.classList.add("coming-movie-item");
 
-  // Bakgrunnsbanner
+  // 🎬 Bakgrunnsbilde (fra "bakgrunn")
   const banner = document.createElement("img");
-  banner.src = film.banner || film.poster;
+  banner.src = film.bakgrunn || film.poster || "";
   banner.alt = film.tittel;
   banner.classList.add("banner");
   link.appendChild(banner);
 
-  // Trailer-video
+  // 🎥 Trailer-video (fra "trailer")
   const video = document.createElement("video");
   if (film.trailer) {
     video.src = film.trailer;
@@ -1048,7 +1048,7 @@ function createUpcomingMovieElement(filmKey, film) {
   video.playsInline = true;
   link.appendChild(video);
 
-  // Logo
+  // 🎭 Logo (fra "logo")
   if (film.logo) {
     const logo = document.createElement("img");
     logo.src = film.logo;
@@ -1057,13 +1057,13 @@ function createUpcomingMovieElement(filmKey, film) {
     link.appendChild(logo);
   }
 
-  // Utgivelsesdato nederst til høyre
+  // 📅 Utgivelsesdato med mørk bakgrunn & ikon
   const info = document.createElement("div");
   info.classList.add("coming-movie-info");
 
   const release = document.createElement("p");
   const icon = document.createElement("i");
-  icon.classList.add("fas", "fa-calendar-alt"); // Font Awesome kalender
+  icon.classList.add("fas", "fa-calendar-alt");
   release.appendChild(icon);
 
   if (film.publishDate) {
@@ -1075,31 +1075,30 @@ function createUpcomingMovieElement(filmKey, film) {
     const tomorrow = new Date(today);
     tomorrow.setDate(today.getDate() + 1);
 
+    let datoTekst = "";
     if (releaseDate.getTime() === tomorrow.getTime()) {
-      release.appendChild(document.createTextNode(" Kommer i morgen"));
+      datoTekst = "Kommer i morgen";
     } else {
       const currentYear = today.getFullYear();
       const releaseYear = releaseDate.getFullYear();
-
       let options = { day: "numeric", month: "long" };
       if (releaseYear !== currentYear) {
         options.year = "numeric";
       }
-
-      release.appendChild(document.createTextNode(" " + releaseDate.toLocaleDateString("no-NO", options)));
+      datoTekst = "Kommer: " + releaseDate.toLocaleDateString("no-NO", options);
     }
+    release.appendChild(document.createTextNode(" " + datoTekst));
   } else {
-    release.appendChild(document.createTextNode(" Ukjent dato"));
+    release.appendChild(document.createTextNode(" Kommer: Ukjent"));
   }
 
   info.appendChild(release);
   link.appendChild(info);
 
-  // Hover-effekt (fade til video etter 3s)
+  // Hover-effekt med 3 sek delay før video
   let hoverTimeout;
   link.addEventListener("mouseenter", () => {
     link.classList.add("expanded");
-
     hoverTimeout = setTimeout(() => {
       if (film.trailer) {
         link.classList.add("show-video");
@@ -1122,6 +1121,7 @@ function createUpcomingMovieElement(filmKey, film) {
 
   return link;
 }
+
 
 function renderGallery(galleryId, filterFunction, sortByPublishDate = false, limit = null) {
   const gallery = document.getElementById(galleryId);
@@ -1377,6 +1377,7 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 });
 </script>
+
 
 
 
