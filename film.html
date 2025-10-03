@@ -200,7 +200,7 @@ body.loaded {
 
 .text-button-container {
   display: flex;
-  align-items: stretch;
+  align-items: flex-start; /* ✅ gjør at teksten ikke strekker seg */
   gap: 40px;
   padding: 30px;
   border-radius: 12px;
@@ -209,6 +209,7 @@ body.loaded {
 .text-container {
   flex: 2;
   min-width: 300px;
+  max-width: 600px; /* ✅ fast bredde på beskrivelsen */
   text-align: left;
   color: white;
 }
@@ -258,6 +259,7 @@ body.loaded {
 
 .cast-info {
   flex: 0 0 200px;
+  max-width: 200px; /* ✅ holder seg fast */
   font-size: 13px;
   color: #aaa;
   line-height: 1.6;
@@ -398,7 +400,7 @@ body.loaded {
   color: #fff;
 }
 
-    .availability-info {
+.availability-info {
   margin-top: 10px;
   font-size: 13px;
   color: #ccc;
@@ -411,7 +413,6 @@ body.loaded {
   color: #fff;   /* hvit klokke */
   font-size: 14px;
 }
-
 
 /* === iPad og mindre skjermer === */
 @media (max-width: 1024px) {
@@ -459,6 +460,7 @@ body.loaded {
 
   .text-container {
     font-size: 15px;
+    max-width: 100%; /* tillat full bredde på små skjermer */
   }
 
   .watch-button {
@@ -492,7 +494,7 @@ body.loaded {
 .more-btn {
   display: inline;
   color: #ddd;
-  background: rgba(255,255,255,0.1); /* samme farge som tekstområdet, men litt mørkere */
+  background: rgba(255,255,255,0.1);
   border: none;
   cursor: pointer;
   font-size: 14px;
@@ -939,6 +941,7 @@ if (words.length > MAX_ORD) {
 
 
  
+
 
 
 
