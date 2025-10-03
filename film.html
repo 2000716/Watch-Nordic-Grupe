@@ -204,15 +204,15 @@ body.loaded {
   gap: 40px;
   padding: 30px;
   border-radius: 12px;
-  max-width: 1200px;   /* ✅ bredere boks */
+  max-width: 1200px;
   width: 100%;
 }
 
+/* === Tekstfelt (låst bredde/høyde) === */
 .text-container {
-  flex: 2;
-  min-width: 400px;
-  max-width: 700px;   /* ✅ bredere tekstfelt */
-  max-height: 260px;  /* ✅ litt høyere */
+  flex: 0 0 700px;   /* fast bredde */
+  max-width: 700px;
+  max-height: 260px; /* fast høyde */
   overflow-y: auto;
   text-align: left;
   color: white;
@@ -261,8 +261,9 @@ body.loaded {
   filter: brightness(80%) contrast(120%);
 }
 
+/* === Cast-info (låst bredde/høyde) === */
 .cast-info {
-  flex: 0 0 260px;     /* ✅ bredere høyreboks */
+  flex: 0 0 260px;
   max-width: 260px;
   max-height: 260px;
   overflow-y: auto;
@@ -275,6 +276,7 @@ body.loaded {
   color: #fff;
 }
 
+/* === Knapper === */
 .watch-button {
   background: #fff;
   color: #000;
@@ -320,7 +322,7 @@ body.loaded {
   padding: 40px 60px 60px 60px;
   background: black;
   transition: margin-left 0.3s ease;
-  margin-top: 0;
+  margin-top: -40px;
 }
 
 .vertical-nav.collapsed ~ .recommendations {
@@ -466,13 +468,16 @@ body.loaded {
   }
 
   .text-container {
-    font-size: 15px;
+    flex: 1;
     max-width: 100%;
     max-height: none;
     overflow-y: visible;
+    font-size: 15px;
   }
 
   .cast-info {
+    flex: 1;
+    max-width: 100%;
     max-height: none;
     overflow-y: visible;
   }
@@ -555,11 +560,6 @@ body.loaded {
   font-size: 20px;
   color: white;
   cursor: pointer;
-}
-
-/* === Justering av galleriet === */
-.recommendations {
-  margin-top: -40px;
 }
 
   </style>
@@ -955,6 +955,7 @@ if (words.length > MAX_ORD) {
 
 
  
+
 
 
 
