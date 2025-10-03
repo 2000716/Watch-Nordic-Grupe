@@ -334,7 +334,7 @@ const filmer = {
     expireDate: "2027-11-15T23:59:59",
   },
 
-     "missing-link": {
+    "missing-link": {
     tittel: "Missing Link",
     bakgrunn: "https://is1-ssl.mzstatic.com/image/thumb/Features114/v4/ce/56/4d/ce564d94-0642-ea42-202c-c5dc4a1496ac/mzl.oflzllwl.png/2400x1350sr.webp",
     logo: "https://static.wixstatic.com/media/fd2fb2_8f810efe6e43455dbc05aa232a59b897~mv2.webp",
@@ -350,8 +350,25 @@ const filmer = {
     publishDate: "2025-10-25T00:00:00", // ISO datoformat
     expireDate: "2027-11-15T23:59:59",
   },
+
+    "titanic-digital-resurrection": {
+    tittel: "Titanic Digital Resurrection",
+    bakgrunn: "https://d32qys9a6wm9no.cloudfront.net/images/movies/backdrop/2f/5e55bbdc9efb40b5f6e4c8e54d4afbfd_1280x720.jpg?t=1744244601",
+    logo: "https://disney.images.edge.bamgrid.com/ripcut-delivery/v2/variant/disney/b156d077-a608-4f8f-9393-bbb5b8328ce2/compose?format=webp",
+    poster: "https://disney.images.edge.bamgrid.com/ripcut-delivery/v2/variant/disney/72158a35-dc7b-4b46-b298-67c100559fed/scale?format=webp&width=600",
+    posterVertikal: "https://m.media-amazon.com/images/M/MV5BNDdiNzg1MTAtMWJiOC00ZDFmLTkzOWEtNDRmMTFjMjMwZGNlXkEyXkFqcGc@._V1_FMjpg_UX1000_.jpg", // portrett
+    beskrivelse: "Avslører den mest detaljerte Titanic-modellen noensinne, ved hjelp av avanserte undervannsskanninger og 715 000 digitale bilder for å lage en nøyaktig 1:1 digital tvilling av det legendariske skipsvraket.",
+    metadata: ["USA", "2025", "12+", "Dokumentar", "1 t 30 min"],
+    imdb: "https://www.imdb.com/title/tt36462222/",
+    skuespillere: "Josh Goodman, Jennifer Jo Hooper, Parks Stephenson",
+    regissor: "Fergus Colville",
+    watchUrl: "film-mal.html?id=titanic-digital-resurrection",
+    publishDate: "2025-10-04T00:00:00", // ISO datoformat
+    expireDate: "2026-11-15T23:59:59",
+  },
   
 };
+
 
 
 
