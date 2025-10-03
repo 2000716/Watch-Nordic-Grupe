@@ -7,7 +7,7 @@ const filmer = {
     poster: "https://is1-ssl.mzstatic.com/image/thumb/Video124/v4/4b/f6/66/4bf66634-eace-f237-8991-a383189e2b03/pr_source.lsr/392x220.webp",
     posterVertikal: "https://image.tmdb.org/t/p/w780/isb2Qow76GpqYmsSyfdMfsYAjts.jpg", // portrett
     beskrivelse: "På tampen av bryllupet sitt gifter den nervøse brudgommen Victor seg ved et uhell med likbruden Emily og stiger ned med henne til underverdenen.",
-    metadata: ["USA", "2005", "9+", "Fantasi / Grøsser", "1 t 13 min"],
+    metadata: ["USA", "2005", "9+", "Grøsser", "1 t 13 min"],
     imdb: "https://www.imdb.com/title/tt0121164/?ref_=nv_sr_srsg_1_tt_5_nm_3_in_0_q_corpse%2520",
     skuespillere: "Johnny Depp, Helena Bonham Carter, Emily Watson",
     regissor: "Tim Burton",
@@ -23,7 +23,7 @@ const filmer = {
     poster: "https://static.wixstatic.com/media/fd2fb2_3b5f5cd114b746e8b05881724a22a0e5~mv2.jpg",
     posterVertikal: "https://image.tmdb.org/t/p/original/a8xMPQUw8h7E3bJ9Dw596SD8p3v.jpg", // portrett
     beskrivelse: "Den middelaldrende advokaten Peter Banning må overbevises om at han en gang var den legendariske Peter Pan for å kunne redde barna fra Kaptein Krok.",
-    metadata: ["USA", "1991", "13+", "Fantasi / Familie", "2 t 16 min"],
+    metadata: ["USA", "1991", "13+", "Familie", "2 t 16 min"],
     imdb: "https://www.imdb.com/title/tt0102057/?ref_=nv_sr_srsg_1_tt_5_nm_2_in_0_q_HOOK",
     skuespillere: "Dustin Hoffman, Robin Williams, Julia Roberts",
     regissor: "Steven Spielberg",
@@ -39,7 +39,7 @@ const filmer = {
     poster: "https://beam-images.warnermediacdn.com/BEAM_LWM_DELIVERABLES/500cfa5c-264b-4366-9264-342b1569605e/32dcbd1e-b23c-4acd-ba97-2e6b6a42a620?host=wbd-images.prod-vod.h264.io&partner=beamcom&w=500",
     posterVertikal: "https://i-viaplay-com.akamaized.net/viaplay-prod/316/184/1574841515-a8796d95201d56c1f26a231e3cad4ddd89e2bb01.jpg?width=400&height=600", // portrett
     beskrivelse: "Legenden sier at Den Magiske Diamant oppfyller ønsker ved fullmåne. Men det er vesle Marco som stikker av med diamanten!",
-    metadata: ["Norge", "2019", "Alle", "Familie / Barn", "1 t 19 min"],
+    metadata: ["Norge", "2019", "Alle", "Familie", "1 t 19 min"],
     imdb: "https://www.imdb.com/title/tt8048384/?ref_=nv_sr_srsg_0_tt_8_nm_0_in_0_q_kaptein%2520sabeltann%2520og%2520den%2520",
     skuespillere: "Kyrre Haugen Sydness, Siri Skjeggedal, Leonard Valestrand Eike",
     regissor: "Marit Moum Aune, Rasmus A. Sivertsen",
@@ -69,7 +69,7 @@ const filmer = {
     poster: "https://m.media-amazon.com/images/S/pv-target-images/44839e4a60bb8205258ba5fb43d1369c8a3cdd27f628692f6d0bd5c6c0c35ca6.jpg",
     posterVertikal: "https://i-viaplay-com.akamaized.net/viaplay-prod/849/40/1740747124-2e6f862a9638dd9cefc70ddf014a388f6f2ada76.jpg?width=400&height=600", // portrett
     beskrivelse: "Etter at en politimann og politihunden hans smelter sammen for å bli Hundemannen, må han stoppe skurken katten Petey.",
-    metadata: ["USA", "2025", "7+", "Barn / Familie", "1 t 29 min"],
+    metadata: ["USA", "2025", "7+", "Familie", "1 t 29 min"],
     imdb: "https://www.imdb.com/title/tt10954718/?ref_=nv_sr_srsg_1_tt_6_nm_1_in_0_q_dOg%2520man",
     skuespillere: "Pete Davidson, Poppy Liu, Lil Rel Howery",
     regissor: "Peter Hastings",
@@ -85,7 +85,7 @@ const filmer = {
     poster: "https://is1-ssl.mzstatic.com/image/thumb/Video113/v4/b1/96/ac/b196acbf-3010-b760-3193-702c340000f0/1181928424-WW-AMP_SF.lsr/1200x675.jpg",
     posterVertikal: "https://i-viaplay-com.akamaized.net/viaplay-prod/894/612/1494855562-3d4fd9d992512643629a5255922564376c705923.jpg?width=400&height=600", // portrett
     beskrivelse: "I en liten skog bor Klatremus og mange andre dyr. Her lever de livet sitt og synger og danser når de har lyst. Men de må passe på for reven.",
-    metadata: ["Norge", "2016", "Alle", "Barn / Familie", "1 t 15 min"],
+    metadata: ["Norge", "2016", "Alle", "Familie", "1 t 15 min"],
     imdb: "https://www.imdb.com/title/tt4730838/?ref_=nv_sr_srsg_0_tt_7_nm_1_in_0_q_dyrene%2520i%2520",
     skuespillere: "Espen Bråten Kristoffersen, Stig Henrik Hoff, Wenche Myhre",
     regissor: "Rasmus A. Sivertsen",
@@ -101,7 +101,7 @@ const filmer = {
     poster: "https://sumo.cdn.tv2.no/imageapi/v3/img/5dbc0a4f498e1dc3eb8394b3-1700644038168",
     posterVertikal: "https://i-viaplay-com.akamaized.net/viaplay-prod/908/1012/1460156915-30c59a4bbbfa5b5e2995b36a67da4d63eb0efb42.jpg?width=400&height=600", // portrett
     beskrivelse: "En desperat avisredaktør med planer om å sette en ny snørekord, får tak i en kraftig snøkanon, alt for å prøve å lage store avisoverskrifter før jul.",
-    metadata: ["Norge", "2013", "7+", "Barn / Familie", "1 t 17 min"],
+    metadata: ["Norge", "2013", "7+", "Familie", "1 t 17 min"],
     imdb: "https://www.imdb.com/title/tt2769896/?ref_=nv_sr_srsg_0_tt_2_nm_0_in_0_q_JUl%2520i%2520fl%25C3%25A5klypa",
     skuespillere: "Trond Brænne, Kari Ann Grønsund, Trond Høvik, Kåre Conradi, John F. Brungot",
     regissor: "Rasmus A. Sivertsen",
@@ -117,7 +117,7 @@ const filmer = {
     poster: "https://beam-images.warnermediacdn.com/BEAM_LWM_DELIVERABLES/dbc86275-72ef-4012-a80e-4851224eb8bf/b00246ed-8e34-466b-84cd-340c02e2c6b1?host=wbd-images.prod-vod.h264.io&partner=beamcom&w=500",
     posterVertikal: "https://i-viaplay-com.akamaized.net/viaplay-prod/503/868/1571304540-fe2ce9da3baf8ce50054b7f3dca79517f4b77fc2.jpg?width=400&height=600", // portrett
     beskrivelse: "Lageret av ingrediensen som gjør Bamse til verdens sterkeste bjørn blir ødelagt i en brann, og når Bamse ikke lenger kan bli sterk, er gode råd dyre!",
-    metadata: ["Danmark", "2018", "Alle", "Barn / Familie", "1 t 1 min"],
+    metadata: ["Danmark", "2018", "Alle", "Familie", "1 t 1 min"],
     imdb: "https://www.imdb.com/title/tt9472442/?ref_=nv_sr_srsg_0_tt_1_nm_0_in_0_q_bamse%2520og%2520dunder",
     skuespillere: "Dennis Storhøi, Morten Røhrt, Jan Martin Johnsen, Morten Rudå",
     regissor: "Christian Ryltenius",
@@ -148,7 +148,7 @@ const filmer = {
     poster: "https://static.wixstatic.com/media/fd2fb2_0639d85789b84e0b84e29d09a21632e2~mv2.jpg",
     posterVertikal: "https://m.media-amazon.com/images/M/MV5BYjVjZGViNmEtNmZmNS00OThjLWIxZWQtZjVhYmNmYWUzZDExXkEyXkFqcGc@._V1_.jpg", // portrett
     beskrivelse: "Mummi, Sniff og My legger ut for å stoppe en komet som nærmer seg Mummidalen.",
-    metadata: ["Finland", "1992", "Alle", "Familie / Barn", "1 t 10 min"],
+    metadata: ["Finland", "1992", "Alle", "Familie", "1 t 10 min"],
     imdb: "https://www.imdb.com/title/tt0240425/?ref_=nv_sr_srsg_0_tt_8_nm_0_in_0_q_Comet%2520in%2520moo",
     skuespillere: "Rabbe Smedlund, Jyrki Kovaleff, Elina Salo",
     regissor: "Hiroshi Saitô",
@@ -164,7 +164,7 @@ const filmer = {
     poster: "https://i-viaplay-com.akamaized.net/viaplay-prod/440/136/1481804637-d3396e82d915956b7b435991d4b13d7b0113256a.jpg?width=448&height=252",
     posterVertikal: "https://i-viaplay-com.akamaized.net/viaplay-prod/440/136/1481804635-e2e21566cce4cb5887c08d8aa8358e78759595cf.jpg?width=400&height=600", // portrett
     beskrivelse: "Kongens nei handler om de tre dramatiske døgnene i april 1940, hvor den norske kongen får et ufattelig ultimatum av den tyske krigsmakten: Overgivelse eller døden.",
-    metadata: ["Norge", "2016", "9+", "Drama / Krig", "2 t 13 min"],
+    metadata: ["Norge", "2016", "9+", "Drama", "2 t 13 min"],
     imdb: "https://www.imdb.com/title/tt4353996/",
     skuespillere: "Anders Baasmo Christiansen, Erik Hivju, Jesper Christensen, Rolf Kristian Larsen, Tuva Novotny",
     regissor: "Erik Poppe",
@@ -179,7 +179,7 @@ const filmer = {
     poster: "https://sumo.cdn.tv2.no/imageapi/v3/img/65c76cd7498e720ede899535-1738749898075/nfpluss?location=list&width=1200&height=630",
     posterVertikal: "https://i-viaplay-com.akamaized.net/viaplay-prod/715/824/1635457976-80bb0806bfbb1af04f28b7addedc4b5458878dd3.jpg?width=400&height=600", // portrett
     beskrivelse: "Filmen bygger på den virkelige historien om Max Manus, det mest fargerike medlem av den norske motstandsbevegelsen under andre verdenskrig.",
-    metadata: ["Norge", "2008", "15+", "Drama / Krig", "1 t 58 min"],
+    metadata: ["Norge", "2008", "15+", "Drama", "1 t 58 min"],
     imdb: "https://www.imdb.com/title/tt1029235/",
     skuespillere: "Aksel Hennie, Agnes Kittelsen, Nicolai Cleve Broch",
     regissor: "Joachim Rønning, Espen Sandberg",
@@ -194,7 +194,7 @@ const filmer = {
     poster: "https://hype.my/wp-content/uploads/2025/07/Smurfs-Header.png",
     posterVertikal: "https://image.tmdb.org/t/p/original/3dwNXK6A5Jmw7h4JRqsq2tQIreQ.jpg", // portrett
     beskrivelse: "Når Gammelsmurf blir tatt av de onde trollmennene Razamel og Gargamel, leder Smurfette Smurfene på et oppdrag til den virkelige verden for å redde ham.",
-    metadata: ["USA", "2025", "7+", "Animasjon / Familie", "1 t 29 min"],
+    metadata: ["USA", "2025", "7+", "Familie", "1 t 29 min"],
     imdb: "https://www.imdb.com/title/tt18069420/",
     skuespillere: "Rihanna, Natasha Lyonne, Hannah Waddingham, Kurt Russell, Nick Offerman,",
     regissor: " Chris Miller",
@@ -210,7 +210,7 @@ const filmer = {
     poster: "https://static.wixstatic.com/media/fd2fb2_591857f6d2d643e9be3de342acde9761~mv2.jpg",
     posterVertikal: "https://image.tmdb.org/t/p/w780/lfToeZDzH6dlQNkUgP20X5H1fhD.jpg", // portrett
     beskrivelse: "Mummitrollene setter seil til Rivieraen, hvor Snorkfrøken, etter en reise fylt med stormer og farer på øde øyer, blir blendet av oppmerksomheten til en playboy.",
-    metadata: ["Finland", "2015", "Alle", "Animasjon / Familie", "1 t 20 min"],
+    metadata: ["Finland", "2015", "Alle", "Familie", "1 t 20 min"],
     imdb: "https://www.imdb.com/title/tt2371399/",
     skuespillere: "Maria Sid, Russell Tovey, Mats Långbacka",
     regissor: "Xavier Picard",
@@ -225,7 +225,7 @@ const filmer = {
     poster: "https://images-prod.ai.tv2.no/v2/image-packs/pfimg_pack_01k4s3f8b5fn1bgb8e5qjzjtmy?height=630",
     posterVertikal: "https://i-viaplay-com.akamaized.net/viaplay-prod/889/480/1463401854-6df2cdc3059ce11d81d81c205d50aacae15211e8.jpg?width=400&height=600", // portrett
     beskrivelse: "En gjeng pirater reiser til London og møter Charles Darwin, en snakkende ape og en fiende som prøver å utslette dem.",
-    metadata: ["Storbritannia", "2012", "6+", "Animasjon / Familie", "1 t 24 min"],
+    metadata: ["Storbritannia", "2012", "6+", "Familie", "1 t 24 min"],
     imdb: "https://www.imdb.com/title/tt1430626/",
     skuespillere: "Hugh Grant, Salma Hayek, Jeremy Piven",
     regissor: "Peter Lord, Jeff Newitt",
@@ -259,7 +259,7 @@ const filmer = {
     poster: "https://sumo.cdn.tv2.no/imageapi/v3/img/59677ff90cf25438151a6a48-1708671818935",
     posterVertikal: "https://play-lh.googleusercontent.com/fC14EKuDp10UJmJmNoj-iIxo29_R-9JCF5d10XpsaAEh2n0DWm5Oda6HzkHB6wcm4bTAlg", // portrett
     beskrivelse: "Den lure sauen Shaun og flokken hans under tilsyn av bonden og gjeterhunden, Blitzer.",
-    metadata: ["Storbritannia", "2015", "Alle", "Animasjon / Familie", "1 t 21 min"],
+    metadata: ["Storbritannia", "2015", "Alle", "Familie", "1 t 21 min"],
     imdb: "https://www.imdb.com/title/tt2872750/",
     skuespillere: "Justin Fletcher, John Sparkes, Omid Djalili",
     regissor: "Mark Burton, Richard Starzak",
@@ -309,7 +309,7 @@ const filmer = {
     poster: "https://m.media-amazon.com/images/S/pv-target-images/fbb7d019ac94443df2f06f5ff9620267460fa808f463c82036f367013da15f5c.jpg",
     posterVertikal: "https://images-prod.ai.tv2.no/v2/image-packs/pfimg_pack_01k4smakxkea6t9t5e1dg1nhy6?location=moviePoster&width=672", // portrett
     beskrivelse: "En eksentrisk oppfinner bygger et fantastisk fartøy som kan fly og flyte. Sammen med familien styrer han bilen mot en magisk verden full endeløse eventyr.",
-    metadata: ["USA", "1968", "Alle", "Familie / Musikal", "2 t 25 min"],
+    metadata: ["USA", "1968", "Alle", "Musikal", "2 t 25 min"],
     imdb: "https://www.imdb.com/title/tt0062803/",
     skuespillere: "Dick Van Dyke, Sally Ann Howes, Lionel Jeffries",
     regissor: "Ken Hughes",
@@ -325,7 +325,7 @@ const filmer = {
     poster: "https://disney.images.edge.bamgrid.com/ripcut-delivery/v2/variant/disney/a02a8bb0-319d-459b-89ec-28ba8bbcff04/compose?aspectRatio=1.78&format=webp&width=1200",
     posterVertikal: "https://lumiere-a.akamaihd.net/v1/images/p_muppettreasureisland_19640_a7d3ec93.jpeg?region=0%2C0%2C540%2C810", // portrett
     beskrivelse: "Muppetene setter seil på jakt etter skatter, med Jim Hawkins og Long John Silver.",
-    metadata: ["USA", "1996", "7 år", "Familie / Fantasy", "1 t 39 min"],
+    metadata: ["USA", "1996", "7 år", "Familie", "1 t 39 min"],
     imdb: "https://www.imdb.com/title/tt0117110/",
     skuespillere: "Billy Connolly, Jennifer Saunders, Dave Goelz, Steve Whitmire",
     regissor: "Brian Henson",
@@ -342,7 +342,7 @@ const filmer = {
     poster: "https://is1-ssl.mzstatic.com/image/thumb/Video124/v4/42/8b/f4/428bf4a6-e17c-5719-1c2f-dff378ec37ab/pr_source.lsr/1200x675.jpg",
     posterVertikal: "https://play-lh.googleusercontent.com/XEfGdgtOLZyapSFAidkjyq03gHba_TAQWoSlgT-jiOCyl1a7TyRzjMMXiYAOEaA9vepd4_j8m7ix5Ke9SzCS", // portrett
     beskrivelse: "Sir Lionel Frost er en modig og spektakulær eventyrer. Herr Link er nok den siste av sin art, han er ensom og han mener at Sir Lionel er den eneste som kan hjelpe ham.",
-    metadata: ["USA", "2019", "6 år", "Familie / Komedie ", "1 t 30 min"],
+    metadata: ["USA", "2019", "6 år", "Familie", "1 t 30 min"],
     imdb: "https://www.imdb.com/title/tt6348138?ref_ext_viaplay",
     skuespillere: "Hugh Jackman, Zoe Saldana, Zach Galifianakis, David Walliams",
     regissor: "Chris Butler",
@@ -368,6 +368,7 @@ const filmer = {
   },
   
 };
+
 
 
 
