@@ -885,25 +885,28 @@ if (data.expireDate) {
 
 // -------------------- Begrenset beskrivelse --------------------
 const descEl = document.querySelector(".description");
+const fullText = descEl.textContent.trim();
 
-if (descEl.textContent.length > 200) { // grense for å vise "Mer"
-  const fullText = descEl.textContent;
-  
-  // Lag kortversjon med maks 200 tegn
-  const kortText = fullText.substring(0, 30).trim() + "... ";
+// Velg hvor mange ord som skal vises (f.eks. 11 eller 20)
+const MAX_ORD = 20;  
+
+// Splitt opp i ord
+const words = fullText.split(/\s+/);
+
+if (words.length > MAX_ORD) {
+  // Kortversjon = første MAX_ORD ord
+  const kortText = words.slice(0, MAX_ORD).join(" ") + "... ";
 
   // Sett kort tekst først
   descEl.textContent = kortText;
 
-  // Lag en knapp
+  // Lag "Mer"-knapp
   const moreBtn = document.createElement("button");
   moreBtn.className = "more-btn";
   moreBtn.textContent = "Mer";
-
-  // Legg til knappen etter kort teksten
   descEl.appendChild(moreBtn);
 
-  // Når man klikker "Mer"
+  // Når man trykker på "Mer" → åpne popup med hele teksten
   moreBtn.addEventListener("click", () => {
     const overlay = document.createElement("div");
     overlay.className = "popup-overlay";
@@ -936,6 +939,7 @@ if (descEl.textContent.length > 200) { // grense for å vise "Mer"
 
 
  
+
 
 
 
