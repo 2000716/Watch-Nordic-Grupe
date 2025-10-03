@@ -888,14 +888,22 @@ const descEl = document.querySelector(".description");
 
 if (descEl.textContent.length > 200) { // grense for å vise "Mer"
   const fullText = descEl.textContent;
-  descEl.classList.add("short");
+  
+  // Lag kortversjon med maks 200 tegn
+  const kortText = fullText.substring(0, 200).trim() + "... ";
 
-  // Lag en knapp som del av samme tekst
+  // Sett kort tekst først
+  descEl.textContent = kortText;
+
+  // Lag en knapp
   const moreBtn = document.createElement("button");
   moreBtn.className = "more-btn";
   moreBtn.textContent = "Mer";
+
+  // Legg til knappen etter kort teksten
   descEl.appendChild(moreBtn);
 
+  // Når man klikker "Mer"
   moreBtn.addEventListener("click", () => {
     const overlay = document.createElement("div");
     overlay.className = "popup-overlay";
@@ -910,6 +918,7 @@ if (descEl.textContent.length > 200) { // grense for å vise "Mer"
     overlay.appendChild(box);
     document.body.appendChild(overlay);
 
+    // Lukk popup
     box.querySelector(".close-btn").addEventListener("click", () => {
       overlay.remove();
     });
@@ -927,6 +936,7 @@ if (descEl.textContent.length > 200) { // grense for å vise "Mer"
 
 
  
+
 
 
 
