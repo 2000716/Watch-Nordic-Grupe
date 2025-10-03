@@ -200,16 +200,19 @@ body.loaded {
 
 .text-button-container {
   display: flex;
-  align-items: flex-start; /* ✅ gjør at teksten ikke strekker seg */
+  align-items: flex-start;
   gap: 40px;
   padding: 30px;
   border-radius: 12px;
+  max-width: 900px;   /* ✅ fast usynlig boksbredde */
 }
 
 .text-container {
   flex: 2;
   min-width: 300px;
-  max-width: 600px; /* ✅ fast bredde på beskrivelsen */
+  max-width: 500px;   /* ✅ stopper teksten fra å strekke seg */
+  max-height: 220px;  /* ✅ fast høyde på tekstboksen */
+  overflow-y: auto;   /* ✅ scrollbar hvis teksten blir for lang */
   text-align: left;
   color: white;
 }
@@ -259,7 +262,9 @@ body.loaded {
 
 .cast-info {
   flex: 0 0 200px;
-  max-width: 200px; /* ✅ holder seg fast */
+  max-width: 200px;
+  max-height: 220px;  /* ✅ samme høyde som beskrivelsen */
+  overflow-y: auto;   /* ✅ scrollbar hvis mye innhold */
   font-size: 13px;
   color: #aaa;
   line-height: 1.6;
@@ -456,11 +461,19 @@ body.loaded {
     flex-direction: column;
     gap: 20px;
     padding: 20px;
+    max-width: 100%;
   }
 
   .text-container {
     font-size: 15px;
-    max-width: 100%; /* tillat full bredde på små skjermer */
+    max-width: 100%;
+    max-height: none;
+    overflow-y: visible;
+  }
+
+  .cast-info {
+    max-height: none;
+    overflow-y: visible;
   }
 
   .watch-button {
@@ -483,7 +496,7 @@ body.loaded {
 /* === Kort beskrivelse og popup === */
 .description.short {
   display: -webkit-box;
-  -webkit-line-clamp: 2; /* maks 2 linjer */
+  -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -545,7 +558,7 @@ body.loaded {
 
 /* === Justering av galleriet === */
 .recommendations {
-  margin-top: -40px; /* trekker galleriet oppover */
+  margin-top: -40px;
 }
 
   </style>
@@ -941,6 +954,7 @@ if (words.length > MAX_ORD) {
 
 
  
+
 
 
 
