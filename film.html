@@ -204,15 +204,16 @@ body.loaded {
   gap: 40px;
   padding: 30px;
   border-radius: 12px;
-  max-width: 900px;   /* ✅ fast usynlig boksbredde */
+  max-width: 1200px;   /* ✅ bredere boks */
+  width: 100%;
 }
 
 .text-container {
   flex: 2;
-  min-width: 300px;
-  max-width: 500px;   /* ✅ stopper teksten fra å strekke seg */
-  max-height: 220px;  /* ✅ fast høyde på tekstboksen */
-  overflow-y: auto;   /* ✅ scrollbar hvis teksten blir for lang */
+  min-width: 400px;
+  max-width: 700px;   /* ✅ bredere tekstfelt */
+  max-height: 260px;  /* ✅ litt høyere */
+  overflow-y: auto;
   text-align: left;
   color: white;
 }
@@ -261,10 +262,10 @@ body.loaded {
 }
 
 .cast-info {
-  flex: 0 0 200px;
-  max-width: 200px;
-  max-height: 220px;  /* ✅ samme høyde som beskrivelsen */
-  overflow-y: auto;   /* ✅ scrollbar hvis mye innhold */
+  flex: 0 0 260px;     /* ✅ bredere høyreboks */
+  max-width: 260px;
+  max-height: 260px;
+  overflow-y: auto;
   font-size: 13px;
   color: #aaa;
   line-height: 1.6;
@@ -415,7 +416,7 @@ body.loaded {
 }
 
 .availability-info i {
-  color: #fff;   /* hvit klokke */
+  color: #fff;
   font-size: 14px;
 }
 
@@ -954,6 +955,7 @@ if (words.length > MAX_ORD) {
 
 
  
+
 
 
 
