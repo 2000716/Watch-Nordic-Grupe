@@ -481,21 +481,28 @@ body.loaded {
 /* === Kort beskrivelse og popup === */
 .description.short {
   display: -webkit-box;
-  -webkit-line-clamp: 3;
+  -webkit-line-clamp: 2; /* maks 2 linjer */
   -webkit-box-orient: vertical;
   overflow: hidden;
   text-overflow: ellipsis;
+  position: relative;
+  max-width: 100%;
 }
 
 .more-btn {
-  color: #00FFCC;
-  background: none;
+  display: inline;
+  color: #ddd;
+  background: rgba(255,255,255,0.1); /* samme farge som tekstområdet, men litt mørkere */
   border: none;
   cursor: pointer;
   font-size: 14px;
-  margin-top: 6px;
-  padding: 0;
-  text-decoration: underline;
+  margin-left: 6px;
+  padding: 2px 6px;
+  border-radius: 6px;
+}
+.more-btn:hover {
+  background: rgba(255,255,255,0.2);
+  color: #fff;
 }
 
 .popup-overlay {
@@ -876,17 +883,18 @@ if (data.expireDate) {
   }
 }
 
-  // -------------------- Begrenset beskrivelse --------------------
+// -------------------- Begrenset beskrivelse --------------------
 const descEl = document.querySelector(".description");
 
-if (descEl.textContent.length > 200) { // grensen på antall tegn
+if (descEl.textContent.length > 200) { // grense for å vise "Mer"
   const fullText = descEl.textContent;
   descEl.classList.add("short");
 
+  // Lag en knapp som del av samme tekst
   const moreBtn = document.createElement("button");
   moreBtn.className = "more-btn";
   moreBtn.textContent = "Mer";
-  descEl.insertAdjacentElement("afterend", moreBtn);
+  descEl.appendChild(moreBtn);
 
   moreBtn.addEventListener("click", () => {
     const overlay = document.createElement("div");
@@ -907,7 +915,7 @@ if (descEl.textContent.length > 200) { // grensen på antall tegn
     });
   });
 }
-  
+
 
 </script>
 
@@ -919,6 +927,7 @@ if (descEl.textContent.length > 200) { // grensen på antall tegn
 
 
  
+
 
 
 
