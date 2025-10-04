@@ -458,7 +458,10 @@ main {
   color: #00FFCC;
 }
 
-/* Kommende filmer nytt design */
+/* ===============================
+   KOMMENDE FILMER – NYTT DESIGN
+   =============================== */
+
 .coming-movies-gallery {
   display: flex;
   flex-direction: row;
@@ -468,6 +471,7 @@ main {
   scroll-behavior: smooth;
 }
 
+/* Filmkort */
 .coming-movie-item {
   position: relative;
   flex: 0 0 160px;   /* smal standardbredde */
@@ -483,14 +487,18 @@ main {
   flex: 0 0 500px;   /* vokser mye mer når i fokus */
 }
 
+/* Bakgrunnsbilde */
 .coming-movie-item img.banner {
+  position: absolute;
+  inset: 0;
   width: 100%;
   height: 100%;
   object-fit: cover;
   display: block;
+  transition: opacity 0.6s ease;
 }
 
-/* Video ligger bak bildet til hover */
+/* Video (bak bildet ved hover) */
 .coming-movie-item video {
   width: 100%;
   height: 100%;
@@ -502,29 +510,50 @@ main {
   transition: opacity 0.6s ease;
 }
 
-/* Logo-container nederst */
+/* Når video skal vises */
+.coming-movie-item.show-video img.banner {
+  opacity: 0;
+}
+
+.coming-movie-item.show-video video {
+  opacity: 1;
+}
+
+/* ===============================
+   LOGO – RESPONSIV OG PROPORSJONAL
+   =============================== */
+
 .coming-movie-item .logo {
   position: absolute;
-  bottom: 20px;       /* alltid samme avstand fra bunnen */
-  left: 50%;
+  bottom: 5%;               /* plasseres litt over bunnen */
+  left: 50%;                /* sentrert horisontalt */
   transform: translateX(-50%);
-  height: 60px;       /* alle logoer får samme høyde */
-  width: auto;
-  object-fit: contain;
+  max-width: 45%;           /* logo skalerer med kortets bredde */
+  height: auto;             /* høyde justeres automatisk */
+  object-fit: contain;      /* behold proporsjoner */
   z-index: 3;
   transition: all 0.4s ease;
+  pointer-events: none;     /* hindrer at logoen fanger museklikk */
 }
 
-/* Når utvidet → flyttes til venstre, men høyden er den samme */
+/* Når filmkortet er utvidet (hover/klikk) */
 .coming-movie-item.expanded .logo {
-  left: 20px;
+  left: 6%;                 /* flyttes pent mot venstre */
   transform: none;
-  height: 60px;       /* holder samme høyde */
-  width: auto;
+  max-width: 30%;           /* gjør logoen litt mindre i utvidet visning */
+  height: auto;
 }
 
+/* Liten animasjon ved hover */
+.coming-movie-item:hover .logo {
+  transform: translateX(-50%) scale(1.05);
+  transition: transform 0.4s ease;
+}
 
-/* Utgivelsesdato nederst til høyre */
+/* ===============================
+   UTGIVELSESDATO / INFO-TAG
+   =============================== */
+
 .coming-movie-item .coming-movie-info {
   position: absolute;
   bottom: 15px;
@@ -537,45 +566,72 @@ main {
   transition: opacity 0.3s ease;
 }
 
-/* Selve "taggen" */
+/* Selve taggen */
 .coming-movie-item .coming-movie-info p {
   display: inline-flex;
   align-items: center;
   background: rgba(0, 0, 0, 0.6);  /* mørk bakgrunn */
   padding: 6px 10px;
   border-radius: 8px;
-  backdrop-filter: blur(4px);      /* litt glass-effekt */
+  backdrop-filter: blur(4px);      /* glass-effekt */
 }
 
-/* Ikonet */
+/* Ikon i taggen */
 .coming-movie-item .coming-movie-info i {
   color: #00FFCC;   /* turkis ikon */
   margin-right: 6px;
   font-size: 14px;
 }
 
-
-
+/* Vis info når utvidet */
 .coming-movie-item.expanded .coming-movie-info {
   opacity: 1;
 }
 
-/* Fade-effekt mellom bilde og video */
-.coming-movie-item img.banner {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transition: opacity 0.6s ease;
+/* ===============================
+   RESPONSIV JUSTERING
+   =============================== */
+
+@media (max-width: 900px) {
+  .coming-movie-item {
+    flex: 0 0 140px;
+    height: 260px;
+  }
+
+  .coming-movie-item:hover {
+    flex: 0 0 380px;
+  }
+
+  .coming-movie-item .logo {
+    max-width: 55%;
+    bottom: 6%;
+  }
+
+  .coming-movie-item.expanded .logo {
+    max-width: 40%;
+    left: 8%;
+  }
 }
 
-.coming-movie-item.show-video img.banner {
-  opacity: 0;
-}
+@media (max-width: 600px) {
+  .coming-movie-item {
+    flex: 0 0 120px;
+    height: 220px;
+  }
 
-.coming-movie-item.show-video video {
-  opacity: 1;
+  .coming-movie-item:hover {
+    flex: 0 0 300px;
+  }
+
+  .coming-movie-item .logo {
+    max-width: 65%;
+    bottom: 8%;
+  }
+
+  .coming-movie-item.expanded .logo {
+    max-width: 45%;
+    left: 10%;
+  }
 }
 
 
@@ -1393,4 +1449,5 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 });
 </script>
+
 
