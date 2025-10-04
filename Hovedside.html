@@ -1031,25 +1031,21 @@ function createUpcomingMovieElement(filmKey, film) {
   const link = document.createElement("div");
   link.classList.add("coming-movie-item");
 
-  // 🎬 Bakgrunnsbilde (fra "bakgrunn")
+  // 🎬 Bakgrunnsbilde
   const banner = document.createElement("img");
   banner.src = film.bakgrunn || film.poster || "";
   banner.alt = film.tittel;
   banner.classList.add("banner");
   link.appendChild(banner);
 
-  // 🎥 Trailer-video (fra "trailer")
+  // 🎥 Trailer-video
   const video = document.createElement("video");
-  if (film.trailer) {
-    video.src = film.trailer;
-  }
- // video.muted = true; // fjernet muting
-video.loop = true;
-video.playsInline = true;
-link.appendChild(video);
+  if (film.trailer) video.src = film.trailer;
+  video.loop = true;
+  video.playsInline = true;
+  link.appendChild(video);
 
-
-  // 🎭 Logo (fra "logo")
+  // 🎭 Logo
   if (film.logo) {
     const logo = document.createElement("img");
     logo.src = film.logo;
@@ -1058,7 +1054,7 @@ link.appendChild(video);
     link.appendChild(logo);
   }
 
-  // 📅 Utgivelsesdato med mørk bakgrunn & ikon
+  // 📅 Utgivelsesdato
   const info = document.createElement("div");
   info.classList.add("coming-movie-info");
 
@@ -1076,18 +1072,37 @@ link.appendChild(video);
     const tomorrow = new Date(today);
     tomorrow.setDate(today.getDate() + 1);
 
+    // Ukedager og måneder på norsk
+    const dager = ["Søndag", "Mandag", "Tirsdag", "Onsdag", "Torsdag", "Fredag", "Lørdag"];
+    const måneder = [
+      "Januar", "Februar", "Mars", "April", "Mai", "Juni",
+      "Juli", "August", "September", "Oktober", "November", "Desember"
+    ];
+
     let datoTekst = "";
+
     if (releaseDate.getTime() === tomorrow.getTime()) {
       datoTekst = "Kommer i morgen";
     } else {
-      const currentYear = today.getFullYear();
-      const releaseYear = releaseDate.getFullYear();
-      let options = { day: "numeric", month: "long" };
-      if (releaseYear !== currentYear) {
-        options.year = "numeric";
+      const diff = (releaseDate - today) / (1000 * 60 * 60 * 24);
+      if (diff > 1 && diff < 7) {
+        // Kommer i løpet av uka → vis ukedag
+        datoTekst = "Kommer på " + dager[releaseDate.getDay()];
+      } else {
+        // Vanlig formatert dato med stor måned
+        const dag = releaseDate.getDate();
+        const måned = måneder[releaseDate.getMonth()];
+        const år = releaseDate.getFullYear();
+        const currentYear = today.getFullYear();
+
+        if (år === currentYear) {
+          datoTekst = `Kommer: ${dag}. ${måned}`;
+        } else {
+          datoTekst = `Kommer: ${dag}. ${måned} ${år}`;
+        }
       }
-      datoTekst = "Kommer: " + releaseDate.toLocaleDateString("no-NO", options);
     }
+
     release.appendChild(document.createTextNode(" " + datoTekst));
   } else {
     release.appendChild(document.createTextNode(" Kommer: Ukjent"));
@@ -1378,3 +1393,4 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 });
 </script>
+
