@@ -374,7 +374,7 @@ const filmer = {
     poster: "https://is1-ssl.mzstatic.com/image/thumb/Video114/v4/36/9a/d3/369ad302-8973-e84a-c21b-adea856dd178/pr_source.lsr/1200x675CA.TVA23C01.jpg",
     posterVertikal: "https://is1-ssl.mzstatic.com/image/thumb/Video112/v4/1a/e6/ce/1ae6cecf-8fd7-7145-83eb-ec5a5caaffab/pr_source.lsr/450x676CA.TVA23C01.webp", // portrett
     beskrivelse: "En eventyrlysten jente finner en annen verden som er en merkelig idealisert versjon av hennes frustrerende hjem, men den har uhyggelige hemmeligheter.",
-    metadata: ["USA", "2009", "Alle", "Dokumentar", "1 t 40 min"],
+    metadata: ["USA", "2009", "Alle", "Familie", "1 t 40 min"],
     imdb: "https://www.imdb.com/title/tt0327597/",
     skuespillere: "Dakota Fanning, Teri Hatcher, John Hodgman",
     regissor: "Henry Selick",
@@ -384,6 +384,7 @@ const filmer = {
   },
   
 };
+
 
 
 
