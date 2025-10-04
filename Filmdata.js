@@ -398,8 +398,25 @@ const filmer = {
     publishDate: "2025-11-01T00:00:00", // ISO datoformat
     expireDate: "2027-11-15T23:59:59",
   },
+
+      "elizabeth-the-golden-age": {
+    tittel: "Elizabeth The Golden Age",
+    bakgrunn: "https://ichef.bbci.co.uk/images/ic/640x360/p0g3gb25.jpg",
+    logo: "https://occ-0-1165-38.1.nflxso.net/dnm/api/v6/S4oi7EPZbv2UEPaukW54OORa0S8/AAAABb0OYLoucii93-gZzYkXqp8kpA-ER2f48Pu3ml2WGIYrVtL4xKJuOVwI3e1rGSP5CFwtlqCcJjQ2RTSixAdlEWAVe83zoZZVig.webp?r=582",
+    poster: "https://ntvb.tmsimg.com/assets/p169794_v_h8_am.jpg?w=1280&h=720",
+    posterVertikal: "https://image.tmdb.org/t/p/w780/3bL6lLd6cyQ4JNT4ucqm4PICIVs.jpg", // portrett
+    beskrivelse: "Dronning Elizabeth stålsetter seg mot invasjon, forræderi og svik mens hun lenger etter eventyreren Sir Walter Raleigh.",
+    metadata: ["USA", "2007", "16+", "Drama", "1 t 29 min"],
+    imdb: "https://www.imdb.com/title/tt0414055/?ref_=nv_sr_srsg_0_tt_8_nm_0_in_0_q_the%2520golden%2520a",
+    skuespillere: "Cate Blanchett, Geoffrey Rush, Clive Owen",
+    regissor: "Shekhar Kapur",
+    watchUrl: "film-mal.html?id=elizabeth-the-golden-age",
+    publishDate: "2025-10-07T00:00:00", // ISO datoformat
+    expireDate: "2027-11-15T23:59:59",
+  },
   
 };
+
 
 
 
