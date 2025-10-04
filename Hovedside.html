@@ -970,16 +970,14 @@ main {
   
    <section class="gallery-section">
   <h2>Kommende filmer</h2>
-  <div class="gallery-wrapper">
-    <div class="fade-left"></div>
-    <button class="scroll-button left" onclick="scrollGallery(this, -1)">❮</button>
-    
-    <!-- Her fylles filmene inn av JS -->
-    <div class="coming-movies-gallery" id="kommer-snart-galleri"></div>
-    
-    <button class="scroll-button right" onclick="scrollGallery(this, 1)">❯</button>
-    <div class="fade-right"></div>
-  </div>
+   <div class="gallery-wrapper">
+  <div class="fade-left"></div>
+  <button class="scroll-button left" onclick="scrollGallery(this, -1)">❮</button>
+  <div class="coming-movies-gallery" id="kommer-snart-galleri"></div>
+  <button class="scroll-button right" onclick="scrollGallery(this, 1)">❯</button>
+  <div class="fade-right"></div>
+</div>
+
 </section>
 
   
@@ -1449,5 +1447,6 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 });
 </script>
+
 
 
