@@ -369,7 +369,7 @@ const filmer = {
 
       "coraline": {
     tittel: "Coraline",
-    bakgrunn: "https://images.ctfassets.net/wvdmts5g5tqe/gWlxQlDwH3JWhdPS5cSRG/300ff05b4cc3198a7e480f29017fa6cf/253566ad-a723-4b03-806d-fab92ecf7334.jpeg?w=800&q=75",
+    bakgrunn: "https://images.contentstack.io/v3/assets/blt223a4a92692ca457/blt464b27c4c46c1bf9/68a37823ef572284f9c66b9d/3460_post_589800294eb9e.jpg?branch=production&width=3840",
     logo: "https://is1-ssl.mzstatic.com/image/thumb/Features211/v4/9a/13/bd/9a13bddf-41ae-186a-38f8-1c105ea5506e/ijc735814406953527949.png/432x162.png",
     poster: "https://is1-ssl.mzstatic.com/image/thumb/Video114/v4/36/9a/d3/369ad302-8973-e84a-c21b-adea856dd178/pr_source.lsr/1200x675CA.TVA23C01.jpg",
     posterVertikal: "https://is1-ssl.mzstatic.com/image/thumb/Video112/v4/1a/e6/ce/1ae6cecf-8fd7-7145-83eb-ec5a5caaffab/pr_source.lsr/450x676CA.TVA23C01.webp", // portrett
@@ -384,6 +384,7 @@ const filmer = {
   },
   
 };
+
 
 
 
