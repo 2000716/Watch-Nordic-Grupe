@@ -366,8 +366,25 @@ const filmer = {
     publishDate: "2025-10-04T00:00:00", // ISO datoformat
     expireDate: "2026-11-15T23:59:59",
   },
+
+      "coraline": {
+    tittel: "Coraline",
+    bakgrunn: "https://images.ctfassets.net/wvdmts5g5tqe/gWlxQlDwH3JWhdPS5cSRG/300ff05b4cc3198a7e480f29017fa6cf/253566ad-a723-4b03-806d-fab92ecf7334.jpeg?w=800&q=75",
+    logo: "https://is1-ssl.mzstatic.com/image/thumb/Features211/v4/9a/13/bd/9a13bddf-41ae-186a-38f8-1c105ea5506e/ijc735814406953527949.png/432x162.png",
+    poster: "https://is1-ssl.mzstatic.com/image/thumb/Video114/v4/36/9a/d3/369ad302-8973-e84a-c21b-adea856dd178/pr_source.lsr/1200x675CA.TVA23C01.jpg",
+    posterVertikal: "https://is1-ssl.mzstatic.com/image/thumb/Video112/v4/1a/e6/ce/1ae6cecf-8fd7-7145-83eb-ec5a5caaffab/pr_source.lsr/450x676CA.TVA23C01.webp", // portrett
+    beskrivelse: "En eventyrlysten jente finner en annen verden som er en merkelig idealisert versjon av hennes frustrerende hjem, men den har uhyggelige hemmeligheter.",
+    metadata: ["USA", "2009", "Alle", "Dokumentar", "1 t 40 min"],
+    imdb: "https://www.imdb.com/title/tt0327597/",
+    skuespillere: "Dakota Fanning, Teri Hatcher, John Hodgman",
+    regissor: "Henry Selick",
+    watchUrl: "film-mal.html?id=coraline",
+    publishDate: "2025-10-06T00:00:00", // ISO datoformat
+    expireDate: "2026-11-15T23:59:59",
+  },
   
 };
+
 
 
 
