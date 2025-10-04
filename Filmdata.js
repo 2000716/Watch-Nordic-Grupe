@@ -386,7 +386,7 @@ const filmer = {
     "dark-crystal": {
     tittel: "Dark Crystal",
     bakgrunn: "https://is1-ssl.mzstatic.com/image/thumb/Features123/v4/95/18/4e/95184e5d-2567-2547-e528-7d01ac8627d7/mzl.yxnoafun.png/2400x1350sr.webp",
-    logo: "https://www.darkcrystal.com/wp-content/uploads/2019/12/dclogo@2x.png",
+    logo: "https://www.boom-studios.com/wp-content/uploads/2023/11/DarkCrystal_Stacked_White-1024x740.png",
     poster: "https://s3.amazonaws.com/nightjarprod/content/uploads/sites/344/2024/12/08224242/fZPxRaa6gvCyGCh9Xk5kyPqz7fp.jpg",
     posterVertikal: "https://images.squarespace-cdn.com/content/v1/5b18735a3917ee20d18a2117/68445461-2516-404c-abb1-ceaf37147108/maxresdefault.jpg", // portrett
     beskrivelse: "Geflings prøver å redde verden fra ondskap i denne forseggjorte fantasy-filmen fra regissørene Jim Henson og Frank Oz.",
@@ -400,6 +400,7 @@ const filmer = {
   },
   
 };
+
 
 
 
