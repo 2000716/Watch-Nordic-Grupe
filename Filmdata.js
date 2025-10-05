@@ -336,7 +336,7 @@ const filmer = {
 
     "missing-link": {
     tittel: "Missing Link",
-    bakgrunn: "https://is1-ssl.mzstatic.com/image/thumb/Features114/v4/ce/56/4d/ce564d94-0642-ea42-202c-c5dc4a1496ac/mzl.oflzllwl.png/2400x1350sr.webp",
+    bakgrunn: "https://ichef.bbci.co.uk/images/ic/640x360/p09jh15m.jpg",
     logo: "https://static.wixstatic.com/media/fd2fb2_8f810efe6e43455dbc05aa232a59b897~mv2.webp",
     trailer: "https://video.wixstatic.com/video/fd2fb2_ba8ea3625beb465fbac16300806e23e5/1080p/mp4/file.mp4", // 🎥 NY
     poster: "https://is1-ssl.mzstatic.com/image/thumb/Video124/v4/42/8b/f4/428bf4a6-e17c-5719-1c2f-dff378ec37ab/pr_source.lsr/1200x675.jpg",
@@ -416,6 +416,7 @@ const filmer = {
   },
   
 };
+
 
 
 
