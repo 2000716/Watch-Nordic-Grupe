@@ -458,126 +458,133 @@ main {
   color: #00FFCC;
 }
 
-/* Kommende filmer nytt design */
+/* === Kommende filmer – forbedret utseende === */
 .coming-movies-gallery {
   display: flex;
   flex-direction: row;
-  gap: 20px;
+  gap: 22px;
   padding: 20px 16px;
   overflow-x: auto;
   scroll-behavior: smooth;
+  -ms-overflow-style: none;
+}
+.coming-movies-gallery::-webkit-scrollbar {
+  display: none;
 }
 
 .coming-movie-item {
   position: relative;
-  flex: 0 0 160px;   /* smal standardbredde */
+  flex: 0 0 180px;
   height: 300px;
-  border-radius: 8px;
+  border-radius: 14px;
   overflow: hidden;
   cursor: pointer;
-  transition: all 0.4s ease;
+  transition: all 0.6s ease;
   background-color: #000;
+  box-shadow: 0 0 20px rgba(0,0,0,0.4);
+  transform-origin: center;
 }
 
 .coming-movie-item:hover {
-  flex: 0 0 500px;   /* vokser mye mer når i fokus */
+  flex: 0 0 440px;
+  transform: scale(1.03);
+  box-shadow: 0 0 25px rgba(0, 255, 204, 0.4);
 }
 
+/* Bakgrunnsbilde */
 .coming-movie-item img.banner {
+  position: absolute;
+  inset: 0;
   width: 100%;
   height: 100%;
   object-fit: cover;
-  display: block;
+  transition: opacity 0.6s ease;
 }
 
-/* Video ligger bak bildet til hover */
+/* Video */
 .coming-movie-item video {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-  position: absolute;
-  inset: 0;
-  opacity: 0;
-  transition: opacity 0.6s ease;
-}
-
-/* Logo-container nederst */
-.coming-movie-item .logo {
-  position: absolute;
-  bottom: 20px;       /* alltid samme avstand fra bunnen */
-  left: 50%;
-  transform: translateX(-50%);
-  height: 60px;       /* alle logoer får samme høyde */
-  width: auto;
-  object-fit: contain;
-  z-index: 3;
-  transition: all 0.4s ease;
-}
-
-/* Når utvidet → flyttes til venstre, men høyden er den samme */
-.coming-movie-item.expanded .logo {
-  left: 20px;
-  transform: none;
-  height: 60px;       /* holder samme høyde */
-  width: auto;
-}
-
-
-/* Utgivelsesdato nederst til høyre */
-.coming-movie-item .coming-movie-info {
-  position: absolute;
-  bottom: 15px;
-  right: 15px;
-  text-align: right;
-  font-size: 14px;
-  color: #fff;
-  z-index: 3;
-  opacity: 0;
-  transition: opacity 0.3s ease;
-}
-
-/* Selve "taggen" */
-.coming-movie-item .coming-movie-info p {
-  display: inline-flex;
-  align-items: center;
-  background: rgba(0, 0, 0, 0.6);  /* mørk bakgrunn */
-  padding: 6px 10px;
-  border-radius: 8px;
-  backdrop-filter: blur(4px);      /* litt glass-effekt */
-}
-
-/* Ikonet */
-.coming-movie-item .coming-movie-info i {
-  color: #00FFCC;   /* turkis ikon */
-  margin-right: 6px;
-  font-size: 14px;
-}
-
-
-
-.coming-movie-item.expanded .coming-movie-info {
-  opacity: 1;
-}
-
-/* Fade-effekt mellom bilde og video */
-.coming-movie-item img.banner {
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: opacity 0.6s ease;
-}
-
-.coming-movie-item.show-video img.banner {
   opacity: 0;
+  transition: opacity 0.8s ease;
+  z-index: 1;
 }
 
 .coming-movie-item.show-video video {
   opacity: 1;
 }
+.coming-movie-item.show-video img.banner {
+  opacity: 0;
+}
 
+/* Logo-container med glass-effekt */
+.coming-movie-item .logo {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  height: 60px;
+  z-index: 3;
+  transition: all 0.4s ease;
+  backdrop-filter: blur(10px) brightness(1.1);
+  padding: 8px 14px;
+  border-radius: 10px;
+  background: rgba(0, 0, 0, 0.4);
+}
+
+.coming-movie-item.expanded .logo {
+  left: 25px;
+  transform: none;
+  background: rgba(0, 0, 0, 0.5);
+}
+
+/* Utgivelsesinfo nederst til høyre */
+.coming-movie-item .coming-movie-info {
+  position: absolute;
+  bottom: 15px;
+  right: 15px;
+  font-size: 14px;
+  color: #fff;
+  z-index: 3;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  background: rgba(0,0,0,0.4);
+  padding: 6px 10px;
+  border-radius: 8px;
+  backdrop-filter: blur(6px);
+}
+
+.coming-movie-item.expanded .coming-movie-info {
+  opacity: 1;
+}
+
+.coming-movie-item .coming-movie-info i {
+  color: #00FFCC;
+  margin-right: 6px;
+}
+
+/* Litt dybde og hover-effekt */
+.coming-movie-item:hover .coming-movie-info,
+.coming-movie-item:hover .logo {
+  filter: drop-shadow(0 0 6px rgba(0,255,204,0.7));
+}
+
+/* Responsivt justert for små skjermer */
+@media (max-width: 768px) {
+  .coming-movie-item {
+    flex: 0 0 200px;
+    height: 260px;
+  }
+  .coming-movie-item:hover {
+    flex: 0 0 280px;
+  }
+  .coming-movie-item .logo {
+    height: 50px;
+  }
+}
 
 /* === Topp 10 filmer === */
 .top10-gallery {
@@ -1394,4 +1401,5 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 });
 </script>
+
 
