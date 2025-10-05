@@ -520,25 +520,31 @@ main {
   opacity: 0;
 }
 
-/* Logo-container med glass-effekt */
+/* Logo – uten bakgrunn eller glass-effekt */
 .coming-movie-item .logo {
   position: absolute;
   bottom: 20px;
   left: 50%;
   transform: translateX(-50%);
-  height: 60px;
+  height: 50px;
   z-index: 3;
   transition: all 0.4s ease;
-  backdrop-filter: blur(10px) brightness(1.1);
-  padding: 8px 14px;
-  border-radius: 10px;
-  background: rgba(0, 0, 0, 0.4);
+  background: none !important;
+  backdrop-filter: none !important;
+  padding: 0;
+  border: none;
+  filter: drop-shadow(0 0 4px rgba(0, 0, 0, 0.6)); /* bare litt kontrast mot lys bakgrunn */
+  object-fit: contain;
 }
 
+/* Når filmen utvides (stort bilde) */
 .coming-movie-item.expanded .logo {
   left: 25px;
   transform: none;
-  background: rgba(0, 0, 0, 0.5);
+  height: 70px;
+  filter: drop-shadow(0 0 6px rgba(0, 0, 0, 0.7));
+  background: none !important;
+  backdrop-filter: none !important;
 }
 
 /* Utgivelsesinfo nederst til høyre */
@@ -1401,5 +1407,6 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 });
 </script>
+
 
 
