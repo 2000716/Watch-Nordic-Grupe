@@ -520,32 +520,33 @@ main {
   opacity: 0;
 }
 
-/* Logo – uten bakgrunn eller glass-effekt */
+/* === Kommende filmer logo – automatisk responsiv === */
 .coming-movie-item .logo {
   position: absolute;
   bottom: 20px;
   left: 50%;
   transform: translateX(-50%);
-  height: 50px;
+  max-height: 50px;      /* maks høyde i lite format */
+  max-width: 90%;        /* aldri bredere enn elementet */
   z-index: 3;
   transition: all 0.4s ease;
   background: none !important;
   backdrop-filter: none !important;
   padding: 0;
   border: none;
-  filter: drop-shadow(0 0 4px rgba(0, 0, 0, 0.6)); /* bare litt kontrast mot lys bakgrunn */
-  object-fit: contain;
+  object-fit: contain;    /* beholder proporsjoner */
+  filter: drop-shadow(0 0 4px rgba(0,0,0,0.6)); /* lett kontrast mot bakgrunn */
 }
 
 /* Når filmen utvides (stort bilde) */
 .coming-movie-item.expanded .logo {
   left: 25px;
   transform: none;
-  height: 70px;
-  filter: drop-shadow(0 0 6px rgba(0, 0, 0, 0.7));
-  background: none !important;
-  backdrop-filter: none !important;
+  max-height: 70px;      /* beholder nåværende høyde */
+  max-width: 100%;       /* kan strekke seg i bredden hvis nødvendig */
+  filter: drop-shadow(0 0 6px rgba(0,0,0,0.7));
 }
+
 
 /* Utgivelsesinfo nederst til høyre */
 .coming-movie-item .coming-movie-info {
@@ -1407,6 +1408,7 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 });
 </script>
+
 
 
 
