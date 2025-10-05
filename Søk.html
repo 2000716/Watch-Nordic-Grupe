@@ -113,7 +113,7 @@ h1 {
   display: flex; 
   flex-wrap: wrap; 
   gap: 20px; 
-  justify-content: center; /* sentrerer filmkort */
+  justify-content: center; 
   align-items: flex-start;
 }
 
@@ -216,7 +216,7 @@ h1 {
   localStorage.setItem("tidligereSøk", JSON.stringify(tidligereSøk));
 
   // ==============================
-  // Hjelpefunksjon for å hente data sikkert
+  // Hjelpefunksjon for å hente data
   // ==============================
   function hentData(obj) {
     if (!obj) return [];
@@ -240,12 +240,11 @@ h1 {
       card.className = "film-card";
       card.innerHTML = `<img src="${poster || 'default-poster.jpg'}" alt="${tittel || navn}">`;
 
-      // Klikk på kort går til riktig side
       card.addEventListener("click", () => {
         if (type === "film") {
-          window.location.href = `film.html?navn=${navn}`;
+          window.location.href = `film.html?navn=${encodeURIComponent(navn)}`;
         } else {
-          window.location.href = `serie.html?navn=${navn}`;
+          window.location.href = `serie.html?navn=${encodeURIComponent(navn)}`;
         }
       });
 
@@ -273,33 +272,30 @@ h1 {
   visFilmer(tidligereSøk);
 
   // ==============================
-  // Søke-funksjon
+  // Søke-funksjon (fikset versjon)
   // ==============================
   searchInput.addEventListener("input", e => {
     const søk = e.target.value.trim().toLowerCase();
+
     if (!søk) {
       visFilmer(tidligereSøk);
       return;
     }
 
-    // Søker i filmer
-    const filmTreff = hentData(filmer)
-      .filter(f => (f.tittel && f.tittel.toLowerCase().includes(søk)) ||
-                   (f.metadata && f.metadata.some(m => m.toLowerCase().includes(søk))) ||
-                   (f.skuespillere && f.skuespillere.toLowerCase().includes(søk)) ||
-                   (f.regissor && f.regissor.toLowerCase().includes(søk)))
-      .map(f => ({ ...f, type: "film" }));
+    function matcher(obj) {
+      const tittelMatch = obj.tittel?.toLowerCase().includes(søk);
+      const metadataMatch = Array.isArray(obj.metadata) && obj.metadata.some(m => m.toLowerCase().includes(søk));
+      const skuespillerMatch = Array.isArray(obj.skuespillere)
+        ? obj.skuespillere.join(" ").toLowerCase().includes(søk)
+        : obj.skuespillere?.toLowerCase().includes(søk);
+      const regissørMatch = obj.regissør?.toLowerCase().includes(søk);
+      return tittelMatch || metadataMatch || skuespillerMatch || regissørMatch;
+    }
 
-    // Søker i serier
-    const serieTreff = hentData(serier)
-      .filter(s => (s.tittel && s.tittel.toLowerCase().includes(søk)) ||
-                   (s.metadata && s.metadata.some(m => m.toLowerCase().includes(søk))) ||
-                   (s.skuespillere && s.skuespillere.toLowerCase().includes(søk)) ||
-                   (s.regissor && s.regissor.toLowerCase().includes(søk)))
-      .map(s => ({ ...s, type: "serie" }));
+    const filmTreff = hentData(filmer).filter(matcher).map(f => ({ ...f, type: "film" }));
+    const serieTreff = hentData(serier).filter(matcher).map(s => ({ ...s, type: "serie" }));
 
     const treff = [...filmTreff, ...serieTreff];
-
     visResultater(treff);
 
     // Oppdater tidligere søk
@@ -317,3 +313,4 @@ h1 {
 
 </body>
 </html>
+
