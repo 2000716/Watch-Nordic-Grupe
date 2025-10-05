@@ -206,63 +206,90 @@ h1 {
   // Last tidligere søk fra localStorage
   let tidligereSøk = JSON.parse(localStorage.getItem("tidligereSøk")) || [];
 
-  // Slett søk eldre enn 48 timer
+  // Fjern søk eldre enn 48 timer
   const nå = Date.now();
   tidligereSøk = tidligereSøk.filter(item => nå - item.timestamp < 48 * 60 * 60 * 1000);
   localStorage.setItem("tidligereSøk", JSON.stringify(tidligereSøk));
 
-  // Funksjon for å vise filmer
-  function visFilmer(filmListe) {
+  // Funksjon for å vise resultater (filmer og serier)
+  function visResultater(resultatliste) {
     filmGrid.innerHTML = "";
-    if (filmListe.length === 0) return;
-    filmListe.forEach(obj => {
-      const filmNavn = obj.navn || obj; // kompatibilitet
-      const data = filmer[filmNavn];
+    if (resultatliste.length === 0) {
+      filmGrid.innerHTML = "<p>Ingen treff.</p>";
+      return;
+    }
+
+    resultatliste.forEach(obj => {
+      const { navn, type } = obj;
+      const data = type === "film" ? filmer[navn] : serier[navn];
       if (data) {
         const card = document.createElement("div");
         card.className = "film-card";
         card.innerHTML = `<img src="${data.poster || 'default-poster.jpg'}" alt="${data.tittel}">`;
-        card.addEventListener("click", () => window.location.href = `film.html?navn=${filmNavn}`);
+
+        // Gå til riktig side basert på type
+        card.addEventListener("click", () => {
+          if (type === "film") {
+            window.location.href = `film.html?navn=${navn}`;
+          } else {
+            window.location.href = `serie.html?navn=${navn}`;
+          }
+        });
+
         filmGrid.appendChild(card);
       }
     });
   }
 
-  // Vis tidligere søk først (sentrert)
-  visFilmer(tidligereSøk);
+  // Vis tidligere søk først
+  visResultater(tidligereSøk);
 
-  // Søke-funksjon
+  // Felles søk i både filmer og serier
   searchInput.addEventListener("input", e => {
     const søk = e.target.value.trim().toLowerCase();
     if (!søk) {
-      visFilmer(tidligereSøk);
+      visResultater(tidligereSøk);
       return;
     }
 
-    const treff = Object.keys(filmer).filter(filmNavn => {
-      const data = filmer[filmNavn];
-      return (
-        (data.tittel && data.tittel.toLowerCase().includes(søk)) ||
-        (data.metadata && data.metadata.some(m => m.toLowerCase().includes(søk))) ||
-        (data.skuespillere && data.skuespillere.toLowerCase().includes(søk)) ||
-        (data.regissor && data.regissor.toLowerCase().includes(søk))
-      );
-    });
+    const filmTreff = Object.keys(filmer)
+      .filter(filmNavn => {
+        const data = filmer[filmNavn];
+        return (
+          (data.tittel && data.tittel.toLowerCase().includes(søk)) ||
+          (data.metadata && data.metadata.some(m => m.toLowerCase().includes(søk))) ||
+          (data.skuespillere && data.skuespillere.toLowerCase().includes(søk)) ||
+          (data.regissor && data.regissor.toLowerCase().includes(søk))
+        );
+      })
+      .map(navn => ({ navn, type: "film" }));
 
-    visFilmer(treff.map(navn => ({ navn })));
+    const serieTreff = Object.keys(serier)
+      .filter(serieNavn => {
+        const data = serier[serieNavn];
+        return (
+          (data.tittel && data.tittel.toLowerCase().includes(søk)) ||
+          (data.metadata && data.metadata.some(m => m.toLowerCase().includes(søk))) ||
+          (data.skuespillere && data.skuespillere.toLowerCase().includes(søk)) ||
+          (data.regissor && data.regissor.toLowerCase().includes(søk))
+        );
+      })
+      .map(navn => ({ navn, type: "serie" }));
+
+    const treff = [...filmTreff, ...serieTreff];
+    visResultater(treff);
 
     // Oppdater tidligere søk
-    treff.forEach(filmNavn => {
-      if (!tidligereSøk.some(item => item.navn === filmNavn)) {
-        tidligereSøk.unshift({ navn: filmNavn, timestamp: Date.now() });
+    treff.forEach(item => {
+      if (!tidligereSøk.some(t => t.navn === item.navn && t.type === item.type)) {
+        tidligereSøk.unshift({ ...item, timestamp: Date.now() });
       }
     });
 
-    // Maks 10 i listen
+    // Maks 10 elementer
     tidligereSøk = tidligereSøk.slice(0, 10);
     localStorage.setItem("tidligereSøk", JSON.stringify(tidligereSøk));
   });
 </script>
-
 </body>
 </html>
