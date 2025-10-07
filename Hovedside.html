@@ -984,12 +984,12 @@ const epost = localStorage.getItem("epost");
 const passord = localStorage.getItem("passord");
 
 if (!epost || !passord) {
-  window.location.href = "Starts side.html";
+  window.location.href = "Startside.html";
 }
 
 window.addEventListener("storage", () => {
   if (!localStorage.getItem("epost") || !localStorage.getItem("passord")) {
-    window.location.href = "Starts side.html";
+    window.location.href = "Startside.html";
   }
 });
 
@@ -1041,7 +1041,7 @@ function oppdaterBanner() {
   }
 }
 
-// ==================== GALLERI-FUNKSJONER ==================== //
+// ==================== GALLERI-ELEMENTER ==================== //
 function createMovieElement(filmKey, film, isSerie = false) {
   const link = document.createElement("a");
   link.href = isSerie ? `serie.html?navn=${filmKey}` : `film.html?navn=${filmKey}`;
@@ -1052,14 +1052,106 @@ function createMovieElement(filmKey, film, isSerie = false) {
   return link;
 }
 
-function renderGallery(galleryId, dataType = "filmer", filterFunction = null, sortByPublishDate = false, limit = null) {
+function createUpcomingMovieElement(filmKey, film) {
+  const link = document.createElement("div");
+  link.classList.add("coming-movie-item");
+
+  const banner = document.createElement("img");
+  banner.src = film.bakgrunn || film.poster || "";
+  banner.alt = film.tittel;
+  banner.classList.add("banner");
+  link.appendChild(banner);
+
+  const video = document.createElement("video");
+  if (film.trailer) video.src = film.trailer;
+  video.loop = true;
+  video.playsInline = true;
+  link.appendChild(video);
+
+  if (film.logo) {
+    const logo = document.createElement("img");
+    logo.src = film.logo;
+    logo.alt = film.tittel + " Logo";
+    logo.classList.add("logo");
+    link.appendChild(logo);
+  }
+
+  const info = document.createElement("div");
+  info.classList.add("coming-movie-info");
+
+  const release = document.createElement("p");
+  const icon = document.createElement("i");
+  icon.classList.add("fas", "fa-calendar-alt");
+  release.appendChild(icon);
+
+  if (film.publishDate) {
+    const releaseDate = new Date(film.publishDate);
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    releaseDate.setHours(0, 0, 0, 0);
+
+    const dager = ["Søndag","Mandag","Tirsdag","Onsdag","Torsdag","Fredag","Lørdag"];
+    const måneder = [
+      "Januar","Februar","Mars","April","Mai","Juni",
+      "Juli","August","September","Oktober","November","Desember"
+    ];
+
+    let datoTekst = "";
+    const tomorrow = new Date(today); tomorrow.setDate(today.getDate() + 1);
+    if (releaseDate.getTime() === tomorrow.getTime()) {
+      datoTekst = "Kommer i morgen";
+    } else {
+      const diff = (releaseDate - today) / (1000 * 60 * 60 * 24);
+      if (diff > 1 && diff < 7) {
+        datoTekst = "Kommer på " + dager[releaseDate.getDay()];
+      } else {
+        const dag = releaseDate.getDate();
+        const måned = måneder[releaseDate.getMonth()];
+        const år = releaseDate.getFullYear();
+        const currentYear = today.getFullYear();
+        datoTekst = år === currentYear ? `Kommer: ${dag}. ${måned}` : `Kommer: ${dag}. ${måned} ${år}`;
+      }
+    }
+    release.appendChild(document.createTextNode(" " + datoTekst));
+  } else {
+    release.appendChild(document.createTextNode(" Kommer: Ukjent"));
+  }
+
+  info.appendChild(release);
+  link.appendChild(info);
+
+  let hoverTimeout;
+  link.addEventListener("mouseenter", () => {
+    link.classList.add("expanded");
+    hoverTimeout = setTimeout(() => {
+      if (film.trailer) {
+        link.classList.add("show-video");
+        video.play();
+      }
+    }, 3000);
+  });
+
+  link.addEventListener("mouseleave", () => {
+    clearTimeout(hoverTimeout);
+    link.classList.remove("expanded", "show-video");
+    video.pause();
+    video.currentTime = 0;
+  });
+
+  link.addEventListener("click", () => {
+    window.location.href = `film.html?navn=${filmKey}`;
+  });
+
+  return link;
+}
+
+// ==================== GALLERI-FUNKSJONER ==================== //
+function renderGallery(galleryId, data, filterFunction = null, sortByDate = false, limit = null, isSerie = false) {
   const gallery = document.getElementById(galleryId);
   if (!gallery) return;
-
-  const data = dataType === "serier" ? serier : filmer;
   gallery.innerHTML = "";
-  const currentDate = new Date();
 
+  const currentDate = new Date();
   let keys = Object.keys(data);
 
   keys = keys.filter((key) => {
@@ -1068,61 +1160,35 @@ function renderGallery(galleryId, dataType = "filmer", filterFunction = null, so
     return new Date(item.publishDate) <= currentDate;
   });
 
-  if (filterFunction) {
-    keys = keys.filter(filterFunction);
-  }
-
-  if (sortByPublishDate) {
-    keys.sort((a, b) => {
-      const dateA = new Date(data[a].publishDate || 0);
-      const dateB = new Date(data[b].publishDate || 0);
-      return dateB - dateA;
-    });
-  }
-
-  if (limit) {
-    keys = keys.slice(0, limit);
-  }
+  if (filterFunction) keys = keys.filter(filterFunction);
+  if (sortByDate) keys.sort((a,b) => new Date(data[b].publishDate||0) - new Date(data[a].publishDate||0));
+  if (limit) keys = keys.slice(0, limit);
 
   keys.forEach((key) => {
-    const item = data[key];
-    const element = createMovieElement(key, item, dataType === "serier");
-    gallery.appendChild(element);
+    const film = data[key];
+    const el = createMovieElement(key, film, isSerie);
+    gallery.appendChild(el);
   });
 }
 
-// ==================== KOMMER SNART ==================== //
 function renderUpcoming(galleryId) {
   const gallery = document.getElementById(galleryId);
   if (!gallery) return;
-
   gallery.innerHTML = "";
   const currentDate = new Date();
 
-  const upcomingFilms = Object.keys(filmer).filter((key) => {
-    const film = filmer[key];
-    if (!film.publishDate) return false;
-    return new Date(film.publishDate) > currentDate;
+  const upcoming = Object.keys(filmer).filter(k => {
+    const f = filmer[k];
+    return f.publishDate && new Date(f.publishDate) > currentDate;
   });
 
-  upcomingFilms.sort((a, b) => {
-    const dateA = new Date(filmer[a].publishDate);
-    const dateB = new Date(filmer[b].publishDate);
-    return dateA - dateB;
-  });
-
-  upcomingFilms.forEach((key) => {
-    const film = filmer[key];
-    const element = createMovieElement(key, film);
-    gallery.appendChild(element);
-  });
+  upcoming.sort((a,b) => new Date(filmer[a].publishDate) - new Date(filmer[b].publishDate));
+  upcoming.forEach((key) => gallery.appendChild(createUpcomingMovieElement(key, filmer[key])));
 }
 
-// ==================== TOPP 10 ==================== //
 function renderTop10(galleryId) {
   const gallery = document.getElementById(galleryId);
   if (!gallery) return;
-
   gallery.innerHTML = "";
 
   let filmKeys = Object.keys(filmer);
@@ -1135,14 +1201,10 @@ function renderTop10(galleryId) {
   });
 
   const seed = today.getFullYear() * 1000 + today.getMonth() * 50 + today.getDate();
+  const seededRandom = (seed) => { const x = Math.sin(seed++) * 10000; return x - Math.floor(x); };
 
-  function seededRandom(seed) {
-    const x = Math.sin(seed++) * 10000;
-    return x - Math.floor(x);
-  }
-
-  filmKeys.sort((a, b) => seededRandom(seed + a.length) - seededRandom(seed + b.length));
-  filmKeys = filmKeys.slice(0, 10);
+  filmKeys.sort((a,b) => seededRandom(seed + a.length) - seededRandom(seed + b.length));
+  filmKeys = filmKeys.slice(0,10);
 
   filmKeys.forEach((key, index) => {
     const film = filmer[key];
@@ -1164,32 +1226,26 @@ function renderTop10(galleryId) {
   });
 }
 
-// ==================== HALLOWEEN ==================== //
 function renderHalloweenBanner() {
   const bannerImage = document.getElementById("special-banner-image");
   const bannerLogo = document.getElementById("special-banner-logo");
   const bannerLink = document.getElementById("special-banner-link");
   const gallery = document.getElementById("halloween-gallery");
 
-  const halloweenFilmKey = Object.keys(filmer).find(key =>
-    filmer[key].banner && filmer[key].metadata.some(m =>
-      m.toLowerCase().includes("halloween") || m.toLowerCase().includes("skrekk")
-    )
+  const halloweenKey = Object.keys(filmer).find(k =>
+    filmer[k].banner && filmer[k].metadata?.some(m => m.toLowerCase().includes("halloween") || m.toLowerCase().includes("skrekk"))
   );
+  if (!halloweenKey) return;
 
-  if (!halloweenFilmKey) return;
-  const film = filmer[halloweenFilmKey];
-
+  const film = filmer[halloweenKey];
   if (film.banner) bannerImage.src = film.banner;
   if (film.logo) bannerLogo.src = film.logo;
-  bannerLink.href = `film.html?navn=${halloweenFilmKey}`;
+  bannerLink.href = `film.html?navn=${halloweenKey}`;
 
   gallery.innerHTML = "";
-  Object.keys(filmer).forEach(key => {
+  Object.keys(filmer).forEach((key) => {
     const f = filmer[key];
-    if (f.metadata.some(m =>
-      m.toLowerCase().includes("halloween") || m.toLowerCase().includes("skrekk")
-    )) {
+    if (f.metadata?.some(m => m.toLowerCase().includes("halloween") || m.toLowerCase().includes("skrekk"))) {
       const link = document.createElement("a");
       link.href = `film.html?navn=${key}`;
       const img = document.createElement("img");
@@ -1201,7 +1257,6 @@ function renderHalloweenBanner() {
   });
 }
 
-// ==================== FORTSETT Å SE ==================== //
 function renderContinueWatching() {
   const section = document.getElementById("fortsett-section");
   const gallery = document.getElementById("fortsett-galleri");
@@ -1209,65 +1264,50 @@ function renderContinueWatching() {
 
   gallery.innerHTML = "";
   let filmKeys = Object.keys(filmer);
-
-  let fortsettFilmer = filmKeys.filter((key) => {
-    const progress = localStorage.getItem("progress_" + key);
+  let fortsett = filmKeys.filter(k => {
+    const progress = localStorage.getItem("progress_" + k);
     return progress && progress > 0 && progress < 100;
   });
 
-  if (fortsettFilmer.length === 0) {
-    section.style.display = "none";
-    return;
-  }
-
+  if (fortsett.length === 0) { section.style.display = "none"; return; }
   section.style.display = "block";
 
-  fortsettFilmer.forEach((key) => {
+  fortsett.forEach((key) => {
     const film = filmer[key];
     const progress = localStorage.getItem("progress_" + key);
 
     const link = document.createElement("a");
-    link.href = `film-mal.html?id=${key}`;
+    link.href = `film.html?navn=${key}`;
     link.classList.add("image-with-progress");
 
     const img = document.createElement("img");
     img.src = film.poster;
     img.alt = film.tittel;
 
-    const progressBar = document.createElement("div");
-    progressBar.classList.add("progress-bar");
-    progressBar.setAttribute("data-progress", progress);
-    progressBar.style.setProperty("--progress", progress + "%");
+    const bar = document.createElement("div");
+    bar.classList.add("progress-bar");
+    bar.setAttribute("data-progress", progress);
+    bar.style.setProperty("--progress", progress + "%");
 
     link.appendChild(img);
-    link.appendChild(progressBar);
+    link.appendChild(bar);
     gallery.appendChild(link);
   });
 }
 
 // ==================== INIT ==================== //
 document.addEventListener("DOMContentLoaded", () => {
-  renderGallery("nye-filmer-galleri", "filmer", null, true, 10);
+  renderGallery("nye-filmer-galleri", filmer, null, true, 10);
   renderTop10("topp10-filmer-galleri");
-
-  renderGallery("barn-galleri", "filmer", (key) => {
-    const film = filmer[key];
-    return film.metadata.some(m =>
-      m.toLowerCase().includes("barn") || m.toLowerCase().includes("familie")
-    );
-  });
-
-  // 🎬 NYTT: Vanlig seriegalleri under topp 10
-  renderGallery("serier-galleri", "serier");
-
+  renderGallery("barn-galleri", filmer, (k) => filmer[k].metadata?.some(m => ["barn","familie"].includes(m.toLowerCase())));
+  renderGallery("serier-galleri", serier, null, true, null, true);
   renderUpcoming("kommer-snart-galleri");
   oppdaterBanner();
   renderHalloweenBanner();
   renderContinueWatching();
 
-  // Scroll og fade
   document.querySelectorAll(".gallery-wrapper").forEach((wrapper) => {
-    const gallery = wrapper.querySelector(".image-gallery, .top10-gallery");
+    const gallery = wrapper.querySelector(".image-gallery, .coming-movies-gallery, .top10-gallery");
     const leftBtn = wrapper.querySelector(".scroll-button.left");
     const rightBtn = wrapper.querySelector(".scroll-button.right");
     const fadeLeft = wrapper.querySelector(".fade-left");
@@ -1277,6 +1317,7 @@ document.addEventListener("DOMContentLoaded", () => {
       if (!gallery) return;
       const scrollLeft = gallery.scrollLeft;
       const maxScroll = gallery.scrollWidth - gallery.clientWidth;
+
       if (leftBtn) leftBtn.classList.toggle("hidden", scrollLeft <= 0);
       if (rightBtn) rightBtn.classList.toggle("hidden", scrollLeft >= maxScroll);
       if (fadeLeft) fadeLeft.classList.toggle("fade-hidden", scrollLeft <= 0);
@@ -1289,7 +1330,6 @@ document.addEventListener("DOMContentLoaded", () => {
     updateScrollState();
   });
 
-  // Init progressbar
   document.querySelectorAll(".progress-bar").forEach((bar) => {
     const progress = bar.getAttribute("data-progress");
     if (progress) bar.style.setProperty("--progress", progress + "%");
