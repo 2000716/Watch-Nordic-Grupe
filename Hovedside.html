@@ -924,7 +924,17 @@ main {
   </div>
 </section>
 
-      
+       <section class="gallery-section">
+  <h2>Serier</h2>
+  <div class="gallery-wrapper">
+    <div class="fade-left"></div>
+    <button class="scroll-button left" onclick="scrollGallery(this, -1)">❮</button>
+    <div class="film-gallery" id="serier-galleri"></div>
+    <button class="scroll-button right" onclick="scrollGallery(this, 1)">❯</button>
+    <div class="fade-right"></div>
+  </div>
+</section>
+ 
   
    <section class="gallery-section">
   <h2>Kommende filmer</h2>
@@ -974,12 +984,12 @@ const epost = localStorage.getItem("epost");
 const passord = localStorage.getItem("passord");
 
 if (!epost || !passord) {
-  window.location.href = "Startside.html";
+  window.location.href = "Starts side.html";
 }
 
 window.addEventListener("storage", () => {
   if (!localStorage.getItem("epost") || !localStorage.getItem("passord")) {
-    window.location.href = "Startside.html";
+    window.location.href = "Starts side.html";
   }
 });
 
@@ -1031,10 +1041,10 @@ function oppdaterBanner() {
   }
 }
 
-// ==================== GALLERI-ELEMENTER ==================== //
-function createMovieElement(filmKey, film, isSerie = false) {
+// ==================== DYNAMISK GALLERI-LASTING ==================== //
+function createMovieElement(filmKey, film) {
   const link = document.createElement("a");
-  link.href = isSerie ? `serie.html?navn=${filmKey}` : `film.html?navn=${filmKey}`;
+  link.href = `film.html?navn=${filmKey}`;
   const img = document.createElement("img");
   img.src = film.poster;
   img.alt = film.tittel;
@@ -1046,18 +1056,21 @@ function createUpcomingMovieElement(filmKey, film) {
   const link = document.createElement("div");
   link.classList.add("coming-movie-item");
 
+  // 🎬 Bakgrunnsbilde
   const banner = document.createElement("img");
   banner.src = film.bakgrunn || film.poster || "";
   banner.alt = film.tittel;
   banner.classList.add("banner");
   link.appendChild(banner);
 
+  // 🎥 Trailer-video
   const video = document.createElement("video");
   if (film.trailer) video.src = film.trailer;
   video.loop = true;
   video.playsInline = true;
   link.appendChild(video);
 
+  // 🎭 Logo
   if (film.logo) {
     const logo = document.createElement("img");
     logo.src = film.logo;
@@ -1066,6 +1079,7 @@ function createUpcomingMovieElement(filmKey, film) {
     link.appendChild(logo);
   }
 
+  // 📅 Utgivelsesdato
   const info = document.createElement("div");
   info.classList.add("coming-movie-info");
 
@@ -1080,28 +1094,40 @@ function createUpcomingMovieElement(filmKey, film) {
     today.setHours(0, 0, 0, 0);
     releaseDate.setHours(0, 0, 0, 0);
 
-    const dager = ["Søndag","Mandag","Tirsdag","Onsdag","Torsdag","Fredag","Lørdag"];
+    const tomorrow = new Date(today);
+    tomorrow.setDate(today.getDate() + 1);
+
+    // Ukedager og måneder på norsk
+    const dager = ["Søndag", "Mandag", "Tirsdag", "Onsdag", "Torsdag", "Fredag", "Lørdag"];
     const måneder = [
-      "Januar","Februar","Mars","April","Mai","Juni",
-      "Juli","August","September","Oktober","November","Desember"
+      "Januar", "Februar", "Mars", "April", "Mai", "Juni",
+      "Juli", "August", "September", "Oktober", "November", "Desember"
     ];
 
     let datoTekst = "";
-    const tomorrow = new Date(today); tomorrow.setDate(today.getDate() + 1);
+
     if (releaseDate.getTime() === tomorrow.getTime()) {
       datoTekst = "Kommer i morgen";
     } else {
       const diff = (releaseDate - today) / (1000 * 60 * 60 * 24);
       if (diff > 1 && diff < 7) {
+        // Kommer i løpet av uka → vis ukedag
         datoTekst = "Kommer på " + dager[releaseDate.getDay()];
       } else {
+        // Vanlig formatert dato med stor måned
         const dag = releaseDate.getDate();
         const måned = måneder[releaseDate.getMonth()];
         const år = releaseDate.getFullYear();
         const currentYear = today.getFullYear();
-        datoTekst = år === currentYear ? `Kommer: ${dag}. ${måned}` : `Kommer: ${dag}. ${måned} ${år}`;
+
+        if (år === currentYear) {
+          datoTekst = `Kommer: ${dag}. ${måned}`;
+        } else {
+          datoTekst = `Kommer: ${dag}. ${måned} ${år}`;
+        }
       }
     }
+
     release.appendChild(document.createTextNode(" " + datoTekst));
   } else {
     release.appendChild(document.createTextNode(" Kommer: Ukjent"));
@@ -1110,6 +1136,7 @@ function createUpcomingMovieElement(filmKey, film) {
   info.appendChild(release);
   link.appendChild(info);
 
+  // Hover-effekt med 3 sek delay før video
   let hoverTimeout;
   link.addEventListener("mouseenter", () => {
     link.classList.add("expanded");
@@ -1128,6 +1155,7 @@ function createUpcomingMovieElement(filmKey, film) {
     video.currentTime = 0;
   });
 
+  // Klikk = gå til film-siden
   link.addEventListener("click", () => {
     window.location.href = `film.html?navn=${filmKey}`;
   });
@@ -1135,50 +1163,76 @@ function createUpcomingMovieElement(filmKey, film) {
   return link;
 }
 
-// ==================== GALLERI-FUNKSJONER ==================== //
-function renderGallery(galleryId, data, filterFunction = null, sortByDate = false, limit = null, isSerie = false) {
+
+function renderGallery(galleryId, filterFunction, sortByPublishDate = false, limit = null) {
   const gallery = document.getElementById(galleryId);
   if (!gallery) return;
+
   gallery.innerHTML = "";
-
   const currentDate = new Date();
-  let keys = Object.keys(data);
 
-  keys = keys.filter((key) => {
-    const item = data[key];
-    if (!item.publishDate) return true;
-    return new Date(item.publishDate) <= currentDate;
+  let filmKeys = Object.keys(filmer);
+
+  filmKeys = filmKeys.filter((key) => {
+    const film = filmer[key];
+    if (!film.publishDate) return true;
+    return new Date(film.publishDate) <= currentDate;
   });
 
-  if (filterFunction) keys = keys.filter(filterFunction);
-  if (sortByDate) keys.sort((a,b) => new Date(data[b].publishDate||0) - new Date(data[a].publishDate||0));
-  if (limit) keys = keys.slice(0, limit);
+  if (filterFunction) {
+    filmKeys = filmKeys.filter(filterFunction);
+  }
 
-  keys.forEach((key) => {
-    const film = data[key];
-    const el = createMovieElement(key, film, isSerie);
-    gallery.appendChild(el);
+  if (sortByPublishDate) {
+    filmKeys.sort((a, b) => {
+      const dateA = new Date(filmer[a].publishDate || 0);
+      const dateB = new Date(filmer[b].publishDate || 0);
+      return dateB - dateA;
+    });
+  }
+
+  if (limit) {
+    filmKeys = filmKeys.slice(0, limit);
+  }
+
+  filmKeys.forEach((key) => {
+    const film = filmer[key];
+    const movieElement = createMovieElement(key, film);
+    gallery.appendChild(movieElement);
   });
 }
 
 function renderUpcoming(galleryId) {
   const gallery = document.getElementById(galleryId);
   if (!gallery) return;
+
   gallery.innerHTML = "";
   const currentDate = new Date();
 
-  const upcoming = Object.keys(filmer).filter(k => {
-    const f = filmer[k];
-    return f.publishDate && new Date(f.publishDate) > currentDate;
+  const upcomingFilms = Object.keys(filmer).filter((key) => {
+    const film = filmer[key];
+    if (!film.publishDate) return false;
+    return new Date(film.publishDate) > currentDate;
   });
 
-  upcoming.sort((a,b) => new Date(filmer[a].publishDate) - new Date(filmer[b].publishDate));
-  upcoming.forEach((key) => gallery.appendChild(createUpcomingMovieElement(key, filmer[key])));
+  upcomingFilms.sort((a, b) => {
+    const dateA = new Date(filmer[a].publishDate);
+    const dateB = new Date(filmer[b].publishDate);
+    return dateA - dateB;
+  });
+
+  upcomingFilms.forEach((key) => {
+    const film = filmer[key];
+    const element = createUpcomingMovieElement(key, film);
+    gallery.appendChild(element);
+  });
 }
 
+// ==================== TOPP 10 FILMER ==================== //
 function renderTop10(galleryId) {
   const gallery = document.getElementById(galleryId);
   if (!gallery) return;
+
   gallery.innerHTML = "";
 
   let filmKeys = Object.keys(filmer);
@@ -1186,15 +1240,19 @@ function renderTop10(galleryId) {
 
   filmKeys = filmKeys.filter((key) => {
     const film = filmer[key];
-    if (!film.publishDate) return true;
+    if (!film.publishDate) return true; 
     return new Date(film.publishDate) <= today;
   });
 
   const seed = today.getFullYear() * 1000 + today.getMonth() * 50 + today.getDate();
-  const seededRandom = (seed) => { const x = Math.sin(seed++) * 10000; return x - Math.floor(x); };
 
-  filmKeys.sort((a,b) => seededRandom(seed + a.length) - seededRandom(seed + b.length));
-  filmKeys = filmKeys.slice(0,10);
+  function seededRandom(seed) {
+    const x = Math.sin(seed++) * 10000;
+    return x - Math.floor(x);
+  }
+
+  filmKeys.sort((a, b) => seededRandom(seed + a.length) - seededRandom(seed + b.length));
+  filmKeys = filmKeys.slice(0, 10);
 
   filmKeys.forEach((key, index) => {
     const film = filmer[key];
@@ -1216,26 +1274,32 @@ function renderTop10(galleryId) {
   });
 }
 
+// ==================== SPESIAL HALLOWEEN-BANNER ==================== //
 function renderHalloweenBanner() {
   const bannerImage = document.getElementById("special-banner-image");
   const bannerLogo = document.getElementById("special-banner-logo");
   const bannerLink = document.getElementById("special-banner-link");
   const gallery = document.getElementById("halloween-gallery");
 
-  const halloweenKey = Object.keys(filmer).find(k =>
-    filmer[k].banner && filmer[k].metadata?.some(m => m.toLowerCase().includes("halloween") || m.toLowerCase().includes("skrekk"))
+  const halloweenFilmKey = Object.keys(filmer).find(key =>
+    filmer[key].banner && filmer[key].metadata.some(m =>
+      m.toLowerCase().includes("halloween") || m.toLowerCase().includes("skrekk")
+    )
   );
-  if (!halloweenKey) return;
 
-  const film = filmer[halloweenKey];
+  if (!halloweenFilmKey) return;
+  const film = filmer[halloweenFilmKey];
+
   if (film.banner) bannerImage.src = film.banner;
   if (film.logo) bannerLogo.src = film.logo;
-  bannerLink.href = `film.html?navn=${halloweenKey}`;
+  bannerLink.href = `film.html?navn=${halloweenFilmKey}`;
 
   gallery.innerHTML = "";
-  Object.keys(filmer).forEach((key) => {
+  Object.keys(filmer).forEach(key => {
     const f = filmer[key];
-    if (f.metadata?.some(m => m.toLowerCase().includes("halloween") || m.toLowerCase().includes("skrekk"))) {
+    if (f.metadata.some(m =>
+      m.toLowerCase().includes("halloween") || m.toLowerCase().includes("skrekk")
+    )) {
       const link = document.createElement("a");
       link.href = `film.html?navn=${key}`;
       const img = document.createElement("img");
@@ -1247,6 +1311,7 @@ function renderHalloweenBanner() {
   });
 }
 
+// ==================== FORTSETT Å SE ==================== //
 function renderContinueWatching() {
   const section = document.getElementById("fortsett-section");
   const gallery = document.getElementById("fortsett-galleri");
@@ -1254,48 +1319,60 @@ function renderContinueWatching() {
 
   gallery.innerHTML = "";
   let filmKeys = Object.keys(filmer);
-  let fortsett = filmKeys.filter(k => {
-    const progress = localStorage.getItem("progress_" + k);
+
+  let fortsettFilmer = filmKeys.filter((key) => {
+    const progress = localStorage.getItem("progress_" + key);
     return progress && progress > 0 && progress < 100;
   });
 
-  if (fortsett.length === 0) { section.style.display = "none"; return; }
+  if (fortsettFilmer.length === 0) {
+    section.style.display = "none";
+    return;
+  }
+
   section.style.display = "block";
 
-  fortsett.forEach((key) => {
+  fortsettFilmer.forEach((key) => {
     const film = filmer[key];
     const progress = localStorage.getItem("progress_" + key);
 
     const link = document.createElement("a");
-    link.href = `film.html?navn=${key}`;
+    link.href = `film-mal.html?id=${key}`;
     link.classList.add("image-with-progress");
 
     const img = document.createElement("img");
     img.src = film.poster;
     img.alt = film.tittel;
 
-    const bar = document.createElement("div");
-    bar.classList.add("progress-bar");
-    bar.setAttribute("data-progress", progress);
-    bar.style.setProperty("--progress", progress + "%");
+    const progressBar = document.createElement("div");
+    progressBar.classList.add("progress-bar");
+    progressBar.setAttribute("data-progress", progress);
+    progressBar.style.setProperty("--progress", progress + "%");
 
     link.appendChild(img);
-    link.appendChild(bar);
+    link.appendChild(progressBar);
     gallery.appendChild(link);
   });
 }
 
 // ==================== INIT ==================== //
 document.addEventListener("DOMContentLoaded", () => {
-  renderGallery("nye-filmer-galleri", filmer, null, true, 10);
-  renderTop10("topp10-filmer-galleri");
-  renderGallery("barn-galleri", filmer, (k) => filmer[k].metadata?.some(m => ["barn","familie"].includes(m.toLowerCase())));
-  renderGallery("serier-galleri", serier, null, true, null, true);
+  renderGallery("nye-filmer-galleri", null, true, 10); 
+  renderTop10("topp10-filmer-galleri"); 
+  renderGallery("barn-galleri", (key) => {
+    const film = filmer[key];
+    return film.metadata.some(
+      (meta) =>
+        meta.toLowerCase().includes("barn") ||
+        meta.toLowerCase().includes("familie")
+    );
+  });
   renderUpcoming("kommer-snart-galleri");
   oppdaterBanner();
   renderHalloweenBanner();
   renderContinueWatching();
 
+  // Scroll-piler & fades
   document.querySelectorAll(".gallery-wrapper").forEach((wrapper) => {
     const gallery = wrapper.querySelector(".image-gallery, .coming-movies-gallery, .top10-gallery");
     const leftBtn = wrapper.querySelector(".scroll-button.left");
@@ -1314,18 +1391,34 @@ document.addEventListener("DOMContentLoaded", () => {
       if (fadeRight) fadeRight.classList.toggle("fade-hidden", scrollLeft >= maxScroll);
     }
 
-    if (leftBtn) leftBtn.addEventListener("click", () => gallery.scrollBy({ left: -300, behavior: "smooth" }));
-    if (rightBtn) rightBtn.addEventListener("click", () => gallery.scrollBy({ left: 300, behavior: "smooth" }));
-    if (gallery) gallery.addEventListener("scroll", updateScrollState);
+    if (leftBtn) {
+      leftBtn.addEventListener("click", () => {
+        gallery.scrollBy({ left: -300, behavior: "smooth" });
+      });
+    }
+    if (rightBtn) {
+      rightBtn.addEventListener("click", () => {
+        gallery.scrollBy({ left: 300, behavior: "smooth" });
+      });
+    }
+
+    if (gallery) {
+      gallery.addEventListener("scroll", updateScrollState);
+    }
+
     updateScrollState();
   });
 
+  // Init progress-bar
   document.querySelectorAll(".progress-bar").forEach((bar) => {
     const progress = bar.getAttribute("data-progress");
-    if (progress) bar.style.setProperty("--progress", progress + "%");
+    if (progress) {
+      bar.style.setProperty("--progress", progress + "%");
+    }
   });
 });
 </script>
+
 
 
 
