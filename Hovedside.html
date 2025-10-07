@@ -924,6 +924,17 @@ main {
   </div>
 </section>
 
+        <section class="gallery-section">
+  <h2>Serier</h2>
+  <div class="gallery-wrapper">
+    <div class="fade-left"></div>
+    <button class="scroll-button left" onclick="scrollGallery(this, -1)">❮</button>
+    <div class="film-gallery" id="serier-galleri"></div>
+    <button class="scroll-button right" onclick="scrollGallery(this, 1)">❯</button>
+    <div class="fade-right"></div>
+  </div>
+</section>
+
   
    <section class="gallery-section">
   <h2>Kommende filmer</h2>
@@ -1030,10 +1041,10 @@ function oppdaterBanner() {
   }
 }
 
-// ==================== DYNAMISK GALLERI-LASTING ==================== //
-function createMovieElement(filmKey, film) {
+// ==================== GALLERI-FUNKSJONER ==================== //
+function createMovieElement(filmKey, film, isSerie = false) {
   const link = document.createElement("a");
-  link.href = `film.html?navn=${filmKey}`;
+  link.href = isSerie ? `serie.html?navn=${filmKey}` : `film.html?navn=${filmKey}`;
   const img = document.createElement("img");
   img.src = film.poster;
   img.alt = film.tittel;
@@ -1041,156 +1052,46 @@ function createMovieElement(filmKey, film) {
   return link;
 }
 
-function createUpcomingMovieElement(filmKey, film) {
-  const link = document.createElement("div");
-  link.classList.add("coming-movie-item");
-
-  // 🎬 Bakgrunnsbilde
-  const banner = document.createElement("img");
-  banner.src = film.bakgrunn || film.poster || "";
-  banner.alt = film.tittel;
-  banner.classList.add("banner");
-  link.appendChild(banner);
-
-  // 🎥 Trailer-video
-  const video = document.createElement("video");
-  if (film.trailer) video.src = film.trailer;
-  video.loop = true;
-  video.playsInline = true;
-  link.appendChild(video);
-
-  // 🎭 Logo
-  if (film.logo) {
-    const logo = document.createElement("img");
-    logo.src = film.logo;
-    logo.alt = film.tittel + " Logo";
-    logo.classList.add("logo");
-    link.appendChild(logo);
-  }
-
-  // 📅 Utgivelsesdato
-  const info = document.createElement("div");
-  info.classList.add("coming-movie-info");
-
-  const release = document.createElement("p");
-  const icon = document.createElement("i");
-  icon.classList.add("fas", "fa-calendar-alt");
-  release.appendChild(icon);
-
-  if (film.publishDate) {
-    const releaseDate = new Date(film.publishDate);
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
-    releaseDate.setHours(0, 0, 0, 0);
-
-    const tomorrow = new Date(today);
-    tomorrow.setDate(today.getDate() + 1);
-
-    // Ukedager og måneder på norsk
-    const dager = ["Søndag", "Mandag", "Tirsdag", "Onsdag", "Torsdag", "Fredag", "Lørdag"];
-    const måneder = [
-      "Januar", "Februar", "Mars", "April", "Mai", "Juni",
-      "Juli", "August", "September", "Oktober", "November", "Desember"
-    ];
-
-    let datoTekst = "";
-
-    if (releaseDate.getTime() === tomorrow.getTime()) {
-      datoTekst = "Kommer i morgen";
-    } else {
-      const diff = (releaseDate - today) / (1000 * 60 * 60 * 24);
-      if (diff > 1 && diff < 7) {
-        // Kommer i løpet av uka → vis ukedag
-        datoTekst = "Kommer på " + dager[releaseDate.getDay()];
-      } else {
-        // Vanlig formatert dato med stor måned
-        const dag = releaseDate.getDate();
-        const måned = måneder[releaseDate.getMonth()];
-        const år = releaseDate.getFullYear();
-        const currentYear = today.getFullYear();
-
-        if (år === currentYear) {
-          datoTekst = `Kommer: ${dag}. ${måned}`;
-        } else {
-          datoTekst = `Kommer: ${dag}. ${måned} ${år}`;
-        }
-      }
-    }
-
-    release.appendChild(document.createTextNode(" " + datoTekst));
-  } else {
-    release.appendChild(document.createTextNode(" Kommer: Ukjent"));
-  }
-
-  info.appendChild(release);
-  link.appendChild(info);
-
-  // Hover-effekt med 3 sek delay før video
-  let hoverTimeout;
-  link.addEventListener("mouseenter", () => {
-    link.classList.add("expanded");
-    hoverTimeout = setTimeout(() => {
-      if (film.trailer) {
-        link.classList.add("show-video");
-        video.play();
-      }
-    }, 3000);
-  });
-
-  link.addEventListener("mouseleave", () => {
-    clearTimeout(hoverTimeout);
-    link.classList.remove("expanded", "show-video");
-    video.pause();
-    video.currentTime = 0;
-  });
-
-  // Klikk = gå til film-siden
-  link.addEventListener("click", () => {
-    window.location.href = `film.html?navn=${filmKey}`;
-  });
-
-  return link;
-}
-
-
-function renderGallery(galleryId, filterFunction, sortByPublishDate = false, limit = null) {
+function renderGallery(galleryId, dataType = "filmer", filterFunction = null, sortByPublishDate = false, limit = null) {
   const gallery = document.getElementById(galleryId);
   if (!gallery) return;
 
+  const data = dataType === "serier" ? serier : filmer;
   gallery.innerHTML = "";
   const currentDate = new Date();
 
-  let filmKeys = Object.keys(filmer);
+  let keys = Object.keys(data);
 
-  filmKeys = filmKeys.filter((key) => {
-    const film = filmer[key];
-    if (!film.publishDate) return true;
-    return new Date(film.publishDate) <= currentDate;
+  keys = keys.filter((key) => {
+    const item = data[key];
+    if (!item.publishDate) return true;
+    return new Date(item.publishDate) <= currentDate;
   });
 
   if (filterFunction) {
-    filmKeys = filmKeys.filter(filterFunction);
+    keys = keys.filter(filterFunction);
   }
 
   if (sortByPublishDate) {
-    filmKeys.sort((a, b) => {
-      const dateA = new Date(filmer[a].publishDate || 0);
-      const dateB = new Date(filmer[b].publishDate || 0);
+    keys.sort((a, b) => {
+      const dateA = new Date(data[a].publishDate || 0);
+      const dateB = new Date(data[b].publishDate || 0);
       return dateB - dateA;
     });
   }
 
   if (limit) {
-    filmKeys = filmKeys.slice(0, limit);
+    keys = keys.slice(0, limit);
   }
 
-  filmKeys.forEach((key) => {
-    const film = filmer[key];
-    const movieElement = createMovieElement(key, film);
-    gallery.appendChild(movieElement);
+  keys.forEach((key) => {
+    const item = data[key];
+    const element = createMovieElement(key, item, dataType === "serier");
+    gallery.appendChild(element);
   });
 }
 
+// ==================== KOMMER SNART ==================== //
 function renderUpcoming(galleryId) {
   const gallery = document.getElementById(galleryId);
   if (!gallery) return;
@@ -1212,12 +1113,12 @@ function renderUpcoming(galleryId) {
 
   upcomingFilms.forEach((key) => {
     const film = filmer[key];
-    const element = createUpcomingMovieElement(key, film);
+    const element = createMovieElement(key, film);
     gallery.appendChild(element);
   });
 }
 
-// ==================== TOPP 10 FILMER ==================== //
+// ==================== TOPP 10 ==================== //
 function renderTop10(galleryId) {
   const gallery = document.getElementById(galleryId);
   if (!gallery) return;
@@ -1229,7 +1130,7 @@ function renderTop10(galleryId) {
 
   filmKeys = filmKeys.filter((key) => {
     const film = filmer[key];
-    if (!film.publishDate) return true; 
+    if (!film.publishDate) return true;
     return new Date(film.publishDate) <= today;
   });
 
@@ -1263,7 +1164,7 @@ function renderTop10(galleryId) {
   });
 }
 
-// ==================== SPESIAL HALLOWEEN-BANNER ==================== //
+// ==================== HALLOWEEN ==================== //
 function renderHalloweenBanner() {
   const bannerImage = document.getElementById("special-banner-image");
   const bannerLogo = document.getElementById("special-banner-logo");
@@ -1346,24 +1247,27 @@ function renderContinueWatching() {
 
 // ==================== INIT ==================== //
 document.addEventListener("DOMContentLoaded", () => {
-  renderGallery("nye-filmer-galleri", null, true, 10); 
-  renderTop10("topp10-filmer-galleri"); 
-  renderGallery("barn-galleri", (key) => {
+  renderGallery("nye-filmer-galleri", "filmer", null, true, 10);
+  renderTop10("topp10-filmer-galleri");
+
+  renderGallery("barn-galleri", "filmer", (key) => {
     const film = filmer[key];
-    return film.metadata.some(
-      (meta) =>
-        meta.toLowerCase().includes("barn") ||
-        meta.toLowerCase().includes("familie")
+    return film.metadata.some(m =>
+      m.toLowerCase().includes("barn") || m.toLowerCase().includes("familie")
     );
   });
+
+  // 🎬 NYTT: Vanlig seriegalleri under topp 10
+  renderGallery("serier-galleri", "serier");
+
   renderUpcoming("kommer-snart-galleri");
   oppdaterBanner();
   renderHalloweenBanner();
   renderContinueWatching();
 
-  // Scroll-piler & fades
+  // Scroll og fade
   document.querySelectorAll(".gallery-wrapper").forEach((wrapper) => {
-    const gallery = wrapper.querySelector(".image-gallery, .coming-movies-gallery, .top10-gallery");
+    const gallery = wrapper.querySelector(".image-gallery, .top10-gallery");
     const leftBtn = wrapper.querySelector(".scroll-button.left");
     const rightBtn = wrapper.querySelector(".scroll-button.right");
     const fadeLeft = wrapper.querySelector(".fade-left");
@@ -1373,41 +1277,25 @@ document.addEventListener("DOMContentLoaded", () => {
       if (!gallery) return;
       const scrollLeft = gallery.scrollLeft;
       const maxScroll = gallery.scrollWidth - gallery.clientWidth;
-
       if (leftBtn) leftBtn.classList.toggle("hidden", scrollLeft <= 0);
       if (rightBtn) rightBtn.classList.toggle("hidden", scrollLeft >= maxScroll);
       if (fadeLeft) fadeLeft.classList.toggle("fade-hidden", scrollLeft <= 0);
       if (fadeRight) fadeRight.classList.toggle("fade-hidden", scrollLeft >= maxScroll);
     }
 
-    if (leftBtn) {
-      leftBtn.addEventListener("click", () => {
-        gallery.scrollBy({ left: -300, behavior: "smooth" });
-      });
-    }
-    if (rightBtn) {
-      rightBtn.addEventListener("click", () => {
-        gallery.scrollBy({ left: 300, behavior: "smooth" });
-      });
-    }
-
-    if (gallery) {
-      gallery.addEventListener("scroll", updateScrollState);
-    }
-
+    if (leftBtn) leftBtn.addEventListener("click", () => gallery.scrollBy({ left: -300, behavior: "smooth" }));
+    if (rightBtn) rightBtn.addEventListener("click", () => gallery.scrollBy({ left: 300, behavior: "smooth" }));
+    if (gallery) gallery.addEventListener("scroll", updateScrollState);
     updateScrollState();
   });
 
-  // Init progress-bar
+  // Init progressbar
   document.querySelectorAll(".progress-bar").forEach((bar) => {
     const progress = bar.getAttribute("data-progress");
-    if (progress) {
-      bar.style.setProperty("--progress", progress + "%");
-    }
+    if (progress) bar.style.setProperty("--progress", progress + "%");
   });
 });
 </script>
-
 
 
 
