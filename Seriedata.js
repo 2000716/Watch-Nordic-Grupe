@@ -1,6 +1,6 @@
 // ==================== SERIEDATA ==================== //
 const serier = {
-  "stranger-things": {
+  "i-mummidalen": {
     tittel: "I Mummidalen",
     bakgrunn: "https://occ-0-2774-2773.1.nflxso.net/art/1e1cc/1e1cc36b78849b8c62e5b048dd77d02d7d694a69.jpg",
     banner: "https://image.tmdb.org/t/p/original/x2LSRK2Cm7MZhjluni1msVJ3wDF.jpg", // hero-banner
@@ -43,6 +43,7 @@ const serier = {
 
 // Gjør tilgjengelig globalt
 window.serier = serier;
+
 
 
 
