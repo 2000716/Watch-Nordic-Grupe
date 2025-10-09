@@ -2,7 +2,7 @@
 const serier = {
   "i-mummidalen": {
     tittel: "I Mummidalen",
-    bakgrunn: "https://occ-0-2774-2773.1.nflxso.net/art/1e1cc/1e1cc36b78849b8c62e5b048dd77d02d7d694a69.jpg",
+    bakgrunn: "https://gfx.nrk.no/dX0XYs1HRsBtIl6h4ZWoawCp6_b4VgKnn2dGKDMiObpA",
     banner: "https://image.tmdb.org/t/p/original/x2LSRK2Cm7MZhjluni1msVJ3wDF.jpg", // hero-banner
     logo: "https://occ-0-55-56.1.nflxso.net/art/8b26a/8b26a3dfc7b891f55ee4b04ff10d9bcd1b3a8f3a.png",
     poster: "https://image.tmdb.org/t/p/w1280/9yjEMASvxhJGSUq7peDpWgBO5JW.jpg",
@@ -43,6 +43,7 @@ const serier = {
 
 // Gjør tilgjengelig globalt
 window.serier = serier;
+
 
 
 
