@@ -414,8 +414,25 @@ const filmer = {
     publishDate: "2025-10-07T00:00:00", // ISO datoformat
     expireDate: "2027-11-15T23:59:59",
   },
+
+        "sauen-shaun-feirer-jul": {
+    tittel: "Sauen Shaun feirer jul",
+    bakgrunn: "https://occ-0-8407-2218.1.nflxso.net/dnm/api/v6/6AYY37jfdO6hpXcMjf9Yu5cnmO0/AAAABQU4tesNj6oOG7YHhKHa5IZECNxDSBDHbt7P8FWUTu7-rslIOwXFfWepqLrH8LBboQFxtkbPSiLtRTgLqcmcNucHkXtUpdprmtoO.jpg?r=f2d",
+    logo: "https://occ-0-1165-38.1.nflxso.net/dnm/api/v6/S4oi7EPZbv2UEPaukW54OORa0S8/AAAABdP2M4ExqLRi_hWk75iFkl5fiI-dU8WE0TfEVadY740nACPAMeKPZII-eUIrBONcu3YDty2g9gXUxpSt8irE5i-uEZXeAj_-Dg.webp?r=69a",
+    poster: "https://gfx.nrk.no/7c4eFzYIYHFuMYIisqPR6Qa6BLow_t3HLfu4p3juss1Q",
+    posterVertikal: "https://static.wixstatic.com/media/fd2fb2_6b9a4707bb09488f94325d610e12b763~mv2.png", // portrett
+    beskrivelse: "Shaun støter på et problem mens han leter etter en større julestrømpe, så hele gården legger ut på et ellevilt juleeventyr – med slede!",
+    metadata: ["Storbritannia", "2020", "Alle", "Familie", "29 min"],
+    imdb: "https://www.imdb.com/title/tt15857304/",
+    skuespillere: "Justin Fletcher, John Sparkes, Laura Aikman",
+    regissor: "Steve Cox",
+    watchUrl: "film-mal.html?id=elizabeth-the-golden-age",
+    publishDate: "2025-10-09T00:00:00", // ISO datoformat
+    expireDate: "2027-11-15T23:59:59",
+  },
   
 };
+
 
 
 
