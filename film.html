@@ -562,6 +562,80 @@ body.loaded {
   cursor: pointer;
 }
 
+  /* === Episode galleri for serier === */
+.season-buttons {
+  display: flex;
+  gap: 10px;
+  margin: 20px 60px 20px 60px;
+}
+
+.season-btn {
+  background: #0b2a2d;
+  color: #fff;
+  border: none;
+  padding: 10px 18px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.3s;
+  font-size: 15px;
+}
+
+.season-btn.active {
+  background: #00ffcc;
+  color: #000;
+  font-weight: bold;
+}
+
+.season-btn:hover {
+  background: #00ccaa;
+}
+
+.episode-gallery {
+  display: flex;
+  overflow-x: auto;
+  gap: 16px;
+  padding: 20px 60px;
+  scroll-behavior: smooth;
+}
+
+.episode-gallery::-webkit-scrollbar {
+  height: 6px;
+}
+
+.episode-card {
+  background: #111;
+  border-radius: 8px;
+  flex: 0 0 260px;
+  overflow: hidden;
+  transition: transform 0.3s;
+}
+
+.episode-card:hover {
+  transform: scale(1.03);
+}
+
+.episode-card img {
+  width: 100%;
+  height: 150px;
+  object-fit: cover;
+}
+
+.episode-info {
+  padding: 10px;
+}
+
+.episode-info h4 {
+  font-size: 16px;
+  margin-bottom: 6px;
+}
+
+.episode-info p {
+  font-size: 14px;
+  color: #ccc;
+  line-height: 1.4;
+}
+
+
   </style>
 </head>
 <body>
@@ -800,7 +874,7 @@ window.addEventListener("DOMContentLoaded", () => {
   document.body.classList.add("loaded");
 });
 
-/* === Anbefalinger === */
+/* === Anbefalinger (kun for filmer) === */
 function hentTilfeldige(antall) {
   const kilde = type === "film" ? filmer : serier;
   const nå = new Date();
@@ -818,23 +892,76 @@ function hentTilfeldige(antall) {
   return valgt;
 }
 
-const anbefalte = hentTilfeldige(6);
 const gallery = document.getElementById("recommendationGallery");
 const tittelEl = document.querySelector(".recommendations h2");
-tittelEl.textContent = type === "film" ? "Filmer du kanskje vil like" : "Serier du kanskje vil like";
 
-anbefalte.forEach(n => {
-  const kilde = type === "film" ? filmer : serier;
-  const item = kilde[n];
-  const img = document.createElement("img");
-  img.src = item.posterVertikal || item.poster || item.bakgrunn;
-  img.alt = item.tittel;
-  img.addEventListener("click", () => {
-    const side = type === "film" ? "film.html" : "serie.html";
-    window.location.href = `${side}?navn=${n}`;
+/* === Episode galleri for serier === */
+if (type === "serie" && data.sesonger) {
+  const recommendationsDiv = document.querySelector(".recommendations");
+  recommendationsDiv.innerHTML = `
+    <h2>Episoder</h2>
+    <div class="season-buttons" id="seasonButtons"></div>
+    <div class="episode-gallery" id="episodeGallery"></div>
+  `;
+
+  const seasonButtons = document.getElementById("seasonButtons");
+  const episodeGallery = document.getElementById("episodeGallery");
+
+  // --- Bygg sesongknapper ---
+  data.sesonger.forEach((sesong, index) => {
+    const btn = document.createElement("button");
+    btn.textContent = "Sesong " + sesong.nummer;
+    btn.className = "season-btn";
+    if (index === 0) btn.classList.add("active");
+    btn.addEventListener("click", () => visSesong(sesong.nummer));
+    seasonButtons.appendChild(btn);
   });
-  gallery.appendChild(img);
-});
+
+  // --- Funksjon for å vise episoder ---
+  function visSesong(nummer) {
+    document.querySelectorAll(".season-btn").forEach(b => b.classList.remove("active"));
+    const aktivBtn = Array.from(document.querySelectorAll(".season-btn"))
+      .find(b => b.textContent.includes(nummer));
+    if (aktivBtn) aktivBtn.classList.add("active");
+
+    const valgtSesong = data.sesonger.find(s => s.nummer === nummer);
+    if (!valgtSesong) return;
+    episodeGallery.innerHTML = "";
+
+    valgtSesong.episoder.forEach((ep, i) => {
+      const epCard = document.createElement("div");
+      epCard.className = "episode-card";
+      epCard.innerHTML = `
+        <img src="${ep.bilde}" alt="Episode ${i + 1}">
+        <div class="episode-info">
+          <h4>${i + 1}. ${ep.tittel}</h4>
+          <p>${ep.beskrivelse}</p>
+        </div>
+      `;
+      episodeGallery.appendChild(epCard);
+    });
+  }
+
+  // Vis første sesong som standard
+  visSesong(data.sesonger[0].nummer);
+} else {
+  // === Anbefalinger for film ===
+  const anbefalte = hentTilfeldige(6);
+  tittelEl.textContent = type === "film" ? "Filmer du kanskje vil like" : "Serier du kanskje vil like";
+
+  anbefalte.forEach(n => {
+    const kilde = type === "film" ? filmer : serier;
+    const item = kilde[n];
+    const img = document.createElement("img");
+    img.src = item.posterVertikal || item.poster || item.bakgrunn;
+    img.alt = item.tittel;
+    img.addEventListener("click", () => {
+      const side = type === "film" ? "film.html" : "serie.html";
+      window.location.href = `${side}?navn=${n}`;
+    });
+    gallery.appendChild(img);
+  });
+}
 
 /* === Trailer-logikk === */
 const trailerVideo = document.getElementById("trailerVideo");
@@ -954,6 +1081,7 @@ if (words.length > MAX_ORD) {
 
 
  
+
 
 
 
