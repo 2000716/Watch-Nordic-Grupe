@@ -7,7 +7,7 @@ const serier = {
     logo: "https://occ-0-55-56.1.nflxso.net/art/8b26a/8b26a3dfc7b891f55ee4b04ff10d9bcd1b3a8f3a.png",
     poster: "https://image.tmdb.org/t/p/w1280/9yjEMASvxhJGSUq7peDpWgBO5JW.jpg",
     posterVertikal: "https://image.tmdb.org/t/p/w780/56v2KjBlU4XaOv9rVYEQypROD7P.jpg",
-    beskrivelse:"Når en ung gutt forsvinner i en liten by, avdekker vennene hans en mystisk jente med overnaturlige krefter og en hemmelig regjeringskonspirasjon.",
+    beskrivelse:"Mummitrollet bor i Mummidalen i et høyt, sylinderformet, blått hus som Mummipappa bygde etter sin stormfulle ungdom med hatifnattene.",
     metadata: ["Finnland", "1990", "Alle", "Familie", "4 sesonger"],
     imdb: "https://www.imdb.com/title/tt4574334/",
     skuespillere: "Millie Bobby Brown, Finn Wolfhard, David Harbour, Winona Ryder",
@@ -43,6 +43,7 @@ const serier = {
 
 // Gjør tilgjengelig globalt
 window.serier = serier;
+
 
 
 
