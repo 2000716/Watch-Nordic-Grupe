@@ -7,12 +7,12 @@
   <link rel="icon" type="image/png" href="https://static.wixstatic.com/media/fd2fb2_39376e4ee55b460ab7a3ebbfcf35fef7~mv2.png" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
   <style>
+/* === Generelt === */
 * {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
 }
-
 body {
   background-color: black;
   color: #fff;
@@ -20,10 +20,7 @@ body {
   opacity: 0;
   transition: opacity 1s ease;
 }
-
-body.loaded {
-  opacity: 1;
-}
+body.loaded { opacity: 1; }
 
 /* === Navigasjon === */
 .vertical-nav {
@@ -38,55 +35,22 @@ body.loaded {
   align-items: center;
   justify-content: center;
   z-index: 100;
-  transition: transform 0.3s ease;
   padding-top: 16px;
+  transition: transform 0.3s ease;
 }
-
-.vertical-nav.collapsed {
-  transform: translateX(-100%);
-}
-
-.nav-icons-wrapper {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-}
-
-.profilmeny {
-  margin-bottom: 20px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-}
-
-.profilmeny img {
-  width: 48px;
-  height: 48px;
-  border-radius: 50%;
-  object-fit: cover;
-  border: 2px solid #fff;
-}
+.vertical-nav.collapsed { transform: translateX(-100%); }
 
 .nav-icon {
   color: white;
   font-size: 22px;
   padding: 16px 0;
   text-decoration: none;
-  text-align: center;
   width: 100%;
+  text-align: center;
   transition: color 0.3s ease;
   cursor: pointer;
-  background: none;
-  border: none;
 }
-
-.nav-icon:hover,
-.nav-icon.active {
-  color: #00FFCC;
-}
+.nav-icon:hover, .nav-icon.active { color: #00FFCC; }
 
 .menu-toggle {
   position: fixed;
@@ -100,7 +64,6 @@ body.loaded {
   padding: 12px 16px;
   color: white;
   cursor: pointer;
-  transition: left 0.3s ease;
   width: 50px;
   height: 120px;
   display: flex;
@@ -108,12 +71,9 @@ body.loaded {
   justify-content: center;
   font-size: 28px;
 }
+.vertical-nav.collapsed + .menu-toggle { left: 0; }
 
-.vertical-nav.collapsed + .menu-toggle {
-  left: 0;
-}
-
-/* === Hero-seksjon === */
+/* === Hero === */
 .hero {
   margin-left: 70px;
   position: relative;
@@ -121,160 +81,72 @@ body.loaded {
   overflow: hidden;
   transition: margin-left 0.3s ease;
 }
+.vertical-nav.collapsed ~ .hero { margin-left: 0; }
 
-.vertical-nav.collapsed ~ .hero {
-  margin-left: 0;
-}
-
-.background-image,
-.background-video {
+.background-image, .background-video {
   position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
   object-fit: cover;
   z-index: 0;
   transition: opacity 1s ease-in-out;
-  opacity: 1;
-  filter: brightness(0.6);
 }
-
-.background-video {
-  opacity: 0;
-  filter: brightness(0.8);
-}
+.background-image { filter: brightness(0.6); }
+.background-video { opacity: 0; filter: brightness(0.8); }
 
 .overlay {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(to top, #091b1e 0%, rgba(9, 27, 30, 0) 60%);
+  position: absolute; width: 100%; height: 100%;
+  background: linear-gradient(to top, #091b1e 0%, rgba(9,27,30,0) 60%);
   z-index: 1;
 }
-
 .bottom-fade {
-  position: absolute; 
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  height: 200px;
-  background: linear-gradient(to top, rgba(0, 0, 0, 1), transparent);
+  position: absolute; bottom: 0; left: 0;
+  width: 100%; height: 200px;
+  background: linear-gradient(to top, rgba(0,0,0,1), transparent);
   z-index: 1;
 }
-
 .content-wrapper {
   position: absolute;
-  top: 60px;
-  left: 60px;
-  right: 60px;
-  display: flex;
-  flex-direction: column;
+  top: 60px; left: 60px; right: 60px;
+  display: flex; flex-direction: column;
   z-index: 2;
 }
-
 .logo-container {
-  width: 260px;
-  height: 100px;
+  width: 260px; height: 100px;
   margin-bottom: 100px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  overflow: hidden;
+  display: flex; align-items: center; justify-content: center;
 }
+.film-logo { max-width: 100%; max-height: 100%; object-fit: contain; }
 
-.film-logo {
-  max-width: 100%;
-  max-height: 100%;
-  object-fit: contain;
-}
-
-/* === Innhold venstre side === */
+/* === Venstreside === */
 .left-content {
-  display: flex;
-  flex-direction: column;
+  display: flex; flex-direction: column;
   align-items: flex-start;
   margin-top: 170px;
-  min-height: 400px;
 }
-
 .text-button-container {
-  display: flex;
-  align-items: flex-start;
-  gap: 40px;
-  padding: 30px;
+  display: flex; align-items: flex-start;
+  gap: 40px; padding: 30px;
   border-radius: 12px;
-  max-width: 1200px;
-  width: 100%;
 }
-
-/* === Tekstfelt (låst bredde/høyde) === */
 .text-container {
-  flex: 0 0 400px;   /* fast bredde */
+  flex: 0 0 400px;
   max-width: 700px;
-  max-height: 260px; /* fast høyde */
+  max-height: 260px;
   overflow-y: auto;
-  text-align: left;
   color: white;
 }
+.description { font-size: 16px; line-height: 1.6; margin-bottom: 8px; }
 
-.description {
-  font-size: 16px;
-  line-height: 1.6;
-  margin-bottom: 8px;
-}
-
-/* === Metadata === */
 .metadata {
   margin-top: 14px;
   color: #ddd;
   font-size: 13px;
-  line-height: 1.4;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-  align-items: center;
+  display: flex; flex-wrap: wrap; gap: 6px;
 }
+.imdb-logo { width: 28px; margin-left: 4px; cursor: pointer; }
 
-.metadata span,
-.metadata .imdb-link {
-  display: inline-flex;
-  align-items: center;
-}
-
-.metadata span:nth-child(even) {
-  color: #ddd;
-  user-select: none;
-  font-weight: bold;
-  font-size: 16px;
-}
-
-.imdb-logo {
-  width: 28px;
-  margin-left: 4px;
-  cursor: pointer;
-  filter: brightness(100%) contrast(100%);
-  transition: filter 0.3s ease;
-}
-
-.imdb-logo:hover {
-  filter: brightness(80%) contrast(120%);
-}
-
-/* === Cast-info (låst bredde/høyde) === */
-.cast-info {
-  flex: 0 0 260px;
-  max-width: 260px;
-  max-height: 260px;
-  overflow-y: auto;
-  font-size: 13px;
-  color: #aaa;
-  line-height: 1.6;
-}
-
-.cast-info strong {
-  color: #fff;
-}
+.cast-info { flex: 0 0 260px; color: #aaa; font-size: 13px; }
 
 /* === Knapper === */
 .watch-button {
@@ -288,32 +160,24 @@ body.loaded {
   cursor: pointer;
   transition: transform 0.2s ease;
   width: 280px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  display: flex; align-items: center; justify-content: center;
   gap: 8px;
-  white-space: nowrap;
 }
+.watch-button:hover { transform: scale(1.05); }
+.buttons-column { display: flex; flex-direction: column; gap: 15px; }
 
-.watch-button:hover {
-  transform: scale(1.05);
+/* === Video-kontroller === */
+.video-controls {
+  position: absolute; top: 20px; right: 30px;
+  z-index: 3;
+  display: flex; gap: 10px;
+  opacity: 0; transition: opacity 0.5s;
 }
-
-.buttons-column {
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-}
-
-.icon-animate {
-  display: inline-block;
-  animation: fadePop 0.4s ease forwards;
-}
-
-@keyframes fadePop {
-  0%   { opacity: 0; transform: scale(0.6); }
-  60%  { opacity: 1; transform: scale(1.2); }
-  100% { opacity: 1; transform: scale(1); }
+.video-controls button {
+  background: rgba(0,0,0,0.6);
+  border: none; color: white;
+  font-size: 20px; padding: 10px 14px;
+  border-radius: 10px; cursor: pointer;
 }
 
 /* === Anbefalinger === */
@@ -322,610 +186,271 @@ body.loaded {
   padding: 40px 60px 60px 60px;
   background: black;
   transition: margin-left 0.3s ease;
-  margin-top: -40px;
 }
-
-.vertical-nav.collapsed ~ .recommendations {
-  margin-left: 0;
-}
-
-.recommendations h2 {
-  font-size: 24px;
-  margin-bottom: 18px;
-  margin-left: 40px;
-}
-
 .gallery {
-  display: flex;
-  flex-wrap: nowrap;
-  gap: 16px;
-  justify-content: flex-start;
-  margin-left: 30px;
-  overflow-x: auto;
-  padding-bottom: 10px;
-  -webkit-overflow-scrolling: touch;
-  scroll-behavior: smooth;
+  display: flex; gap: 16px;
+  overflow-x: auto; padding-bottom: 10px;
 }
-
-.gallery::-webkit-scrollbar {
-  height: 6px;
-}
-
 .gallery img {
-  width: 160px;
-  height: 240px;
-  border-radius: 6px;
-  object-fit: cover;
-  cursor: pointer;
-  transition: transform 0.3s;
-  flex: 0 0 auto;
+  width: 160px; height: 240px;
+  border-radius: 6px; object-fit: cover;
+  cursor: pointer; transition: transform 0.3s;
 }
 
-/* === Video kontrollknapper === */
-.video-controls {
-  position: absolute;
-  top: 20px;
-  right: 30px;
-  z-index: 3;
-  display: flex;
-  gap: 10px;
-  opacity: 0;
-  transition: opacity 0.5s ease;
+/* === Serie seksjon === */
+.serie-episoder {
+  padding: 40px 60px;
+  background: black;
 }
-
-.video-controls button {
-  background: rgba(0,0,0,0.6);
-  border: none;
-  color: white;
-  font-size: 20px;
-  padding: 10px 14px;
+.episode-card {
+  width: 200px;
+  background: #111;
   border-radius: 10px;
   cursor: pointer;
-}
-
-.video-controls button:hover {
-  background: rgba(255,255,255,0.2);
-}
-
-/* === Bunntekst === */
-.site-footer {
-  background-color: black;
-  color: #aaa;
-  text-align: center;
-  padding: 20px 10px;
-  font-size: 14px;
-  margin-top: 0;
-}
-
-.site-footer a {
-  color: #00FFCC;
-  text-decoration: none;
-  margin: 0 8px;
-  transition: color 0.3s ease;
-}
-
-.site-footer a:hover {
-  color: #fff;
-}
-
-.availability-info {
-  margin-top: 10px;
-  font-size: 13px;
-  color: #ccc;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-
-.availability-info i {
-  color: #fff;
-  font-size: 14px;
-}
-
-/* === iPad og mindre skjermer === */
-@media (max-width: 1024px) {
-  .vertical-nav {
-    width: 60px;
-    padding-top: 12px;
-  }
-
-  .nav-icon {
-    font-size: 20px;
-    padding: 12px 0;
-  }
-
-  .menu-toggle {
-    width: 45px;
-    height: 100px;
-    font-size: 24px;
-  }
-
-  .hero {
-    margin-left: 60px;
-  }
-
-  .content-wrapper {
-    top: 40px;
-    left: 20px;
-    right: 20px;
-  }
-
-  .logo-container {
-    width: 200px;
-    height: 80px;
-    margin-bottom: 60px;
-  }
-
-  .left-content {
-    margin-top: 100px;
-  }
-
-  .text-button-container {
-    flex-direction: column;
-    gap: 20px;
-    padding: 20px;
-    max-width: 100%;
-  }
-
-  .text-container {
-    flex: 1;
-    max-width: 100%;
-    max-height: none;
-    overflow-y: visible;
-    font-size: 15px;
-  }
-
-  .cast-info {
-    flex: 1;
-    max-width: 100%;
-    max-height: none;
-    overflow-y: visible;
-  }
-
-  .watch-button {
-    width: 100%;
-    font-size: 16px;
-    padding: 12px 20px;
-  }
-
-  .gallery img {
-    width: 140px;
-    height: 210px;
-  }
-
-  .video-controls button {
-    font-size: 24px;
-    padding: 14px 18px;
-  }
-}
-
-/* === Kort beskrivelse og popup === */
-.description.short {
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
   overflow: hidden;
-  text-overflow: ellipsis;
-  position: relative;
-  max-width: 100%;
+  transition: transform 0.2s;
+}
+.episode-card:hover { transform: scale(1.05); }
+.episode-card img {
+  width: 100%; height: 120px; object-fit: cover;
+}
+.episode-card div {
+  padding: 10px;
 }
 
-.more-btn {
-  display: inline;
-  color: #ddd;
-  background: rgba(255,255,255,0.1);
-  border: none;
-  cursor: pointer;
+/* === Footer === */
+.site-footer {
+  background-color: black; color: #aaa;
+  text-align: center; padding: 20px;
   font-size: 14px;
-  margin-left: 6px;
-  padding: 2px 6px;
-  border-radius: 6px;
 }
-.more-btn:hover {
-  background: rgba(255,255,255,0.2);
-  color: #fff;
-}
+.site-footer a { color: #00FFCC; text-decoration: none; }
 
+/* === Popup === */
+.more-btn {
+  color: #ddd; background: rgba(255,255,255,0.1);
+  border: none; cursor: pointer; font-size: 14px;
+  margin-left: 6px; padding: 2px 6px; border-radius: 6px;
+}
 .popup-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
+  position: fixed; top: 0; left: 0;
+  width: 100%; height: 100%;
   background: rgba(0,0,0,0.7);
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  display: flex; align-items: center; justify-content: center;
   z-index: 200;
 }
-
 .popup-box {
-  background: #111;
-  color: white;
-  max-width: 600px;
-  max-height: 70vh;
+  background: #111; color: white;
+  max-width: 600px; max-height: 70vh;
   overflow-y: auto;
-  padding: 20px;
-  border-radius: 12px;
+  padding: 20px; border-radius: 12px;
   position: relative;
-  text-align: left;
 }
-
 .popup-box .close-btn {
-  position: absolute;
-  top: 10px;
-  right: 14px;
-  background: none;
-  border: none;
-  font-size: 20px;
-  color: white;
-  cursor: pointer;
+  position: absolute; top: 10px; right: 14px;
+  background: none; border: none;
+  font-size: 20px; color: white; cursor: pointer;
 }
-
   </style>
 </head>
 <body>
-
-<div class="vertical-nav" id="verticalNav">
-  <div class="profilmeny">
-    <a href="konto.html">
-      <img id="menyProfilbilde" src="https://via.placeholder.com/100" alt="Min profil" />
-    </a>
-  </div>
-  <a href="Søk.html" class="nav-icon"><i class="fas fa-search"></i></a>
-  <a href="Hovedside.html" class="nav-icon"><i class="fas fa-house"></i></a>
-  <a href="Film.html" class="nav-icon"><i class="fas fa-film"></i></a>
-  <a href="Serier" class="nav-icon"><i class="fas fa-tv"></i></a>
-  <a href="Min-Liste.html" class="nav-icon"><i class="fas fa-bookmark"></i></a>
-</div>
-
-<button class="menu-toggle" id="menuToggle"><i class="fas fa-chevron-left"></i></button>
-
-<div class="hero">
-  <img class="background-image" id="backgroundImage" src="" alt="Bakgrunnsbilde" />
-  <video id="trailerVideo" class="background-video" muted playsinline></video>
-
-  <div class="overlay"></div>
-  <div class="bottom-fade"></div>
-
-  <!-- Kontrollknapper -->
-  <div id="videoControls" class="video-controls">
-    <button id="pauseBtn"><i class="fas fa-pause"></i></button>
-    <button id="soundBtn"><i class="fas fa-volume-mute"></i></button>
+  <div class="vertical-nav" id="verticalNav">
+    <div class="profilmeny">
+      <a href="konto.html"><img id="menyProfilbilde" src="https://via.placeholder.com/100" alt="Min profil" /></a>
+    </div>
+    <a href="Søk.html" class="nav-icon"><i class="fas fa-search"></i></a>
+    <a href="Hovedside.html" class="nav-icon"><i class="fas fa-house"></i></a>
+    <a href="Film.html" class="nav-icon"><i class="fas fa-film"></i></a>
+    <a href="Serier.html" class="nav-icon"><i class="fas fa-tv"></i></a>
+    <a href="Min-Liste.html" class="nav-icon"><i class="fas fa-bookmark"></i></a>
   </div>
 
-  <div class="content-wrapper">
-    <div class="logo-container">
-      <img class="film-logo" src="" alt="Filmlogo" />
+  <button class="menu-toggle" id="menuToggle"><i class="fas fa-chevron-left"></i></button>
+
+  <div class="hero">
+    <img class="background-image" id="backgroundImage" src="" alt="Bakgrunnsbilde" />
+    <video id="trailerVideo" class="background-video" muted playsinline></video>
+
+    <div class="overlay"></div>
+    <div class="bottom-fade"></div>
+
+    <div id="videoControls" class="video-controls">
+      <button id="pauseBtn"><i class="fas fa-pause"></i></button>
+      <button id="soundBtn"><i class="fas fa-volume-mute"></i></button>
     </div>
 
-    <div class="left-content">
-      <div class="text-button-container">
-        <div class="buttons-column">
-          <button class="watch-button" id="watchBtn">
-            <i class="fas fa-play"></i><span> Se nå</span>
-          </button>
-          <button class="watch-button" id="addToListBtn">
-            <i class="fas fa-plus"></i><span> Legg til i Min liste</span>
-          </button>
-        </div>
+    <div class="content-wrapper">
+      <div class="logo-container"><img class="film-logo" src="" alt="Filmlogo" /></div>
 
-        <div class="text-container">
-          <p class="description"></p>
-          <div class="metadata"></div>
-          <div class="availability-info" id="availabilityInfo"></div>
+      <div class="left-content">
+        <div class="text-button-container">
+          <div class="buttons-column">
+            <button class="watch-button" id="watchBtn"><i class="fas fa-play"></i><span> Se nå</span></button>
+            <button class="watch-button" id="addToListBtn"><i class="fas fa-plus"></i><span> Legg til i Min liste</span></button>
+          </div>
+          <div class="text-container">
+            <p class="description"></p>
+            <div class="metadata"></div>
+            <div class="availability-info" id="availabilityInfo"></div>
+          </div>
+          <div class="cast-info"></div>
         </div>
-        <div class="cast-info"></div>
       </div>
     </div>
   </div>
-</div>
 
-<div class="recommendations">
-  <h2>Filmer du kanskje vil like</h2>
-  <div class="gallery" id="recommendationGallery"></div>
-</div>
-
-<!-- Bunntekst -->
-<footer class="site-footer">
-  <p>&copy; 2025 Watch Nordic Grupe</p>
-  <div class="footer-links">
-    <a href="Om-oss.html">Om oss</a> |
-    <a href="Kontakt.html">Kontakt</a> |
-    <a href="Personvern.html">Personvern</a>
+  <!-- Anbefalinger -->
+  <div class="recommendations">
+    <h2>Filmer du kanskje vil like</h2>
+    <div class="gallery" id="recommendationGallery"></div>
   </div>
-</footer>
-  
-<script src="Filmdata.js"></script>
-<script src="Seriedata.js"></script>
-<script>
-/* ===========================================================
-   Dynamisk støtte for FILMER og SERIER – full funksjonalitet
-   =========================================================== */
+
+  <footer class="site-footer">
+    <p>&copy; 2025 Watch Nordic Grupe</p>
+    <a href="Om-oss.html">Om oss</a> | <a href="Kontakt.html">Kontakt</a> | <a href="Personvern.html">Personvern</a>
+  </footer>
+
+  <script src="Filmdata.js"></script>
+  <script src="Seriedata.js"></script>
+  <script>
+/* === Felles logikk for film og serie === */
 const params = new URLSearchParams(window.location.search);
 const navn = params.get("navn");
-
-/* === Finn riktig datasett === */
 let type = "film";
 let data = filmer[navn];
-
 if (!data && typeof serier !== "undefined" && serier[navn]) {
-  type = "serie";
-  data = serier[navn];
+  type = "serie"; data = serier[navn];
 }
+if (!data) { alert("Fant ikke filmen eller serien."); window.location.href = "Hovedside.html"; }
 
-if (!data) {
-  alert("Fant ikke filmen eller serien.");
-  window.location.href = "Hovedside.html";
-}
-
-/* === Publiseringsdato-sjekk === */
 let erUpublisert = false;
-if (data.publishDate && new Date(data.publishDate) > new Date()) {
-  erUpublisert = true;
-}
+if (data.publishDate && new Date(data.publishDate) > new Date()) erUpublisert = true;
 
-/* === Sett inn hovedinformasjon === */
 document.title = data.tittel;
 document.getElementById("backgroundImage").src = data.bakgrunn;
 document.querySelector(".film-logo").src = data.logo;
 document.querySelector(".description").textContent = data.beskrivelse;
 
-/* === Metadata + IMDB === */
+/* === Metadata og IMDB === */
 const metadataEl = document.querySelector(".metadata");
 const metaHTML = data.metadata.map(m => `<span>${m}</span><span>•</span>`).join("");
-const imdbHTML = `
-  <span class="imdb-link">
-    <a href="${data.imdb}" target="_blank" style="display: inline-flex; align-items: center;">
-      <img class="imdb-logo" src="https://static.wixstatic.com/media/fd2fb2_f544f361fa8f4349a4e538b2d50c219e~mv2.png" alt="IMDB-logo" />
-    </a>
-  </span>`;
+const imdbHTML = `<span class="imdb-link"><a href="${data.imdb}" target="_blank">
+<img class="imdb-logo" src="https://static.wixstatic.com/media/fd2fb2_f544f361fa8f4349a4e538b2d50c219e~mv2.png" alt="IMDB-logo"/></a></span>`;
 metadataEl.innerHTML = metaHTML + imdbHTML;
 
-/* === Cast-info === */
+/* === Cast === */
 const castLabel = type === "film" ? "Regissør" : "Skaper";
-document.querySelector(".cast-info").innerHTML = `
-  <p><strong>Medvirkende:</strong> ${data.skuespillere}</p>
-  <p><strong>${castLabel}:</strong> ${data.regissor || data.skaper || "Ukjent"}</p>
-`;
+document.querySelector(".cast-info").innerHTML =
+  `<p><strong>Medvirkende:</strong> ${data.skuespillere || ""}</p>
+   <p><strong>${castLabel}:</strong> ${data.regissor || data.skaper || "Ukjent"}</p>`;
 
 /* === Se nå-knapp === */
 const watchBtn = document.getElementById("watchBtn");
 let statusKey = `${type}-${navn}-status`;
 let status = localStorage.getItem(statusKey);
-
 function oppdaterWatchKnapp() {
-  const icon = watchBtn.querySelector("i");
   const text = watchBtn.querySelector("span");
-  if (status === "påbegynt") {
-    icon.className = "fas fa-play";
-    text.textContent = " Gjenoppta";
-  } else {
-    icon.className = "fas fa-play";
-    text.textContent = type === "film" ? " Se nå" : " Se episode";
-  }
+  text.textContent = status === "påbegynt" ? " Gjenoppta" : type === "film" ? " Se nå" : " Se episode";
 }
 oppdaterWatchKnapp();
-
 watchBtn.addEventListener("click", () => {
   if (erUpublisert) return;
   localStorage.setItem(statusKey, "påbegynt");
-  status = "påbegynt";
-  oppdaterWatchKnapp();
   window.location.href = data.watchUrl;
 });
 
-/* === Ferdig markering etter video === */
-const videoEl = document.querySelector("video");
-if (videoEl) {
-  videoEl.addEventListener("ended", () => {
-    localStorage.setItem(statusKey, "ferdig");
-    status = "ferdig";
-    oppdaterWatchKnapp();
-  });
-}
-
-/* === Legg til i min liste === */
+/* === Min liste === */
 const addToListBtn = document.getElementById("addToListBtn");
 let minListe = JSON.parse(localStorage.getItem("minListe")) || [];
-
 function oppdaterListeKnapp() {
   const icon = addToListBtn.querySelector("i");
   const text = addToListBtn.querySelector("span");
-  if (minListe.includes(`${type}:${navn}`)) {
-    icon.className = "fas fa-check";
-    text.textContent = " Lagt til i Min liste";
-  } else {
-    icon.className = "fas fa-plus";
-    text.textContent = " Legg til i Min liste";
-  }
-  icon.classList.remove("icon-animate");
-  void icon.offsetWidth;
-  icon.classList.add("icon-animate");
+  const key = `${type}:${navn}`;
+  if (minListe.includes(key)) { icon.className = "fas fa-check"; text.textContent = " Lagt til i Min liste"; }
+  else { icon.className = "fas fa-plus"; text.textContent = " Legg til i Min liste"; }
 }
 oppdaterListeKnapp();
-
 addToListBtn.addEventListener("click", () => {
-  if (erUpublisert) return;
   const key = `${type}:${navn}`;
-  if (!minListe.includes(key)) {
-    minListe.push(key);
-  } else {
-    minListe = minListe.filter(f => f !== key);
-  }
+  if (!minListe.includes(key)) minListe.push(key);
+  else minListe = minListe.filter(f => f !== key);
   localStorage.setItem("minListe", JSON.stringify(minListe));
   oppdaterListeKnapp();
-});
-
-/* === Hvis upublisert === */
-if (erUpublisert) {
-  [watchBtn, addToListBtn].forEach(btn => {
-    btn.disabled = true;
-    btn.style.opacity = "0.5";
-    btn.style.cursor = "not-allowed";
-  });
-
-  const desc = document.querySelector(".description");
-  const publiseringsDato = new Date(data.publishDate);
-  const datoFormatert = publiseringsDato.toLocaleDateString("no-NO", {
-    year: "numeric",
-    month: "long",
-    day: "numeric"
-  });
-  const info = document.createElement("p");
-  info.style.color = "#ff6666";
-  info.style.fontWeight = "bold";
-  info.style.marginTop = "12px";
-  info.textContent = `Tilgjengelig fra: ${datoFormatert}`;
-  desc.insertAdjacentElement("afterend", info);
-}
-
-/* === Profilbilde === */
-const lagretBilde = localStorage.getItem("profilbilde");
-if (lagretBilde) document.getElementById("menyProfilbilde").src = lagretBilde;
-
-/* === Meny-knapp === */
-const menuToggle = document.getElementById("menuToggle");
-const verticalNav = document.getElementById("verticalNav");
-menuToggle.addEventListener("click", () => {
-  verticalNav.classList.toggle("collapsed");
-  menuToggle.classList.toggle("collapsed");
-  const icon = menuToggle.querySelector("i");
-  icon.classList.toggle("fa-chevron-right");
-  icon.classList.toggle("fa-chevron-left");
-});
-
-/* === Fade-in === */
-window.addEventListener("DOMContentLoaded", () => {
-  document.body.classList.add("loaded");
 });
 
 /* === Anbefalinger === */
 function hentTilfeldige(antall) {
   const kilde = type === "film" ? filmer : serier;
   const nå = new Date();
-  const alle = Object.keys(kilde).filter(k => {
-    if (k === navn) return false;
-    const el = kilde[k];
-    if (el.publishDate && new Date(el.publishDate) > nå) return false;
-    return true;
-  });
+  const alle = Object.keys(kilde).filter(k => k !== navn && !(kilde[k].publishDate && new Date(kilde[k].publishDate) > nå));
   const valgt = [];
-  while (valgt.length < antall && alle.length > 0) {
-    const i = Math.floor(Math.random() * alle.length);
-    valgt.push(alle.splice(i, 1)[0]);
-  }
+  while (valgt.length < antall && alle.length > 0) valgt.push(alle.splice(Math.floor(Math.random()*alle.length),1)[0]);
   return valgt;
 }
-
 const anbefalte = hentTilfeldige(6);
 const gallery = document.getElementById("recommendationGallery");
-const tittelEl = document.querySelector(".recommendations h2");
-tittelEl.textContent = type === "film" ? "Filmer du kanskje vil like" : "Serier du kanskje vil like";
-
+document.querySelector(".recommendations h2").textContent =
+  type === "film" ? "Filmer du kanskje vil like" : "Serier du kanskje vil like";
 anbefalte.forEach(n => {
-  const kilde = type === "film" ? filmer : serier;
-  const item = kilde[n];
+  const item = (type === "film" ? filmer : serier)[n];
   const img = document.createElement("img");
   img.src = item.posterVertikal || item.poster || item.bakgrunn;
   img.alt = item.tittel;
-  img.addEventListener("click", () => {
-    const side = type === "film" ? "film.html" : "serie.html";
-    window.location.href = `${side}?navn=${n}`;
-  });
+  img.addEventListener("click", () => { window.location.href = `Film.html?navn=${n}`; });
   gallery.appendChild(img);
 });
 
-/* === Trailer-logikk === */
-const trailerVideo = document.getElementById("trailerVideo");
-const backgroundImage = document.getElementById("backgroundImage");
-const videoControls = document.getElementById("videoControls");
-const pauseBtn = document.getElementById("pauseBtn");
-const soundBtn = document.getElementById("soundBtn");
+/* === Serie: sesonger og episoder === */
+if (type === "serie" && data.sesonger) {
+  const recommendationsSection = document.querySelector(".recommendations");
+  const serieContainer = document.createElement("div");
+  serieContainer.className = "serie-episoder";
+  serieContainer.innerHTML = `
+    <h2>Velg sesong og episode</h2>
+    <div style="margin-bottom:16px;">
+      <label for="seasonSelect">Sesong:</label>
+      <select id="seasonSelect" style="margin-left:10px; padding:6px 10px; font-size:16px; border-radius:6px;"></select>
+    </div>
+    <div id="episodeList" style="display:flex; flex-wrap:wrap; gap:14px;"></div>
+  `;
+  recommendationsSection.parentNode.insertBefore(serieContainer, recommendationsSection);
 
-if (data.trailer && data.trailer.trim() !== "") {
-  trailerVideo.src = data.trailer;
-  trailerVideo.preload = "auto";
-  setTimeout(() => {
-    backgroundImage.style.opacity = "0";
-    trailerVideo.style.opacity = "1";
-    trailerVideo.play();
-    videoControls.style.opacity = "1";
-  }, 10000);
-  trailerVideo.addEventListener("ended", () => {
-    trailerVideo.style.opacity = "0";
-    backgroundImage.style.opacity = "1";
-    videoControls.style.opacity = "0";
-  });
-  pauseBtn.addEventListener("click", () => {
-    if (trailerVideo.paused) {
-      trailerVideo.play();
-      pauseBtn.innerHTML = '<i class="fas fa-pause"></i>';
-    } else {
-      trailerVideo.pause();
-      pauseBtn.innerHTML = '<i class="fas fa-play"></i>';
-    }
-  });
-  soundBtn.addEventListener("click", () => {
-    trailerVideo.muted = !trailerVideo.muted;
-    soundBtn.innerHTML = trailerVideo.muted
-      ? '<i class="fas fa-volume-mute"></i>'
-      : '<i class="fas fa-volume-up"></i>';
-  });
-} else {
-  trailerVideo.style.display = "none";
-  videoControls.style.display = "none";
-}
+  const seasonSelect = serieContainer.querySelector("#seasonSelect");
+  const episodeList = serieContainer.querySelector("#episodeList");
 
-/* === Tilgjengelighetsinfo === */
-const availabilityEl = document.getElementById("availabilityInfo");
-if (data.expireDate) {
-  const nå = new Date();
-  const expire = new Date(data.expireDate);
-  const diff = expire - nå;
-  const ettÅr = 365 * 24 * 60 * 60 * 1000;
-  if (diff > ettÅr) {
-    availabilityEl.innerHTML = `<i class="far fa-clock"></i><span>Tilgjengelig lenger enn ett år</span>`;
-  } else if (diff > 0) {
-    const dato = expire.toLocaleDateString("no-NO", {
-      year: "numeric",
-      month: "short",
-      day: "numeric"
+  Object.keys(data.sesonger).forEach(ses => {
+    const opt = document.createElement("option");
+    opt.value = ses; opt.textContent = `Sesong ${ses}`;
+    seasonSelect.appendChild(opt);
+  });
+
+  function visEpisoder(ses) {
+    episodeList.innerHTML = "";
+    const episoder = data.sesonger[ses];
+    episoder.forEach((ep, i) => {
+      const card = document.createElement("div");
+      card.className = "episode-card";
+      card.innerHTML = `
+        <img src="${ep.bilde || data.bakgrunn}">
+        <div>
+          <h4 style="margin-bottom:6px; font-size:16px;">${ep.tittel}</h4>
+          <p style="font-size:13px; color:#ccc;">${ep.beskrivelse || ""}</p>
+        </div>`;
+      card.addEventListener("click", () => {
+        watchBtn.querySelector("span").textContent = ` Spill av episode ${i+1}`;
+        if (ep.watchUrl) data.watchUrl = ep.watchUrl;
+        if (ep.bilde) document.getElementById("backgroundImage").src = ep.bilde;
+      });
+      episodeList.appendChild(card);
     });
-    availabilityEl.innerHTML = `<i class="far fa-clock"></i><span>Tilgjengelig til: ${dato}</span>`;
   }
+  visEpisoder(Object.keys(data.sesonger)[0]);
+  seasonSelect.addEventListener("change", e => visEpisoder(e.target.value));
 }
 
-/* === Kort beskrivelse + popup === */
-const descEl = document.querySelector(".description");
-const fullText = descEl.textContent.trim();
-const MAX_ORD = 20;
-const words = fullText.split(/\s+/);
-if (words.length > MAX_ORD) {
-  const kortText = words.slice(0, MAX_ORD).join(" ") + "... ";
-  descEl.textContent = kortText;
-  const moreBtn = document.createElement("button");
-  moreBtn.className = "more-btn";
-  moreBtn.textContent = "Mer";
-  descEl.appendChild(moreBtn);
-  moreBtn.addEventListener("click", () => {
-    const overlay = document.createElement("div");
-    overlay.className = "popup-overlay";
-    const box = document.createElement("div");
-    box.className = "popup-box";
-    box.innerHTML = `
-      <button class="close-btn">&times;</button>
-      <p>${fullText}</p>
-    `;
-    overlay.appendChild(box);
-    document.body.appendChild(overlay);
-    box.querySelector(".close-btn").addEventListener("click", () => {
-      overlay.remove();
-    });
-  });
-}
-</script>
-
+/* === Ferdig lastet === */
+window.addEventListener("load", () => document.body.classList.add("loaded"));
+  </script>
 </body>
 </html>
 
@@ -933,6 +458,7 @@ if (words.length > MAX_ORD) {
 
 
  
+
 
 
 
