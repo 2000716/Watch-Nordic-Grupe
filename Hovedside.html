@@ -1235,7 +1235,7 @@ function renderSeries(galleryId) {
   Object.keys(serier).forEach((key) => {
     const serie = serier[key];
     const link = document.createElement("a");
-    link.href = `serie.html?navn=${key}`;
+    link.href = `film.html?navn=${key}`;
     const img = document.createElement("img");
     img.src = serie.poster;
     img.alt = serie.tittel;
@@ -1363,6 +1363,7 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 });
 </script>
+
 
 
 
