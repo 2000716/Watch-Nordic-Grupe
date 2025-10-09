@@ -760,7 +760,7 @@ metadataEl.innerHTML = metaHTML + imdbHTML;
 const castLabel = type === "film" ? "Regissør" : "Skaper";
 document.querySelector(".cast-info").innerHTML = `
   <p><strong>Medvirkende:</strong> ${data.skuespillere}</p>
-  <p><strong>${castLabel}:</strong> ${data.regissor || data.skaper || "Ukjent"}</p>
+  <p><strong>${castLabel}:</strong> ${data.skapere || data.regissor || "Ukjent"}</p>
 `;
 
 /* === Se nå-knapp === */
@@ -874,7 +874,7 @@ window.addEventListener("DOMContentLoaded", () => {
   document.body.classList.add("loaded");
 });
 
-/* === Anbefalinger (kun for filmer) === */
+/* === Anbefalinger / episoder === */
 function hentTilfeldige(antall) {
   const kilde = type === "film" ? filmer : serier;
   const nå = new Date();
@@ -896,7 +896,7 @@ const gallery = document.getElementById("recommendationGallery");
 const tittelEl = document.querySelector(".recommendations h2");
 
 /* === Episode galleri for serier === */
-if (type === "serie" && data.sesonger) {
+if (type === "serie" && data.episoder) {
   const recommendationsDiv = document.querySelector(".recommendations");
   recommendationsDiv.innerHTML = `
     <h2>Episoder</h2>
@@ -907,35 +907,37 @@ if (type === "serie" && data.sesonger) {
   const seasonButtons = document.getElementById("seasonButtons");
   const episodeGallery = document.getElementById("episodeGallery");
 
+  const sesonger = Object.keys(data.episoder); // ["Sesong 1", "Sesong 2"]
+
   // --- Bygg sesongknapper ---
-  data.sesonger.forEach((sesong, index) => {
+  sesonger.forEach((sesongNavn, index) => {
     const btn = document.createElement("button");
-    btn.textContent = "Sesong " + sesong.nummer;
+    btn.textContent = sesongNavn;
     btn.className = "season-btn";
     if (index === 0) btn.classList.add("active");
-    btn.addEventListener("click", () => visSesong(sesong.nummer));
+    btn.addEventListener("click", () => visSesong(sesongNavn));
     seasonButtons.appendChild(btn);
   });
 
   // --- Funksjon for å vise episoder ---
-  function visSesong(nummer) {
+  function visSesong(sesongNavn) {
     document.querySelectorAll(".season-btn").forEach(b => b.classList.remove("active"));
     const aktivBtn = Array.from(document.querySelectorAll(".season-btn"))
-      .find(b => b.textContent.includes(nummer));
+      .find(b => b.textContent === sesongNavn);
     if (aktivBtn) aktivBtn.classList.add("active");
 
-    const valgtSesong = data.sesonger.find(s => s.nummer === nummer);
+    const valgtSesong = data.episoder[sesongNavn];
     if (!valgtSesong) return;
     episodeGallery.innerHTML = "";
 
-    valgtSesong.episoder.forEach((ep, i) => {
+    valgtSesong.forEach((ep, i) => {
       const epCard = document.createElement("div");
       epCard.className = "episode-card";
       epCard.innerHTML = `
-        <img src="${ep.bilde}" alt="Episode ${i + 1}">
+        <img src="${ep.thumbnail}" alt="Episode ${i + 1}">
         <div class="episode-info">
           <h4>${i + 1}. ${ep.tittel}</h4>
-          <p>${ep.beskrivelse}</p>
+          <p>${ep.varighet}</p>
         </div>
       `;
       episodeGallery.appendChild(epCard);
@@ -943,9 +945,9 @@ if (type === "serie" && data.sesonger) {
   }
 
   // Vis første sesong som standard
-  visSesong(data.sesonger[0].nummer);
+  visSesong(sesonger[0]);
 } else {
-  // === Anbefalinger for film ===
+  /* === Anbefalinger for film === */
   const anbefalte = hentTilfeldige(6);
   tittelEl.textContent = type === "film" ? "Filmer du kanskje vil like" : "Serier du kanskje vil like";
 
@@ -1081,6 +1083,7 @@ if (words.length > MAX_ORD) {
 
 
  
+
 
 
 
