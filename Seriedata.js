@@ -8,7 +8,7 @@ const serier = {
     poster: "https://image.tmdb.org/t/p/w1280/9yjEMASvxhJGSUq7peDpWgBO5JW.jpg",
     posterVertikal: "https://image.tmdb.org/t/p/w780/56v2KjBlU4XaOv9rVYEQypROD7P.jpg",
     beskrivelse:"Når en ung gutt forsvinner i en liten by, avdekker vennene hans en mystisk jente med overnaturlige krefter og en hemmelig regjeringskonspirasjon.",
-    metadata: ["USA", "2016–", "16+", "Mystikk / Sci-fi / Drama", "4 sesonger"],
+    metadata: ["Finnland", "1990", "Alle", "Familie", "4 sesonger"],
     imdb: "https://www.imdb.com/title/tt4574334/",
     skuespillere: "Millie Bobby Brown, Finn Wolfhard, David Harbour, Winona Ryder",
     skapere: "The Duffer Brothers",
@@ -43,6 +43,7 @@ const serier = {
 
 // Gjør tilgjengelig globalt
 window.serier = serier;
+
 
 
 
