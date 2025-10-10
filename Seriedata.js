@@ -39,7 +39,7 @@ const serier = {
         {
           tittel: "Episode 1: Den store flommen",
           varighet: "23 min",
-          thumbnail: "https://m.media-amazon.com/images/I/81EYlj8ePjL._AC_SY679_.jpg",
+          thumbnail: "https://media.themoviedb.org/t/p/w320_and_h180_bestv2/hW1HW2XIaBCZrUWcG7TUTYMGB76.jpg",
           watchUrl: "spillerepisode.html?serie=i-mummidalen&s=2&e=1"
         }
       ]
@@ -95,6 +95,7 @@ const serier = {
 
 // Gjør tilgjengelig globalt
 window.serier = serier;
+
 
 
 
