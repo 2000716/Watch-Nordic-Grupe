@@ -430,8 +430,25 @@ const filmer = {
     publishDate: "2025-10-09T00:00:00", // ISO datoformat
     expireDate: "2027-11-15T23:59:59",
   },
+
+       "the-boxtrolls": {
+    tittel: "The Boxtrolls",
+    bakgrunn: "https://is1-ssl.mzstatic.com/image/thumb/HKRf395gN2xl8xeoaxc1OA/2400x1350sr.webp",
+    logo: "https://is1-ssl.mzstatic.com/image/thumb/Video116/v4/4c/39/f0/4c39f099-4d62-e2a2-36ab-699f5a072375/vbj8223707386596475778.png/432x162.png",
+    poster: "https://is1-ssl.mzstatic.com/image/thumb/Video112/v4/c7/86/5c/c7865c44-192a-7898-5d6d-69c88694f460/pr_source.lsr/1200x675.jpg",
+    posterVertikal: "https://is1-ssl.mzstatic.com/image/thumb/Video128/v4/d0/41/9e/d0419ee7-ac11-c565-f00b-c218cabec50c/contsched.hoyvlgwi.lsr/450x676CA.TVA23C01.webp", // portrett
+    beskrivelse: "En ung foreldreløs gutt oppdratt av søppelsamlere i underjordiske huler prøver å redde vennene sine fra en ond skadedyrbekjemper.",
+    metadata: ["USA", "2014", "7 år", "Familie", "1 t 36 min"],
+    imdb: "https://www.imdb.com/title/tt0787474/",
+    skuespillere: "Ben Kingsley, Isaac Hempstead-Wright, Elle Fanning, Dee Bradley Baker, Steve Blum",
+    regissor: "Anthony Stacchi, Graham Annable",
+    watchUrl: "film-mal.html?id=the-boxtrolls",
+    publishDate: "2025-10-012T00:00:00", // ISO datoformat
+    expireDate: "2026-11-15T23:59:59",
+  },
   
 };
+
 
 
 
