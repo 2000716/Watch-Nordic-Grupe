@@ -334,23 +334,6 @@ const filmer = {
     expireDate: "2027-11-15T23:59:59",
   },
 
-    "missing-link": {
-    tittel: "Missing Link",
-    bakgrunn: "https://occ-0-8407-2218.1.nflxso.net/dnm/api/v6/6AYY37jfdO6hpXcMjf9Yu5cnmO0/AAAABX3W4Y1G1U95wDyrd5NOudF2LqzFdURYh8wQ4_yVIAZ6N7nSNAIdYN6XnxtBha0ZBrSQThGXZLoIjXswvwVAVami74V8HR4o2cBc.jpg?r=10d",
-    logo: "https://static.wixstatic.com/media/fd2fb2_8f810efe6e43455dbc05aa232a59b897~mv2.webp",
-    trailer: "https://video.wixstatic.com/video/fd2fb2_ba8ea3625beb465fbac16300806e23e5/1080p/mp4/file.mp4", // 🎥 NY
-    poster: "https://is1-ssl.mzstatic.com/image/thumb/Video124/v4/42/8b/f4/428bf4a6-e17c-5719-1c2f-dff378ec37ab/pr_source.lsr/1200x675.jpg",
-    posterVertikal: "https://play-lh.googleusercontent.com/XEfGdgtOLZyapSFAidkjyq03gHba_TAQWoSlgT-jiOCyl1a7TyRzjMMXiYAOEaA9vepd4_j8m7ix5Ke9SzCS", // portrett
-    beskrivelse: "Sir Lionel Frost er en modig og spektakulær eventyrer. Herr Link er nok den siste av sin art, han er ensom og han mener at Sir Lionel er den eneste som kan hjelpe ham.",
-    metadata: ["USA", "2019", "6 år", "Familie", "1 t 30 min"],
-    imdb: "https://www.imdb.com/title/tt6348138?ref_ext_viaplay",
-    skuespillere: "Hugh Jackman, Zoe Saldana, Zach Galifianakis, David Walliams",
-    regissor: "Chris Butler",
-    watchUrl: "film-mal.html?id=missing-link",
-    publishDate: "2025-10-25T00:00:00", // ISO datoformat
-    expireDate: "2027-11-15T23:59:59",
-  },
-
     "titanic-digital-resurrection": {
     tittel: "Titanic Digital Resurrection",
     bakgrunn: "https://d32qys9a6wm9no.cloudfront.net/images/movies/backdrop/2f/5e55bbdc9efb40b5f6e4c8e54d4afbfd_1280x720.jpg?t=1744244601",
@@ -364,22 +347,6 @@ const filmer = {
     regissor: "Fergus Colville",
     watchUrl: "film-mal.html?id=titanic-digital-resurrection",
     publishDate: "2025-10-04T00:00:00", // ISO datoformat
-    expireDate: "2026-11-15T23:59:59",
-  },
-
-      "coraline": {
-    tittel: "Coraline",
-    bakgrunn: "https://images.contentstack.io/v3/assets/blt223a4a92692ca457/blt464b27c4c46c1bf9/68a37823ef572284f9c66b9d/3460_post_589800294eb9e.jpg?branch=production&width=3840",
-    logo: "https://is1-ssl.mzstatic.com/image/thumb/Features211/v4/9a/13/bd/9a13bddf-41ae-186a-38f8-1c105ea5506e/ijc735814406953527949.png/432x162.png",
-    poster: "https://is1-ssl.mzstatic.com/image/thumb/Video114/v4/36/9a/d3/369ad302-8973-e84a-c21b-adea856dd178/pr_source.lsr/1200x675CA.TVA23C01.jpg",
-    posterVertikal: "https://is1-ssl.mzstatic.com/image/thumb/Video112/v4/1a/e6/ce/1ae6cecf-8fd7-7145-83eb-ec5a5caaffab/pr_source.lsr/450x676CA.TVA23C01.webp", // portrett
-    beskrivelse: "En eventyrlysten jente finner en annen verden som er en merkelig idealisert versjon av hennes frustrerende hjem, men den har uhyggelige hemmeligheter.",
-    metadata: ["USA", "2009", "Alle", "Familie", "1 t 40 min"],
-    imdb: "https://www.imdb.com/title/tt0327597/",
-    skuespillere: "Dakota Fanning, Teri Hatcher, John Hodgman",
-    regissor: "Henry Selick",
-    watchUrl: "film-mal.html?id=coraline",
-    publishDate: "2025-10-06T00:00:00", // ISO datoformat
     expireDate: "2026-11-15T23:59:59",
   },
 
@@ -399,21 +366,6 @@ const filmer = {
     expireDate: "2027-11-15T23:59:59",
   },
 
-      "elizabeth-the-golden-age": {
-    tittel: "Elizabeth The Golden Age",
-    bakgrunn: "https://ichef.bbci.co.uk/images/ic/640x360/p0g3gb25.jpg",
-    logo: "https://occ-0-1165-38.1.nflxso.net/dnm/api/v6/S4oi7EPZbv2UEPaukW54OORa0S8/AAAABb0OYLoucii93-gZzYkXqp8kpA-ER2f48Pu3ml2WGIYrVtL4xKJuOVwI3e1rGSP5CFwtlqCcJjQ2RTSixAdlEWAVe83zoZZVig.webp?r=582",
-    poster: "https://ntvb.tmsimg.com/assets/p169794_v_h8_am.jpg?w=1280&h=720",
-    posterVertikal: "https://image.tmdb.org/t/p/w780/3bL6lLd6cyQ4JNT4ucqm4PICIVs.jpg", // portrett
-    beskrivelse: "Dronning Elizabeth stålsetter seg mot invasjon, forræderi og svik mens hun lenger etter eventyreren Sir Walter Raleigh.",
-    metadata: ["USA", "2007", "16+", "Drama", "1 t 29 min"],
-    imdb: "https://www.imdb.com/title/tt0414055/?ref_=nv_sr_srsg_0_tt_8_nm_0_in_0_q_the%2520golden%2520a",
-    skuespillere: "Cate Blanchett, Geoffrey Rush, Clive Owen",
-    regissor: "Shekhar Kapur",
-    watchUrl: "film-mal.html?id=elizabeth-the-golden-age",
-    publishDate: "2025-10-07T00:00:00", // ISO datoformat
-    expireDate: "2027-11-15T23:59:59",
-  },
 
         "sauen-shaun-feirer-jul": {
     tittel: "Sauen Shaun feirer jul",
@@ -448,6 +400,7 @@ const filmer = {
   },
   
 };
+
 
 
 
