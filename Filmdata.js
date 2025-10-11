@@ -395,11 +395,12 @@ const filmer = {
     skuespillere: "Ben Kingsley, Isaac Hempstead-Wright, Elle Fanning, Dee Bradley Baker, Steve Blum",
     regissor: "Anthony Stacchi, Graham Annable",
     watchUrl: "film-mal.html?id=the-boxtrolls",
-    publishDate: "2025-10-012T00:00:00", // ISO datoformat
+    publishDate: "2025-10-12T00:00:00", // ISO datoformat
     expireDate: "2026-11-15T23:59:59",
   },
   
 };
+
 
 
 
