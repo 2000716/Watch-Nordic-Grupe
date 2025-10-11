@@ -359,8 +359,6 @@ body.loaded { opacity: 1; }
    =========================================================== */
 const params = new URLSearchParams(window.location.search);
 const navn = params.get("navn");
-
-/* === Finn riktig datasett === */
 let type = "film";
 let data = filmer[navn];
 
@@ -368,19 +366,16 @@ if (!data && typeof serier !== "undefined" && serier[navn]) {
   type = "serie";
   data = serier[navn];
 }
-
 if (!data) {
   alert("Fant ikke filmen eller serien.");
   window.location.href = "Hovedside.html";
 }
 
-/* === Publiseringsdato-sjekk === */
+/* === Publiseringsdato === */
 let erUpublisert = false;
-if (data.publishDate && new Date(data.publishDate) > new Date()) {
-  erUpublisert = true;
-}
+if (data.publishDate && new Date(data.publishDate) > new Date()) erUpublisert = true;
 
-/* === Sett inn hovedinformasjon === */
+/* === Grunninfo === */
 document.title = data.tittel;
 document.getElementById("backgroundImage").src = data.bakgrunn;
 document.querySelector(".film-logo").src = data.logo;
@@ -391,13 +386,13 @@ const metadataEl = document.querySelector(".metadata");
 const metaHTML = data.metadata.map(m => `<span>${m}</span><span>•</span>`).join("");
 const imdbHTML = `
   <span class="imdb-link">
-    <a href="${data.imdb}" target="_blank" style="display: inline-flex; align-items: center;">
-      <img class="imdb-logo" src="https://static.wixstatic.com/media/fd2fb2_f544f361fa8f4349a4e538b2d50c219e~mv2.png" alt="IMDB-logo" />
+    <a href="${data.imdb}" target="_blank">
+      <img class="imdb-logo" src="https://static.wixstatic.com/media/fd2fb2_f544f361fa8f4349a4e538b2d50c219e~mv2.png" alt="IMDB" />
     </a>
   </span>`;
 metadataEl.innerHTML = metaHTML + imdbHTML;
 
-/* === Cast-info === */
+/* === Cast === */
 const castLabel = type === "film" ? "Regissør" : "Skaper";
 document.querySelector(".cast-info").innerHTML = `
   <p><strong>Medvirkende:</strong> ${data.skuespillere}</p>
@@ -412,13 +407,8 @@ let status = localStorage.getItem(statusKey);
 function oppdaterWatchKnapp() {
   const icon = watchBtn.querySelector("i");
   const text = watchBtn.querySelector("span");
-  if (status === "påbegynt") {
-    icon.className = "fas fa-play";
-    text.textContent = " Gjenoppta";
-  } else {
-    icon.className = "fas fa-play";
-    text.textContent = type === "film" ? " Se nå" : " Se episode";
-  }
+  if (status === "påbegynt") text.textContent = " Gjenoppta";
+  else text.textContent = type === "film" ? " Se nå" : " Se episode";
 }
 oppdaterWatchKnapp();
 
@@ -430,7 +420,7 @@ watchBtn.addEventListener("click", () => {
   window.location.href = data.watchUrl;
 });
 
-/* === Ferdig markering etter video === */
+/* === Ferdig status === */
 const videoEl = document.querySelector("video");
 if (videoEl) {
   videoEl.addEventListener("ended", () => {
@@ -440,7 +430,7 @@ if (videoEl) {
   });
 }
 
-/* === Legg til i min liste === */
+/* === Min liste === */
 const addToListBtn = document.getElementById("addToListBtn");
 let minListe = JSON.parse(localStorage.getItem("minListe")) || [];
 
@@ -454,66 +444,116 @@ function oppdaterListeKnapp() {
     icon.className = "fas fa-plus";
     text.textContent = " Legg til i Min liste";
   }
-  icon.classList.remove("icon-animate");
-  void icon.offsetWidth;
-  icon.classList.add("icon-animate");
 }
 oppdaterListeKnapp();
 
 addToListBtn.addEventListener("click", () => {
   if (erUpublisert) return;
   const key = `${type}:${navn}`;
-  if (!minListe.includes(key)) {
-    minListe.push(key);
-  } else {
-    minListe = minListe.filter(f => f !== key);
-  }
+  if (!minListe.includes(key)) minListe.push(key);
+  else minListe = minListe.filter(f => f !== key);
   localStorage.setItem("minListe", JSON.stringify(minListe));
   oppdaterListeKnapp();
 });
 
-/* === Hvis upublisert === */
+/* === Upublisert === */
 if (erUpublisert) {
   [watchBtn, addToListBtn].forEach(btn => {
-    btn.disabled = true;
-    btn.style.opacity = "0.5";
-    btn.style.cursor = "not-allowed";
+    btn.disabled = true; btn.style.opacity = "0.5"; btn.style.cursor = "not-allowed";
   });
-
-  const desc = document.querySelector(".description");
-  const publiseringsDato = new Date(data.publishDate);
-  const datoFormatert = publiseringsDato.toLocaleDateString("no-NO", {
-    year: "numeric",
-    month: "long",
-    day: "numeric"
-  });
-  const info = document.createElement("p");
-  info.style.color = "#ff6666";
-  info.style.fontWeight = "bold";
-  info.style.marginTop = "12px";
-  info.textContent = `Tilgjengelig fra: ${datoFormatert}`;
-  desc.insertAdjacentElement("afterend", info);
+  const info = document.createElement("div");
+  info.className = "availability-info";
+  info.innerHTML = `<i class="fas fa-clock"></i> Tilgjengelig fra ${new Date(data.publishDate).toLocaleDateString("no-NO")}`;
+  document.querySelector(".text-container").appendChild(info);
 }
 
-/* === Profilbilde === */
-const lagretBilde = localStorage.getItem("profilbilde");
-if (lagretBilde) document.getElementById("menyProfilbilde").src = lagretBilde;
+/* === Video-trailer === */
+const backgroundImage = document.getElementById("backgroundImage");
+const backgroundVideo = document.getElementById("backgroundVideo");
+const videoControls = document.getElementById("videoControls");
 
-/* === Meny-knapp === */
-const menuToggle = document.getElementById("menuToggle");
-const verticalNav = document.getElementById("verticalNav");
-menuToggle.addEventListener("click", () => {
-  verticalNav.classList.toggle("collapsed");
-  menuToggle.classList.toggle("collapsed");
-  const icon = menuToggle.querySelector("i");
-  icon.classList.toggle("fa-chevron-right");
-  icon.classList.toggle("fa-chevron-left");
+function fadeBackgroundToVideo() {
+  if (!data.trailer) return;
+  backgroundVideo.src = data.trailer;
+  backgroundVideo.style.opacity = "1";
+  backgroundImage.style.opacity = "0";
+  backgroundVideo.play();
+  videoControls.style.opacity = "1";
+}
+function fadeVideoToBackground() {
+  backgroundVideo.pause();
+  backgroundVideo.style.opacity = "0";
+  backgroundImage.style.opacity = "1";
+  videoControls.style.opacity = "0";
+}
+document.getElementById("playVideoBtn").addEventListener("click", fadeBackgroundToVideo);
+document.getElementById("closeVideoBtn").addEventListener("click", fadeVideoToBackground);
+
+/* === Serie === */
+if (type === "serie") {
+  const seasonButtons = document.getElementById("seasonButtons");
+  const episodeGallery = document.getElementById("episodeGallery");
+  seasonButtons.innerHTML = "";
+  Object.keys(data.sesonger).forEach((sesongNavn, idx) => {
+    const btn = document.createElement("button");
+    btn.className = `season-btn ${idx === 0 ? "active" : ""}`;
+    btn.textContent = sesongNavn;
+    btn.addEventListener("click", () => visSesong(sesongNavn, btn));
+    seasonButtons.appendChild(btn);
+  });
+  visSesong(Object.keys(data.sesonger)[0], seasonButtons.firstChild);
+
+  function visSesong(sesongNavn, knapp) {
+    document.querySelectorAll(".season-btn").forEach(b => b.classList.remove("active"));
+    knapp.classList.add("active");
+    episodeGallery.innerHTML = "";
+    const valgtSesong = data.sesonger[sesongNavn];
+    valgtSesong.forEach((ep, i) => {
+      const epCard = document.createElement("div");
+      epCard.className = "episode-card";
+      const epId = `${navn}-${sesongNavn}-${i}`;
+      const sett = localStorage.getItem(epId) === "sett";
+
+      epCard.innerHTML = `
+        <img src="${ep.thumbnail}" alt="${ep.tittel}">
+        <div class="episode-info">
+          <h4>${i + 1}. ${ep.tittel}</h4>
+          <p>${ep.varighet}</p>
+          <p class="ep-desc">${ep.beskrivelse}</p>
+          <button class="watch-episode"><i class="fas fa-play"></i> Se nå</button>
+        </div>
+      `;
+      if (sett) epCard.style.opacity = "0.6";
+
+      epCard.querySelector(".watch-episode").addEventListener("click", () => {
+        localStorage.setItem(epId, "sett");
+        window.location.href = ep.watchUrl;
+      });
+      episodeGallery.appendChild(epCard);
+    });
+  }
+}
+
+/* === Popup-beskrivelse === */
+document.querySelectorAll(".more-btn").forEach(btn => {
+  btn.addEventListener("click", () => {
+    const popup = document.createElement("div");
+    popup.className = "popup-overlay";
+    popup.innerHTML = `
+      <div class="popup-box">
+        <button class="close-btn">&times;</button>
+        <h3>${data.tittel}</h3>
+        <p>${data.langBeskrivelse || data.beskrivelse}</p>
+      </div>
+    `;
+    document.body.appendChild(popup);
+    popup.querySelector(".close-btn").addEventListener("click", () => popup.remove());
+  });
 });
 
-/* === Fade-in === */
-window.addEventListener("DOMContentLoaded", () => {
-  document.body.classList.add("loaded");
-});
+/* === Fade inn === */
+window.addEventListener("load", () => document.body.classList.add("loaded"));
+
 
 /* === Anbefalinger / episoder === */
 function hentTilfeldige(antall) {
@@ -724,6 +764,7 @@ if (words.length > MAX_ORD) {
 
 
  
+
 
 
 
