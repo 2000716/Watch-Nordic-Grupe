@@ -9,204 +9,848 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
 
 <style>
-/* === Reset og basisoppsett === */
-body {
+* {
+  box-sizing: border-box;
   margin: 0;
-  font-family: Arial, sans-serif;
-  background-color: #0d0d0d;
-  color: #ffffff;
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
-}
-
-main {
-  flex: 1;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-}
-
-/* === Container-oppsett === */
-.content-wrapper {
-  width: 90%;
-  max-width: 1800px;
-  margin: 0 auto;
   padding: 0;
 }
 
-/* === Hero banner === */
-.hero-banner {
-  width: 100%;
-  height: 40vh;
-  min-height: 300px;
-  max-height: 600px;
-  position: relative;
-  overflow: hidden;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+html, body {
+  font-family: Arial, sans-serif;
+  background: #091B1E;
+  color: white;
+  overflow-x: hidden;
 }
 
-.hero-banner img {
+/* Navigasjon til venstre */
+.vertical-nav {
+  width: 70px;
+  height: 100vh;
+  background-color: transparent;
+  position: fixed;
+  top: 0;
+  left: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+}
+
+.nav-icons-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.profilmeny {
+  cursor: pointer;
+  margin-bottom: 10px;
+}
+
+.profilmeny img {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #fff;
+}
+
+.nav-icon {
+  color: white;
+  font-size: 22px;
+  padding: 16px 0;
+  text-decoration: none;
+  text-align: center;
+  width: 100%;
+  transition: color 0.3s ease;
+  cursor: pointer;
+  background: none;
+  border: none;
+}
+
+.nav-icon:hover,
+.nav-icon.active {
+  color: #00FFCC;
+}
+
+/* Hovedinnhold */
+main {
+  margin-left: 60px;
+  padding: 20px 10px 10px 10px;
+}
+
+.content-wrapper {
+  width: 100%;
+  max-width: none;
+  margin: 0;
+  padding: 0;
+}
+
+  main {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+
+/* === Header PC === */
+.top-header {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+.top-header .watch-logo {
+  margin-left: auto;
+  width: 200px;
+}
+
+.top-header .header-profil {
+  display: none;
+}
+
+.top-header img.watch-logo {
+  width: 200px;
+}
+
+/* Hero-banner */
+.hero-banner {
+  position: relative;
+  height: 350px;
+  border-radius: 12px;
+  overflow: hidden;
+  margin-bottom: 30px;
+  margin-left: 16px;
+  width: calc(100% - 16px);
+  border: 2px solid #00FFCC;
+}
+
+.banner-image {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  filter: brightness(70%);
+  display: block;
 }
 
-.hero-text {
+.banner-content {
   position: absolute;
-  text-align: center;
-  color: #fff;
-}
-
-.hero-text h1 {
-  font-size: clamp(1.8rem, 4vw, 3rem);
-  margin: 0;
-}
-
-.hero-text p {
-  font-size: clamp(1rem, 2vw, 1.3rem);
-  margin-top: 10px;
-}
-
-/* === Seksjonsoverskrifter === */
-section {
-  margin-top: 40px;
-}
-
-h2 {
-  font-size: clamp(1.4rem, 2.5vw, 2rem);
-  margin-bottom: 15px;
-  border-left: 4px solid #e50914;
-  padding-left: 10px;
-}
-
-/* === Filmgalleri === */
-.image-gallery {
+  top: 50%;
+  left: 30px;
+  transform: translateY(-50%);
   display: flex;
-  flex-wrap: wrap;
-  gap: 16px;
-  justify-content: flex-start;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
 }
 
-.image-gallery a {
+.film-logo {
+  width: 300px;
+}
+
+.watch-button {
   text-decoration: none;
-  color: inherit;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  background-color: white;
+  color: black;
+  padding: 10px 80px;
+  border: none;
+  border-radius: 4px;
+  font-weight: bold;
+  display: inline-block;
 }
 
-.image-gallery a:hover {
-  transform: scale(1.05);
-  box-shadow: 0 4px 10px rgba(255, 255, 255, 0.2);
+.watch-button:hover {
+  background-color: #f2f2f2;
 }
 
-.image-gallery a img {
-  width: clamp(180px, 15vw, 260px);
-  height: clamp(100px, 9vw, 160px);
-  object-fit: cover;
-  border-radius: 10px;
-}
-
-/* === Kommende filmer seksjon === */
-.coming-movies {
-  margin-top: 60px;
-}
-
-.coming-movie-container {
-  display: flex;
-  gap: 16px;
-  overflow-x: auto;
-  scroll-behavior: smooth;
-  padding-bottom: 10px;
-}
-
-.coming-movie-item {
-  flex: 0 0 clamp(180px, 18vw, 400px);
-  height: clamp(260px, 35vh, 480px);
-  background-color: #1a1a1a;
+/* === Special Hero Banner med galleri === */
+.special-hero-banner {
+  margin: 30px 16px;
+  width: calc(100% - 32px);
+  border: 2px solid #00FFCC;
   border-radius: 12px;
   overflow: hidden;
   position: relative;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  height: 350px;
 }
 
-.coming-movie-item:hover {
+.special-hero-banner .banner-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  filter: brightness(0.6);
+}
+
+.banner-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 30px;
+  box-sizing: border-box;
+}
+
+/* Venstre del */
+.banner-left {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  z-index: 2;
+}
+
+.banner-left .film-logo {
+  width: 280px;
+  max-width: 100%;
+}
+
+.banner-left .watch-button {
+  text-decoration: none;
+  background: white;
+  color: black;
+  padding: 12px 40px;
+  border-radius: 6px;
+  font-weight: bold;
+  transition: background 0.3s ease;
+}
+
+.banner-left .watch-button:hover {
+  background: #f2f2f2;
+}
+
+/* Høyre galleri */
+.banner-right {
+  max-width: 500px;
+  overflow-x: auto;
+  display: flex;
+  gap: 12px;
+  padding-bottom: 6px;
+}
+
+.banner-gallery {
+  display: flex;
+  flex-direction: row;
+  gap: 12px;
+}
+
+.banner-gallery img {
+  width: 120px;
+  height: 180px;
+  object-fit: cover;
+  border-radius: 8px;
+  transition: transform 0.3s ease;
+}
+
+.banner-gallery img:hover {
   transform: scale(1.05);
-  box-shadow: 0 4px 20px rgba(255, 255, 255, 0.2);
 }
 
-.coming-movie-item img {
+/* Gallerier */
+.gallery-section {
+  margin-bottom: 20px;
+}
+
+.gallery-section h2 {
+  font-size: 18px;
+  margin-bottom: 12px;
+  color: #00FFCC;
+  padding-left: 16px;
+}
+
+.gallery-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.fade-left,
+.fade-right {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 70px;
+  z-index: 1;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.fade-left {
+  left: 0;
+  background: linear-gradient(to right, #091B1E, rgba(9, 27, 30, 0));
+}
+
+.fade-right {
+  right: 0;
+  background: linear-gradient(to left, #091B1E, rgba(9, 27, 30, 0));
+}
+
+.gallery-wrapper:hover .scroll-button:not(.hidden),
+.gallery-wrapper:hover .fade-left:not(.fade-hidden),
+.gallery-wrapper:hover .fade-right:not(.fade-hidden) {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.fade-hidden {
+  display: none;
+}
+
+.scroll-button {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: white;
+  font-size: 28px;
+  cursor: pointer;
+  z-index: 2;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+  user-select: none;
+}
+
+.scroll-button.left {
+  left: 0;
+}
+
+.scroll-button.right {
+  right: 0;
+}
+
+.scroll-button.hidden {
+  display: none;
+}
+
+.scroll-button:hover {
+  color: #00FFCC;
+}
+
+/* Selve bilde-galleriet */
+.image-gallery {
+  flex: 1;
+  display: flex;
+  overflow-x: auto;
+  gap: 16px;
+  padding: 10px 16px;
+  scroll-behavior: smooth;
+  -ms-overflow-style: none;
+}
+
+.image-gallery::-webkit-scrollbar {
+  display: none;
+}
+
+.image-gallery a {
+  display: inline-block;
+  position: relative;
+  border-radius: 5px;
+  background: transparent;
+  overflow: visible;
+  border: 2px solid transparent;
+  transition: border 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
+}
+
+.image-gallery a img {
+  width: 220px;
+  height: 124px;
+  object-fit: cover;
+  border-radius: 5px;
+  display: block;
+  transition: transform 0.3s ease;
+}
+
+.image-gallery a:hover img {
+  transform: scale(1.05);
+}
+
+/* Fremdriftslinje på filmer */
+.image-with-progress {
+  position: relative;
+  width: 220px;
+  height: 124px;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.image-with-progress img {
   width: 100%;
   height: 100%;
   object-fit: cover;
 }
 
-.coming-movie-item .info {
+.progress-bar {
   position: absolute;
   bottom: 0;
   left: 0;
-  right: 0;
-  background: linear-gradient(transparent, rgba(0, 0, 0, 0.8));
-  padding: 10px;
+  height: 4px;
+  width: 100%;
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+.progress-bar::after {
+  content: '';
+  position: absolute;
+  height: 100%;
+  left: 0;
+  top: 0;
+  background-color: #00FFCC;
+  width: var(--progress, 0%);
+  transition: width 0.3s ease;
+}
+
+/* Footer */
+.footer {
+  margin-top: 40px;
+  padding: 20px 10px;
+  text-align: center;
+  color: #515151;
+  font-size: 14px;
+}
+
+.footer-links {
+  margin-bottom: 10px;
+}
+
+.footer-links a {
+  color: #b1b1b1;
+  margin: 0 10px;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.footer-links a:hover {
+  color: #00FFCC;
+}
+
+.footer-copy {
+  font-size: 13px;
+  color: #00FFCC;
+}
+
+/* Sjanger-galleri */
+.genre-gallery a {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-width: 160px;
+  height: 60px;
+  border-radius: 30px;
+  background: #0d2c30;
+  color: white;
+  font-size: 16px;
+  font-weight: bold;
+  text-decoration: none;
+  border: 2px solid transparent;
+  transition: all 0.3s ease;
+  padding: 0 18px;
+}
+
+.genre-gallery a i {
+  margin-left: 8px;
+  font-size: 18px;
+}
+
+.genre-gallery a:hover {
+  border: 2px solid #00FFCC;
+  box-shadow: 0 0 10px rgba(0, 255, 204, 0.6);
+  transform: scale(1.05);
+  color: #00FFCC;
+}
+
+/* === Kommende filmer – forbedret utseende === */
+.coming-movies-gallery {
+  display: flex;
+  flex-direction: row;
+  gap: 22px;
+  padding: 20px 16px;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  -ms-overflow-style: none;
+}
+.coming-movies-gallery::-webkit-scrollbar {
+  display: none;
+}
+
+.coming-movie-item {
+  position: relative;
+  flex: 0 0 180px;
+  height: 300px;
+  border-radius: 8px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: all 0.6s ease;
+  background-color: #000;
+  box-shadow: 0 0 20px rgba(0,0,0,0.4);
+  transform-origin: center;
+}
+
+.coming-movie-item:hover {
+  flex: 0 0 440px;
+  transform: scale(1.03);
+}
+
+/* Bakgrunnsbilde */
+.coming-movie-item img.banner {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: opacity 0.6s ease;
+}
+
+/* Video */
+.coming-movie-item video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  transition: opacity 0.8s ease;
+  z-index: 1;
+}
+
+.coming-movie-item.show-video video {
+  opacity: 1;
+}
+.coming-movie-item.show-video img.banner {
+  opacity: 0;
+}
+
+/* === Kommende filmer logo – automatisk responsiv === */
+.coming-movie-item .logo {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  max-height: 50px;      /* maks høyde i lite format */
+  max-width: 90%;        /* aldri bredere enn elementet */
+  z-index: 3;
+  transition: all 0.4s ease;
+  background: none !important;
+  backdrop-filter: none !important;
+  padding: 0;
+  border: none;
+  object-fit: contain;    /* beholder proporsjoner */
+  filter: drop-shadow(0 0 4px rgba(0,0,0,0.6)); /* lett kontrast mot bakgrunn */
+}
+
+/* Når filmen utvides (stort bilde) */
+.coming-movie-item.expanded .logo {
+  left: 25px;
+  transform: none;
+  max-height: 70px;      /* beholder nåværende høyde */
+  max-width: 100%;       /* kan strekke seg i bredden hvis nødvendig */
+  filter: drop-shadow(0 0 6px rgba(0,0,0,0.7));
+}
+
+
+/* Utgivelsesinfo nederst til høyre */
+.coming-movie-item .coming-movie-info {
+  position: absolute;
+  bottom: 15px;
+  right: 15px;
+  font-size: 14px;
   color: #fff;
-  font-size: 1rem;
-  text-align: center;
+  z-index: 3;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  background: rgba(0,0,0,0.4);
+  padding: 6px 10px;
+  border-radius: 8px;
+  backdrop-filter: blur(6px);
 }
 
-/* === Scrollbar-stil === */
-::-webkit-scrollbar {
-  height: 10px;
-  background: #111;
+.coming-movie-item.expanded .coming-movie-info {
+  opacity: 1;
 }
 
-::-webkit-scrollbar-thumb {
-  background: #e50914;
-  border-radius: 10px;
+.coming-movie-item .coming-movie-info i {
+  color: #00FFCC;
+  margin-right: 6px;
 }
 
-/* === Footer === */
-footer {
-  background-color: #111;
-  color: #aaa;
-  text-align: center;
-  padding: 20px 0;
-  font-size: 0.9rem;
-  border-top: 1px solid #222;
+/* Litt dybde og hover-effekt */
+.coming-movie-item:hover .coming-movie-info,
+.coming-movie-item:hover .logo {
+  filter: drop-shadow(0 0 6px rgba(0,255,204,0.7));
 }
 
-/* === Responsiv design === */
+/* Responsivt justert for små skjermer */
 @media (max-width: 768px) {
+  .coming-movie-item {
+    flex: 0 0 200px;
+    height: 260px;
+  }
+  .coming-movie-item:hover {
+    flex: 0 0 280px;
+  }
+  .coming-movie-item .logo {
+    height: 50px;
+  }
+}
+
+/* === Topp 10 filmer === */
+.top10-gallery {
+  display: flex;
+  flex-direction: row;
+  gap: 30px;
+  padding: 10px 16px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+}
+
+.top10-gallery::-webkit-scrollbar {
+  display: none;
+}
+
+.top10-item {
+  position: relative;
+  display: inline-block;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+.top10-item img {
+  width: 150px;
+  height: 225px;
+  border-radius: 8px;
+  display: block;
+}
+
+.top10-item:hover {
+  transform: scale(1.05);
+}
+
+.top10-number {
+  position: absolute;
+  bottom: -10px;
+  left: -15px;
+  font-size: 70px;
+  font-weight: 900;
+  line-height: 1;
+  color: transparent;
+  -webkit-text-stroke: 3px #00FFCC;
+  z-index: 2;
+  transition: all 0.3s ease;
+  pointer-events: none;
+}
+
+.top10-item:hover .top10-number {
+  color: #00FFCC;
+  -webkit-text-stroke: 0;
+}
+
+/* ===== Halloween-banner galleri (vertikale bilder) ===== */
+#halloween-gallery {
+  display: flex;
+  flex-direction: row;
+  gap: 12px;
+  overflow-x: auto;
+  padding: 10px 16px;
+  scroll-behavior: smooth;
+}
+
+#halloween-gallery a {
+  display: inline-block;
+  flex: 0 0 auto;
+  width: 120px;
+  height: 180px;
+  border-radius: 8px;
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+#halloween-gallery a img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 8px;
+  display: block;
+  transition: transform 0.3s ease;
+}
+
+#halloween-gallery a:hover img {
+  transform: scale(1.05);
+}
+
+#halloween-gallery a:hover {
+  box-shadow: 0 0 10px rgba(0, 255, 204, 0.5);
+}
+
+#halloween-gallery::-webkit-scrollbar {
+  display: none;
+}
+
+/* ===== Mobilvennlig tilpasning ===== */
+@media (max-width: 768px) {
+  .vertical-nav {
+    width: 100%;
+    height: 60px;
+    flex-direction: row;
+    justify-content: space-around;
+    position: fixed;
+    bottom: 0;
+    top: auto;
+    background: rgba(9, 27, 30, 0.95);
+  }
+
+  .nav-icons-wrapper {
+    flex-direction: row;
+    gap: 20px;
+  }
+
+  .profilmeny {
+    margin-bottom: 0;
+  }
+
+  .nav-icon {
+    font-size: 20px;
+    padding: 8px;
+  }
+
+  main {
+    margin-left: 0;
+    margin-bottom: 70px;
+    padding: 10px;
+  }
+
+  .top-header {
+    justify-content: space-between;
+  }
+
+  .top-header .watch-logo {
+    order: 1;
+    width: 140px;
+  }
+
+  .top-header .header-profil {
+    display: block;
+    order: 2;
+  }
+
   .hero-banner {
-    height: 35vh;
+    height: 200px;
+    margin-left: 0;
+    width: 100%;
   }
 
-  .hero-text h1 {
-    font-size: 1.8rem;
+  .film-logo {
+    width: 180px;
   }
 
-  .hero-text p {
-    font-size: 1rem;
+  .watch-button {
+    padding: 8px 30px;
+    font-size: 14px;
   }
 
-  .image-gallery {
+  .image-gallery a img,
+  .image-with-progress {
+    width: 160px;
+    height: 90px;
+  }
+
+  .genre-gallery a {
+    min-width: 120px;
+    height: 50px;
+    font-size: 14px;
+    padding: 0 12px;
+  }
+
+  .top10-item img {
+    width: 140px;
+    height: 210px;
+  }
+
+  .top10-number {
+    font-size: 100px;
+  }
+
+  .special-hero-banner {
+    height: auto;
+  }
+
+  .banner-overlay {
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+  }
+
+  .banner-right {
+    max-width: 100%;
     justify-content: center;
   }
 
-  .coming-movie-container {
-    gap: 10px;
+  .banner-left .film-logo {
+    width: 200px;
+  }
+
+  #halloween-gallery a {
+    width: 100px;
+    height: 150px;
   }
 }
 
-@media (min-width: 1600px) {
-  main {
-    padding: 40px 60px;
+@media (max-width: 480px) {
+  .film-logo {
+    width: 140px;
+  }
+
+  .watch-button {
+    padding: 6px 20px;
+    font-size: 12px;
+  }
+
+  .image-gallery a img,
+  .image-with-progress {
+    width: 130px;
+    height: 72px;
+  }
+
+  .genre-gallery a {
+    font-size: 12px;
+    min-width: 100px;
+    height: 44px;
+  }
+
+  .footer {
+    font-size: 12px;
+    padding: 15px 5px;
+  }
+
+  .top10-item img {
+    width: 120px;
+    height: 180px;
+  }
+
+  .top10-number {
+    font-size: 80px;
+  }
+
+  #halloween-gallery a {
+    width: 80px;
+    height: 120px;
   }
 
   .hero-banner {
-    height: 50vh;
-  }
+  height: 40vh; /* Tar 40% av skjermhøyden */
+  min-height: 300px;
+  max-height: 600px;
+}
+
 }
 
 
@@ -736,6 +1380,7 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 </script>
 
+ 
 
 
 
