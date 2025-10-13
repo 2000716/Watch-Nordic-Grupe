@@ -8,17 +8,20 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
   <style>
 * {
-  box-sizing: border-box;
+/* === Reset og grunnoppsett === */
+* {
   margin: 0;
   padding: 0;
+  box-sizing: border-box;
 }
 
 body {
-  background-color: black;
+  background: #000;
   color: #fff;
   font-family: 'Segoe UI', sans-serif;
+  overflow-x: hidden;
   opacity: 0;
-  transition: opacity 1s ease;
+  transition: opacity 0.8s ease;
 }
 
 body.loaded {
@@ -27,320 +30,203 @@ body.loaded {
 
 /* === Navigasjon === */
 .vertical-nav {
-  width: 70px;
-  height: 100vh;
-  background-color: #091B1E;
   position: fixed;
-  top: 0;
-  left: 0;
+  top: 50%;
+  left: 20px;
+  transform: translateY(-50%);
+  background: rgba(9, 27, 30, 0.85);
+  backdrop-filter: blur(10px);
+  border-radius: 20px;
+  width: 70px;
+  padding: 16px 0;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  gap: 12px;
   z-index: 100;
-  transition: transform 0.3s ease;
-  padding-top: 16px;
-}
-
-.vertical-nav.collapsed {
-  transform: translateX(-100%);
-}
-
-.nav-icons-wrapper {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 10px;
-}
-
-.profilmeny {
-  margin-bottom: 20px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-}
-
-.profilmeny img {
-  width: 48px;
-  height: 48px;
-  border-radius: 50%;
-  object-fit: cover;
-  border: 2px solid #fff;
+  transition: all 0.3s ease;
 }
 
 .nav-icon {
-  color: white;
+  color: #fff;
   font-size: 22px;
-  padding: 16px 0;
+  padding: 12px 0;
   width: 100%;
   text-align: center;
-  transition: color 0.3s ease;
   cursor: pointer;
-  background: none;
-  border: none;
+  transition: color 0.3s, transform 0.2s;
 }
 
 .nav-icon:hover,
 .nav-icon.active {
   color: #00FFCC;
+  transform: scale(1.1);
 }
 
-.menu-toggle {
-  position: fixed;
-  top: 50%;
-  left: 70px;
-  transform: translateY(-50%);
-  z-index: 101;
-  background-color: #091b1e;
-  border: none;
-  border-radius: 0 12px 12px 0;
-  padding: 12px 16px;
-  color: white;
-  cursor: pointer;
-  transition: left 0.3s ease;
+.profilmeny img {
   width: 50px;
-  height: 120px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 28px;
-}
-
-.vertical-nav.collapsed + .menu-toggle {
-  left: 0;
+  height: 50px;
+  border-radius: 50%;
+  border: 2px solid #00ffcc;
+  margin-bottom: 10px;
 }
 
 /* === Hero-seksjon === */
 .hero {
-  margin-left: 70px;
   position: relative;
   height: 100vh;
+  width: 100%;
   overflow: hidden;
-  transition: margin-left 0.3s ease;
 }
 
-.vertical-nav.collapsed ~ .hero {
-  margin-left: 0;
-}
-
-.background-image,
-.background-video {
+.background-video,
+.background-image {
   position: absolute;
   top: 0; left: 0;
   width: 100%; height: 100%;
   object-fit: cover;
+  filter: brightness(0.55);
   z-index: 0;
-  transition: opacity 1s ease-in-out;
-  filter: brightness(0.6);
-}
-
-.background-video {
-  opacity: 0;
-  filter: brightness(0.8);
 }
 
 .overlay {
   position: absolute;
-  width: 100%; height: 100%;
-  background: linear-gradient(to top, #091b1e 0%, rgba(9,27,30,0) 60%);
+  inset: 0;
+  background: linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.2) 60%);
   z-index: 1;
 }
 
-.bottom-fade {
+.hero-content {
   position: absolute;
-  bottom: 0; left: 0;
-  width: 100%;
-  height: 200px;
-  background: linear-gradient(to top, rgba(0,0,0,1), transparent);
-  z-index: 1;
-}
-
-.content-wrapper {
-  position: absolute;
-  top: 40px;
-  left: 5%;
-  right: 5%;
-  display: flex;
-  flex-direction: column;
+  bottom: 20%;
+  left: 8%;
   z-index: 2;
+  max-width: 600px;
 }
 
-.logo-container {
-  width: clamp(180px, 25vw, 260px);
-  height: auto;
-  margin-bottom: 80px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+.hero-content .film-logo {
+  width: clamp(200px, 30vw, 340px);
+  margin-bottom: 20px;
 }
 
-.film-logo {
-  max-width: 100%;
-  height: auto;
-  object-fit: contain;
+.hero-content h1 {
+  font-size: clamp(22px, 3vw, 38px);
+  font-weight: 700;
+  margin-bottom: 12px;
 }
 
-/* === Innhold venstre side === */
-.left-content {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  margin-top: 140px;
-  min-height: 300px;
-}
-
-.text-button-container {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 2rem;
-  padding: 2rem;
-  border-radius: 12px;
-  max-width: 1200px;
-  width: 100%;
-}
-
-/* === Tekstfelt === */
-.text-container {
-  flex: 1 1 300px;
-  max-width: 100%;
-  overflow-y: visible;
-  text-align: left;
-  color: white;
-}
-
-.description {
-  font-size: clamp(14px, 1.5vw, 18px);
+.hero-content .description {
+  font-size: clamp(14px, 1.4vw, 18px);
   line-height: 1.6;
-  margin-bottom: 8px;
+  color: #ddd;
+  margin-bottom: 20px;
 }
 
-/* === Metadata === */
-.metadata {
-  margin-top: 14px;
-  color: #ddd;
-  font-size: 13px;
+.hero-buttons {
   display: flex;
   flex-wrap: wrap;
-  gap: 6px;
-  align-items: center;
+  gap: 12px;
 }
 
-.metadata span,
-.metadata .imdb-link {
-  display: inline-flex;
-  align-items: center;
-}
-
-.metadata span:nth-child(even) {
-  color: #ddd;
-  user-select: none;
+.watch-button {
+  background: #00ffcc;
+  color: #000;
   font-weight: bold;
   font-size: 16px;
+  padding: 12px 24px;
+  border-radius: 12px;
+  border: none;
+  cursor: pointer;
+  transition: transform 0.2s, background 0.3s;
+}
+
+.watch-button:hover {
+  transform: scale(1.05);
+  background: #00e0b0;
+}
+
+.secondary-btn {
+  background: rgba(255,255,255,0.15);
+  color: #fff;
+  border: 1px solid #fff;
+  padding: 12px 24px;
+  border-radius: 12px;
+  transition: background 0.3s;
+}
+
+.secondary-btn:hover {
+  background: rgba(255,255,255,0.3);
+}
+
+/* === Informasjon under hero === */
+.info-section {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 40px;
+  padding: 60px 8%;
+  background: #0a0a0a;
+}
+
+.text-container {
+  font-size: 16px;
+  color: #ddd;
+  line-height: 1.6;
+}
+
+.metadata {
+  margin-top: 20px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  color: #aaa;
+  font-size: 14px;
 }
 
 .imdb-logo {
   width: 28px;
   margin-left: 4px;
-  cursor: pointer;
-  transition: filter 0.3s ease;
 }
 
-.imdb-logo:hover {
-  filter: brightness(80%) contrast(120%);
-}
-
-/* === Cast-info === */
 .cast-info {
-  flex: 1 1 250px;
-  max-width: 100%;
-  font-size: 13px;
-  color: #aaa;
-  line-height: 1.6;
+  font-size: 14px;
+  color: #bbb;
+  background: #111;
+  padding: 20px;
+  border-radius: 12px;
+  line-height: 1.5;
 }
 
-.cast-info strong {
-  color: #fff;
-}
+.cast-info strong { color: #fff; }
 
-/* === Knapper === */
-.watch-button {
-  background: #fff;
-  color: #000;
-  font-size: clamp(14px, 1.4vw, 18px);
-  font-weight: bold;
-  padding: 10px 20px;
-  border: none;
-  border-radius: 10px;
-  cursor: pointer;
-  transition: transform 0.2s ease;
-  width: 100%;
-  max-width: 280px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-}
-
-.watch-button:hover {
-  transform: scale(1.05);
-}
-
-.buttons-column {
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-}
-
-.icon-animate {
-  display: inline-block;
-  animation: fadePop 0.4s ease forwards;
-}
-
-@keyframes fadePop {
-  0% { opacity: 0; transform: scale(0.6); }
-  60% { opacity: 1; transform: scale(1.2); }
-  100% { opacity: 1; transform: scale(1); }
-}
-
-/* === Anbefalinger === */
+/* === Galleri === */
 .recommendations {
-  margin-left: 70px;
-  padding: 20px 5% 40px 5%;
-  background: black;
-  margin-top: 0;
-  transition: margin-left 0.3s ease;
-}
-
-.vertical-nav.collapsed ~ .recommendations {
-  margin-left: 0;
+  padding: 60px 8%;
+  background: #000;
 }
 
 .recommendations h2 {
-  font-size: clamp(18px, 2vw, 26px);
-  margin-bottom: 12px;
-  margin-left: 10px;
+  font-size: clamp(20px, 2vw, 28px);
+  margin-bottom: 20px;
 }
 
 .gallery {
   display: flex;
-  flex-wrap: wrap;
-  gap: 14px;
-  justify-content: center;
-  margin: 0 auto;
   overflow-x: auto;
+  gap: 16px;
+  scroll-behavior: smooth;
   padding-bottom: 10px;
 }
 
+.gallery::-webkit-scrollbar {
+  height: 6px;
+}
+
 .gallery img {
-  width: clamp(120px, 20vw, 180px);
-  height: auto;
-  aspect-ratio: 2 / 3;
-  border-radius: 8px;
+  border-radius: 10px;
+  width: 180px;
+  height: 270px;
   object-fit: cover;
-  cursor: pointer;
+  flex-shrink: 0;
   transition: transform 0.3s;
 }
 
@@ -348,51 +234,173 @@ body.loaded {
   transform: scale(1.05);
 }
 
-/* === Video kontrollknapper === */
-.video-controls {
-  position: absolute;
-  top: 20px;
-  right: 30px;
-  z-index: 3;
+/* === Sesonger og episoder === */
+.season-buttons {
   display: flex;
+  flex-wrap: wrap;
   gap: 10px;
-  opacity: 0;
-  transition: opacity 0.5s ease;
+  margin-bottom: 20px;
 }
 
-.video-controls button {
-  background: rgba(0,0,0,0.6);
+.season-btn {
+  background: #0b2a2d;
+  color: #fff;
   border: none;
-  color: white;
-  font-size: 20px;
-  padding: 10px 14px;
+  padding: 10px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background 0.3s;
+}
+
+.season-btn.active {
+  background: #00ffcc;
+  color: #000;
+}
+
+.season-btn:hover {
+  background: #00ccaa;
+}
+
+.episode-gallery {
+  display: flex;
+  overflow-x: auto;
+  gap: 16px;
+  padding: 10px 0;
+}
+
+.episode-card {
+  background: #111;
   border-radius: 10px;
+  flex: 0 0 240px;
+  transition: transform 0.3s;
+}
+
+.episode-card:hover {
+  transform: scale(1.03);
+}
+
+.episode-card img {
+  width: 100%;
+  height: 140px;
+  object-fit: cover;
+  border-radius: 10px 10px 0 0;
+}
+
+.episode-info {
+  padding: 12px;
+}
+
+.episode-info h4 {
+  margin-bottom: 4px;
+  font-size: 15px;
+}
+
+.episode-info p {
+  font-size: 13px;
+  color: #bbb;
+}
+
+/* === Popup === */
+.popup-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 200;
+}
+
+.popup-box {
+  background: #111;
+  color: #fff;
+  padding: 24px;
+  border-radius: 12px;
+  max-width: 600px;
+  max-height: 80vh;
+  overflow-y: auto;
+  position: relative;
+}
+
+.popup-box .close-btn {
+  position: absolute;
+  top: 10px; right: 12px;
+  background: none;
+  border: none;
+  font-size: 22px;
+  color: #fff;
   cursor: pointer;
 }
 
-.video-controls button:hover {
-  background: rgba(255,255,255,0.2);
-}
-
-/* === Bunntekst === */
+/* === Footer === */
 .site-footer {
-  background-color: black;
+  background: #0a0a0a;
   color: #aaa;
   text-align: center;
-  padding: 20px 10px;
+  padding: 30px 10px;
   font-size: 14px;
 }
 
 .site-footer a {
-  color: #00FFCC;
-  text-decoration: none;
+  color: #00ffcc;
   margin: 0 8px;
-  transition: color 0.3s ease;
+  text-decoration: none;
+  transition: color 0.3s;
 }
 
 .site-footer a:hover {
   color: #fff;
 }
+
+/* === Responsivitet === */
+@media (max-width: 900px) {
+  .info-section {
+    grid-template-columns: 1fr;
+    padding: 40px 6%;
+  }
+
+  .hero-content {
+    bottom: 15%;
+    left: 6%;
+    max-width: 90%;
+  }
+
+  .gallery img {
+    width: 150px;
+    height: 220px;
+  }
+
+  .vertical-nav {
+    left: 10px;
+    width: 60px;
+  }
+}
+
+@media (max-width: 600px) {
+  .hero-content {
+    bottom: 10%;
+    left: 5%;
+    text-align: left;
+  }
+
+  .hero-buttons {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .info-section {
+    padding: 30px 5%;
+  }
+
+  .gallery img {
+    width: 130px;
+    height: 200px;
+  }
+
+  .site-footer {
+    font-size: 13px;
+  }
 
 .availability-info {
   margin-top: 10px;
@@ -1013,6 +1021,7 @@ if (words.length > MAX_ORD) {
 
 
  
+
 
 
 
