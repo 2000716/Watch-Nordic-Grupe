@@ -1132,44 +1132,77 @@ document.addEventListener("contextmenu", (e) => {
   e.preventDefault();
 });
 
-// ==================== LÅSE FUNKSJON ==================== //
-let isLocked = false;
+// ==================== LÅSEKNAPP ==================== //
+const topBar = document.querySelector(".top-bar");
 
-// Legg til låseknapp i kontrollene
-const rightControls = document.querySelector(".right-controls");
+// Lag låseikonet
 const lockBtn = document.createElement("button");
+lockBtn.id = "lockBtn";
 lockBtn.className = "btn lock-btn";
-lockBtn.title = "Lås skjerm";
-lockBtn.innerHTML = '<img src="https://static.wixstatic.com/media/fd2fb2_12cf911f52a748d99a0c87f1b76e19b5~mv2.png" alt="Lock">';
-rightControls.appendChild(lockBtn);
+lockBtn.innerHTML = '<i class="fa-solid fa-lock-open"></i>';
+lockBtn.style.cssText = `
+  position: absolute;
+  right: 20px;
+  top: 10px;
+  font-size: 28px;
+  color: white;
+  background: none;
+  border: none;
+  cursor: pointer;
+  z-index: 10001;
+  display: none; /* vises kun i fullskjerm */
+`;
+topBar.appendChild(lockBtn);
 
-lockBtn.addEventListener("click", () => {
-  isLocked = !isLocked;
+let screenLocked = false;
+let hideTimeout;
 
-  if (isLocked) {
-    // Skjul UI og lås interaksjon
-    ui.classList.add("hidden");
-    subtitleOverlay.classList.remove("subtitle-up");
-    lockBtn.style.opacity = "0.2";
-    lockBtn.title = "Låst – klikk for å låse opp";
+function setLockState(locked) {
+  screenLocked = locked;
 
-    // Deaktiver musebevegelse og tastetrykk som viser UI
-    document.removeEventListener("mousemove", showUI);
-    document.removeEventListener("keydown", showUI);
-  } else {
-    // Gjenaktiver kontroller
-    ui.classList.remove("hidden");
-    subtitleOverlay.classList.add("subtitle-up");
+  if (locked) {
+    lockBtn.innerHTML = '<i class="fa-solid fa-lock"></i>';
+    document.body.style.cursor = "none";      // skjul musepeker
+    ui.classList.add("hidden");               // skjul kontroller
     lockBtn.style.opacity = "1";
-    lockBtn.title = "Lås skjerm";
-    document.addEventListener("mousemove", showUI);
-    document.addEventListener("keydown", showUI);
+    lockBtn.style.pointerEvents = "auto";
+  } else {
+    lockBtn.innerHTML = '<i class="fa-solid fa-lock-open"></i>';
+    document.body.style.cursor = "default";   // vis musepeker igjen
+    ui.classList.remove("hidden");
+  }
+}
+
+// Klikk på låsen for å låse / låse opp
+lockBtn.addEventListener("click", e => {
+  e.stopPropagation();
+  setLockState(!screenLocked);
+});
+
+// Når du beveger musen i låst modus, vis låsikonet kort
+document.addEventListener("mousemove", () => {
+  if (!screenLocked) return;
+  lockBtn.style.opacity = "1";
+  clearTimeout(hideTimeout);
+  hideTimeout = setTimeout(() => {
+    lockBtn.style.opacity = "0.3";
+  }, 1500);
+});
+
+// Vis eller skjul låsen når du går inn / ut av fullskjerm
+document.addEventListener("fullscreenchange", () => {
+  if (document.fullscreenElement) {
+    lockBtn.style.display = "block";
+  } else {
+    lockBtn.style.display = "none";
+    setLockState(false); // lås opp automatisk når du går ut av fullskjerm
   }
 });
 
 
 
 </script>
+
 
 
 
