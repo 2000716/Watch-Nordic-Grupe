@@ -1150,55 +1150,51 @@ lockBtn.style.cssText = `
   border: none;
   cursor: pointer;
   z-index: 10001;
-  display: none; /* vises kun i fullskjerm */
 `;
 topBar.appendChild(lockBtn);
 
 let screenLocked = false;
-let hideTimeout;
 
 function setLockState(locked) {
   screenLocked = locked;
-
   if (locked) {
     lockBtn.innerHTML = '<i class="fa-solid fa-lock"></i>';
-    document.body.style.cursor = "none";      // skjul musepeker
-    ui.classList.add("hidden");               // skjul kontroller
-    lockBtn.style.opacity = "1";
+    document.body.style.cursor = "none";             // skjul musepeker
+    ui.classList.add("hidden");                      // skjul UI
+    lockBtn.style.opacity = "1";                     // la låsen være synlig
     lockBtn.style.pointerEvents = "auto";
   } else {
     lockBtn.innerHTML = '<i class="fa-solid fa-lock-open"></i>';
-    document.body.style.cursor = "default";   // vis musepeker igjen
-    ui.classList.remove("hidden");
+    document.body.style.cursor = "default";
+    ui.classList.remove("hidden");                   // vis UI igjen
   }
 }
 
-// Klikk på låsen for å låse / låse opp
+// Klikk på låsen
 lockBtn.addEventListener("click", e => {
   e.stopPropagation();
   setLockState(!screenLocked);
 });
 
-// Når du beveger musen i låst modus, vis låsikonet kort
+// Når du beveger musa i låst modus, vis kun låseikonet
 document.addEventListener("mousemove", () => {
-  if (!screenLocked) return;
+  if (!screenLocked) return; // kun hvis låst
   lockBtn.style.opacity = "1";
   clearTimeout(hideTimeout);
   hideTimeout = setTimeout(() => {
-    lockBtn.style.opacity = "0.3";
+    lockBtn.style.opacity = "0.3"; // fade vekk litt
   }, 1500);
 });
 
-// Vis eller skjul låsen når du går inn / ut av fullskjerm
+// Når du går inn/ut av fullskjerm, vis eller skjul låseknappen
 document.addEventListener("fullscreenchange", () => {
   if (document.fullscreenElement) {
     lockBtn.style.display = "block";
   } else {
     lockBtn.style.display = "none";
-    setLockState(false); // lås opp automatisk når du går ut av fullskjerm
+    setLockState(false); // lås opp automatisk
   }
 });
-
 
 
 </script>
