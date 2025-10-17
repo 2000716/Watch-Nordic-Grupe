@@ -1154,19 +1154,54 @@ lockBtn.style.cssText = `
 topBar.appendChild(lockBtn);
 
 let screenLocked = false;
+let hideTimeout;
+
+// Opprett et svart, gjennomsiktig lag for å blokkere klikk
+const lockOverlay = document.createElement("div");
+lockOverlay.style.cssText = `
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.85);
+  z-index: 10000;
+  display: none;
+  pointer-events: all;
+`;
+document.body.appendChild(lockOverlay);
+
+function blockInput(e) {
+  if (!screenLocked) return;
+  e.stopPropagation();
+  e.preventDefault();
+  return false;
+}
 
 function setLockState(locked) {
   screenLocked = locked;
   if (locked) {
     lockBtn.innerHTML = '<i class="fa-solid fa-lock"></i>';
-    document.body.style.cursor = "none";             // skjul musepeker
-    ui.classList.add("hidden");                      // skjul UI
-    lockBtn.style.opacity = "1";                     // la låsen være synlig
+    document.body.style.cursor = "none"; // skjul musepeker
+    ui.classList.add("hidden"); // skjul UI
+    lockOverlay.style.display = "block"; // legg over svart lag
+    lockBtn.style.opacity = "1"; // låseknappen synlig
     lockBtn.style.pointerEvents = "auto";
+
+    // Deaktiver tastatur og mus (bortsett fra låseknappen)
+    document.addEventListener("keydown", blockInput, true);
+    document.addEventListener("mousedown", blockInput, true);
+    document.addEventListener("mouseup", blockInput, true);
+    document.addEventListener("mousemove", blockInput, true);
+    document.addEventListener("touchstart", blockInput, true);
   } else {
     lockBtn.innerHTML = '<i class="fa-solid fa-lock-open"></i>';
     document.body.style.cursor = "default";
-    ui.classList.remove("hidden");                   // vis UI igjen
+    ui.classList.remove("hidden");
+    lockOverlay.style.display = "none";
+
+    document.removeEventListener("keydown", blockInput, true);
+    document.removeEventListener("mousedown", blockInput, true);
+    document.removeEventListener("mouseup", blockInput, true);
+    document.removeEventListener("mousemove", blockInput, true);
+    document.removeEventListener("touchstart", blockInput, true);
   }
 }
 
@@ -1176,17 +1211,17 @@ lockBtn.addEventListener("click", e => {
   setLockState(!screenLocked);
 });
 
-// Når du beveger musa i låst modus, vis kun låseikonet
+// Når du beveger musa i låst modus, fade låseikonet litt
 document.addEventListener("mousemove", () => {
-  if (!screenLocked) return; // kun hvis låst
+  if (!screenLocked) return;
   lockBtn.style.opacity = "1";
   clearTimeout(hideTimeout);
   hideTimeout = setTimeout(() => {
-    lockBtn.style.opacity = "0.3"; // fade vekk litt
+    lockBtn.style.opacity = "0.3";
   }, 1500);
 });
 
-// Når du går inn/ut av fullskjerm, vis eller skjul låseknappen
+// Når du går inn/ut av fullskjerm
 document.addEventListener("fullscreenchange", () => {
   if (document.fullscreenElement) {
     lockBtn.style.display = "block";
@@ -1197,7 +1232,9 @@ document.addEventListener("fullscreenchange", () => {
 });
 
 
+
 </script>
+
 
 
 
