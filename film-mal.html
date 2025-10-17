@@ -394,6 +394,13 @@ video::cue {
   z-index: 10; /* Høyere enn underteksten */
 }
 
+.lock-btn {
+  transition: opacity 0.5s ease;
+}
+.lock-btn:hover {
+  opacity: 1 !important;
+}
+
 
   </style>
 </head>
@@ -1125,7 +1132,73 @@ document.addEventListener("contextmenu", (e) => {
   e.preventDefault();
 });
 
+// ==================== LÅSEKNAPP ==================== //
+const topBar = document.querySelector(".top-bar");
+
+// Lag låseikonet
+const lockBtn = document.createElement("button");
+lockBtn.id = "lockBtn";
+lockBtn.className = "btn lock-btn";
+lockBtn.innerHTML = '<i class="fa-solid fa-lock-open"></i>';
+lockBtn.style.cssText = `
+  position: absolute;
+  right: 20px;
+  top: 10px;
+  font-size: 28px;
+  color: white;
+  background: none;
+  border: none;
+  cursor: pointer;
+  z-index: 10001;
+`;
+topBar.appendChild(lockBtn);
+
+let screenLocked = false;
+
+function setLockState(locked) {
+  screenLocked = locked;
+  if (locked) {
+    lockBtn.innerHTML = '<i class="fa-solid fa-lock"></i>';
+    document.body.style.cursor = "none";             // skjul musepeker
+    ui.classList.add("hidden");                      // skjul UI
+    lockBtn.style.opacity = "1";                     // la låsen være synlig
+    lockBtn.style.pointerEvents = "auto";
+  } else {
+    lockBtn.innerHTML = '<i class="fa-solid fa-lock-open"></i>';
+    document.body.style.cursor = "default";
+    ui.classList.remove("hidden");                   // vis UI igjen
+  }
+}
+
+// Klikk på låsen
+lockBtn.addEventListener("click", e => {
+  e.stopPropagation();
+  setLockState(!screenLocked);
+});
+
+// Når du beveger musa i låst modus, vis kun låseikonet
+document.addEventListener("mousemove", () => {
+  if (!screenLocked) return; // kun hvis låst
+  lockBtn.style.opacity = "1";
+  clearTimeout(hideTimeout);
+  hideTimeout = setTimeout(() => {
+    lockBtn.style.opacity = "0.3"; // fade vekk litt
+  }, 1500);
+});
+
+// Når du går inn/ut av fullskjerm, vis eller skjul låseknappen
+document.addEventListener("fullscreenchange", () => {
+  if (document.fullscreenElement) {
+    lockBtn.style.display = "block";
+  } else {
+    lockBtn.style.display = "none";
+    setLockState(false); // lås opp automatisk
+  }
+});
+
+
 </script>
+
 
 
 
