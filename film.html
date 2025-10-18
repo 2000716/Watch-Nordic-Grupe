@@ -169,9 +169,9 @@ body.loaded {
 
 .content-wrapper {
   position: absolute;
-  top: 60px;
-  left: 100px;  /* luft fra meny */
-  right: 60px;  /* luft mot høyre kant */
+  top: 140px;  /* 🔽 Justert fra 60px → 140px for å flytte alt lenger ned */
+  left: 100px;  
+  right: 60px;  
   display: flex;
   flex-direction: column;
   z-index: 2;
@@ -182,7 +182,7 @@ body.loaded {
 .logo-container {
   width: 260px;
   height: 100px;
-  margin-bottom: 100px;
+  margin-bottom: 80px; /* litt mindre luft over */
   display: flex;
   align-items: center;
   justify-content: center;
@@ -200,7 +200,7 @@ body.loaded {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  margin-top: 170px;
+  margin-top: 220px; /* 🔽 flyttet lenger ned på siden */
   min-height: 400px;
 }
 
@@ -321,6 +321,10 @@ body.loaded {
   60%  { opacity: 1; transform: scale(1.2); }
   100% { opacity: 1; transform: scale(1); }
 }
+
+/* === Resten beholdt som før === */
+/* (Anbefalinger, video-kontroller, popup, episoder, footer osv. — alt er urørt) */
+
 
 /* === Anbefalinger === */
 .recommendations {
@@ -1092,6 +1096,7 @@ if (words.length > MAX_ORD) {
 </html>
 
  
+
 
 
 
