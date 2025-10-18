@@ -13,6 +13,10 @@
   padding: 0;
 }
 
+html {
+  font-size: clamp(14px, 1vw + 10px, 18px);
+}
+
 body {
   background-color: black;
   color: #fff;
@@ -208,11 +212,11 @@ body.loaded {
   width: 100%;
 }
 
-/* === Tekstfelt (låst bredde/høyde) === */
+/* === Tekstfelt === */
 .text-container {
-  flex: 0 0 400px;   /* fast bredde */
+  flex: 0 0 400px;
   max-width: 700px;
-  max-height: 260px; /* fast høyde */
+  max-height: 260px;
   overflow-y: auto;
   text-align: left;
   color: white;
@@ -261,7 +265,7 @@ body.loaded {
   filter: brightness(80%) contrast(120%);
 }
 
-/* === Cast-info (låst bredde/høyde) === */
+/* === Cast-info === */
 .cast-info {
   flex: 0 0 260px;
   max-width: 260px;
@@ -345,6 +349,7 @@ body.loaded {
   padding-bottom: 10px;
   -webkit-overflow-scrolling: touch;
   scroll-behavior: smooth;
+  scroll-snap-type: x mandatory;
 }
 
 .gallery::-webkit-scrollbar {
@@ -359,6 +364,11 @@ body.loaded {
   cursor: pointer;
   transition: transform 0.3s;
   flex: 0 0 auto;
+  scroll-snap-align: start;
+}
+
+.gallery img:hover {
+  transform: scale(1.05);
 }
 
 /* === Video kontrollknapper === */
@@ -499,6 +509,109 @@ body.loaded {
   }
 }
 
+/* === Mobil og små skjermer === */
+@media (max-width: 768px) {
+  .vertical-nav {
+    width: 100%;
+    height: auto;
+    flex-direction: row;
+    justify-content: space-around;
+    position: fixed;
+    bottom: 0;
+    top: auto;
+    padding: 8px 0;
+  }
+
+  .menu-toggle {
+    display: none;
+  }
+
+  .hero {
+    margin-left: 0;
+    height: auto;
+    padding-bottom: 60px;
+  }
+
+  .content-wrapper {
+    position: relative;
+    top: 0;
+    left: 0;
+    right: 0;
+    padding: 20px;
+    text-align: center;
+  }
+
+  .logo-container {
+    width: 80%;
+    height: auto;
+    margin: 0 auto 20px auto;
+  }
+
+  .left-content {
+    margin-top: 0;
+  }
+
+  .text-button-container {
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    padding: 10px;
+  }
+
+  .text-container, .cast-info {
+    flex: 1 1 100%;
+    max-width: 100%;
+    overflow: visible;
+    font-size: 1rem;
+  }
+
+  .buttons-column {
+    width: 100%;
+  }
+
+  .watch-button {
+    width: 100%;
+    font-size: 1rem;
+    padding: 12px 0;
+  }
+
+  .recommendations {
+    padding: 20px;
+    margin-left: 0;
+  }
+
+  .recommendations h2 {
+    text-align: center;
+    font-size: 1.4rem;
+  }
+
+  .gallery {
+    justify-content: center;
+  }
+
+  .gallery img {
+    width: 120px;
+    height: 180px;
+  }
+
+  .episode-gallery {
+    padding: 10px;
+  }
+
+  .episode-card {
+    flex: 0 0 70%;
+  }
+
+  .episode-card img {
+    height: auto;
+  }
+
+  .site-footer {
+    font-size: 12px;
+    padding: 15px;
+  }
+}
+
 /* === Kort beskrivelse og popup === */
 .description.short {
   display: -webkit-box;
@@ -521,6 +634,7 @@ body.loaded {
   padding: 2px 6px;
   border-radius: 6px;
 }
+
 .more-btn:hover {
   background: rgba(255,255,255,0.2);
   color: #fff;
@@ -562,7 +676,7 @@ body.loaded {
   cursor: pointer;
 }
 
-  /* === Episode galleri for serier === */
+/* === Episode galleri for serier === */
 .season-buttons {
   display: flex;
   gap: 10px;
@@ -596,6 +710,7 @@ body.loaded {
   gap: 16px;
   padding: 20px 60px;
   scroll-behavior: smooth;
+  scroll-snap-type: x mandatory;
 }
 
 .episode-gallery::-webkit-scrollbar {
@@ -608,6 +723,7 @@ body.loaded {
   flex: 0 0 260px;
   overflow: hidden;
   transition: transform 0.3s;
+  scroll-snap-align: start;
 }
 
 .episode-card:hover {
@@ -633,6 +749,12 @@ body.loaded {
   font-size: 14px;
   color: #ccc;
   line-height: 1.4;
+}
+
+/* === Bilder og video skalerer alltid === */
+img, video {
+  max-width: 100%;
+  height: auto;
 }
 
 
@@ -1059,6 +1181,7 @@ if (words.length > MAX_ORD) {
 </html>
 
  
+
 
 
 
