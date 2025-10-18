@@ -394,13 +394,6 @@ video::cue {
   z-index: 10; /* Høyere enn underteksten */
 }
 
-.lock-btn {
-  transition: opacity 0.5s ease;
-}
-.lock-btn:hover {
-  opacity: 1 !important;
-}
-
 
   </style>
 </head>
@@ -1132,109 +1125,7 @@ document.addEventListener("contextmenu", (e) => {
   e.preventDefault();
 });
 
-// ==================== LÅSEKNAPP ==================== //
-const topBar = document.querySelector(".top-bar");
-
-// Lag låseikonet
-const lockBtn = document.createElement("button");
-lockBtn.id = "lockBtn";
-lockBtn.className = "btn lock-btn";
-lockBtn.innerHTML = '<i class="fa-solid fa-lock-open"></i>';
-lockBtn.style.cssText = `
-  position: absolute;
-  right: 20px;
-  top: 10px;
-  font-size: 28px;
-  color: white;
-  background: none;
-  border: none;
-  cursor: pointer;
-  z-index: 10001;
-`;
-topBar.appendChild(lockBtn);
-
-let screenLocked = false;
-let hideTimeout;
-
-// Opprett et svart, gjennomsiktig lag for å blokkere klikk
-const lockOverlay = document.createElement("div");
-lockOverlay.style.cssText = `
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.85);
-  z-index: 10000;
-  display: none;
-  pointer-events: all;
-`;
-document.body.appendChild(lockOverlay);
-
-function blockInput(e) {
-  if (!screenLocked) return;
-  e.stopPropagation();
-  e.preventDefault();
-  return false;
-}
-
-function setLockState(locked) {
-  screenLocked = locked;
-  if (locked) {
-    lockBtn.innerHTML = '<i class="fa-solid fa-lock"></i>';
-    document.body.style.cursor = "none"; // skjul musepeker
-    ui.classList.add("hidden"); // skjul UI
-    lockOverlay.style.display = "block"; // legg over svart lag
-    lockBtn.style.opacity = "1"; // låseknappen synlig
-    lockBtn.style.pointerEvents = "auto";
-
-    // Deaktiver tastatur og mus (bortsett fra låseknappen)
-    document.addEventListener("keydown", blockInput, true);
-    document.addEventListener("mousedown", blockInput, true);
-    document.addEventListener("mouseup", blockInput, true);
-    document.addEventListener("mousemove", blockInput, true);
-    document.addEventListener("touchstart", blockInput, true);
-  } else {
-    lockBtn.innerHTML = '<i class="fa-solid fa-lock-open"></i>';
-    document.body.style.cursor = "default";
-    ui.classList.remove("hidden");
-    lockOverlay.style.display = "none";
-
-    document.removeEventListener("keydown", blockInput, true);
-    document.removeEventListener("mousedown", blockInput, true);
-    document.removeEventListener("mouseup", blockInput, true);
-    document.removeEventListener("mousemove", blockInput, true);
-    document.removeEventListener("touchstart", blockInput, true);
-  }
-}
-
-// Klikk på låsen
-lockBtn.addEventListener("click", e => {
-  e.stopPropagation();
-  setLockState(!screenLocked);
-});
-
-// Når du beveger musa i låst modus, fade låseikonet litt
-document.addEventListener("mousemove", () => {
-  if (!screenLocked) return;
-  lockBtn.style.opacity = "1";
-  clearTimeout(hideTimeout);
-  hideTimeout = setTimeout(() => {
-    lockBtn.style.opacity = "0.3";
-  }, 1500);
-});
-
-// Når du går inn/ut av fullskjerm
-document.addEventListener("fullscreenchange", () => {
-  if (document.fullscreenElement) {
-    lockBtn.style.display = "block";
-  } else {
-    lockBtn.style.display = "none";
-    setLockState(false); // lås opp automatisk
-  }
-});
-
-
-
 </script>
-
 
 
 
