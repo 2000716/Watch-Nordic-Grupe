@@ -170,11 +170,13 @@ body.loaded {
 .content-wrapper {
   position: absolute;
   top: 60px;
-  left: 60px;
-  right: 60px;
+  left: 100px;  /* luft fra meny */
+  right: 60px;  /* luft mot høyre kant */
   display: flex;
   flex-direction: column;
   z-index: 2;
+  width: auto;
+  max-width: calc(100vw - 160px);
 }
 
 .logo-container {
@@ -205,17 +207,17 @@ body.loaded {
 .text-button-container {
   display: flex;
   align-items: flex-start;
-  gap: 40px;
+  justify-content: space-between;
+  gap: 60px;
   padding: 30px;
   border-radius: 12px;
-  max-width: 1200px;
   width: 100%;
 }
 
 /* === Tekstfelt === */
 .text-container {
-  flex: 0 0 400px;
-  max-width: 700px;
+  flex: 1;
+  max-width: 60%;
   max-height: 260px;
   overflow-y: auto;
   text-align: left;
@@ -434,78 +436,19 @@ body.loaded {
 
 /* === iPad og mindre skjermer === */
 @media (max-width: 1024px) {
-  .vertical-nav {
-    width: 60px;
-    padding-top: 12px;
-  }
-
-  .nav-icon {
-    font-size: 20px;
-    padding: 12px 0;
-  }
-
-  .menu-toggle {
-    width: 45px;
-    height: 100px;
-    font-size: 24px;
-  }
-
-  .hero {
-    margin-left: 60px;
-  }
-
   .content-wrapper {
-    top: 40px;
     left: 20px;
     right: 20px;
-  }
-
-  .logo-container {
-    width: 200px;
-    height: 80px;
-    margin-bottom: 60px;
-  }
-
-  .left-content {
-    margin-top: 100px;
   }
 
   .text-button-container {
     flex-direction: column;
     gap: 20px;
-    padding: 20px;
-    max-width: 100%;
   }
 
   .text-container {
-    flex: 1;
     max-width: 100%;
     max-height: none;
-    overflow-y: visible;
-    font-size: 15px;
-  }
-
-  .cast-info {
-    flex: 1;
-    max-width: 100%;
-    max-height: none;
-    overflow-y: visible;
-  }
-
-  .watch-button {
-    width: 100%;
-    font-size: 16px;
-    padding: 12px 20px;
-  }
-
-  .gallery img {
-    width: 140px;
-    height: 210px;
-  }
-
-  .video-controls button {
-    font-size: 24px;
-    padding: 14px 18px;
   }
 }
 
@@ -534,7 +477,6 @@ body.loaded {
 
   .content-wrapper {
     position: relative;
-    top: 0;
     left: 0;
     right: 0;
     padding: 20px;
@@ -547,10 +489,6 @@ body.loaded {
     margin: 0 auto 20px auto;
   }
 
-  .left-content {
-    margin-top: 0;
-  }
-
   .text-button-container {
     flex-direction: column;
     align-items: center;
@@ -559,7 +497,6 @@ body.loaded {
   }
 
   .text-container, .cast-info {
-    flex: 1 1 100%;
     max-width: 100%;
     overflow: visible;
     font-size: 1rem;
@@ -580,30 +517,9 @@ body.loaded {
     margin-left: 0;
   }
 
-  .recommendations h2 {
-    text-align: center;
-    font-size: 1.4rem;
-  }
-
-  .gallery {
-    justify-content: center;
-  }
-
   .gallery img {
     width: 120px;
     height: 180px;
-  }
-
-  .episode-gallery {
-    padding: 10px;
-  }
-
-  .episode-card {
-    flex: 0 0 70%;
-  }
-
-  .episode-card img {
-    height: auto;
   }
 
   .site-footer {
@@ -612,7 +528,7 @@ body.loaded {
   }
 }
 
-/* === Kort beskrivelse og popup === */
+/* === Popup === */
 .description.short {
   display: -webkit-box;
   -webkit-line-clamp: 2;
@@ -620,7 +536,6 @@ body.loaded {
   overflow: hidden;
   text-overflow: ellipsis;
   position: relative;
-  max-width: 100%;
 }
 
 .more-btn {
@@ -711,10 +626,6 @@ body.loaded {
   padding: 20px 60px;
   scroll-behavior: smooth;
   scroll-snap-type: x mandatory;
-}
-
-.episode-gallery::-webkit-scrollbar {
-  height: 6px;
 }
 
 .episode-card {
@@ -1181,6 +1092,7 @@ if (words.length > MAX_ORD) {
 </html>
 
  
+
 
 
 
