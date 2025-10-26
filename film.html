@@ -40,10 +40,10 @@ body.loaded {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  z-index: 100;
-  transition: transform 0.3s ease;
+  justify-content: flex-start;
   padding-top: 16px;
+  transition: transform 0.3s ease;
+  z-index: 100;
 }
 
 .vertical-nav.collapsed {
@@ -54,7 +54,6 @@ body.loaded {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
   gap: 10px;
 }
 
@@ -79,12 +78,9 @@ body.loaded {
   font-size: 22px;
   padding: 16px 0;
   text-decoration: none;
-  text-align: center;
   width: 100%;
+  text-align: center;
   transition: color 0.3s ease;
-  cursor: pointer;
-  background: none;
-  border: none;
 }
 
 .nav-icon:hover,
@@ -92,6 +88,7 @@ body.loaded {
   color: #00FFCC;
 }
 
+/* === Menyknapp === */
 .menu-toggle {
   position: fixed;
   top: 50%;
@@ -104,24 +101,24 @@ body.loaded {
   padding: 12px 16px;
   color: white;
   cursor: pointer;
-  transition: left 0.3s ease;
   width: 50px;
   height: 120px;
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 28px;
+  transition: all 0.3s ease;
 }
 
 .vertical-nav.collapsed + .menu-toggle {
   left: 0;
 }
 
-/* === Hero-seksjon === */
+/* === Hero === */
 .hero {
   margin-left: 70px;
   position: relative;
-  height: 100vh;
+  min-height: 100vh;
   overflow: hidden;
   transition: margin-left 0.3s ease;
 }
@@ -140,7 +137,6 @@ body.loaded {
   object-fit: cover;
   z-index: 0;
   transition: opacity 1s ease-in-out;
-  opacity: 1;
   filter: brightness(0.6);
 }
 
@@ -151,189 +147,113 @@ body.loaded {
 
 .overlay {
   position: absolute;
-  width: 100%;
-  height: 100%;
+  inset: 0;
   background: linear-gradient(to top, #091b1e 0%, rgba(9, 27, 30, 0) 60%);
   z-index: 1;
 }
 
 .bottom-fade {
-  position: absolute; 
+  position: absolute;
   bottom: 0;
-  left: 0;
   width: 100%;
   height: 200px;
-  background: linear-gradient(to top, rgba(0, 0, 0, 1), transparent);
+  background: linear-gradient(to top, black, transparent);
   z-index: 1;
 }
 
+/* === Innhold === */
 .content-wrapper {
   position: absolute;
-  top: 60px;  /* 🔼 løfter logoen høyere */
-  left: 100px;
-  right: 60px;
+  top: 60px;
+  left: clamp(20px, 8vw, 100px);
+  right: clamp(20px, 8vw, 100px);
+  z-index: 2;
   display: flex;
   flex-direction: column;
-  z-index: 2;
-  width: auto;
-  max-width: calc(100vw - 160px);
+  gap: 20px;
 }
 
 /* === Logo === */
 .logo-container {
-  width: 260px;
-  height: 100px;
-  margin-bottom: 140px; /* fin avstand mellom logo og tekst */
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  overflow: hidden;
+  width: min(260px, 80%);
+  margin: 0 auto 40px;
 }
 
 .film-logo {
   max-width: 100%;
-  max-height: 100%;
+  height: auto;
   object-fit: contain;
 }
 
 /* === Tekst og knapper === */
-.left-content {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  margin-top: 240px; /* 🔼 litt høyere enn før (var 320px) */
-  min-height: 400px;
-}
-
 .text-button-container {
   display: flex;
+  flex-wrap: wrap;
+  gap: 40px;
   align-items: flex-start;
   justify-content: space-between;
-  gap: 60px;
-  padding: 30px;
+  padding: 20px;
   border-radius: 12px;
-  width: 100%;
 }
 
-/* === Tekstfelt === */
 .text-container {
-  flex: 1;
-  max-width: 60%;
-  max-height: 260px;
-  overflow-y: auto;
-  text-align: left;
+  flex: 1 1 300px;
   color: white;
 }
 
 .description {
-  font-size: 16px;
+  font-size: clamp(14px, 1vw + 8px, 18px);
   line-height: 1.6;
-  margin-bottom: 8px;
+  margin-bottom: 10px;
 }
 
-/* === Metadata === */
 .metadata {
-  margin-top: 14px;
-  color: #ddd;
-  font-size: 13px;
-  line-height: 1.4;
   display: flex;
   flex-wrap: wrap;
   gap: 6px;
-  align-items: center;
+  font-size: 0.9rem;
+  color: #ccc;
 }
 
-.metadata span,
-.metadata .imdb-link {
-  display: inline-flex;
-  align-items: center;
-}
-
-.metadata span:nth-child(even) {
-  color: #ddd;
-  user-select: none;
-  font-weight: bold;
-  font-size: 16px;
-}
-
-.imdb-logo {
-  width: 28px;
-  margin-left: 4px;
-  cursor: pointer;
-  filter: brightness(100%) contrast(100%);
-  transition: filter 0.3s ease;
-}
-
-.imdb-logo:hover {
-  filter: brightness(80%) contrast(120%);
-}
-
-/* === Cast-info === */
 .cast-info {
-  flex: 0 0 260px;
-  max-width: 260px;
-  max-height: 260px;
-  overflow-y: auto;
-  font-size: 13px;
+  flex: 1 1 200px;
+  font-size: 0.9rem;
   color: #aaa;
-  line-height: 1.6;
-}
-
-.cast-info strong {
-  color: #fff;
 }
 
 /* === Knapper === */
+.buttons-column {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  flex: 1 1 200px;
+}
+
 .watch-button {
-  background: #fff;
-  color: #000;
-  font-size: 18px;
+  background: white;
+  color: black;
+  font-size: clamp(14px, 2vw, 18px);
   font-weight: bold;
-  padding: 10px 50px;
+  padding: 10px 40px;
   border: none;
   border-radius: 10px;
   cursor: pointer;
   transition: transform 0.2s ease;
-  width: 280px;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
-  white-space: nowrap;
 }
 
 .watch-button:hover {
   transform: scale(1.05);
 }
 
-.buttons-column {
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-}
-
-.icon-animate {
-  display: inline-block;
-  animation: fadePop 0.4s ease forwards;
-}
-
-@keyframes fadePop {
-  0%   { opacity: 0; transform: scale(0.6); }
-  60%  { opacity: 1; transform: scale(1.2); }
-  100% { opacity: 1; transform: scale(1); }
-}
-
-/* === Resten beholdt som før === */
-/* (anbefalinger, popup, video, footer, episoder osv. — urørt) */
-
-
 /* === Anbefalinger === */
 .recommendations {
   margin-left: 70px;
-  padding: 40px 60px 60px 60px;
-  background: black;
+  padding: 40px;
   transition: margin-left 0.3s ease;
-  margin-top: -40px;
 }
 
 .vertical-nav.collapsed ~ .recommendations {
@@ -341,123 +261,54 @@ body.loaded {
 }
 
 .recommendations h2 {
-  font-size: 24px;
-  margin-bottom: 18px;
-  margin-left: 40px;
+  font-size: clamp(18px, 2vw, 26px);
+  margin-bottom: 16px;
 }
 
 .gallery {
   display: flex;
-  flex-wrap: nowrap;
-  gap: 16px;
-  justify-content: flex-start;
-  margin-left: 30px;
   overflow-x: auto;
-  padding-bottom: 10px;
-  -webkit-overflow-scrolling: touch;
-  scroll-behavior: smooth;
+  gap: 16px;
   scroll-snap-type: x mandatory;
-}
-
-.gallery::-webkit-scrollbar {
-  height: 6px;
+  -webkit-overflow-scrolling: touch;
 }
 
 .gallery img {
-  width: 160px;
-  height: 240px;
-  border-radius: 6px;
-  object-fit: cover;
-  cursor: pointer;
-  transition: transform 0.3s;
   flex: 0 0 auto;
-  scroll-snap-align: start;
+  width: clamp(120px, 20vw, 180px);
+  height: auto;
+  border-radius: 8px;
+  object-fit: cover;
+  transition: transform 0.3s;
 }
 
 .gallery img:hover {
   transform: scale(1.05);
 }
 
-/* === Video kontrollknapper === */
-.video-controls {
-  position: absolute;
-  top: 20px;
-  right: 30px;
-  z-index: 3;
-  display: flex;
-  gap: 10px;
-  opacity: 0;
-  transition: opacity 0.5s ease;
-}
-
-.video-controls button {
-  background: rgba(0,0,0,0.6);
-  border: none;
-  color: white;
-  font-size: 20px;
-  padding: 10px 14px;
-  border-radius: 10px;
-  cursor: pointer;
-}
-
-.video-controls button:hover {
-  background: rgba(255,255,255,0.2);
-}
-
-/* === Bunntekst === */
+/* === Footer === */
 .site-footer {
-  background-color: black;
+  background: black;
   color: #aaa;
   text-align: center;
   padding: 20px 10px;
-  font-size: 14px;
-  margin-top: 0;
+  font-size: clamp(12px, 1vw, 14px);
 }
 
-.site-footer a {
-  color: #00FFCC;
-  text-decoration: none;
-  margin: 0 8px;
-  transition: color 0.3s ease;
-}
-
-.site-footer a:hover {
-  color: #fff;
-}
-
-.availability-info {
-  margin-top: 10px;
-  font-size: 13px;
-  color: #ccc;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-
-.availability-info i {
-  color: #fff;
-  font-size: 14px;
-}
-
-/* === iPad og mindre skjermer === */
+/* === RESPONSIVITET === */
 @media (max-width: 1024px) {
-  .content-wrapper {
-    left: 20px;
-    right: 20px;
+  .hero {
+    margin-left: 0;
   }
-
   .text-button-container {
     flex-direction: column;
-    gap: 20px;
+    align-items: center;
   }
-
-  .text-container {
-    max-width: 100%;
-    max-height: none;
+  .text-container, .cast-info {
+    text-align: center;
   }
 }
 
-/* === Mobil og små skjermer === */
 @media (max-width: 768px) {
   .vertical-nav {
     width: 100%;
@@ -475,36 +326,22 @@ body.loaded {
   }
 
   .hero {
-    margin-left: 0;
-    height: auto;
-    padding-bottom: 60px;
+    padding-bottom: 80px;
+    min-height: auto;
   }
 
   .content-wrapper {
     position: relative;
+    top: 0;
     left: 0;
     right: 0;
     padding: 20px;
     text-align: center;
   }
 
-  .logo-container {
-    width: 80%;
-    height: auto;
-    margin: 0 auto 20px auto;
-  }
-
   .text-button-container {
-    flex-direction: column;
-    align-items: center;
-    gap: 16px;
-    padding: 10px;
-  }
-
-  .text-container, .cast-info {
-    max-width: 100%;
-    overflow: visible;
-    font-size: 1rem;
+    padding: 0;
+    gap: 20px;
   }
 
   .buttons-column {
@@ -513,164 +350,12 @@ body.loaded {
 
   .watch-button {
     width: 100%;
-    font-size: 1rem;
-    padding: 12px 0;
-  }
-
-  .recommendations {
-    padding: 20px;
-    margin-left: 0;
+    padding: 14px;
   }
 
   .gallery img {
     width: 120px;
-    height: 180px;
   }
-
-  .site-footer {
-    font-size: 12px;
-    padding: 15px;
-  }
-}
-
-/* === Popup === */
-.description.short {
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  position: relative;
-}
-
-.more-btn {
-  display: inline;
-  color: #ddd;
-  background: rgba(255,255,255,0.1);
-  border: none;
-  cursor: pointer;
-  font-size: 14px;
-  margin-left: 6px;
-  padding: 2px 6px;
-  border-radius: 6px;
-}
-
-.more-btn:hover {
-  background: rgba(255,255,255,0.2);
-  color: #fff;
-}
-
-.popup-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0,0,0,0.7);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 200;
-}
-
-.popup-box {
-  background: #111;
-  color: white;
-  max-width: 600px;
-  max-height: 70vh;
-  overflow-y: auto;
-  padding: 20px;
-  border-radius: 12px;
-  position: relative;
-  text-align: left;
-}
-
-.popup-box .close-btn {
-  position: absolute;
-  top: 10px;
-  right: 14px;
-  background: none;
-  border: none;
-  font-size: 20px;
-  color: white;
-  cursor: pointer;
-}
-
-/* === Episode galleri for serier === */
-.season-buttons {
-  display: flex;
-  gap: 10px;
-  margin: 20px 60px 20px 60px;
-}
-
-.season-btn {
-  background: #0b2a2d;
-  color: #fff;
-  border: none;
-  padding: 10px 18px;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: background 0.3s;
-  font-size: 15px;
-}
-
-.season-btn.active {
-  background: #00ffcc;
-  color: #000;
-  font-weight: bold;
-}
-
-.season-btn:hover {
-  background: #00ccaa;
-}
-
-.episode-gallery {
-  display: flex;
-  overflow-x: auto;
-  gap: 16px;
-  padding: 20px 60px;
-  scroll-behavior: smooth;
-  scroll-snap-type: x mandatory;
-}
-
-.episode-card {
-  background: #111;
-  border-radius: 8px;
-  flex: 0 0 260px;
-  overflow: hidden;
-  transition: transform 0.3s;
-  scroll-snap-align: start;
-}
-
-.episode-card:hover {
-  transform: scale(1.03);
-}
-
-.episode-card img {
-  width: 100%;
-  height: 150px;
-  object-fit: cover;
-}
-
-.episode-info {
-  padding: 10px;
-}
-
-.episode-info h4 {
-  font-size: 16px;
-  margin-bottom: 6px;
-}
-
-.episode-info p {
-  font-size: 14px;
-  color: #ccc;
-  line-height: 1.4;
-}
-
-/* === Bilder og video skalerer alltid === */
-img, video {
-  max-width: 100%;
-  height: auto;
 }
 
 
@@ -1097,6 +782,7 @@ if (words.length > MAX_ORD) {
 </html>
 
  
+
 
 
 
