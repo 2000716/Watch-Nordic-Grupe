@@ -7,354 +7,301 @@
   <link rel="icon" type="image/png" href="https://static.wixstatic.com/media/fd2fb2_39376e4ee55b460ab7a3ebbfcf35fef7~mv2.png" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
   <style>
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
-html {
-  font-size: clamp(14px, 1vw + 10px, 18px);
-}
+    html, body {
+      font-family: 'Poppins', sans-serif;
+      background: radial-gradient(circle at top left, #020c0e, #061113 60%, #0b1c20 100%);
+      color: white;
+      overflow-x: hidden;
+    }
 
-body {
-  background-color: #000;
-  color: #fff;
-  font-family: 'Segoe UI', sans-serif;
-  opacity: 0;
-  transition: opacity 1s ease;
-}
+    body {
+      display: flex;
+      flex-direction: column;
+      scroll-behavior: smooth;
+    }
 
-body.loaded {
-  opacity: 1;
-}
+    /* --- Glødende bakgrunn --- */
+    body::before {
+      content: "";
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 120%;
+      height: 120%;
+      background: radial-gradient(circle at 20% 20%, rgba(0,255,150,0.08), transparent 40%),
+                  radial-gradient(circle at 80% 80%, rgba(0,255,0,0.08), transparent 40%);
+      z-index: -1;
+      animation: pulse 15s ease-in-out infinite alternate;
+    }
 
-/* === Navigasjon === */
-.vertical-nav {
-  width: 70px;
-  height: 100vh;
-  background-color: #0A1C1D;
-  position: fixed;
-  top: 0;
-  left: 0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-start;
-  padding-top: 16px;
-  transition: transform 0.3s ease;
-  z-index: 100;
-}
+    @keyframes pulse {
+      0% { transform: scale(1); opacity: 0.7; }
+      100% { transform: scale(1.1); opacity: 1; }
+    }
 
-.vertical-nav.collapsed {
-  transform: translateX(-100%);
-}
+    /* Top-bar */
+    .top-bar {
+      background: rgba(6, 17, 19, 0.85);
+      backdrop-filter: blur(8px);
+      box-shadow: 0 2px 20px rgba(0, 255, 100, 0.1);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 30px;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 9999;
+      transition: 0.3s;
+    }
 
-.profilmeny img {
-  width: 48px;
-  height: 48px;
-  border-radius: 50%;
-  object-fit: cover;
-  border: 2px solid #00FFCC;
-}
+    .top-bar img {
+      height: 40px;
+      transition: transform 0.3s;
+    }
 
-.nav-icon {
-  color: #fff;
-  font-size: 22px;
-  padding: 16px 0;
-  text-decoration: none;
-  text-align: center;
-  width: 100%;
-  transition: color 0.3s ease;
-}
+    .top-bar img:hover {
+      transform: scale(1.05);
+    }
 
-.nav-icon:hover,
-.nav-icon.active {
-  color: #00FFCC;
-}
+    .auth-buttons {
+      display: flex;
+      gap: 10px;
+    }
 
-/* === Menyknapp === */
-.menu-toggle {
-  position: fixed;
-  top: 50%;
-  left: 70px;
-  transform: translateY(-50%);
-  z-index: 101;
-  background-color: #0A1C1D;
-  border: none;
-  border-radius: 0 12px 12px 0;
-  color: #00FFCC;
-  cursor: pointer;
-  width: 50px;
-  height: 120px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 28px;
-  transition: background 0.3s ease;
-}
+    .auth-buttons button {
+      background: linear-gradient(90deg, #00ff99, #00cc66);
+      color: black;
+      border: none;
+      padding: 7px 16px;
+      border-radius: 20px;
+      font-size: 14px;
+      cursor: pointer;
+      transition: 0.3s;
+      font-weight: bold;
+      box-shadow: 0 0 10px rgba(0,255,150,0.3);
+    }
 
-.menu-toggle:hover {
-  background-color: #00FFCC;
-  color: #000;
-}
+    .auth-buttons button:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 20px rgba(0,255,150,0.6);
+    }
 
-.vertical-nav.collapsed + .menu-toggle {
-  left: 0;
-}
+    /* Hero */
+    .hero {
+      background: url('https://static.wixstatic.com/media/fd2fb2_cb01bba1adf84bf1aa5ef6ec7cb2f055~mv2.png') no-repeat center center / cover;
+      height: 100vh;
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+      position: relative;
+      padding-left: 60px;
+      text-align: left;
+      overflow: hidden;
+    }
 
-/* === Hero === */
-.hero {
-  margin-left: 70px;
-  position: relative;
-  min-height: 100vh;
-  overflow: hidden;
-  transition: margin-left 0.3s ease;
-}
+    .hero::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: rgba(0,0,0,0.4);
+    }
 
-.vertical-nav.collapsed ~ .hero {
-  margin-left: 0;
-}
+    .overlay {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 200px;
+      background: linear-gradient(to bottom, rgba(6, 17, 19, 0) 0%, #061113 100%);
+      z-index: 1;
+    }
 
-.background-image,
-.background-video {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  z-index: 0;
-  transition: opacity 1s ease-in-out;
-  filter: brightness(0.65);
-  box-shadow: none; /* 🔹 Ingen skygge */
-}
+    .main-content {
+      position: relative;
+      z-index: 2;
+      max-width: 500px;
+      animation: fadeInUp 1.5s ease;
+    }
 
-.background-video {
-  opacity: 0;
-  filter: brightness(0.8);
-}
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
 
-.overlay {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(to top, #091b1e 0%, rgba(9, 27, 30, 0) 60%);
-  z-index: 1;
-}
+    .hero-logo {
+      width: 130px;
+      margin-bottom: 20px;
+      filter: drop-shadow(0 0 10px rgba(0,255,100,0.4));
+    }
 
-.bottom-fade {
-  position: absolute;
-  bottom: 0;
-  width: 100%;
-  height: 200px;
-  background: linear-gradient(to top, black, transparent);
-  z-index: 1;
-}
+    .hero-small-text {
+      font-size: 1rem;
+      margin-bottom: 8px;
+      color: #b5ffdf;
+      letter-spacing: 0.5px;
+    }
 
-/* === Innhold === */
-.content-wrapper {
-  position: absolute;
-  top: 60px;
-  left: clamp(20px, 8vw, 100px);
-  right: clamp(20px, 8vw, 100px);
-  z-index: 2;
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-}
+    .tagline {
+      font-size: 1.4rem;
+      margin-bottom: 20px;
+      line-height: 1.4;
+      color: #e4ffe9;
+    }
 
-.logo-container {
-  width: min(260px, 80%);
-  margin: 0 auto 40px;
-}
+    .cta-button {
+      background: linear-gradient(90deg, #00ff99, #00cc66);
+      color: #000;
+      padding: 12px 26px;
+      font-size: 16px;
+      border: none;
+      border-radius: 25px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: 0.3s;
+      box-shadow: 0 0 20px rgba(0,255,150,0.3);
+    }
 
-.film-logo {
-  max-width: 100%;
-  height: auto;
-  object-fit: contain;
-  filter: drop-shadow(0 0 0 transparent); /* 🔹 Fjernet logo-skygge */
-}
+    .cta-button:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 0 30px rgba(0,255,150,0.6);
+    }
 
-/* === Tekst og knapper === */
-.text-button-container {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 40px;
-  align-items: flex-start;
-  justify-content: space-between;
-  padding: 20px;
-  border-radius: 12px;
-}
+    /* Seksjoner */
+    .section {
+      padding: 80px 30px;
+      background-color: transparent;
+      text-align: center;
+    }
 
-.text-container {
-  flex: 1 1 300px;
-  color: white;
-}
+    .section h2 {
+      font-size: 2rem;
+      margin-bottom: 20px;
+      background: linear-gradient(90deg, #00ff99, #00cc66);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
 
-.description {
-  font-size: clamp(14px, 1vw + 8px, 18px);
-  line-height: 1.6;
-  margin-bottom: 10px;
-}
+    .section p {
+      font-size: 1.1rem;
+      color: #bcd2c4;
+      max-width: 700px;
+      margin: 0 auto;
+    }
 
-.metadata {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-  font-size: 0.9rem;
-  color: #00FFCC;
-}
+    .section-2 {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 50px;
+      padding: 80px 30px;
+    }
 
-.cast-info {
-  flex: 1 1 200px;
-  font-size: 0.9rem;
-  color: #ccc;
-}
+    .section-2 img {
+      max-width: 420px;
+      width: 100%;
+      border-radius: 20px;
+      transition: transform 0.4s;
+      box-shadow: none; /* ingen skygge */
+    }
 
-/* === Knapper === */
-.buttons-column {
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-  flex: 1 1 200px;
-}
+    .section-2 img:hover {
+      transform: scale(1.05);
+    }
 
-.watch-button {
-  background: #00FFCC;
-  color: #000;
-  font-size: clamp(14px, 2vw, 18px);
-  font-weight: bold;
-  padding: 10px 40px;
-  border: none;
-  border-radius: 10px;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  box-shadow: none; /* 🔹 Ingen skygge */
-}
+    .section-2-text {
+      max-width: 500px;
+      text-align: left;
+    }
 
-.watch-button:hover {
-  background: #00FFD9;
-  transform: scale(1.05);
-}
+    /* FAQ */
+    .accordion {
+      background-color: rgba(255,255,255,0.05);
+      color: white;
+      cursor: pointer;
+      padding: 18px;
+      width: 100%;
+      text-align: left;
+      border: none;
+      border-radius: 8px;
+      outline: none;
+      transition: background 0.3s, transform 0.2s;
+      margin-top: 12px;
+    }
 
-/* === Anbefalinger === */
-.recommendations {
-  margin-left: 70px;
-  padding: 40px;
-  transition: margin-left 0.3s ease;
-}
+    .accordion:hover {
+      background-color: rgba(255,255,255,0.1);
+      transform: scale(1.01);
+    }
 
-.vertical-nav.collapsed ~ .recommendations {
-  margin-left: 0;
-}
+    .panel {
+      padding: 0 16px;
+      background-color: rgba(255,255,255,0.03);
+      border-left: 2px solid #00ff99;
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease-out;
+      border-radius: 8px;
+      margin-top: 4px;
+    }
 
-.recommendations h2 {
-  font-size: clamp(18px, 2vw, 26px);
-  margin-bottom: 16px;
-  color: #00FFCC;
-}
+    /* Footer */
+    .footer-links {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 25px;
+      padding: 40px;
+      background-color: rgba(6,17,19,0.8);
+      backdrop-filter: blur(10px);
+      font-size: 15px;
+    }
 
-.gallery {
-  display: flex;
-  overflow-x: auto;
-  gap: 16px;
-  scroll-snap-type: x mandatory;
-  -webkit-overflow-scrolling: touch;
-}
+    .footer-links a {
+      color: #6effc3;
+      text-decoration: none;
+      transition: 0.3s;
+    }
 
-.gallery img {
-  flex: 0 0 auto;
-  width: clamp(120px, 20vw, 180px);
-  border-radius: 8px;
-  object-fit: cover;
-  transition: transform 0.3s ease;
-  box-shadow: none; /* 🔹 Ingen skygge */
-}
+    .footer-links a:hover {
+      text-decoration: underline;
+      color: #fff;
+    }
 
-.gallery img:hover {
-  transform: scale(1.05);
-}
+    .footer {
+      text-align: center;
+      padding: 25px;
+      font-size: 14px;
+      color: #88b59b;
+      background-color: rgba(6,17,19,0.9);
+      border-top: 1px solid rgba(255,255,255,0.1);
+    }
 
-/* === Footer === */
-.site-footer {
-  background: black;
-  color: #aaa;
-  text-align: center;
-  padding: 20px 10px;
-  font-size: clamp(12px, 1vw, 14px);
-}
+    /* Mobiltilpasning */
+    @media (max-width: 768px) {
+      .hero {
+        padding: 120px 20px 40px;
+        text-align: center;
+        justify-content: center;
+      }
 
-.site-footer a {
-  color: #00FFCC;
-  transition: color 0.3s ease;
-}
+      .section-2 {
+        flex-direction: column;
+        text-align: center;
+      }
 
-.site-footer a:hover {
-  color: #00FFD9;
-}
-
-/* === Responsivitet === */
-@media (max-width: 1024px) {
-  .hero {
-    margin-left: 0;
-  }
-  .text-button-container {
-    flex-direction: column;
-    align-items: center;
-  }
-  .text-container, .cast-info {
-    text-align: center;
-  }
-}
-
-@media (max-width: 768px) {
-  .vertical-nav {
-    width: 100%;
-    height: auto;
-    flex-direction: row;
-    justify-content: space-around;
-    position: fixed;
-    bottom: 0;
-    top: auto;
-    padding: 8px 0;
-  }
-
-  .menu-toggle {
-    display: none;
-  }
-
-  .hero {
-    padding-bottom: 80px;
-    min-height: auto;
-  }
-
-  .content-wrapper {
-    position: relative;
-    top: 0;
-    left: 0;
-    right: 0;
-    padding: 20px;
-    text-align: center;
-  }
-
-  .buttons-column {
-    width: 100%;
-  }
-
-  .watch-button {
-    width: 100%;
-    padding: 14px;
-  }
-
-  .gallery img {
-    width: 120px;
-  }
-}
-
+      .section-2-text {
+        text-align: center;
+      }
+    }
   </style>
 </head>
 <body>
