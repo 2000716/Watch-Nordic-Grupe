@@ -14,19 +14,42 @@
     }
 
     html, body {
-      font-family: 'Arial', sans-serif;
-      background-color: #061113;
+      font-family: 'Poppins', sans-serif;
+      background: radial-gradient(circle at top left, #020c0e, #061113 60%, #0b1c20 100%);
       color: white;
+      overflow-x: hidden;
     }
 
     body {
       display: flex;
       flex-direction: column;
+      scroll-behavior: smooth;
+    }
+
+    /* --- Glødende gradient-bakgrunn --- */
+    body::before {
+      content: "";
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 120%;
+      height: 120%;
+      background: radial-gradient(circle at 20% 20%, rgba(0,255,255,0.08), transparent 40%),
+                  radial-gradient(circle at 80% 80%, rgba(255,0,150,0.08), transparent 40%);
+      z-index: -1;
+      animation: pulse 15s ease-in-out infinite alternate;
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(1); opacity: 0.7; }
+      100% { transform: scale(1.1); opacity: 1; }
     }
 
     /* Top-bar */
     .top-bar {
-      background-color: #061113;
+      background: rgba(6, 17, 19, 0.85);
+      backdrop-filter: blur(8px);
+      box-shadow: 0 2px 20px rgba(0, 255, 255, 0.1);
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -36,10 +59,16 @@
       left: 0;
       right: 0;
       z-index: 9999;
+      transition: 0.3s;
     }
 
     .top-bar img {
-      height: 35px;
+      height: 40px;
+      transition: transform 0.3s;
+    }
+
+    .top-bar img:hover {
+      transform: scale(1.05);
     }
 
     .auth-buttons {
@@ -48,19 +77,21 @@
     }
 
     .auth-buttons button {
-      background-color: transparent;
-      color: white;
-      border: 1px solid white;
-      padding: 6px 14px;
-      border-radius: 4px;
+      background: linear-gradient(90deg, #00ffff, #0077ff);
+      color: black;
+      border: none;
+      padding: 7px 16px;
+      border-radius: 20px;
       font-size: 14px;
       cursor: pointer;
       transition: 0.3s;
+      font-weight: bold;
+      box-shadow: 0 0 10px rgba(0,255,255,0.3);
     }
 
     .auth-buttons button:hover {
-      background-color: white;
-      color: black;
+      transform: scale(1.05);
+      box-shadow: 0 0 20px rgba(0,255,255,0.6);
     }
 
     /* Hero */
@@ -72,8 +103,15 @@
       align-items: center;
       position: relative;
       padding-left: 60px;
-      padding-top: 60px;
       text-align: left;
+      overflow: hidden;
+    }
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: rgba(0,0,0,0.4);
     }
 
     .overlay {
@@ -81,7 +119,7 @@
       bottom: 0;
       left: 0;
       right: 0;
-      height: 150px;
+      height: 200px;
       background: linear-gradient(to bottom, rgba(6, 17, 19, 0) 0%, #061113 100%);
       z-index: 1;
     }
@@ -89,57 +127,73 @@
     .main-content {
       position: relative;
       z-index: 2;
-      max-width: 480px;
+      max-width: 500px;
+      animation: fadeInUp 1.5s ease;
+    }
+
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
     }
 
     .hero-logo {
-      width: 120px;
+      width: 130px;
       margin-bottom: 20px;
+      filter: drop-shadow(0 0 10px rgba(0,255,255,0.4));
     }
 
     .hero-small-text {
-      font-size: 0.9rem;
+      font-size: 1rem;
       margin-bottom: 8px;
-      color: #aaa;
+      color: #b5f6ff;
+      letter-spacing: 0.5px;
     }
 
     .tagline {
-      font-size: 1.3rem;
-      margin-bottom: 18px;
+      font-size: 1.4rem;
+      margin-bottom: 20px;
       line-height: 1.4;
-      color: #ddd;
+      color: #e4f9ff;
     }
 
     .cta-button {
-      background-color: #fff;
-      color: black;
-      padding: 10px 22px;
-      font-size: 15px;
+      background: linear-gradient(90deg, #00ffff, #0077ff);
+      color: #000;
+      padding: 12px 26px;
+      font-size: 16px;
       border: none;
-      border-radius: 5px;
+      border-radius: 25px;
       cursor: pointer;
       font-weight: bold;
       transition: 0.3s;
+      box-shadow: 0 0 20px rgba(0,255,255,0.3);
     }
 
     .cta-button:hover {
-      opacity: 0.9;
+      transform: translateY(-3px);
+      box-shadow: 0 0 30px rgba(0,255,255,0.6);
     }
 
     /* Seksjoner */
     .section {
-      padding: 60px 30px;
-      background-color: #061113;
+      padding: 80px 30px;
+      background-color: transparent;
+      text-align: center;
     }
 
     .section h2 {
-      font-size: 1.8rem;
-      margin-bottom: 16px;
+      font-size: 2rem;
+      margin-bottom: 20px;
+      background: linear-gradient(90deg, #00ffff, #0077ff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
     }
 
     .section p {
-      font-size: 1rem;
-      color: #ccc;
+      font-size: 1.1rem;
+      color: #bcd2d8;
+      max-width: 700px;
+      margin: 0 auto;
     }
 
     .section-2 {
@@ -147,44 +201,56 @@
       align-items: center;
       justify-content: center;
       flex-wrap: wrap;
-      gap: 40px;
-      padding: 60px 30px;
+      gap: 50px;
+      padding: 80px 30px;
     }
 
     .section-2 img {
-      max-width: 400px;
+      max-width: 420px;
       width: 100%;
-      border-radius: 8px;
+      border-radius: 20px;
+      box-shadow: 0 0 25px rgba(0,255,255,0.15);
+      transition: transform 0.4s;
+    }
+
+    .section-2 img:hover {
+      transform: scale(1.05);
     }
 
     .section-2-text {
       max-width: 500px;
+      text-align: left;
     }
 
     /* FAQ */
     .accordion {
-      background-color: #222;
+      background-color: rgba(255,255,255,0.05);
       color: white;
       cursor: pointer;
-      padding: 16px;
+      padding: 18px;
       width: 100%;
       text-align: left;
       border: none;
+      border-radius: 8px;
       outline: none;
-      transition: background 0.3s;
-      margin-top: 10px;
+      transition: background 0.3s, transform 0.2s;
+      margin-top: 12px;
     }
 
     .accordion:hover {
-      background-color: #333;
+      background-color: rgba(255,255,255,0.1);
+      transform: scale(1.01);
     }
 
     .panel {
       padding: 0 16px;
-      background-color: #061113;
+      background-color: rgba(255,255,255,0.03);
+      border-left: 2px solid #00ffff;
       max-height: 0;
       overflow: hidden;
-      transition: max-height 0.2s ease-out;
+      transition: max-height 0.3s ease-out;
+      border-radius: 8px;
+      margin-top: 4px;
     }
 
     /* Footer */
@@ -192,39 +258,39 @@
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
-      gap: 20px;
-      padding: 30px;
-      background-color: #061113;
-      font-size: 14px;
+      gap: 25px;
+      padding: 40px;
+      background-color: rgba(6,17,19,0.8);
+      backdrop-filter: blur(10px);
+      font-size: 15px;
     }
 
     .footer-links a {
-      color: #888;
+      color: #7ce8ff;
       text-decoration: none;
+      transition: 0.3s;
     }
 
     .footer-links a:hover {
       text-decoration: underline;
+      color: #fff;
     }
 
     .footer {
       text-align: center;
-      padding: 20px;
+      padding: 25px;
       font-size: 14px;
-      color: #888;
-      background-color: #061113;
+      color: #88aeb5;
+      background-color: rgba(6,17,19,0.9);
+      border-top: 1px solid rgba(255,255,255,0.1);
     }
 
     /* Mobiltilpasning */
     @media (max-width: 768px) {
       .hero {
-        padding: 100px 20px 40px;
+        padding: 120px 20px 40px;
         text-align: center;
         justify-content: center;
-      }
-
-      .main-content {
-        max-width: 100%;
       }
 
       .section-2 {
@@ -233,27 +299,7 @@
       }
 
       .section-2-text {
-        max-width: 100%;
-      }
-
-      .auth-buttons {
-        gap: 6px;
-      }
-    }
-
-    @media (max-width: 480px) {
-      .tagline {
-        font-size: 1.1rem;
-      }
-
-      .cta-button {
-        padding: 10px 18px;
-        font-size: 14px;
-      }
-
-      .auth-buttons button {
-        font-size: 13px;
-        padding: 5px 12px;
+        text-align: center;
       }
     }
   </style>
@@ -272,7 +318,6 @@
 <div class="hero">
   <div class="overlay"></div>
   <div class="main-content">
-    <!-- Logo over teksten -->
     <img src="https://static.wixstatic.com/media/fd2fb2_afd8d639fe9447fda738bdb59f1147d0~mv2.png" 
          alt="Watch Nordic logo" 
          class="hero-logo" />
@@ -286,7 +331,7 @@
 <div class="section section-2">
   <img src="https://static.wixstatic.com/media/fd2fb2_fde5e13505db4f0daaae406aaa3a3090~mv2.png" alt="Se alt du vil" />
   <div class="section-2-text">
-    <h2>Se alt du vil, <br> når du vil</h2>
+    <h2>Se alt du vil,<br> når du vil</h2>
     <p>Uansett tid på døgnet – se dine favorittfilmer og serier uten avbrudd. Oppdag nytt innhold hver uke.</p>
   </div>
 </div>
@@ -346,10 +391,8 @@
     });
   });
 </script>
-
 </body>
 </html>
-
 
 
 
