@@ -34,8 +34,8 @@
       left: 0;
       width: 120%;
       height: 120%;
-      background: radial-gradient(circle at 20% 20%, rgba(0,255,150,0.08), transparent 40%),
-                  radial-gradient(circle at 80% 80%, rgba(0,255,0,0.08), transparent 40%);
+      background: radial-gradient(circle at 20% 20%, rgba(0,255,180,0.08), transparent 40%),
+                  radial-gradient(circle at 80% 80%, rgba(0,200,120,0.08), transparent 40%);
       z-index: -1;
       animation: pulse 15s ease-in-out infinite alternate;
     }
@@ -49,7 +49,7 @@
     .top-bar {
       background: rgba(6, 17, 19, 0.85);
       backdrop-filter: blur(8px);
-      box-shadow: 0 2px 20px rgba(0, 255, 100, 0.1);
+      box-shadow: 0 2px 20px rgba(0, 255, 180, 0.1);
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -77,21 +77,22 @@
     }
 
     .auth-buttons button {
-      background: linear-gradient(90deg, #00ff99, #00cc66);
+      background: linear-gradient(90deg, #00e0b2, #00cc88, #00ff99);
       color: black;
       border: none;
       padding: 7px 16px;
-      border-radius: 20px;
+      border-radius: 25px;
       font-size: 14px;
       cursor: pointer;
       transition: 0.3s;
       font-weight: bold;
-      box-shadow: 0 0 10px rgba(0,255,150,0.3);
+      box-shadow: 0 0 10px rgba(0,255,180,0.25);
     }
 
     .auth-buttons button:hover {
       transform: scale(1.05);
-      box-shadow: 0 0 20px rgba(0,255,150,0.6);
+      box-shadow: 0 0 25px rgba(0,255,180,0.6);
+      filter: brightness(1.1);
     }
 
     /* Hero */
@@ -139,13 +140,13 @@
     .hero-logo {
       width: 130px;
       margin-bottom: 20px;
-      filter: drop-shadow(0 0 10px rgba(0,255,100,0.4));
+      filter: drop-shadow(0 0 10px rgba(0,255,180,0.4));
     }
 
     .hero-small-text {
       font-size: 1rem;
       margin-bottom: 8px;
-      color: #b5ffdf;
+      color: #a8ffe4;
       letter-spacing: 0.5px;
     }
 
@@ -153,25 +154,26 @@
       font-size: 1.4rem;
       margin-bottom: 20px;
       line-height: 1.4;
-      color: #e4ffe9;
+      color: #dcfff1;
     }
 
     .cta-button {
-      background: linear-gradient(90deg, #00ff99, #00cc66);
+      background: linear-gradient(90deg, #00e0b2, #00cc88, #00ff99);
       color: #000;
       padding: 12px 26px;
       font-size: 16px;
       border: none;
-      border-radius: 25px;
+      border-radius: 30px;
       cursor: pointer;
       font-weight: bold;
       transition: 0.3s;
-      box-shadow: 0 0 20px rgba(0,255,150,0.3);
+      box-shadow: 0 0 20px rgba(0,255,180,0.3);
     }
 
     .cta-button:hover {
       transform: translateY(-3px);
-      box-shadow: 0 0 30px rgba(0,255,150,0.6);
+      box-shadow: 0 0 30px rgba(0,255,180,0.6);
+      filter: brightness(1.1);
     }
 
     /* Seksjoner */
@@ -184,7 +186,7 @@
     .section h2 {
       font-size: 2rem;
       margin-bottom: 20px;
-      background: linear-gradient(90deg, #00ff99, #00cc66);
+      background: linear-gradient(90deg, #00e0b2, #00cc88, #00ff99);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
     }
@@ -210,7 +212,7 @@
       width: 100%;
       border-radius: 20px;
       transition: transform 0.4s;
-      box-shadow: none; /* ingen skygge */
+      box-shadow: none; /* Ingen skygge */
     }
 
     .section-2 img:hover {
@@ -245,7 +247,7 @@
     .panel {
       padding: 0 16px;
       background-color: rgba(255,255,255,0.03);
-      border-left: 2px solid #00ff99;
+      border-left: 2px solid #00e0b2;
       max-height: 0;
       overflow: hidden;
       transition: max-height 0.3s ease-out;
@@ -266,7 +268,7 @@
     }
 
     .footer-links a {
-      color: #6effc3;
+      color: #70ffd6;
       text-decoration: none;
       transition: 0.3s;
     }
@@ -393,6 +395,7 @@
 </script>
 </body>
 </html>
+
 
 
 
