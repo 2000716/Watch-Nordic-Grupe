@@ -1253,7 +1253,7 @@ function renderSeries(galleryId) {
   Object.keys(serier).forEach((key) => {
     const serie = serier[key];
     const link = document.createElement("a");
-    link.href = `film.html?navn=${key}`;
+    link.href = `serie.html?navn=${key}`; // endret til egen serie-side
     const img = document.createElement("img");
     img.src = serie.poster;
     img.alt = serie.tittel;
@@ -1347,7 +1347,7 @@ document.addEventListener("DOMContentLoaded", () => {
     );
   });
   renderUpcoming("kommer-snart-galleri");
-  renderSeries("serier-galleri"); // ✅ Legger til serier
+  renderSeries("serier-galleri"); // ✅ Legger til serier fra Seriedata.js
   oppdaterBanner();
   renderHalloweenBanner();
   renderContinueWatching();
@@ -1380,9 +1380,11 @@ document.addEventListener("DOMContentLoaded", () => {
     if (progress) bar.style.setProperty("--progress", progress + "%");
   });
 });
+
 </script>
 
  
+
 
 
 
