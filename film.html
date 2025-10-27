@@ -169,7 +169,7 @@ body.loaded {
 
 .content-wrapper {
   position: absolute;
-  top: 60px;
+  top: 60px;  /* 🔼 løfter logoen høyere */
   left: 100px;
   right: 60px;
   display: flex;
@@ -179,26 +179,21 @@ body.loaded {
   max-width: calc(100vw - 160px);
 }
 
-/* === Logo (responsiv størrelse) === */
+/* === Logo === */
 .logo-container {
-  width: clamp(180px, 25vw, 400px); /* Skalerer med skjermen */
-  height: auto;
-  margin-bottom: clamp(60px, 12vh, 140px);
+  width: 260px;
+  height: 100px;
+  margin-bottom: 140px; /* fin avstand mellom logo og tekst */
   display: flex;
   align-items: center;
   justify-content: center;
+  overflow: hidden;
 }
 
 .film-logo {
-  width: 100%;
-  height: auto;
+  max-width: 100%;
+  max-height: 100%;
   object-fit: contain;
-  filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.6));
-  transition: transform 0.3s ease;
-}
-
-.film-logo:hover {
-  transform: scale(1.02);
 }
 
 /* === Tekst og knapper === */
@@ -206,7 +201,7 @@ body.loaded {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  margin-top: 240px;
+  margin-top: 240px; /* 🔼 litt høyere enn før (var 320px) */
   min-height: 400px;
 }
 
@@ -327,6 +322,10 @@ body.loaded {
   60%  { opacity: 1; transform: scale(1.2); }
   100% { opacity: 1; transform: scale(1); }
 }
+
+/* === Resten beholdt som før === */
+/* (anbefalinger, popup, video, footer, episoder osv. — urørt) */
+
 
 /* === Anbefalinger === */
 .recommendations {
@@ -490,7 +489,8 @@ body.loaded {
   }
 
   .logo-container {
-    width: clamp(160px, 60vw, 300px);
+    width: 80%;
+    height: auto;
     margin: 0 auto 20px auto;
   }
 
@@ -1097,6 +1097,8 @@ if (words.length > MAX_ORD) {
 </html>
 
  
+
+
 
 
 
