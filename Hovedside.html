@@ -1253,9 +1253,9 @@ function renderSeries(galleryId) {
   Object.keys(serier).forEach((key) => {
     const serie = serier[key];
     const link = document.createElement("a");
-    link.href = `serie.html?navn=${key}`; // endret til egen serie-side
+    link.href = `spillerepisode.html?serie=${key}&s=1&e=1`; // starter alltid på Sesong 1, Episode 1
     const img = document.createElement("img");
-    img.src = serie.poster;
+    img.src = serie.poster; // bruker poster fra Seriedata.js
     img.alt = serie.tittel;
     link.appendChild(img);
     gallery.appendChild(link);
@@ -1384,6 +1384,7 @@ document.addEventListener("DOMContentLoaded", () => {
 </script>
 
  
+
 
 
 
