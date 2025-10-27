@@ -7,8 +7,7 @@ const serier = {
     logo: "https://occ-0-55-56.1.nflxso.net/art/8b26a/8b26a3dfc7b891f55ee4b04ff10d9bcd1b3a8f3a.png",
     poster: "https://image.tmdb.org/t/p/w1280/9yjEMASvxhJGSUq7peDpWgBO5JW.jpg",
     posterVertikal: "https://image.tmdb.org/t/p/w780/56v2KjBlU4XaOv9rVYEQypROD7P.jpg",
-    beskrivelse:
-      "De sjarmerende og animerte eventyrene til en skapning som heter Mummi og hans venner og familie.",
+    beskrivelse:"De sjarmerende og animerte eventyrene til en skapning som heter Mummi og hans venner og familie.",
     metadata: ["Finland", "1990", "Alle", "Familie", "4 sesonger"],
     imdb: "https://www.imdb.com/title/tt0247117/",
     skuespillere: "Mummitrollet, Snusmumrikken, Lille My, Snorkfrøken",
@@ -49,6 +48,7 @@ const serier = {
  
 // Gjør tilgjengelig globalt
 window.serier = serier;
+
 
 
 
