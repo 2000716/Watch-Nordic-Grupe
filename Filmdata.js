@@ -417,9 +417,9 @@ const filmer = {
 
     "love-never-dies": {
     tittel: "Love Never Dies",
-    bakgrunn: "https://images.justwatch.com/backdrop/300788978/s640/andrew-lloyd-webbers-love-never-dies",
+    bakgrunn: "https://d32qys9a6wm9no.cloudfront.net/images/movies/backdrop/5b/dd5c6b191c58a3a174dc2045e1d09cfd_1280x720.jpg?t=1738011224",
     banner: "https://storage.googleapis.com/production-cms-storage-bucket/Love%20Never%20Dies_1680x560.jpg", // <- brukes til hero-banner
-    logo: "https://static.wixstatic.com/media/fd2fb2_50304abeb9234675a479ac875c6a3268~mv2.png",
+    logo: "https://images.squarespace-cdn.com/content/v1/5ff4950f1e66b27b45e4e21d/1622215912332-NHLIUYALAJRAQ5USC3BE/LND-About-Logo+-+900px-v1.png",
     poster: "https://www.loveneverdies.com/wp-content/uploads/LND-SEO-1024x576.png",
     posterVertikal: "https://image.tmdb.org/t/p/w780/66PKthTm3oi2lrsahRbaAPOnimT.jpg", // portrett
     beskrivelse: "Ti år etter at en brann i Paris bare etterlot seg en maske, varer Fantomets kjærlighet til Christine ved på Coney Island. Hun ankommer med Raoul og sønnen deres for å opptre, uvitende om hva som venter på den mystiske Mister Ys spillested.",
@@ -432,6 +432,7 @@ const filmer = {
     expireDate: "2026-11-15T23:59:59",
   },
 };
+
 
 
 
