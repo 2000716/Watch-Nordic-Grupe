@@ -431,7 +431,24 @@ const filmer = {
     publishDate: "2025-10-28T00:00:00", // ISO datoformat
     expireDate: "2026-11-15T23:59:59",
   },
+
+      "cats": {
+    tittel: "Cats",
+    bakgrunn: "https://cdn.sanity.io/images/j0wdmpyb/production/ddb0dbc0c1667e0e8fce66531d6488953a5834dd-1920x1080.jpg?w=1640&auto=format",
+    logo: "https://pixel.disco.skyshowtime.com/uuid/fc9cc0f0-3c44-338a-994e-601561705dda/LOGO_TITLE_WIDE?language=nb-NO&proposition=SKYSHOWTIME&version=328aef8a-e760-38b8-933a-a24a26e539b8",
+    poster: "https://pixel.disco.skyshowtime.com/uuid/fc9cc0f0-3c44-338a-994e-601561705dda/COVER_TITLE_WIDE?language=sv-SE&proposition=SKYSHOWTIME&version=f37633bd-3545-3a3e-b94c-8cbafc2fb7a5",
+    posterVertikal: "https://pixel.disco.skyshowtime.com/uuid/fc9cc0f0-3c44-338a-994e-601561705dda/COVER_TITLE_TALL?language=nb-NO&proposition=SKYSHOWTIME&version=d359d125-3d34-35fb-9482-d89658295730", // portrett
+    beskrivelse: "En flokk med katter, kalt Jellicles, må hvert år bestemme seg for hvem som skal opphøyes til Heaviside Layer, og komme tilbake til et nytt Jellicle-liv.",
+    metadata: ["USA", "2019", "7 år", "Musikal", "1 t 49 min"],
+    imdb: "https://www.imdb.com/title/tt5697572/",
+    skuespillere: "Taylor Swift, Idris Elba, Judi Dench, Jennifer Hudson, James Corden, Jason Derulo",
+    regissor: "Tom Hooper",
+    watchUrl: "film-mal.html?id=cats",
+    publishDate: "2025-10-30T00:00:00", // ISO datoformat
+    expireDate: "2026-11-15T23:59:59",
+  },
 };
+
 
 
 
