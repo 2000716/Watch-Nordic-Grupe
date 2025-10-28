@@ -855,6 +855,29 @@ main {
 
 }
 
+ .banner-buttons {
+  display: flex;
+  gap: 16px;
+  margin-top: 10px;
+}
+
+.details-button {
+  text-decoration: none;
+  background-color: transparent;
+  color: white;
+  border: 2px solid white;
+  padding: 10px 40px;
+  border-radius: 4px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.details-button:hover {
+  background-color: white;
+  color: black;
+}
+
 
   </style>
   </head>
@@ -882,13 +905,17 @@ main {
         </div>
   
         <!-- Hero Banner -->
-        <section class="hero-banner">
-          <img class="banner-image" src="" alt="Film Banner">
-          <div class="banner-content">
-            <img class="film-logo" src="" alt="Film Logo">
-          </div>
-        </section>
-       
+<section class="hero-banner">
+  <img class="banner-image" src="" alt="Film Banner">
+  <div class="banner-content">
+    <img class="film-logo" src="" alt="Film Logo">
+    <div class="banner-buttons">
+      <button class="watch-button" id="playNowBtn">Spill av nå</button>
+      <button class="details-button" id="detailsBtn">Se detaljer</button>
+    </div>
+  </div>
+</section>
+
         <section class="gallery-section">
           <h2>Nye filmer på Watch</h2>
           <div class="gallery-wrapper">
@@ -1028,20 +1055,30 @@ if (lagretBilde) {
 }
 
 // ==================== HERO-BANNER ==================== //
-function oppdaterBanner() {
-  const filmKeys = Object.keys(filmer).filter(key => filmer[key].banner);
-  if (filmKeys.length === 0) return;
+let currentBannerIndex = 0;
+let bannerFilmKeys = [];
 
-  const randomKey = filmKeys[Math.floor(Math.random() * filmKeys.length)];
-  const film = filmer[randomKey];
+function oppdaterBanner() {
+  // Hent alle filmer med banner én gang
+  if (bannerFilmKeys.length === 0) {
+    bannerFilmKeys = Object.keys(filmer).filter(key => filmer[key].banner);
+  }
+  if (bannerFilmKeys.length === 0) return;
+
+  // Hent neste film
+  const filmKey = bannerFilmKeys[currentBannerIndex];
+  const film = filmer[filmKey];
 
   const bannerImage = document.querySelector(".hero-banner .banner-image");
+  const bannerLogo = document.querySelector(".hero-banner .film-logo");
+  const playBtn = document.getElementById("playNowBtn");
+  const detailsBtn = document.getElementById("detailsBtn");
+
   if (bannerImage) {
     bannerImage.src = film.banner;
     bannerImage.alt = film.tittel;
   }
 
-  const bannerLogo = document.querySelector(".hero-banner .film-logo");
   if (bannerLogo) {
     if (film.logo) {
       bannerLogo.src = film.logo;
@@ -1052,13 +1089,25 @@ function oppdaterBanner() {
     }
   }
 
-  const bannerSection = document.querySelector(".hero-banner");
-  if (bannerSection) {
-    bannerSection.onclick = () => {
-      window.location.href = `film.html?navn=${randomKey}`;
+  // Knapper – spill av og detaljer
+  if (playBtn) {
+    playBtn.onclick = () => {
+      window.location.href = `film.html?navn=${filmKey}&action=play`;
     };
   }
+  if (detailsBtn) {
+    detailsBtn.onclick = () => {
+      window.location.href = `film.html?navn=${filmKey}`;
+    };
+  }
+
+  // Bytt til neste banner
+  currentBannerIndex = (currentBannerIndex + 1) % bannerFilmKeys.length;
 }
+
+// Sett intervall for å bytte banner hvert 10. sekund
+setInterval(oppdaterBanner, 10000);
+
 
 // ==================== DYNAMISK GALLERI-LASTING ==================== //
 function createMovieElement(filmKey, film) {
@@ -1384,6 +1433,7 @@ document.addEventListener("DOMContentLoaded", () => {
 </script>
 
  
+
 
 
 
