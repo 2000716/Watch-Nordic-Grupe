@@ -124,33 +124,144 @@ main {
 }
 
 /* Hero-banner */
-document.addEventListener("DOMContentLoaded", () => {
-  // Hent en tilfeldig film fra "filmer"-objektet ditt
-  const filmKeys = Object.keys(filmer);
-  const tilfeldigKey = filmKeys[Math.floor(Math.random() * filmKeys.length)];
-  const film = filmer[tilfeldigKey];
+/* 🎥 Netflix-style Hero Banner */
+.hero-banner {
+  position: relative;
+  height: 75vh;
+  min-height: 500px;
+  width: 100%;
+  overflow: hidden;
+  margin-bottom: 50px;
+  background-color: black;
+}
 
-  // Oppdater banner med data
-  document.getElementById("banner-bilde").src = film.bannerbilde || film.bilde;
-  document.getElementById("banner-logo").src = film.logo || film.bilde;
-  document.getElementById("banner-beskrivelse").textContent = film.beskrivelse || "Ingen beskrivelse tilgjengelig.";
+.hero-banner::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to top,
+    rgba(0, 0, 0, 0.9) 0%,
+    rgba(0, 0, 0, 0.4) 40%,
+    rgba(0, 0, 0, 0) 80%
+  );
+  z-index: 1;
+}
 
-  // Metadata (år, sjanger, lengde, aldersgrense osv.)
-  const metaEl = document.getElementById("banner-metadata");
-  if (film.metadata) {
-    const { år, sjanger, varighet, aldersgrense } = film.metadata;
-    metaEl.textContent = `${aldersgrense || ""} ${år ? "• " + år : ""} ${sjanger ? "• " + sjanger : ""} ${varighet ? "• " + varighet : ""}`;
+.banner-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  filter: brightness(0.8);
+  transition: transform 4s ease-in-out;
+}
+
+.hero-banner:hover .banner-image {
+  transform: scale(1.05);
+}
+
+.banner-content {
+  position: absolute;
+  bottom: 100px;
+  left: 80px;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 16px;
+  max-width: 600px;
+  color: white;
+}
+
+.film-logo {
+  width: 400px;
+  max-width: 100%;
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.8));
+}
+
+.banner-meta {
+  font-size: 16px;
+  color: #aaa;
+}
+
+.banner-content p {
+  font-size: 18px;
+  line-height: 1.4;
+  color: #ddd;
+  max-width: 500px;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.8);
+}
+
+.banner-buttons {
+  display: flex;
+  gap: 16px;
+}
+
+.watch-button,
+.details-button {
+  font-size: 18px;
+  font-weight: bold;
+  padding: 12px 40px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.watch-button {
+  background-color: #00FFCC;
+  color: black;
+  border: none;
+}
+
+.watch-button:hover {
+  background-color: #00e6b8;
+  transform: scale(1.05);
+}
+
+.details-button {
+  background: rgba(255, 255, 255, 0.15);
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  backdrop-filter: blur(4px);
+}
+
+.details-button:hover {
+  background: rgba(255, 255, 255, 0.3);
+  transform: scale(1.05);
+}
+
+/* Mobilversjon */
+@media (max-width: 768px) {
+  .hero-banner {
+    height: 60vh;
+    min-height: 300px;
   }
 
-  // Knapper
-  document.getElementById("banner-se-na").addEventListener("click", () => {
-    window.location.href = film.videolenke || "#";
-  });
+  .banner-content {
+    bottom: 50px;
+    left: 20px;
+    max-width: 90%;
+  }
 
-  document.getElementById("banner-detaljer").addEventListener("click", () => {
-    window.location.href = `Film-detaljer.html?id=${tilfeldigKey}`;
-  });
-});
+  .film-logo {
+    width: 250px;
+  }
+
+  .banner-content p {
+    font-size: 14px;
+  }
+
+  .banner-meta {
+    font-size: 13px;
+  }
+
+  .watch-button,
+  .details-button {
+    font-size: 14px;
+    padding: 8px 20px;
+  }
+}
 
 /* Gallerier */
 .gallery-section {
@@ -1448,6 +1559,7 @@ document.addEventListener("DOMContentLoaded", () => {
 </script>
 
  
+
 
 
 
