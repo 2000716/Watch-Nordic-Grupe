@@ -675,21 +675,27 @@ img, video {
 
 
   </style>
-</head>
-<body>
-
-<div class="vertical-nav" id="verticalNav">
-  <div class="profilmeny">
-    <a href="konto.html">
-      <img id="menyProfilbilde" src="https://via.placeholder.com/100" alt="Min profil" />
-    </a>
+<header class="top-nav">
+  <div class="nav-left">
+    <img class="watch-logo" src="https://static.wixstatic.com/media/fd2fb2_a4b2ace62dff4605a0387f46aad8a404~mv2.png" alt="Watch Logo" />
+    <nav class="nav-links">
+      <a href="Hovedside.html" class="active">Hjem</a>
+      <a href="Serier.html">Serier</a>
+      <a href="Film.html">Filmer</a>
+      <a href="Nyheter.html">Nyheter</a>
+      <a href="Min-Liste.html">Min liste</a>
+    </nav>
   </div>
-  <a href="Søk.html" class="nav-icon"><i class="fas fa-search"></i></a>
-  <a href="Hovedside.html" class="nav-icon"><i class="fas fa-house"></i></a>
-  <a href="Film.html" class="nav-icon"><i class="fas fa-film"></i></a>
-  <a href="Serier" class="nav-icon"><i class="fas fa-tv"></i></a>
-  <a href="Min-Liste.html" class="nav-icon"><i class="fas fa-bookmark"></i></a>
-</div>
+
+  <div class="nav-right">
+    <a href="Søk.html" class="nav-search"><i class="fas fa-search"></i></a>
+    <div class="profilmeny" onclick="gåTilKonto()">
+      <img id="menyProfilbilde" src="https://via.placeholder.com/100" alt="Min profil" />
+    </div>
+  </div>
+</header>
+
+  
 
 <button class="menu-toggle" id="menuToggle"><i class="fas fa-chevron-left"></i></button>
 
@@ -1097,6 +1103,7 @@ if (words.length > MAX_ORD) {
 </html>
 
  
+
 
 
 
