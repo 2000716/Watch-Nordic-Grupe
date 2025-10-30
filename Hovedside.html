@@ -882,73 +882,142 @@ main {
   color: black;
 }
 
-/* === Horisontal navigasjonslinje === */
-/* --- FIKS MENY OVER BANNER MED MELLOMROM --- */
 .top-nav {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
-  background: #none; /* gir en bakgrunn slik at menyen ikke "blander seg" med banneret */
-  border-bottom: 2px solid #00FFCC;
-  padding: 12px 40px;
-  z-index: 200;
+  height: 70px;
+  background: rgba(0, 0, 0, 0.85);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 50px;
+  z-index: 500;
+  backdrop-filter: blur(10px);
+  transition: background 0.3s ease;
 }
 
+/* Logo og venstreside */
+.nav-left {
+  display: flex;
+  align-items: center;
+  gap: 40px;
+}
 
 .top-nav .watch-logo {
-  width: 160px;
+  width: 130px;
   height: auto;
+  cursor: pointer;
 }
 
+/* Navigasjonslenker */
 .nav-links {
   display: flex;
-  gap: 30px;
+  gap: 26px;
 }
 
-.nav-links .nav-icon {
-  color: white;
-  font-size: 22px;
+.nav-links a {
+  color: #bfbfbf;
   text-decoration: none;
+  font-weight: 500;
+  font-size: 15px;
   transition: color 0.3s ease;
 }
 
-.nav-links .nav-icon:hover,
-.nav-links .nav-icon.active {
+.nav-links a:hover {
+  color: #fff;
+}
+
+.nav-links a.active {
+  color: #00FFCC;
+  font-weight: bold;
+}
+
+/* Høyre side: søk + profil */
+.nav-right {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+.nav-search {
+  color: #bfbfbf;
+  font-size: 18px;
+  transition: color 0.3s ease;
+}
+
+.nav-search:hover {
   color: #00FFCC;
 }
 
 .profilmeny img {
-  width: 45px;
-  height: 45px;
+  width: 42px;
+  height: 42px;
   border-radius: 50%;
-  border: 2px solid white;
+  border: 2px solid #fff;
   object-fit: cover;
   cursor: pointer;
+  transition: transform 0.3s ease, border 0.3s ease;
 }
 
-/* Juster hovedinnhold slik at det ikke skjules bak header */
-main {
-  padding-top: 100px; /* gir plass til menyen slik at banneret ikke ligger under */
+.profilmeny img:hover {
+  transform: scale(1.05);
+  border-color: #00FFCC;
+}
+
+/* Skygger for å fremheve meny over banner */
+.top-nav.scrolled {
+  background: rgba(0, 0, 0, 0.95);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.6);
+}
+
+/* Responsiv tilpasning */
+@media (max-width: 768px) {
+  .top-nav {
+    padding: 0 20px;
+    height: 60px;
+  }
+
+  .nav-links {
+    display: none; /* skjul tekstmeny på mobil */
+  }
+
+  .watch-logo {
+    width: 110px;
+  }
+
+  .nav-search {
+    font-size: 20px;
+  }
+
+  .profilmeny img {
+    width: 36px;
+    height: 36px;
+  }
 }
 
 
 
 
   </style>
-  <header class="top-nav">
-  <img class="watch-logo" src="https://static.wixstatic.com/media/fd2fb2_a4b2ace62dff4605a0387f46aad8a404~mv2.png" alt="Watch Logo" />
+<header class="top-nav">
+  <div class="nav-left">
+    <img class="watch-logo" src="https://static.wixstatic.com/media/fd2fb2_a4b2ace62dff4605a0387f46aad8a404~mv2.png" alt="Watch Logo" />
+    <nav class="nav-links">
+      <a href="Hovedside.html" class="active">Hjem</a>
+      <a href="Serier.html">Serier</a>
+      <a href="Film.html">Filmer</a>
+      <a href="Nyheter.html">Nyheter</a>
+      <a href="Min-Liste.html">Min liste</a>
+    </nav>
+  </div>
 
-  <nav class="nav-links">
-    <a href="Hovedside.html" class="nav-icon active" title="Hjem"><i class="fas fa-house"></i></a>
-    <a href="Film.html" class="nav-icon" title="Film"><i class="fas fa-film"></i></a>
-    <a href="Serier.html" class="nav-icon" title="Serier"><i class="fas fa-tv"></i></a>
-    <a href="Min-Liste.html" class="nav-icon" title="Min liste"><i class="fas fa-bookmark"></i></a>
-    <a href="Søk.html" class="nav-icon" title="Søk"><i class="fas fa-search"></i></a>
-  </nav>
-
-  <div class="profilmeny" onclick="gåTilKonto()">
-    <img id="menyProfilbilde" src="https://via.placeholder.com/100" alt="Min profil" />
+  <div class="nav-right">
+    <a href="Søk.html" class="nav-search"><i class="fas fa-search"></i></a>
+    <div class="profilmeny" onclick="gåTilKonto()">
+      <img id="menyProfilbilde" src="https://via.placeholder.com/100" alt="Min profil" />
+    </div>
   </div>
 </header>
 
@@ -1482,6 +1551,7 @@ document.addEventListener("DOMContentLoaded", () => {
 </script>
 
  
+
 
 
 
