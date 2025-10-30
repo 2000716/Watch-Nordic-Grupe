@@ -887,16 +887,15 @@ main {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background: rgba(9, 27, 30, 0.95); /* eller en annen farge */
-  padding: 15px 40px;
-  position: relative;  /* ikke fast eller absolutt */
+  background: None;
+  padding: 10px 40px;
+  position: fixed; /* Fester menyen øverst */
   top: 0;
   left: 0;
   width: 100%;
   z-index: 200;
-  border-bottom: 2px solid #00FFCC;
+  border-bottom: 2px solid none;
 }
-
 
 
 
@@ -933,8 +932,9 @@ main {
 
 /* Juster hovedinnhold slik at det ikke skjules bak header */
 main {
-  padding-top: 100px; /* gir plass under menyen */
+  padding-top: 120px; /* flytter alt innhold litt ned så det ikke overlapper menyen */
 }
+
 
   </style>
   <header class="top-nav">
@@ -1483,6 +1483,7 @@ document.addEventListener("DOMContentLoaded", () => {
 </script>
 
  
+
 
 
 
