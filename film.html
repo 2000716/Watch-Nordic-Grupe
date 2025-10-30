@@ -1012,17 +1012,6 @@ if (erUpublisert) {
 const lagretBilde = localStorage.getItem("profilbilde");
 if (lagretBilde) document.getElementById("menyProfilbilde").src = lagretBilde;
 
-/* === Meny-knapp === */
-const menuToggle = document.getElementById("menuToggle");
-const verticalNav = document.getElementById("verticalNav");
-menuToggle.addEventListener("click", () => {
-  verticalNav.classList.toggle("collapsed");
-  menuToggle.classList.toggle("collapsed");
-  const icon = menuToggle.querySelector("i");
-  icon.classList.toggle("fa-chevron-right");
-  icon.classList.toggle("fa-chevron-left");
-});
-
 /* === Fade-in === */
 window.addEventListener("DOMContentLoaded", () => {
   document.body.classList.add("loaded");
@@ -1213,6 +1202,7 @@ if (words.length > MAX_ORD) {
 </html>
 
  
+
 
 
 
