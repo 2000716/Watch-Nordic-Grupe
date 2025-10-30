@@ -887,15 +887,16 @@ main {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background: rgba(9, 27, 30, 0.95); /* Behold bakgrunn eller velg annen farge */
-  padding: 10px 40px;
-  position: fixed;                   /* Ligger alltid øverst */
+  background: rgba(9, 27, 30, 0.95); /* eller en annen farge */
+  padding: 15px 40px;
+  position: relative;  /* ikke fast eller absolutt */
   top: 0;
   left: 0;
   width: 100%;
   z-index: 200;
-  border-bottom: 2px solid #00FFCC;  /* Behold eller fjern etter smak */
+  border-bottom: 2px solid #00FFCC;
 }
+
 
 
 
@@ -1482,6 +1483,7 @@ document.addEventListener("DOMContentLoaded", () => {
 </script>
 
  
+
 
 
 
