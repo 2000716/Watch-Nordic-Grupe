@@ -36,6 +36,7 @@ const filmer = {
     bakgrunn: "https://iptvimagecache-playplus-prod-vip.han.telia.se/original/no/imgv3/GnP7NDuB0Rrw7IqKaTNuGddHmo9uH98LTuGRs8nsXJvIiNzbUb2LoKtBRiiR2Yg-OfX6odiC2nMHfm6XZuDZz-iivlYEPLXGpx3QZMpE21N2HaSNGxmn_HIyz30.jpeg",
     banner: "https://static.wixstatic.com/media/fd2fb2_0efea4ff6f6b4073b0e64bb659e3d800~mv2.jpg", // <- brukes til hero-banner
     logo: "https://static.wixstatic.com/media/fd2fb2_38bcd3561623467f8a05f8fb23488188~mv2.png",
+    trailer: "https://video.wixstatic.com/video/fd2fb2_516f105ae8b94969abd830baf696f6d4/360p/mp4/file.mp4", // 🎥 NY 
     poster: "https://beam-images.warnermediacdn.com/BEAM_LWM_DELIVERABLES/500cfa5c-264b-4366-9264-342b1569605e/32dcbd1e-b23c-4acd-ba97-2e6b6a42a620?host=wbd-images.prod-vod.h264.io&partner=beamcom&w=500",
     posterVertikal: "https://i-viaplay-com.akamaized.net/viaplay-prod/316/184/1574841515-a8796d95201d56c1f26a231e3cad4ddd89e2bb01.jpg?width=400&height=600", // portrett
     beskrivelse: "Legenden sier at Den Magiske Diamant oppfyller ønsker ved fullmåne. Men det er vesle Marco som stikker av med diamanten!",
@@ -98,6 +99,7 @@ const filmer = {
     bakgrunn: "https://occ-0-8407-2218.1.nflxso.net/dnm/api/v6/E8vDc_W8CLv7-yMQu8KMEC7Rrr8/AAAABf_jXS7fg-ggm0v_ygwinuf9ZAf46TiEnc5yHc9if-TcxcEsEh_RIDErLYQpvhnosZF6f3oXPzEdY7xdP0XOSM2xcPDK0s6Ix0HM.jpg?r=9e5",
     banner: "https://montages.no/files/2013/11/sola6.jpg", // <- brukes til hero-banner
     logo: "https://occ-0-3668-38.1.nflxso.net/dnm/api/v6/S4oi7EPZbv2UEPaukW54OORa0S8/AAAABW5AdcvFX4G8XnB_b3uQRtZgvyU3QTyH4uSjNdDIANcjK_MlWXdMffH6J7JaKlt3Xj4_YKWusqEWZ9Xo1CkqN2_OYV51oVqvhw.webp?r=97e",
+    trailer: "https://video.wixstatic.com/video/fd2fb2_c45cd733abaa48deb8f7f7e78e713838/720p/mp4/file.mp4", // 🎥 NY 
     poster: "https://sumo.cdn.tv2.no/imageapi/v3/img/5dbc0a4f498e1dc3eb8394b3-1700644038168",
     posterVertikal: "https://i-viaplay-com.akamaized.net/viaplay-prod/908/1012/1460156915-30c59a4bbbfa5b5e2995b36a67da4d63eb0efb42.jpg?width=400&height=600", // portrett
     beskrivelse: "En desperat avisredaktør med planer om å sette en ny snørekord, får tak i en kraftig snøkanon, alt for å prøve å lage store avisoverskrifter før jul.",
@@ -448,6 +450,7 @@ const filmer = {
     expireDate: "2026-11-15T23:59:59",
   },
 };
+
 
 
 
