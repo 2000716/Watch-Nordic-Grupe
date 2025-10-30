@@ -887,15 +887,16 @@ main {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background: transparent;       /* Ingen bakgrunnsfarge */
+  background: rgba(9, 27, 30, 0.95); /* Behold bakgrunn eller velg annen farge */
   padding: 10px 40px;
-  position: absolute;            /* Legger menyen over banneret */
+  position: fixed;                   /* Ligger alltid øverst */
   top: 0;
   left: 0;
   width: 100%;
-  z-index: 300;                  /* Høyere enn banneret */
-  border: none;                  /* Fjerner stripen */
+  z-index: 200;
+  border-bottom: 2px solid #00FFCC;  /* Behold eller fjern etter smak */
 }
+
 
 
 .top-nav .watch-logo {
@@ -1481,6 +1482,7 @@ document.addEventListener("DOMContentLoaded", () => {
 </script>
 
  
+
 
 
 
