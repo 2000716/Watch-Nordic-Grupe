@@ -883,20 +883,17 @@ main {
 }
 
 /* === Horisontal navigasjonslinje === */
+/* --- FIKS MENY OVER BANNER MED MELLOMROM --- */
 .top-nav {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  background: None;
-  padding: 10px 40px;
-  position: fixed; /* Fester menyen øverst */
+  position: fixed;
   top: 0;
   left: 0;
   width: 100%;
+  background: #091B1E; /* gir en bakgrunn slik at menyen ikke "blander seg" med banneret */
+  border-bottom: 2px solid #00FFCC;
+  padding: 12px 40px;
   z-index: 200;
-  border-bottom: 2px solid none;
 }
-
 
 
 .top-nav .watch-logo {
@@ -932,8 +929,14 @@ main {
 
 /* Juster hovedinnhold slik at det ikke skjules bak header */
 main {
-  padding-top: 120px; /* flytter alt innhold litt ned så det ikke overlapper menyen */
+  padding-top: 100px; /* gir plass til menyen slik at banneret ikke ligger under */
 }
+
+/* litt mellomrom mellom menyen og banneret */
+.hero-banner {
+  margin-top: 20px;
+}
+
 
 
   </style>
@@ -1483,6 +1486,7 @@ document.addEventListener("DOMContentLoaded", () => {
 </script>
 
  
+
 
 
 
