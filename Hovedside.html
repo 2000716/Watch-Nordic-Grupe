@@ -80,9 +80,10 @@ html, body {
 main {
   margin-left: 80px;       /* beholder plass for menyen */
   margin-right: 80px;      /* legger til luft på høyre side */
-  padding: 20px;
+  padding-top: 0; /* ikke legg til ekstra plass nå */
   max-width: 1400px;
 }
+
 
 
 .content-wrapper {
@@ -886,15 +887,16 @@ main {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background: rgba(9, 27, 30, 0.95);
+  background: transparent;       /* Ingen bakgrunnsfarge */
   padding: 10px 40px;
-  position: fixed;
+  position: absolute;            /* Legger menyen over banneret */
   top: 0;
   left: 0;
   width: 100%;
-  z-index: 200;
-  border-bottom: 2px solid #00FFCC;
+  z-index: 300;                  /* Høyere enn banneret */
+  border: none;                  /* Fjerner stripen */
 }
+
 
 .top-nav .watch-logo {
   width: 160px;
@@ -1479,6 +1481,7 @@ document.addEventListener("DOMContentLoaded", () => {
 </script>
 
  
+
 
 
 
