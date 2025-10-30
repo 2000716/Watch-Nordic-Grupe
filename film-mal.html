@@ -763,8 +763,7 @@ const filmer = {
     subtitleUrl: "",
     tilbakeUrl: "film.html?navn=love-never-dies",
     audioLanguages: [{ code: "en", label: "Engelsk" }],
-    subtitleLanguages: [ { code: "no", label: "Norsk" },
-      { code: "off", label: "Av" }
+    subtitleLanguages: [ 
     ]
   },
 
@@ -772,11 +771,11 @@ const filmer = {
     tittel: "Cats",
     watchUrl: "film-mal.html?id=cats",
     videoUrl: "https://video.wixstatic.com/video/fd2fb2_f5d40aa3feba439bb38089215e24a80f/720p/mp4/file.mp4",
-    subtitleUrl: "",
+    subtitleUrl: "Cats.VTT",
     tilbakeUrl: "film.html?navn=cats",
     audioLanguages: [{ code: "en", label: "Engelsk" }],
-    subtitleLanguages: [ 
-    ]
+    subtitleLanguages:  [ { code: "no", label: "Norsk" },
+      { code: "off", label: "Av" }
   },
 };
 
@@ -1148,6 +1147,7 @@ document.addEventListener("contextmenu", (e) => {
 });
 
 </script>
+
 
 
 
