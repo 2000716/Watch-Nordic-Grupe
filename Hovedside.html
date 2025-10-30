@@ -968,9 +968,10 @@ background: linear-gradient(
 /* Høyre side: søk + profil */
 .nav-right {
   display: flex;
-  align-items: center;
-  gap: 24px;
+  align-items: center; /* ← sørger for at de står på samme linje */
+  gap: 12px; /* valgfritt: reduserer mellomrommet litt */
 }
+
 
 .nav-search {
   color: #bfbfbf;
@@ -1593,6 +1594,7 @@ window.addEventListener("scroll", () => {
 </script>
 
  
+
 
 
 
