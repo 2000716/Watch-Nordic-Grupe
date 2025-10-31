@@ -1,7 +1,7 @@
 const filmer = {
   "corpse-bride": {
     tittel: "Corpse Bride",
-    bakgrunn: "https://beam-images.warnermediacdn.com/BEAM_LWM_DELIVERABLES/d28771bd-73ed-49a7-9259-bdb33a115cbc/c628867cbdcd9987018dd7e994bde435f4725dac.jpg?host=wbd-images.prod-vod.h264.io&partner=beamcom",
+    bakgrunn: "https://i-viaplay-com.akamaized.net/viaplay-prod/215/1000/1460156720-16bb7db7ba76e552a8dccce6a762ae68f7b22828.jpg?width=1600&height=900",
     banner: "https://image.tmdb.org/t/p/original//jQ1T7mThUYEFhQrfOFCRepVGe1v.jpg", // <- brukes til hero-banner
     logo: "https://occ-0-8407-92.1.nflxso.net/dnm/api/v6/S4oi7EPZbv2UEPaukW54OORa0S8/AAAABXsHIUIEsoNXp18ZFMeNZGV2VDqmkxZieG_LfgHTMtvUNwYCxJXmI4SMgxIdomfNtMLREHe7vqwoceGjEqzTsD-aHT8veWO5GKQ.png?r=e74",
     poster: "https://is1-ssl.mzstatic.com/image/thumb/Video124/v4/4b/f6/66/4bf66634-eace-f237-8991-a383189e2b03/pr_source.lsr/392x220.webp",
@@ -80,7 +80,7 @@ const filmer = {
 
   "dyrene-i-hakkabakkeskogen": {
     tittel: "Dyrene i Hakkebakkeskogen",
-    bakgrunn: "https://images.squarespace-cdn.com/content/v1/582b59736b8f5b751a0cf841/1483043813486-L79UYGV3MT4F5744E5JV/image-asset.jpeg",
+    bakgrunn: "https://i-viaplay-com.akamaized.net/viaplay-prod/895/88/1494855562-397f093620f3a68c7e1201f2a18e45c7f3862c11.jpg?width=1600&height=900",
     banner: "https://nfimageservice.azurewebsites.net/Image/677daaa6-0fe9-43b9-b181-84d1f71d0c92/Dyrene_i_Hakkebakkes.jpg.jfif?webpEnabled=true", // <- brukes til hero-banner
     logo: "https://is1-ssl.mzstatic.com/image/thumb/Features113/v4/15/0e/02/150e0271-d537-03c1-fcce-c94654692013/hqd8703496463884450421.png/760x286.png",
     poster: "https://is1-ssl.mzstatic.com/image/thumb/Video113/v4/b1/96/ac/b196acbf-3010-b760-3193-702c340000f0/1181928424-WW-AMP_SF.lsr/1200x675.jpg",
@@ -450,6 +450,7 @@ const filmer = {
     expireDate: "2026-11-15T23:59:59",
   },
 };
+
 
 
 
