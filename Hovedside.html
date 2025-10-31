@@ -1500,14 +1500,15 @@ function renderSeries(galleryId) {
   Object.keys(serier).forEach((key) => {
     const serie = serier[key];
     const link = document.createElement("a");
-    link.href = `spillerepisode.html?serie=${key}&s=1&e=1`; // starter alltid på Sesong 1, Episode 1
+    link.href = `spillerepisode.html?serie=${key}&s=1&e=1`;
     const img = document.createElement("img");
-    img.src = serie.poster; // bruker poster fra Seriedata.js
+    img.src = serie.poster; // 👈 her forventes at serie.poster finnes
     img.alt = serie.tittel;
     link.appendChild(img);
     gallery.appendChild(link);
   });
 }
+
 
 // ==================== HALLOWEEN ==================== //
 function renderHalloweenBanner() {
@@ -1642,6 +1643,7 @@ window.addEventListener("scroll", () => {
 </script>
 
  
+
 
 
 
