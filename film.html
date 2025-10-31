@@ -754,9 +754,11 @@ img, video {
 /* Høyre side: søk + profil */
 .nav-right {
   display: flex;
-  align-items: center;
-  gap: 24px;
+  align-items: center; /* ← sørger for at de står på samme linje */
+  gap: 12px; /* valgfritt: reduserer mellomrommet litt */
 }
+
+
 
 .nav-search {
   color: #bfbfbf;
@@ -778,9 +780,9 @@ img, video {
   transition: transform 0.3s ease, border 0.3s ease;
 }
 
-.profilmeny img:hover {
-  transform: scale(1.05);
-  border-color: #00FFCC;
+.profilmeny img {
+  vertical-align: middle;
+  transform: translateY(1px); /* valgfritt – juster opp/ned om nødvendig */
 }
 
 /* Skygger for å fremheve meny over banner */
@@ -808,10 +810,11 @@ img, video {
     font-size: 20px;
   }
 
-  .profilmeny img {
-    width: 36px;
-    height: 36px;
-  }
+ .profilmeny img {
+  vertical-align: middle;
+  transform: translateY(1px); /* valgfritt – juster opp/ned om nødvendig */
+}
+
 }
 
   </style>
@@ -1238,6 +1241,7 @@ window.addEventListener("scroll", () => {
 </html>
 
  
+
 
 
 
