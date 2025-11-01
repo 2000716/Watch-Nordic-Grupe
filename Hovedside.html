@@ -563,14 +563,12 @@ background: linear-gradient(
 
 /* === Forbedret plassering ved utvidelse === */
 .coming-movie-item.expanded .logo {
-  left: 25px;
-  bottom: 70px; /* flytt logoen opp slik at datoen får plass under */
-  transform: none;
+  width: auto;
+  height: auto;
+  max-width: min(55%, 250px);
   max-height: 70px;
-  max-width: calc(100% - 40px);
-  object-fit: contain;
-  filter: drop-shadow(0 0 6px rgba(0,0,0,0.7));
 }
+
 
 /* Sørg for at dato alltid ligger nederst og tydelig */
 .coming-movie-item .coming-movie-info {
@@ -1657,6 +1655,7 @@ window.addEventListener("scroll", () => {
 </script>
 
  
+
 
 
 
