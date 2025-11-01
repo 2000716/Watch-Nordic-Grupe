@@ -1159,7 +1159,7 @@ background: linear-gradient(
   z-index: 0;
 }
 
-  /* ===== FULL MOBILOPTIMALISERING ===== */
+  /* ===== MOBIL- OG NETTBRETTOPTIMALISERING ===== */
 @media (max-width: 1024px) {
   /* Skjul navigasjonspiler og fade-effekter */
   .scroll-button,
@@ -1168,119 +1168,31 @@ background: linear-gradient(
     display: none !important;
   }
 
-  /* Fjerner hover-zoom og animasjoner for touch */
-  .image-gallery a img,
-  .coming-movie-item img,
-  .top10-item img {
-    transform: none !important;
-    transition: none !important;
-  }
-
-  /* Generell layouttilpasning */
-  body {
-    overflow-x: hidden;
-    font-size: 15px;
-  }
-
-  header {
-    flex-direction: column;
-    align-items: flex-start;
-    padding: 12px;
-  }
-
-  header img {
-    width: 90px;
-    margin-bottom: 10px;
-  }
-
-  nav {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-  }
-
-  nav a {
-    font-size: 14px;
-    padding: 6px 10px;
-  }
-
-  /* Seksjonstitler */
-  .gallery-section h2 {
-    font-size: 18px;
-    margin: 15px 12px 10px;
-  }
-
-  /* Galleri-oppsett */
+  /* Gjør galleriene mer brukervennlige for berøring */
   .image-gallery,
   .coming-movies-gallery,
   .top10-gallery,
   #halloween-gallery {
-    display: flex;
     overflow-x: auto !important;
-    gap: 12px;
     scroll-snap-type: x mandatory;
-    padding: 10px;
+    gap: 12px;
+    padding: 10px 10px;
   }
 
   .image-gallery a,
   .coming-movie-item,
   .top10-item {
-    flex: 0 0 70%;
     scroll-snap-align: start;
-    border-radius: 10px;
-    overflow: hidden;
   }
 
-  /* Juster bildestørrelser for små skjermer */
-  .image-gallery a img,
-  .coming-movie-item img,
-  .top10-item img {
-    width: 100%;
-    height: auto;
-    border-radius: 10px;
-  }
-
-  /* Seksjonsmarginer */
+  /* Reduser marginer for bedre plass på små skjermer */
   .gallery-section {
-    margin: 0 0 25px;
-  }
-
-  /* Tekst og beskrivelser */
-  .coming-movie-item h3,
-  .top10-item h3 {
-    font-size: 14px;
-    text-align: center;
-    margin-top: 6px;
-  }
-
-  /* Footer */
-  footer {
-    text-align: center;
-    padding: 20px 10px;
-    font-size: 13px;
-    color: #aaa;
-  }
-
-  /* Gjør at alt scroller jevnt på touch */
-  * {
-    -webkit-overflow-scrolling: touch;
-  }
-}
-
-/* Ekstra finjustering for små mobiler (under 600px) */
-@media (max-width: 600px) {
-  header img {
-    width: 75px;
+    margin-left: 10px;
+    margin-right: 10px;
   }
 
   .gallery-section h2 {
-    font-size: 16px;
-  }
-
-  .image-gallery a,
-  .coming-movie-item,
-  .top10-item {
-    flex: 0 0 80%;
+    margin-left: 12px;
   }
 }
 
@@ -1855,6 +1767,7 @@ window.addEventListener("scroll", () => {
 </script>
 
  
+
 
 
 
