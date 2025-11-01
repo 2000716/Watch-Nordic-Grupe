@@ -549,33 +549,43 @@ background: linear-gradient(
   padding: 0;
   border: none;
   object-fit: contain;    /* beholder proporsjoner */
-  filter: drop-shadow(0 0 4px rgba(0,0,0,0.6)); /* lett kontrast mot bakgrunn */
+  filter: drop-shadow(0 0 4px rgba(0,0,0,0.6));
 }
 
 /* Når filmen utvides (stort bilde) */
 .coming-movie-item.expanded .logo {
   left: 25px;
   transform: none;
-  max-height: 70px;      /* beholder nåværende høyde */
-  max-width: 100%;       /* kan strekke seg i bredden hvis nødvendig */
+  max-height: 70px;
+  max-width: 100%;
   filter: drop-shadow(0 0 6px rgba(0,0,0,0.7));
+  transition: all 0.4s ease;
+}
+
+/* Automatisk mindre hvis logoen er veldig bred (for å unngå overlapp) */
+.coming-movie-item.expanded .logo[width][height] {
+  aspect-ratio: attr(width) / attr(height);
+}
+
+.coming-movie-item.expanded .logo {
+  max-width: clamp(40%, 80vw, 90%); /* dynamisk begrensning */
+}
+
+@media (min-aspect-ratio: 3/1) {
+  .coming-movie-item.expanded .logo {
+    max-width: 60%;
+    max-height: 60px;
+  }
 }
 
 /* Sørg for at dato alltid ligger nederst og tydelig */
-.coming-movie-item .coming-movie-info {
-  bottom: 15px;
-  right: 15px;
-  z-index: 4; /* sørg for at den ligger over video og bilde */
-}
-
-/* Utgivelsesinfo nederst til høyre */
 .coming-movie-item .coming-movie-info {
   position: absolute;
   bottom: 15px;
   right: 15px;
   font-size: 14px;
   color: #fff;
-  z-index: 3;
+  z-index: 4;
   opacity: 0;
   transition: opacity 0.4s ease;
   background: rgba(0,0,0,0.4);
@@ -1640,6 +1650,7 @@ window.addEventListener("scroll", () => {
 </script>
 
  
+
 
 
 
