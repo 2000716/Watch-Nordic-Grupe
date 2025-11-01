@@ -401,22 +401,6 @@ const filmer = {
     expireDate: "2026-11-15T23:59:59",
   },
 
-       "cubo": {
-    tittel: "Cubo",
-    bakgrunn: "https://is1-ssl.mzstatic.com/image/thumb/Features124/v4/15/c6/94/15c694a8-2960-738a-eb4d-d5f3b1bdb1ff/mzl.lsluogii.png/2400x1350sr.webp",
-    logo: "https://is1-ssl.mzstatic.com/image/thumb/Features124/v4/e8/fa/35/e8fa35e2-3bfe-bfca-4978-ef5d44ff5cb5/liw9115780673091366146.png/432x162.png",
-    poster: "https://is1-ssl.mzstatic.com/image/thumb/Video114/v4/92/c5/5b/92c55b3a-f904-124f-4e8e-9fb4ddf34605/pr_source.lsr/1200x675.jpg",
-    posterVertikal: "https://is1-ssl.mzstatic.com/image/thumb/Video51/v4/6e/3c/7a/6e3c7a0c-b849-df2e-dbb1-cc7454d07edc/08Q01_MLPE_NO_KuboandTwoStrings_2000x3000.jpg/450x676CA.TVA23C01.webp", // portrett
-    beskrivelse: "En ung gutt ved navn Kubo må finne en magisk rustning som ble brukt av sin avdøde far for å beseire en hevngjerrig ånd fra fortiden.",
-    metadata: ["USA", "2016", "9 år", "Familie", "1 t 38 min"],
-    imdb: "https://www.imdb.com/title/tt4302938/",
-    skuespillere: "Matthew McConaughey, Charlize Theron, Rooney Mara, Ralph Fiennes, Art Parkinson, Brenda Vaccaro",
-    regissor: "Travis Knight",
-    watchUrl: "film-mal.html?id=cubo",
-    publishDate: "2025-10-20T00:00:00", // ISO datoformat
-    expireDate: "2026-11-15T23:59:59",
-  },
-
     "love-never-dies": {
     tittel: "Love Never Dies",
     bakgrunn: "https://d32qys9a6wm9no.cloudfront.net/images/movies/backdrop/5b/dd5c6b191c58a3a174dc2045e1d09cfd_1280x720.jpg?t=1738011224",
@@ -466,6 +450,7 @@ const filmer = {
     expireDate: "2027-11-15T23:59:59",
   },
 };
+
 
 
 
