@@ -449,7 +449,24 @@ const filmer = {
     publishDate: "2025-10-30T00:00:00", // ISO datoformat
     expireDate: "2026-11-15T23:59:59",
   },
+
+    "den-første-julen-i-skomakergaten": {
+    tittel: "Den første julen i skomakergaten",
+    bakgrunn: "https://i-viaplay-com.akamaized.net/viaplay-prod/1011/996/1728658186-baad7423846da5694de79fdf959fd61d9c388204.jpg?width=1600&height=900",
+    logo: "https://images.squarespace-cdn.com/content/v1/506a89dee4b00f5f2f4c4800/ebd587c1-5ad5-4d49-aa41-84120a0a734d/Skomakergata_logo.png?format=2500w",
+    poster: "https://images-prod.ai.tv2.no/v2/image-packs/pfimg_pack_01k746vv0tedk9abvy373fshrv?height=630",
+    posterVertikal: "https://i-viaplay-com.akamaized.net/viaplay-prod/1012/972/1728658184-e25115536901bb6a48800fae98d5f41d9b9f9cf2.jpg?width=400&height=600", // portrett
+    beskrivelse: "Det er første jul etter krigen og Stine kommer alene med toget til Skomakergata. Der søker hun ly hos skomaker Andersen som viser seg å være en gammel surpomp som bare vil være alene, men møtet mellom de to vil forandre ting for alltid.",
+    metadata: ["Norge", "2023", "6 år", "Familie", "1 t 29 min"],
+    imdb: "https://www.imdb.com/title/tt15400448?ref_ext_viaplay",
+    skuespillere: "Kåre Conradi, Kaya Ekerholt McCurley, Mathias Luppichini, Iman Meskini, Rebekka Nystabakk",
+    regissor: "Mikal Hovland",
+    watchUrl: "film-mal.html?id=den-første-julen-i-skomakergaten",
+    publishDate: "2025-12-21T00:00:00", // ISO datoformat
+    expireDate: "2027-11-15T23:59:59",
+  },
 };
+
 
 
 
