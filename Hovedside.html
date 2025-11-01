@@ -562,6 +562,86 @@ background: linear-gradient(
   transition: all 0.4s ease;
 }
 
+/* Automatisk mindre for ekstremt brede logoer */
+.coming-movie-item.expanded .logo.wide {
+  max-width: 60%;
+  max-height: 55px;
+}
+
+/* Sørg for at dato alltid ligger nederst og tydelig */
+.coming-movie-item .coming-movie-info {
+  position: absolute;
+  bottom: 15px;
+  right: 15px;
+  font-size: 14px;
+  color: #fff;
+  z-index: 4;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  background: rgba(0,0,0,0.4);
+  padding: 6px 10px;
+  border-radius: 8px;
+  backdrop-filter: blur(6px);
+}
+
+.coming-movie-item.expanded .coming-movie-info {
+  opacity: 1;
+}
+
+.coming-movie-item .coming-movie-info i {
+  color: #00FFCC;
+  margin-right: 6px;
+}
+
+/* Litt dybde og hover-effekt */
+.coming-movie-item:hover .coming-movie-info,
+.coming-movie-item:hover .logo {
+  filter: drop-shadow(0 0 6px rgba(0,255,204,0.7));
+}
+
+/* Responsivt justert for små skjermer */
+@media (max-width: 768px) {
+  .coming-movie-item {
+    flex: 0 0 200px;
+    height: 260px;
+  }
+  .coming-movie-item:hover {
+    flex: 0 0 280px;
+  }
+  .coming-movie-item .logo {
+    height: 50px;
+  }
+}
+
+
+/* === Kommende filmer logo – automatisk responsiv === */
+.coming-movie-item .logo {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  max-height: 50px;      /* maks høyde i lite format */
+  max-width: 90%;        /* aldri bredere enn elementet */
+  z-index: 3;
+  transition: all 0.4s ease;
+  background: none !important;
+  backdrop-filter: none !important;
+  padding: 0;
+  border: none;
+  object-fit: contain;    /* beholder proporsjoner */
+  filter: drop-shadow(0 0 4px rgba(0,0,0,0.6));
+}
+
+/* Når filmen utvides (stort bilde) */
+.coming-movie-item.expanded .logo {
+  left: 25px;
+  transform: none;
+  max-height: 70px;
+  max-width: 100%;
+  filter: drop-shadow(0 0 6px rgba(0,0,0,0.7));
+  transition: all 0.4s ease;
+}
+
 /* Automatisk mindre hvis logoen er veldig bred (for å unngå overlapp) */
 .coming-movie-item.expanded .logo[width][height] {
   aspect-ratio: attr(width) / attr(height);
@@ -1650,6 +1730,7 @@ window.addEventListener("scroll", () => {
 </script>
 
  
+
 
 
 
