@@ -561,6 +561,29 @@ background: linear-gradient(
   filter: drop-shadow(0 0 6px rgba(0,0,0,0.7));
 }
 
+/* === Forbedret plassering ved utvidelse === */
+.coming-movie-item.expanded .logo {
+  left: 25px;
+  bottom: 70px; /* flytt logoen opp slik at datoen får plass under */
+  transform: none;
+  max-height: 70px;
+  max-width: calc(100% - 40px);
+  object-fit: contain;
+  filter: drop-shadow(0 0 6px rgba(0,0,0,0.7));
+}
+
+/* Sørg for at dato alltid ligger nederst og tydelig */
+.coming-movie-item .coming-movie-info {
+  bottom: 15px;
+  right: 15px;
+  z-index: 4; /* sørg for at den ligger over video og bilde */
+}
+
+/* Juster overlappingseffekt på hover */
+.coming-movie-item.expanded .coming-movie-info {
+  opacity: 1;
+  transform: translateY(0);
+}
 
 /* Utgivelsesinfo nederst til høyre */
 .coming-movie-item .coming-movie-info {
@@ -1634,6 +1657,7 @@ window.addEventListener("scroll", () => {
 </script>
 
  
+
 
 
 
