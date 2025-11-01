@@ -1231,6 +1231,7 @@ if (lagretBilde) {
 }
 
 // ==================== HERO-BANNER (med video og timebasert visning) ==================== //
+// ==================== HERO-BANNER (med video, timebasert visning og lyd av) ==================== //
 function hentTimeFilm() {
   const filmKeys = Object.keys(filmer).filter(k => filmer[k].banner);
   if (filmKeys.length === 0) return null;
@@ -1260,6 +1261,7 @@ function oppdaterBanner() {
   if (film.trailer) {
     video.src = film.trailer;
     video.load();
+    video.muted = true; // 🔇 Lyd av
   } else {
     video.removeAttribute("src");
   }
@@ -1293,7 +1295,6 @@ function oppdaterBanner() {
 
 // Kjør når siden laster
 oppdaterBanner();
-
 
 
 
@@ -1633,6 +1634,7 @@ window.addEventListener("scroll", () => {
 </script>
 
  
+
 
 
 
