@@ -1053,6 +1053,16 @@ background: linear-gradient(
   margin-bottom: 14px;
 }
 
+  .banner-video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: none;
+  z-index: 0;
+}
+
 
 
   </style>
@@ -1080,6 +1090,8 @@ background: linear-gradient(
         <!-- Hero Banner -->
 <section class="hero-banner">
   <img class="banner-image" id="banner-bilde" src="" alt="Film Banner" />
+  <video id="banner-video" class="banner-video" playsinline preload="none"></video>
+
   <div class="banner-content">
     <img class="film-logo" id="banner-logo" src="" alt="Film Logo" />
     <p id="banner-beskrivelse"></p>
@@ -1090,6 +1102,7 @@ background: linear-gradient(
     </div>
   </div>
 </section>
+
 
 
         <section class="gallery-section">
@@ -1217,74 +1230,70 @@ if (lagretBilde) {
   if (headerProfil) headerProfil.src = lagretBilde;
 }
 
-// ==================== HERO-BANNER ==================== //
-// ==================== HERO-BANNER ==================== //
-let currentBannerIndex = 0;
-let bannerFilmKeys = [];
+// ==================== HERO-BANNER (med video og timebasert visning) ==================== //
+function hentTimeFilm() {
+  const filmKeys = Object.keys(filmer).filter(k => filmer[k].banner);
+  if (filmKeys.length === 0) return null;
 
-function shuffleArray(array) {
-  for (let i = array.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [array[i], array[j]] = [array[j], array[i]];
-  }
-  return array;
+  // Bruk timen i døgnet som index (samme film vises hele timen)
+  const timeIndex = new Date().getHours() % filmKeys.length;
+  return filmer[filmKeys[timeIndex]];
 }
 
 function oppdaterBanner() {
-  // Hent alle filmer med banner én gang
-  if (bannerFilmKeys.length === 0) {
-    bannerFilmKeys = Object.keys(filmer).filter(key => filmer[key].banner);
-    bannerFilmKeys = shuffleArray(bannerFilmKeys); // 👈 Bland rekkefølgen
+  const film = hentTimeFilm();
+  if (!film) return;
+
+  const bilde = document.getElementById("banner-bilde");
+  const video = document.getElementById("banner-video");
+  const logo = document.getElementById("banner-logo");
+  const beskrivelse = document.getElementById("banner-beskrivelse");
+  const metadata = document.getElementById("banner-metadata");
+  const seNa = document.getElementById("banner-se-na");
+  const detaljer = document.getElementById("banner-detaljer");
+
+  // Sett opp bilde
+  bilde.src = film.banner || "";
+  bilde.style.display = "block";
+
+  // Sett opp video
+  if (film.trailer) {
+    video.src = film.trailer;
+    video.load();
+  } else {
+    video.removeAttribute("src");
   }
+  video.style.display = "none";
 
-  if (bannerFilmKeys.length === 0) return;
+  // Tekster og logo
+  logo.src = film.logo || "";
+  logo.style.display = film.logo ? "block" : "none";
+  beskrivelse.textContent = film.beskrivelse || "";
+  metadata.textContent = film.metadata ? film.metadata.join(" • ") : "";
 
-  const filmKey = bannerFilmKeys[currentBannerIndex];
-  const film = filmer[filmKey];
+  // Knapper
+  seNa.onclick = () => window.location.href = `film.html?navn=${film.tittel}`;
+  detaljer.onclick = () => window.location.href = `film.html?navn=${film.tittel}`;
 
-  const bannerImage = document.querySelector(".hero-banner .banner-image");
-  const bannerLogo = document.querySelector(".hero-banner .film-logo");
+  // Spill av traileren etter 5 sekunder, og gå tilbake til bilde når ferdig
+  setTimeout(() => {
+    if (film.trailer) {
+      bilde.style.display = "none";
+      video.style.display = "block";
+      video.currentTime = 0;
+      video.play();
 
-  if (bannerImage) {
-    bannerImage.src = film.banner;
-    bannerImage.alt = film.tittel;
-  }
-
-  if (bannerLogo) {
-    if (film.logo) {
-      bannerLogo.src = film.logo;
-      bannerLogo.alt = film.tittel + " Logo";
-      bannerLogo.style.display = "block";
-    } else {
-      bannerLogo.style.display = "none";
+      video.onended = () => {
+        video.style.display = "none";
+        bilde.style.display = "block";
+      };
     }
-  }
-
-  // Oppdater knapper
-  const seNaBtn = document.getElementById("banner-se-na");
-  const detaljerBtn = document.getElementById("banner-detaljer");
-
-  if (seNaBtn) {
-    seNaBtn.onclick = () => window.location.href = `film.html?navn=${filmKey}&action=play`;
-  }
-
-  if (detaljerBtn) {
-    detaljerBtn.onclick = () => window.location.href = `film.html?navn=${filmKey}`;
-  }
-
-  // Neste banner (når vi er ferdig med listen, bland på nytt)
-  currentBannerIndex++;
-  if (currentBannerIndex >= bannerFilmKeys.length) {
-    bannerFilmKeys = shuffleArray(bannerFilmKeys);
-    currentBannerIndex = 0;
-  }
+  }, 5000); // 5 sekunder før trailer starter
 }
 
-// Start med ett tilfeldig banner umiddelbart
+// Kjør når siden laster
 oppdaterBanner();
 
-// Bytt banner hvert 10. sekund
-setInterval(oppdaterBanner, 10000);
 
 
 
@@ -1624,6 +1633,7 @@ window.addEventListener("scroll", () => {
 </script>
 
  
+
 
 
 
