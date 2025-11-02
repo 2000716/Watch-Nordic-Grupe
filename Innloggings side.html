@@ -156,84 +156,113 @@
   </div>
 
   <footer>© 2025 Watch Nordic – Din underholdning, ditt valg</footer>
+<script>
+  let registreringsmodus = false;
 
-  <script>
-    let registreringsmodus = false;
+  window.addEventListener("DOMContentLoaded", () => {
+    const lagretEpost = localStorage.getItem("epost");
+    const lagretPassord = localStorage.getItem("passord");
 
-    window.addEventListener("DOMContentLoaded", () => {
-      const lagretEpost = localStorage.getItem("epost");
-      const lagretPassord = localStorage.getItem("passord");
+    if (lagretEpost) document.getElementById("epost").value = lagretEpost;
+    if (lagretPassord) document.getElementById("passord").value = lagretPassord;
+  });
 
-      if (lagretEpost) document.getElementById("epost").value = lagretEpost;
-      if (lagretPassord) document.getElementById("passord").value = lagretPassord;
-    });
+  function handterSkjema() {
+    const epost = document.getElementById("epost").value.trim().toLowerCase();
+    const passord = document.getElementById("passord").value.trim();
+    const navn = document.getElementById("navn").value.trim();
+    const feilmelding = document.getElementById("feilmelding");
+    feilmelding.textContent = "";
 
-    function handterSkjema() {
-      const epost = document.getElementById("epost").value.trim().toLowerCase();
-      const passord = document.getElementById("passord").value.trim();
-      const navn = document.getElementById("navn").value.trim();
-      const feilmelding = document.getElementById("feilmelding");
-      feilmelding.textContent = "";
+    let brukere = JSON.parse(localStorage.getItem("brukere") || "{}");
 
-      let brukere = JSON.parse(localStorage.getItem("brukere") || "{}");
-
-      if (!epost || !passord || (registreringsmodus && !navn)) {
-        feilmelding.textContent = registreringsmodus
-          ? "Fyll ut navn, e-post og passord."
-          : "Fyll ut e-post og passord.";
-        return false;
-      }
-
-      if (registreringsmodus) {
-        if (brukere[epost]) {
-          feilmelding.textContent = "E-posten er allerede registrert.";
-          return false;
-        }
-
-        brukere[epost] = { navn, passord };
-        localStorage.setItem("brukere", JSON.stringify(brukere));
-        localStorage.setItem("epost", epost);
-        localStorage.setItem("passord", passord);
-        localStorage.setItem("navn", navn);
-        window.location.href = "Hovedside.html";
-      } else {
-        const bruker = brukere[epost];
-        if (bruker && bruker.passord === passord) {
-          localStorage.setItem("epost", epost);
-          localStorage.setItem("passord", passord);
-          localStorage.setItem("navn", bruker.navn);
-          window.location.href = "Hovedside.html";
-        } else {
-          feilmelding.textContent = "Feil e-post eller passord.";
-        }
-      }
+    if (!epost || !passord || (registreringsmodus && !navn)) {
+      feilmelding.textContent = registreringsmodus
+        ? "Fyll ut navn, e-post og passord."
+        : "Fyll ut e-post og passord.";
       return false;
     }
 
-    function visRegistrering() {
-      registreringsmodus = true;
-      document.getElementById("formTitle").textContent = "Registrer deg";
-      document.getElementById("submitKnapp").textContent = "Opprett konto";
-      document.getElementById("toggleText").innerHTML =
-        'Allerede medlem? <a onclick="visInnlogging()">Logg inn</a>';
-      document.getElementById("navnGruppe").style.display = "block";
-      document.getElementById("feilmelding").textContent = "";
-      document.getElementById("passord").setAttribute("autocomplete", "new-password");
+    if (registreringsmodus) {
+      if (brukere[epost]) {
+        feilmelding.textContent = "E-posten er allerede registrert.";
+        return false;
+      }
+
+      brukere[epost] = { navn, passord };
+      localStorage.setItem("brukere", JSON.stringify(brukere));
+      localStorage.setItem("epost", epost);
+      localStorage.setItem("passord", passord);
+      localStorage.setItem("navn", navn);
+      window.location.href = "Hovedside.html";
+    } else {
+      const bruker = brukere[epost];
+      if (bruker && bruker.passord === passord) {
+        localStorage.setItem("epost", epost);
+        localStorage.setItem("passord", passord);
+        localStorage.setItem("navn", bruker.navn);
+        window.location.href = "Hovedside.html";
+      } else {
+        feilmelding.textContent = "Feil e-post eller passord.";
+      }
+    }
+    return false;
+  }
+
+  function visRegistrering() {
+    registreringsmodus = true;
+    document.getElementById("formTitle").textContent = "Registrer deg";
+    document.getElementById("submitKnapp").textContent = "Opprett konto";
+    document.getElementById("toggleText").innerHTML =
+      'Allerede medlem? <a onclick="visInnlogging()">Logg inn</a>';
+    document.getElementById("navnGruppe").style.display = "block";
+    document.getElementById("feilmelding").textContent = "";
+    document.getElementById("passord").setAttribute("autocomplete", "new-password");
+  }
+
+  function visInnlogging() {
+    registreringsmodus = false;
+    document.getElementById("formTitle").textContent = "Logg inn";
+    document.getElementById("submitKnapp").textContent = "Fortsett";
+    document.getElementById("toggleText").innerHTML =
+      'Er du ikke medlem? <a onclick="visRegistrering()">Registrer deg</a>';
+    document.getElementById("navnGruppe").style.display = "none";
+    document.getElementById("feilmelding").textContent = "";
+    document.getElementById("passord").setAttribute("autocomplete", "current-password");
+  }
+
+  // ➕ NY FUNKSJON – "Glemt passord"
+  document.querySelector(".forgot-text a").addEventListener("click", () => {
+    const epost = prompt("Skriv inn e-postadressen du registrerte deg med:");
+    if (!epost) return;
+
+    let brukere = JSON.parse(localStorage.getItem("brukere") || "{}");
+    const bruker = brukere[epost.toLowerCase()];
+
+    if (!bruker) {
+      alert("Fant ingen bruker med denne e-posten.");
+      return;
     }
 
-    function visInnlogging() {
-      registreringsmodus = false;
-      document.getElementById("formTitle").textContent = "Logg inn";
-      document.getElementById("submitKnapp").textContent = "Fortsett";
-      document.getElementById("toggleText").innerHTML =
-        'Er du ikke medlem? <a onclick="visRegistrering()">Registrer deg</a>';
-      document.getElementById("navnGruppe").style.display = "none";
-      document.getElementById("feilmelding").textContent = "";
-      document.getElementById("passord").setAttribute("autocomplete", "current-password");
+    const nyttPassord = prompt("Skriv inn nytt passord:");
+    if (!nyttPassord) return;
+
+    bruker.passord = nyttPassord;
+    brukere[epost.toLowerCase()] = bruker;
+    localStorage.setItem("brukere", JSON.stringify(brukere));
+
+    // Oppdaterer lagret passord dersom dette er den innloggede brukeren
+    if (localStorage.getItem("epost") === epost.toLowerCase()) {
+      localStorage.setItem("passord", nyttPassord);
     }
-  </script>
+
+    alert("Passordet er oppdatert! Du kan nå logge inn med det nye passordet.");
+  });
+</script>
+
 </body>
 </html>
+
 
 
 
