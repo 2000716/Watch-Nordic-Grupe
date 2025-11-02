@@ -197,22 +197,6 @@ const filmer = {
     expireDate: "2026-11-15T23:59:59",
   },
 
-   "mummitrollet-på-rivieraen": {
-    tittel: "Mummitrollet på Rivieraen",
-    bakgrunn: "https://image.tmdb.org/t/p/w1280/z80RWUg5fs0wxx43jDSkaJvln0m.jpg",
-    logo: "https://static.wixstatic.com/media/fd2fb2_cb58ab8385504c98900985c1a30b4b3b~mv2.png",
-    trailer: "https://video.wixstatic.com/video/fd2fb2_5343c88a14624075b13ad824e79d429d/1080p/mp4/file.mp4", // 🎥 NY
-    poster: "https://static.wixstatic.com/media/fd2fb2_591857f6d2d643e9be3de342acde9761~mv2.jpg",
-    posterVertikal: "https://image.tmdb.org/t/p/w780/lfToeZDzH6dlQNkUgP20X5H1fhD.jpg", // portrett
-    beskrivelse: "Mummitrollene setter seil til Rivieraen, hvor Snorkfrøken, etter en reise fylt med stormer og farer på øde øyer, blir blendet av oppmerksomheten til en playboy.",
-    metadata: ["Finland", "2015", "Alle", "Familie", "1 t 20 min"],
-    imdb: "https://www.imdb.com/title/tt2371399/",
-    skuespillere: "Maria Sid, Russell Tovey, Mats Långbacka",
-    regissor: "Xavier Picard",
-    watchUrl: "film-mal.html?id=mummitrollet-på-rivieraen",
-    expireDate: "2025-10-15T23:00:00",
-  },
-
      "pirates": {
     tittel: "Pirates",
     bakgrunn: "https://imageservice.sky.com/uuid/24859a07-faf9-40f6-83ec-ff8fe241f850/background/2000",
@@ -440,6 +424,7 @@ const filmer = {
     expireDate: "2027-11-15T23:59:59",
   },
 };
+
 
 
 
