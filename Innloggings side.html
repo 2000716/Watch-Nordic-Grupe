@@ -84,112 +84,233 @@
   </div>
 
   <script>
-    let registreringsmodus = false;
+<script>
+/* ==========================
+   STREAMIFY LOGIN SYSTEM v3
+   ========================== */
 
-    window.addEventListener("DOMContentLoaded", () => {
-      const lagretEpost = localStorage.getItem("epost");
-      const lagretPassord = localStorage.getItem("passord");
+// --- GLOBAL STATE ---
+let registreringsmodus = false;
 
-      if (lagretEpost) document.getElementById("epost").value = lagretEpost;
-      if (lagretPassord) document.getElementById("passord").value = lagretPassord;
-    });
+/* --------------------------
+   AUTOLOGIN & INIT
+-------------------------- */
+window.addEventListener("DOMContentLoaded", () => {
+  const aktivBruker = localStorage.getItem("aktivBruker");
+  const aktivProfil = localStorage.getItem("aktivProfil");
 
-    function handterSkjema() {
-      const epost = document.getElementById("epost").value.trim().toLowerCase();
-      const passord = document.getElementById("passord").value.trim();
-      const navn = document.getElementById("navn").value.trim();
-      const feilmelding = document.getElementById("feilmelding");
-      feilmelding.textContent = "";
+  // Direkte videresending hvis innlogget
+  if (aktivBruker && aktivProfil) {
+    window.location.href = "Hovedside.html";
+    return;
+  } else if (aktivBruker && !aktivProfil) {
+    window.location.href = "profiler.html";
+    return;
+  }
 
-      let brukere = JSON.parse(localStorage.getItem("brukere") || "{}");
+  // Preutfyll lagret e-post hvis finnes
+  const lagretEpost = localStorage.getItem("epost");
+  if (lagretEpost) document.getElementById("epost").value = lagretEpost;
+});
 
-      if (!epost || !passord || (registreringsmodus && !navn)) {
-        feilmelding.textContent = registreringsmodus
-          ? "Fyll ut navn, e-post og passord."
-          : "Fyll ut e-post og passord.";
-        return false;
-      }
+/* --------------------------
+   SKJEMAHÅNDTERING
+-------------------------- */
+function handterSkjema() {
+  const epost = document.getElementById("epost").value.trim().toLowerCase();
+  const passord = document.getElementById("passord").value.trim();
+  const navn = document.getElementById("navn")?.value.trim();
+  const feilmelding = document.getElementById("feilmelding");
+  feilmelding.textContent = "";
 
-      if (registreringsmodus) {
-        if (brukere[epost]) {
-          feilmelding.textContent = "E-posten er allerede registrert.";
-          return false;
-        }
+  let brukere = JSON.parse(localStorage.getItem("brukere") || "{}");
 
-        // Lagre ny bruker
-        brukere[epost] = { navn, passord };
-        localStorage.setItem("brukere", JSON.stringify(brukere));
-        localStorage.setItem("epost", epost);
-        localStorage.setItem("passord", passord);
-        localStorage.setItem("navn", navn);
+  // Validering
+  if (!epost || !passord || (registreringsmodus && !navn)) {
+    feilmelding.textContent = registreringsmodus
+      ? "Fyll ut navn, e-post og passord."
+      : "Fyll ut e-post og passord.";
+    return false;
+  }
 
-        window.location.href = "Hovedside.html";
-      } else {
-        const bruker = brukere[epost];
-
-        if (bruker && bruker.passord === passord) {
-          localStorage.setItem("epost", epost);
-          localStorage.setItem("passord", passord);
-          localStorage.setItem("navn", bruker.navn);
-
-          window.location.href = "Hovedside.html";
-        } else {
-          feilmelding.textContent = "Feil e-post eller passord.";
-        }
-      }
-
+  // --- REGISTRERING ---
+  if (registreringsmodus) {
+    if (brukere[epost]) {
+      feilmelding.textContent = "E-posten er allerede registrert.";
       return false;
     }
 
-    function visRegistrering() {
-      registreringsmodus = true;
-      document.getElementById("formTitle").textContent = "Registrer deg";
-      document.getElementById("submitKnapp").textContent = "Registrer";
-      document.getElementById("toggleText").innerHTML =
-        'Allerede medlem? <a onclick="visInnlogging()">Logg inn</a>';
-      document.getElementById("navnGruppe").style.display = "block";
-      document.getElementById("feilmelding").textContent = "";
-      document.getElementById("passord").setAttribute("autocomplete", "new-password");
-    }
+    brukere[epost] = {
+      navn,
+      passord,
+      profiler: [{ navn: "Hovedprofil", favoritter: [] }]
+    };
 
-    function visInnlogging() {
-      registreringsmodus = false;
-      document.getElementById("formTitle").textContent = "Logg inn";
-      document.getElementById("submitKnapp").textContent = "Fortsett";
-      document.getElementById("toggleText").innerHTML =
-        'Er du ikke medlem? <a onclick="visRegistrering()">Registrer deg</a>';
-      document.getElementById("navnGruppe").style.display = "none";
-      document.getElementById("feilmelding").textContent = "";
-      document.getElementById("passord").setAttribute("autocomplete", "current-password");
-    }
+    localStorage.setItem("brukere", JSON.stringify(brukere));
+    localStorage.setItem("aktivBruker", epost);
+    localStorage.removeItem("aktivProfil");
+    localStorage.setItem("epost", epost);
 
-    // Eksporter/importer funksjon for å dele mellom enheter
-    function eksporterBrukere() {
-      const brukere = localStorage.getItem("brukere");
-      if (!brukere) {
-        alert("Ingen brukere å eksportere.");
-        return;
-      }
-      const kode = btoa(brukere); // base64
-      prompt("Kopier denne koden og lim den inn på en annen enhet:", kode);
-    }
+    window.location.href = "profiler.html";
+    return false;
+  }
 
-    function importerBrukere() {
-      const kode = prompt("Lim inn eksportert kode her:");
-      if (!kode) return;
-      try {
-        const json = atob(kode);
-        const brukere = JSON.parse(json);
-        localStorage.setItem("brukere", JSON.stringify(brukere));
-        alert("Brukere importert! Du kan nå logge inn.");
-      } catch (e) {
-        alert("Ugyldig kode.");
-      }
+  // --- INNLOGGING ---
+  const bruker = brukere[epost];
+  if (bruker && bruker.passord === passord) {
+    localStorage.setItem("aktivBruker", epost);
+    localStorage.removeItem("aktivProfil");
+    localStorage.setItem("epost", epost);
+
+    if (bruker.profiler.length > 1) {
+      window.location.href = "profiler.html";
+    } else {
+      localStorage.setItem("aktivProfil", bruker.profiler[0].navn);
+      window.location.href = "Hovedside.html";
     }
-  </script>
+  } else {
+    feilmelding.textContent = "Feil e-post eller passord.";
+  }
+
+  return false;
+}
+
+/* --------------------------
+   BYTT MELLOM MODUS
+-------------------------- */
+function visRegistrering() {
+  registreringsmodus = true;
+  document.getElementById("formTitle").textContent = "Opprett konto";
+  document.getElementById("submitKnapp").textContent = "Registrer";
+  document.getElementById("toggleText").innerHTML =
+    'Allerede medlem? <a onclick="visInnlogging()">Logg inn</a>';
+  document.getElementById("navnGruppe").style.display = "block";
+  document.getElementById("feilmelding").textContent = "";
+  document.getElementById("passord").setAttribute("autocomplete", "new-password");
+}
+
+function visInnlogging() {
+  registreringsmodus = false;
+  document.getElementById("formTitle").textContent = "Logg inn";
+  document.getElementById("submitKnapp").textContent = "Fortsett";
+  document.getElementById("toggleText").innerHTML =
+    'Ikke medlem? <a onclick="visRegistrering()">Registrer deg</a>';
+  document.getElementById("navnGruppe").style.display = "none";
+  document.getElementById("feilmelding").textContent = "";
+  document.getElementById("passord").setAttribute("autocomplete", "current-password");
+}
+
+/* --------------------------
+   GLEMT PASSORD (DEMO)
+-------------------------- */
+function glemtPassord() {
+  const epost = prompt("Skriv inn e-posten din for å tilbakestille passord:");
+  if (!epost) return;
+  const brukere = JSON.parse(localStorage.getItem("brukere") || "{}");
+  if (brukere[epost]) {
+    const nytt = Math.random().toString(36).slice(-8);
+    brukere[epost].passord = nytt;
+    localStorage.setItem("brukere", JSON.stringify(brukere));
+    alert("Et nytt passord er sendt (simulert): " + nytt);
+  } else {
+    alert("Fant ingen bruker med denne e-posten.");
+  }
+}
+
+/* --------------------------
+   EKSPORT / IMPORT ("Sky")
+-------------------------- */
+function eksporterBrukere() {
+  const data = localStorage.getItem("brukere");
+  if (!data) return alert("Ingen brukere funnet.");
+  const kode = btoa(data);
+  prompt("Kopier denne eksportkoden for å synkronisere til en annen enhet:", kode);
+}
+
+function importerBrukere() {
+  const kode = prompt("Lim inn eksportkoden her:");
+  if (!kode) return;
+  try {
+    const json = atob(kode);
+    const brukere = JSON.parse(json);
+    localStorage.setItem("brukere", JSON.stringify(brukere));
+    alert("Brukere importert! Du kan nå logge inn.");
+  } catch {
+    alert("Ugyldig kode.");
+  }
+}
+
+/* --------------------------
+   PROFILHÅNDTERING (profiler.html)
+-------------------------- */
+function visProfiler() {
+  const brukerEpost = localStorage.getItem("aktivBruker");
+  if (!brukerEpost) return (window.location.href = "index.html");
+
+  const brukere = JSON.parse(localStorage.getItem("brukere") || "{}");
+  const bruker = brukere[brukerEpost];
+  if (!bruker) {
+    localStorage.removeItem("aktivBruker");
+    window.location.href = "index.html";
+    return;
+  }
+
+  const container = document.getElementById("profilerListe");
+  if (!container) return;
+  container.innerHTML = "";
+
+  bruker.profiler.forEach(p => {
+    const btn = document.createElement("button");
+    btn.textContent = p.navn;
+    btn.className = "profilKnapp";
+    btn.onclick = () => velgProfil(p.navn);
+    container.appendChild(btn);
+  });
+
+  const addBtn = document.createElement("button");
+  addBtn.textContent = "+ Ny profil";
+  addBtn.className = "profilKnapp leggTil";
+  addBtn.onclick = leggTilProfil;
+  container.appendChild(addBtn);
+}
+
+function leggTilProfil() {
+  const navn = prompt("Skriv inn navn på ny profil:");
+  if (!navn) return;
+
+  const epost = localStorage.getItem("aktivBruker");
+  const brukere = JSON.parse(localStorage.getItem("brukere") || "{}");
+  const bruker = brukere[epost];
+
+  if (bruker.profiler.find(p => p.navn.toLowerCase() === navn.toLowerCase())) {
+    return alert("En profil med dette navnet finnes allerede.");
+  }
+
+  bruker.profiler.push({ navn, favoritter: [] });
+  brukere[epost] = bruker;
+  localStorage.setItem("brukere", JSON.stringify(brukere));
+  alert("Ny profil opprettet!");
+  visProfiler();
+}
+
+function velgProfil(navn) {
+  localStorage.setItem("aktivProfil", navn);
+  window.location.href = "Hovedside.html";
+}
+
+/* --------------------------
+   LOGG UT
+-------------------------- */
+function loggUt() {
+  localStorage.removeItem("aktivBruker");
+  localStorage.removeItem("aktivProfil");
+  window.location.href = "index.html";
+}
+</script>
 
 </body>
 </html>
+
 
 
 
