@@ -423,7 +423,27 @@ const filmer = {
     publishDate: "2025-12-21T00:00:00", // ISO datoformat
     expireDate: "2027-11-15T23:59:59",
   },
+
+  
+    "bukkene-bruse-på-badeland": {
+    tittel: "Bukkene Bruse På Badeland",
+    bakgrunn: "https://gfx.nrk.no/TvSHoqEH2RZNUGu8GkUPQgV9GzD5Lnx9JM5xRu-b0fgQ",
+    banner: "https://gfx.nrk.no/TvSHoqEH2RZNUGu8GkUPQgV9GzD5Lnx9JM5xRu-b0fgQ", // <- brukes til hero-banner
+    logo: "https://gfx.nrk.no/sFLofcs-6z2yRECoqj1OswexUISYWnn9tiKLHazGYnwA",
+    trailer: "https://video.wixstatic.com/video/fd2fb2_01e27bfa32554edcbed3b23ce9d6ad1d/1080p/mp4/file.mp4", // 🎥 NY 
+    poster: "https://gfx.nrk.no/sTYD5OcGTwLgaejFDJJtfw2nPPgGbstPXGsG39nryCpw",
+    posterVertikal: "https://i-viaplay-com.akamaized.net/viaplay-prod/291/964/1709901113-992977647b04853547970001d520ea437bc8d372.jpg?width=400&height=600", // portrett
+    beskrivelse: "De tre bukkene Bruse gidder ikke å dra til setra for å gjøre seg fete nok en gang. Det blir alt for mye styr med trollet. I år skal de på badeland!",
+    metadata: ["Norge", "2023", "Alle", "Familie", "1 t 7 min"],
+    imdb: "https://www.imdb.com/title/tt21421052/",
+    skuespillere: "Astrid Lammetun, William Ashurst, Trond Fausa Aurvåg, Will Ashurst, Regina Tucker",
+    regissor: "William AshurstWill Ashurst",
+    watchUrl: "film-mal.html?id=bukkene-bruse-på-badeland",
+    publishDate: "2026-01-01T00:00:00", // ISO datoformat
+    expireDate: "2027-11-15T23:59:59",
+  },
 };
+
 
 
 
