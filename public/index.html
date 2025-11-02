@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Innlogging / Registrering</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background:
+        linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)),
+        url('https://static.wixstatic.com/media/fd2fb2_cb01bba1adf84bf1aa5ef6ec7cb2f055~mv2.png') 
+        no-repeat center center fixed;
+      background-size: cover;
+      font-family: Arial, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      color: white;
+    }
+    header { position: absolute; top: 20px; left: 40px; display: flex; align-items: center; }
+    header img { height: 50px; width: auto; }
+    .container {
+      background-color: rgba(15, 42, 46, 0.6);
+      padding: 40px;
+      border-radius: 12px;
+      box-shadow: 0 0 25px rgba(0,0,0,0.7);
+      max-width: 400px;
+      width: 100%;
+      text-align: center;
+      animation: fadeIn 0.6s ease-in-out;
+    }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+    h2 { margin-bottom: 20px; font-size: 26px; color: #ffffff; }
+    label { display: block; text-align: left; margin-top: 15px; margin-bottom: 5px; font-size: 14px; }
+    input { width: 100%; padding: 12px; border: none; border-radius: 6px; background-color: #e3e3e3; font-size: 15px; }
+    input:focus { outline: 2px solid #1b5457; }
+    button { width: 100%; padding: 12px; background-color: #1b5457; color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 16px; margin-top: 20px; transition: 0.3s; }
+    button:hover { background-color: #247274; }
+    .error { color: #ff4c4c; margin-top: 10px; min-height: 20px; }
+    .toggle-text, .forgot-text { margin-top: 15px; font-size: 14px; }
+    .toggle-text a, .forgot-text a { color: #00bfff; cursor: pointer; text-decoration: underline; }
+    footer { position: absolute; bottom: 10px; font-size: 12px; color: #aaa; }
+  </style>
+</head>
+<body>
+  <header>
+    <img src="https://static.wixstatic.com/media/fd2fb2_a4b2ace62dff4605a0387f46aad8a404~mv2.png" alt="Watch Logo">
+  </header>
+
+  <div class="container">
+    <h2 id="formTitle">Logg inn</h2>
+
+    <form onsubmit="return handterSkjema()">
+      <div id="navnGruppe" style="display: none;">
+        <label for="navn">Navn</label>
+        <input type="text" id="navn" placeholder="Fullt navn" autocomplete="name" />
+      </div>
+
+      <label for="epost">E-post</label>
+      <input type="email" id="epost" placeholder="E-post" autocomplete="email" required />
+
+      <label for="passord">Passord</label>
+      <input type="password" id="passord" placeholder="Passord" autocomplete="current-password" required />
+
+      <button type="submit" id="submitKnapp">Fortsett</button>
+      <div class="error" id="feilmelding"></div>
+    </form>
+
+    <div class="forgot-text">
+      <a href="#" id="forgotLink">Glemt passord?</a>
+    </div>
+
+    <div class="toggle-text" id="toggleText">
+      Er du ikke medlem? <a onclick="visRegistrering()">Registrer deg</a>
+    </div>
+  </div>
+
+  <footer>© 2025 Watch Nordic – Din underholdning, ditt valg</footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
+
+
+
+
+
+
