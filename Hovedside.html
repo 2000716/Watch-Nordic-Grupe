@@ -1196,6 +1196,17 @@ background: linear-gradient(
   }
 }
 
+/* --- UTVIDER HERO-BANNER BAK GALLERIENE --- */
+.hero-banner {
+  height: 120vh; /* Øker høyden så bildet/videoen strekker seg bak galleriet */
+  margin-bottom: -40vh; /* Trekker galleriene visuelt opp slik at de "dekker" banneret */
+  z-index: 0; /* Lar galleriene vises over */
+}
+
+.gallery-section {
+  position: relative;
+  z-index: 2; /* Sørger for at galleriene ligger over banneret */
+}
 
 
   </style>
@@ -1767,6 +1778,7 @@ window.addEventListener("scroll", () => {
 </script>
 
  
+
 
 
 
