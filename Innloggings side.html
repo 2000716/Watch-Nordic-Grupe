@@ -3,14 +3,14 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Strømmetjeneste – Innlogging / Registrering</title>
+  <title>Innlogging / Registrering</title>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
     body {
       background:
-        linear-gradient(rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0.75)),
-        url('https://images.unsplash.com/photo-1606813909024-842b1e1e1c2a?auto=format&fit=crop&w=1600&q=80')
+        linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)),
+        url('https://static.wixstatic.com/media/fd2fb2_cb01bba1adf84bf1aa5ef6ec7cb2f055~mv2.png') 
         no-repeat center center fixed;
       background-size: cover;
       font-family: Arial, sans-serif;
@@ -26,18 +26,21 @@
       position: absolute;
       top: 20px;
       left: 40px;
-      font-size: 28px;
-      font-weight: bold;
-      color: #e50914;
-      letter-spacing: 1px;
+      display: flex;
+      align-items: center;
+    }
+
+    header img {
+      height: 50px;
+      width: auto;
     }
 
     .container {
-      background-color: rgba(20, 20, 20, 0.85);
+      background-color: rgba(15, 42, 46, 0.6);
       padding: 40px;
       border-radius: 12px;
-      box-shadow: 0 0 25px rgba(0,0,0,0.6);
-      max-width: 380px;
+      box-shadow: 0 0 25px rgba(0,0,0,0.7);
+      max-width: 400px;
       width: 100%;
       text-align: center;
       animation: fadeIn 0.6s ease-in-out;
@@ -48,7 +51,11 @@
       to { opacity: 1; transform: translateY(0); }
     }
 
-    h2 { margin-bottom: 20px; }
+    h2 {
+      margin-bottom: 20px;
+      font-size: 26px;
+      color: #ffffff;
+    }
 
     label {
       display: block;
@@ -63,19 +70,18 @@
       padding: 12px;
       border: none;
       border-radius: 6px;
-      background-color: #333;
-      color: white;
+      background-color: #e3e3e3;
       font-size: 15px;
     }
 
     input:focus {
-      outline: 2px solid #e50914;
+      outline: 2px solid #1b5457;
     }
 
     button {
       width: 100%;
       padding: 12px;
-      background-color: #e50914;
+      background-color: #1b5457;
       color: white;
       border: none;
       border-radius: 6px;
@@ -86,7 +92,7 @@
     }
 
     button:hover {
-      background-color: #f6121d;
+      background-color: #247274;
     }
 
     .error {
@@ -110,13 +116,16 @@
       position: absolute;
       bottom: 10px;
       font-size: 12px;
-      color: #999;
+      color: #aaa;
     }
   </style>
 </head>
 <body>
 
-  <header>StreamZone</header>
+  <!-- Logo som bilde -->
+  <header>
+    <img src="https://static.wixstatic.com/media/fd2fb2_a4b2ace62dff4605a0387f46aad8a404~mv2.png" alt="Watch Logo">
+  </header>
 
   <div class="container">
     <h2 id="formTitle">Logg inn</h2>
@@ -146,7 +155,7 @@
     </div>
   </div>
 
-  <footer>© 2025 StreamZone – Alle rettigheter reservert</footer>
+  <footer>© 2025 Watch Nordic – Din underholdning, ditt valg</footer>
 
   <script>
     let registreringsmodus = false;
@@ -225,7 +234,6 @@
   </script>
 </body>
 </html>
-
 
 
 
