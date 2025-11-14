@@ -1422,7 +1422,7 @@ function oppdaterBanner() {
   metadata.textContent = film.metadata ? film.metadata.join(" • ") : "";
 
   // Knapper
-  seNa.onclick = () => window.location.href = `film.html?navn=${film.tittel}`;
+  seNa.onclick = () => window.location.href = `film-mal.html?id=${film.tittel}`;
   detaljer.onclick = () => window.location.href = `film.html?navn=${film.tittel}`;
 
   // Spill av traileren etter 5 sekunder, og gå tilbake til bilde når ferdig
@@ -1782,6 +1782,7 @@ window.addEventListener("scroll", () => {
 </script>
 
  
+
 
 
 
