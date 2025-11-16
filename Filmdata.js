@@ -453,10 +453,11 @@ const filmer = {
     skuespillere: "Jim Carrey, Jeffrey Tambor, Christine Baranski, Bill Irwin, Molly Shannon, Clint Howard",
     regissor: "Ron Howard",
     watchUrl: "film-mal.html?id=how-the-grinch-stole-christmas",
-    publishDate: "2025-01-12T00:00:00", // ISO datoformat
+    publishDate: "2025-12-1T00:00:00", // ISO datoformat
     expireDate: "2027-11-15T23:59:59",
   },
 };
+
 
 
 
