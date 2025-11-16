@@ -32,7 +32,6 @@ const filmer = {
   "kaptein-sabeltann": {
     tittel: "Kaptein Sabeltann",
     bakgrunn: "https://iptvimagecache-playplus-prod-vip.han.telia.se/original/no/imgv3/GnP7NDuB0Rrw7IqKaTNuGddHmo9uH98LTuGRs8nsXJvIiNzbUb2LoKtBRiiR2Yg-OfX6odiC2nMHfm6XZuDZz-iivlYEPLXGpx3QZMpE21N2HaSNGxmn_HIyz30.jpeg",
-    banner: "https://static.wixstatic.com/media/fd2fb2_0efea4ff6f6b4073b0e64bb659e3d800~mv2.jpg", // <- brukes til hero-banner
     logo: "https://static.wixstatic.com/media/fd2fb2_38bcd3561623467f8a05f8fb23488188~mv2.png",
     trailer: "https://video.wixstatic.com/video/fd2fb2_516f105ae8b94969abd830baf696f6d4/360p/mp4/file.mp4", // 🎥 NY 
     poster: "https://beam-images.warnermediacdn.com/BEAM_LWM_DELIVERABLES/500cfa5c-264b-4366-9264-342b1569605e/32dcbd1e-b23c-4acd-ba97-2e6b6a42a620?host=wbd-images.prod-vod.h264.io&partner=beamcom&w=500",
@@ -94,7 +93,6 @@ const filmer = {
   "jul-i-flåklypa": {
     tittel: "Jul i Flåklypa",
     bakgrunn: "https://occ-0-8407-2218.1.nflxso.net/dnm/api/v6/E8vDc_W8CLv7-yMQu8KMEC7Rrr8/AAAABf_jXS7fg-ggm0v_ygwinuf9ZAf46TiEnc5yHc9if-TcxcEsEh_RIDErLYQpvhnosZF6f3oXPzEdY7xdP0XOSM2xcPDK0s6Ix0HM.jpg?r=9e5",
-    banner: "https://montages.no/files/2013/11/sola6.jpg", // <- brukes til hero-banner
     logo: "https://occ-0-3668-38.1.nflxso.net/dnm/api/v6/S4oi7EPZbv2UEPaukW54OORa0S8/AAAABW5AdcvFX4G8XnB_b3uQRtZgvyU3QTyH4uSjNdDIANcjK_MlWXdMffH6J7JaKlt3Xj4_YKWusqEWZ9Xo1CkqN2_OYV51oVqvhw.webp?r=97e",
     trailer: "https://video.wixstatic.com/video/fd2fb2_c45cd733abaa48deb8f7f7e78e713838/720p/mp4/file.mp4", // 🎥 NY 
     poster: "https://sumo.cdn.tv2.no/imageapi/v3/img/5dbc0a4f498e1dc3eb8394b3-1700644038168",
@@ -231,7 +229,6 @@ const filmer = {
    "sauen-shaun–filmen": {
     tittel: "Sauen Shaun – Filmen",
     bakgrunn: "https://image.tmdb.org/t/p/original/27LJejNKvrtGca0Woc4oEBvh1Xs.jpg",
-    banner: "https://image.tmdb.org/t/p/original/27LJejNKvrtGca0Woc4oEBvh1Xs.jpg", // <- brukes til hero-banner
     logo: "https://image.tmdb.org/t/p/original/camSNGn7WGX34TjGmTCHPqJp2Hb.png",
     trailer: "https://video.wixstatic.com/video/fd2fb2_1a19f6915f224212a406fb1de9a7a47c/1080p/mp4/file.mp4", // 🎥 NY
     poster: "https://sumo.cdn.tv2.no/imageapi/v3/img/59677ff90cf25438151a6a48-1708671818935",
@@ -428,7 +425,6 @@ const filmer = {
     "bukkene-bruse-på-badeland": {
     tittel: "Bukkene Bruse På Badeland",
     bakgrunn: "https://gfx.nrk.no/TvSHoqEH2RZNUGu8GkUPQgV9GzD5Lnx9JM5xRu-b0fgQ",
-    banner: "https://gfx.nrk.no/TvSHoqEH2RZNUGu8GkUPQgV9GzD5Lnx9JM5xRu-b0fgQ", // <- brukes til hero-banner
     logo: "https://gfx.nrk.no/sFLofcs-6z2yRECoqj1OswexUISYWnn9tiKLHazGYnwA",
     trailer: "https://video.wixstatic.com/video/fd2fb2_01e27bfa32554edcbed3b23ce9d6ad1d/1080p/mp4/file.mp4", // 🎥 NY 
     poster: "https://gfx.nrk.no/sTYD5OcGTwLgaejFDJJtfw2nPPgGbstPXGsG39nryCpw",
@@ -442,7 +438,26 @@ const filmer = {
     publishDate: "2026-01-01T00:00:00", // ISO datoformat
     expireDate: "2027-11-15T23:59:59",
   },
+
+      "how-the-grinch-stole-christmas": {
+    tittel: "How the Grinch Stole Christmas",
+    bakgrunn: "https://www.level44.co/wp-content/uploads/2024/11/531787-1920x1080-desktop-1080p-how-the-grinch-stole-christmas-background.jpg",
+    banner: "https://pixel.disco.skyshowtime.com/uuid/3a5361e7-6d03-320d-8abb-823525e9f1f0/SCENE_CLEAN_WIDE?language=en-US&proposition=SKYSHOWTIME&version=d3229f74-ffee-32ef-abb6-cebc9818efd9", // <- brukes til hero-banner
+    logo: "https://pixel.disco.skyshowtime.com/uuid/3a5361e7-6d03-320d-8abb-823525e9f1f0/LOGO_TITLE_WIDE?language=nb-NO&proposition=SKYSHOWTIME&version=81afed2e-bda2-357c-a63c-c3af1731ea60",
+    trailer: "https://video.wixstatic.com/video/fd2fb2_28624f6f1130402d9df0ab2e3b5c2ec3/1080p/mp4/file.mp4", // 🎥 NY 
+    poster: "https://pixel.disco.skyshowtime.com/uuid/3a5361e7-6d03-320d-8abb-823525e9f1f0/COVER_TITLE_WIDE?language=cs-CZ&proposition=SKYSHOWTIME&version=ffb08096-b2a5-3786-810d-6c6b5da18195",
+    posterVertikal: "https://i-viaplay-com.akamaized.net/viaplay-prod/597/852/1539185788-099594a1e0088f10b1c5ca57ed5a70dcdffdf6dd.jpg?width=400&height=600", // portrett
+    beskrivelse: "Den gretne Grinchen liker ikke julen og akter å ødelegge høytiden for innbyggerne i Hvemvik. Men så møter han Cindy Lou Hvem, en ung jente som vil være venner med ham.",
+    metadata: ["USA", "2000", "Alle", "Familie", "1 t 44 min"],
+    imdb: "https://www.imdb.com/title/tt0170016/",
+    skuespillere: "Jim Carrey, Jeffrey Tambor, Christine Baranski, Bill Irwin, Molly Shannon, Clint Howard",
+    regissor: "Ron Howard",
+    watchUrl: "film-mal.html?id=how-the-grinch-stole-christmas",
+    publishDate: "2025-01-12T00:00:00", // ISO datoformat
+    expireDate: "2027-11-15T23:59:59",
+  },
 };
+
 
 
 
