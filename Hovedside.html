@@ -174,10 +174,13 @@ background: linear-gradient(
 
 
 .film-logo {
-  width: 400px;
-  max-width: 100%;
+  width: 280px;              /* standard størrelse */
+  max-width: 60%;            /* kan ikke dekke hele banneret */
+  max-height: 160px;         /* viktig – stopp vertikal strekking */
+  object-fit: contain;       /* holder proporsjoner */
   filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.8));
 }
+
 
 .banner-meta {
   font-size: 16px;
@@ -190,7 +193,14 @@ background: linear-gradient(
   color: #ddd;
   max-width: 500px;
   text-shadow: 0 2px 8px rgba(0, 0, 0, 0.8);
+
+  /* NYTT – begrens tekst */
+  display: -webkit-box;
+  -webkit-line-clamp: 3; /* maks 3 linjer – juster tallet */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
+
 
 .banner-buttons {
   display: flex;
@@ -1782,6 +1792,7 @@ window.addEventListener("scroll", () => {
 </script>
 
  
+
 
 
 
