@@ -394,6 +394,90 @@ video::cue {
   z-index: 10; /* Høyere enn underteksten */
 }
 
+    /* ================= MOBIL–TILPASNING ================= */
+
+/* For skjermer under 768px (mobiler i stående format) */
+@media (max-width: 768px) {
+
+  /* Gjør video UI større og lettere å trykke på */
+  .controls {
+    padding: 10px 12px;
+    gap: 10px;
+  }
+
+  .center-controls .btn img,
+  .right-controls .btn img,
+  .left-controls .btn img {
+    width: 26px;   /* mindre knapper på mobil */
+  }
+
+  /* Undertekster – større og høyere opp */
+  video::cue,
+  .subtitle-overlay {
+    font-size: 18px !important;      /* mindre for mobil */
+    bottom: 12% !important;          /* flyttes opp */
+    line-height: 1.25;
+    padding: 0 10px;
+  }
+
+  /* Når UI vises, løft undertekstene enda litt mer */
+  .subtitle-overlay.subtitle-up {
+    bottom: 20% !important;
+  }
+
+  /* Filmtittelen */
+  .movie-title {
+    font-size: 18px;
+    bottom: 80px;
+    left: 15px;
+  }
+
+  /* Progresjonslinje */
+  .progress-container {
+    bottom: 65px;
+    padding: 0 12px;
+  }
+
+  .time-display {
+    bottom: 78px;
+    right: 12px;
+    font-size: 12px;
+  }
+
+  /* Meny for undertekster */
+  .caption-menu {
+    bottom: 140px;
+    right: 10px;
+    min-width: 150px;
+    padding: 10px;
+  }
+
+  .caption-menu button {
+    font-size: 13px;
+    padding: 6px 8px;
+  }
+
+  /* Vannmerke */
+  .watermark {
+    width: 40px;
+    top: 10px;
+    right: 10px;
+  }
+}
+
+/* Ekstra små skjermer (f.eks. iPhone SE) */
+@media (max-width: 480px) {
+  video::cue,
+  .subtitle-overlay {
+    font-size: 16px !important;
+    bottom: 10% !important;
+  }
+
+  .subtitle-overlay.subtitle-up {
+    bottom: 18% !important;
+  }
+}
+
 
   </style>
 </head>
@@ -1169,6 +1253,7 @@ document.addEventListener("contextmenu", (e) => {
 });
 
 </script>
+
 
 
 
