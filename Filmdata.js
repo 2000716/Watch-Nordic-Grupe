@@ -442,7 +442,7 @@ const filmer = {
       "how-the-grinch-stole-christmas": {
     tittel: "How the Grinch Stole Christmas",
     bakgrunn: "https://www.level44.co/wp-content/uploads/2024/11/531787-1920x1080-desktop-1080p-how-the-grinch-stole-christmas-background.jpg",
-    banner: "https://pixel.disco.skyshowtime.com/uuid/3a5361e7-6d03-320d-8abb-823525e9f1f0/SCENE_CLEAN_WIDE?language=en-US&proposition=SKYSHOWTIME&version=d3229f74-ffee-32ef-abb6-cebc9818efd9", // <- brukes til hero-banner
+    banner: "https://m.media-amazon.com/images/S/pv-target-images/e7535552ea3560c6fa543377e537acf5275a1e91a0941cf33e81e62e096f5675._SX1080_FMjpg_.jpg", // <- brukes til hero-banner
     logo: "https://pixel.disco.skyshowtime.com/uuid/3a5361e7-6d03-320d-8abb-823525e9f1f0/LOGO_TITLE_WIDE?language=nb-NO&proposition=SKYSHOWTIME&version=81afed2e-bda2-357c-a63c-c3af1731ea60",
     trailer: "https://video.wixstatic.com/video/fd2fb2_28624f6f1130402d9df0ab2e3b5c2ec3/1080p/mp4/file.mp4", // 🎥 NY 
     poster: "https://pixel.disco.skyshowtime.com/uuid/3a5361e7-6d03-320d-8abb-823525e9f1f0/COVER_TITLE_WIDE?language=cs-CZ&proposition=SKYSHOWTIME&version=ffb08096-b2a5-3786-810d-6c6b5da18195",
@@ -457,6 +457,7 @@ const filmer = {
     expireDate: "2027-11-15T23:59:59",
   },
 };
+
 
 
 
