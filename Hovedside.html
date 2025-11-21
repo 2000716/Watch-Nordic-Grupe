@@ -1355,8 +1355,7 @@ background: linear-gradient(
         </div>
       </footer>
     </main>
-  
-<script src="Filmdata.js"></script> 
+  <script src="Filmdata.js"></script> 
 <script src="Seriedata.js"></script> 
 <script>
 // ==================== AUTENTISERING ==================== //
@@ -1388,13 +1387,11 @@ if (lagretBilde) {
   if (headerProfil) headerProfil.src = lagretBilde;
 }
 
-// ==================== HERO-BANNER (med video og timebasert visning) ==================== //
 // ==================== HERO-BANNER (med video, timebasert visning og lyd av) ==================== //
 function hentTimeFilm() {
   const filmKeys = Object.keys(filmer).filter(k => filmer[k].banner);
   if (filmKeys.length === 0) return null;
 
-  // Bruk timen i døgnet som index (samme film vises hele timen)
   const timeIndex = new Date().getHours() % filmKeys.length;
   return filmer[filmKeys[timeIndex]];
 }
@@ -1411,49 +1408,62 @@ function oppdaterBanner() {
   const seNa = document.getElementById("banner-se-na");
   const detaljer = document.getElementById("banner-detaljer");
 
-  // Sett opp bilde
   bilde.src = film.banner || "";
   bilde.style.display = "block";
 
-  // Sett opp video
   if (film.trailer) {
     video.src = film.trailer;
     video.load();
-    video.muted = true; // 🔇 Lyd av
+    video.muted = true;
   } else {
     video.removeAttribute("src");
   }
   video.style.display = "none";
 
-  // Tekster og logo
   logo.src = film.logo || "";
   logo.style.display = film.logo ? "block" : "none";
   beskrivelse.textContent = film.beskrivelse || "";
   metadata.textContent = film.metadata ? film.metadata.join(" • ") : "";
 
-  // Knapper
   seNa.onclick = () => window.location.href = `film-mal.html?id=${film.tittel}`;
   detaljer.onclick = () => window.location.href = `film.html?navn=${film.tittel}`;
 
-  // Spill av traileren etter 5 sekunder, og gå tilbake til bilde når ferdig
   setTimeout(() => {
     if (film.trailer) {
       bilde.style.display = "none";
       video.style.display = "block";
       video.currentTime = 0;
       video.play();
-
       video.onended = () => {
         video.style.display = "none";
         bilde.style.display = "block";
       };
     }
-  }, 5000); // 5 sekunder før trailer starter
+  }, 5000);
 }
 
-// Kjør når siden laster
 oppdaterBanner();
 
+
+// ==================== UNIVERSAL SCROLL FUNKSJON ==================== //
+function scrollGallery(button, direction) {
+  const wrapper = button.closest(".gallery-wrapper");
+  if (!wrapper) return;
+
+  const gallery =
+    wrapper.querySelector(".image-gallery") ||
+    wrapper.querySelector(".coming-movies-gallery") ||
+    wrapper.querySelector(".top10-gallery");
+
+  if (!gallery) return;
+
+  const scrollAmount = gallery.clientWidth * 0.8;
+
+  gallery.scrollBy({
+    left: direction * scrollAmount,
+    behavior: "smooth"
+  });
+}
 
 
 // ==================== DYNAMISK GALLERI-LASTING ==================== //
@@ -1651,7 +1661,7 @@ function renderSeries(galleryId) {
     const link = document.createElement("a");
     link.href = `spillerepisode.html?serie=${key}&s=1&e=1`;
     const img = document.createElement("img");
-    img.src = serie.poster; // 👈 her forventes at serie.poster finnes
+    img.src = serie.poster;
     img.alt = serie.tittel;
     link.appendChild(img);
     gallery.appendChild(link);
@@ -1733,8 +1743,10 @@ function renderContinueWatching() {
   });
 }
 
+
 // ==================== INIT ==================== //
 document.addEventListener("DOMContentLoaded", () => {
+
   renderGallery("nye-filmer-galleri", null, true, 10);
   renderTop10("topp10-filmer-galleri");
   renderGallery("barn-galleri", (key) => {
@@ -1744,7 +1756,7 @@ document.addEventListener("DOMContentLoaded", () => {
     );
   });
   renderUpcoming("kommer-snart-galleri");
-  renderSeries("serier-galleri"); // ✅ Legger til serier fra Seriedata.js
+  renderSeries("serier-galleri");
   oppdaterBanner();
   renderHalloweenBanner();
   renderContinueWatching();
@@ -1778,7 +1790,7 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 });
 
-  // === Endre menybakgrunn ved scroll ===
+// === Endre menybakgrunn ved scroll ===
 window.addEventListener("scroll", () => {
   const nav = document.querySelector(".top-nav");
   if (window.scrollY > 50) {
@@ -1787,11 +1799,7 @@ window.addEventListener("scroll", () => {
     nav.classList.remove("scrolled");
   }
 });
-
-
 </script>
-
- 
 
 
 
