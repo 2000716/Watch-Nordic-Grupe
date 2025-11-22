@@ -456,25 +456,10 @@ const filmer = {
     expireDate: "2027-11-15T23:59:59",
   },
 
-    "wicked": {
-    tittel: "Wiced",
-    bakgrunn: "https://substackcdn.com/image/fetch/$s_!6enX!,w_1456,c_limit,f_webp,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F5e6b0ef3-0149-4f7a-898c-a1a12afad99d_1400x700.png",
-    banner: "https://www.hollywoodreporter.com/wp-content/uploads/2024/10/2551_D133_00142R-H-2024.jpg?w=1296", // <- brukes til hero-banner
-    logo: "https://www.skyshowtime.com/dam/commerce/assets/web/hero/wicked/logo/wicked_logo_all.png",
-    trailer: "https://video.wixstatic.com/video/fd2fb2_2324a032235b46b8a98bea9175681ac6/1080p/mp4/file.mp4", // 🎥 NY 
-    poster: "https://images-prod.ai.tv2.no/v2/image-packs/pfimg_pack_01k9b3zaaxfb1rxgr8f109thd5?height=630",
-    posterVertikal: "https://img-cdn.sfanytime.com/COVERM/COVERM_162b1029-d7c3-4ff9-a780-348b4141412a_01.jpg?w=415&ar=0.692&fit=crop&fm=pjpg&s=d4a0b9412b0bf81796713ac74d2704f2", // portrett
-    beskrivelse: "Elphaba, en misforstått ung kvinne på grunn av sin grønne hud, og Galinda, en populær kvinne, blir venner på Shiz University i Oz. Men etter et møte med den vidunderlige trollmannen fra Oz kommer vennskapet deres til et veiskille.",
-    metadata: ["USA", "2024", "9 år", "Familie","2 t 40 min"],
-    imdb: "https://www.imdb.com/title/tt1262426?ref_ext_viaplay",
-    skuespillere: "Cynthia Erivo, Ariana Grande-Butera, Jonathan Bailey, Jeff Goldblum, Bowen Yang",
-    regissor: "Jon M. Chu",
-    watchUrl: "film-mal.html?id=wicked",
-    publishDate:"2026-01-10T00:00:00", // ISO datoformat
-    expireDate: "2027-11-15T23:59:59",
-  },
+   
   
     
+
 
 
 
