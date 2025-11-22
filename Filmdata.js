@@ -470,11 +470,12 @@ const filmer = {
     skuespillere: "Cynthia Erivo, Ariana Grande-Butera, Jonathan Bailey, Jeff Goldblum, Bowen Yang",
     regissor: "Jon M. Chu",
     watchUrl: "film-mal.html?id=wicked",
-    publishDate:"2026-1-10T00:00:00", // ISO datoformat
+    publishDate:"2026-01-10T00:00:00", // ISO datoformat
     expireDate: "2027-11-15T23:59:59",
   },
   
     },
+
 
 
 
