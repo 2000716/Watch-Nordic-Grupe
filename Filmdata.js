@@ -458,7 +458,7 @@ const filmer = {
     "wicked": {
     tittel: "Wicked",
     bakgrunn: "https://pixel.disco.skyshowtime.com/uuid/40ec0ebf-cb29-3777-ab59-8de374eab89b/LAND_16_9?language=en-US&proposition=SKYSHOWTIME&version=640aa566-6134-3649-905c-c5c3955ab2ad",
-    bannet: "https://www.hollywoodreporter.com/wp-content/uploads/2024/10/2551_D133_00142R-H-2024.jpg?w=1296",
+    banner: "https://www.hollywoodreporter.com/wp-content/uploads/2024/10/2551_D133_00142R-H-2024.jpg?w=1296",
     logo: "https://www.skyshowtime.com/dam/commerce/assets/web/hero/wicked/logo/wicked_logo_all.png",
     trailer: "https://video.wixstatic.com/video/fd2fb2_2324a032235b46b8a98bea9175681ac6/1080p/mp4/file.mp4", // 🎥 NY 
     poster: "https://pixel.disco.skyshowtime.com/uuid/40ec0ebf-cb29-3777-ab59-8de374eab89b/COVER_TITLE_WIDE/640/480?language=nb-NO&proposition=SKYSHOWTIME&version=5737f7cb-b768-3675-928e-95b250e44e96",
@@ -477,6 +477,7 @@ const filmer = {
    
   
     
+
 
 
 
