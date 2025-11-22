@@ -1455,6 +1455,31 @@ function oppdaterBanner() {
 }
 
 oppdaterBanner();
+  function adjustBannerVideo(videoElement, container) {
+  // Når metadata er lastet, sjekk dimensjoner
+  videoElement.addEventListener('loadedmetadata', () => {
+    const videoRatio = videoElement.videoWidth / videoElement.videoHeight;
+    const containerRatio = container.offsetWidth / container.offsetHeight;
+
+    if (videoRatio < containerRatio) {
+      // Videoen er smalere enn container → strekk i bredde
+      videoElement.style.width = '100%';
+      videoElement.style.height = '100%';
+      videoElement.style.objectFit = 'cover';
+    } else {
+      // Videoen er bredere enn container → strekk i høyde
+      videoElement.style.width = '100%';
+      videoElement.style.height = '100%';
+      videoElement.style.objectFit = 'cover';
+    }
+  });
+}
+
+// Bruk den når du setter banner-videoen
+const bannerVideo = document.getElementById("banner-video");
+const heroBanner = document.querySelector(".hero-banner");
+adjustBannerVideo(bannerVideo, heroBanner);
+
 
 
 // ==================== UNIVERSAL SCROLL FUNKSJON ==================== //
@@ -1811,7 +1836,10 @@ window.addEventListener("scroll", () => {
     nav.classList.remove("scrolled");
   }
 });
+
+  
 </script>
+
 
 
 
