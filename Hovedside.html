@@ -1520,8 +1520,10 @@ if (lagretBilde) {
   if (headerProfil) headerProfil.src = lagretBilde;
 }
 
-// ==================== HERO-BANNER (med video, timebasert visning og lyd av) ==================== //
+// ==================== HERO-BANNER ==================== //
+
 function hentTimeFilm() {
+  // Henter en film basert på time på dagen
   const filmKeys = Object.keys(filmer).filter(k => filmer[k].banner);
   if (filmKeys.length === 0) return null;
 
@@ -1541,9 +1543,11 @@ function oppdaterBanner() {
   const seNa = document.getElementById("banner-se-na");
   const detaljer = document.getElementById("banner-detaljer");
 
+  // Sett bannerbilde
   bilde.src = film.banner || "";
   bilde.style.display = "block";
 
+  // Sett video
   if (film.trailer) {
     video.src = film.trailer;
     video.load();
@@ -1553,14 +1557,22 @@ function oppdaterBanner() {
   }
   video.style.display = "none";
 
+  // Sett logo og beskrivelse
   logo.src = film.logo || "";
   logo.style.display = film.logo ? "block" : "none";
   beskrivelse.textContent = film.beskrivelse || "";
+
+  // Sett metadata
   metadata.textContent = film.metadata ? film.metadata.join(" • ") : "";
 
+  // Se nå-knapp
   seNa.onclick = () => window.location.href = `film-mal.html?id=${film.tittel}`;
-  detaljer.onclick = () => window.location.href = `film.html?navn=${film.tittel}`;
 
+  // Detaljer-knapp med små bokstaver
+  const tittelSmå = film.tittel.toLowerCase();
+  detaljer.onclick = () => window.location.href = `film.html?navn=${tittelSmå}`;
+
+  // Spill video etter 5 sekunder hvis tilgjengelig
   setTimeout(() => {
     if (film.trailer) {
       bilde.style.display = "none";
@@ -1575,20 +1587,20 @@ function oppdaterBanner() {
   }, 5000);
 }
 
+// Kjør oppdaterBanner når siden lastes
 oppdaterBanner();
-  function adjustBannerVideo(videoElement, container) {
-  // Når metadata er lastet, sjekk dimensjoner
+
+// ==================== HJELPEFUNKSJON: JUSTER VIDEO ==================== //
+function adjustBannerVideo(videoElement, container) {
   videoElement.addEventListener('loadedmetadata', () => {
     const videoRatio = videoElement.videoWidth / videoElement.videoHeight;
     const containerRatio = container.offsetWidth / container.offsetHeight;
 
     if (videoRatio < containerRatio) {
-      // Videoen er smalere enn container → strekk i bredde
       videoElement.style.width = '100%';
       videoElement.style.height = '100%';
       videoElement.style.objectFit = 'cover';
     } else {
-      // Videoen er bredere enn container → strekk i høyde
       videoElement.style.width = '100%';
       videoElement.style.height = '100%';
       videoElement.style.objectFit = 'cover';
@@ -1596,7 +1608,6 @@ oppdaterBanner();
   });
 }
 
-// Bruk den når du setter banner-videoen
 const bannerVideo = document.getElementById("banner-video");
 const heroBanner = document.querySelector(".hero-banner");
 adjustBannerVideo(bannerVideo, heroBanner);
@@ -2029,6 +2040,7 @@ window.addEventListener("scroll", () => {
 
 
  
+
 
 
 
