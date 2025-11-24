@@ -1258,22 +1258,33 @@ background: linear-gradient(
     max-height: 80px !important;
   }
 }
-  /* === KOMMENDE FILMER – MOBILFIX === */
+/* === KOMMENDE FILMER – MOBILFIX === */
 @media (max-width: 768px) {
+
+  .coming-movies-wrapper {
+    overflow-x: auto !important;
+    padding: 0 10px !important;
+  }
+
+  .coming-movies-list {
+    gap: 12px !important;
+    height: 260px !important;
+  }
 
   .coming-movie-item {
     flex: 0 0 180px !important;
     height: 240px !important;
     transform: none !important;
+    transition: none !important;
   }
 
-  /* Fjern hover-expansion */
+  /* Fjern hover-zoom */
   .coming-movie-item:hover {
     flex: 0 0 180px !important;
     transform: none !important;
   }
 
-  /* Skjul video på mobil */
+  /* Skjul video helt */
   .coming-movie-item video {
     display: none !important;
   }
@@ -1281,24 +1292,24 @@ background: linear-gradient(
   /* Vis alltid bilde */
   .coming-movie-item img.banner {
     opacity: 1 !important;
+    display: block !important;
   }
 
-  /* Logo mindre + sentrert */
+  /* Fiks logo på mobil */
   .coming-movie-item .logo {
-    bottom: 10px !important;
-    max-height: 45px !important;
+    bottom: 12px !important;
     left: 50% !important;
     transform: translateX(-50%) !important;
+    max-height: 48px !important;
+    width: auto !important;
   }
 
-  /* Skjul dato for renere mobilvisning,
-     eller si fra hvis du vil beholde */
+  /* Skjul synopsis / tekstinfo på mobil */
   .coming-movie-item .coming-movie-info {
-    opacity: 0 !important;
     display: none !important;
+    opacity: 0 !important;
   }
 }
-
 
 
 </style> 
@@ -1977,6 +1988,7 @@ window.addEventListener("scroll", () => {
 
 
  
+
 
 
 
