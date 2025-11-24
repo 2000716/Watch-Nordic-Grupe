@@ -1331,6 +1331,26 @@ background: linear-gradient(
   }
 }
 
+  @media (max-width: 768px) {
+
+  /* gjør navigasjonen flytende over bildet */
+  .top-nav {
+    position: absolute !important;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background: none !important;
+    box-shadow: none !important;
+  }
+
+  /* sørger for at bildet starter i topp */
+  .hero-banner {
+    margin-top: 0 !important;
+    padding-top: 0 !important;
+  }
+
+}
+
 
 </style> 
 <header class="top-nav">
@@ -2008,6 +2028,7 @@ window.addEventListener("scroll", () => {
 
 
  
+
 
 
 
