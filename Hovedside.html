@@ -1568,9 +1568,12 @@ function oppdaterBanner() {
   // Se nå-knapp
   seNa.onclick = () => window.location.href = `film-mal.html?id=${film.tittel}`;
 
-  // Detaljer-knapp med små bokstaver
-  const tittelSmå = film.tittel.toLowerCase();
-  detaljer.onclick = () => window.location.href = `film.html?navn=${tittelSmå}`;
+ // Detaljer-knapp med små bokstaver
+const tittelSmå = film.tittel.toLowerCase().replace(/\s+/g, '-'); // erstatter mellomrom med bindestrek
+detaljer.onclick = () => {
+  const url = `Watch-Nordic-Grupe/film.html?navn=${tittelSmå}`;
+  window.location.href = url;
+};
 
   // Spill video etter 5 sekunder hvis tilgjengelig
   setTimeout(() => {
@@ -2040,6 +2043,7 @@ window.addEventListener("scroll", () => {
 
 
  
+
 
 
 
