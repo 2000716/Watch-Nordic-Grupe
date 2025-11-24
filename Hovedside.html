@@ -1236,6 +1236,29 @@ background: linear-gradient(
   z-index: 2; /* Sørger for at galleriene ligger over banneret */
 }
 
+  /* === Endelig korrigering for mobil hero-banner === */
+@media (max-width: 768px) {
+
+  .hero-banner {
+    height: 35vh !important;     /* gjør banneret mindre */
+    min-height: 180px !important;
+    max-height: 260px !important;
+    margin-bottom: 20px !important;  /* stopper at gallerier trekkes opp i banneret */
+  }
+
+  .banner-content {
+    top: auto !important;
+    bottom: 20px !important;   /* flytter innhold lenger ned */
+    left: 20px !important;
+    transform: none !important;
+  }
+
+  .film-logo {
+    width: 140px !important;   /* mye mindre film-logo */
+    max-height: 80px !important;
+  }
+}
+
 
 </style> 
 <header class="top-nav">
@@ -1913,6 +1936,7 @@ window.addEventListener("scroll", () => {
 
 
  
+
 
 
 
