@@ -1258,6 +1258,47 @@ background: linear-gradient(
     max-height: 80px !important;
   }
 }
+  /* === KOMMENDE FILMER – MOBILFIX === */
+@media (max-width: 768px) {
+
+  .coming-movie-item {
+    flex: 0 0 180px !important;
+    height: 240px !important;
+    transform: none !important;
+  }
+
+  /* Fjern hover-expansion */
+  .coming-movie-item:hover {
+    flex: 0 0 180px !important;
+    transform: none !important;
+  }
+
+  /* Skjul video på mobil */
+  .coming-movie-item video {
+    display: none !important;
+  }
+
+  /* Vis alltid bilde */
+  .coming-movie-item img.banner {
+    opacity: 1 !important;
+  }
+
+  /* Logo mindre + sentrert */
+  .coming-movie-item .logo {
+    bottom: 10px !important;
+    max-height: 45px !important;
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+  }
+
+  /* Skjul dato for renere mobilvisning,
+     eller si fra hvis du vil beholde */
+  .coming-movie-item .coming-movie-info {
+    opacity: 0 !important;
+    display: none !important;
+  }
+}
+
 
 
 </style> 
@@ -1936,6 +1977,7 @@ window.addEventListener("scroll", () => {
 
 
  
+
 
 
 
