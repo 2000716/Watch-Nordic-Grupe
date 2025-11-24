@@ -394,87 +394,130 @@ video::cue {
   z-index: 10; /* Høyere enn underteksten */
 }
 
-    /* ================= MOBIL–TILPASNING ================= */
+/* ================= FORBEDRET MOBILVENNLIGHET ================= */
 
-/* For skjermer under 768px (mobiler i stående format) */
 @media (max-width: 768px) {
 
-  /* Gjør video UI større og lettere å trykke på */
+  body { overflow: hidden; }
+
+  /* Video fyller skjermen korrekt */
+  video {
+    object-fit: cover;
+    height: 100vh;
+    width: 100vw;
+  }
+
+  /* Mindre toppbar */
+  .top-bar {
+    padding: 6px 12px;
+  }
+
+  .top-bar img {
+    width: 34px;
+    height: 34px;
+  }
+
+  /* Tittel */
+  .movie-title {
+    font-size: 16px;
+    bottom: 70px;
+    left: 12px;
+  }
+
+  /* Kontroller */
   .controls {
-    padding: 10px 12px;
-    gap: 10px;
+    padding: 8px 10px;
+    justify-content: space-between;
   }
 
   .center-controls .btn img,
-  .right-controls .btn img,
-  .left-controls .btn img {
-    width: 26px;   /* mindre knapper på mobil */
+  .left-controls .btn img,
+  .right-controls .btn img {
+    width: 24px;
   }
 
-  /* Undertekster – større og høyere opp */
-  video::cue,
-  .subtitle-overlay {
-    font-size: 18px !important;      /* mindre for mobil */
-    bottom: 12% !important;          /* flyttes opp */
-    line-height: 1.25;
+  /* Like-knapp – skjul på mobil (for stor) */
+  .like-btn {
+    font-size: 14px;
+    padding: 6px 10px;
+  }
+
+  @media (orientation: landscape) {
+    .like-btn { display: none; }
+  }
+
+  /* Progress bar */
+  .progress-container {
+    bottom: 58px;
     padding: 0 10px;
   }
 
-  /* Når UI vises, løft undertekstene enda litt mer */
-  .subtitle-overlay.subtitle-up {
-    bottom: 20% !important;
+  .progress {
+    height: 5px;
   }
 
-  /* Filmtittelen */
-  .movie-title {
-    font-size: 18px;
-    bottom: 80px;
-    left: 15px;
-  }
-
-  /* Progresjonslinje */
-  .progress-container {
-    bottom: 65px;
-    padding: 0 12px;
+  .thumb {
+    width: 10px;
+    height: 10px;
   }
 
   .time-display {
-    bottom: 78px;
-    right: 12px;
     font-size: 12px;
+    bottom: 70px;
+    right: 10px;
   }
 
-  /* Meny for undertekster */
+  /* Undertekster */
+  video::cue,
+  .subtitle-overlay {
+    font-size: 17px !important;
+    bottom: 13% !important;
+  }
+
+  .subtitle-overlay.subtitle-up {
+    bottom: 22% !important;
+  }
+
+  /* Caption-meny */
   .caption-menu {
-    bottom: 140px;
     right: 10px;
-    min-width: 150px;
-    padding: 10px;
+    bottom: 120px;
+    min-width: 140px;
   }
 
   .caption-menu button {
-    font-size: 13px;
+    font-size: 12px;
     padding: 6px 8px;
+  }
+
+  /* Fullscreen */
+  #fullscreenBtn img {
+    width: 28px;
   }
 
   /* Vannmerke */
   .watermark {
-    width: 40px;
-    top: 10px;
-    right: 10px;
+    width: 32px;
+    top: 8px;
+    right: 8px;
   }
 }
 
-/* Ekstra små skjermer (f.eks. iPhone SE) */
-@media (max-width: 480px) {
+/* iPhone SE / veldig små skjermer */
+@media (max-width: 420px) {
+  .movie-title {
+    font-size: 14px;
+    bottom: 64px;
+  }
+
   video::cue,
   .subtitle-overlay {
-    font-size: 16px !important;
-    bottom: 10% !important;
+    font-size: 15px !important;
+    bottom: 11% !important;
   }
 
   .subtitle-overlay.subtitle-up {
-    bottom: 18% !important;
+    bottom: 20% !important;
   }
 }
 
@@ -894,6 +937,17 @@ const filmer = {
     subtitleLanguages:  [ { code: "no", label: "Norsk" },
       { code: "off", label: "Av" } ]
   },
+
+       "reisen-til-julestjernen": {
+    tittel: "Reisen til Julestjernen",
+    watchUrl: "film-mal.html?id=how-the-grinch-stole-christmas",
+    videoUrl: "https://video.wixstatic.com/video/fd2fb2_516cbabf274a4989b1009160756da125/720p/mp4/file.mp4",
+    subtitleUrl: "Grinch.VTT",
+    tilbakeUrl: "film.html?navn=how-the-grinch-stole-christmas",
+    audioLanguages: [{ code: "en", label: "Norsk" }],
+    subtitleLanguages:  [ { code: "no", label: "Norsk" },
+      { code: "off", label: "Av" } ]
+  },
 };
 
 // Hent film-id fra URL
@@ -1264,6 +1318,7 @@ document.addEventListener("contextmenu", (e) => {
 });
 
 </script>
+
 
 
 
