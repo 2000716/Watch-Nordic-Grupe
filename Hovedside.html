@@ -1350,6 +1350,25 @@ background: linear-gradient(
   }
 
 }
+  @media (max-width: 768px) {
+
+  .top-nav {
+    background: transparent !important;
+    position: absolute !important;
+    top: 0;
+    left: 0;
+  }
+
+  .top-nav::before {
+    display: none !important;
+  }
+
+  .hero-banner {
+    margin-top: -25px !important;  /* løfter bildet inn under statusbar */
+    height: calc(40vh + 25px) !important;
+  }
+}
+
 
 
 </style> 
@@ -2028,6 +2047,7 @@ window.addEventListener("scroll", () => {
 
 
  
+
 
 
 
