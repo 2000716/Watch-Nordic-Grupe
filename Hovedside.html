@@ -252,9 +252,13 @@ background: linear-gradient(
 /* Mobilversjon */
 @media (max-width: 768px) {
   .hero-banner {
-    height: 60vh;
-    min-height: 300px;
+    height: 65vh !important;
+    min-height: 360px !important;
+    max-height: none !important;
+    margin-bottom: -40px !important; /* banner overlapper litt ned */
   }
+}
+
 
   .banner-content {
     bottom: 50px;
@@ -2043,6 +2047,7 @@ window.addEventListener("scroll", () => {
 
 
  
+
 
 
 
