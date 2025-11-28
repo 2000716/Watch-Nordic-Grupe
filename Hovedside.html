@@ -1383,6 +1383,30 @@ background: linear-gradient(
   }
 }
 
+    /* === Kun mobil: banneret skal være lenger ned === */
+@media (max-width: 767px) {
+  .hero-banner {
+    height: 120vh !important;
+  }
+
+  .banner-content {
+    bottom: 20px !important;
+    top: auto !important;
+  }
+}
+
+/* === PC: normal plassering, ikke langt ned === */
+@media (min-width: 768px) {
+  .hero-banner {
+    height: 80vh !important;
+  }
+
+  .banner-content {
+    top: 18% !important;
+    bottom: auto !important;
+  }
+}
+
 
 
 
@@ -2151,6 +2175,7 @@ window.addEventListener("scroll", () => {
 
 
  
+
 
 
 
