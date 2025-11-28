@@ -474,8 +474,8 @@ const filmer = {
 
       "reisen-til-julestjernen": {
     tittel: "Reisen til JUlestjernen",
-    bakgrunn: "https://gfx.nrk.no/U94TA1lTjNxnYlEml2qrfQPcWbAOTcB9hE1d207kYvrQ",
-    banner: "https://gfx.nrk.no/U94TA1lTjNxnYlEml2qrfQPcWbAOTcB9hE1d207kYvrQ",
+    bakgrunn: "https://image.tmdb.org/t/p/original/w3xPhjHvopXb9KwUmla9TrfZNbs.jpg",
+    banner: "https://image.tmdb.org/t/p/original/w3xPhjHvopXb9KwUmla9TrfZNbs.jpg",
     logo: "https://static.wixstatic.com/media/fd2fb2_d736aae773814450a4b020e287dbb75c~mv2.png",
     poster: "https://gfx.nrk.no/rkyU1BVEaAdBVHVeQxjkkQY8olwf04UC9jpunEc-PR_w",
     posterVertikal: "https://image.tmdb.org/t/p/original/k4kOxAqbDftvEZ7k1lYCApJB4al.jpg", // portrett
@@ -493,6 +493,7 @@ const filmer = {
    
   
     
+
 
 
 
