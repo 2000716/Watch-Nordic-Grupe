@@ -1242,13 +1242,14 @@ background: linear-gradient(
 
   /* === Endelig korrigering for mobil hero-banner === */
 @media (max-width: 768px) {
-
   .hero-banner {
-    height: 35vh !important;     /* gjør banneret mindre */
-    min-height: 180px !important;
-    max-height: 260px !important;
-    margin-bottom: 20px !important;  /* stopper at gallerier trekkes opp i banneret */
+    height: 65vh !important;
+    min-height: 360px !important;
+    max-height: none !important;
+    margin-bottom: -40px !important; /* banner overlapper litt ned */
   }
+}
+
 
   .banner-content {
     top: auto !important;
@@ -2047,6 +2048,7 @@ window.addEventListener("scroll", () => {
 
 
  
+
 
 
 
