@@ -1388,6 +1388,41 @@ background: linear-gradient(
   }
 }
 
+    /* Flytt hero-innhold høyere opp for ALLE skjermstørrelser */
+.hero-content {
+  padding-top: 10px !important;      /* minimerer plass øverst */
+  margin-top: -40px !important;      /* løfter innholdet opp */
+  position: relative;
+  z-index: 5;                         /* sørger for at det ikke skjules */
+}
+
+/* Løft knappene */
+.hero-buttons {
+  margin-top: -20px !important;
+}
+
+/* Løft metadata */
+.hero-metadata,
+.meta,
+.hero-info {
+  margin-top: -25px !important;
+}
+
+/* Løft logoen */
+.hero-logo,
+.hero-banner-logo,
+.logo-container {
+  margin-top: -20px !important;
+  z-index: 6; 
+}
+
+/* Hindrer at galleriene under kryper opp */
+.gallery-section,
+.movies-row,
+.section-wrapper {
+  margin-top: 40px !important;
+}
+
 
 
 
@@ -2082,6 +2117,7 @@ window.addEventListener("scroll", () => {
 
 
  
+
 
 
 
