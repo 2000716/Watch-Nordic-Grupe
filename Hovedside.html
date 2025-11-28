@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="no">
 <head>
   <meta charset="UTF-8" />
@@ -1238,14 +1238,13 @@ background: linear-gradient(
 
   /* === Endelig korrigering for mobil hero-banner === */
 @media (max-width: 768px) {
-  .hero-banner {
-    height: 65vh !important;
-    min-height: 360px !important;
-    max-height: none !important;
-    margin-bottom: -40px !important; /* banner overlapper litt ned */
-  }
-}
 
+  .hero-banner {
+    height: 35vh !important;     /* gjør banneret mindre */
+    min-height: 180px !important;
+    max-height: 260px !important;
+    margin-bottom: 20px !important;  /* stopper at gallerier trekkes opp i banneret */
+  }
 
   .banner-content {
     top: auto !important;
@@ -1349,63 +1348,6 @@ background: linear-gradient(
     margin-top: 0 !important;
     padding-top: 0 !important;
   }
-
-    /* === FIX: Netflix-style hero for PC — flytt alt høyere opp === */
-@media (min-width: 1025px) {
-
-  /* Normal høyde som Netflix */
-  .hero-banner {
-    height: 80vh !important;
-    margin-bottom: 0 !important;
-  }
-
-  /* Flytt innholdet høyere opp */
-  .banner-content {
-    top: 18% !important;        /* Netflix ca. 15–22% */
-    bottom: auto !important;
-    transform: translateY(0) !important;
-  }
-
-  /* Film-logo høyere opp og større */
-  .film-logo {
-    width: 380px !important;
-    max-height: 200px !important;
-  }
-
-  /* Metadata tettere under logoen */
-  .banner-meta {
-    margin-top: -10px !important;
-  }
-
-  /* Knappene flyttes opp og samlet */
-  .banner-buttons {
-    margin-top: 5px !important;
-  }
-}
-
-    /* === Kun mobil: banneret skal være lenger ned === */
-@media (max-width: 767px) {
-  .hero-banner {
-    height: 120vh !important;
-  }
-
-  .banner-content {
-    bottom: 20px !important;
-    top: auto !important;
-  }
-}
-
-/* === PC: normal plassering, ikke langt ned === */
-@media (min-width: 768px) {
-  .hero-banner {
-    height: 80vh !important;
-  }
-
-  .banner-content {
-    top: 18% !important;
-    bottom: auto !important;
-  }
-}
 
 
 
@@ -2171,10 +2113,8 @@ window.addEventListener("scroll", () => {
 
 
 
-
-
-
  
+
 
 
 
