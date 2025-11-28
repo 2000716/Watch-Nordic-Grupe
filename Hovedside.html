@@ -139,58 +139,72 @@ main {
   content: "";
   position: absolute;
   inset: 0;
-background: linear-gradient(
-  to top,
-  rgba(9, 27, 30, 1) 10%,
-  rgba(9, 27, 30, 0.6) 50%,
-  rgba(9, 27, 30, 0) 90%
-);
-
+  background: linear-gradient(
+    to top,
+    rgba(9, 27, 30, 1) 12%,
+    rgba(9, 27, 30, 0.7) 50%,
+    rgba(9, 27, 30, 0) 90%
+  );
   z-index: 1;
 }
 
-.banner-image {
+/* Cinematic backdrop image/video */
+.banner-image,
+.banner-video {
   width: 100%;
   height: 100%;
   object-fit: cover;
   display: block;
 }
 
+/* Banner Content */
 .banner-content {
   position: absolute;
-  top: 25%;
+  top: 28%;
   left: 80px;
-  transform: translateY(-15%);
+  transform: translateY(-20%);
   z-index: 2;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: 16px;
+  gap: 18px;
   max-width: 600px;
   color: white;
 }
 
-  .banner-video {
-  width: 100%;
-  height: 100%;
-  object-fit: fill; /* Tvinger full strekking, vil forvrenge videoen */
-}
-
-
-
+/* --- Netflix-style LOGO (valg B – venstrestilt, mer premium) --- */
 .film-logo {
-  width: 400px;        /* større standardbredde */
-  max-width: 80%;      /* tillater mer plass */
-  max-height: 250px;   /* høyere vertikal begrensning */
+  width: 420px;
+  max-width: 80%;
+  max-height: 260px;
   object-fit: contain;
-  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.8));
+  filter: drop-shadow(0 0 25px rgba(0,0,0,0.85));
+  transition: transform .3s ease, filter .3s ease;
 }
 
+.film-logo:hover {
+  transform: scale(1.03);
+  filter: drop-shadow(0 0 35px rgba(255,255,255,0.25));
+}
+
+/* --- Metadata (Netflix badge style) --- */
 .banner-meta {
-  font-size: 16px;
-  color: White;
+  display: flex;
+  gap: 10px;
+  font-size: 15px;
+  flex-wrap: wrap;
 }
 
+.banner-meta span {
+  background: rgba(255,255,255,0.12);
+  padding: 6px 12px;
+  border-radius: 6px;
+  border: 1px solid rgba(255,255,255,0.18);
+  backdrop-filter: blur(6px);
+  text-shadow: 0 3px 8px rgba(0,0,0,0.6);
+}
+
+/* Beskrivelse (gjemt hos deg fra før – beholdt funksjon) */
 .banner-content p {
   font-size: 18px;
   line-height: 1.4;
@@ -198,68 +212,79 @@ background: linear-gradient(
   max-width: 500px;
   text-shadow: 0 2px 8px rgba(0, 0, 0, 0.8);
 
-  /* NYTT – begrens tekst */
   display: -webkit-box;
-  -webkit-line-clamp: 3; /* maks 3 linjer – juster tallet */
+  -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
   overflow: hidden;
+
+  /* Din funksjon – skjule tekst */
+  display: none !important;
 }
 
-
+/* --- BUTTONS (oppgradert til cinematic Netflix stil) --- */
 .banner-buttons {
   display: flex;
   gap: 16px;
 }
 
-.watch-button,
-.details-button {
-  font-size: 18px;
-  font-weight: bold;
-  padding: 12px 40px;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
+/* PLAY */
 .watch-button {
-  background-color: #00FFCC;
-  color: black;
+  background: #ffffff;
+  color: #000;
+  font-size: 20px;
+  font-weight: 700;
+  padding: 14px 45px;
+  border-radius: 10px;
+  cursor: pointer;
   border: none;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  transition: transform .25s ease, background .25s ease;
+  box-shadow: 0 4px 18px rgba(0,0,0,0.6);
 }
 
 .watch-button:hover {
-  background-color: #00e6b8;
-  transform: scale(1.05);
+  background: #e6e6e6;
+  transform: scale(1.06);
 }
 
+/* INFO */
 .details-button {
-  background: rgba(255, 255, 255, 0.15);
+  background: rgba(255,255,255,0.18);
   color: white;
-  border: 1px solid rgba(255, 255, 255, 0.4);
-  backdrop-filter: blur(4px);
+  font-size: 20px;
+  font-weight: 600;
+  padding: 14px 45px;
+  border-radius: 10px;
+  cursor: pointer;
+  border: 1px solid rgba(255,255,255,0.35);
+  backdrop-filter: blur(8px);
+  transition: transform .25s ease, background .25s ease;
+  box-shadow: 0 4px 18px rgba(0,0,0,0.6);
 }
 
 .details-button:hover {
-  background: rgba(255, 255, 255, 0.3);
-  transform: scale(1.05);
+  background: rgba(255,255,255,0.32);
+  transform: scale(1.06);
 }
 
-  .banner-content p {
-  display: none !important;
-}
-
-
-/* Mobilversjon */
+/* -------------------------- */
+/* 📱 Mobilversjon */
+/* -------------------------- */
 @media (max-width: 768px) {
+
   .hero-banner {
     height: 60vh;
     min-height: 300px;
   }
 
   .banner-content {
+    top: auto;
     bottom: 50px;
     left: 20px;
     max-width: 90%;
+    transform: none;
   }
 
   .film-logo {
@@ -277,7 +302,7 @@ background: linear-gradient(
   .watch-button,
   .details-button {
     font-size: 14px;
-    padding: 8px 20px;
+    padding: 10px 22px;
   }
 }
 
@@ -2114,6 +2139,7 @@ window.addEventListener("scroll", () => {
 
 
  
+
 
 
 
