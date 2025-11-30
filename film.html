@@ -816,18 +816,25 @@ img, video {
 
 }
 
-  </style>
-<header class="top-nav">
-  <div class="nav-left">
-    <img class="watch-logo" src="https://static.wixstatic.com/media/fd2fb2_a4b2ace62dff4605a0387f46aad8a404~mv2.png" alt="Watch Logo" />
-    <nav class="nav-links">
-      <a href="Hovedside.html" class="active">Start</a>
-      <a href="Serier.html">Serier</a>
-      <a href="Film.html">Filmer</a>
-      <a href="Nyheter.html">Nytt og populært</a>
-      <a href="Min-Liste.html">Min liste</a>
-    </nav>
-  </div>
+  <section class="gallery-section">
+          <h2>Sjangere</h2>
+          <div class="gallery-wrapper">
+            <div class="fade-left"></div>
+            <button class="scroll-button left" onclick="scrollGallery(this, -1)">❮</button>
+            <div class="image-gallery genre-gallery">
+              <a href="sjanger.html?navn=julefilmer">Julefilmer <i class="fas fa-tree"></i></a>
+              <a href="sjanger.html?navn=barn">Barn / Familie <i class="fas fa-rocket"></i></a>
+              <a href="sjanger.html?navn=komedie">Komedie <i class="fas fa-laugh"></i></a>
+              <a href="sjanger.html?navn=skrekk">Skrekk <i class="fas fa-ghost"></i></a>
+              <a href="sjanger.html?navn=drama">Drama <i class="fas fa-theater-masks"></i></a>
+              <a href="sjanger.html?navn=romantikk">Romantikk <i class="fas fa-heart"></i></a>
+              <a href="sjanger.html?navn=action">Action <i class="fas fa-bolt"></i></a>
+            </div>
+            <button class="scroll-button right" onclick="scrollGallery(this, 1)">❯</button>
+            <div class="fade-right"></div>
+          </div>
+        </section>
+  
 
   <div class="nav-right">
     <a href="Søk.html" class="nav-search"><i class="fas fa-search"></i></a>
@@ -1247,6 +1254,7 @@ window.addEventListener("scroll", () => {
 </html>
 
  
+
 
 
 
