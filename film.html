@@ -512,16 +512,21 @@ body.loaded {
     padding: 12px 0;
   }
 
-  .recommendations {
-    padding: 20px;
-    margin-left: 0;
-  }
+.recommendations {
+  margin-left: 0;       /* full bredde */
+  padding: 40px 20px;   /* mindre innvendig padding */
+}
 
-  .gallery img {
-    width: 120px;
-    height: 180px;
-  }
+.recommendations h2 {
+  margin-left: 0;       /* fjern sideforskyvning */
+  padding-left: 20px;   /* litt luft til venstre */
+}
 
+.gallery {
+  padding: 0 20px;      /* litt luft til kantene */
+  width: 100%;          /* maks bredde */
+}
+ 
   .site-footer {
     font-size: 12px;
     padding: 15px;
@@ -873,7 +878,7 @@ img, video {
 </div>
 
 <div class="recommendations">
-  <h2>Filmer du kanskje vil like</h2>
+<h2>Anbefalt til deg</h2>
   <div class="gallery" id="recommendationGallery"></div>
 </div>
 
@@ -1242,6 +1247,7 @@ window.addEventListener("scroll", () => {
 </html>
 
  
+
 
 
 
