@@ -348,36 +348,29 @@ body.loaded {
 }
 
 .gallery {
-  display: flex;
-  flex-wrap: nowrap;
-  gap: 16px;
-  justify-content: flex-start;
-  margin-left: 30px;
-  overflow-x: auto;
-  padding-bottom: 10px;
-  -webkit-overflow-scrolling: touch;
-  scroll-behavior: smooth;
-  scroll-snap-type: x mandatory;
-}
-
-.gallery::-webkit-scrollbar {
-  height: 6px;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr); /* 4 bilder per rad */
+  grid-template-rows: repeat(2, auto);  /* 2 rader */
+  gap: 20px;                            /* avstand mellom bilder */
+  justify-content: center;              /* sentrer grid */
+  margin: 0 auto;                       /* sentrer container */
+  width: fit-content;                   /* tilpass bredden til innholdet */
+  padding: 20px;
 }
 
 .gallery img {
-  width: 300px;
-  height: 170px;
+  width: 260px;          /* juster størrelse om du vil */
+  height: 150px;
   object-fit: cover;
-  border-radius: 6px;
+  border-radius: 8px;
   cursor: pointer;
   transition: transform 0.3s;
-  flex: 0 0 auto;
-  scroll-snap-align: start;
 }
 
 .gallery img:hover {
   transform: scale(1.05);
 }
+
 
 /* === Video kontrollknapper === */
 .video-controls {
@@ -1248,6 +1241,7 @@ window.addEventListener("scroll", () => {
 </html>
 
  
+
 
 
 
