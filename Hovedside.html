@@ -1,4 +1,4 @@
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="no">
 <head>
   <meta charset="UTF-8" />
@@ -139,72 +139,58 @@ main {
   content: "";
   position: absolute;
   inset: 0;
-  background: linear-gradient(
-    to top,
-    rgba(9, 27, 30, 1) 12%,
-    rgba(9, 27, 30, 0.7) 50%,
-    rgba(9, 27, 30, 0) 90%
-  );
+background: linear-gradient(
+  to top,
+  rgba(9, 27, 30, 1) 10%,
+  rgba(9, 27, 30, 0.6) 50%,
+  rgba(9, 27, 30, 0) 90%
+);
+
   z-index: 1;
 }
 
-/* Cinematic backdrop image/video */
-.banner-image,
-.banner-video {
+.banner-image {
   width: 100%;
   height: 100%;
   object-fit: cover;
   display: block;
 }
 
-/* Banner Content */
 .banner-content {
   position: absolute;
-  top: 28%;
+  top: 25%;
   left: 80px;
-  transform: translateY(-20%);
+  transform: translateY(-15%);
   z-index: 2;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: 18px;
+  gap: 16px;
   max-width: 600px;
   color: white;
 }
 
-/* --- Netflix-style LOGO (valg B – venstrestilt, mer premium) --- */
+  .banner-video {
+  width: 100%;
+  height: 100%;
+  object-fit: fill; /* Tvinger full strekking, vil forvrenge videoen */
+}
+
+
+
 .film-logo {
-  width: 420px;
-  max-width: 80%;
-  max-height: 260px;
+  width: 400px;        /* større standardbredde */
+  max-width: 80%;      /* tillater mer plass */
+  max-height: 250px;   /* høyere vertikal begrensning */
   object-fit: contain;
-  filter: drop-shadow(0 0 25px rgba(0,0,0,0.85));
-  transition: transform .3s ease, filter .3s ease;
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.8));
 }
 
-.film-logo:hover {
-  transform: scale(1.03);
-  filter: drop-shadow(0 0 35px rgba(255,255,255,0.25));
-}
-
-/* --- Metadata (Netflix badge style) --- */
 .banner-meta {
-  display: flex;
-  gap: 10px;
-  font-size: 15px;
-  flex-wrap: wrap;
+  font-size: 16px;
+  color: White;
 }
 
-.banner-meta span {
-  background: rgba(255,255,255,0.12);
-  padding: 6px 12px;
-  border-radius: 6px;
-  border: 1px solid rgba(255,255,255,0.18);
-  backdrop-filter: blur(6px);
-  text-shadow: 0 3px 8px rgba(0,0,0,0.6);
-}
-
-/* Beskrivelse (gjemt hos deg fra før – beholdt funksjon) */
 .banner-content p {
   font-size: 18px;
   line-height: 1.4;
@@ -212,79 +198,68 @@ main {
   max-width: 500px;
   text-shadow: 0 2px 8px rgba(0, 0, 0, 0.8);
 
+  /* NYTT – begrens tekst */
   display: -webkit-box;
-  -webkit-line-clamp: 3;
+  -webkit-line-clamp: 3; /* maks 3 linjer – juster tallet */
   -webkit-box-orient: vertical;
   overflow: hidden;
-
-  /* Din funksjon – skjule tekst */
-  display: none !important;
 }
 
-/* --- BUTTONS (oppgradert til cinematic Netflix stil) --- */
+
 .banner-buttons {
   display: flex;
   gap: 16px;
 }
 
-/* PLAY */
-.watch-button {
-  background: #ffffff;
-  color: #000;
-  font-size: 20px;
-  font-weight: 700;
-  padding: 14px 45px;
-  border-radius: 10px;
+.watch-button,
+.details-button {
+  font-size: 18px;
+  font-weight: bold;
+  padding: 12px 40px;
+  border-radius: 6px;
   cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.watch-button {
+  background-color: #00FFCC;
+  color: black;
   border: none;
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  transition: transform .25s ease, background .25s ease;
-  box-shadow: 0 4px 18px rgba(0,0,0,0.6);
 }
 
 .watch-button:hover {
-  background: #e6e6e6;
-  transform: scale(1.06);
+  background-color: #00e6b8;
+  transform: scale(1.05);
 }
 
-/* INFO */
 .details-button {
-  background: rgba(255,255,255,0.18);
+  background: rgba(255, 255, 255, 0.15);
   color: white;
-  font-size: 20px;
-  font-weight: 600;
-  padding: 14px 45px;
-  border-radius: 10px;
-  cursor: pointer;
-  border: 1px solid rgba(255,255,255,0.35);
-  backdrop-filter: blur(8px);
-  transition: transform .25s ease, background .25s ease;
-  box-shadow: 0 4px 18px rgba(0,0,0,0.6);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  backdrop-filter: blur(4px);
 }
 
 .details-button:hover {
-  background: rgba(255,255,255,0.32);
-  transform: scale(1.06);
+  background: rgba(255, 255, 255, 0.3);
+  transform: scale(1.05);
 }
 
-/* -------------------------- */
-/* 📱 Mobilversjon */
-/* -------------------------- */
-@media (max-width: 768px) {
+  .banner-content p {
+  display: none !important;
+}
 
+
+/* Mobilversjon */
+@media (max-width: 768px) {
   .hero-banner {
     height: 60vh;
     min-height: 300px;
   }
 
   .banner-content {
-    top: auto;
     bottom: 50px;
     left: 20px;
     max-width: 90%;
-    transform: none;
   }
 
   .film-logo {
@@ -302,7 +277,7 @@ main {
   .watch-button,
   .details-button {
     font-size: 14px;
-    padding: 10px 22px;
+    padding: 8px 20px;
   }
 }
 
@@ -1374,57 +1349,6 @@ main {
     padding-top: 0 !important;
   }
 
-   /* === 🎄 JULESTRIPE MED LOGO + GALLERI === */
-.christmas-strip {
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 40px;
-  padding: 40px 60px;
-  margin-top: 40px;
-
-  /* Bakgrunnsstripe (kan byttes til et eget juletapet) */
-  background: url("LINK-TIL-JULE-BAKGRUNN.jpg") center/cover no-repeat;
-  border-radius: 14px;
-}
-
-/* Venstre del: julelogo */
-.christmas-left img {
-  width: 260px;
-  max-width: 100%;
-  filter: drop-shadow(0 0 10px rgba(0,0,0,0.7));
-}
-
-/* Høyre del: selve galleriet */
-.christmas-right {
-  flex: 1;
-}
-
-.christmas-right h2 {
-  margin-bottom: 12px;
-  color: #00FFCC;
-  font-size: 24px;
-  text-shadow: 0 0 10px rgba(0,255,204,0.4);
-}
-
-/* Mobilvennlig */
-@media (max-width: 900px) {
-  .christmas-strip {
-    flex-direction: column;
-    text-align: center;
-    padding: 30px 20px;
-  }
-
-  .christmas-left img {
-    width: 180px;
-  }
-
-  .christmas-right {
-    width: 100%;
-  }
-}
-
 
 
 
@@ -1538,29 +1462,6 @@ main {
     <div class="fade-right"></div>
   </div>
 </section>
-
- <!-- 🎄 JULESEKSJON MED STRIPE, LOGO VENSTRE OG DYNAMISK GALLERI -->
-<div class="christmas-strip">
-  
-  <div class="christmas-left">
-    <img src="LINK-TIL-GOD-JUL-LOGO.png" alt="God jul fra oss">
-  </div>
-
-  <div class="christmas-right">
-    <h2>🎅 Julens filmer</h2>
-
-    <div class="gallery-wrapper">
-      <button class="scroll-button left">&lt;</button>
-
-      <div class="image-gallery" id="christmas-gallery">
-        <!-- Fylles med JS -->
-      </div>
-
-      <button class="scroll-button right">&gt;</button>
-    </div>
-  </div>
-</div>
-
 
   
         <section class="gallery-section">
@@ -1940,6 +1841,40 @@ function renderSeries(galleryId) {
 }
 
 
+// ==================== HALLOWEEN ==================== //
+function renderHalloweenBanner() {
+  const bannerImage = document.getElementById("special-banner-image");
+  const bannerLogo = document.getElementById("special-banner-logo");
+  const bannerLink = document.getElementById("special-banner-link");
+  const gallery = document.getElementById("halloween-gallery");
+
+  const halloweenFilmKey = Object.keys(filmer).find(key =>
+    filmer[key].banner && filmer[key].metadata.some(m =>
+      m.toLowerCase().includes("halloween") || m.toLowerCase().includes("skrekk")
+    )
+  );
+  if (!halloweenFilmKey) return;
+  const film = filmer[halloweenFilmKey];
+
+  if (film.banner) bannerImage.src = film.banner;
+  if (film.logo) bannerLogo.src = film.logo;
+  bannerLink.href = `film.html?navn=${halloweenFilmKey}`;
+
+  gallery.innerHTML = "";
+  Object.keys(filmer).forEach(key => {
+    const f = filmer[key];
+    if (f.metadata.some(m => m.toLowerCase().includes("halloween") || m.toLowerCase().includes("skrekk"))) {
+      const link = document.createElement("a");
+      link.href = `film.html?navn=${key}`;
+      const img = document.createElement("img");
+      img.src = f.posterVertikal || f.poster;
+      img.alt = f.tittel;
+      link.appendChild(img);
+      gallery.appendChild(link);
+    }
+  });
+}
+
 // ==================== FORTSETT Å SE ==================== //
 function renderContinueWatching() {
   const section = document.getElementById("fortsett-section");
@@ -2037,174 +1972,8 @@ window.addEventListener("scroll", () => {
   }
 });
 
-
-
   
 </script>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
- 
-
-
-
-
-
-
-
-
-
- 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
- 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
