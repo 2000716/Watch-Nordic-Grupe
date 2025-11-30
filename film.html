@@ -349,18 +349,18 @@ body.loaded {
 
 .gallery {
   display: grid;
-  grid-template-columns: repeat(4, 1fr); /* 4 bilder per rad */
-  grid-template-rows: repeat(2, auto);  /* 2 rader */
-  gap: 20px;                            /* avstand mellom bilder */
-  justify-content: center;              /* sentrer grid */
-  margin: 0 auto;                       /* sentrer container */
-  width: fit-content;                   /* tilpass bredden til innholdet */
+  grid-template-columns: repeat(4, 1fr); /* 4 kolonner uansett */
+  grid-template-rows: repeat(2, auto);
+  gap: 20px;
+  width: 100%;               /* fyller hele skjermen */
+  max-width: 1400px;         /* stopper før den blir altfor bred */
+  margin: 0 auto;            /* holder den sentrert */
   padding: 20px;
 }
 
 .gallery img {
-  width: 260px;          /* juster størrelse om du vil */
-  height: 150px;
+  width: 100%;               /* hvert bilde fyller sin grid-celle */
+  height: 180px;             /* du kan justere høyden her */
   object-fit: cover;
   border-radius: 8px;
   cursor: pointer;
@@ -370,6 +370,7 @@ body.loaded {
 .gallery img:hover {
   transform: scale(1.05);
 }
+
 
 
 /* === Video kontrollknapper === */
@@ -1241,6 +1242,7 @@ window.addEventListener("scroll", () => {
 </html>
 
  
+
 
 
 
