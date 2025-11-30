@@ -1488,6 +1488,29 @@ main {
   </div>
 </section>
 
+ <!-- 🎄 JULESEKSJON MED STRIPE, LOGO VENSTRE OG DYNAMISK GALLERI -->
+<div class="christmas-strip">
+  
+  <div class="christmas-left">
+    <img src="LINK-TIL-GOD-JUL-LOGO.png" alt="God jul fra oss">
+  </div>
+
+  <div class="christmas-right">
+    <h2>🎅 Julens filmer</h2>
+
+    <div class="gallery-wrapper">
+      <button class="scroll-button left">&lt;</button>
+
+      <div class="image-gallery" id="christmas-gallery">
+        <!-- Fylles med JS -->
+      </div>
+
+      <button class="scroll-button right">&gt;</button>
+    </div>
+  </div>
+</div>
+
+
   
         <section class="gallery-section">
           <h2>Barn</h2>
@@ -1866,40 +1889,6 @@ function renderSeries(galleryId) {
 }
 
 
-// ==================== HALLOWEEN ==================== //
-function renderHalloweenBanner() {
-  const bannerImage = document.getElementById("special-banner-image");
-  const bannerLogo = document.getElementById("special-banner-logo");
-  const bannerLink = document.getElementById("special-banner-link");
-  const gallery = document.getElementById("halloween-gallery");
-
-  const halloweenFilmKey = Object.keys(filmer).find(key =>
-    filmer[key].banner && filmer[key].metadata.some(m =>
-      m.toLowerCase().includes("halloween") || m.toLowerCase().includes("skrekk")
-    )
-  );
-  if (!halloweenFilmKey) return;
-  const film = filmer[halloweenFilmKey];
-
-  if (film.banner) bannerImage.src = film.banner;
-  if (film.logo) bannerLogo.src = film.logo;
-  bannerLink.href = `film.html?navn=${halloweenFilmKey}`;
-
-  gallery.innerHTML = "";
-  Object.keys(filmer).forEach(key => {
-    const f = filmer[key];
-    if (f.metadata.some(m => m.toLowerCase().includes("halloween") || m.toLowerCase().includes("skrekk"))) {
-      const link = document.createElement("a");
-      link.href = `film.html?navn=${key}`;
-      const img = document.createElement("img");
-      img.src = f.posterVertikal || f.poster;
-      img.alt = f.tittel;
-      link.appendChild(img);
-      gallery.appendChild(link);
-    }
-  });
-}
-
 // ==================== FORTSETT Å SE ==================== //
 function renderContinueWatching() {
   const section = document.getElementById("fortsett-section");
@@ -2139,6 +2128,7 @@ window.addEventListener("scroll", () => {
 
 
  
+
 
 
 
