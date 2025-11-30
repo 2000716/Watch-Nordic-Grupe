@@ -2037,30 +2037,6 @@ window.addEventListener("scroll", () => {
   }
 });
 
- <script type="module">
-  import { FilmData } from "./Filmdata.js";
-
-  // Finn alle julefilmer (tag "jul")
-  const juleFilmer = FilmData.filter(film => 
-    film.tags && film.tags.includes("jul")
-  );
-
-  // Hent gallericontaineren
-  const gallery = document.getElementById("christmas-gallery");
-
-  // Generer HTML for filmene
-  juleFilmer.forEach(film => {
-    const link = document.createElement("a");
-    link.href = `film.html?id=${film.id}`; // lenke til infoside
-
-    const img = document.createElement("img");
-    img.src = film.image;
-    img.alt = film.title;
-
-    link.appendChild(img);
-    gallery.appendChild(link);
-  });
-</script>
 
 
   
@@ -2205,6 +2181,7 @@ window.addEventListener("scroll", () => {
 
 
  
+
 
 
 
