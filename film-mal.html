@@ -521,6 +521,177 @@ video::cue {
   }
 }
 
+    /* ===================== MOBILSPESIFIKK STYLING ===================== */
+@media (max-width: 768px) {
+
+  /* Video fyller skjermen */
+  video {
+    width: 100vw;
+    height: 100vh;
+    object-fit: cover;
+  }
+
+  /* Toppbar */
+  .top-bar {
+    padding: 6px 12px;
+  }
+  .top-bar img {
+    width: 34px;
+    height: 34px;
+  }
+
+  /* Filmtittel */
+  .movie-title {
+    font-size: 16px;
+    bottom: 70px;
+    left: 12px;
+  }
+
+  /* Kontroller nederst */
+  .controls {
+    padding: 8px 10px;
+    gap: 12px;
+  }
+
+  .center-controls .btn img,
+  .left-controls .btn img,
+  .right-controls .btn img {
+    width: 24px;
+    height: 24px;
+  }
+
+  /* Like-knapp */
+  .like-btn {
+    font-size: 14px;
+    padding: 6px 10px;
+  }
+
+  /* Progress bar */
+  .progress-container {
+    bottom: 58px;
+    padding: 0 10px;
+  }
+
+  .progress {
+    height: 5px;
+  }
+
+  .progress-filled {
+    height: 100%;
+  }
+
+  .thumb {
+    width: 10px;
+    height: 10px;
+  }
+
+  .time-display {
+    font-size: 12px;
+    bottom: 70px;
+    right: 10px;
+  }
+
+  /* Undertekster */
+  video::cue,
+  .subtitle-overlay {
+    font-size: 17px !important;
+    bottom: 13% !important;
+  }
+
+  .subtitle-overlay.subtitle-up {
+    bottom: 22% !important;
+  }
+
+  /* Caption-meny */
+  .caption-menu {
+    right: 10px;
+    bottom: 120px;
+    min-width: 140px;
+  }
+
+  .caption-menu button {
+    font-size: 12px;
+    padding: 6px 8px;
+  }
+
+  /* Fullscreen ikon */
+  #fullscreenBtn img {
+    width: 28px;
+  }
+
+  /* Vannmerke */
+  .watermark {
+    width: 32px;
+    top: 8px;
+    right: 8px;
+  }
+
+  /* Resume-overlay */
+  .resume-box {
+    padding: 20px;
+  }
+  .resume-box p {
+    font-size: 16px;
+  }
+  .resume-buttons button {
+    font-size: 14px;
+    padding: 8px 16px;
+  }
+
+  /* Mini-player */
+  .miniplayer {
+    width: 240px !important;
+    height: 135px !important;
+    bottom: 16px;
+    right: 16px;
+  }
+}
+
+/* For veldig små skjermer som iPhone SE */
+@media (max-width: 420px) {
+  .movie-title {
+    font-size: 14px;
+    bottom: 64px;
+  }
+
+  video::cue,
+  .subtitle-overlay {
+    font-size: 15px !important;
+    bottom: 11% !important;
+  }
+
+  .subtitle-overlay.subtitle-up {
+    bottom: 20% !important;
+  }
+
+  .progress-container {
+    bottom: 50px;
+  }
+
+  .time-display {
+    font-size: 11px;
+    bottom: 62px;
+    right: 8px;
+  }
+
+  .controls {
+    padding: 6px 8px;
+  }
+
+  .center-controls .btn img,
+  .left-controls .btn img,
+  .right-controls .btn img {
+    width: 20px;
+    height: 20px;
+  }
+
+  .like-btn {
+    font-size: 12px;
+    padding: 4px 8px;
+  }
+}
+
+
 
   </style>
 </head>
@@ -1318,6 +1489,7 @@ document.addEventListener("contextmenu", (e) => {
 });
 
 </script>
+
 
 
 
