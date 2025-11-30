@@ -349,18 +349,17 @@ body.loaded {
 
 .gallery {
   display: grid;
-  grid-template-columns: repeat(4, 1fr); /* 4 kolonner uansett */
+  grid-template-columns: repeat(4, 1fr); /* fortsatt 4 kolonner */
   grid-template-rows: repeat(2, auto);
   gap: 20px;
-  width: 100%;               /* fyller hele skjermen */
-  max-width: 1400px;         /* stopper før den blir altfor bred */
-  margin: 0 auto;            /* holder den sentrert */
-  padding: 20px;
+  width: 100%;            /* full bredde */
+  margin: 0;              /* ingen sentrering */
+  padding: 0 10px;        /* litt luft så bildene ikke klistrer seg i kanten */
 }
 
 .gallery img {
-  width: 100%;               /* hvert bilde fyller sin grid-celle */
-  height: 180px;             /* du kan justere høyden her */
+  width: 100%;            /* fyll hele cellebredden */
+  height: 180px;
   object-fit: cover;
   border-radius: 8px;
   cursor: pointer;
@@ -370,6 +369,7 @@ body.loaded {
 .gallery img:hover {
   transform: scale(1.05);
 }
+
 
 
 
@@ -1242,6 +1242,7 @@ window.addEventListener("scroll", () => {
 </html>
 
  
+
 
 
 
