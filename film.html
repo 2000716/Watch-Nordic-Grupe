@@ -365,10 +365,10 @@ body.loaded {
 }
 
 .gallery img {
-  width: 160px;
-  height: 240px;
-  border-radius: 6px;
+  width: 300px;
+  height: 170px;
   object-fit: cover;
+  border-radius: 6px;
   cursor: pointer;
   transition: transform 0.3s;
   flex: 0 0 auto;
@@ -1123,18 +1123,25 @@ if (type === "serie" && data.episoder) {
   const anbefalte = hentTilfeldige(6);
   tittelEl.textContent = type === "film" ? "Filmer du kanskje vil like" : "Serier du kanskje vil like";
 
-  anbefalte.forEach(n => {
+anbefalte.forEach(n => {
     const kilde = type === "film" ? filmer : serier;
     const item = kilde[n];
+    
     const img = document.createElement("img");
-    img.src = item.posterVertikal || item.poster || item.bakgrunn;
+
+    // HENT HORISONTAL POSTER HER 👇
+    img.src = item.posterHorisontal || item.poster || item.bakgrunn;
+
     img.alt = item.tittel;
+
     img.addEventListener("click", () => {
       const side = type === "film" ? "film.html" : "serie.html";
       window.location.href = `${side}?navn=${n}`;
     });
+
     gallery.appendChild(img);
-  });
+});
+
 }
 
 /* === Trailer-logikk === */
@@ -1241,6 +1248,7 @@ window.addEventListener("scroll", () => {
 </html>
 
  
+
 
 
 
