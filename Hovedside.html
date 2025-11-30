@@ -1572,7 +1572,7 @@ function oppdaterBanner() {
  // Detaljer-knapp med små bokstaver
 const tittelSmå = film.tittel.toLowerCase().replace(/\s+/g, '-'); // erstatter mellomrom med bindestrek
 detaljer.onclick = () => {
-  const url = `Watch-Nordic-Grupe/film.html?navn=${tittelSmå}`;
+  const url = `film.html?navn=${tittelSmå}`;
   window.location.href = url;
 };
 
@@ -1975,6 +1975,7 @@ window.addEventListener("scroll", () => {
 
   
 </script>
+
 
 
 
