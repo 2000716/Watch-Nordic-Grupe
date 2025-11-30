@@ -1114,7 +1114,7 @@ if (type === "serie" && data.episoder) {
   visSesong(sesonger[0]);
 } else {
   /* === Anbefalinger for film === */
-  const anbefalte = hentTilfeldige(6);
+  const anbefalte = hentTilfeldige(8);
   tittelEl.textContent = type === "film" ? "Filmer du kanskje vil like" : "Serier du kanskje vil like";
 
 anbefalte.forEach(n => {
@@ -1242,6 +1242,7 @@ window.addEventListener("scroll", () => {
 </html>
 
  
+
 
 
 
