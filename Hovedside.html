@@ -1374,6 +1374,57 @@ main {
     padding-top: 0 !important;
   }
 
+   /* === 🎄 JULESTRIPE MED LOGO + GALLERI === */
+.christmas-strip {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 40px;
+  padding: 40px 60px;
+  margin-top: 40px;
+
+  /* Bakgrunnsstripe (kan byttes til et eget juletapet) */
+  background: url("LINK-TIL-JULE-BAKGRUNN.jpg") center/cover no-repeat;
+  border-radius: 14px;
+}
+
+/* Venstre del: julelogo */
+.christmas-left img {
+  width: 260px;
+  max-width: 100%;
+  filter: drop-shadow(0 0 10px rgba(0,0,0,0.7));
+}
+
+/* Høyre del: selve galleriet */
+.christmas-right {
+  flex: 1;
+}
+
+.christmas-right h2 {
+  margin-bottom: 12px;
+  color: #00FFCC;
+  font-size: 24px;
+  text-shadow: 0 0 10px rgba(0,255,204,0.4);
+}
+
+/* Mobilvennlig */
+@media (max-width: 900px) {
+  .christmas-strip {
+    flex-direction: column;
+    text-align: center;
+    padding: 30px 20px;
+  }
+
+  .christmas-left img {
+    width: 180px;
+  }
+
+  .christmas-right {
+    width: 100%;
+  }
+}
+
 
 
 
@@ -1986,6 +2037,32 @@ window.addEventListener("scroll", () => {
   }
 });
 
+ <script type="module">
+  import { FilmData } from "./Filmdata.js";
+
+  // Finn alle julefilmer (tag "jul")
+  const juleFilmer = FilmData.filter(film => 
+    film.tags && film.tags.includes("jul")
+  );
+
+  // Hent gallericontaineren
+  const gallery = document.getElementById("christmas-gallery");
+
+  // Generer HTML for filmene
+  juleFilmer.forEach(film => {
+    const link = document.createElement("a");
+    link.href = `film.html?id=${film.id}`; // lenke til infoside
+
+    const img = document.createElement("img");
+    img.src = film.image;
+    img.alt = film.title;
+
+    link.appendChild(img);
+    gallery.appendChild(link);
+  });
+</script>
+
+
   
 </script>
 
@@ -2128,6 +2205,7 @@ window.addEventListener("scroll", () => {
 
 
  
+
 
 
 
