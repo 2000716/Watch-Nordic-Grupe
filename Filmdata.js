@@ -96,24 +96,17 @@ const filmer = {
   logo: "https://occ-0-1164-38.1.nflxso.net/dnm/api/v6/S4oi7EPZbv2UEPaukW54OORa0S8/AAAABW5AdcvFX4G8XnB_b3uQRtZgvyU3QTyH4uSjNdDIANcjK_MlWXdMffH6J7JaKlt3Xj4_YKWusqEWZ9Xo1CkqN2_OYV51oVqvhw.webp?r=97e",
   poster: "https://images-prod.ai.tv2.no/v2/image-packs/pfimg_pack_01kathyxcje73rxsdzgc6w1b72",
   posterVertikal: "https://image.tmdb.org/t/p/original/joDoH3j5I6IJn9rDveY9dovAoe2.jpg",
-  beskrivelse:
-    "En desperat avisredaktør med planer om å sette en ny snørekord, får tak i en kraftig snøkanon, alt for å prøve å lage store avisoverskrifter før jul.",
+  beskrivelse:"En desperat avisredaktør med planer om å sette en ny snørekord, får tak i en kraftig snøkanon, alt for å prøve å lage store avisoverskrifter før jul.",
   metadata: ["Norge", "2013", "Alle", "Familie / Jul", "1 t 16 min"],
   imdb: "https://www.imdb.com/title/tt3324938/",
   skuespillere: "Kjell Aukrust (figurer), Robert Stoltenberg (stemmer), m.fl.",
   regissor: "Rasmus A. Sivertsen",
-  // Dette peker til infosiden (filmdetaljer)
   watchUrl: "film-mal.html?id=jul-i-flåklypa",
-  // Dette brukes av selve videospilleren
-  videoUrl:
-  "https://video.wixstatic.com/video/fd2fb2_26bfed9bfc254af8b14f41820a066eec/720p/mp4/file.mp4",
+  videoUrl:"https://video.wixstatic.com/video/fd2fb2_26bfed9bfc254af8b14f41820a066eec/720p/mp4/file.mp4",
   subtitleUrl: "Jul-i-flåklypa.VTT",
-  // Tilbake-knappen når man er på visningssiden
   tilbakeUrl: "film.html?navn=jul-i-flåklypa",
-  // Språkvalg for lyd
   audioLanguages: [
     { code: "no", label: "Norsk" } ],
-  // Språkvalg for undertekster
   subtitleLanguages: [
     { code: "no", label: "Norsk" },
     { code: "off", label: "Av" }
@@ -536,12 +529,40 @@ const filmer = {
   expireDate: "2027-01-01T23:59:59"
 },
 
+   "julenatt-i-blåfjell": {
+    tittel: "Julenatt i Blåfjell",
+    bakgrunn: "https://image.tmdb.org/t/p/original/mv6TL9WCJ1UcHHtXaSUjZMOz9A6.jpg",
+    banner: "https://image.tmdb.org/t/p/original/kXZi4IW8vUTHB9s3v2l3PvBY3cW.jpg",
+    logo: "https://gfx.nrk.no/Z2OMId2vXZveqp9mkGWlhwvF-ecOJFJs6mwJ5ml3MI4w",
+    poster: "https://images-prod.ai.tv2.no/v2/image-packs/pfimg_pack_01kated9ybe63a5hbj533jk18t?height=630",
+    posterVertikal: "https://image.tmdb.org/t/p/original/wgU0KfHfMFv7zH0tvu9GbcTCrmd.jpg", // portrett
+    beskrivelse: "For å redde den hun elsker høyest, må prinsesse Fjellrose trosse frykten for den store verden og reise ut av Blåfjell.",
+    metadata: ["Norge", "2009", "Alle", "Familie", "1 t 22 min"],
+    imdb: "https://www.imdb.com/title/tt1438462/?ref_=nv_sr_srsg_0_tt_6_nm_2_in_0_q_julenatt%2520i%2520",
+    skuespillere: "Ane Viola Semb, Johan Tinus Lindgren, Finn Schau",
+    regissor: " Katarina Launing, Roar Uthaug",
+  watchUrl: "film-mal.html?id=julenatt-i-blåfjell",
+  videoUrl:"https://video.wixstatic.com/video/fd2fb2_fe9b1ad1020a43dc8944254e7934a12e/720p/mp4/file.mp4",
+  subtitleUrl: "Reise.VTT",
+  tilbakeUrl: "film.html?navn=julenatt-i-blåfjell",
+  audioLanguages: [
+    { code: "no", label: "Norsk" } ],
+  subtitleLanguages: [
+    { code: "no", label: "Norsk" },
+    { code: "off", label: "Av" }
+  ],
+  publishDate: "2025-12-02T00:00:00", // ISO datoformat
+  expireDate: "2027-01-01T23:59:59"
+},
+
+  
   
   };
 
    
   
     
+
 
 
 
