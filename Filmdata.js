@@ -543,12 +543,13 @@ const filmer = {
     regissor: " Katarina Launing, Roar Uthaug",
   watchUrl: "film-mal.html?id=julenatt-i-blåfjell",
   videoUrl:"https://video.wixstatic.com/video/fd2fb2_6863184a133e43beb6980bdc8ec1c326/360p/mp4/file.mp4",
-  subtitleUrl: "",
+  subtitleUrl: "julenatt-i-blåfjell.VTT",
   tilbakeUrl: "film.html?navn=julenatt-i-blåfjell",
   audioLanguages: [
     { code: "no", label: "Norsk" } ],
   subtitleLanguages: [
-   
+   { code: "no", label: "Norsk" },
+    { code: "off", label: "Av" }
   ],
   publishDate: "2025-12-02T00:00:00", // ISO datoformat
   expireDate: "2027-01-01T23:59:59"
@@ -561,6 +562,7 @@ const filmer = {
    
   
     
+
 
 
 
