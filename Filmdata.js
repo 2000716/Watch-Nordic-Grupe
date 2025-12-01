@@ -542,14 +542,13 @@ const filmer = {
     skuespillere: "Ane Viola Semb, Johan Tinus Lindgren, Finn Schau",
     regissor: " Katarina Launing, Roar Uthaug",
   watchUrl: "film-mal.html?id=julenatt-i-blåfjell",
-  videoUrl:"https://video.wixstatic.com/video/fd2fb2_fe9b1ad1020a43dc8944254e7934a12e/720p/mp4/file.mp4",
-  subtitleUrl: "Reise.VTT",
+  videoUrl:"https://video.wixstatic.com/video/fd2fb2_6863184a133e43beb6980bdc8ec1c326/360p/mp4/file.mp4",
+  subtitleUrl: "",
   tilbakeUrl: "film.html?navn=julenatt-i-blåfjell",
   audioLanguages: [
     { code: "no", label: "Norsk" } ],
   subtitleLanguages: [
-    { code: "no", label: "Norsk" },
-    { code: "off", label: "Av" }
+   
   ],
   publishDate: "2025-12-02T00:00:00", // ISO datoformat
   expireDate: "2027-01-01T23:59:59"
@@ -562,6 +561,7 @@ const filmer = {
    
   
     
+
 
 
 
