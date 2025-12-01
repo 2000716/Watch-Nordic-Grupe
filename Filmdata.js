@@ -94,10 +94,10 @@ const filmer = {
   tittel: "Jul i Flåklypa",
   bakgrunn: "https://image.tmdb.org/t/p/original/1rsvGE8OQWgwZPv7EAGo80w15b5.jpg",
   logo: "https://occ-0-1164-38.1.nflxso.net/dnm/api/v6/S4oi7EPZbv2UEPaukW54OORa0S8/AAAABW5AdcvFX4G8XnB_b3uQRtZgvyU3QTyH4uSjNdDIANcjK_MlWXdMffH6J7JaKlt3Xj4_YKWusqEWZ9Xo1CkqN2_OYV51oVqvhw.webp?r=97e",
-  poster: "https://image.tmdb.org/t/p/original/joDoH3j5I6IJn9rDveY9dovAoe2.jpg",
-  posterVertikal: "https://images-prod.ai.tv2.no/v2/image-packs/pfimg_pack_01kathyxcje73rxsdzgc6w1b72",
+  poster: "https://images-prod.ai.tv2.no/v2/image-packs/pfimg_pack_01kathyxcje73rxsdzgc6w1b72",
+  posterVertikal: "https://image.tmdb.org/t/p/original/joDoH3j5I6IJn9rDveY9dovAoe2.jpg",
   beskrivelse:
-    "I den lille bygda Flåklypa blir det en jul full av forviklinger, oppfinnelser og humor!",
+    "En desperat avisredaktør med planer om å sette en ny snørekord, får tak i en kraftig snøkanon, alt for å prøve å lage store avisoverskrifter før jul.",
   metadata: ["Norge", "2013", "Alle", "Familie / Jul", "1 t 16 min"],
   imdb: "https://www.imdb.com/title/tt3324938/",
   skuespillere: "Kjell Aukrust (figurer), Robert Stoltenberg (stemmer), m.fl.",
@@ -509,6 +509,7 @@ const filmer = {
    
   
     
+
 
 
 
