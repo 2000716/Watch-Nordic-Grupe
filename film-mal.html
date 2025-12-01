@@ -781,7 +781,7 @@ video::cue {
 
   <!-- JS PLAY -->
   <script src="play.js">
-  // ===================== FILMDATA =====================
+// ===================== FILMDATA =====================
 const urlParams = new URLSearchParams(window.location.search);
 const filmId = urlParams.get('id')?.toLowerCase().replace(/\s+/g, '-');
 
@@ -796,12 +796,7 @@ document.title = film.tittel;
 // ===================== DOM =====================
 const video = document.getElementById('video');
 const titleElement = document.getElementById('movieTitle');
-titleElement.textContent = film.tittel;
-
 const backButton = document.getElementById('backButton');
-if (backButton && film.tilbakeUrl) backButton.href = film.tilbakeUrl;
-
-const ui = document.getElementById('ui');
 const playBtn = document.getElementById('playPauseBtn');
 const playIcon = document.getElementById('playIcon');
 const muteBtn = document.getElementById('muteBtn');
@@ -814,24 +809,18 @@ const thumb = document.getElementById('thumb');
 const timeDisplay = document.getElementById('timeDisplay');
 const captionsBtn = document.getElementById('captionsBtn');
 const captionMenu = document.getElementById('captionMenu');
+const subtitleTracksDiv = document.getElementById('subtitleTracks');
 const fullscreenBtn = document.getElementById('fullscreenBtn');
 const container = document.getElementById('container');
 const loadingSpinner = document.getElementById('loadingSpinner');
-const previewBox = document.getElementById('previewBox');
-const previewImage = document.getElementById('previewImage');
-const previewTime = document.getElementById('previewTime');
-
-const resumeOverlay = document.getElementById("resumeOverlay");
-const continueBtn = document.getElementById("continueBtn");
-const restartBtn = document.getElementById("restartBtn");
-
 const subtitleOverlay = document.getElementById("subtitleOverlay");
 
-// ===================== VIDEO SETUP =====================
-const source = document.createElement("source");
-source.src = film.videoUrl;
-source.type = "video/mp4";
-video.appendChild(source);
+// ===================== SETUP VIDEO =====================
+titleElement.textContent = film.tittel;
+if (backButton && film.tilbakeUrl) backButton.href = film.tilbakeUrl;
+
+video.src = film.videoUrl;
+video.autoplay = true;
 
 // Undertekster
 if (film.subtitleUrl) {
@@ -844,17 +833,11 @@ if (film.subtitleUrl) {
   video.appendChild(track);
 }
 
-video.load();
-video.autoplay = true;
-
 // ===================== VARIABLES =====================
 let isDragging = false;
 let hideTimeout;
-let subtitlesEnabled = true;
-const subtitleSettingKey = "global-subtitle-setting";
-let globalSubtitleSetting = localStorage.getItem(subtitleSettingKey) || "off";
 
-// ===================== FUNCTIONS =====================
+// ===================== FUNKSJONER =====================
 function formatTime(time) {
   const m = Math.floor(time / 60);
   const s = Math.floor(time % 60);
@@ -868,22 +851,51 @@ function updateProgress() {
     thumb.style.left = percent + '%';
   }
   timeDisplay.textContent = `${formatTime(video.currentTime)} / ${formatTime(video.duration)}`;
-  if (!isNaN(video.duration) && video.duration > 0) {
-    localStorage.setItem("progress_" + filmId, ((video.currentTime/video.duration)*100).toFixed(1));
-  }
 }
 
+// UI vis/skjul
 function showUI() {
-  ui.classList.remove('hidden');
+  document.getElementById('ui').classList.remove('hidden');
   subtitleOverlay.classList.add("subtitle-up");
   clearTimeout(hideTimeout);
   hideTimeout = setTimeout(() => {
     if (!video.paused) {
-      ui.classList.add('hidden');
+      document.getElementById('ui').classList.add('hidden');
       subtitleOverlay.classList.remove("subtitle-up");
     }
   }, 3000);
 }
+
+// ===================== EVENTS =====================
+// Play/pause
+playBtn.addEventListener('click', () => {
+  if (video.paused) video.play();
+  else video.pause();
+});
+video.addEventListener('click', () => {
+  if (video.paused) video.play();
+  else video.pause();
+});
+video.addEventListener('play', () => { playIcon.src="https://static.wixstatic.com/media/fd2fb2_f4658d43d3204506948e5c5ab65461d7~mv2.png"; showUI(); });
+video.addEventListener('pause', () => { playIcon.src="https://static.wixstatic.com/media/fd2fb2_f6f25f56b00e49eea8dc4f811b50bb5c~mv2.png"; showUI(); });
+
+// Mute
+muteBtn.addEventListener('click', () => {
+  video.muted = !video.muted;
+  muteIcon.src = video.muted
+    ? "https://static.wixstatic.com/media/fd2fb2_e7e7e77a59964f018d9e2d4605a047db~mv2.png"
+    : "https://static.wixstatic.com/media/fd2fb2_5c4fab8430e94d2381fc487b1654191d~mv2.png";
+});
+
+// Rewind / Forward
+rewindBtn.addEventListener('click', () => video.currentTime = Math.max(0, video.currentTime - 10));
+forwardBtn.addEventListener('click', () => video.currentTime = Math.min(video.duration, video.currentTime + 10));
+
+// Scrub
+progress.addEventListener('mousedown', e => { isDragging=true; scrubTo(e); });
+document.addEventListener('mouseup', e => { if(isDragging){ video.currentTime=scrubTo(e)*video.duration; isDragging=false; }} );
+document.addEventListener('mousemove', e => { if(isDragging){ scrubTo(e); }});
+thumb.addEventListener('mousedown', e => { e.preventDefault(); isDragging=true; });
 
 function scrubTo(e) {
   const rect = progress.getBoundingClientRect();
@@ -894,40 +906,49 @@ function scrubTo(e) {
   return percent;
 }
 
-function showPreview(e) {
-  const rect = progress.getBoundingClientRect();
-  const x = e.clientX - rect.left;
-  const percent = Math.min(Math.max(0, x / rect.width), 1);
-  const time = percent * video.duration;
+// Fullscreen
+fullscreenBtn.addEventListener('click', () => {
+  if(!document.fullscreenElement) container.requestFullscreen();
+  else document.exitFullscreen();
+});
+document.addEventListener('fullscreenchange', () => {
+  fullscreenBtn.querySelector('img').src = document.fullscreenElement
+    ? "https://static.wixstatic.com/media/fd2fb2_c9b139f2774c4bf7b32c7271fd6c1c1a~mv2.png"
+    : "https://static.wixstatic.com/media/fd2fb2_3fa37682b3b34c04a2cd08ffcde2763a~mv2.png";
+});
 
-  previewBox.style.left = `${x - 120}px`;
-  previewBox.style.display = "block";
-  previewTime.textContent = formatTime(time);
+// Loading spinner
+video.addEventListener('waiting', () => loadingSpinner.style.display='block');
+video.addEventListener('playing', () => loadingSpinner.style.display='none');
 
-  const hiddenVideo = document.createElement("video");
-  hiddenVideo.src = film.videoUrl;
-  hiddenVideo.muted = true;
-  hiddenVideo.crossOrigin = "anonymous";
+// Progress update
+video.addEventListener('timeupdate', updateProgress);
+video.addEventListener('loadedmetadata', updateProgress);
 
-  const canvas = document.createElement("canvas");
-  const ctx = canvas.getContext("2d");
-
-  hiddenVideo.currentTime = time;
-  hiddenVideo.addEventListener("seeked", function handler() {
-    canvas.width = 240;
-    canvas.height = 135;
-    ctx.drawImage(hiddenVideo,0,0,canvas.width,canvas.height);
-    previewImage.src = canvas.toDataURL("image/jpeg");
-    hiddenVideo.removeEventListener("seeked", handler);
+// ===================== UNDERTEKSTER =====================
+if(film.subtitleLanguages) {
+  film.subtitleLanguages.forEach(lang => {
+    const btn = document.createElement("button");
+    btn.textContent = lang.label;
+    btn.dataset.lang = lang.code;
+    btn.addEventListener('click', () => {
+      if(lang.code === "off") {
+        for(const track of video.textTracks) track.mode="disabled";
+      } else {
+        for(const track of video.textTracks) track.mode = track.language === lang.code ? "showing" : "disabled";
+      }
+      updateSubtitleButtons(lang.code);
+    });
+    subtitleTracksDiv.appendChild(btn);
   });
 }
-
-function hidePreview() { previewBox.style.display = "none"; }
 
 function updateSubtitleButtons(activeLang) {
   document.querySelectorAll("#subtitleTracks button").forEach(btn => {
     btn.classList.toggle("active", btn.dataset.lang === activeLang);
   });
+}
+
 }
 
 // ===================== EVENTS =====================
@@ -985,6 +1006,7 @@ video.addEventListener('canplay', () => loadingSpinne
 </script>
 </body>
 </html>
+
 
 
 
