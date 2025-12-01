@@ -500,8 +500,14 @@ const filmer = {
     imdb: "https://www.imdb.com/title/tt2034761/",
     skuespillere: "Vilde Zeiner, Anders Baasmo, Agnes Kittelsen",
     regissor: "Nils Gaup",
-    watchUrl: "film-mal.html?id=reisen-til-julestjernen",
     publishDate: "2025-11-25T00:00:00", // ISO datoformat
+    watchUrl: "film-mal.html?id=how-the-grinch-stole-christmas",
+    videoUrl: "https://video.wixstatic.com/video/fd2fb2_fe9b1ad1020a43dc8944254e7934a12e/720p/mp4/file.mp4",
+    subtitleUrl: "Reisen.VTT",
+    tilbakeUrl: "film.html?navn=reisen-til-julestjernen",
+    audioLanguages: [{ code: "en", label: "Norsk" }],
+    subtitleLanguages:  [ { code: "no", label: "Norsk" },
+      { code: "off", label: "Av" } ] },
     expireDate: "2027-11-15T23:59:59",
   },
   };
@@ -509,6 +515,7 @@ const filmer = {
    
   
     
+
 
 
 
