@@ -489,7 +489,7 @@ const filmer = {
   },
 
       "reisen-til-julestjernen": {
-    tittel: "Reisen til JUlestjernen",
+    tittel: "Reisen til Julestjernen",
     bakgrunn: "https://image.tmdb.org/t/p/original/w3xPhjHvopXb9KwUmla9TrfZNbs.jpg",
     banner: "https://static.wixstatic.com/media/fd2fb2_0580c3c7d51e4c3fac23d7775e44da83~mv2.jpg",
     logo: "https://static.wixstatic.com/media/fd2fb2_d736aae773814450a4b020e287dbb75c~mv2.png",
@@ -501,7 +501,7 @@ const filmer = {
     skuespillere: "Vilde Zeiner, Anders Baasmo, Agnes Kittelsen",
     regissor: "Nils Gaup",
     publishDate: "2025-11-25T00:00:00", // ISO datoformat
-    watchUrl: "film-mal.html?id=how-the-grinch-stole-christmas",
+    watchUrl: "film-mal.html?id=reisen-til-julestjernen",
     videoUrl: "https://video.wixstatic.com/video/fd2fb2_fe9b1ad1020a43dc8944254e7934a12e/720p/mp4/file.mp4",
     subtitleUrl: "Reisen.VTT",
     tilbakeUrl: "film.html?navn=reisen-til-julestjernen",
@@ -515,6 +515,7 @@ const filmer = {
    
   
     
+
 
 
 
