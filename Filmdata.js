@@ -107,7 +107,7 @@ const filmer = {
   // Dette brukes av selve videospilleren
   videoUrl:
   "https://video.wixstatic.com/video/fd2fb2_26bfed9bfc254af8b14f41820a066eec/720p/mp4/file.mp4",
-  subtitleUrl: "Jul-i-flåklypa.vtt",
+  subtitleUrl: "jul-i-flåklypa.VTT",
   // Tilbake-knappen når man er på visningssiden
   tilbakeUrl: "film.html?navn=jul-i-flåklypa",
   // Språkvalg for lyd
@@ -509,6 +509,7 @@ const filmer = {
    
   
     
+
 
 
 
