@@ -107,7 +107,7 @@ const filmer = {
   // Dette brukes av selve videospilleren
   videoUrl:
   "https://video.wixstatic.com/video/fd2fb2_26bfed9bfc254af8b14f41820a066eec/720p/mp4/file.mp4",
-  subtitleUrl: "jul-i-flåklypa.VTT",
+  subtitleUrl: "Jul-i-flåklypa.VTT",
   // Tilbake-knappen når man er på visningssiden
   tilbakeUrl: "film.html?navn=jul-i-flåklypa",
   // Språkvalg for lyd
@@ -504,11 +504,45 @@ const filmer = {
     publishDate: "2025-11-25T00:00:00", // ISO datoformat
     expireDate: "2027-11-15T23:59:59",
   },
+  
+ "reisen-til-julestjernen": {
+    tittel: "Reisen til Julestjernen",
+    bakgrunn: "https://image.tmdb.org/t/p/original/w3xPhjHvopXb9KwUmla9TrfZNbs.jpg",
+    banner: "https://static.wixstatic.com/media/fd2fb2_0580c3c7d51e4c3fac23d7775e44da83~mv2.jpg",
+    logo: "https://static.wixstatic.com/media/fd2fb2_d736aae773814450a4b020e287dbb75c~mv2.png",
+    poster: "https://gfx.nrk.no/rkyU1BVEaAdBVHVeQxjkkQY8olwf04UC9jpunEc-PR_w",
+    posterVertikal: "https://image.tmdb.org/t/p/original/k4kOxAqbDftvEZ7k1lYCApJB4al.jpg", // portrett
+    beskrivelse: "Kongens datter forsvinner på jakt etter Julestjernen. Dronningen dør av sorg og Kongen forbanner Julestjernen slik at den slukner.",
+    metadata: ["Norge", "2012", "Alle", "Familie", "1 t 16 min"],
+    imdb: "https://www.imdb.com/title/tt2034761/",
+    skuespillere: "Vilde Zeiner, Anders Baasmo, Agnes Kittelsen",
+    regissor: "Nils Gaup",
+  // Dette peker til infosiden (filmdetaljer)
+  watchUrl: "film-mal.html?id=reisen-til-julestjernen",
+  // Dette brukes av selve videospilleren
+  videoUrl:
+  "https://video.wixstatic.com/video/fd2fb2_fe9b1ad1020a43dc8944254e7934a12e/720p/mp4/file.mp4",
+  subtitleUrl: "Reise.VTT",
+  // Tilbake-knappen når man er på visningssiden
+  tilbakeUrl: "film.html?navn=reisen-til-julestjernen",
+  // Språkvalg for lyd
+  audioLanguages: [
+    { code: "no", label: "Norsk" } ],
+  // Språkvalg for undertekster
+  subtitleLanguages: [
+    { code: "no", label: "Norsk" },
+    { code: "off", label: "Av" }
+  ],
+  expireDate: "2027-01-01T23:59:59"
+},
+
+  
   };
 
    
   
     
+
 
 
 
