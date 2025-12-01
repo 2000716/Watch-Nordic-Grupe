@@ -92,13 +92,13 @@ const filmer = {
 
  "jul-i-flåklypa": {
   tittel: "Jul i Flåklypa",
-  bakgrunn: "https://path/to/background.jpg",
-  logo: "https://path/to/logo.png",
-  poster: "https://path/to/poster.webp",
-  posterVertikal: "https://path/to/vertical.jpg",
+  bakgrunn: "https://image.tmdb.org/t/p/original/1rsvGE8OQWgwZPv7EAGo80w15b5.jpg",
+  logo: "https://occ-0-1164-38.1.nflxso.net/dnm/api/v6/S4oi7EPZbv2UEPaukW54OORa0S8/AAAABW5AdcvFX4G8XnB_b3uQRtZgvyU3QTyH4uSjNdDIANcjK_MlWXdMffH6J7JaKlt3Xj4_YKWusqEWZ9Xo1CkqN2_OYV51oVqvhw.webp?r=97e",
+  poster: "https://image.tmdb.org/t/p/original/joDoH3j5I6IJn9rDveY9dovAoe2.jpg",
+  posterVertikal: "https://images-prod.ai.tv2.no/v2/image-packs/pfimg_pack_01kathyxcje73rxsdzgc6w1b72",
   beskrivelse:
     "I den lille bygda Flåklypa blir det en jul full av forviklinger, oppfinnelser og humor!",
-  metadata: ["Norge", "2013", "Tillatt for alle", "Familie", "1 t 16 min"],
+  metadata: ["Norge", "2013", "Alle", "Familie / Jul", "1 t 16 min"],
   imdb: "https://www.imdb.com/title/tt3324938/",
   skuespillere: "Kjell Aukrust (figurer), Robert Stoltenberg (stemmer), m.fl.",
   regissor: "Rasmus A. Sivertsen",
@@ -509,6 +509,7 @@ const filmer = {
    
   
     
+
 
 
 
