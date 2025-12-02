@@ -11,6 +11,15 @@ const filmer = {
     skuespillere: "Johnny Depp, Helena Bonham Carter, Emily Watson",
     regissor: "Tim Burton",
     watchUrl: "film-mal.html?id=corpse-bride",
+    videoUrl:"https://video.wixstatic.com/video/fd2fb2_a659818165894e4894228ad4804060f4/1080p/mp4/file.mp4",
+   subtitleUrl: "Corpse-bride.VTT",
+   tilbakeUrl: "film.html?navn=corpse-bride",
+  audioLanguages: [
+    { code: "no", label: "Engelsk" } ],
+  subtitleLanguages: [
+    { code: "no", label: "Norsk" },
+    { code: "off", label: "Av" }
+  ],
     expireDate: "2026-11-15T23:59:59",
   },
 
@@ -560,6 +569,7 @@ const filmer = {
    
   
     
+
 
 
 
