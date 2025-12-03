@@ -324,6 +324,17 @@ body.loaded {
   100% { opacity: 1; transform: scale(1); }
 }
 
+/* === Bakgrunn rundt knapper + tekst + metadata + info + cast === */
+.text-button-container {
+    background: rgba(9, 27, 30, 0.55);  /* mørk transparent */
+    backdrop-filter: blur(12px);        /* gir moderne glass-effekt */
+    -webkit-backdrop-filter: blur(12px);
+    border-radius: 22px;                /* myke kanter */
+    padding: 40px;
+    border: 1px solid rgba(255, 255, 255, 0.05); /* subtil kant */
+}
+
+   
 /* === Resten beholdt som før === */
 /* (anbefalinger, popup, video, footer, episoder osv. — urørt) */
 
@@ -1252,6 +1263,7 @@ window.addEventListener("scroll", () => {
 </html>
 
  
+
 
 
 
