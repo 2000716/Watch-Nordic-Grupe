@@ -12,6 +12,11 @@
   margin: 0;
   padding: 0;
 }
+ html, body {
+ overflow-x: hidden;   /* Hindrer all scrolling til siden */
+  width: 100%;          /* Sikrer at ingenting blir bredere enn vinduet */
+}
+
 
 html {
   font-size: clamp(14px, 1vw + 10px, 18px);
@@ -1263,6 +1268,7 @@ window.addEventListener("scroll", () => {
 </html>
 
  
+
 
 
 
