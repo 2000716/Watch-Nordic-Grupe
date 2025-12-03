@@ -334,16 +334,12 @@ body.loaded {
 
 /* === Bakgrunn rundt knapper + tekst + metadata + info + cast === */
 .text-button-container {
-  display: flex;
-  align-items: flex-start;      /* venstrejustert vertikalt */
-  justify-content: flex-start;  /* venstrejustert horisontalt */
-  gap: 60px;
-  padding: 40px;
-  background: rgba(9, 27, 30, 0.55);
-  backdrop-filter: blur(12px);
-  border-radius: 22px;
-  border: 1px solid rgba(255,255,255,0.05);
-  text-align: left;             /* venstrejuster tekst */
+    background: rgba(9, 27, 30, 0.55);  /* mørk transparent */
+    backdrop-filter: blur(12px);        /* gir moderne glass-effekt */
+    -webkit-backdrop-filter: blur(12px);
+    border-radius: 22px;                /* myke kanter */
+    padding: 40px;
+    border: 1px solid rgba(255, 255, 255, 0.05); /* subtil kant */
 }
 
 
@@ -1277,6 +1273,7 @@ window.addEventListener("scroll", () => {
 </html>
 
  
+
 
 
 
