@@ -34,7 +34,15 @@ const filmer = {
     imdb: "https://www.imdb.com/title/tt0102057/?ref_=nv_sr_srsg_1_tt_5_nm_2_in_0_q_HOOK",
     skuespillere: "Dustin Hoffman, Robin Williams, Julia Roberts",
     regissor: "Steven Spielberg",
-    watchUrl: "film-mal.html?id=hook",
+  watchUrl: "film-mal.html?id=hook",
+    videoUrl: "https://video.wixstatic.com/video/fd2fb2_4900b93cc027487693fc66246b1ae100/720p/mp4/file.mp4",
+    subtitleUrl: "Hook.VTT",
+    tilbakeUrl: "film.html?navn=hook",
+    audioLanguages: [{ code: "en", label: "Engelsk" }],
+    subtitleLanguages: [
+      { code: "no", label: "Norsk" },
+      { code: "off", label: "Av" }
+    ],
     expireDate: "2027-10-10T23:59:59",
   },
 
@@ -50,7 +58,13 @@ const filmer = {
     imdb: "https://www.imdb.com/title/tt8048384/?ref_=nv_sr_srsg_0_tt_8_nm_0_in_0_q_kaptein%2520sabeltann%2520og%2520den%2520",
     skuespillere: "Kyrre Haugen Sydness, Siri Skjeggedal, Leonard Valestrand Eike",
     regissor: "Marit Moum Aune, Rasmus A. Sivertsen",
-    watchUrl: "film-mal.html?id=kaptein-sabeltann",
+     watchUrl: "film-mal.html?id=kaptein-sabeltann",
+    videoUrl: "https://video.wixstatic.com/video/fd2fb2_6e01d7be2fda439fb39701d649b7f8b1/1080p/mp4/file.mp4",
+    subtitleUrl: "Kaptein-sabeltann.VTT",
+    tilbakeUrl: "film.html?navn=kaptein-sabeltann",
+    audioLanguages: [{ code: "no", label: "Norsk" }],
+    subtitleLanguages: [ { code: "no", label: "Norsk" },
+      { code: "off", label: "Av" }],
     expireDate: "2026-10-10T23:59:59",
   },
 
@@ -66,6 +80,14 @@ const filmer = {
     skuespillere: "Cher, Christina Aguilera, Alan Cumming",
     regissor: "Steve Antin",
     watchUrl: "film-mal.html?id=burlesque",
+    videoUrl: "https://video.wixstatic.com/video/fd2fb2_7462cc0c8b1741fe813b5bf84c073e84/720p/mp4/file.mp4",
+    subtitleUrl: "Burlesque.VTT",
+    tilbakeUrl: "film.html?navn=burlesque",
+    audioLanguages: [{ code: "en", label: "Engelsk" }],
+    subtitleLanguages: [
+      { code: "no", label: "Norsk" },
+      { code: "off", label: "Av" }
+    ],
     expireDate: "2026-11-15T23:59:59",
   },
 
@@ -80,7 +102,15 @@ const filmer = {
     imdb: "https://www.imdb.com/title/tt10954718/?ref_=nv_sr_srsg_1_tt_6_nm_1_in_0_q_dOg%2520man",
     skuespillere: "Pete Davidson, Poppy Liu, Lil Rel Howery",
     regissor: "Peter Hastings",
-    watchUrl: "film-mal.html?id=dog-man",
+   watchUrl: "film-mal.html?id=dog-man",
+    videoUrl: "https://video.wixstatic.com/video/fd2fb2_f18a5454a4584c6e9b4d7f6e1e97413a/1080p/mp4/file.mp4",
+    subtitleUrl: "Dog-man.VTT",
+    tilbakeUrl: "film.html?navn=dog-man",
+    audioLanguages: [{ code: "no", label: "Norsk" }],
+    subtitleLanguages: [
+      { code: "no", label: "Norsk" },
+      { code: "off", label: "Av" }
+    ],
     expireDate: "2026-01-01T23:59:59",
   },
 
@@ -96,6 +126,11 @@ const filmer = {
     skuespillere: "Espen Bråten Kristoffersen, Stig Henrik Hoff, Wenche Myhre",
     regissor: "Rasmus A. Sivertsen",
     watchUrl: "film-mal.html?id=dyrene-i-hakkabakkeskogen",
+    videoUrl: "https://video.wixstatic.com/video/fd2fb2_e702a89f1d8d4d7b8cecfc4692d04493/720p/mp4/file.mp4",
+    subtitleUrl: "",
+    tilbakeUrl: "film.html?navn=dyrene-i-hakkabakkeskogen",
+    audioLanguages: [{ code: "no", label: "Norsk" }],
+    subtitleLanguages: [],
     expireDate: "2026-11-15T23:59:59",
   },
 
@@ -135,7 +170,15 @@ const filmer = {
     imdb: "https://www.imdb.com/title/tt9472442/?ref_=nv_sr_srsg_0_tt_1_nm_0_in_0_q_bamse%2520og%2520dunder",
     skuespillere: "Dennis Storhøi, Morten Røhrt, Jan Martin Johnsen, Morten Rudå",
     regissor: "Christian Ryltenius",
-    watchUrl: "film-mal.html?id=bamse-og-dunderklokken",
+   watchUrl: "film-mal.html?id=bamse-og-dunderklokken",
+    videoUrl: "https://video.wixstatic.com/video/fd2fb2_747e98649cb54331a25845335a07d608/1080p/mp4/file.mp4",
+    subtitleUrl: "Bamse-og-dunderklokken.VTT",
+    tilbakeUrl: "film.html?navn=bamse-og-dunderklokken",
+    audioLanguages: [{ code: "no", label: "Norsk" }],
+    subtitleLanguages: [
+      { code: "no", label: "Norsk" },
+      { code: "off", label: "Av" }
+    ],
     expireDate: "2027-10-15T23:59:59",
   },
 
@@ -151,6 +194,14 @@ const filmer = {
     skuespillere: "Yonas Kibreab, Zoe Saldaña, Remy Edgerly",
     regissor: "Adrian Molina, Domee Shi, Madeline Sharafian",
     watchUrl: "film-mal.html?id=elio",
+    videoUrl: "https://video.wixstatic.com/video/fd2fb2_e2a1c24ef9da432dbdfae032ea242136/720p/mp4/file.mp4",
+    subtitleUrl: "Elio.VTT",
+    tilbakeUrl: "film.html?navn=elio",
+    audioLanguages: [{ code: "no", label: "Norsk" }],
+    subtitleLanguages: [
+      { code: "no", label: "Norsk" },
+      { code: "off", label: "Av" }
+    ],
     expireDate: "2026-11-15T23:59:59",
   },
 
@@ -166,6 +217,11 @@ const filmer = {
     skuespillere: "Rabbe Smedlund, Jyrki Kovaleff, Elina Salo",
     regissor: "Hiroshi Saitô",
     watchUrl: "film-mal.html?id=comet-in-moominland",
+    videoUrl: "https://video.wixstatic.com/video/fd2fb2_b4f49d491bc344f99d49bf3e297648db/720p/mp4/file.mp4",
+    subtitleUrl: "",
+    tilbakeUrl: "film.html?navn=comet-in-moominland",
+    audioLanguages: [{ code: "no", label: "Norsk" }],
+    subtitleLanguages: [],
     expireDate: "2028-10-15T23:59:59",
   },
 
@@ -180,7 +236,13 @@ const filmer = {
     imdb: "https://www.imdb.com/title/tt4353996/",
     skuespillere: "Anders Baasmo Christiansen, Erik Hivju, Jesper Christensen, Rolf Kristian Larsen, Tuva Novotny",
     regissor: "Erik Poppe",
-    watchUrl: "film-mal.html?id=kongens-nei",
+   watchUrl: "film-mal.html?id=kongens-nei",
+    videoUrl: "https://video.wixstatic.com/video/fd2fb2_16a47b758eee49719f0166dd9ee859d7/720p/mp4/file.mp4",
+    subtitleUrl: "Kongens nei.VTT",
+    tilbakeUrl: "film.html?navn=kongens-nei",
+    audioLanguages: [{ code: "no", label: "Norsk" }],
+    subtitleLanguages: [{ code: "no", label: "Norsk" },
+      { code: "off", label: "Av" }],
     expireDate: "2026-11-15T23:59:59",
   },
 
@@ -196,6 +258,10 @@ const filmer = {
     skuespillere: "Aksel Hennie, Agnes Kittelsen, Nicolai Cleve Broch",
     regissor: "Joachim Rønning, Espen Sandberg",
     watchUrl: "film-mal.html?id=max-manus",
+    videoUrl: "https://video.wixstatic.com/video/fd2fb2_3057b85398be48ce997098642c08485e/720p/mp4/file.mp4",
+    subtitleUrl: "",
+    tilbakeUrl: "film.html?navn=max-manus",
+    audioLanguages: [{ code: "no", label: "Norsk" }],
     expireDate: "2026-11-15T23:59:59",
   },
        "smurfs": {
@@ -210,6 +276,14 @@ const filmer = {
     skuespillere: "Rihanna, Natasha Lyonne, Hannah Waddingham, Kurt Russell, Nick Offerman,",
     regissor: " Chris Miller",
     watchUrl: "film-mal.html?id=smurfs",
+    videoUrl: "https://video.wixstatic.com/video/fd2fb2_56cc51ddef524d8390ef2029ee8b883c/480p/mp4/file.mp4",
+    subtitleUrl: "Smurfs.VTT",
+    tilbakeUrl: "film.html?navn=smurfs",
+    audioLanguages: [{ code: "en", label: "Engelsk" }],
+    subtitleLanguages: [
+      { code: "no", label: "Norsk" },
+      { code: "off", label: "Av" }
+    ],
     expireDate: "2026-11-15T23:59:59",
   },
 
@@ -224,7 +298,15 @@ const filmer = {
     imdb: "https://www.imdb.com/title/tt1430626/",
     skuespillere: "Hugh Grant, Salma Hayek, Jeremy Piven",
     regissor: "Peter Lord, Jeff Newitt",
-    watchUrl: "film-mal.html?id=Pirates",
+     watchUrl: "film-mal.html?id=irates",
+    videoUrl: "https://video.wixstatic.com/video/fd2fb2_d929da1da60145be96f418e6338fd0d1/1080p/mp4/file.mp4",
+    subtitleUrl: "Pirates.VTT",
+    tilbakeUrl: "film.html?navn=pirates",
+    audioLanguages: [{ code: "en", label: "Engelsk" }],
+    subtitleLanguages: [
+      { code: "no", label: "Norsk" },
+      { code: "off", label: "Av" }
+    ],
     expireDate: "2028-11-15T23:59:59",
   },
 
@@ -239,7 +321,15 @@ const filmer = {
     imdb: "https://www.imdb.com/title/tt14806994/",
     skuespillere: "Anders Baasmo, John Carew, Elias Holmen Sørensen",
     regissor: "Hallvard Bræin",
-    watchUrl: "film-mal.html?id=olsenbanden–siste-skrik",
+     watchUrl: "film-mal.html?id=olsenbanden–siste-skrik",
+    videoUrl: "https://video.wixstatic.com/video/fd2fb2_bd1113d3f4fa48ec9da1f94c4a79974f/480p/mp4/file.mp4",
+    subtitleUrl: "Olsenbanden–siste-skrik.VTT",
+    tilbakeUrl: "film.html?navn=olsenbanden–siste-skrik",
+    audioLanguages: [{ code: "no", label: "Norsk" }],
+    subtitleLanguages: [
+      { code: "no", label: "Norsk" },
+      { code: "off", label: "Av" }
+    ],
     publishDate: "2025-09-23T00:00:00", // ISO datoformat
     expireDate: "2026-11-15T23:59:59",
   },
@@ -256,7 +346,13 @@ const filmer = {
     imdb: "https://www.imdb.com/title/tt2872750/",
     skuespillere: "Justin Fletcher, John Sparkes, Omid Djalili",
     regissor: "Mark Burton, Richard Starzak",
-    watchUrl: "film-mal.html?id=sauen-shaun–filmen",
+   watchUrl: "film-mal.html?id=sauen-shaun–filmen",
+    videoUrl: "https://video.wixstatic.com/video/fd2fb2_c8d3037f1c4e44cf9678616825edbca0/1080p/mp4/file.mp4",
+    subtitleUrl: "",
+    tilbakeUrl: "film.html?navn=sauen-shaun–filmen",
+    audioLanguages: [{ code: "en", label: "Engelsk" }],
+    subtitleLanguages: [
+    ],
     publishDate: "2025-10-02T00:00:00", // ISO datoformat
     expireDate: "2027-11-15T23:59:59",
   },
@@ -272,7 +368,14 @@ const filmer = {
     imdb: "https://www.imdb.com/title/tt1340094/",
     skuespillere: "Bill Skarsgård, FKA twigs, Danny Huston",
     regissor: "Rupert Sanders",
-    watchUrl: "film-mal.html?id=the-crow",
+   watchUrl: "film-mal.html?id=the-crow",
+    videoUrl: "https://video.wixstatic.com/video/fd2fb2_c6ad380c53e744be9c0d99326add0587/720p/mp4/file.mp4",
+    subtitleUrl: "the-Crow.VTT",
+    tilbakeUrl: "film.html?navn=the-crow",
+    audioLanguages: [{ code: "en", label: "Engelsk" }],
+    subtitleLanguages: [ { code: "no", label: "Norsk" },
+      { code: "off", label: "Av" }
+    ],
     publishDate: "2025-09-21", // ISO datoformat
     expireDate: "2026-11-15T23:59:59",
   },
@@ -288,7 +391,14 @@ const filmer = {
     imdb: "https://www.imdb.com/title/tt0127536?ref_ext_viaplay",
     skuespillere: "Cate Blanchett, Geoffrey Rush, Christopher Eccleston",
     regissor: "Shekhar Kapur",
-    watchUrl: "film-mal.html?id=elizabeth",
+  watchUrl: "film-mal.html?id=elizabeth",
+    videoUrl: "https://video.wixstatic.com/video/fd2fb2_0ddd1ebc9ff74180bad3e94afb2742ca/1080p/mp4/file.mp4",
+    subtitleUrl: "Elizabeth.VTT",
+    tilbakeUrl: "film.html?navn=elizabeth",
+    audioLanguages: [{ code: "en", label: "Engelsk" }],
+    subtitleLanguages: [ { code: "no", label: "Norsk" },
+      { code: "off", label: "Av" }
+    ],
     publishDate: "2025-09-26", // ISO datoformat
     expireDate: "2026-11-15T23:59:59",
   },
@@ -321,7 +431,14 @@ const filmer = {
     imdb: "https://www.imdb.com/title/tt0117110/",
     skuespillere: "Billy Connolly, Jennifer Saunders, Dave Goelz, Steve Whitmire",
     regissor: "Brian Henson",
-    watchUrl: "film-mal.html?id=muppet-treasure-island",
+   watchUrl: "film-mal.html?id=muppet-treasure-island",
+    videoUrl: "https://video.wixstatic.com/video/fd2fb2_cfdc15e7851f41c1acecc82f0ec8d2a1/1080p/mp4/file.mp4",
+    subtitleUrl: "Muppet-treasure-island.VTT",
+    tilbakeUrl: "film.html?navn=muppet-treasure-island",
+    audioLanguages: [{ code: "en", label: "Engelsk" }],
+    subtitleLanguages: [ { code: "no", label: "Norsk" },
+      { code: "off", label: "Av" }
+    ],
     publishDate: "2025-09-29T00:00:00", // ISO datoformat
     expireDate: "2027-11-15T23:59:59",
   },
@@ -337,7 +454,14 @@ const filmer = {
     imdb: "https://www.imdb.com/title/tt36462222/",
     skuespillere: "Josh Goodman, Jennifer Jo Hooper, Parks Stephenson",
     regissor: "Fergus Colville",
-    watchUrl: "film-mal.html?id=titanic-digital-resurrection",
+     watchUrl: "film-mal.html?id=titanic-digital-resurrection",
+    videoUrl: "https://video.wixstatic.com/video/fd2fb2_5a581d01dd57499087e1dcb5dd183ec0/1080p/mp4/file.mp4",
+    subtitleUrl: "Titanic-digital-resurrection.VTT",
+    tilbakeUrl: "film.html?navn=titanic-digital-resurrection",
+    audioLanguages: [{ code: "en", label: "Engelsk" }],
+    subtitleLanguages: [ { code: "no", label: "Norsk" },
+      { code: "off", label: "Av" }
+    ],
     publishDate: "2025-10-04T00:00:00", // ISO datoformat
     expireDate: "2026-11-15T23:59:59",
   },
@@ -370,7 +494,12 @@ const filmer = {
     imdb: "https://www.imdb.com/title/tt15857304/",
     skuespillere: "Justin Fletcher, John Sparkes, Laura Aikman",
     regissor: "Steve Cox",
-    watchUrl: "film-mal.html?id=sauen-shaun-feirer-jul",
+     watchUrl: "film-mal.html?id=sauen-shaun-feirer-jul",
+    videoUrl: "https://video.wixstatic.com/video/fd2fb2_d4651ed7344a42d2a22d62753d92a982/480p/mp4/file.mp4",
+    subtitleUrl: "",
+    tilbakeUrl: "film.html?navn=sauen-shaun-feirer-jul",
+    audioLanguages: [{ code: "en", label: "Engelsk" }],
+    subtitleLanguages: [],
     publishDate: "2025-10-09T00:00:00", // ISO datoformat
     expireDate: "2027-11-15T23:59:59",
   },
@@ -386,7 +515,14 @@ const filmer = {
     imdb: "https://www.imdb.com/title/tt0787474/",
     skuespillere: "Ben Kingsley, Isaac Hempstead-Wright, Elle Fanning, Dee Bradley Baker, Steve Blum",
     regissor: "Anthony Stacchi, Graham Annable",
-    watchUrl: "film-mal.html?id=the-boxtrolls",
+   watchUrl: "film-mal.html?id=the-boxtrolls",
+    videoUrl: "https://video.wixstatic.com/video/fd2fb2_0686c943753342acbcd9d2ca052f8ee8/720p/mp4/file.mp4",
+    subtitleUrl: "Boxtrolls.VTT",
+    tilbakeUrl: "film.html?navn=the-boxtrolls",
+    audioLanguages: [{ code: "en", label: "Engelsk" }],
+    subtitleLanguages: [ { code: "no", label: "Norsk" },
+      { code: "off", label: "Av" }
+    ],
     publishDate: "2025-10-12T00:00:00", // ISO datoformat
     expireDate: "2026-11-15T23:59:59",
   },
@@ -403,6 +539,12 @@ const filmer = {
     skuespillere: "Ben Lewis, Anna O'Byrne, María Mercedes",
     regissor: "Andrew Lloyd Webber, Glenn Slater",
     watchUrl: "film-mal.html?id=love-never-dies",
+    videoUrl: "https://video.wixstatic.com/video/fd2fb2_aafa623322874f88aa4dd7e55eab6c01/720p/mp4/file.mp4",
+    subtitleUrl: "",
+    tilbakeUrl: "film.html?navn=love-never-dies",
+    audioLanguages: [{ code: "en", label: "Engelsk" }],
+    subtitleLanguages: [ 
+    ],
     publishDate: "2025-10-28T00:00:00", // ISO datoformat
     expireDate: "2026-11-15T23:59:59",
   },
@@ -418,7 +560,13 @@ const filmer = {
     imdb: "https://www.imdb.com/title/tt5697572/",
     skuespillere: "Taylor Swift, Idris Elba, Judi Dench, Jennifer Hudson, James Corden, Jason Derulo",
     regissor: "Tom Hooper",
-    watchUrl: "film-mal.html?id=cats",
+ watchUrl: "film-mal.html?id=cats",
+    videoUrl: "https://video.wixstatic.com/video/fd2fb2_f5d40aa3feba439bb38089215e24a80f/720p/mp4/file.mp4",
+    subtitleUrl: "Cats.VTT",
+    tilbakeUrl: "film.html?navn=cats",
+    audioLanguages: [{ code: "en", label: "Engelsk" }],
+    subtitleLanguages:  [ { code: "no", label: "Norsk" },
+      { code: "off", label: "Av" } ],
     publishDate: "2025-10-30T00:00:00", // ISO datoformat
     expireDate: "2026-11-15T23:59:59",
   },
@@ -470,6 +618,12 @@ const filmer = {
     skuespillere: "Jim Carrey, Jeffrey Tambor, Christine Baranski, Bill Irwin, Molly Shannon, Clint Howard",
     regissor: "Ron Howard",
     watchUrl: "film-mal.html?id=how-the-grinch-stole-christmas",
+    videoUrl: "https://video.wixstatic.com/video/fd2fb2_516cbabf274a4989b1009160756da125/720p/mp4/file.mp4",
+    subtitleUrl: "Grinch.VTT",
+    tilbakeUrl: "film.html?navn=how-the-grinch-stole-christmas",
+    audioLanguages: [{ code: "en", label: "Engelsk" }],
+    subtitleLanguages:  [ { code: "no", label: "Norsk" },
+      { code: "off", label: "Av" } ],
     publishDate: "2025-12-01T00:00:00", // ISO datoformat
     expireDate: "2027-11-15T23:59:59",
   },
@@ -487,23 +641,6 @@ const filmer = {
     regissor: "Jon M. Chu",
     watchUrl: "film-mal.html?id=wicked",
     publishDate: "2026-01-10T00:00:00", // ISO datoformat
-    expireDate: "2027-11-15T23:59:59",
-  },
-
-      "reisen-til-julestjernen": {
-    tittel: "Reisen til Julestjernen",
-    bakgrunn: "https://image.tmdb.org/t/p/original/w3xPhjHvopXb9KwUmla9TrfZNbs.jpg",
-    banner: "https://static.wixstatic.com/media/fd2fb2_0580c3c7d51e4c3fac23d7775e44da83~mv2.jpg",
-    logo: "https://static.wixstatic.com/media/fd2fb2_d736aae773814450a4b020e287dbb75c~mv2.png",
-    poster: "https://gfx.nrk.no/rkyU1BVEaAdBVHVeQxjkkQY8olwf04UC9jpunEc-PR_w",
-    posterVertikal: "https://image.tmdb.org/t/p/original/k4kOxAqbDftvEZ7k1lYCApJB4al.jpg", // portrett
-    beskrivelse: "Kongens datter forsvinner på jakt etter Julestjernen. Dronningen dør av sorg og Kongen forbanner Julestjernen slik at den slukner.",
-    metadata: ["Norge", "2012", "Alle", "Familie", "1 t 16 min"],
-    imdb: "https://www.imdb.com/title/tt2034761/",
-    skuespillere: "Vilde Zeiner, Anders Baasmo, Agnes Kittelsen",
-    regissor: "Nils Gaup",
-    watchUrl: "film-mal.html?id=reisen-til-julestjernen",
-    publishDate: "2025-11-25T00:00:00", // ISO datoformat
     expireDate: "2027-11-15T23:59:59",
   },
   
@@ -569,6 +706,7 @@ const filmer = {
    
   
     
+
 
 
 
