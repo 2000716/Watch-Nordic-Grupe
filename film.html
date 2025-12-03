@@ -335,16 +335,17 @@ body.loaded {
 /* === Bakgrunn rundt knapper + tekst + metadata + info + cast === */
 .text-button-container {
   display: flex;
-  align-items: center;      /* ← sentrer vertikalt */
-  justify-content: center;  /* ← sentrer horisontalt */
+  align-items: flex-start;      /* venstrejustert vertikalt */
+  justify-content: flex-start;  /* venstrejustert horisontalt */
   gap: 60px;
   padding: 40px;
   background: rgba(9, 27, 30, 0.55);
   backdrop-filter: blur(12px);
   border-radius: 22px;
   border: 1px solid rgba(255,255,255,0.05);
-  text-align: center;       /* ← sentrer tekst */
+  text-align: left;             /* venstrejuster tekst */
 }
+
 
 
    
@@ -1276,6 +1277,7 @@ window.addEventListener("scroll", () => {
 </html>
 
  
+
 
 
 
