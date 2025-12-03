@@ -1973,8 +1973,35 @@ window.addEventListener("scroll", () => {
   }
 });
 
+  // Hent dagens dato
+const now = new Date();
+
+// Filtrer bort utgåtte filmer
+const activeFilms = films.filter(film => {
+    const expire = new Date(film.expireDate);
+    return expire > now; // bare filmer som IKKE har gått ut
+});
+
+// Finn galleriet på siden
+const gallery = document.getElementById("gallery");
+
+// Lag film-elementer fra activeFilms
+activeFilms.forEach(film => {
+    const item = document.createElement("a");
+    item.href = film.link;
+    item.className = "film-item";
+
+    item.innerHTML = `
+        <img src="${film.image}" alt="${film.title}">
+    `;
+
+    gallery.appendChild(item);
+});
+
+
   
 </script>
+
 
 
 
