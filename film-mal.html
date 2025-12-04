@@ -690,6 +690,63 @@ video::cue {
     padding: 4px 8px;
   }
 }
+   /* === MYK BAKGRUNSRUTE FOR HELE KONTROLLPANELET === */
+.controls {
+  background: rgba(0, 0, 0, 0.45);        /* myk mørk bakgrunn */
+  backdrop-filter: blur(14px);            /* glass-effekt */
+  -webkit-backdrop-filter: blur(14px);
+  border-radius: 20px;                    /* runde hjørner */
+  padding: 18px 24px;
+  margin: 0 20px 20px;                    /* litt avstand fra kanten */
+}
+
+/* === SPOLINGSLINJE + BAKGRUNSPLATE === */
+.progress-container {
+  bottom: 110px;                          /* flyttes litt opp */
+  padding: 0 35px;
+}
+
+.progress {
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border-radius: 20px;
+  height: 10px;
+}
+
+/* Fyll, tommel */
+.progress-filled {
+  border-radius: 20px;
+}
+
+.thumb {
+  width: 16px;
+  height: 16px;
+  background: white;
+  border: 3px solid #0fddcb;
+}
+
+/* === MIDTPLASSEN MED PLAY / PAUSE === */
+.center-controls .btn img,
+.left-controls .btn img,
+.right-controls .btn img {
+  filter: drop-shadow(0 0 6px rgba(0,0,0,0.6));
+}
+
+/* Bakgrunnsrute rundt ikonknapper */
+.btn {
+  background: rgba(0,0,0,0.35);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border-radius: 16px;
+  padding: 8px 12px;
+}
+
+/* Hover-effekt */
+.btn:hover {
+  background: rgba(255,255,255,0.18);
+}
+
 
 
 
@@ -1166,6 +1223,7 @@ document.addEventListener("contextmenu", (e) => {
 });
 
 </script>
+
 
 
 
