@@ -226,6 +226,18 @@ video::cue {
   pointer-events: none; /* gjør at den ikke blokkerer klikk */
 }
 
+/* Filmtittel */
+.movie-title {
+  position: absolute;
+  bottom: 100px;
+  left: 30px;
+  color: white;
+  font-size: 28px;
+  font-weight: bold;
+  text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.8);
+  z-index: 12;
+}
+
 /* Loading spinner */
 .loading-spinner {
   position: absolute;
@@ -529,21 +541,11 @@ video::cue {
   }
 
   /* Filmtittel */
- .top-bar {
-  display: flex;
-  align-items: center;
-  gap: 15px; /* mellomrom mellom tilbakeknapp og tekst */
-}
-
-.movie-title {
-  position: static;        /* fjern absolute posisjonering */
-  color: white;
-  font-size: 24px;
-  font-weight: bold;
-  text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.8);
-  margin-left: 10px;       /* litt ekstra avstand hvis ønsket */
-}
-
+  .movie-title {
+    font-size: 16px;
+    bottom: 70px;
+    left: 12px;
+  }
 
   /* Kontroller nederst */
   .controls {
@@ -720,14 +722,13 @@ video::cue {
 </div>
 
     <div class="ui" id="ui">
-     <div class="top-bar">
-  <a href="#" class="back-button" id="backButton">
-    <img src="https://static.wixstatic.com/media/fd2fb2_59ea5a2a1ff34303a71a369537dd62c3~mv2.png" alt="Back">
-  </a>
+      <div class="top-bar">
+        <a href="#" class="back-button" id="backButton">
+          <img src="https://static.wixstatic.com/media/fd2fb2_59ea5a2a1ff34303a71a369537dd62c3~mv2.png" alt="Back">
+        </a>
+      </div>
 
-  <div class="movie-title">The Curse of the Were-Rabbit</div>
-</div>
-
+      <div class="movie-title">The Curse of the Were-Rabbit</div>
 
       <div class="progress-container">
         <div class="progress" id="progress">
