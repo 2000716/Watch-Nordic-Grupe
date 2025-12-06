@@ -1,87 +1,856 @@
 <!DOCTYPE html>
 <html lang="no">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Film mal</title>
-<link rel="icon" type="image/png" href="https://static.wixstatic.com/media/fd2fb2_39376e4ee55b460ab7a3ebbfcf35fef7~mv2.png" />
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
-<style>
-* { box-sizing: border-box; margin: 0; padding: 0; }
-html, body { overflow-x: hidden; width: 100%; }
-html { font-size: clamp(14px, 1vw + 10px, 18px); }
-body { background-color: black; color: #fff; font-family: 'Segoe UI', sans-serif; opacity: 0; transition: opacity 1s ease; }
-body.loaded { opacity: 1; }
-
-/* === Navigasjon === */
-.vertical-nav { width: 70px; height: 100vh; background-color: #091B1E; position: fixed; top: 0; left: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 100; transition: transform 0.3s ease; padding-top: 16px; }
-.vertical-nav.collapsed { transform: translateX(-100%); }
-.nav-icons-wrapper { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; }
-.profilmeny { margin-bottom: 20px; display: flex; justify-content: center; align-items: center; width: 100%; }
-.profilmeny img { width: 48px; height: 48px; border-radius: 50%; object-fit: cover; border: 2px solid #fff; }
-.nav-icon { color: white; font-size: 22px; padding: 16px 0; text-decoration: none; text-align: center; width: 100%; transition: color 0.3s ease; cursor: pointer; background: none; border: none; }
-.nav-icon:hover, .nav-icon.active { color: #00FFCC; }
-.menu-toggle { position: fixed; top: 50%; left: 70px; transform: translateY(-50%); z-index: 101; background-color: #091b1e; border: none; border-radius: 0 12px 12px 0; padding: 12px 16px; color: white; cursor: pointer; transition: left 0.3s ease; width: 50px; height: 120px; display: flex; align-items: center; justify-content: center; font-size: 28px; }
-.vertical-nav.collapsed + .menu-toggle { left: 0; }
-
-/* === Hero-seksjon === */
-.hero { margin-left: 0; position: relative; height: 100vh; width: 100vw; overflow: hidden; }
-.vertical-nav.collapsed ~ .hero { margin-left: 0; }
-.background-image, .background-video { position: absolute; top: 0; left: 0; width: 100vw; height: 100vh; object-fit: cover; z-index: 0; transition: opacity 1s ease-in-out; opacity: 1; }
-.background-video { opacity: 0; filter: brightness(0.8); }
-.overlay { position: absolute; width: 100%; height: 100%; background: linear-gradient(to top, #091b1e 0%, rgba(9, 27, 30, 0) 60%); z-index: 1; }
-.bottom-fade { position: absolute; bottom: 0; left: 0; width: 100%; height: 200px; background: linear-gradient(to top, rgba(0,0,0,1), transparent); z-index: 1; }
-
-/* === Content-wrapper === */
-.content-wrapper { position: absolute; top: 200px; left: 100px; right: 60px; display: flex; flex-direction: column; z-index: 2; width: auto; max-width: calc(100vw - 160px); }
-
-/* === Logo / tittel === */
-.logo-container { width: 260px; height: auto; margin-bottom: 40px; display: flex; flex-direction: column; align-items: center; justify-content: center; }
-.film-logo { max-width: 100%; max-height: 100%; object-fit: contain; }
-.title-text { color: #fff; font-size: 2rem; font-weight: bold; text-align: center; width: 100%; }
-
-/* === Tekst og knapper === */
-.left-content { display: flex; flex-direction: column; align-items: flex-start; margin-top: 0; min-height: 400px; }
-.text-button-container { display: flex; align-items: flex-start; justify-content: space-between; gap: 60px; padding: 30px; border-radius: 12px; width: 100%; background: rgba(9, 27, 30, 0.55); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border-radius: 22px; padding: 40px; border: 1px solid rgba(255,255,255,0.05); }
-.buttons-column { display: flex; flex-direction: column; gap: 15px; }
-.watch-button { background: #fff; color: #000; font-size: 18px; font-weight: bold; padding: 10px 50px; border: none; border-radius: 10px; cursor: pointer; transition: transform 0.2s ease; width: 280px; display: flex; align-items: center; justify-content: center; gap: 8px; white-space: nowrap; }
-.watch-button:hover { transform: scale(1.05); }
-.text-container { flex: 1; max-width: 60%; max-height: 260px; overflow-y: auto; text-align: left; color: white; }
-.description { font-size: 16px; line-height: 1.6; margin-bottom: 8px; }
-.metadata { margin-top: 14px; color: #ddd; font-size: 13px; line-height: 1.4; display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
-.metadata span, .metadata .imdb-link { display: inline-flex; align-items: center; }
-.metadata span:nth-child(even) { color: #ddd; user-select: none; font-weight: bold; font-size: 16px; }
-.imdb-logo { width: 28px; margin-left: 4px; cursor: pointer; filter: brightness(100%) contrast(100%); transition: filter 0.3s ease; }
-.imdb-logo:hover { filter: brightness(80%) contrast(120%); }
-.cast-info { flex: 0 0 260px; max-width: 260px; max-height: 260px; overflow-y: auto; font-size: 13px; color: #aaa; line-height: 1.6; }
-.cast-info strong { color: #fff; }
-
-/* === Responsive === */
-@media (max-width: 768px) {
-  .content-wrapper { position: relative; left: 0; right: 0; padding: 20px; text-align: center; }
-  .logo-container { width: 80%; height: auto; margin: 0 auto 20px auto; }
-  .text-button-container { flex-direction: column; align-items: center; gap: 16px; padding: 10px; }
-  .text-container, .cast-info { max-width: 100%; overflow: visible; font-size: 1rem; }
-  .buttons-column { width: 100%; }
-  .watch-button { width: 100%; font-size: 1rem; padding: 12px 0; }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Film mal</title>
+  <link rel="icon" type="image/png" href="https://static.wixstatic.com/media/fd2fb2_39376e4ee55b460ab7a3ebbfcf35fef7~mv2.png" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <style>
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+ html, body {
+ overflow-x: hidden;   /* Hindrer all scrolling til siden */
+  width: 100%;          /* Sikrer at ingenting blir bredere enn vinduet */
 }
 
-/* === Resten av CSS beholdt som i originalen (anbefalinger, popup, etc.) === */
-</style>
-</head>
-<body>
 
+html {
+  font-size: clamp(14px, 1vw + 10px, 18px);
+}
+
+body {
+  background-color: black;
+  color: #fff;
+  font-family: 'Segoe UI', sans-serif;
+  opacity: 0;
+  transition: opacity 1s ease;
+}
+
+body.loaded {
+  opacity: 1;
+}
+
+/* === Navigasjon === */
+.vertical-nav {
+  width: 70px;
+  height: 100vh;
+  background-color: #091B1E;
+  position: fixed;
+  top: 0;
+  left: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  transition: transform 0.3s ease;
+  padding-top: 16px;
+}
+
+.vertical-nav.collapsed {
+  transform: translateX(-100%);
+}
+
+.nav-icons-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.profilmeny {
+  margin-bottom: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+.profilmeny img {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #fff;
+}
+
+.nav-icon {
+  color: white;
+  font-size: 22px;
+  padding: 16px 0;
+  text-decoration: none;
+  text-align: center;
+  width: 100%;
+  transition: color 0.3s ease;
+  cursor: pointer;
+  background: none;
+  border: none;
+}
+
+.nav-icon:hover,
+.nav-icon.active {
+  color: #00FFCC;
+}
+
+.menu-toggle {
+  position: fixed;
+  top: 50%;
+  left: 70px;
+  transform: translateY(-50%);
+  z-index: 101;
+  background-color: #091b1e;
+  border: none;
+  border-radius: 0 12px 12px 0;
+  padding: 12px 16px;
+  color: white;
+  cursor: pointer;
+  transition: left 0.3s ease;
+  width: 50px;
+  height: 120px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+}
+
+.vertical-nav.collapsed + .menu-toggle {
+  left: 0;
+}
+
+/* === Hero-seksjon === */
+.hero {
+  margin-left: 0;       /* fjern marginen som var for menyen */
+  position: relative;
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+}
+
+
+
+.vertical-nav.collapsed ~ .hero {
+  margin-left: 0;
+}
+
+.background-image,
+.background-video {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;          /* strekk helt ut */
+  height: 100vh;         /* full høyde */
+  object-fit: cover;     /* fyll hele skjermen */
+  z-index: 0;
+  transition: opacity 1s ease-in-out;
+  opacity: 1;
+}
+   
+.background-video {
+  opacity: 0;
+  filter: brightness(0.8);
+}
+
+.overlay {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(to top, #091b1e 0%, rgba(9, 27, 30, 0) 60%);
+  z-index: 1;
+}
+
+.bottom-fade {
+  position: absolute; 
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 200px;
+  background: linear-gradient(to top, rgba(0, 0, 0, 1), transparent);
+  z-index: 1;
+}
+
+.content-wrapper {
+  position: absolute;
+  top: 200px;  /* 🔼 Flytt hele innholdet lenger ned */
+  left: 100px;
+  right: 60px;
+  display: flex;
+  flex-direction: column;
+  z-index: 2;
+  width: auto;
+  max-width: calc(100vw - 160px);
+}}
+
+
+/* === Logo === */
+.logo-container {
+  width: 260px;
+  height: 100px;
+  margin-bottom: 40px; /* 🔼 kortere avstand mellom logo og infoboks */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.film-logo {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+/* === Tekst og knapper === */
+.left-content {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin-top: 20px; /* 🔼 flytt infoboks nærmere logoen */
+  min-height: 400px;
+}
+    
+.text-button-container {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 60px;
+  padding: 30px;
+  border-radius: 12px;
+  width: 100%;
+}
+
+/* === Tekstfelt === */
+.text-container {
+  flex: 1;
+  max-width: 60%;
+  max-height: 260px;
+  overflow-y: auto;
+  text-align: left;
+  color: white;
+}
+
+.description {
+  font-size: 16px;
+  line-height: 1.6;
+  margin-bottom: 8px;
+}
+
+/* === Metadata === */
+.metadata {
+  margin-top: 14px;
+  color: #ddd;
+  font-size: 13px;
+  line-height: 1.4;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: center;
+}
+
+.metadata span,
+.metadata .imdb-link {
+  display: inline-flex;
+  align-items: center;
+}
+
+.metadata span:nth-child(even) {
+  color: #ddd;
+  user-select: none;
+  font-weight: bold;
+  font-size: 16px;
+}
+
+.imdb-logo {
+  width: 28px;
+  margin-left: 4px;
+  cursor: pointer;
+  filter: brightness(100%) contrast(100%);
+  transition: filter 0.3s ease;
+}
+
+.imdb-logo:hover {
+  filter: brightness(80%) contrast(120%);
+}
+
+/* === Cast-info === */
+.cast-info {
+  flex: 0 0 260px;
+  max-width: 260px;
+  max-height: 260px;
+  overflow-y: auto;
+  font-size: 13px;
+  color: #aaa;
+  line-height: 1.6;
+}
+
+.cast-info strong {
+  color: #fff;
+}
+
+/* === Knapper === */
+.watch-button {
+  background: #fff;
+  color: #000;
+  font-size: 18px;
+  font-weight: bold;
+  padding: 10px 50px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+  width: 280px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  white-space: nowrap;
+}
+
+.watch-button:hover {
+  transform: scale(1.05);
+}
+
+.buttons-column {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.icon-animate {
+  display: inline-block;
+  animation: fadePop 0.4s ease forwards;
+}
+
+@keyframes fadePop {
+  0%   { opacity: 0; transform: scale(0.6); }
+  60%  { opacity: 1; transform: scale(1.2); }
+  100% { opacity: 1; transform: scale(1); }
+}
+
+/* === Bakgrunn rundt knapper + tekst + metadata + info + cast === */
+.text-button-container {
+    background: rgba(9, 27, 30, 0.55);  /* mørk transparent */
+    backdrop-filter: blur(12px);        /* gir moderne glass-effekt */
+    -webkit-backdrop-filter: blur(12px);
+    border-radius: 22px;                /* myke kanter */
+    padding: 40px;
+    border: 1px solid rgba(255, 255, 255, 0.05); /* subtil kant */
+}
+
+
+
+   
+/* === Resten beholdt som før === */
+/* (anbefalinger, popup, video, footer, episoder osv. — urørt) */
+
+
+/* === Anbefalinger === */
+.recommendations {
+  margin-left: 70px;
+  padding: 40px 60px 60px 60px;
+  background: black;
+  transition: margin-left 0.3s ease;
+  margin-top: -40px;
+}
+
+.vertical-nav.collapsed ~ .recommendations {
+  margin-left: 0;
+}
+
+.recommendations h2 {
+  font-size: 24px;
+  margin-bottom: 18px;
+  margin-left: 40px;
+}
+
+.gallery {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr); /* fortsatt 4 kolonner */
+  grid-template-rows: repeat(2, auto);
+  gap: 20px;
+  width: 100%;            /* full bredde */
+  margin: 0;              /* ingen sentrering */
+  padding: 0 10px;        /* litt luft så bildene ikke klistrer seg i kanten */
+}
+
+.gallery img {
+  width: 100%;            /* fyll hele cellebredden */
+  height: 180px;
+  object-fit: cover;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: transform 0.3s;
+}
+
+.gallery img:hover {
+  transform: scale(1.05);
+}
+
+
+
+
+/* === Video kontrollknapper === */
+.video-controls {
+  position: absolute;
+  top: 20px;
+  right: 30px;
+  z-index: 3;
+  display: flex;
+  gap: 10px;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+.video-controls button {
+  background: rgba(0,0,0,0.6);
+  border: none;
+  color: white;
+  font-size: 20px;
+  padding: 10px 14px;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.video-controls button:hover {
+  background: rgba(255,255,255,0.2);
+}
+
+/* === Bunntekst === */
+.site-footer {
+  background-color: black;
+  color: #aaa;
+  text-align: center;
+  padding: 20px 10px;
+  font-size: 14px;
+  margin-top: 0;
+}
+
+.site-footer a {
+  color: #00FFCC;
+  text-decoration: none;
+  margin: 0 8px;
+  transition: color 0.3s ease;
+}
+
+.site-footer a:hover {
+  color: #fff;
+}
+
+.availability-info {
+  margin-top: 10px;
+  font-size: 13px;
+  color: #ccc;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.availability-info i {
+  color: #fff;
+  font-size: 14px;
+}
+
+/* === iPad og mindre skjermer === */
+@media (max-width: 1024px) {
+  .content-wrapper {
+    left: 20px;
+    right: 20px;
+  }
+
+  .text-button-container {
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .text-container {
+    max-width: 100%;
+    max-height: none;
+  }
+}
+
+/* === Mobil og små skjermer === */
+@media (max-width: 768px) {
+  .vertical-nav {
+    width: 100%;
+    height: auto;
+    flex-direction: row;
+    justify-content: space-around;
+    position: fixed;
+    bottom: 0;
+    top: auto;
+    padding: 8px 0;
+  }
+
+  .menu-toggle {
+    display: none;
+  }
+
+  .hero {
+    margin-left: 0;
+    height: auto;
+    padding-bottom: 60px;
+  }
+
+  .content-wrapper {
+    position: relative;
+    left: 0;
+    right: 0;
+    padding: 20px;
+    text-align: center;
+  }
+
+  .logo-container {
+    width: 80%;
+    height: auto;
+    margin: 0 auto 20px auto;
+  }
+
+  .text-button-container {
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    padding: 10px;
+  }
+
+  .text-container, .cast-info {
+    max-width: 100%;
+    overflow: visible;
+    font-size: 1rem;
+  }
+
+  .buttons-column {
+    width: 100%;
+  }
+
+  .watch-button {
+    width: 100%;
+    font-size: 1rem;
+    padding: 12px 0;
+  }
+
+.recommendations {
+  margin-left: 0;       /* full bredde */
+  padding: 40px 20px;   /* mindre innvendig padding */
+}
+
+.recommendations h2 {
+  margin-left: 0;       /* fjern sideforskyvning */
+  padding-left: 20px;   /* litt luft til venstre */
+}
+
+.gallery {
+  padding: 0 20px;      /* litt luft til kantene */
+  width: 100%;          /* maks bredde */
+}
+ 
+  .site-footer {
+    font-size: 12px;
+    padding: 15px;
+  }
+}
+
+/* === Popup === */
+.description.short {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  position: relative;
+}
+
+.more-btn {
+  display: inline;
+  color: #ddd;
+  background: rgba(255,255,255,0.1);
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+  margin-left: 6px;
+  padding: 2px 6px;
+  border-radius: 6px;
+}
+
+.more-btn:hover {
+  background: rgba(255,255,255,0.2);
+  color: #fff;
+}
+
+.popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 200;
+}
+
+.popup-box {
+  background: #111;
+  color: white;
+  max-width: 600px;
+  max-height: 70vh;
+  overflow-y: auto;
+  padding: 20px;
+  border-radius: 12px;
+  position: relative;
+  text-align: left;
+}
+
+.popup-box .close-btn {
+  position: absolute;
+  top: 10px;
+  right: 14px;
+  background: none;
+  border: none;
+  font-size: 20px;
+  color: white;
+  cursor: pointer;
+}
+
+/* === Episode galleri for serier === */
+.season-buttons {
+  display: flex;
+  gap: 10px;
+  margin: 20px 60px 20px 60px;
+}
+
+.season-btn {
+  background: #0b2a2d;
+  color: #fff;
+  border: none;
+  padding: 10px 18px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.3s;
+  font-size: 15px;
+}
+
+.season-btn.active {
+  background: #00ffcc;
+  color: #000;
+  font-weight: bold;
+}
+
+.season-btn:hover {
+  background: #00ccaa;
+}
+
+.episode-gallery {
+  display: flex;
+  overflow-x: auto;
+  gap: 16px;
+  padding: 20px 60px;
+  scroll-behavior: smooth;
+  scroll-snap-type: x mandatory;
+}
+
+.episode-card {
+  background: #111;
+  border-radius: 8px;
+  flex: 0 0 260px;
+  overflow: hidden;
+  transition: transform 0.3s;
+  scroll-snap-align: start;
+}
+
+.episode-card:hover {
+  transform: scale(1.03);
+}
+
+.episode-card img {
+  width: 100%;
+  height: 150px;
+  object-fit: cover;
+}
+
+.episode-info {
+  padding: 10px;
+}
+
+.episode-info h4 {
+  font-size: 16px;
+  margin-bottom: 6px;
+}
+
+.episode-info p {
+  font-size: 14px;
+  color: #ccc;
+  line-height: 1.4;
+}
+
+/* === Bilder og video skalerer alltid === */
+img, video {
+  max-width: 100%;
+  height: auto;
+}
+
+/* === MENY MED FADE OG SCROLL-BAKGRUNN === */
+.top-nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 70px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 50px;
+  z-index: 500;
+  background: transparent;
+  transition: background 0.4s ease, box-shadow 0.4s ease;
+}
+
+.top-nav::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(to bottom, rgba(9, 27, 30, 0.9), rgba(9, 27, 30, 0));
+  z-index: -1;
+  transition: opacity 0.4s ease, background 0.4s ease;
+  opacity: 1;
+}
+
+/* Når du scroller – solid mørk bakgrunn */
+.top-nav.scrolled::before {
+  background: rgba(9, 27, 30, 0.95);
+  opacity: 1;
+}
+
+/* Liten skygge når du scroller ned for ekstra kontrast */
+.top-nav.scrolled {
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.4);
+}
+
+
+/* Logo og venstreside */
+.nav-left {
+  display: flex;
+  align-items: center;
+  gap: 40px;
+}
+
+.top-nav .watch-logo {
+  width: 130px;
+  height: auto;
+  cursor: pointer;
+}
+
+/* Navigasjonslenker */
+.nav-links {
+  display: flex;
+  gap: 26px;
+}
+
+.nav-links a {
+  color: #bfbfbf;
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 15px;
+  transition: color 0.3s ease;
+}
+
+.nav-links a:hover {
+  color: #fff;
+}
+
+.nav-links a.active {
+  color: #00FFCC;
+  font-weight: bold;
+}
+
+/* Høyre side: søk + profil */
+.nav-right {
+  display: flex;
+  align-items: center; /* ← sørger for at de står på samme linje */
+  gap: 12px; /* valgfritt: reduserer mellomrommet litt */
+}
+
+
+
+.nav-search {
+  color: #bfbfbf;
+  font-size: 18px;
+  transition: color 0.3s ease;
+}
+
+.nav-search:hover {
+  color: #00FFCC;
+}
+
+.profilmeny img {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  border: 2px solid #fff;
+  object-fit: cover;
+  cursor: pointer;
+  transition: transform 0.3s ease, border 0.3s ease;
+}
+
+.profilmeny img {
+  vertical-align: middle;
+  transform: translateY(1px); /* valgfritt – juster opp/ned om nødvendig */
+}
+
+/* Skygger for å fremheve meny over banner */
+.top-nav.scrolled {
+  background: None;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.6);
+}
+
+/* Responsiv tilpasning */
+@media (max-width: 768px) {
+  .top-nav {
+    padding: 0 20px;
+    height: 60px;
+  }
+
+  .nav-links {
+    display: none; /* skjul tekstmeny på mobil */
+  }
+
+  .watch-logo {
+    width: 110px;
+  }
+
+  .nav-search {
+    font-size: 20px;
+  }
+
+ .profilmeny img {
+  vertical-align: middle;
+  transform: translateY(1px); /* valgfritt – juster opp/ned om nødvendig */
+}
+
+}
+
+</style> 
 <header class="top-nav">
   <div class="nav-left">
-    <img class="watch-logo" src="https://static.wixstatic.com/media/fd2fb2_a4b2ace62dff4605a0387f46aad8a404~mv2.png" alt="Watch Logo" />
-    <nav class="nav-links">
-      <a href="Hovedside.html" class="active"><i class="fas fa-house-user"></i> Start</a>
-      <a href="Serier.html"><i class="fas fa-th-large"></i> Serier</a>
-      <a href="Film.html"><i class="fas fa-film"></i> Filmer</a>
-      <a href="Nyheter.html"><i class="fas fa-fire-flame-curved"></i> Nytt og populært</a>
-      <a href="Min-Liste.html"><i class="fas fa-plus-square"></i> Min liste</a>
-    </nav>
-  </div>
+      <img class="watch-logo" src="https://static.wixstatic.com/media/fd2fb2_a4b2ace62dff4605a0387f46aad8a404~mv2.png" alt="Watch Logo" />
+
+<nav class="nav-links">
+  <a href="Hovedside.html" class="active"><i class="fas fa-house-user"></i> Start</a>
+  <a href="Serier.html"><i class="fas fa-th-large"></i> Serier</a>
+  <a href="Film.html"><i class="fas fa-film"></i> Filmer</a>
+  <a href="Nyheter.html"><i class="fas fa-fire-flame-curved"></i> Nytt og populært</a>
+  <a href="Min-Liste.html"><i class="fas fa-plus-square"></i> Min liste</a>
+</nav>
+    </div>
+
+
+
   <div class="nav-right">
     <a href="Søk.html" class="nav-search"><i class="fas fa-search"></i></a>
     <div class="profilmeny" onclick="gåTilKonto()">
@@ -90,11 +859,16 @@ body.loaded { opacity: 1; }
   </div>
 </header>
 
+
+
 <div class="hero">
   <img class="background-image" id="backgroundImage" src="" alt="Bakgrunnsbilde" />
   <video id="trailerVideo" class="background-video" muted playsinline></video>
+
   <div class="overlay"></div>
   <div class="bottom-fade"></div>
+
+  <!-- Kontrollknapper -->
   <div id="videoControls" class="video-controls">
     <button id="pauseBtn"><i class="fas fa-pause"></i></button>
     <button id="soundBtn"><i class="fas fa-volume-mute"></i></button>
@@ -104,12 +878,18 @@ body.loaded { opacity: 1; }
     <div class="logo-container">
       <img class="film-logo" src="" alt="Filmlogo" />
     </div>
+
     <div class="left-content">
       <div class="text-button-container">
         <div class="buttons-column">
-          <button class="watch-button" id="watchBtn"><i class="fas fa-play"></i><span> Se nå</span></button>
-          <button class="watch-button" id="addToListBtn"><i class="fas fa-plus"></i><span> Legg til i Min liste</span></button>
+          <button class="watch-button" id="watchBtn">
+            <i class="fas fa-play"></i><span> Se nå</span>
+          </button>
+          <button class="watch-button" id="addToListBtn">
+            <i class="fas fa-plus"></i><span> Legg til i Min liste</span>
+          </button>
         </div>
+
         <div class="text-container">
           <p class="description"></p>
           <div class="metadata"></div>
@@ -122,10 +902,11 @@ body.loaded { opacity: 1; }
 </div>
 
 <div class="recommendations">
-  <h2>Anbefalt til deg</h2>
+<h2>Anbefalt til deg</h2>
   <div class="gallery" id="recommendationGallery"></div>
 </div>
 
+<!-- Bunntekst -->
 <footer class="site-footer">
   <p>&copy; 2025 Watch Nordic Grupe</p>
   <div class="footer-links">
@@ -513,13 +1294,6 @@ if (data.logo && data.logo.trim() !== "") {
 </html>
 
  
-
-
-
-
-
-
-
 
 
 
