@@ -188,19 +188,18 @@ body.loaded {
 
 /* === Logo === */
 .logo-container {
-  width: 260px;
-  height: 100px;
-  margin-bottom: 140px; /* fin avstand mellom logo og tekst */
+  width: 260px;              /* maks bredde */
+  height: auto;              /* skaler etter innhold */
+  margin-bottom: 140px;
   display: flex;
   align-items: center;
-  justify-content: center;
-  overflow: hidden;
+  justify-content: flex-start;
 }
 
 .film-logo {
-  max-width: 100%;
-  max-height: 100%;
-  object-fit: contain;
+  width: 100%;
+  max-height: 120px;         /* ← begrens høyden */
+  object-fit: contain;       /* behold riktige proporsjoner */
 }
 
 /* === Tekst og knapper === */
@@ -1294,6 +1293,7 @@ if (data.logo && data.logo.trim() !== "") {
 </html>
 
  
+
 
 
 
