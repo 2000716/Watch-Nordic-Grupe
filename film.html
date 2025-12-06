@@ -1,4 +1,4 @@
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="no">
 <head>
   <meta charset="UTF-8" />
@@ -188,14 +188,14 @@ body.loaded {
 
 /* === Logo === */
 .logo-container {
-  width: 300px;
-  height: auto;
-  margin: 0 0 14px 0; /* lite mellomrom over infoboksen */
+  width: 260px;
+  height: 100px;
+  margin-bottom: 140px; /* fin avstand mellom logo og tekst */
   display: flex;
-  align-items: flex-start;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
 }
-
-
 
 .film-logo {
   max-width: 100%;
@@ -208,10 +208,9 @@ body.loaded {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  margin-top: auto;
-  padding-top: 420px; /* flytter hele blokk nedover */
+  margin-top: 240px; /* 🔼 litt høyere enn før (var 320px) */
+  min-height: 400px;
 }
-
 
 .text-button-container {
   display: flex;
@@ -503,14 +502,11 @@ body.loaded {
     text-align: center;
   }
 
-.logo-container {
-  width: 300px;
-  height: auto;
-  margin: 0 0 14px 0; /* lite mellomrom over infoboksen */
-  display: flex;
-  align-items: flex-start;
-}
-
+  .logo-container {
+    width: 80%;
+    height: auto;
+    margin: 0 auto 20px auto;
+  }
 
   .text-button-container {
     flex-direction: column;
@@ -878,14 +874,10 @@ img, video {
     <button id="soundBtn"><i class="fas fa-volume-mute"></i></button>
   </div>
 
-<div class="content-wrapper">
-    <div class="left-content">
-
-        <!-- LOGOEN FLYTTET HIT – rett over infoboksen -->
-        <div class="logo-container">
-          <img class="film-logo" src="" alt="Filmlogo" />
-        </div>
-
+  <div class="content-wrapper">
+    <div class="logo-container">
+      <img class="film-logo" src="" alt="Filmlogo" />
+    </div>
 
     <div class="left-content">
       <div class="text-button-container">
@@ -908,6 +900,7 @@ img, video {
     </div>
   </div>
 </div>
+
 <div class="recommendations">
 <h2>Anbefalt til deg</h2>
   <div class="gallery" id="recommendationGallery"></div>
@@ -1299,95 +1292,4 @@ if (data.logo && data.logo.trim() !== "") {
 
 </body>
 </html>
-
- 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
