@@ -209,10 +209,21 @@ body.loaded {
 }
 
 .text-button-container {
-  position: absolute;
-  top: 300px; /* velg nøyaktig plass */
-  left: 100px;
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 40px;
+    background: rgba(9, 27, 30, 0.55);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-radius: 22px;
+    padding: 40px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+
+    width: 900px;    /* ← gjør boksen avlang */
+    max-width: 90%;
 }
+
 
 
 /* === Tekstfelt === */
@@ -1285,6 +1296,7 @@ if (data.logo && data.logo.trim() !== "") {
 
 </body>
 </html>
+
 
 
 
