@@ -188,13 +188,13 @@ body.loaded {
 
 /* === Logo === */
 .logo-container {
-  width: 260px;
-  height: 100px;
-  margin-bottom: 20px; /* mye mindre mellomrom */
+  width: 300px;
+  height: auto;
+  margin: 0 0 14px 0; /* lite mellomrom over infoboksen */
   display: flex;
-  align-items: center;
-  justify-content: center;
+  align-items: flex-start;
 }
+
 
 
 .film-logo {
@@ -208,9 +208,10 @@ body.loaded {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  margin-top: 240px; /* 🔼 litt høyere enn før (var 320px) */
-  min-height: 400px;
+  margin-top: auto;
+  padding-top: 420px; /* flytter hele blokk nedover */
 }
+
 
 .text-button-container {
   display: flex;
@@ -502,11 +503,14 @@ body.loaded {
     text-align: center;
   }
 
-  .logo-container {
-    width: 80%;
-    height: auto;
-    margin: 0 auto 20px auto;
-  }
+.logo-container {
+  width: 300px;
+  height: auto;
+  margin: 0 0 14px 0; /* lite mellomrom over infoboksen */
+  display: flex;
+  align-items: flex-start;
+}
+
 
   .text-button-container {
     flex-direction: column;
@@ -874,10 +878,14 @@ img, video {
     <button id="soundBtn"><i class="fas fa-volume-mute"></i></button>
   </div>
 
- <div class="content-wrapper">
-    <div class="logo-container">
-      <img class="film-logo" src="" alt="Filmlogo" />
-    </div>
+<div class="content-wrapper">
+    <div class="left-content">
+
+        <!-- LOGOEN FLYTTET HIT – rett over infoboksen -->
+        <div class="logo-container">
+          <img class="film-logo" src="" alt="Filmlogo" />
+        </div>
+
 
     <div class="left-content">
       <div class="text-button-container">
@@ -1293,6 +1301,7 @@ if (data.logo && data.logo.trim() !== "") {
 </html>
 
  
+
 
 
 
