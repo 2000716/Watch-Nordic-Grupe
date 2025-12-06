@@ -702,6 +702,7 @@ const filmer = {
      "muldvarpen": {
     tittel: "Muldvarpen",
     bakgrunn: "https://gfx.nrk.no/_pHLvQyWkVZpk-HXL-kkhQN2z4sacPh6VeHpVbpxTg-Q",
+    logo: "",     
     poster: "https://image.tmdb.org/t/p/original/vj3ETTb4spt7zlBF4mqYqbnWzfX.jpg",
     posterVertikal: "https://image.tmdb.org/t/p/original/jwCXUviHLxj7tmyn3PbSzXtZQeC.jpg", // portrett
     beskrivelse: "Tsjekkisk animasjonsserie om muldvarpen og vennene hans.",
@@ -726,6 +727,7 @@ const filmer = {
    
   
     
+
 
 
 
