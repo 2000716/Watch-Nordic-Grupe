@@ -163,13 +163,14 @@ body.loaded {
   z-index: 1;
 }
 
+
 .bottom-fade {
-  position: absolute; 
+  position: absolute;
   bottom: 0;
   left: 0;
   width: 100%;
-  height: 200px;
-  background: linear-gradient(to top, rgba(0, 0, 0, 1), transparent);
+  height: 150px;
+  background: linear-gradient(to bottom, transparent, #000);
   z-index: 1;
 }
 
@@ -338,13 +339,13 @@ body.loaded {
 /* === Bakgrunn rundt knapper + tekst + metadata + info + cast === */
 .text-button-container {
     background: rgba(9, 27, 30, 0.55);  /* mørk transparent */
-    backdrop-filter: blur(12px);        /* gir moderne glass-effekt */
-    -webkit-backdrop-filter: blur(12px);
-    border-radius: 22px;                /* myke kanter */
-    padding: 40px;
-    border: 1px solid rgba(255, 255, 255, 0.05); /* subtil kant */
-}
+  padding: 20px 24px;
+  border-radius: 10px;
+  backdrop-filter: blur(10px);
 
+  max-width: 700px;
+  width: 90%;
+}
 
 
    
@@ -1299,6 +1300,7 @@ if (data.logo && data.logo.trim() !== "") {
 </html>
 
  
+
 
 
 
