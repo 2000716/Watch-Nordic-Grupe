@@ -175,7 +175,7 @@ body.loaded {
 
 .content-wrapper {
   position: absolute;
-  top: 430px;  /* 🔼 Flytt hele innholdet lenger ned */
+  top: 430px;
   left: 100px;
   right: 60px;
   display: flex;
@@ -183,18 +183,20 @@ body.loaded {
   z-index: 2;
   width: auto;
   max-width: calc(100vw - 160px);
-}}
+}
 
 
 /* === Logo === */
 .logo-container {
-  width: 260px;              /* maks bredde */
-  height: auto;              /* skaler etter innhold */
-  margin-bottom: 140px;
+  width: 280px;
+  height: auto;
+  margin-bottom: 40px;  /* mindre avstand */
+  margin-left: 0;       /* tving til venstre */
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: flex-start;
 }
+
 
 .film-logo {
   width: 100%;
@@ -1293,6 +1295,7 @@ if (data.logo && data.logo.trim() !== "") {
 </html>
 
  
+
 
 
 
