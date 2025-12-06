@@ -1278,58 +1278,6 @@ background: linear-gradient(
 
 }
 
-/* === KOMMENDE FILMER – MOBILFIX === */
-@media (max-width: 768px) {
-
-  .coming-movies-wrapper {
-    overflow-x: auto !important;
-    padding: 0 10px !important;
-  }
-
-  .coming-movies-list {
-    gap: 12px !important;
-    height: 260px !important;
-  }
-
-  .coming-movie-item {
-    flex: 0 0 180px !important;
-    height: 240px !important;
-    transform: none !important;
-    transition: none !important;
-  }
-
-  /* Fjern hover-zoom */
-  .coming-movie-item:hover {
-    flex: 0 0 180px !important;
-    transform: none !important;
-  }
-
-  /* Skjul video helt */
-  .coming-movie-item video {
-    display: none !important;
-  }
-
-  /* Vis alltid bilde */
-  .coming-movie-item img.banner {
-    opacity: 1 !important;
-    display: block !important;
-  }
-
-  /* Fiks logo på mobil */
-  .coming-movie-item .logo {
-    bottom: 12px !important;
-    left: 50% !important;
-    transform: translateX(-50%) !important;
-    max-height: 48px !important;
-    width: auto !important;
-  }
-
-  /* Skjul synopsis / tekstinfo på mobil */
-  .coming-movie-item .coming-movie-info {
-    display: none !important;
-    opacity: 0 !important;
-  }
-}
 
   @media (max-width: 768px) {
 
@@ -1415,34 +1363,6 @@ background: linear-gradient(
   box-shadow: 0 0 10px rgba(0,255,204,0.7);
   border-color: #00FFCC;
 }
-
-/* Mobil */
-@media (max-width: 768px) {
-  .christmas-section {
-    height: auto;
-    padding: 20px 0;
-  }
-
-  .christmas-overlay {
-    flex-direction: column;
-    text-align: center;
-    gap: 20px;
-  }
-
-  .christmas-gallery {
-    flex-direction: row;
-    overflow-x: auto;
-    overflow-y: hidden;
-    width: 100%;
-    justify-content: center;
-  }
-
-  .christmas-gallery img {
-    width: 100px;
-    height: 130px;
-  }
-}
-
 
 
 
@@ -2116,16 +2036,9 @@ activeFilms.forEach(film => {
 
   const juleGalleri = document.querySelector(".christmas-gallery");
 
-  // Fyll galleriet automatisk
-  filmer.forEach(film => {
-    const img = document.createElement("img");
-    img.src = film.bilde;   // fra filmdata.js
-    img.alt = film.tittel;
-    juleGalleri.appendChild(img);
-  });
-</script>
 
 </script>
+
 
 
 
