@@ -1265,12 +1265,36 @@ window.addEventListener("scroll", () => {
   }
 });
 
+ const logoContainer = document.querySelector(".logo-container");
+const filmLogo = document.querySelector(".film-logo");
+
+if (data.logo && data.logo.trim() !== "") {
+  // Logo finnes → vis bildet
+  filmLogo.src = data.logo;
+  filmLogo.style.display = "block";
+} else {
+  // Ingen logo → fjern bilde og vis tittel
+  filmLogo.style.display = "none";
+
+  // Lag tekst-element for tittelen
+  const titleEl = document.createElement("div");
+  titleEl.textContent = data.tittel;
+  titleEl.style.color = "#fff";
+  titleEl.style.fontSize = "2rem";
+  titleEl.style.fontWeight = "bold";
+  titleEl.style.textAlign = "center";
+  titleEl.style.width = "100%";
+
+  logoContainer.appendChild(titleEl);
+}
+
 </script>
 
 </body>
 </html>
 
  
+
 
 
 
