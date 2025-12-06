@@ -699,13 +699,34 @@ const filmer = {
   expireDate: "2027-01-01T23:59:59"
 },
 
-  
+     "muldvarpen": {
+    tittel: "Muldvarpen",
+    bakgrunn: "https://gfx.nrk.no/_pHLvQyWkVZpk-HXL-kkhQN2z4sacPh6VeHpVbpxTg-Q",
+    poster: "https://image.tmdb.org/t/p/original/vj3ETTb4spt7zlBF4mqYqbnWzfX.jpg",
+    posterVertikal: "https://image.tmdb.org/t/p/original/jwCXUviHLxj7tmyn3PbSzXtZQeC.jpg", // portrett
+    beskrivelse: "Tsjekkisk animasjonsserie om muldvarpen og vennene hans.",
+    metadata: ["Tsjekkia", "1980", "Alle", "Familie", "5 min"],
+    imdb: "https://www.imdb.com/title/tt0841927/",
+    skuespillere: "",
+    regissor: "Zdeněk Miler",
+  watchUrl: "muldvarpen",
+  videoUrl:"https://ia804506.us.archive.org/12/items/screen-recording-12-06-2025-12-49-26-1/ScreenRecording_12-06-2025%2012-49-26_1.mp4",
+  subtitleUrl: "",
+  tilbakeUrl: "film.html?navn=muldvarpen",
+  audioLanguages: [
+    { code: "no", label: "Norsk" } ],
+  subtitleLanguages: [
+  ],
+  publishDate: "2025-12-15T00:00:00", // ISO datoformat
+  expireDate: "2027-01-01T23:59:59"
+},
   
   };
 
    
   
     
+
 
 
 
