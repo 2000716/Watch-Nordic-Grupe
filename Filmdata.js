@@ -710,7 +710,7 @@ const filmer = {
     imdb: "https://www.imdb.com/title/tt0841927/",
     skuespillere: "",
     regissor: "Zdeněk Miler",
-  watchUrl: "muldvarpen",
+  watchUrl: "film-mal.html?id=muldvarpen",
   videoUrl:"https://ia804506.us.archive.org/12/items/screen-recording-12-06-2025-12-49-26-1/ScreenRecording_12-06-2025%2012-49-26_1.mp4",
   subtitleUrl: "",
   tilbakeUrl: "film.html?navn=muldvarpen",
@@ -727,6 +727,7 @@ const filmer = {
    
   
     
+
 
 
 
