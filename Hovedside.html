@@ -1278,6 +1278,58 @@ background: linear-gradient(
 
 }
 
+/* === KOMMENDE FILMER – MOBILFIX === */
+@media (max-width: 768px) {
+
+  .coming-movies-wrapper {
+    overflow-x: auto !important;
+    padding: 0 10px !important;
+  }
+
+  .coming-movies-list {
+    gap: 12px !important;
+    height: 260px !important;
+  }
+
+  .coming-movie-item {
+    flex: 0 0 180px !important;
+    height: 240px !important;
+    transform: none !important;
+    transition: none !important;
+  }
+
+  /* Fjern hover-zoom */
+  .coming-movie-item:hover {
+    flex: 0 0 180px !important;
+    transform: none !important;
+  }
+
+  /* Skjul video helt */
+  .coming-movie-item video {
+    display: none !important;
+  }
+
+  /* Vis alltid bilde */
+  .coming-movie-item img.banner {
+    opacity: 1 !important;
+    display: block !important;
+  }
+
+  /* Fiks logo på mobil */
+  .coming-movie-item .logo {
+    bottom: 12px !important;
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+    max-height: 48px !important;
+    width: auto !important;
+  }
+
+  /* Skjul synopsis / tekstinfo på mobil */
+  .coming-movie-item .coming-movie-info {
+    display: none !important;
+    opacity: 0 !important;
+  }
+}
 
   @media (max-width: 768px) {
 
@@ -1296,73 +1348,6 @@ background: linear-gradient(
     margin-top: 0 !important;
     padding-top: 0 !important;
   }
-
-    /* === JULESEKSJON === */
-.christmas-section {
-  width: 100%;
-  height: 320px;
-  background-image: url("https://images.unsplash.com/photo-1543877087-ebf71fde2be2");
-  background-size: cover;
-  background-position: center;
-  border-radius: 10px;
-  margin: 40px 0;
-  position: relative;
-  overflow: hidden;
-}
-
-.christmas-overlay {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  height: 100%;
-  padding: 40px;
-  background: rgba(0,0,0,0.45);
-  backdrop-filter: blur(2px);
-}
-
-/* Venstre side */
-.christmas-left {
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-}
-
-.christmas-left h1 {
-  font-size: 48px;
-  color: #00FFCC;
-  text-shadow: 0 0 12px black;
-  font-weight: 900;
-}
-
-.christmas-logo {
-  width: 120px;
-  filter: drop-shadow(0 0 10px #00ffcc);
-}
-
-/* Vertikalt galleri */
-.christmas-gallery {
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-  height: 100%;
-  overflow-y: auto;
-  padding-right: 6px;
-}
-
-.christmas-gallery img {
-  width: 120px;
-  height: 160px;
-  object-fit: cover;
-  border-radius: 8px;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-  border: 2px solid transparent;
-}
-
-.christmas-gallery img:hover {
-  transform: scale(1.04);
-  box-shadow: 0 0 10px rgba(0,255,204,0.7);
-  border-color: #00FFCC;
-}
 
 
 
@@ -1478,24 +1463,6 @@ background: linear-gradient(
     <div class="fade-right"></div>
   </div>
 </section>
-
-  <section class="christmas-section">
-  <div class="christmas-overlay">
-
-    <!-- Venstre side: Logo / tekst -->
-    <div class="christmas-left">
-      <img src="https://www.sigvards-farghall.se/wp-content/uploads/2017/12/godjul.png" 
-           class="christmas-logo" 
-           alt="God jul" />
-      <h1>God jul!</h1>
-    </div>
-
-    <!-- Høyre side: Vertikalt galleri – FYLLES AUTOMATISK -->
-    <div class="christmas-gallery"></div>
-
-  </div>
-</section>
-
 
   
         <section class="gallery-section">
@@ -2031,15 +1998,9 @@ activeFilms.forEach(film => {
     gallery.appendChild(item);
 });
 
-  <script type="module">
-  import { filmer } from "./filmdata.js";
 
-  const juleGalleri = document.querySelector(".christmas-gallery");
-
-
+  
 </script>
-
-
 
 
 
