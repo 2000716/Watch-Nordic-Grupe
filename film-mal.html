@@ -33,29 +33,31 @@ video {
 
 
 
-/* Undertekster */
-/* Importer en god brødtekst-font fra Google Fonts */
+/* Brødtekst-font */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400&display=swap');
 
 video::cue {
-  font-family: 'Inter', sans-serif;  /* Brødtekst-font */
+  font-family: 'Inter', sans-serif;
   font-size: 26px !important;
-  font-weight: 300; /* Tynn, elegant tekst */
+  font-weight: 300;
   color: #ffffff;
   background: none !important;
 
-  /* VELDIG TYNN OUTLINE – bare nok til å leses */
+  /* Tynn outline */
   text-shadow:
      -1px -1px 0 #000,
       1px -1px 0 #000,
      -1px  1px 0 #000,
       1px  1px 0 #000;
 
-  line-height: 1.35;  /* Mer “bok-lesbarhet” */
-  white-space: pre-wrap;
+  /* 🔥 disse to gjør teksten IKKE klumpete */
+  letter-spacing: 0.5px;   /* mer luft mellom bokstavene */
+  line-height: 1.45;       /* mer luft mellom linjene */
 
+  white-space: pre-wrap;
   bottom: 8%;
 }
+
 
 
 
@@ -1172,6 +1174,7 @@ document.addEventListener("contextmenu", (e) => {
 });
 
 </script>
+
 
 
 
