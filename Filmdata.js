@@ -298,7 +298,7 @@ const filmer = {
     imdb: "https://www.imdb.com/title/tt1430626/",
     skuespillere: "Hugh Grant, Salma Hayek, Jeremy Piven",
     regissor: "Peter Lord, Jeff Newitt",
-     watchUrl: "film-mal.html?id=irates",
+     watchUrl: "film-mal.html?id=pirates",
     videoUrl: "https://video.wixstatic.com/video/fd2fb2_d929da1da60145be96f418e6338fd0d1/1080p/mp4/file.mp4",
     subtitleUrl: "Pirates.VTT",
     tilbakeUrl: "film.html?navn=pirates",
@@ -727,6 +727,7 @@ const filmer = {
    
   
     
+
 
 
 
