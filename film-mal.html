@@ -699,25 +699,28 @@ video::cue {
   }
 }
 
-    /* MOBIL: video skal ikke fylle skjermen */
-@media (max-width: 768px) {
+    @media (max-width: 768px) {
+
   .container {
-    width: 100%;
+    width: 100vw;
     height: auto;
+    aspect-ratio: 16/9; /* Holder proporsjoner */
+    position: relative;
+    overflow: hidden;
   }
 
   video {
-    position: relative;
     width: 100%;
-    height: auto;
-    max-height: 40vh; /* Juster høyden du ønsker */
+    height: 100%;
     object-fit: contain;
+    position: relative;
   }
 
   body {
-    overflow-y: auto; /* tillat scrolling */
+    overflow-y: auto; /* scroll hvis noe er under videoen */
   }
 }
+
 
 
 
@@ -1195,6 +1198,7 @@ document.addEventListener("contextmenu", (e) => {
 });
 
 </script>
+
 
 
 
