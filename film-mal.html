@@ -699,6 +699,27 @@ video::cue {
   }
 }
 
+    /* MOBIL: video skal ikke fylle skjermen */
+@media (max-width: 768px) {
+  .container {
+    width: 100%;
+    height: auto;
+  }
+
+  video {
+    position: relative;
+    width: 100%;
+    height: auto;
+    max-height: 40vh; /* Juster høyden du ønsker */
+    object-fit: contain;
+  }
+
+  body {
+    overflow-y: auto; /* tillat scrolling */
+  }
+}
+
+
 
 
   </style>
@@ -1174,6 +1195,7 @@ document.addEventListener("contextmenu", (e) => {
 });
 
 </script>
+
 
 
 
