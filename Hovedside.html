@@ -1349,6 +1349,23 @@ background: linear-gradient(
     padding-top: 0 !important;
   }
 
+    .new-badge {
+  position: absolute;
+  top: 6px;
+  left: 6px;
+  background: #e50914; /* Netflix-rød */
+  color: white;
+  font-size: 13px;
+  font-weight: bold;
+  padding: 4px 8px;
+  border-radius: 4px;
+  z-index: 5;
+  box-shadow: 0 0 8px rgba(0,0,0,0.5);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+
 
 
 
@@ -1998,9 +2015,46 @@ activeFilms.forEach(film => {
     gallery.appendChild(item);
 });
 
+  Object.keys(filmer).forEach(key => {
+    const film = filmer[key];
+
+    galleri.innerHTML += `
+    <a href="${film.watchUrl}" 
+       class="movie-item" 
+       data-publish="${film.publishDate}">
+       
+       <span class="new-badge" style="display:none;">NY</span>
+
+       <div class="image-with-progress">
+         <img src="${film.poster}">
+       </div>
+    </a>`;
+});
+
+  function erNyFilm(dato) {
+    const dagerNy = 14;                     // endre hvis du vil
+    const nå = new Date();
+    const publisert = new Date(dato);
+    const diff = (nå - publisert) / (1000 * 60 * 60 * 24);
+    return diff <= dagerNy;
+}
+
+function markerNyeFilmer() {
+    document.querySelectorAll(".movie-item").forEach(item => {
+        const dato = item.getAttribute("data-publish");
+        if (dato && erNyFilm(dato)) {
+            item.querySelector(".new-badge").style.display = "inline-block";
+        }
+    });
+}
+
+document.addEventListener("DOMContentLoaded", markerNyeFilmer);
+
+
 
   
 </script>
+
 
 
 
