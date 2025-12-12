@@ -729,8 +729,8 @@ const filmer = {
     poster: "https://i-viaplay-com.akamaized.net/viaplay-prod/307/828/1740152643-17a0f043de12d5829ca42cde98ad9876a0843f86.jpg?width=448&height=252",
     posterVertikal: "https://i-viaplay-com.akamaized.net/viaplay-prod/307/828/1740152641-a11d0bfc07c635e0eb545631bf16a73343031817.jpg?width=400&height=600", // portrett
     beskrivelse: "Den marmelade-elskende bjørnen går seg vill i jungelen i et spennende eventyr. Med Brown-familien på slep følger en spennende reise når et mysterium kaster dem inn i en uventet eskapade gjennom regnskogen i Amazonas og opp til Perus fjelltopper.",
-    metadata: ["Storbritannia", "2024", "Alle", "Familie", "1 t 42 min"],
-    imdb: "https://www.imdb.com/title/tt0841927/",
+    metadata: ["England", "2024", "Alle", "Familie", "1 t 42 min"],
+    imdb: "https://www.imdb.com/title/tt5822536/",
     skuespillere: "Ben Whishaw, Imelda Staunton, Hugh Bonneville, Emily Mortimer, Madeleine Harris, Samuel Joslin, Joel Fry, Robbie Gee, Ben Miller",
     regissor: "Dougal Wilson",
   watchUrl: "film-mal.html?id=paddington-i-peru",
@@ -751,6 +751,7 @@ const filmer = {
    
   
     
+
 
 
 
