@@ -725,6 +725,7 @@ const filmer = {
        "paddington-i-peru": {
     tittel: "Peddington i Peru",
     bakgrunn: "https://image.tmdb.org/t/p/original/7N7CtZftqEvgojR3QloukU0oWPg.jpg",
+    banner: "https://image.tmdb.org/t/p/original/54pdu6zPgnfqxezN6mqwxtR5fny.jpg", 
     logo: "https://image.tmdb.org/t/p/original/47ZZ3izUpIRiQK3FYKKa74YkirC.png",     
     poster: "https://i-viaplay-com.akamaized.net/viaplay-prod/307/828/1740152643-17a0f043de12d5829ca42cde98ad9876a0843f86.jpg?width=448&height=252",
     posterVertikal: "https://i-viaplay-com.akamaized.net/viaplay-prod/307/828/1740152641-a11d0bfc07c635e0eb545631bf16a73343031817.jpg?width=400&height=600", // portrett
@@ -751,6 +752,7 @@ const filmer = {
    
   
     
+
 
 
 
