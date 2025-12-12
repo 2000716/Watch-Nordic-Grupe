@@ -725,7 +725,7 @@ const filmer = {
        "paddington-i-peru": {
     tittel: "Peddington i Peru",
     bakgrunn: "https://image.tmdb.org/t/p/original/7N7CtZftqEvgojR3QloukU0oWPg.jpg",
-    logo: "https://static.wikia.nocookie.net/logopedia/images/3/3b/PaddingtoninPerulogo-ezgif.com-webp-to-png-converter.png/revision/latest/scale-to-width-down/1200?cb=20250505214912",     
+    logo: "https://image.tmdb.org/t/p/original/47ZZ3izUpIRiQK3FYKKa74YkirC.png",     
     poster: "https://i-viaplay-com.akamaized.net/viaplay-prod/307/828/1740152643-17a0f043de12d5829ca42cde98ad9876a0843f86.jpg?width=448&height=252",
     posterVertikal: "https://i-viaplay-com.akamaized.net/viaplay-prod/307/828/1740152641-a11d0bfc07c635e0eb545631bf16a73343031817.jpg?width=400&height=600", // portrett
     beskrivelse: "Den marmelade-elskende bjørnen går seg vill i jungelen i et spennende eventyr. Med Brown-familien på slep følger en spennende reise når et mysterium kaster dem inn i en uventet eskapade gjennom regnskogen i Amazonas og opp til Perus fjelltopper.",
@@ -751,6 +751,7 @@ const filmer = {
    
   
     
+
 
 
 
