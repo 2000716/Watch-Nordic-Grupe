@@ -1,53 +1,72 @@
-// ==================== SERIEDATA ==================== //
 const serier = {
-  "i-mummidalen": {
-    tittel: "I Mummidalen",
-    bakgrunn: "https://gfx.nrk.no/dX0XYs1HRsBtIl6h4ZWoawCp6_b4VgKnn2dGKDMiObpA",
-    banner: "https://image.tmdb.org/t/p/original/x2LSRK2Cm7MZhjluni1msVJ3wDF.jpg",
-    logo: "https://occ-0-55-56.1.nflxso.net/art/8b26a/8b26a3dfc7b891f55ee4b04ff10d9bcd1b3a8f3a.png",
-    poster: "https://image.tmdb.org/t/p/w1280/9yjEMASvxhJGSUq7peDpWgBO5JW.jpg",
-    posterVertikal: "https://image.tmdb.org/t/p/w780/56v2KjBlU4XaOv9rVYEQypROD7P.jpg",
-    beskrivelse:"De sjarmerende og animerte eventyrene til en skapning som heter Mummi og hans venner og familie.",
-    metadata: ["Finland", "1990", "Alle", "Familie", "4 sesonger"],
-    imdb: "https://www.imdb.com/title/tt0247117/",
-    skuespillere: "Mummitrollet, Snusmumrikken, Lille My, Snorkfrøken",
-    skapere: "Tove Jansson",
-    antallSesonger: 4,
-    antallEpisoder: 34,
-    watchUrl: "spillerepisode.html?serie=i-mummidalen&s=1&e=1",
-    status: "Pågående",
-    expireDate: "2026-12-31T23:59:59",
+  "corpse-bride-serien": {
+    tittel: "Corpse Bride – Serien",
+    bakgrunn: "https://i-viaplay-com.akamaized.net/viaplay-prod/215/1000/1460156720-16bb7db7ba76e552a8dccce6a762ae68f7b22828.jpg?width=1600&height=900",
+    logo: "https://occ-0-8407-92.1.nflxso.net/dnm/api/v6/S4oi7EPZbv2UEPaukW54OORa0S8/AAAABXsHIUIEsoNXp18ZFMeNZGV2VDqmkxZieG_LfgHTMtvUNwYCxJXmI4SMgxIdomfNtMLREHe7vqwoceGjEqzTsD-aHT8veWO5GKQ.png?r=e74",
+    poster: "https://is1-ssl.mzstatic.com/image/thumb/Video124/v4/4b/f6/66/4bf66634-eace-f237-8991-a383189e2b03/pr_source.lsr/392x220.webp",
+    posterVertikal: "https://image.tmdb.org/t/p/w780/isb2Qow76GpqYmsSyfdMfsYAjts.jpg",
 
-    // 🔹 Legg til episoder her
-    episoder: {
-      "Sesong 1": [
-        {
-          tittel: "Episode 1: Vår i Mummidalen",
-          varighet: "22 min",
-          thumbnail: "https://media.themoviedb.org/t/p/w320_and_h180_bestv2/hW1HW2XIaBCZrUWcG7TUTYMGB76.jpg",
-          watchUrl: "spillerepisode.html?serie=i-mummidalen&s=1&e=1"
-        },
-        {
-          tittel: "Episode 2: Snusmumrikken vender tilbake",
-          varighet: "21 min",
-          thumbnail: "https://m.media-amazon.com/images/I/81EYlj8ePjL._AC_SY679_.jpg",
-          watchUrl: "spillerepisode.html?serie=i-mummidalen&s=1&e=2"
+    beskrivelse:
+      "En mørk og poetisk animasjonsserie satt i Tim Burtons gotiske univers.",
+
+    metadata: ["USA", "2005", "9+", "Fantasy", "Animasjon"],
+    imdb: "https://www.imdb.com/title/tt0121164/",
+    skuespillere: "Johnny Depp, Helena Bonham Carter",
+    regissor: "Tim Burton",
+
+    expireDate: "2026-11-15T23:59:59",
+
+    audioLanguages: [
+      { code: "en", label: "Engelsk" }
+    ],
+    subtitleLanguages: [
+      { code: "no", label: "Norsk" },
+      { code: "off", label: "Av" }
+    ],
+
+    sesonger: {
+      1: {
+        sesongNummer: 1,
+        beskrivelse: "Sesong 1 – Begynnelsen",
+        episoder: {
+          1: {
+            episodeNummer: 1,
+            tittel: "Likbruden",
+            varighet: "23 min",
+            thumbnail:
+              "https://image.tmdb.org/t/p/w500/isb2Qow76GpqYmsSyfdMfsYAjts.jpg",
+
+            beskrivelse:
+              "Victor oppdager en ny verden når han ved et uhell vekker likbruden.",
+
+            videoUrl:
+              "https://video.wixstatic.com/video/fd2fb2_episode1/1080p/mp4/file.mp4",
+
+            subtitleUrl: "corpsebride-s01e01.vtt"
+          },
+
+          2: {
+            episodeNummer: 2,
+            tittel: "Underverdenen",
+            varighet: "24 min",
+            thumbnail:
+              "https://image.tmdb.org/t/p/w500/example2.jpg",
+
+            beskrivelse:
+              "Victor må velge mellom to verdener.",
+
+            videoUrl:
+              "https://video.wixstatic.com/video/fd2fb2_episode2/1080p/mp4/file.mp4",
+
+            subtitleUrl: "corpsebride-s01e02.vtt"
+          }
         }
-      ],
-      "Sesong 2": [
-        {
-          tittel: "Episode 1: Den store flommen",
-          varighet: "23 min",
-          thumbnail: "https://media.themoviedb.org/t/p/w320_and_h180_bestv2/hW1HW2XIaBCZrUWcG7TUTYMGB76.jpg",
-          watchUrl: "spillerepisode.html?serie=i-mummidalen&s=2&e=1"
-        }
-      ]
+      }
     }
-  },
+  }
+};
 
- 
-// Gjør tilgjengelig globalt
-window.serier = serier;
+
 
 
 
