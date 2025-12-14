@@ -834,16 +834,16 @@ video::cue {
   <!-- PLAY SCRIPT -->
   <script>
   // ===================== FILMDATA =====================
- const urlParams = new URLSearchParams(window.location.search);
+// ===================== DATAHENTING =====================
+const urlParams = new URLSearchParams(window.location.search);
 
-// === SJEKK HVA VI SPILLER ===
 const filmId = urlParams.get("id");
 const serieId = urlParams.get("serie");
 const sesongNr = urlParams.get("s");
 const episodeNr = urlParams.get("e");
 
 let data = null;
-let type = null; // "film" | "serie"
+let type = null;
 
 // === FILM ===
 if (filmId && typeof filmer !== "undefined" && filmer[filmId]) {
@@ -857,8 +857,7 @@ else if (
   sesongNr &&
   episodeNr &&
   typeof serier !== "undefined" &&
-  serier[serieId] &&
-  serier[serieId].sesonger?.[sesongNr]?.episoder?.[episodeNr]
+  serier[serieId]?.sesonger?.[sesongNr]?.episoder?.[episodeNr]
 ) {
   data = serier[serieId].sesonger[sesongNr].episoder[episodeNr];
   type = "serie";
@@ -870,207 +869,142 @@ else {
   window.location.href = "index.html";
 }
 
-  document.title = film.tittel;
+// ===================== INIT =====================
+document.title = data.tittel;
 
-// DOM-elementer
-const video = document.getElementById('video');
-const source = video.querySelector('source');
-const track = video.querySelector('track');
-source.src = film.videoUrl;
-track.src = film.subtitleUrl;
+// DOM
+const video = document.getElementById("video");
+const source = video.querySelector("source");
+const track = video.querySelector("track");
+const titleElement = document.querySelector(".movie-title");
+const backButton = document.getElementById("backButton");
+
+source.src = data.videoUrl;
+track.src = data.subtitleUrl || "";
 video.load();
 
-const titleElement = document.querySelector('.movie-title');
-if (titleElement) titleElement.textContent = film.tittel;
+if (titleElement) titleElement.textContent = data.tittel;
 
-const backButton = document.getElementById('backButton');
-if (backButton && film.tilbakeUrl) backButton.setAttribute('href', film.tilbakeUrl);
+if (backButton) {
+  backButton.href =
+    type === "film"
+      ? data.tilbakeUrl
+      : `film.html?navn=${serieId}`;
+}
 
-const ui = document.getElementById('ui');
-const playBtn = document.getElementById('playPauseBtn');
-const playIcon = document.getElementById('playIcon');
-const muteBtn = document.getElementById('muteBtn');
-const muteIcon = document.getElementById('muteIcon');
-const rewindBtn = document.getElementById('rewindBtn');
-const forwardBtn = document.getElementById('forwardBtn');
-const progress = document.getElementById('progress');
-const progressFilled = document.getElementById('progressFilled');
-const thumb = document.getElementById('thumb');
-const timeDisplay = document.getElementById('timeDisplay');
-const captionsBtn = document.getElementById('captionsBtn');
-const captionMenu = document.getElementById('captionMenu');
-const fullscreenBtn = document.getElementById('fullscreenBtn');
-const container = document.getElementById('container');
-const loadingSpinner = document.getElementById('loadingSpinner');
-const previewBox = document.getElementById('previewBox');
-const previewImage = document.getElementById('previewImage');
-const previewTime = document.getElementById('previewTime');
+// ===================== UI ELEMENTER =====================
+const ui = document.getElementById("ui");
+const playBtn = document.getElementById("playPauseBtn");
+const playIcon = document.getElementById("playIcon");
+const muteBtn = document.getElementById("muteBtn");
+const muteIcon = document.getElementById("muteIcon");
+const rewindBtn = document.getElementById("rewindBtn");
+const forwardBtn = document.getElementById("forwardBtn");
+const progress = document.getElementById("progress");
+const progressFilled = document.getElementById("progressFilled");
+const thumb = document.getElementById("thumb");
+const timeDisplay = document.getElementById("timeDisplay");
+const captionsBtn = document.getElementById("captionsBtn");
+const captionMenu = document.getElementById("captionMenu");
+const fullscreenBtn = document.getElementById("fullscreenBtn");
+const container = document.getElementById("container");
+const loadingSpinner = document.getElementById("loadingSpinner");
+const previewBox = document.getElementById("previewBox");
+const previewImage = document.getElementById("previewImage");
+const previewTime = document.getElementById("previewTime");
+const subtitleOverlay = document.getElementById("subtitleOverlay");
 
-// Resume overlay
+// Resume
 const resumeOverlay = document.getElementById("resumeOverlay");
 const continueBtn = document.getElementById("continueBtn");
 const restartBtn = document.getElementById("restartBtn");
 
-// Undertekster overlay
-const subtitleOverlay = document.getElementById("subtitleOverlay");
+// ===================== PROGRESS KEY =====================
+const progressKey =
+  type === "film"
+    ? `${filmId}-lastPosition`
+    : `${serieId}-s${sesongNr}e${episodeNr}-lastPosition`;
 
-// ==================== VARIABLER ==================== //
-let isDragging = false;
-let hideTimeout;
-let subtitlesEnabled = true; // styrer om undertekster skal vises
-
-// ==================== FUNKSJONER ==================== //
-// Format tid til mm:ss
+// ===================== HJELPEFUNKSJONER =====================
 function formatTime(time) {
   const m = Math.floor(time / 60);
   const s = Math.floor(time % 60);
-  return `${m}:${s < 10 ? '0' + s : s}`;
+  return `${m}:${s < 10 ? "0" + s : s}`;
 }
 
-// Oppdater progress-bar
+// ===================== PROGRESS =====================
+let isDragging = false;
+
 function updateProgress() {
-  if (!isDragging) {
+  if (!isDragging && video.duration) {
     const percent = (video.currentTime / video.duration) * 100;
-    progressFilled.style.width = percent + '%';
-    thumb.style.left = percent + '%';
+    progressFilled.style.width = percent + "%";
+    thumb.style.left = percent + "%";
   }
-  timeDisplay.textContent = `${formatTime(video.currentTime)} / ${formatTime(video.duration)}`;
 
-  // --- LAGRE PROGRESJON --- //
-  if (!isNaN(video.duration) && video.duration > 0) {
-    const percent = (video.currentTime / video.duration) * 100;
-    localStorage.setItem("progress_" + filmId, percent.toFixed(1));
-  }
+  timeDisplay.textContent =
+    `${formatTime(video.currentTime)} / ${formatTime(video.duration || 0)}`;
 }
 
-// ==================== EVENTS ==================== //
-video.addEventListener('timeupdate', updateProgress);
-video.addEventListener('loadedmetadata', updateProgress);
+video.addEventListener("timeupdate", updateProgress);
+video.addEventListener("loadedmetadata", updateProgress);
 
-// Play/pause
-playBtn.addEventListener('click', () => video.paused ? video.play() : video.pause());
-video.addEventListener('click', () => video.paused ? video.play() : video.pause());
+// ===================== PLAY / PAUSE =====================
+playBtn.addEventListener("click", () => video.paused ? video.play() : video.pause());
+video.addEventListener("click", () => video.paused ? video.play() : video.pause());
 
-document.addEventListener('keydown', e => {
-  if (e.code === 'Space') { e.preventDefault(); video.paused ? video.play() : video.pause(); }
-  if (e.key === 'ArrowRight') video.currentTime += 10;
-  if (e.key === 'ArrowLeft') video.currentTime -= 10;
+video.addEventListener("play", () => {
+  playIcon.src = "https://static.wixstatic.com/media/fd2fb2_f4658d43d3204506948e5c5ab65461d7~mv2.png";
+  showUI();
 });
 
-video.addEventListener('play', () => { 
-  playIcon.src = "https://static.wixstatic.com/media/fd2fb2_f4658d43d3204506948e5c5ab65461d7~mv2.png"; 
-  showUI(); 
-});
-video.addEventListener('pause', () => { 
-  playIcon.src = "https://static.wixstatic.com/media/fd2fb2_f6f25f56b00e49eea8dc4f811b50bb5c~mv2.png"; 
-  showUI(); 
+video.addEventListener("pause", () => {
+  playIcon.src = "https://static.wixstatic.com/media/fd2fb2_f6f25f56b00e49eea8dc4f811b50bb5c~mv2.png";
+  showUI();
 });
 
-// Mute
-muteBtn.addEventListener('click', () => {
+// ===================== LYD =====================
+muteBtn.addEventListener("click", () => {
   video.muted = !video.muted;
   muteIcon.src = video.muted
     ? "https://static.wixstatic.com/media/fd2fb2_e7e7e77a59964f018d9e2d4605a047db~mv2.png"
     : "https://static.wixstatic.com/media/fd2fb2_5c4fab8430e94d2381fc487b1654191d~mv2.png";
 });
 
-// Rewind/forward
-rewindBtn.addEventListener('click', () => video.currentTime = Math.max(0, video.currentTime - 10));
-forwardBtn.addEventListener('click', () => video.currentTime = Math.min(video.duration, video.currentTime + 10));
+// ===================== SEEK =====================
+rewindBtn.addEventListener("click", () => video.currentTime = Math.max(0, video.currentTime - 10));
+forwardBtn.addEventListener("click", () => video.currentTime = Math.min(video.duration, video.currentTime + 10));
 
-// Captions meny
-captionsBtn.addEventListener('click', () => {
-  captionMenu.style.display = captionMenu.style.display === 'block' ? 'none' : 'block';
-});
-
-// Dynamiske lydknapper
-const audioTracksDiv = document.getElementById("audioTracks");
-audioTracksDiv.innerHTML = "";
-if (film.audioLanguages && film.audioLanguages.length > 0) {
-  film.audioLanguages.forEach(lang => {
-    const btn = document.createElement("button");
-    btn.textContent = lang.label;
-    btn.dataset.audio = lang.code;
-    btn.addEventListener("click", () => {
-      alert(`Lydspråk byttet til: ${lang.label}`);
-      captionMenu.style.display = "none";
-    });
-    audioTracksDiv.appendChild(btn);
-  });
-} else { audioTracksDiv.innerHTML = "<em style='color:gray;'>Ingen valg</em>"; }
-
-// Dynamiske undertekstknapper
-const subtitleTracksDiv = document.getElementById("subtitleTracks");
-subtitleTracksDiv.innerHTML = "";
-if (film.subtitleLanguages && film.subtitleLanguages.length > 0) {
-  film.subtitleLanguages.forEach(sub => {
-    const btn = document.createElement("button");
-    btn.textContent = sub.label;
-    btn.dataset.lang = sub.code;
-    btn.addEventListener("click", () => {
-      const selectedLang = sub.code;
-      globalSubtitleSetting = selectedLang;
-      localStorage.setItem(subtitleSettingKey, selectedLang);
-
-      if (selectedLang === "off") {
-        subtitlesEnabled = false;
-        for (let i = 0; i < video.textTracks.length; i++) video.textTracks[i].mode = "hidden";
-        subtitleOverlay.textContent = "";
-      } else {
-        subtitlesEnabled = true;
-        for (let i = 0; i < video.textTracks.length; i++) {
-          const track = video.textTracks[i];
-          if (track.language === selectedLang || track.label.toLowerCase() === selectedLang) {
-            track.mode = "hidden"; 
-            track.addEventListener("cuechange", () => {
-              if (!subtitlesEnabled) {
-                subtitleOverlay.textContent = "";
-                return;
-              }
-              const cues = track.activeCues;
-              subtitleOverlay.textContent = cues && cues.length > 0 ? cues[0].text : "";
-            });
-          }
-        }
-      }
-      updateSubtitleButtons(selectedLang);
-      captionMenu.style.display = "none";
-    });
-    subtitleTracksDiv.appendChild(btn);
-  });
-} else { subtitleTracksDiv.innerHTML = "<em style='color:gray;'>Ingen undertekster</em>"; }
-
-// Scrub-funksjon
+// ===================== SCRUB =====================
 function scrubTo(e) {
   const rect = progress.getBoundingClientRect();
   const x = e.clientX - rect.left;
   const percent = Math.min(Math.max(0, x / rect.width), 1);
-  progressFilled.style.width = percent * 100 + '%';
-  thumb.style.left = percent * 100 + '%';
+  progressFilled.style.width = percent * 100 + "%";
+  thumb.style.left = percent * 100 + "%";
   return percent;
 }
 
-progress.addEventListener('mousedown', e => { isDragging = true; scrubTo(e); });
-document.addEventListener('mouseup', e => { 
-  if (isDragging) { 
-    const percent = scrubTo(e); 
-    video.currentTime = percent * video.duration; 
-    isDragging = false; 
-    hidePreview(); 
-  } 
+progress.addEventListener("mousedown", e => { isDragging = true; scrubTo(e); });
+document.addEventListener("mouseup", e => {
+  if (isDragging) {
+    video.currentTime = scrubTo(e) * video.duration;
+    isDragging = false;
+    previewBox.style.display = "none";
+  }
 });
-document.addEventListener('mousemove', e => { if (isDragging) { scrubTo(e); showPreview(e); } });
-thumb.addEventListener('mousedown', e => { e.preventDefault(); isDragging = true; });
+document.addEventListener("mousemove", e => isDragging && scrubTo(e));
 
-// Preview-bilde
+// ===================== PREVIEW =====================
 const hiddenVideo = document.createElement("video");
-hiddenVideo.src = film.videoUrl;
+hiddenVideo.src = data.videoUrl;
 hiddenVideo.muted = true;
-hiddenVideo.crossOrigin = "anonymous";
+
 const canvas = document.createElement("canvas");
 const ctx = canvas.getContext("2d");
 
-function showPreview(e) {
+progress.addEventListener("mousemove", e => {
+  if (!video.duration) return;
   const rect = progress.getBoundingClientRect();
   const x = e.clientX - rect.left;
   const percent = Math.min(Math.max(0, x / rect.width), 1);
@@ -1081,86 +1015,86 @@ function showPreview(e) {
   previewTime.textContent = formatTime(time);
 
   hiddenVideo.currentTime = time;
-  hiddenVideo.addEventListener("seeked", function handler() {
+  hiddenVideo.onseeked = () => {
     canvas.width = 240;
     canvas.height = 135;
     ctx.drawImage(hiddenVideo, 0, 0, canvas.width, canvas.height);
     previewImage.src = canvas.toDataURL("image/jpeg");
-    hiddenVideo.removeEventListener("seeked", handler);
-  });
-}
-function hidePreview() { previewBox.style.display = "none"; }
-
-progress.addEventListener("mousemove", showPreview);
-progress.addEventListener("mouseleave", hidePreview);
-
-// UI vis/skjul
-function showUI() {
-  ui.classList.remove('hidden');
-  subtitleOverlay.classList.add("subtitle-up");
-  clearTimeout(hideTimeout);
-  hideTimeout = setTimeout(() => {
-    if (!video.paused) {
-      ui.classList.add('hidden');
-      subtitleOverlay.classList.remove("subtitle-up");
-    }
-  }, 3000);
-}
-document.addEventListener('mousemove', showUI);
-document.addEventListener('keydown', showUI);
-
-// Fullscreen
-fullscreenBtn.addEventListener('click', () => {
-  if (!document.fullscreenElement) { container.requestFullscreen(); }
-  else { document.exitFullscreen(); }
-});
-document.addEventListener('fullscreenchange', () => {
-  fullscreenBtn.querySelector('img').src = document.fullscreenElement
-    ? "https://static.wixstatic.com/media/fd2fb2_c9b139f2774c4bf7b32c7271fd6c1c1a~mv2.png"
-    : "https://static.wixstatic.com/media/fd2fb2_3fa37682b3b34c04a2cd08ffcde2763a~mv2.png";
+  };
 });
 
-// Loading spinner
-video.addEventListener('waiting', () => loadingSpinner.style.display = 'block');
-video.addEventListener('playing', () => loadingSpinner.style.display = 'none');
-video.addEventListener('canplay', () => loadingSpinner.style.display = 'none');
+progress.addEventListener("mouseleave", () => previewBox.style.display = "none");
 
-// ==================== RESUME ==================== //
-const savedTime = parseFloat(localStorage.getItem(`${filmId}-lastPosition`));
+// ===================== FULLSCREEN =====================
+fullscreenBtn.addEventListener("click", () => {
+  if (!document.fullscreenElement) container.requestFullscreen();
+  else document.exitFullscreen();
+});
 
-video.addEventListener('loadedmetadata', () => {
-  if (!isNaN(savedTime) && savedTime > 10 && video.duration > savedTime) {
-    video.currentTime = savedTime;
+// ===================== LOADING =====================
+video.addEventListener("waiting", () => loadingSpinner.style.display = "block");
+video.addEventListener("playing", () => loadingSpinner.style.display = "none");
+
+// ===================== RESUME =====================
+const savedTime = parseFloat(localStorage.getItem(progressKey));
+
+video.addEventListener("loadedmetadata", () => {
+  if (!isNaN(savedTime) && savedTime > 10) {
     resumeOverlay.style.display = "flex";
 
-    continueBtn.addEventListener("click", () => {
+    continueBtn.onclick = () => {
       resumeOverlay.style.display = "none";
-      video.play().catch(err => console.warn("Autoplay blokkert:", err));
-    });
+      video.currentTime = savedTime;
+      video.play();
+    };
 
-    restartBtn.addEventListener("click", () => {
-      video.currentTime = 0;
+    restartBtn.onclick = () => {
       resumeOverlay.style.display = "none";
-      video.play().catch(err => console.warn("Autoplay blokkert:", err));
-    });
+      video.currentTime = 0;
+      video.play();
+    };
   } else {
-    video.currentTime = 0;
-    video.muted = false;
-    video.play().catch(err => console.warn("Autoplay blokkert:", err));
+    video.play().catch(() => {});
   }
 });
 
-window.addEventListener('beforeunload', () => {
-  localStorage.setItem(`${filmId}-lastPosition`, video.currentTime);
+window.addEventListener("beforeunload", () => {
+  localStorage.setItem(progressKey, video.currentTime);
 });
 
-// Ferdig
-video.addEventListener('ended', () => {
-  localStorage.removeItem(`${filmId}-lastPosition`);
-  localStorage.removeItem("progress_" + filmId); // fjern fra fortsett å se
-  localStorage.setItem(`${filmId}-status`, "ferdig");
-  window.location.href = film.tilbakeUrl;
+// ===================== SLUTT =====================
+video.addEventListener("ended", () => {
+  localStorage.removeItem(progressKey);
+
+  if (type === "serie") {
+    const nextEp = Number(episodeNr) + 1;
+    if (serier[serieId].sesonger[sesongNr].episoder[nextEp]) {
+      window.location.href =
+        `spillerepisode.html?serie=${serieId}&s=${sesongNr}&e=${nextEp}`;
+      return;
+    }
+  }
+
+  window.location.href = data.tilbakeUrl;
 });
+
+// ===================== UI AUTOHIDE =====================
+let hideTimeout;
+function showUI() {
+  ui.classList.remove("hidden");
+  clearTimeout(hideTimeout);
+  hideTimeout = setTimeout(() => {
+    if (!video.paused) ui.classList.add("hidden");
+  }, 3000);
+}
+
+document.addEventListener("mousemove", showUI);
+document.addEventListener("keydown", showUI);
+
+// ===================== BESKYTTELSE =====================
+video.addEventListener("contextmenu", e => e.preventDefault());
+document.addEventListener("contextmenu", e => e.preventDefault());
+
 
 // Skjul mus etter delay
 let mouseTimer;
@@ -1228,6 +1162,7 @@ document.addEventListener("contextmenu", (e) => {
 });
 
 </script>
+
 
 
 
