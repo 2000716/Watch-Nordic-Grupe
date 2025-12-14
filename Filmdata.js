@@ -722,7 +722,7 @@ const filmer = {
   expireDate: "2027-01-01T23:59:59"
 },
 
-       "paddington-i-peru": {
+       "peddington-i-peru": {
     tittel: "Peddington i Peru",
     bakgrunn: "https://image.tmdb.org/t/p/original/7N7CtZftqEvgojR3QloukU0oWPg.jpg",
     banner: "https://image.tmdb.org/t/p/original/54pdu6zPgnfqxezN6mqwxtR5fny.jpg", 
@@ -752,6 +752,7 @@ const filmer = {
    
   
     
+
 
 
 
