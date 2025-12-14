@@ -1091,7 +1091,7 @@ const gallery = document.getElementById("recommendationGallery");
 const tittelEl = document.querySelector(".recommendations h2");
 
 /* === Episode galleri for serier === */
-if (type === "serie" && data.episoder) {
+if (type === "serie" && data.sesonger) {
   const recommendationsDiv = document.querySelector(".recommendations");
   recommendationsDiv.innerHTML = `
     <h2>Episoder</h2>
@@ -1102,39 +1102,50 @@ if (type === "serie" && data.episoder) {
   const seasonButtons = document.getElementById("seasonButtons");
   const episodeGallery = document.getElementById("episodeGallery");
 
-  const sesonger = Object.keys(data.episoder); // ["Sesong 1", "Sesong 2"]
+  const sesongNumre = Object.keys(data.sesonger);
 
-  // --- Bygg sesongknapper ---
-  sesonger.forEach((sesongNavn, index) => {
+  // === Lag sesongknapper ===
+  sesongNumre.forEach((s, index) => {
     const btn = document.createElement("button");
-    btn.textContent = sesongNavn;
+    btn.textContent = `Sesong ${s}`;
     btn.className = "season-btn";
     if (index === 0) btn.classList.add("active");
-    btn.addEventListener("click", () => visSesong(sesongNavn));
+
+    btn.addEventListener("click", () => visSesong(s));
     seasonButtons.appendChild(btn);
   });
 
-  // --- Funksjon for å vise episoder ---
-  function visSesong(sesongNavn) {
-    document.querySelectorAll(".season-btn").forEach(b => b.classList.remove("active"));
-    const aktivBtn = Array.from(document.querySelectorAll(".season-btn"))
-      .find(b => b.textContent === sesongNavn);
-    if (aktivBtn) aktivBtn.classList.add("active");
+  // === Vis episoder ===
+  function visSesong(sesongNr) {
+    document.querySelectorAll(".season-btn")
+      .forEach(b => b.classList.remove("active"));
 
-    const valgtSesong = data.episoder[sesongNavn];
-    if (!valgtSesong) return;
+    [...seasonButtons.children]
+      .find(b => b.textContent === `Sesong ${sesongNr}`)
+      ?.classList.add("active");
+
     episodeGallery.innerHTML = "";
 
-    valgtSesong.forEach((ep, i) => {
+    const episoder = data.sesonger[sesongNr].episoder;
+
+    Object.keys(episoder).forEach(epNr => {
+      const ep = episoder[epNr];
+
       const epCard = document.createElement("div");
       epCard.className = "episode-card";
       epCard.innerHTML = `
-        <img src="${ep.thumbnail}" alt="Episode ${i + 1}">
+        <img src="${ep.thumbnail}" alt="${ep.tittel}">
         <div class="episode-info">
-          <h4>${i + 1}. ${ep.tittel}</h4>
+          <h4>${epNr}. ${ep.tittel}</h4>
           <p>${ep.varighet}</p>
         </div>
       `;
+
+      epCard.addEventListener("click", () => {
+        window.location.href =
+          `spillerepisode.html?serie=${navn}&s=${sesongNr}&e=${epNr}`;
+      });
+
       episodeGallery.appendChild(epCard);
     });
   }
@@ -1294,6 +1305,7 @@ if (data.logo && data.logo.trim() !== "") {
 </html>
 
  
+
 
 
 
