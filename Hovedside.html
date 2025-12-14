@@ -1809,7 +1809,8 @@ function renderSeries(galleryId) {
     const serie = serier[key];
 
     const link = document.createElement("a");
-    link.href = `spillerepisode.html?serie=${key}&s=1&e=1`;
+    // 🔥 RIKTIG SIDE: film-mal / infosiden
+    link.href = `film.html?navn=${key}`;
 
     const img = document.createElement("img");
     img.src = serie.poster;
@@ -1819,6 +1820,7 @@ function renderSeries(galleryId) {
     gallery.appendChild(link);
   });
 }
+
 
 // ==================== FORTSETT Å SE ==================== //
 function renderContinueWatching() {
@@ -1945,6 +1947,7 @@ activeFilms.forEach(film => {
 
   
 </script>
+
 
 
 
