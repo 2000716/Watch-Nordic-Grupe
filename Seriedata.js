@@ -1,27 +1,26 @@
 const serier = {
   "corpse-bride-serien": {
     tittel: "Corpse Bride – Serien",
-    bakgrunn: "https://i-viaplay-com.akamaized.net/viaplay-prod/215/1000/1460156720-16bb7db7ba76e552a8dccce6a762ae68f7b22828.jpg?width=1600&height=900",
-    logo: "https://occ-0-8407-92.1.nflxso.net/dnm/api/v6/S4oi7EPZbv2UEPaukW54OORa0S8/AAAABXsHIUIEsoNXp18ZFMeNZGV2VDqmkxZieG_LfgHTMtvUNwYCxJXmI4SMgxIdomfNtMLREHe7vqwoceGjEqzTsD-aHT8veWO5GKQ.png?r=e74",
-    poster: "https://is1-ssl.mzstatic.com/image/thumb/Video124/v4/4b/f6/66/4bf66634-eace-f237-8991-a383189e2b03/pr_source.lsr/392x220.webp",
-    posterVertikal: "https://image.tmdb.org/t/p/w780/isb2Qow76GpqYmsSyfdMfsYAjts.jpg",
+    bakgrunn: "https://image.tmdb.org/t/p/original/231meoDrNjyUqF0sD0xItVw1h7g.jpg",
+    logo: "https://image.tmdb.org/t/p/original/cD5TMSmqtRMsuGFCD7QtSWH2bot.png",
+    poster: "https://image.tmdb.org/t/p/w1280/9yjEMASvxhJGSUq7peDpWgBO5JW.jpg",
+    posterVertikal: "https://image.tmdb.org/t/p/original/pU0MiRPaoNeiXZRnJjJ0UOmZiUA.jpg",
 
     beskrivelse:
-      "En mørk og poetisk animasjonsserie satt i Tim Burtons gotiske univers.",
+      "De sjarmerende og animerte eventyrene til en skapning som heter Mummi og hans venner og familie.",
 
-    metadata: ["USA", "2005", "9+", "Fantasy", "Animasjon"],
-    imdb: "https://www.imdb.com/title/tt0121164/",
+    metadata: ["Finnland", "1990", "Alle", "Fantasy", "Animasjon"],
+    imdb: "https://www.imdb.com/title/tt0247117/",
     skuespillere: "Johnny Depp, Helena Bonham Carter",
     regissor: "Tim Burton",
 
     expireDate: "2026-11-15T23:59:59",
 
     audioLanguages: [
-      { code: "en", label: "Engelsk" }
+  
     ],
     subtitleLanguages: [
-      { code: "no", label: "Norsk" },
-      { code: "off", label: "Av" }
+
     ],
 
     sesonger: {
@@ -65,6 +64,7 @@ const serier = {
     }
   }
 };
+
 
 
 
