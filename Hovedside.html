@@ -779,47 +779,6 @@ background: linear-gradient(
   -webkit-text-stroke: 0;
 }
 
-/* ===== Halloween-banner galleri (vertikale bilder) ===== */
-#halloween-gallery {
-  display: flex;
-  flex-direction: row;
-  gap: 12px;
-  overflow-x: auto;
-  padding: 10px 16px;
-  scroll-behavior: smooth;
-}
-
-#halloween-gallery a {
-  display: inline-block;
-  flex: 0 0 auto;
-  width: 120px;
-  height: 180px;
-  border-radius: 8px;
-  overflow: hidden;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-#halloween-gallery a img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  border-radius: 8px;
-  display: block;
-  transition: transform 0.3s ease;
-}
-
-#halloween-gallery a:hover img {
-  transform: scale(1.05);
-}
-
-#halloween-gallery a:hover {
-  box-shadow: 0 0 10px rgba(0, 255, 204, 0.5);
-}
-
-#halloween-gallery::-webkit-scrollbar {
-  display: none;
-}
-
 /* ===== Mobilvennlig tilpasning ===== */
 @media (max-width: 768px) {
   .vertical-nav {
@@ -1841,41 +1800,6 @@ function renderSeries(galleryId) {
   });
 }
 
-
-// ==================== HALLOWEEN ==================== //
-function renderHalloweenBanner() {
-  const bannerImage = document.getElementById("special-banner-image");
-  const bannerLogo = document.getElementById("special-banner-logo");
-  const bannerLink = document.getElementById("special-banner-link");
-  const gallery = document.getElementById("halloween-gallery");
-
-  const halloweenFilmKey = Object.keys(filmer).find(key =>
-    filmer[key].banner && filmer[key].metadata.some(m =>
-      m.toLowerCase().includes("halloween") || m.toLowerCase().includes("skrekk")
-    )
-  );
-  if (!halloweenFilmKey) return;
-  const film = filmer[halloweenFilmKey];
-
-  if (film.banner) bannerImage.src = film.banner;
-  if (film.logo) bannerLogo.src = film.logo;
-  bannerLink.href = `film.html?navn=${halloweenFilmKey}`;
-
-  gallery.innerHTML = "";
-  Object.keys(filmer).forEach(key => {
-    const f = filmer[key];
-    if (f.metadata.some(m => m.toLowerCase().includes("halloween") || m.toLowerCase().includes("skrekk"))) {
-      const link = document.createElement("a");
-      link.href = `film.html?navn=${key}`;
-      const img = document.createElement("img");
-      img.src = f.posterVertikal || f.poster;
-      img.alt = f.tittel;
-      link.appendChild(img);
-      gallery.appendChild(link);
-    }
-  });
-}
-
 // ==================== FORTSETT Å SE ==================== //
 function renderContinueWatching() {
   const section = document.getElementById("fortsett-section");
@@ -2001,6 +1925,7 @@ activeFilms.forEach(film => {
 
   
 </script>
+
 
 
 
