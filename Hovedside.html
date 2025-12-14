@@ -1397,6 +1397,22 @@ background: linear-gradient(
             <div class="fade-right"></div>
           </div>
         </section>
+
+  <section class="gallery-section">
+  <h2>Populære serier</h2>
+  <div class="gallery-wrapper">
+    <div class="fade-left"></div>
+
+    <button class="scroll-button left" onclick="scrollGallery(this, -1)">❮</button>
+
+    <div class="image-gallery" id="serier-galleri"></div>
+
+    <button class="scroll-button right" onclick="scrollGallery(this, 1)">❯</button>
+
+    <div class="fade-right"></div>
+  </div>
+</section>
+
   
         <section class="gallery-section">
   <h2>Topp 10 filmer nå</h2>
@@ -1788,13 +1804,17 @@ function renderSeries(galleryId) {
   if (!gallery || typeof serier === "undefined") return;
 
   gallery.innerHTML = "";
+
   Object.keys(serier).forEach((key) => {
     const serie = serier[key];
+
     const link = document.createElement("a");
     link.href = `spillerepisode.html?serie=${key}&s=1&e=1`;
+
     const img = document.createElement("img");
     img.src = serie.poster;
     img.alt = serie.tittel;
+
     link.appendChild(img);
     gallery.appendChild(link);
   });
@@ -1925,6 +1945,7 @@ activeFilms.forEach(film => {
 
   
 </script>
+
 
 
 
