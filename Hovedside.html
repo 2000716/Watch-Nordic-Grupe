@@ -1954,9 +1954,30 @@ activeFilms.forEach(film => {
     gallery.appendChild(item);
 });
 
+  // ==================== START GALLERIER ==================== //
+renderGallery("nye-filmer-galleri");
+renderGallery("barn-galleri", key => filmer[key].kategori === "barn");
+renderSeries("serier-galleri");
+renderTop10("topp10-filmer-galleri");
+renderUpcoming("kommer-snart-galleri");
+renderContinueWatching();
+
+// Tving oppdatering av piler etter at innhold er lastet
+setTimeout(() => {
+  document.querySelectorAll(".gallery-wrapper").forEach(wrapper => {
+    const gallery = wrapper.querySelector(
+      ".image-gallery, .coming-movies-gallery, .top10-gallery"
+    );
+    if (gallery) {
+      gallery.dispatchEvent(new Event("scroll"));
+    }
+  });
+}, 50);
+
 
   
 </script>
+
 
 
 
