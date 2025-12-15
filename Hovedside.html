@@ -124,7 +124,6 @@ main {
 }
 
 /* Hero-banner */
-/* 🎥 Netflix-style Hero Banner */
 .hero-banner {
   position: relative;
   height: 75vh;
@@ -1310,6 +1309,15 @@ background: linear-gradient(
     padding-top: 0 !important;
   }
 
+.gallery-wrapper:hover .scroll-button {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.gallery-wrapper:hover .scroll-button.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
 
 
 
@@ -1964,6 +1972,7 @@ activeFilms.forEach(film => {
 
   
 </script>
+
 
 
 
