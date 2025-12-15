@@ -1598,12 +1598,14 @@ function scrollGallery(button, direction) {
   const wrapper = button.closest(".gallery-wrapper");
   if (!wrapper) return;
 
-  const gallery = wrapper.querySelector(
-    ".image-gallery, .coming-movies-gallery, .top10-gallery"
-  );
+  const gallery =
+    wrapper.querySelector(".image-gallery") ||
+    wrapper.querySelector(".coming-movies-gallery") ||
+    wrapper.querySelector(".top10-gallery");
+
   if (!gallery) return;
 
-  const scrollAmount = gallery.clientWidth * 0.9;
+  const scrollAmount = gallery.clientWidth * 0.8;
 
   gallery.scrollBy({
     left: direction * scrollAmount,
@@ -1862,55 +1864,50 @@ function renderContinueWatching() {
 
 
 // ==================== INIT ==================== //
-document.querySelectorAll(".gallery-wrapper").forEach((wrapper) => {
-  const gallery = wrapper.querySelector(
-    ".image-gallery, .coming-movies-gallery, .top10-gallery"
-  );
-  const leftBtn = wrapper.querySelector(".scroll-button.left");
-  const rightBtn = wrapper.querySelector(".scroll-button.right");
-  const fadeLeft = wrapper.querySelector(".fade-left");
-  const fadeRight = wrapper.querySelector(".fade-right");
+document.addEventListener("DOMContentLoaded", () => {
 
-  if (!gallery) return;
+  renderGallery("nye-filmer-galleri", null, true, 10);
+  renderTop10("topp10-filmer-galleri");
+  renderGallery("barn-galleri", (key) => {
+    const film = filmer[key];
+    return film.metadata.some(
+      (meta) => meta.toLowerCase().includes("barn") || meta.toLowerCase().includes("familie")
+    );
+  });
+  renderUpcoming("kommer-snart-galleri");
+  renderSeries("serier-galleri");
+  oppdaterBanner();
+  renderHalloweenBanner();
+  renderContinueWatching();
 
-  function updateScrollState() {
-    const maxScroll = gallery.scrollWidth - gallery.clientWidth;
-    const scrollLeft = gallery.scrollLeft;
+  document.querySelectorAll(".gallery-wrapper").forEach((wrapper) => {
+    const gallery = wrapper.querySelector(".image-gallery, .coming-movies-gallery, .top10-gallery");
+    const leftBtn = wrapper.querySelector(".scroll-button.left");
+    const rightBtn = wrapper.querySelector(".scroll-button.right");
+    const fadeLeft = wrapper.querySelector(".fade-left");
+    const fadeRight = wrapper.querySelector(".fade-right");
 
-    // 🔒 Hvis galleriet ikke er bredt nok → skjul ALT
-    if (maxScroll <= 5) {
-      leftBtn?.classList.add("hidden");
-      rightBtn?.classList.add("hidden");
-      fadeLeft?.classList.add("fade-hidden");
-      fadeRight?.classList.add("fade-hidden");
-      return;
+    function updateScrollState() {
+      if (!gallery) return;
+      const scrollLeft = gallery.scrollLeft;
+      const maxScroll = gallery.scrollWidth - gallery.clientWidth;
+      if (leftBtn) leftBtn.classList.toggle("hidden", scrollLeft <= 0);
+      if (rightBtn) rightBtn.classList.toggle("hidden", scrollLeft >= maxScroll);
+      if (fadeLeft) fadeLeft.classList.toggle("fade-hidden", scrollLeft <= 0);
+      if (fadeRight) fadeRight.classList.toggle("fade-hidden", scrollLeft >= maxScroll);
     }
 
-    // ⬅️ Venstre side
-    leftBtn?.classList.toggle("hidden", scrollLeft <= 5);
-    fadeLeft?.classList.toggle("fade-hidden", scrollLeft <= 5);
+    if (leftBtn) leftBtn.addEventListener("click", () => gallery.scrollBy({ left: -300, behavior: "smooth" }));
+    if (rightBtn) rightBtn.addEventListener("click", () => gallery.scrollBy({ left: 300, behavior: "smooth" }));
+    if (gallery) gallery.addEventListener("scroll", updateScrollState);
+    updateScrollState();
+  });
 
-    // ➡️ Høyre side
-    rightBtn?.classList.toggle("hidden", scrollLeft >= maxScroll - 5);
-    fadeRight?.classList.toggle("fade-hidden", scrollLeft >= maxScroll - 5);
-  }
-
-  // Oppdater når man scroller
-  gallery.addEventListener("scroll", updateScrollState);
-
-  // Oppdater når vinduet endrer størrelse
-  window.addEventListener("resize", updateScrollState);
-
-  // Første sjekk
-  updateScrollState();
+  document.querySelectorAll(".progress-bar").forEach((bar) => {
+    const progress = bar.getAttribute("data-progress");
+    if (progress) bar.style.setProperty("--progress", progress + "%");
+  });
 });
-
-
- document.querySelectorAll(".progress-bar").forEach((bar) => {
-  const progress = bar.getAttribute("data-progress");
-  if (progress) bar.style.setProperty("--progress", progress + "%");
-});
-
 
 // === Endre menybakgrunn ved scroll ===
 window.addEventListener("scroll", () => {
@@ -1922,6 +1919,17 @@ window.addEventListener("scroll", () => {
   }
 });
 
+  // Hent dagens dato
+const now = new Date();
+
+// Filtrer bort utgåtte filmer
+const activeFilms = films.filter(film => {
+    const expire = new Date(film.expireDate);
+    return expire > now; // bare filmer som IKKE har gått ut
+});
+
+// Finn galleriet på siden
+const gallery = document.getElementById("gallery");
 
 // Lag film-elementer fra activeFilms
 activeFilms.forEach(film => {
@@ -1936,39 +1944,9 @@ activeFilms.forEach(film => {
     gallery.appendChild(item);
 });
 
-  // ==================== START GALLERIER ==================== //
-renderGallery("nye-filmer-galleri");
-renderGallery("barn-galleri", key => filmer[key].kategori === "barn");
-renderSeries("serier-galleri");
-renderTop10("topp10-filmer-galleri");
-renderUpcoming("kommer-snart-galleri");
-renderContinueWatching();
-
-// Tving oppdatering av piler etter at innhold er lastet
-setTimeout(() => {
-  document.querySelectorAll(".gallery-wrapper").forEach(wrapper => {
-    const gallery = wrapper.querySelector(
-      ".image-gallery, .coming-movies-gallery, .top10-gallery"
-    );
-    if (gallery) {
-      gallery.dispatchEvent(new Event("scroll"));
-    }
-  });
-}, 50);
-
 
   
 </script>
-
-
-
-
-
-
-
-
-
-
 
 
 
