@@ -1141,8 +1141,9 @@ if (type === "serie" && data.sesonger) {
         </div>
       `;
 
-      epCard.addEventListener("click", () => {
- window.location.href = `film.mal.html?navn=${n}`;
+ epCard.addEventListener("click", () => {
+  window.location.href =
+    `film-mal.html?navn=${encodeURIComponent(navn)}&sesong=${sesongNr}&episode=${epNr}`;
 });
 
       episodeGallery.appendChild(epCard);
@@ -1304,6 +1305,7 @@ if (data.logo && data.logo.trim() !== "") {
 </html>
 
  
+
 
 
 
