@@ -1887,15 +1887,30 @@ document.addEventListener("DOMContentLoaded", () => {
     const fadeLeft = wrapper.querySelector(".fade-left");
     const fadeRight = wrapper.querySelector(".fade-right");
 
-    function updateScrollState() {
-      if (!gallery) return;
-      const scrollLeft = gallery.scrollLeft;
-      const maxScroll = gallery.scrollWidth - gallery.clientWidth;
-      if (leftBtn) leftBtn.classList.toggle("hidden", scrollLeft <= 0);
-      if (rightBtn) rightBtn.classList.toggle("hidden", scrollLeft >= maxScroll);
-      if (fadeLeft) fadeLeft.classList.toggle("fade-hidden", scrollLeft <= 0);
-      if (fadeRight) fadeRight.classList.toggle("fade-hidden", scrollLeft >= maxScroll);
-    }
+  function updateScrollState() {
+  if (!gallery) return;
+
+  const scrollLeft = gallery.scrollLeft;
+  const maxScroll = gallery.scrollWidth - gallery.clientWidth;
+
+  // 🚫 Hvis galleriet ikke kan scrolle i det hele tatt
+  if (gallery.scrollWidth <= gallery.clientWidth + 1) {
+    leftBtn?.classList.add("hidden");
+    rightBtn?.classList.add("hidden");
+    fadeLeft?.classList.add("fade-hidden");
+    fadeRight?.classList.add("fade-hidden");
+    return;
+  }
+
+  // ⬅️ Start
+  leftBtn?.classList.toggle("hidden", scrollLeft <= 0);
+  fadeLeft?.classList.toggle("fade-hidden", scrollLeft <= 0);
+
+  // ➡️ Slutt
+  rightBtn?.classList.toggle("hidden", scrollLeft >= maxScroll - 1);
+  fadeRight?.classList.toggle("fade-hidden", scrollLeft >= maxScroll - 1);
+}
+
 
     if (leftBtn) leftBtn.addEventListener("click", () => gallery.scrollBy({ left: -300, behavior: "smooth" }));
     if (rightBtn) rightBtn.addEventListener("click", () => gallery.scrollBy({ left: 300, behavior: "smooth" }));
@@ -1947,6 +1962,7 @@ activeFilms.forEach(film => {
 
   
 </script>
+
 
 
 
