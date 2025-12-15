@@ -828,21 +828,60 @@ video::cue {
     </div>
   </div>
 
-  <!-- FILMDATA -->
-  <script src="Filmdata.js"></script>
+<!-- FILM- OG SERIEDATA -->
+<script src="Filmdata.js"></script>
+<script src="Seriedata.js"></script>
+
 
   <!-- PLAY SCRIPT -->
   <script>
   // ===================== FILMDATA =====================
   const urlParams = new URLSearchParams(window.location.search);
-  const filmId = urlParams.get('id')?.toLowerCase().replace(/\s+/g, '-');
+const urlParams = new URLSearchParams(window.location.search);
 
-  if (!filmId || !filmer[filmId]) {
-    alert("Denne filmen finnes ikke.");
-    window.location.href = "filmer.html";
+let type = "film";
+let film; // brukes videre av HELE playeren (samme variabel)
+
+/* ===== FILM ===== */
+if (urlParams.get("id")) {
+  const filmId = urlParams.get("id").toLowerCase();
+  film = filmer[filmId];
+  type = "film";
+}
+
+/* ===== SERIE ===== */
+else if (urlParams.get("serie")) {
+  const serieId = urlParams.get("serie").toLowerCase();
+  const sesongNr = urlParams.get("sesong");
+  const episodeNr = urlParams.get("episode");
+
+  if (
+    !serier[serieId] ||
+    !serier[serieId].sesonger[sesongNr] ||
+    !serier[serieId].sesonger[sesongNr].episoder[episodeNr]
+  ) {
+    alert("Denne episoden finnes ikke.");
+    window.location.href = "serier.html";
   }
 
-  const film = filmer[filmId];
+  const serie = serier[serieId];
+  const episode = serie.sesonger[sesongNr].episoder[episodeNr];
+
+  film = {
+    ...episode,
+    tittel: `${serie.tittel} – S${sesongNr}E${episodeNr}`,
+    tilbakeUrl: `serie.html?navn=${serieId}&sesong=${sesongNr}`
+  };
+
+  type = "serie";
+}
+
+/* ===== FEIL ===== */
+else {
+  alert("Ugyldig innhold.");
+  window.location.href = "index.html";
+}
+
   document.title = film.tittel;
 
 // DOM-elementer
@@ -1201,6 +1240,7 @@ document.addEventListener("contextmenu", (e) => {
 });
 
 </script>
+
 
 
 
