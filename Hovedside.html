@@ -1308,6 +1308,13 @@ background: linear-gradient(
     margin-top: 0 !important;
     padding-top: 0 !important;
   }
+/* ===== ENDGYLDIG FIX FOR SCROLL-PILER ===== */
+
+.scroll-button.hidden {
+  display: none !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
 
 .gallery-wrapper:hover .scroll-button {
   opacity: 1;
@@ -1318,6 +1325,7 @@ background: linear-gradient(
   opacity: 0;
   pointer-events: none;
 }
+
 
 
 
@@ -1972,6 +1980,7 @@ activeFilms.forEach(film => {
 
   
 </script>
+
 
 
 
