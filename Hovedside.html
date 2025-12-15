@@ -1862,42 +1862,49 @@ function renderContinueWatching() {
 
 
 // ==================== INIT ==================== //
-document.addEventListener("DOMContentLoaded", () => {
+document.querySelectorAll(".gallery-wrapper").forEach((wrapper) => {
+  const gallery = wrapper.querySelector(
+    ".image-gallery, .coming-movies-gallery, .top10-gallery"
+  );
+  const leftBtn = wrapper.querySelector(".scroll-button.left");
+  const rightBtn = wrapper.querySelector(".scroll-button.right");
+  const fadeLeft = wrapper.querySelector(".fade-left");
+  const fadeRight = wrapper.querySelector(".fade-right");
 
-  renderGallery("nye-filmer-galleri", null, true, 10);
-  renderTop10("topp10-filmer-galleri");
-  renderGallery("barn-galleri", (key) => {
-    const film = filmer[key];
-    return film.metadata.some(
-      (meta) => meta.toLowerCase().includes("barn") || meta.toLowerCase().includes("familie")
-    );
-  });
-  renderUpcoming("kommer-snart-galleri");
-  renderSeries("serier-galleri");
-  oppdaterBanner();
-  renderHalloweenBanner();
-  renderContinueWatching();
+  if (!gallery) return;
 
-  document.querySelectorAll(".gallery-wrapper").forEach((wrapper) => {
-    const gallery = wrapper.querySelector(".image-gallery, .coming-movies-gallery, .top10-gallery");
-    const leftBtn = wrapper.querySelector(".scroll-button.left");
-    const rightBtn = wrapper.querySelector(".scroll-button.right");
-    const fadeLeft = wrapper.querySelector(".fade-left");
-    const fadeRight = wrapper.querySelector(".fade-right");
+  function updateScrollState() {
+    const maxScroll = gallery.scrollWidth - gallery.clientWidth;
+    const scrollLeft = gallery.scrollLeft;
 
-    function updateScrollState() {
-      if (!gallery) return;
-      const scrollLeft = gallery.scrollLeft;
-      const maxScroll = gallery.scrollWidth - gallery.clientWidth;
-      if (leftBtn) leftBtn.classList.toggle("hidden", scrollLeft <= 0);
-      if (rightBtn) rightBtn.classList.toggle("hidden", scrollLeft >= maxScroll);
-      if (fadeLeft) fadeLeft.classList.toggle("fade-hidden", scrollLeft <= 0);
-      if (fadeRight) fadeRight.classList.toggle("fade-hidden", scrollLeft >= maxScroll);
+    // 🔒 Hvis galleriet ikke er bredt nok → skjul ALT
+    if (maxScroll <= 5) {
+      leftBtn?.classList.add("hidden");
+      rightBtn?.classList.add("hidden");
+      fadeLeft?.classList.add("fade-hidden");
+      fadeRight?.classList.add("fade-hidden");
+      return;
     }
 
-    if (gallery) gallery.addEventListener("scroll", updateScrollState);
-    updateScrollState();
-  });
+    // ⬅️ Venstre side
+    leftBtn?.classList.toggle("hidden", scrollLeft <= 5);
+    fadeLeft?.classList.toggle("fade-hidden", scrollLeft <= 5);
+
+    // ➡️ Høyre side
+    rightBtn?.classList.toggle("hidden", scrollLeft >= maxScroll - 5);
+    fadeRight?.classList.toggle("fade-hidden", scrollLeft >= maxScroll - 5);
+  }
+
+  // Oppdater når man scroller
+  gallery.addEventListener("scroll", updateScrollState);
+
+  // Oppdater når vinduet endrer størrelse
+  window.addEventListener("resize", updateScrollState);
+
+  // Første sjekk
+  updateScrollState();
+});
+
 
   document.querySelectorAll(".progress-bar").forEach((bar) => {
     const progress = bar.getAttribute("data-progress");
@@ -1943,6 +1950,7 @@ activeFilms.forEach(film => {
 
   
 </script>
+
 
 
 
