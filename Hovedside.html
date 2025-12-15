@@ -1922,24 +1922,6 @@ window.addEventListener("scroll", () => {
   }
 });
 
-// Hent dagens dato
-const now = new Date();
-
-const activeFilms = films.filter(film => {
-    const expire = new Date(film.expireDate);
-    return expire > now;
-});
-
-const gallery = document.getElementById("gallery");
-
-activeFilms.forEach(film => {
-    const item = document.createElement("a");
-    item.href = film.link;
-    item.className = "film-item";
-    item.innerHTML = `<img src="${film.image}" alt="${film.title}">`;
-    gallery.appendChild(item);
-});
-
 
 // Lag film-elementer fra activeFilms
 activeFilms.forEach(film => {
@@ -1977,6 +1959,7 @@ setTimeout(() => {
 
   
 </script>
+
 
 
 
