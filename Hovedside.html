@@ -357,7 +357,9 @@ background: linear-gradient(
 }
 
 .scroll-button.hidden {
-  display: none;
+  display: none !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
 }
 
 .scroll-button:hover {
@@ -1962,6 +1964,7 @@ activeFilms.forEach(film => {
 
   
 </script>
+
 
 
 
