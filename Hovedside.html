@@ -1906,11 +1906,11 @@ document.querySelectorAll(".gallery-wrapper").forEach((wrapper) => {
 });
 
 
-  document.querySelectorAll(".progress-bar").forEach((bar) => {
-    const progress = bar.getAttribute("data-progress");
-    if (progress) bar.style.setProperty("--progress", progress + "%");
-  });
+ document.querySelectorAll(".progress-bar").forEach((bar) => {
+  const progress = bar.getAttribute("data-progress");
+  if (progress) bar.style.setProperty("--progress", progress + "%");
 });
+
 
 // === Endre menybakgrunn ved scroll ===
 window.addEventListener("scroll", () => {
@@ -1950,6 +1950,7 @@ activeFilms.forEach(film => {
 
   
 </script>
+
 
 
 
