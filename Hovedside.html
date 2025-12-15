@@ -1598,14 +1598,12 @@ function scrollGallery(button, direction) {
   const wrapper = button.closest(".gallery-wrapper");
   if (!wrapper) return;
 
-  const gallery =
-    wrapper.querySelector(".image-gallery") ||
-    wrapper.querySelector(".coming-movies-gallery") ||
-    wrapper.querySelector(".top10-gallery");
-
+  const gallery = wrapper.querySelector(
+    ".image-gallery, .coming-movies-gallery, .top10-gallery"
+  );
   if (!gallery) return;
 
-  const scrollAmount = gallery.clientWidth * 0.8;
+  const scrollAmount = gallery.clientWidth * 0.9;
 
   gallery.scrollBy({
     left: direction * scrollAmount,
@@ -1947,6 +1945,7 @@ activeFilms.forEach(film => {
 
   
 </script>
+
 
 
 
