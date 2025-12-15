@@ -9,7 +9,6 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
 
 <style>
-/* ===================== RESET & BASE ===================== */
 * {
   box-sizing: border-box;
   margin: 0;
@@ -68,17 +67,11 @@ html, body {
 
 /* ===================== MAIN ===================== */
 main {
-  margin: 0 80px 0 80px;
+  margin: 0 80px;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
   max-width: 1400px;
-}
-
-.content-wrapper {
-  width: 85%;
-  margin: 0 auto;
-  padding: 0 20px;
 }
 
 /* ===================== TOP NAV ===================== */
@@ -126,7 +119,6 @@ main {
   height: 120vh;
   margin-bottom: -40vh;
   overflow: hidden;
-  z-index: 0;
 }
 
 .hero-banner::after {
@@ -152,8 +144,8 @@ main {
   position: absolute;
   top: 25%;
   left: 80px;
-  z-index: 2;
   max-width: 600px;
+  z-index: 2;
 }
 
 .film-logo {
@@ -176,7 +168,7 @@ main {
   font-weight: bold;
   border-radius: 6px;
   cursor: pointer;
-  transition: .3s;
+  transition: 0.3s;
 }
 
 .watch-button {
@@ -211,15 +203,28 @@ main {
 .fade-left,
 .fade-right {
   position: absolute;
-  inset: 0 auto 0 auto;
+  top: 0;
+  bottom: 0;
   width: 70px;
   opacity: 0;
   pointer-events: none;
-  transition: opacity .3s;
+  transition: opacity 0.3s;
 }
 
-.fade-left { left: 0; background: linear-gradient(to right,#091B1E,transparent); }
-.fade-right { right: 0; background: linear-gradient(to left,#091B1E,transparent); }
+.fade-left {
+  left: 0;
+  background: linear-gradient(to right, #091B1E, transparent);
+}
+
+.fade-right {
+  right: 0;
+  background: linear-gradient(to left, #091B1E, transparent);
+}
+
+.fade-hidden {
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
 
 /* Scroll buttons */
 .scroll-button {
@@ -233,7 +238,7 @@ main {
   cursor: pointer;
   opacity: 0;
   pointer-events: none;
-  z-index: 2;
+  z-index: 3;
 }
 
 .scroll-button.left { left: 0; }
@@ -261,13 +266,15 @@ main {
   scroll-behavior: smooth;
 }
 
-.image-gallery::-webkit-scrollbar { display: none; }
+.image-gallery::-webkit-scrollbar {
+  display: none;
+}
 
 .image-gallery img {
   width: 220px;
   height: 124px;
   border-radius: 5px;
-  transition: transform .3s;
+  transition: transform 0.3s;
 }
 
 .image-gallery img:hover {
@@ -288,7 +295,7 @@ main {
   position: relative;
   border-radius: 8px;
   overflow: hidden;
-  transition: .6s;
+  transition: 0.6s;
 }
 
 .coming-movie-item:hover {
@@ -313,6 +320,10 @@ main {
   overflow-x: auto;
 }
 
+.top10-item {
+  position: relative;
+}
+
 .top10-item img {
   width: 150px;
   height: 225px;
@@ -331,21 +342,13 @@ main {
 /* ===================== MOBILE ===================== */
 @media (max-width: 768px) {
 
-  .vertical-nav {
-    width: 100%;
-    height: 60px;
-    bottom: 0;
-    top: auto;
-    flex-direction: row;
-  }
-
   main {
     margin: 0;
     margin-bottom: 70px;
   }
 
   .hero-banner {
-    height: 35vh !important;
+    height: 35vh;
     margin-bottom: 20px;
   }
 
@@ -359,7 +362,6 @@ main {
     display: none;
   }
 }
-
 
 
 </style> 
@@ -1012,6 +1014,7 @@ activeFilms.forEach(film => {
 
   
 </script>
+
 
 
 
