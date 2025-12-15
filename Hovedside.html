@@ -21,17 +21,31 @@ html, body {
   overflow-x: hidden;
 }
 
-/* Navigasjon til venstre */
+/* ================= LAYOUT ================= */
+main {
+  margin-left: 80px;
+  margin-right: 80px;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  max-width: 1400px;
+}
+
+.content-wrapper {
+  width: 85%;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+/* ================= NAV ================= */
 .vertical-nav {
   width: 70px;
   height: 100vh;
-  background-color: transparent;
   position: fixed;
-  top: 0;
   left: 0;
+  top: 0;
   display: flex;
-  flex-direction: column;
-  align-items: center;
   justify-content: center;
   z-index: 100;
 }
@@ -39,35 +53,17 @@ html, body {
 .nav-icons-wrapper {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
   gap: 10px;
-}
-
-.profilmeny {
-  cursor: pointer;
-  margin-bottom: 10px;
-}
-
-.profilmeny img {
-  width: 48px;
-  height: 48px;
-  border-radius: 50%;
-  object-fit: cover;
-  border: 2px solid #fff;
 }
 
 .nav-icon {
   color: white;
   font-size: 22px;
   padding: 16px 0;
-  text-decoration: none;
-  text-align: center;
-  width: 100%;
-  transition: color 0.3s ease;
-  cursor: pointer;
   background: none;
   border: none;
+  cursor: pointer;
+  transition: color 0.3s;
 }
 
 .nav-icon:hover,
@@ -75,941 +71,30 @@ html, body {
   color: #00FFCC;
 }
 
-/* Hovedinnhold */
-main {
-  margin-left: 80px;       /* beholder plass for menyen */
-  margin-right: 80px;      /* legger til luft på høyre side */
-  padding-top: 0; /* ikke legg til ekstra plass nå */
-  max-width: 1400px;
-}
-
-
-
-.content-wrapper {
-  width: 85%;              /* mindre bredde = mer luft på sidene */
-  max-width: 1400px;       /* begrenser bredden på store skjermer */
-  margin: 0 auto;          /* sentrerer innholdet */
-  padding: 0 20px;         /* litt ekstra luft inni */
-}
-
-
-
-  main {
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-}
-
-
-/* === Header PC === */
-.top-header {
-  display: flex;
-  align-items: center;
-  width: 100%;
-  margin-bottom: 20px;
-}
-
-.top-header .watch-logo {
-  margin-left: auto;
-  width: 200px;
-}
-
-.top-header .header-profil {
-  display: none;
-}
-
-.top-header img.watch-logo {
-  width: 200px;
-}
-
-/* Hero-banner */
-.hero-banner {
-  position: relative;
-  height: 75vh;
-  min-height: 500px;
-  width: 100%;
-  overflow: hidden;
-  margin-bottom: 50px;
-  background-color: black;
-}
-
-.hero-banner::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-background: linear-gradient(
-  to top,
-  rgba(9, 27, 30, 1) 10%,
-  rgba(9, 27, 30, 0.6) 50%,
-  rgba(9, 27, 30, 0) 90%
-);
-
-  z-index: 1;
-}
-
-.banner-image {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-}
-
-.banner-content {
-  position: absolute;
-  top: 25%;
-  left: 80px;
-  transform: translateY(-15%);
-  z-index: 2;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 16px;
-  max-width: 600px;
-  color: white;
-}
-
-  .banner-video {
-  width: 100%;
-  height: 100%;
-  object-fit: fill; /* Tvinger full strekking, vil forvrenge videoen */
-}
-
-
-
-.film-logo {
-  width: 400px;        /* større standardbredde */
-  max-width: 80%;      /* tillater mer plass */
-  max-height: 250px;   /* høyere vertikal begrensning */
-  object-fit: contain;
-  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.8));
-}
-
-.banner-meta {
-  font-size: 16px;
-  color: White;
-}
-
-.banner-content p {
-  font-size: 18px;
-  line-height: 1.4;
-  color: #ddd;
-  max-width: 500px;
-  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.8);
-
-  /* NYTT – begrens tekst */
-  display: -webkit-box;
-  -webkit-line-clamp: 3; /* maks 3 linjer – juster tallet */
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-}
-
-
-.banner-buttons {
-  display: flex;
-  gap: 16px;
-}
-
-.watch-button,
-.details-button {
-  font-size: 18px;
-  font-weight: bold;
-  padding: 12px 40px;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.watch-button {
-  background-color: #00FFCC;
-  color: black;
-  border: none;
-}
-
-.watch-button:hover {
-  background-color: #00e6b8;
-  transform: scale(1.05);
-}
-
-.details-button {
-  background: rgba(255, 255, 255, 0.15);
-  color: white;
-  border: 1px solid rgba(255, 255, 255, 0.4);
-  backdrop-filter: blur(4px);
-}
-
-.details-button:hover {
-  background: rgba(255, 255, 255, 0.3);
-  transform: scale(1.05);
-}
-
-  .banner-content p {
-  display: none !important;
-}
-
-
-/* Mobilversjon */
-@media (max-width: 768px) {
-  .hero-banner {
-    height: 60vh;
-    min-height: 300px;
-  }
-
-  .banner-content {
-    bottom: 50px;
-    left: 20px;
-    max-width: 90%;
-  }
-
-  .film-logo {
-    width: 250px;
-  }
-
-  .banner-content p {
-    font-size: 14px;
-  }
-
-  .banner-meta {
-    font-size: 13px;
-  }
-
-  .watch-button,
-  .details-button {
-    font-size: 14px;
-    padding: 8px 20px;
-  }
-}
-
-/* Gallerier */
-.gallery-section {
-  margin-bottom: 20px;
-}
-
-.gallery-section h2 {
-  font-size: 18px;
-  margin-bottom: 12px;
-  color: #00FFCC;
-  padding-left: 16px;
-}
-
-.gallery-wrapper {
-  position: relative;
-  display: flex;
-  align-items: center;
-}
-
-.fade-left,
-.fade-right {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  width: 70px;
-  z-index: 1;
-  pointer-events: none;
-  opacity: 0;
-  transition: opacity 0.3s ease;
-}
-
-.fade-left {
-  left: 0;
-  background: linear-gradient(to right, #091B1E, rgba(9, 27, 30, 0));
-}
-
-.fade-right {
-  right: 0;
-  background: linear-gradient(to left, #091B1E, rgba(9, 27, 30, 0));
-}
-
-.gallery-wrapper:hover .scroll-button:not(.hidden),
-.gallery-wrapper:hover .fade-left:not(.fade-hidden),
-.gallery-wrapper:hover .fade-right:not(.fade-hidden) {
-  opacity: 1;
-  pointer-events: auto;
-}
-
-.fade-hidden {
-  display: none;
-}
-
-.scroll-button {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  background: none;
-  border: none;
-  color: white;
-  font-size: 28px;
-  cursor: pointer;
-  z-index: 2;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.3s ease;
-  user-select: none;
-}
-
-.scroll-button.left {
-  left: 0;
-}
-
-.scroll-button.right {
-  right: 0;
-}
-
-.scroll-button.hidden {
-  display: none !important;
-  opacity: 0 !important;
-  pointer-events: none !important;
-}
-
-.scroll-button:hover {
-  color: #00FFCC;
-}
-
-/* Selve bilde-galleriet */
-.image-gallery {
-  flex: 1;
-  display: flex;
-  overflow-x: auto;
-  gap: 16px;
-  padding: 10px 16px;
-  scroll-behavior: smooth;
-  -ms-overflow-style: none;
-}
-
-.image-gallery::-webkit-scrollbar {
-  display: none;
-}
-
-.image-gallery a {
-  display: inline-block;
-  position: relative;
-  border-radius: 5px;
-  background: transparent;
-  overflow: visible;
-  border: 2px solid transparent;
-  transition: border 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
-}
-
-.image-gallery a img {
-  width: 220px;
-  height: 124px;
-  object-fit: cover;
-  border-radius: 5px;
-  display: block;
-  transition: transform 0.3s ease;
-}
-
-.image-gallery a:hover img {
-  transform: scale(1.05);
-}
-
-/* Fremdriftslinje på filmer */
-.image-with-progress {
-  position: relative;
-  width: 220px;
-  height: 124px;
-  border-radius: 8px;
-  overflow: hidden;
-}
-
-.image-with-progress img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.progress-bar {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  height: 4px;
-  width: 100%;
-  background-color: rgba(255, 255, 255, 0.2);
-}
-
-.progress-bar::after {
-  content: '';
-  position: absolute;
-  height: 100%;
-  left: 0;
-  top: 0;
-  background-color: #00FFCC;
-  width: var(--progress, 0%);
-  transition: width 0.3s ease;
-}
-
-/* Footer */
-.footer {
-  margin-top: 40px;
-  padding: 20px 10px;
-  text-align: center;
-  color: #515151;
-  font-size: 14px;
-}
-
-.footer-links {
-  margin-bottom: 10px;
-}
-
-.footer-links a {
-  color: #b1b1b1;
-  margin: 0 10px;
-  text-decoration: none;
-  transition: color 0.2s ease;
-}
-
-.footer-links a:hover {
-  color: #00FFCC;
-}
-
-.footer-copy {
-  font-size: 13px;
-  color: #00FFCC;
-}
-
-/* Sjanger-galleri */
-.genre-gallery a {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  min-width: 160px;
-  height: 60px;
-  border-radius: 30px;
-  background: #0d2c30;
-  color: white;
-  font-size: 16px;
-  font-weight: bold;
-  text-decoration: none;
-  border: 2px solid transparent;
-  transition: all 0.3s ease;
-  padding: 0 18px;
-}
-
-.genre-gallery a i {
-  margin-left: 8px;
-  font-size: 18px;
-}
-
-.genre-gallery a:hover {
-  border: 2px solid #00FFCC;
-  box-shadow: 0 0 10px rgba(0, 255, 204, 0.6);
-  transform: scale(1.05);
-  color: #00FFCC;
-}
-
-/* === Kommende filmer – forbedret utseende === */
-.coming-movies-gallery {
-  display: flex;
-  flex-direction: row;
-  gap: 22px;
-  padding: 20px 16px;
-  overflow-x: auto;
-  scroll-behavior: smooth;
-  -ms-overflow-style: none;
-}
-.coming-movies-gallery::-webkit-scrollbar {
-  display: none;
-}
-
-.coming-movie-item {
-  position: relative;
-  flex: 0 0 180px;
-  height: 300px;
-  border-radius: 8px;
-  overflow: hidden;
-  cursor: pointer;
-  transition: all 0.6s ease;
-  background-color: #000;
-  box-shadow: 0 0 20px rgba(0,0,0,0.4);
-  transform-origin: center;
-}
-
-.coming-movie-item:hover {
-  flex: 0 0 440px;
-  transform: scale(1.03);
-}
-
-/* Bakgrunnsbilde */
-.coming-movie-item img.banner {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transition: opacity 0.6s ease;
-}
-
-/* Video */
-.coming-movie-item video {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  opacity: 0;
-  transition: opacity 0.8s ease;
-  z-index: 1;
-}
-
-.coming-movie-item.show-video video {
-  opacity: 1;
-}
-.coming-movie-item.show-video img.banner {
-  opacity: 0;
-}
-
-/* === Kommende filmer logo – automatisk responsiv === */
-.coming-movie-item .logo {
-  position: absolute;
-  bottom: 20px;
-  left: 50%;
-  transform: translateX(-50%);
-  max-height: 50px;      /* maks høyde i lite format */
-  max-width: 90%;        /* aldri bredere enn elementet */
-  z-index: 3;
-  transition: all 0.4s ease;
-  background: none !important;
-  backdrop-filter: none !important;
-  padding: 0;
-  border: none;
-  object-fit: contain;    /* beholder proporsjoner */
-  filter: drop-shadow(0 0 4px rgba(0,0,0,0.6)); /* lett kontrast mot bakgrunn */
-}
-
-/* Når filmen utvides (stort bilde) */
-.coming-movie-item.expanded .logo {
-  left: 25px;
-  transform: none;
-  max-height: 70px;
-  max-width: 100%;
-  filter: drop-shadow(0 0 6px rgba(0,0,0,0.7));
-  transition: all 0.4s ease;
-}
-
-/* Automatisk mindre for ekstremt brede logoer */
-.coming-movie-item.expanded .logo.wide {
-  max-width: 60%;
-  max-height: 55px;
-}
-
-/* Sørg for at dato alltid ligger nederst og tydelig */
-.coming-movie-item .coming-movie-info {
-  position: absolute;
-  bottom: 15px;
-  right: 15px;
-  font-size: 14px;
-  color: #fff;
-  z-index: 4;
-  opacity: 0;
-  transition: opacity 0.4s ease;
-  background: rgba(0,0,0,0.4);
-  padding: 6px 10px;
-  border-radius: 8px;
-  backdrop-filter: blur(6px);
-}
-
-.coming-movie-item.expanded .coming-movie-info {
-  opacity: 1;
-}
-
-.coming-movie-item .coming-movie-info i {
-  color: #00FFCC;
-  margin-right: 6px;
-}
-
-/* Litt dybde og hover-effekt */
-.coming-movie-item:hover .coming-movie-info,
-.coming-movie-item:hover .logo {
-  filter: drop-shadow(0 0 6px rgba(0,255,204,0.7));
-}
-
-/* Responsivt justert for små skjermer */
-@media (max-width: 768px) {
-  .coming-movie-item {
-    flex: 0 0 200px;
-    height: 260px;
-  }
-  .coming-movie-item:hover {
-    flex: 0 0 280px;
-  }
-  .coming-movie-item .logo {
-    height: 50px;
-  }
-}
-
-
-/* === Kommende filmer logo – automatisk responsiv === */
-.coming-movie-item .logo {
-  position: absolute;
-  bottom: 20px;
-  left: 50%;
-  transform: translateX(-50%);
-  max-height: 50px;      /* maks høyde i lite format */
-  max-width: 90%;        /* aldri bredere enn elementet */
-  z-index: 3;
-  transition: all 0.4s ease;
-  background: none !important;
-  backdrop-filter: none !important;
-  padding: 0;
-  border: none;
-  object-fit: contain;    /* beholder proporsjoner */
-  filter: drop-shadow(0 0 4px rgba(0,0,0,0.6));
-}
-
-/* Når filmen utvides (stort bilde) */
-.coming-movie-item.expanded .logo {
-  left: 25px;
-  transform: none;
-  max-height: 70px;
-  max-width: 100%;
-  filter: drop-shadow(0 0 6px rgba(0,0,0,0.7));
-  transition: all 0.4s ease;
-}
-
-/* Automatisk mindre hvis logoen er veldig bred (for å unngå overlapp) */
-.coming-movie-item.expanded .logo[width][height] {
-  aspect-ratio: attr(width) / attr(height);
-}
-
-.coming-movie-item.expanded .logo {
-  max-width: clamp(40%, 80vw, 90%); /* dynamisk begrensning */
-}
-
-@media (min-aspect-ratio: 3/1) {
-  .coming-movie-item.expanded .logo {
-    max-width: 60%;
-    max-height: 60px;
-  }
-}
-
-/* Sørg for at dato alltid ligger nederst og tydelig */
-.coming-movie-item .coming-movie-info {
-  position: absolute;
-  bottom: 15px;
-  right: 15px;
-  font-size: 14px;
-  color: #fff;
-  z-index: 4;
-  opacity: 0;
-  transition: opacity 0.4s ease;
-  background: rgba(0,0,0,0.4);
-  padding: 6px 10px;
-  border-radius: 8px;
-  backdrop-filter: blur(6px);
-}
-
-.coming-movie-item.expanded .coming-movie-info {
-  opacity: 1;
-}
-
-.coming-movie-item .coming-movie-info i {
-  color: #00FFCC;
-  margin-right: 6px;
-}
-
-/* Litt dybde og hover-effekt */
-.coming-movie-item:hover .coming-movie-info,
-.coming-movie-item:hover .logo {
-  filter: drop-shadow(0 0 6px rgba(0,255,204,0.7));
-}
-
-/* Responsivt justert for små skjermer */
-@media (max-width: 768px) {
-  .coming-movie-item {
-    flex: 0 0 200px;
-    height: 260px;
-  }
-  .coming-movie-item:hover {
-    flex: 0 0 280px;
-  }
-  .coming-movie-item .logo {
-    height: 50px;
-  }
-}
-
-/* === Topp 10 filmer === */
-.top10-gallery {
-  display: flex;
-  flex-direction: row;
-  gap: 30px;
-  padding: 10px 16px;
-  overflow-x: auto;
-  overflow-y: hidden;
-  -webkit-overflow-scrolling: touch;
-}
-
-.top10-gallery::-webkit-scrollbar {
-  display: none;
-}
-
-.top10-item {
-  position: relative;
-  display: inline-block;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: transform 0.3s ease;
-}
-
-.top10-item img {
-  width: 150px;
-  height: 225px;
-  border-radius: 8px;
-  display: block;
-}
-
-.top10-item:hover {
-  transform: scale(1.05);
-}
-
-.top10-number {
-  position: absolute;
-  bottom: -10px;
-  left: -15px;
-  font-size: 70px;
-  font-weight: 900;
-  line-height: 1;
-  color: transparent;
-  -webkit-text-stroke: 3px #00FFCC;
-  z-index: 2;
-  transition: all 0.3s ease;
-  pointer-events: none;
-}
-
-.top10-item:hover .top10-number {
-  color: #00FFCC;
-  -webkit-text-stroke: 0;
-}
-
-/* ===== Mobilvennlig tilpasning ===== */
-@media (max-width: 768px) {
-  .vertical-nav {
-    width: 100%;
-    height: 60px;
-    flex-direction: row;
-    justify-content: space-around;
-    position: fixed;
-    bottom: 0;
-    top: auto;
-    background: rgba(9, 27, 30, 0.95);
-  }
-
-  .nav-icons-wrapper {
-    flex-direction: row;
-    gap: 20px;
-  }
-
-  .profilmeny {
-    margin-bottom: 0;
-  }
-
-  .nav-icon {
-    font-size: 20px;
-    padding: 8px;
-  }
-
-  main {
-    margin-left: 0;
-    margin-bottom: 70px;
-    padding: 10px;
-  }
-
-  .top-header {
-    justify-content: space-between;
-  }
-
-  .top-header .watch-logo {
-    order: 1;
-    width: 140px;
-  }
-
-  .top-header .header-profil {
-    display: block;
-    order: 2;
-  }
-
-  .hero-banner {
-    height: 200px;
-    margin-left: 0;
-    width: 100%;
-  }
-
-  .film-logo {
-    width: 180px;
-  }
-
-  .watch-button {
-    padding: 8px 30px;
-    font-size: 14px;
-  }
-
-  .image-gallery a img,
-  .image-with-progress {
-    width: 160px;
-    height: 90px;
-  }
-
-  .genre-gallery a {
-    min-width: 120px;
-    height: 50px;
-    font-size: 14px;
-    padding: 0 12px;
-  }
-
-  .top10-item img {
-    width: 140px;
-    height: 210px;
-  }
-
-  .top10-number {
-    font-size: 100px;
-  }
-
-  .special-hero-banner {
-    height: auto;
-  }
-
-  .banner-overlay {
-    flex-direction: column;
-    align-items: center;
-    gap: 20px;
-  }
-
-  .banner-right {
-    max-width: 100%;
-    justify-content: center;
-  }
-
-  .banner-left .film-logo {
-    width: 200px;
-  }
-
-  #halloween-gallery a {
-    width: 100px;
-    height: 150px;
-  }
-}
-
-@media (max-width: 480px) {
-  .film-logo {
-    width: 140px;
-  }
-
-  .watch-button {
-    padding: 6px 20px;
-    font-size: 12px;
-  }
-
-  .image-gallery a img,
-  .image-with-progress {
-    width: 130px;
-    height: 72px;
-  }
-
-  .genre-gallery a {
-    font-size: 12px;
-    min-width: 100px;
-    height: 44px;
-  }
-
-  .footer {
-    font-size: 12px;
-    padding: 15px 5px;
-  }
-
-  .top10-item img {
-    width: 120px;
-    height: 180px;
-  }
-
-  .top10-number {
-    font-size: 80px;
-  }
-
-  .hero-banner {
-  height: 40vh; /* Tar 40% av skjermhøyden */
-  min-height: 300px;
-  max-height: 600px;
-}
-
-}
-
- .banner-buttons {
-  display: flex;
-  gap: 16px;
-  margin-top: 10px;
-}
-
-.details-button {
-  text-decoration: none;
-  background-color: transparent;
-  color: white;
-  border: 2px solid white;
-  padding: 10px 40px;
-  border-radius: 4px;
-  font-weight: bold;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.details-button:hover {
-  background-color: white;
-  color: black;
-}
-
-/* === MENY MED FADE OG SCROLL-BAKGRUNN === */
+/* ================= TOP NAV ================= */
 .top-nav {
   position: fixed;
   top: 0;
-  left: 0;
   width: 100%;
   height: 70px;
   display: flex;
-  align-items: center;
   justify-content: space-between;
   padding: 0 50px;
   z-index: 500;
-  background: transparent;
-  transition: background 0.4s ease, box-shadow 0.4s ease;
 }
 
 .top-nav::before {
   content: "";
   position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(to bottom, rgba(9, 27, 30, 0.9), rgba(9, 27, 30, 0));
+  inset: 0;
+  background: linear-gradient(to bottom, rgba(9,27,30,.9), rgba(9,27,30,0));
   z-index: -1;
-  transition: opacity 0.4s ease, background 0.4s ease;
-  opacity: 1;
 }
 
-/* Når du scroller – solid mørk bakgrunn */
 .top-nav.scrolled::before {
-  background: rgba(9, 27, 30, 0.95);
-  opacity: 1;
+  background: rgba(9,27,30,.95);
 }
 
-/* Liten skygge når du scroller ned for ekstra kontrast */
-.top-nav.scrolled {
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.4);
-}
-
-
-/* Logo og venstreside */
-.nav-left {
-  display: flex;
-  align-items: center;
-  gap: 40px;
-}
-
-.top-nav .watch-logo {
-  width: 130px;
-  height: auto;
-  cursor: pointer;
-}
-
-/* Navigasjonslenker */
 .nav-links {
   display: flex;
   gap: 26px;
@@ -1018,13 +103,7 @@ background: linear-gradient(
 .nav-links a {
   color: #bfbfbf;
   text-decoration: none;
-  font-weight: 500;
-  font-size: 15px;
-  transition: color 0.3s ease;
-}
-
-.nav-links a:hover {
-  color: #fff;
+  transition: color .3s;
 }
 
 .nav-links a.active {
@@ -1032,293 +111,200 @@ background: linear-gradient(
   font-weight: bold;
 }
 
-/* Høyre side: søk + profil */
-.nav-right {
-  display: flex;
-  align-items: center; /* ← sørger for at de står på samme linje */
-  gap: 12px; /* valgfritt: reduserer mellomrommet litt */
+/* ================= HERO ================= */
+.hero-banner {
+  position: relative;
+  height: 120vh;
+  margin-bottom: -40vh;
+  overflow: hidden;
+  z-index: 0;
 }
 
-
-
-.nav-search {
-  color: #bfbfbf;
-  font-size: 18px;
-  transition: color 0.3s ease;
+.hero-banner::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top,
+    rgba(9,27,30,1) 10%,
+    rgba(9,27,30,.6) 50%,
+    rgba(9,27,30,0) 90%);
+  z-index: 1;
 }
 
-.nav-search:hover {
-  color: #00FFCC;
-}
-
-.profilmeny img {
-  width: 42px;
-  height: 42px;
-  border-radius: 50%;
-  border: 2px solid #fff;
+.banner-image,
+.banner-video {
+  width: 100%;
+  height: 100%;
   object-fit: cover;
+}
+
+.banner-video {
+  position: absolute;
+  inset: 0;
+  display: none;
+}
+
+.banner-content {
+  position: absolute;
+  top: 25%;
+  left: 80px;
+  z-index: 2;
+  max-width: 600px;
+}
+
+.film-logo {
+  width: 400px;
+  max-width: 80%;
+  object-fit: contain;
+}
+
+/* ================= BUTTONS ================= */
+.banner-buttons {
+  display: flex;
+  gap: 16px;
+  margin-top: 10px;
+}
+
+.watch-button,
+.details-button {
+  font-size: 18px;
+  padding: 12px 40px;
+  border-radius: 6px;
   cursor: pointer;
-  transition: transform 0.3s ease, border 0.3s ease;
+  transition: .3s;
 }
 
-.profilmeny img {
-  vertical-align: middle;
-  transform: translateY(1px); /* valgfritt – juster opp/ned om nødvendig */
+.watch-button {
+  background: #00FFCC;
+  color: black;
+  border: none;
 }
 
-/* Skygger for å fremheve meny over banner */
-.top-nav.scrolled {
-  background: None;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.6);
+.details-button {
+  background: rgba(255,255,255,.15);
+  color: white;
+  border: 1px solid rgba(255,255,255,.4);
 }
 
-/* Responsiv tilpasning */
-@media (max-width: 768px) {
-  .top-nav {
-    padding: 0 20px;
-    height: 60px;
-  }
-
-  .nav-links {
-    display: none; /* skjul tekstmeny på mobil */
-  }
-
-  .watch-logo {
-    width: 110px;
-  }
-
-  .nav-search {
-    font-size: 20px;
-  }
-
- .profilmeny img {
-  vertical-align: middle;
-  transform: translateY(1px); /* valgfritt – juster opp/ned om nødvendig */
-}
-
-}
-
-  /* Øker avstanden fra kantene for titler og gallerier */
+/* ================= GALLERI ================= */
 .gallery-section {
-  margin-left: 30px;
-  margin-right: 30px;
+  margin: 0 30px 20px;
+  position: relative;
+  z-index: 2;
 }
 
 .gallery-section h2 {
-  padding-left: 10px; /* liten justering innad i seksjonen */
-  margin-bottom: 14px;
+  color: #00FFCC;
+  margin: 0 0 14px 40px;
 }
 
 .gallery-wrapper {
-  padding-left: 10px;
-  padding-right: 10px;
+  position: relative;
 }
 
-  /* Beholder galleriet inntil kanten */
-.gallery-wrapper {
-  padding-left: 0;
-  padding-right: 0;
+.image-gallery,
+.top10-gallery,
+.coming-movies-gallery {
+  display: flex;
+  gap: 16px;
+  overflow-x: auto;
+  scroll-behavior: smooth;
 }
 
-/* Trekker tittelen lenger inn fra venstre kant */
-.gallery-section h2 {
-  margin-left: 40px; /* juster tallet etter smak, f.eks. 80px */
-  margin-bottom: 14px;
+.image-gallery::-webkit-scrollbar,
+.top10-gallery::-webkit-scrollbar,
+.coming-movies-gallery::-webkit-scrollbar {
+  display: none;
 }
 
-  .banner-video {
+/* ================= KOMMENDE FILMER ================= */
+.coming-movie-item {
+  position: relative;
+  flex: 0 0 180px;
+  height: 300px;
+  border-radius: 8px;
+  overflow: hidden;
+  background: black;
+  transition: .6s;
+}
+
+.coming-movie-item:hover {
+  flex: 0 0 440px;
+}
+
+.coming-movie-item img.banner,
+.coming-movie-item video {
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
   object-fit: cover;
-  display: none;
-  z-index: 0;
 }
 
-  /* ===== MOBIL- OG NETTBRETTOPTIMALISERING ===== */
-@media (max-width: 1024px) {
-  /* Skjul navigasjonspiler og fade-effekter */
-  .scroll-button,
-  .fade-left,
-  .fade-right {
-    display: none !important;
-  }
-
-  /* Gjør galleriene mer brukervennlige for berøring */
-  .image-gallery,
-  .coming-movies-gallery,
-  .top10-gallery,
-  #halloween-gallery {
-    overflow-x: auto !important;
-    scroll-snap-type: x mandatory;
-    gap: 12px;
-    padding: 10px 10px;
-  }
-
-  .image-gallery a,
-  .coming-movie-item,
-  .top10-item {
-    scroll-snap-align: start;
-  }
-
-  /* Reduser marginer for bedre plass på små skjermer */
-  .gallery-section {
-    margin-left: 10px;
-    margin-right: 10px;
-  }
-
-  .gallery-section h2 {
-    margin-left: 12px;
-  }
-}
-  .nav-links a i {
-  margin-right: 6px;
-  font-size: 16px;
+.coming-movie-item video {
+  opacity: 0;
 }
 
-
-/* --- UTVIDER HERO-BANNER BAK GALLERIENE --- */
-.hero-banner {
-  height: 120vh; /* Øker høyden så bildet/videoen strekker seg bak galleriet */
-  margin-bottom: -40vh; /* Trekker galleriene visuelt opp slik at de "dekker" banneret */
-  z-index: 0; /* Lar galleriene vises over */
+.coming-movie-item.show-video video {
+  opacity: 1;
 }
 
-.gallery-section {
-  position: relative;
-  z-index: 2; /* Sørger for at galleriene ligger over banneret */
+.coming-movie-item .logo {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  max-height: 50px;
+  max-width: 90%;
+  z-index: 3;
 }
 
-  /* === Endelig korrigering for mobil hero-banner === */
-@media (max-width: 768px) {
-
-  .hero-banner {
-    height: 35vh !important;     /* gjør banneret mindre */
-    min-height: 180px !important;
-    max-height: 260px !important;
-    margin-bottom: 20px !important;  /* stopper at gallerier trekkes opp i banneret */
-  }
-
-  .banner-content {
-    top: auto !important;
-    bottom: 20px !important;   /* flytter innhold lenger ned */
-    left: 20px !important;
-    transform: none !important;
-  }
-
-  .film-logo {
-    width: 140px !important;   /* mye mindre film-logo */
-    max-height: 80px !important;
-  }
-}
-  @media (max-width: 768px) {
-
-  /* gjør navigasjonen flytende over bildet */
-  .top-nav {
-    position: absolute !important;
-    top: 0;
-    left: 0;
-    width: 100%;
-    background: none !important;
-    box-shadow: none !important;
-  }
-
-  /* sørger for at bildet starter i topp */
-  .hero-banner {
-    margin-top: 0 !important;
-    padding-top: 0 !important;
-  }
-
-}
-
-/* === KOMMENDE FILMER – MOBILFIX === */
-@media (max-width: 768px) {
-
-  .coming-movies-wrapper {
-    overflow-x: auto !important;
-    padding: 0 10px !important;
-  }
-
-  .coming-movies-list {
-    gap: 12px !important;
-    height: 260px !important;
-  }
-
-  .coming-movie-item {
-    flex: 0 0 180px !important;
-    height: 240px !important;
-    transform: none !important;
-    transition: none !important;
-  }
-
-  /* Fjern hover-zoom */
-  .coming-movie-item:hover {
-    flex: 0 0 180px !important;
-    transform: none !important;
-  }
-
-  /* Skjul video helt */
-  .coming-movie-item video {
-    display: none !important;
-  }
-
-  /* Vis alltid bilde */
-  .coming-movie-item img.banner {
-    opacity: 1 !important;
-    display: block !important;
-  }
-
-  /* Fiks logo på mobil */
-  .coming-movie-item .logo {
-    bottom: 12px !important;
-    left: 50% !important;
-    transform: translateX(-50%) !important;
-    max-height: 48px !important;
-    width: auto !important;
-  }
-
-  /* Skjul synopsis / tekstinfo på mobil */
-  .coming-movie-item .coming-movie-info {
-    display: none !important;
-    opacity: 0 !important;
-  }
-}
-
-  @media (max-width: 768px) {
-
-  /* gjør navigasjonen flytende over bildet */
-  .top-nav {
-    position: absolute !important;
-    top: 0;
-    left: 0;
-    width: 100%;
-    background: none !important;
-    box-shadow: none !important;
-  }
-
-  /* sørger for at bildet starter i topp */
-  .hero-banner {
-    margin-top: 0 !important;
-    padding-top: 0 !important;
-  }
-/* ===== ENDGYLDIG FIX FOR SCROLL-PILER ===== */
-
-.scroll-button.hidden {
-  display: none !important;
-  opacity: 0 !important;
-  pointer-events: none !important;
+/* ================= SCROLL BUTTON ================= */
+.scroll-button {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 28px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  opacity: 0;
 }
 
 .gallery-wrapper:hover .scroll-button {
   opacity: 1;
-  pointer-events: auto;
 }
 
-.gallery-wrapper:hover .scroll-button.hidden {
-  opacity: 0;
-  pointer-events: none;
+.scroll-button.hidden {
+  display: none !important;
 }
+
+/* ================= MOBIL ================= */
+@media (max-width: 768px) {
+  main {
+    margin: 0;
+    padding: 10px;
+  }
+
+  .hero-banner {
+    height: 35vh;
+    margin-bottom: 20px;
+  }
+
+  .nav-links {
+    display: none;
+  }
+
+  .coming-movie-item {
+    flex: 0 0 180px;
+    height: 240px;
+  }
+
+  .coming-movie-item video {
+    display: none;
+  }
+}
+
 
 
 
@@ -1972,6 +958,7 @@ activeFilms.forEach(film => {
 
   
 </script>
+
 
 
 
