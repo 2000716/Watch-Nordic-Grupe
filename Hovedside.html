@@ -1895,8 +1895,6 @@ document.addEventListener("DOMContentLoaded", () => {
       if (fadeRight) fadeRight.classList.toggle("fade-hidden", scrollLeft >= maxScroll);
     }
 
-    if (leftBtn) leftBtn.addEventListener("click", () => gallery.scrollBy({ left: -300, behavior: "smooth" }));
-    if (rightBtn) rightBtn.addEventListener("click", () => gallery.scrollBy({ left: 300, behavior: "smooth" }));
     if (gallery) gallery.addEventListener("scroll", updateScrollState);
     updateScrollState();
   });
@@ -1945,6 +1943,7 @@ activeFilms.forEach(film => {
 
   
 </script>
+
 
 
 
