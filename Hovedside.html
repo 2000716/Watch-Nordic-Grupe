@@ -1320,18 +1320,6 @@ background: linear-gradient(
   pointer-events: none;
 }
 
-/* === VERTIKALE POSTERE – STANDARD GALLERIER === */
-.image-gallery a img {
-  width: 160px;
-  height: 240px;
-  object-fit: cover;
-  border-radius: 8px;
-}
-
-/* Litt mer luft mellom plakater */
-.image-gallery {
-  gap: 18px;
-}
 
 
 </style> 
@@ -1870,7 +1858,7 @@ function renderContinueWatching() {
     link.classList.add("image-with-progress");
 
     const img = document.createElement("img");
-    img.src = film.poster || film.poster;
+    img.src = film.poster;
     img.alt = film.tittel;
 
     const progressBar = document.createElement("div");
@@ -1984,6 +1972,7 @@ activeFilms.forEach(film => {
 
   
 </script>
+
 
 
 
