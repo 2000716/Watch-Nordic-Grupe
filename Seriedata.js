@@ -2,7 +2,7 @@ const serier = {
   "i-mummidalen": {
     tittel: "I Mummidalen",
     bakgrunn: "https://image.tmdb.org/t/p/original/231meoDrNjyUqF0sD0xItVw1h7g.jpg",
-    logo: "",
+    logo: "https://image.tmdb.org/t/p/original/cD5TMSmqtRMsuGFCD7QtSWH2bot.png",
     poster: "https://image.tmdb.org/t/p/w1280/9yjEMASvxhJGSUq7peDpWgBO5JW.jpg",
     posterVertikal: "https://image.tmdb.org/t/p/original/pU0MiRPaoNeiXZRnJjJ0UOmZiUA.jpg",
     beskrivelse:
@@ -51,6 +51,7 @@ const serier = {
     }
   }
 };
+
 
 
 
