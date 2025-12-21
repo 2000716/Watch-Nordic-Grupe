@@ -197,12 +197,14 @@ body.loaded {
 
 /* Felles stil for fallback-tittel */
 .text-logo {
-  font-size: clamp(1.5rem, 3vw, 2.2rem); /* mindre, men responsiv */
-  font-weight: 700;
-  line-height: 1.2;
+  font-size: clamp(2rem, 4vw, 3.2rem); /* behold størrelsen du likte */
+  font-weight: 800;
+  line-height: 1.15;
   color: #fff;
-  text-align: left;   /* starter på venstre side */
+  text-align: left;      /* venstre justering */
   width: 100%;
+  white-space: normal;   /* tillater linjeskift */
+  word-break: break-word; /* lange ord brytes */
 }
 
 
@@ -1314,6 +1316,7 @@ if (data.logo && data.logo.trim() !== "") {
 </html>
 
  
+
 
 
 
