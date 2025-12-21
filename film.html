@@ -186,19 +186,13 @@ body.loaded {
 
 
 
-
-/* === Fast logo – venstre side av infoboksen === */
+/* === Logo === */
 .logo-container {
-  position: absolute;
-  bottom: 90px;                 /* SAMME som content-wrapper */
-  left: 100px;                  /* SAMME som content-wrapper */
-  width: 180px;                 /* FAST område */
-  height: 120px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 3;
-  pointer-events: none;
+  width: 100%;
+  max-width: 700px;      /* gir rom for lange titler */
+  min-height: unset;
+  height: auto;          /* 👈 VIKTIG */
+  margin-bottom: 12px;   /* 👈 nærmere info-boksen */
 }
 
 
@@ -1325,6 +1319,11 @@ if (data.logo && data.logo.trim() !== "") {
 </html>
 
  
+
+
+
+
+
 
 
 
