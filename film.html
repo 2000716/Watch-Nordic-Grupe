@@ -195,25 +195,24 @@ body.loaded {
   margin-bottom: 12px;   /* 👈 nærmere info-boksen */
 }
 
-
-
+/* Felles stil for fallback-tittel */
 .text-logo {
   font-size: clamp(2rem, 4vw, 3.2rem);
   font-weight: 800;
   line-height: 1.15;
-  text-align: left;
-  white-space: normal;      /* 👈 tillater linjeskift */
-  word-break: break-word;   /* 👈 lange ord brytes */
+  color: #fff;
+  text-align: left;     /* 👈 VENSTRE */
+  width: 100%;
 }
-
 
 
 
 .film-logo {
   max-width: 100%;
-  max-height: 100%;
+  max-height: 120px;   /* 👈 juster denne */
   object-fit: contain;
 }
+
 
 /* === Tekst og knapper === */
 .left-content {
@@ -1298,20 +1297,15 @@ if (data.logo && data.logo.trim() !== "") {
   filmLogo.src = data.logo;
   filmLogo.style.display = "block";
 } else {
-  // Ingen logo → fjern bilde og vis tittel
   filmLogo.style.display = "none";
 
-  // Lag tekst-element for tittelen
   const titleEl = document.createElement("div");
+  titleEl.className = "text-logo";   // 👈 bruker samme stil som logo
   titleEl.textContent = data.tittel;
-  titleEl.style.color = "#fff";
-  titleEl.style.fontSize = "2rem";
-  titleEl.style.fontWeight = "bold";
-  titleEl.style.textAlign = "center";
-  titleEl.style.width = "100%";
 
   logoContainer.appendChild(titleEl);
 }
+
 
 </script>
 
@@ -1319,6 +1313,7 @@ if (data.logo && data.logo.trim() !== "") {
 </html>
 
  
+
 
 
 
