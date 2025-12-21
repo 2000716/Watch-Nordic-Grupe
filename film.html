@@ -190,12 +190,9 @@ body.loaded {
 .logo-container {
   width: 260px;
   height: 100px;
-  margin-bottom: 140px; /* fin avstand mellom logo og tekst */
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  overflow: hidden;
+  margin-bottom: 20px; /* ⬅️ var 140px */
 }
+
 
 .film-logo {
   max-width: 100%;
@@ -208,9 +205,10 @@ body.loaded {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  margin-top: 240px; /* 🔼 litt høyere enn før (var 320px) */
-  min-height: 400px;
+  margin-top: 0;        /* ⬅️ var 240px */
+  min-height: unset;
 }
+
 
 .text-button-container {
   display: flex;
@@ -494,13 +492,14 @@ body.loaded {
     padding-bottom: 60px;
   }
 
-  .content-wrapper {
-    position: relative;
-    left: 0;
-    right: 0;
-    padding: 20px;
-    text-align: center;
-  }
+.content-wrapper {
+  position: absolute;
+  top: 140px;   /* ⬅️ juster etter smak */
+  left: 100px;
+  right: 60px;
+  z-index: 2;
+}
+
 
   .logo-container {
     width: 80%;
@@ -1305,6 +1304,7 @@ if (data.logo && data.logo.trim() !== "") {
 </html>
 
  
+
 
 
 
