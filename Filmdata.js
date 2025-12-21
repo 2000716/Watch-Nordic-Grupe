@@ -753,7 +753,7 @@ const filmer = {
     tittel: " Kaptein Sabeltann og Grevinnen av Gral",
     bakgrunn: "https://image.tmdb.org/t/p/original/eL8fgEK8mgDcJZRHzuxbLwevCcr.jpg",
     banner: "https://image.tmdb.org/t/p/original/eL8fgEK8mgDcJZRHzuxbLwevCcr.jpg", 
-    logo: "https://is1-ssl.mzstatic.com/image/thumb/Features211/v4/d5/62/74/d562741b-bdee-c6c8-e530-152ca6bd3510/sxp4344381362033209799.png/432x162.png",     
+    logo: "",     
     poster: "https://images-prod.ai.tv2.no/v2/image-packs/pfimg_pack_01kc6s12ydf7ar2jzbh050mfz2?height=630",
     posterVertikal: "https://image.tmdb.org/t/p/original/yKtIO2xeQaz7n7ZmQrFm3fCCIQK.jpg", // portrett
     beskrivelse: "Sett seilene for et helt nytt og spennende sjørøvereventyr. Bli med Kaptein Sabeltann og hans beryktede mannskap i et heftig oppgjør med Grevinnen av Gral.",
@@ -763,11 +763,12 @@ const filmer = {
     regissor: "Rasmus A. Sivertsen, Are Austnes, Yaprak Morali",
   watchUrl: "film-mal.html?id=kaptein-sabeltann-og-grevinnen-av-gral",
   videoUrl:"https://vixsrc.to/playlist/350396.m3u8?token=cab27b195d72d8a92ddf6b69f5b9ff6f&expires=1771514545&h=1",
-  subtitleUrl: "",
+  subtitleUrl: "Kaptein.VTT",
   tilbakeUrl: "film.html?navn=kaptein-sabeltann-og-grevinnen-av-gral",
   audioLanguages: [
     { code: "no", label: "Norsk" } ],
-  subtitleLanguages: [
+  subtitleLanguages: [ { code: "no", label: "Norsk" },
+    { code: "off", label: "Av" }
   ],
   publishDate: "2025-12-06T00:00:00", // ISO datoformat
   expireDate: "2027-01-01T23:59:59"
@@ -778,6 +779,7 @@ const filmer = {
    
   
     
+
 
 
 
