@@ -186,12 +186,23 @@ body.loaded {
 
 
 
-/* === Logo === */
-.logo-container {
-  width: 260px;
-  height: 100px;
-  margin-bottom: 20px; /* ⬅️ var 140px */
+/* === Logo === */.logo-container {
+  width: 100%;
+  max-width: 700px;      /* gir rom for lange titler */
+  min-height: unset;
+  height: auto;          /* 👈 VIKTIG */
+  margin-bottom: 12px;   /* 👈 nærmere info-boksen */
 }
+
+    .text-logo {
+  font-size: clamp(2rem, 4vw, 3.2rem);
+  font-weight: 800;
+  line-height: 1.15;
+  text-align: left;
+  white-space: normal;      /* 👈 tillater linjeskift */
+  word-break: break-word;   /* 👈 lange ord brytes */
+}
+
 
 
 .film-logo {
@@ -1304,6 +1315,7 @@ if (data.logo && data.logo.trim() !== "") {
 </html>
 
  
+
 
 
 
