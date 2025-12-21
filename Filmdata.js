@@ -647,7 +647,6 @@ const filmer = {
  "reisen-til-julestjernen": {
     tittel: "Reisen til Julestjernen",
     bakgrunn: "https://image.tmdb.org/t/p/original/w3xPhjHvopXb9KwUmla9TrfZNbs.jpg",
-    banner: "https://static.wixstatic.com/media/fd2fb2_0580c3c7d51e4c3fac23d7775e44da83~mv2.jpg",
     logo: "https://static.wixstatic.com/media/fd2fb2_d736aae773814450a4b020e287dbb75c~mv2.png",
     poster: "https://gfx.nrk.no/rkyU1BVEaAdBVHVeQxjkkQY8olwf04UC9jpunEc-PR_w",
     posterVertikal: "https://image.tmdb.org/t/p/original/k4kOxAqbDftvEZ7k1lYCApJB4al.jpg", // portrett
@@ -678,7 +677,6 @@ const filmer = {
    "julenatt-i-blåfjell": {
     tittel: "Julenatt i Blåfjell",
     bakgrunn: "https://image.tmdb.org/t/p/original/mv6TL9WCJ1UcHHtXaSUjZMOz9A6.jpg",
-    banner: "https://image.tmdb.org/t/p/original/kXZi4IW8vUTHB9s3v2l3PvBY3cW.jpg",
     logo: "https://gfx.nrk.no/Z2OMId2vXZveqp9mkGWlhwvF-ecOJFJs6mwJ5ml3MI4w",
     poster: "https://images-prod.ai.tv2.no/v2/image-packs/pfimg_pack_01kated9ybe63a5hbj533jk18t?height=630",
     posterVertikal: "https://image.tmdb.org/t/p/original/wgU0KfHfMFv7zH0tvu9GbcTCrmd.jpg", // portrett
@@ -725,7 +723,6 @@ const filmer = {
        "paddington-i-peru": {
     tittel: "Peddington i Peru",
     bakgrunn: "https://image.tmdb.org/t/p/original/7N7CtZftqEvgojR3QloukU0oWPg.jpg",
-    banner: "https://image.tmdb.org/t/p/original/54pdu6zPgnfqxezN6mqwxtR5fny.jpg", 
     logo: "https://image.tmdb.org/t/p/original/47ZZ3izUpIRiQK3FYKKa74YkirC.png",     
     poster: "https://i-viaplay-com.akamaized.net/viaplay-prod/307/828/1740152643-17a0f043de12d5829ca42cde98ad9876a0843f86.jpg?width=448&height=252",
     posterVertikal: "https://i-viaplay-com.akamaized.net/viaplay-prod/307/828/1740152641-a11d0bfc07c635e0eb545631bf16a73343031817.jpg?width=400&height=600", // portrett
@@ -751,8 +748,7 @@ const filmer = {
   
        "kaptein-sabeltann-og-grevinnen-av-gral": {
     tittel: " Kaptein Sabeltann og Grevinnen av Gral",
-    bakgrunn: "https://image.tmdb.org/t/p/original/eL8fgEK8mgDcJZRHzuxbLwevCcr.jpg",
-    banner: "https://image.tmdb.org/t/p/original/eL8fgEK8mgDcJZRHzuxbLwevCcr.jpg", 
+    bakgrunn: "https://image.tmdb.org/t/p/original/eL8fgEK8mgDcJZRHzuxbLwevCcr.jpg", 
     logo: "",     
     poster: "https://images-prod.ai.tv2.no/v2/image-packs/pfimg_pack_01kc6s12ydf7ar2jzbh050mfz2?height=630",
     posterVertikal: "https://image.tmdb.org/t/p/original/yKtIO2xeQaz7n7ZmQrFm3fCCIQK.jpg", // portrett
@@ -773,12 +769,38 @@ const filmer = {
   publishDate: "2025-12-06T00:00:00", // ISO datoformat
   expireDate: "2027-01-01T23:59:59"
 },
+
+         "titina": {
+    tittel: " Titina",
+    bakgrunn: "https://image.tmdb.org/t/p/original/9bSuLhyXZ6OFXP5deFVgfCQ50Pj.jpg",
+    banner: "https://image.tmdb.org/t/p/original/fyRXgewAZnx3BYg0Flsoy7isuba.jpg", 
+    logo: "https://gfx.nrk.no/FFX0VtesIPZYg22hO2fvvwvliqwm9dG2Jsk6c5RZjakg",     
+    poster: "https://image.tmdb.org/t/p/original/ohmvO3SqLzB1ZkR4sTb7cBC0J15.jpg",
+    posterVertikal: "https://image.tmdb.org/t/p/original/1eHqmYcexZ1SV4gwXecOQKEYXJR.jpg", // portrett
+    beskrivelse: "Bli med på lille Titinas eventyrlige reise, fra Romas bakgater til polferd og verdensberømmelse – sammen med matfar Umberto Nobile og Roald Amundsen.",
+    metadata: ["Norge", "2022", "Alle", "Familie", "1 t 27 min"],
+    imdb: "https://www.imdb.com/title/tt11225228/",
+    skuespillere: "Brutus, Jan Gunnar Røise, Kåre Conradi",
+    regissor: "Kajsa Næss",
+  watchUrl: "film-mal.html?id=titina",
+  videoUrl:"https://vixsrc.to/playlist/399864.m3u8?token=746b9f62c908ff8580efc165966c4619&expires=1771530620&h=1",
+  subtitleUrl: "Titina.VTT",
+  tilbakeUrl: "film.html?navn=titina",
+  audioLanguages: [
+    { code: "no", label: "Norsk" } ],
+  subtitleLanguages: [ { code: "no", label: "Norsk" },
+    { code: "off", label: "Av" }
+  ],
+  publishDate: "2025-12-24T00:00:00", // ISO datoformat
+  expireDate: "2027-01-01T23:59:59"
+},
   
   };
 
    
   
     
+
 
 
 
