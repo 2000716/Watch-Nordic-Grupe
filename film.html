@@ -189,24 +189,23 @@ body.loaded {
 /* === Logo === */
 .logo-container {
   width: 100%;
-  max-width: 100%;
-  height: auto;
-  margin-bottom: 12px;
-
-  padding-left: 40px;   /* 👈 matcher infoboksen */
+  max-width: 700px;      /* gir rom for lange titler */
+  min-height: unset;
+  height: auto;          /* 👈 VIKTIG */
+  margin-bottom: 12px;   /* 👈 nærmere info-boksen */
 }
+
 
 
 .text-logo {
   font-size: clamp(2rem, 4vw, 3.2rem);
   font-weight: 800;
   line-height: 1.15;
-  color: #fff;
-
-  text-align: left;     /* 👈 venstrejustert */
-  white-space: normal;
-  word-break: break-word;
+  text-align: left;
+  white-space: normal;      /* 👈 tillater linjeskift */
+  word-break: break-word;   /* 👈 lange ord brytes */
 }
+
 
 
 
@@ -1320,6 +1319,7 @@ if (data.logo && data.logo.trim() !== "") {
 </html>
 
  
+
 
 
 
