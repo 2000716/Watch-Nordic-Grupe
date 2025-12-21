@@ -1552,7 +1552,7 @@ function oppdaterBanner() {
   metadata.textContent = film.metadata ? film.metadata.join(" • ") : "";
 
   // Se nå-knapp
-  seNa.onclick = () => window.location.href = `film-mal.html?id=${film.tittel}`;
+  seNa.onclick = () => window.location.href = `film-mal.html?id={film.tittel}`;
 
  // Detaljer-knapp med små bokstaver
 const tittelSmå = film.tittel.toLowerCase().replace(/\s+/g, ''); // erstatter mellomrom med bindestrek
@@ -1972,6 +1972,7 @@ activeFilms.forEach(film => {
 
   
 </script>
+
 
 
 
