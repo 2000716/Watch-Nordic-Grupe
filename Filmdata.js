@@ -700,7 +700,7 @@ const filmer = {
 },
 
      "muldvarpen": {
-    tittel: "Muldvarpen",
+    tittel:"Muldvarpen",
     bakgrunn: "https://gfx.nrk.no/_pHLvQyWkVZpk-HXL-kkhQN2z4sacPh6VeHpVbpxTg-Q",
     logo: "",     
     poster: "https://image.tmdb.org/t/p/original/vj3ETTb4spt7zlBF4mqYqbnWzfX.jpg",
@@ -779,6 +779,7 @@ const filmer = {
    
   
     
+
 
 
 
