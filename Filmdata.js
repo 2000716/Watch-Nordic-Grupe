@@ -747,11 +747,40 @@ const filmer = {
   publishDate: "2025-12-06T00:00:00", // ISO datoformat
   expireDate: "2027-01-01T23:59:59"
 },
+
+  
+       "kaptein-sabeltann-og-grevinnen-av-gral": {
+    tittel: " Kaptein Sabeltann og Grevinnen av Gral",
+    bakgrunn: "https://image.tmdb.org/t/p/original/eL8fgEK8mgDcJZRHzuxbLwevCcr.jpg",
+    banner: "https://image.tmdb.org/t/p/original/eL8fgEK8mgDcJZRHzuxbLwevCcr.jpg", 
+    logo: "https://image.tmdb.org/t/p/original/47ZZ3izUpIRiQK3FYKKa74YkirC.png",     
+    poster: "https://images-prod.ai.tv2.no/v2/image-packs/pfimg_pack_01kc6s12ydf7ar2jzbh050mfz2?height=630",
+    posterVertikal: "https://image.tmdb.org/t/p/original/yKtIO2xeQaz7n7ZmQrFm3fCCIQK.jpg", // portrett
+    beskrivelse: "Sett seilene for et helt nytt og spennende sjørøvereventyr. Bli med Kaptein Sabeltann og hans beryktede mannskap i et heftig oppgjør med Grevinnen av Gral.",
+    metadata: ["Norge", "2025", "Alle", "Familie", "1 t 13 min"],
+    imdb: "https://www.imdb.com/title/tt5822536/",
+    skuespillere: "Ben Whishaw, Imelda Staunton, Hugh Bonneville, Emily Mortimer, Madeleine Harris, Samuel Joslin, Joel Fry, Robbie Gee, Ben Miller",
+    regissor: "Dougal Wilson",
+  watchUrl: "film-mal.html?id=kaptein-sabeltann-og-grevinnen-av-gral",
+  videoUrl:"https://vixsrc.to/playlist/350396.m3u8?token=cab27b195d72d8a92ddf6b69f5b9ff6f&expires=1771514545&h=1",
+  subtitleUrl: "Paddington.VTT",
+  tilbakeUrl: "film.html?navn=kaptein-sabeltann-og-grevinnen-av-gral",
+  audioLanguages: [
+    { code: "no", label: "Norsk" } ],
+  subtitleLanguages: [
+    { code: "no", label: "Norsk" },
+    { code: "off", label: "Av" }
+  ],
+  publishDate: "2025-12-06T00:00:00", // ISO datoformat
+  expireDate: "2027-01-01T23:59:59"
+},
+  
   };
 
    
   
     
+
 
 
 
