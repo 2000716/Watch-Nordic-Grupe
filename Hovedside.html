@@ -1870,7 +1870,7 @@ function renderContinueWatching() {
     link.classList.add("image-with-progress");
 
     const img = document.createElement("img");
-    img.src = film.posterVertikal || film.poster;
+    img.src = film.poster || film.poster;
     img.alt = film.tittel;
 
     const progressBar = document.createElement("div");
@@ -1984,6 +1984,7 @@ activeFilms.forEach(film => {
 
   
 </script>
+
 
 
 
