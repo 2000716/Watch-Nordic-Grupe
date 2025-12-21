@@ -1555,7 +1555,7 @@ function oppdaterBanner() {
   seNa.onclick = () => window.location.href = `film-mal.html?id=${film.tittel}`;
 
  // Detaljer-knapp med små bokstaver
-const tittelSmå = film.tittel.toLowerCase().replace(/\s+/g, '-'); // erstatter mellomrom med bindestrek
+const tittelSmå = film.tittel.toLowerCase().replace(/\s+/g, ''); // erstatter mellomrom med bindestrek
 detaljer.onclick = () => {
   const url = `film.html?navn=${tittelSmå}`;
   window.location.href = url;
@@ -1972,6 +1972,7 @@ activeFilms.forEach(film => {
 
   
 </script>
+
 
 
 
