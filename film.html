@@ -844,8 +844,65 @@ img, video {
   vertical-align: middle;
   transform: translateY(1px); /* valgfritt – juster opp/ned om nødvendig */
 }
+@media (max-width: 768px) {
 
+  /* === HERO === */
+  .hero {
+    height: auto;
+    min-height: 100vh;
+    padding-top: 70px; /* plass til toppmeny */
+  }
+
+  .background-image,
+  .background-video {
+    height: 60vh;
+  }
+
+  /* === INNHOLD === */
+  .content-wrapper {
+    position: relative;
+    top: auto;
+    left: auto;
+    right: auto;
+    bottom: auto;
+    padding: 16px;
+    max-width: 100%;
+  }
+
+  .text-button-container {
+    padding: 16px;
+    gap: 16px;
+  }
+
+  .text-container,
+  .cast-info {
+    max-height: none;
+    font-size: 15px;
+  }
+
+  /* === LOGO / TITTEL === */
+  .logo-container {
+    max-width: 100%;
+    text-align: center;
+  }
+
+  .text-logo {
+    white-space: normal;
+    text-align: center;
+  }
+
+  /* === KNAPPER === */
+  .buttons-column {
+    width: 100%;
+  }
+
+  .watch-button {
+    width: 100%;
+    padding: 14px;
+    font-size: 16px;
+  }
 }
+
 
 </style> 
 <header class="top-nav">
@@ -1312,6 +1369,7 @@ if (data.logo && data.logo.trim() !== "") {
 </html>
 
  
+
 
 
 
