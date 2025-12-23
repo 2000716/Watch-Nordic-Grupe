@@ -749,7 +749,8 @@ const filmer = {
        "kaptein-sabeltann-og-grevinnen-av-gral": {
     tittel: " Kaptein Sabeltann og Grevinnen av Gral",
     bakgrunn: "https://image.tmdb.org/t/p/original/eL8fgEK8mgDcJZRHzuxbLwevCcr.jpg", 
-    logo: "",     
+    banner: "https://image.tmdb.org/t/p/original/eL8fgEK8mgDcJZRHzuxbLwevCcr.jpg", 
+    logo: "https://images-0.rakuten.tv/storage/global-movie/translation/title-treatment/8a102351-3b9a-44c9-a65a-af813b796717-width410-quality90.png",     
     poster: "https://images-prod.ai.tv2.no/v2/image-packs/pfimg_pack_01kc6s12ydf7ar2jzbh050mfz2?height=630",
     posterVertikal: "https://image.tmdb.org/t/p/original/yKtIO2xeQaz7n7ZmQrFm3fCCIQK.jpg", // portrett
     beskrivelse: "Sett seilene for et helt nytt og spennende sjørøvereventyr. Bli med Kaptein Sabeltann og hans beryktede mannskap i et heftig oppgjør med Grevinnen av Gral.",
@@ -773,7 +774,6 @@ const filmer = {
          "titina": {
     tittel: " Titina",
     bakgrunn: "https://image.tmdb.org/t/p/original/9bSuLhyXZ6OFXP5deFVgfCQ50Pj.jpg",
-    banner: "https://image.tmdb.org/t/p/original/fyRXgewAZnx3BYg0Flsoy7isuba.jpg", 
     logo: "https://gfx.nrk.no/FFX0VtesIPZYg22hO2fvvwvliqwm9dG2Jsk6c5RZjakg",     
     poster: "https://image.tmdb.org/t/p/original/ohmvO3SqLzB1ZkR4sTb7cBC0J15.jpg",
     posterVertikal: "https://image.tmdb.org/t/p/original/1eHqmYcexZ1SV4gwXecOQKEYXJR.jpg", // portrett
@@ -800,6 +800,7 @@ const filmer = {
    
   
     
+
 
 
 
