@@ -1552,8 +1552,10 @@ function oppdaterBanner() {
   metadata.textContent = film.metadata ? film.metadata.join(" • ") : "";
 
   // Se nå-knapp
-  seNa.onclick = () => window.location.href = `seNa.onclick = () => {
+seNa.onclick = () => {
   window.location.href = `film-mal.html?id=${encodeURIComponent(film.tittel)}`;
+};
+
 
 
  // Detaljer-knapp med små bokstaver
@@ -1974,6 +1976,7 @@ activeFilms.forEach(film => {
 
   
 </script>
+
 
 
 
