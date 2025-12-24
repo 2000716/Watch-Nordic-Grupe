@@ -1320,115 +1320,160 @@ background: linear-gradient(
   pointer-events: none;
 }
 
-<header class="top-nav">
-  <div class="nav-left">
-    <img class="watch-logo" src="https://static.wixstatic.com/media/fd2fb2_a4b2ace62dff4605a0387f46aad8a404~mv2.png" alt="Watch Logo" />
-    <nav class="nav-links">
-      <a href="Hovedside.html" class="active"><i class="fas fa-house-user"></i> Start</a>
-      <a href="Serier.html"><i class="fas fa-th-large"></i> Serier</a>
-      <a href="Film.html"><i class="fas fa-film"></i> Filmer</a>
-      <a href="Nyheter.html"><i class="fas fa-fire-flame-curved"></i> Nytt og populært</a>
-      <a href="Min-Liste.html"><i class="fas fa-plus-square"></i> Min liste</a>
-    </nav>
-  </div>
 
-  <div class="nav-right">
-    <a href="Søk.html" class="nav-search"><i class="fas fa-search"></i></a>
-    <div class="profilmeny" onclick="gåTilKonto()">
-      <img id="menyProfilbilde" src="https://via.placeholder.com/100" alt="Min profil" />
-    </div>
-  </div>
+
+</style> 
+<header class="top-nav">
+  <div class="nav-left">
+      <img class="watch-logo" src="https://static.wixstatic.com/media/fd2fb2_a4b2ace62dff4605a0387f46aad8a404~mv2.png" alt="Watch Logo" />
+
+<nav class="nav-links">
+  <a href="Hovedside.html" class="active"><i class="fas fa-house-user"></i> Start</a>
+  <a href="Serier.html"><i class="fas fa-th-large"></i> Serier</a>
+  <a href="Film.html"><i class="fas fa-film"></i> Filmer</a>
+  <a href="Nyheter.html"><i class="fas fa-fire-flame-curved"></i> Nytt og populært</a>
+  <a href="Min-Liste.html"><i class="fas fa-plus-square"></i> Min liste</a>
+</nav>
+    </div>
+
+
+
+  <div class="nav-right">
+    <a href="Søk.html" class="nav-search"><i class="fas fa-search"></i></a>
+    <div class="profilmeny" onclick="gåTilKonto()">
+      <img id="menyProfilbilde" src="https://via.placeholder.com/100" alt="Min profil" />
+    </div>
+  </div>
 </header>
 
-<main>
-  <section class="hero-banner">
-    <img class="banner-image" id="banner-bilde" src="" alt="Film Banner" />
-    <video id="banner-video" class="banner-video" playsinline preload="none"></video>
+  
+        <!-- Hero Banner -->
+<section class="hero-banner">
+  <img class="banner-image" id="banner-bilde" src="" alt="Film Banner" />
+  <video id="banner-video" class="banner-video" playsinline preload="none"></video>
 
-    <div class="banner-content">
-      <img class="film-logo" id="banner-logo" src="" alt="Film Logo" />
-      <p id="banner-beskrivelse"></p>
-      <div id="banner-metadata" class="banner-meta"></div>
-      <div class="banner-buttons">
-        <button class="watch-button" id="banner-se-na">Se nå</button>
-        <button class="details-button" id="banner-detaljer">Detaljer</button>
-      </div>
-    </div>
-  </section>
+  <div class="banner-content">
+    <img class="film-logo" id="banner-logo" src="" alt="Film Logo" />
+    <p id="banner-beskrivelse"></p>
+    <div id="banner-metadata" class="banner-meta"></div>
+    <div class="banner-buttons">
+      <button class="watch-button" id="banner-se-na">Se nå</button>
+      <button class="details-button" id="banner-detaljer">Detaljer</button>
+    </div>
+  </div>
+</section>
 
-  <section class="gallery-section">
-    <h2>Nye filmer på Watch</h2>
-    <div class="gallery-wrapper">
-      <div class="fade-left"></div>
-      <button class="scroll-button left" onclick="scrollGallery(this, -1)">❮</button>
-      <div class="image-gallery" id="nye-filmer-galleri"></div>
-      <button class="scroll-button right" onclick="scrollGallery(this, 1)">❯</button>
-      <div class="fade-right"></div>
-    </div>
-  </section>
 
-  <section class="gallery-section" id="fortsett-section" style="display:none;">
-    <h2>Fortsett å se</h2>
-    <div class="gallery-wrapper">
-      <div class="fade-left"></div>
-      <button class="scroll-button left" onclick="scrollGallery(this, -1)">❮</button>
-      <div class="image-gallery" id="fortsett-galleri"></div>
-      <button class="scroll-button right" onclick="scrollGallery(this, 1)">❯</button>
-      <div class="fade-right"></div>
-    </div>
-  </section>
 
-  <section class="gallery-section">
-    <h2>Sjangere</h2>
-    <div class="gallery-wrapper">
-      <div class="fade-left"></div>
-      <button class="scroll-button left" onclick="scrollGallery(this, -1)">❮</button>
-      <div class="image-gallery genre-gallery">
-        <a href="sjanger.html?navn=julefilmer">Julefilmer <i class="fas fa-tree"></i></a>
-        <a href="sjanger.html?navn=barn">Barn / Familie <i class="fas fa-rocket"></i></a>
-        <a href="sjanger.html?navn=komedie">Komedie <i class="fas fa-laugh"></i></a>
-        <a href="sjanger.html?navn=skrekk">Skrekk <i class="fas fa-ghost"></i></a>
-        <a href="sjanger.html?navn=drama">Drama <i class="fas fa-theater-masks"></i></a>
-        <a href="sjanger.html?navn=romantikk">Romantikk <i class="fas fa-heart"></i></a>
-        <a href="sjanger.html?navn=action">Action <i class="fas fa-bolt"></i></a>
-      </div>
-      <button class="scroll-button right" onclick="scrollGallery(this, 1)">❯</button>
-      <div class="fade-right"></div>
-    </div>
-  </section>
+        <section class="gallery-section">
+          <h2>Nye filmer på Watch</h2>
+          <div class="gallery-wrapper">
+            <div class="fade-left"></div>
+            <button class="scroll-button left" onclick="scrollGallery(this, -1)">❮</button>
+            <div class="image-gallery" id="nye-filmer-galleri"></div>
+            <button class="scroll-button right" onclick="scrollGallery(this, 1)">❯</button>
+            <div class="fade-right"></div>
+          </div>
+        </section>
 
-  <section class="gallery-section">
-    <h2>Topp 10 filmer nå</h2>
-    <div class="gallery-wrapper">
-      <div class="fade-left"></div>
-      <button class="scroll-button left" onclick="scrollGallery(this, -1)">❮</button>
-      <div class="top10-gallery" id="topp10-filmer-galleri"></div>
-      <button class="scroll-button right" onclick="scrollGallery(this, 1)">❯</button>
-      <div class="fade-right"></div>
-    </div>
-  </section> 
+        <!-- ===== Fortsett å se ===== -->
+<section class="gallery-section" id="fortsett-section" style="display:none;">
+  <h2>Fortsett å se</h2>
+  <div class="gallery-wrapper">
+    <div class="fade-left"></div>
+    <button class="scroll-button left" onclick="scrollGallery(this, -1)">❮</button>
+    <div class="image-gallery" id="fortsett-galleri"></div>
+    <button class="scroll-button right" onclick="scrollGallery(this, 1)">❯</button>
+    <div class="fade-right"></div>
+  </div>
+</section>
 
-  <section class="gallery-section">
-    <h2>Kommende filmer</h2>
-    <div class="gallery-wrapper">
-      <div class="fade-left"></div>
-      <button class="scroll-button left" onclick="scrollGallery(this, -1)">❮</button>
-      <div class="coming-movies-gallery" id="kommer-snart-galleri"></div>
-      <button class="scroll-button right" onclick="scrollGallery(this, 1)">❯</button>
-      <div class="fade-right"></div>
-    </div>
-  </section>
+  
+        <section class="gallery-section">
+          <h2>Sjangere</h2>
+          <div class="gallery-wrapper">
+            <div class="fade-left"></div>
+            <button class="scroll-button left" onclick="scrollGallery(this, -1)">❮</button>
+            <div class="image-gallery genre-gallery">
+              <a href="sjanger.html?navn=julefilmer">Julefilmer <i class="fas fa-tree"></i></a>
+              <a href="sjanger.html?navn=barn">Barn / Familie <i class="fas fa-rocket"></i></a>
+              <a href="sjanger.html?navn=komedie">Komedie <i class="fas fa-laugh"></i></a>
+              <a href="sjanger.html?navn=skrekk">Skrekk <i class="fas fa-ghost"></i></a>
+              <a href="sjanger.html?navn=drama">Drama <i class="fas fa-theater-masks"></i></a>
+              <a href="sjanger.html?navn=romantikk">Romantikk <i class="fas fa-heart"></i></a>
+              <a href="sjanger.html?navn=action">Action <i class="fas fa-bolt"></i></a>
+            </div>
+            <button class="scroll-button right" onclick="scrollGallery(this, 1)">❯</button>
+            <div class="fade-right"></div>
+          </div>
+        </section>
 
-  <footer class="footer">
-    <div class="footer-links">
-      <a href="kontakt.html">Kontakt oss</a>
-      <a href="personvern.html">Personvern</a>
-      <a href="vilkar.html">Vilkår for bruk</a>
-      <a href="hjelp.html">Hjelp</a>
-    </div>
-    <div class="footer-copy">© 2025 Watch Nordic Group</div>
-  </footer>
-</main>
+  <section class="gallery-section">
+  <h2>Populære serier</h2>
+  <div class="gallery-wrapper">
+    <div class="fade-left"></div>
+
+    <button class="scroll-button left" onclick="scrollGallery(this, -1)">❮</button>
+
+    <div class="image-gallery" id="serier-galleri"></div>
+
+    <button class="scroll-button right" onclick="scrollGallery(this, 1)">❯</button>
+
+    <div class="fade-right"></div>
+  </div>
+</section>
+
+  
+        <section class="gallery-section">
+  <h2>Topp 10 filmer nå</h2>
+  <div class="gallery-wrapper">
+    <div class="fade-left"></div>
+    <button class="scroll-button left" onclick="scrollGallery(this, -1)">❮</button>
+    <div class="top10-gallery" id="topp10-filmer-galleri"></div>
+    <button class="scroll-button right" onclick="scrollGallery(this, 1)">❯</button>
+    <div class="fade-right"></div>
+  </div>
+</section> 
+  
+   <section class="gallery-section">
+  <h2>Kommende filmer</h2>
+  <div class="gallery-wrapper">
+    <div class="fade-left"></div>
+    <button class="scroll-button left" onclick="scrollGallery(this, -1)">❮</button>
+    
+    <!-- Her fylles filmene inn av JS -->
+    <div class="coming-movies-gallery" id="kommer-snart-galleri"></div>
+    
+    <button class="scroll-button right" onclick="scrollGallery(this, 1)">❯</button>
+    <div class="fade-right"></div>
+  </div>
+</section>
+
+  
+        <section class="gallery-section">
+          <h2>Barn</h2>
+          <div class="gallery-wrapper">
+            <div class="fade-left"></div>
+            <button class="scroll-button left" onclick="scrollGallery(this, -1)">❮</button>
+            <div class="image-gallery" id="barn-galleri"></div>
+            <button class="scroll-button right" onclick="scrollGallery(this, 1)">❯</button>
+            <div class="fade-right"></div>
+          </div>
+        </section>
+      </div>
+  
+      <footer class="footer">
+        <div class="footer-links">
+          <a href="kontakt.html">Kontakt oss</a>
+          <a href="personvern.html">Personvern</a>
+          <a href="vilkar.html">Vilkår for bruk</a>
+          <a href="hjelp.html">Hjelp</a>
+        </div>
+        <div class="footer-copy">
+          © 2025 Watch Nordic Grupe
+        </div>
+      </footer>
+    </main>
 
 <script src="Filmdata.js"></script> 
 <script src="Seriedata.js"></script> 
@@ -1933,6 +1978,7 @@ activeFilms.forEach(film => {
 
   
 </script>
+
 
 
 
