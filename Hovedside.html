@@ -8,6 +8,7 @@
   <link rel="icon" type="image/png" href="https://static.wixstatic.com/media/fd2fb2_39376e4ee55b460ab7a3ebbfcf35fef7~mv2.png" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
 <style>
+/* --- DIN ORIGINALE CSS STARTER HER --- */
 * {
   box-sizing: border-box;
   margin: 0;
@@ -385,6 +386,7 @@ main {
   text-align: center;
   color: #515151;
   font-size: 14px;
+  padding-bottom: 80px; /* Ekstra plass for mobilmeny */
 }
 
 .footer-links a {
@@ -599,6 +601,136 @@ main {
   border: 2px solid #fff;
   object-fit: cover;
   cursor: pointer;
+}
+
+/* ==========================================================================
+   RESPONSIVE DESIGN (MEDIA QUERIES) - NYTT TILLEGG
+   ========================================================================== 
+*/
+
+/* Nettbrett og mindre laptoper (opp til 1024px) */
+@media screen and (max-width: 1024px) {
+  main {
+    margin-left: 0; /* Fjerner venstre marg */
+    margin-right: 0;
+  }
+  
+  .content-wrapper {
+    width: 100%;
+    padding: 0 10px;
+  }
+
+  .gallery-section {
+    margin-left: 10px;
+    margin-right: 10px;
+  }
+
+  /* Toppmeny tilpasser seg */
+  .top-nav {
+    padding: 0 20px;
+  }
+}
+
+/* Mobiltelefoner (opp til 768px) */
+@media screen and (max-width: 768px) {
+  
+  /* 1. Flytt side-navigasjonen til bunnen (App-følelse) */
+  .vertical-nav {
+    width: 100%;
+    height: 60px;
+    top: auto;
+    bottom: 0;
+    flex-direction: row;
+    background-color: #091B1E; /* Bakgrunn må være synlig nå */
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 -4px 10px rgba(0,0,0,0.5);
+  }
+
+  .nav-icons-wrapper {
+    flex-direction: row;
+    width: 100%;
+    justify-content: space-around;
+    padding: 0 10px;
+    gap: 0;
+  }
+
+  .profilmeny {
+    display: none; /* Skjul profilbilde i bunnmeny, bruk toppmenyens profil */
+  }
+
+  .nav-icon {
+    padding: 10px;
+    font-size: 20px;
+  }
+
+  /* 2. Juster hovedinnholdet */
+  main {
+    margin-left: 0;
+    margin-right: 0;
+    padding-bottom: 70px; /* Plass til bunnmenyen slik at innhold ikke skjules */
+  }
+
+  /* 3. Toppmeny for mobil */
+  .top-nav {
+    padding: 0 15px;
+    height: 60px;
+  }
+  
+  .nav-links {
+    display: none; /* Skjul tekstlinker på mobil for å spare plass */
+  }
+
+  .top-nav .watch-logo {
+    width: 100px;
+  }
+
+  /* 4. Hero Banner */
+  .hero-banner {
+    height: 70vh; /* Mindre høyde på mobil */
+    margin-bottom: -10vh;
+  }
+
+  .banner-content {
+    left: 20px; /* Mindre avstand fra venstre */
+    right: 20px;
+    top: 40%;
+    max-width: 100%;
+  }
+
+  .film-logo {
+    width: 250px; /* Mindre logo */
+  }
+
+  .watch-button, .details-button {
+    padding: 10px 20px; /* Mindre knapper */
+    font-size: 16px;
+  }
+
+  /* 5. Gallerier */
+  .gallery-section h2 {
+    margin-left: 10px;
+  }
+
+  .image-gallery a img, 
+  .image-with-progress {
+    width: 160px; /* Mindre bildekort */
+    height: 90px;
+  }
+
+  /* Kommende filmer - fjern hover-effekt som utvider kortet for mye på mobil */
+  .coming-movie-item {
+    flex: 0 0 140px;
+    height: 220px;
+  }
+  
+  .coming-movie-item:hover {
+    flex: 0 0 140px; /* Ingen utvidelse på mobil touch */
+    transform: none;
+  }
+  
+  .coming-movie-item .logo {
+    max-width: 80%;
+  }
 }
 </style>
 </head>
@@ -1217,6 +1349,7 @@ activeFilms.forEach(film => {
 
   
 </script>
+
 
 
 
