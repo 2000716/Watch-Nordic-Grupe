@@ -836,57 +836,44 @@ video::cue {
    =========================================================== */
 
 /* ================= URL PARAMS ================= */
-const params = new URLSearchParams(window.location.search);
+constconst urlParams = new URLSearchParams(window.location.search);
 
-const navn =
-  params.get("navn") ||
-  params.get("id");
+// støtte for enten "id" eller "navn"
+const navn = urlParams.get("navn") || urlParams.get("id");
+const sesong = urlParams.get("sesong") || urlParams.get("s");
+const episode = urlParams.get("episode") || urlParams.get("e");
 
-const sesong =
-  params.get("sesong") ||
-  params.get("s");
+let media;
+let tilbakeUrl = "";
+let mediaId = "";
 
-const episodeNr =
-  params.get("episode") ||
-  params.get("e");
-
-/* ================= MEDIA RESOLVE ================= */
-let film;        // brukes overalt videre (samme som før)
-let filmId;      // unik ID for localStorage
-let type = "film";
-
-if (navn && filmer?.[navn] && !sesong && !episodeNr) {
-  /* ===== FILM ===== */
-  film = filmer[navn];
-  filmId = `film-${navn}`;
+if (navn && filmer[navn] && !sesong && !episode) {
+  // FILM
+  media = filmer[navn];
+  tilbakeUrl = media.tilbakeUrl || "filmer.html";
+  mediaId = `film-${navn}`;
 
 } else if (
   navn &&
-  serier?.[navn] &&
+  serier[navn] &&
   sesong &&
-  episodeNr &&
-  serier[navn].sesonger?.[sesong]?.episoder?.[episodeNr]
+  episode &&
+  serier[navn].sesonger?.[sesong]?.episoder?.[episode]
 ) {
-  /* ===== SERIE / EPISODE ===== */
-  type = "serie";
-
+  // SERIE EPISODE
   const serie = serier[navn];
-  const episode = serie.sesonger[sesong].episoder[episodeNr];
+  const ep = serie.sesonger[sesong].episoder[episode];
 
-  film = {
-    ...episode,
-    audioLanguages: serie.audioLanguages || [],
-    subtitleLanguages: serie.subtitleLanguages || [],
-    tilbakeUrl: `serie.html?navn=${navn}`,
-    tittel: `${serie.tittel} – S${sesong}E${episodeNr}: ${episode.tittel}`
-  };
-
-  filmId = `serie-${navn}-s${sesong}-e${episodeNr}`;
+  media = ep;
+  media.tittel = `${serie.tittel} – S${sesong}E${episode}: ${ep.tittel}`;
+  tilbakeUrl = `serie.html?navn=${navn}`;
+  mediaId = `serie-${navn}-s${sesong}-e${episode}`;
 
 } else {
   alert("Ugyldig innhold");
-  location.href = "Hovedside.html";
+  window.location.href = "Hovedside.html";
 }
+
 
 /* ================= BASIC SETUP ================= */
 document.title = film.tittel;
@@ -1241,6 +1228,7 @@ document.addEventListener("contextmenu", (e) => {
 });
 
 </script>
+
 
 
 
