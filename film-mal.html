@@ -922,44 +922,42 @@ let isDragging = false;
 let hideTimeout;
 let subtitlesEnabled = true;
 
-/* ================= FUNKSJONER ================= */
-function formatTime(t) {
-  const m = Math.floor(t / 60);
-  const s = Math.floor(t % 60);
-  return `${m}:${s < 10 ? "0" + s : s}`;
+// ==================== FUNKSJONER ==================== //
+// Format tid til mm:ss
+function formatTime(time) {
+  const m = Math.floor(time / 60);
+  const s = Math.floor(time % 60);
+  return `${m}:${s < 10 ? '0' + s : s}`;
 }
 
+// Oppdater progress-bar
 function updateProgress() {
   if (!isDragging) {
     const percent = (video.currentTime / video.duration) * 100;
-    progressFilled.style.width = percent + "%";
-    thumb.style.left = percent + "%";
+    progressFilled.style.width = percent + '%';
+    thumb.style.left = percent + '%';
   }
-  timeDisplay.textContent =
-    `${formatTime(video.currentTime)} / ${formatTime(video.duration)}`;
+  timeDisplay.textContent = `${formatTime(video.currentTime)} / ${formatTime(video.duration)}`;
 
-  if (!isNaN(video.duration)) {
-    localStorage.setItem(
-      "progress_" + filmId,
-      ((video.currentTime / video.duration) * 100).toFixed(1)
-    );
+  // --- LAGRE PROGRESJON --- //
+  if (!isNaN(video.duration) && video.duration > 0) {
+    const percent = (video.currentTime / video.duration) * 100;
+    localStorage.setItem("progress_" + filmId, percent.toFixed(1));
   }
 }
 
-/* ================= EVENTS ================= */
-video.addEventListener("timeupdate", updateProgress);
-video.addEventListener("loadedmetadata", updateProgress);
+// ==================== EVENTS ==================== //
+video.addEventListener('timeupdate', updateProgress);
+video.addEventListener('loadedmetadata', updateProgress);
 
-playBtn.onclick = () => video.paused ? video.play() : video.pause();
-video.onclick = playBtn.onclick;
+// Play/pause
+playBtn.addEventListener('click', () => video.paused ? video.play() : video.pause());
+video.addEventListener('click', () => video.paused ? video.play() : video.pause());
 
-document.addEventListener("keydown", e => {
-  if (e.code === "Space") {
-    e.preventDefault();
-    playBtn.onclick();
-  }
-  if (e.key === "ArrowRight") video.currentTime += 10;
-  if (e.key === "ArrowLeft") video.currentTime -= 10;
+document.addEventListener('keydown', e => {
+  if (e.code === 'Space') { e.preventDefault(); video.paused ? video.play() : video.pause(); }
+  if (e.key === 'ArrowRight') video.currentTime += 10;
+  if (e.key === 'ArrowLeft') video.currentTime -= 10;
 });
 
 video.addEventListener('play', () => { 
@@ -1233,11 +1231,6 @@ document.addEventListener("contextmenu", (e) => {
 });
 
 </script>
-
-
-
-
-
 
 
 
