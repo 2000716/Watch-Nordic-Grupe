@@ -833,25 +833,23 @@ video::cue {
 
 <script>
 /* ===================== MEDIA (FILM / SERIE) ===================== */
-const params = new URLSearchParams(window.location.search);
+const urlParams = new URLSearchParams(window.location.search);
 
-const navn = params.get("navn");
-const sesong = params.get("sesong");
-const episode = params.get("episode");
+// støtte for enten "id" eller "navn"
+const navn = urlParams.get("navn") || urlParams.get("id");
+const sesong = urlParams.get("sesong") || urlParams.get("s");
+const episode = urlParams.get("episode") || urlParams.get("e");
 
 let media;
 let tilbakeUrl = "";
 let mediaId = "";
 
-/* === FILM === */
 if (navn && filmer[navn] && !sesong && !episode) {
-  const film = filmer[navn];
-
-  media = film;
-  tilbakeUrl = film.tilbakeUrl || "filmer.html";
+  // FILM
+  media = filmer[navn];
+  tilbakeUrl = media.tilbakeUrl || "filmer.html";
   mediaId = `film-${navn}`;
 
-/* === SERIE / EPISODE === */
 } else if (
   navn &&
   serier[navn] &&
@@ -859,6 +857,7 @@ if (navn && filmer[navn] && !sesong && !episode) {
   episode &&
   serier[navn].sesonger?.[sesong]?.episoder?.[episode]
 ) {
+  // SERIE EPISODE
   const serie = serier[navn];
   const ep = serie.sesonger[sesong].episoder[episode];
 
@@ -869,8 +868,9 @@ if (navn && filmer[navn] && !sesong && !episode) {
 
 } else {
   alert("Ugyldig innhold");
-  location.href = "Hovedside.html";
+  window.location.href = "Hovedside.html";
 }
+
 
 
 document.title = media.tittel;
@@ -1043,6 +1043,7 @@ video.addEventListener("ended", () => {
 video.oncontextmenu = e => e.preventDefault();
 document.oncontextmenu = e => e.preventDefault();
 </script>
+
 
 
 
