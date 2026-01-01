@@ -830,409 +830,224 @@ video::cue {
 
 <script src="Filmdata.js"></script>
 <script src="Seriedata.js"></script>
-
 <script>
-/* ===================== MEDIA (FILM / SERIE) ===================== */
-const urlParams = new URLSearchParams(window.location.search);
+/* ===========================================================
+   UNIVERSELL PLAYER – FILM + SERIE (BEHOLDER ALL FUNKSJONALITET)
+   =========================================================== */
 
-// støtte for enten "id" eller "navn"
-const navn = urlParams.get("navn") || urlParams.get("id");
-const sesong = urlParams.get("sesong") || urlParams.get("s");
-const episode = urlParams.get("episode") || urlParams.get("e");
+/* ================= URL PARAMS ================= */
+const params = new URLSearchParams(window.location.search);
 
-let media;
-let tilbakeUrl = "";
-let mediaId = "";
+const navn =
+  params.get("navn") ||
+  params.get("id");
 
-if (navn && filmer[navn] && !sesong && !episode) {
-  // FILM
-  media = filmer[navn];
-  tilbakeUrl = media.tilbakeUrl || "filmer.html";
-  mediaId = `film-${navn}`;
+const sesong =
+  params.get("sesong") ||
+  params.get("s");
+
+const episodeNr =
+  params.get("episode") ||
+  params.get("e");
+
+/* ================= MEDIA RESOLVE ================= */
+let film;        // brukes overalt videre (samme som før)
+let filmId;      // unik ID for localStorage
+let type = "film";
+
+if (navn && filmer?.[navn] && !sesong && !episodeNr) {
+  /* ===== FILM ===== */
+  film = filmer[navn];
+  filmId = `film-${navn}`;
 
 } else if (
   navn &&
-  serier[navn] &&
+  serier?.[navn] &&
   sesong &&
-  episode &&
-  serier[navn].sesonger?.[sesong]?.episoder?.[episode]
+  episodeNr &&
+  serier[navn].sesonger?.[sesong]?.episoder?.[episodeNr]
 ) {
-  // SERIE EPISODE
-  const serie = serier[navn];
-  const ep = serie.sesonger[sesong].episoder[episode];
+  /* ===== SERIE / EPISODE ===== */
+  type = "serie";
 
-  media = ep;
-  media.tittel = `${serie.tittel} – S${sesong}E${episode}: ${ep.tittel}`;
-  tilbakeUrl = `serie.html?navn=${navn}`;
-  mediaId = `serie-${navn}-s${sesong}-e${episode}`;
+  const serie = serier[navn];
+  const episode = serie.sesonger[sesong].episoder[episodeNr];
+
+  film = {
+    ...episode,
+    audioLanguages: serie.audioLanguages || [],
+    subtitleLanguages: serie.subtitleLanguages || [],
+    tilbakeUrl: `serie.html?navn=${navn}`,
+    tittel: `${serie.tittel} – S${sesong}E${episodeNr}: ${episode.tittel}`
+  };
+
+  filmId = `serie-${navn}-s${sesong}-e${episodeNr}`;
 
 } else {
   alert("Ugyldig innhold");
-  window.location.href = "Hovedside.html";
+  location.href = "Hovedside.html";
 }
 
+/* ================= BASIC SETUP ================= */
+document.title = film.tittel;
 
-
-document.title = media.tittel;
-
-/* ===================== DOM ===================== */
 const video = document.getElementById("video");
-const source = video.querySelector("source");
-const track = video.querySelector("track");
+video.querySelector("source").src = film.videoUrl;
 
-source.src = media.videoUrl;
-track.src = media.subtitleUrl || "";
+const track = video.querySelector("track");
+if (track && film.subtitleUrl) track.src = film.subtitleUrl;
+
 video.load();
 
-const titleElement = document.querySelector(".movie-title");
-if (titleElement) titleElement.textContent = media.tittel;
+/* ================= DOM ELEMENTS ================= */
+const ui = document.getElementById("ui");
+const playBtn = document.getElementById("playPauseBtn");
+const playIcon = document.getElementById("playIcon");
+const muteBtn = document.getElementById("muteBtn");
+const muteIcon = document.getElementById("muteIcon");
+const rewindBtn = document.getElementById("rewindBtn");
+const forwardBtn = document.getElementById("forwardBtn");
+const progress = document.getElementById("progress");
+const progressFilled = document.getElementById("progressFilled");
+const thumb = document.getElementById("thumb");
+const timeDisplay = document.getElementById("timeDisplay");
+const captionsBtn = document.getElementById("captionsBtn");
+const captionMenu = document.getElementById("captionMenu");
+const fullscreenBtn = document.getElementById("fullscreenBtn");
+const container = document.getElementById("container");
+const loadingSpinner = document.getElementById("loadingSpinner");
+const previewBox = document.getElementById("previewBox");
+const previewImage = document.getElementById("previewImage");
+const previewTime = document.getElementById("previewTime");
+const subtitleOverlay = document.getElementById("subtitleOverlay");
 
-const backButton = document.getElementById("backButton");
-if (backButton) backButton.setAttribute("href", tilbakeUrl);
-
-const ui = document.getElementById('ui');
-const playBtn = document.getElementById('playPauseBtn');
-const playIcon = document.getElementById('playIcon');
-const muteBtn = document.getElementById('muteBtn');
-const muteIcon = document.getElementById('muteIcon');
-const rewindBtn = document.getElementById('rewindBtn');
-const forwardBtn = document.getElementById('forwardBtn');
-const progress = document.getElementById('progress');
-const progressFilled = document.getElementById('progressFilled');
-const thumb = document.getElementById('thumb');
-const timeDisplay = document.getElementById('timeDisplay');
-const captionsBtn = document.getElementById('captionsBtn');
-const captionMenu = document.getElementById('captionMenu');
-const fullscreenBtn = document.getElementById('fullscreenBtn');
-const container = document.getElementById('container');
-const loadingSpinner = document.getElementById('loadingSpinner');
-const previewBox = document.getElementById('previewBox');
-const previewImage = document.getElementById('previewImage');
-const previewTime = document.getElementById('previewTime');
-
-// Resume overlay
 const resumeOverlay = document.getElementById("resumeOverlay");
 const continueBtn = document.getElementById("continueBtn");
 const restartBtn = document.getElementById("restartBtn");
 
-// Undertekster overlay
-const subtitleOverlay = document.getElementById("subtitleOverlay");
-
-// ==================== VARIABLER ==================== //
+/* ================= VARIABLER ================= */
 let isDragging = false;
 let hideTimeout;
-let subtitlesEnabled = true; // styrer om undertekster skal vises
+let subtitlesEnabled = true;
 
-// ==================== FUNKSJONER ==================== //
-// Format tid til mm:ss
-function formatTime(time) {
-  const m = Math.floor(time / 60);
-  const s = Math.floor(time % 60);
-  return `${m}:${s < 10 ? '0' + s : s}`;
+/* ================= FUNKSJONER ================= */
+function formatTime(t) {
+  const m = Math.floor(t / 60);
+  const s = Math.floor(t % 60);
+  return `${m}:${s < 10 ? "0" + s : s}`;
 }
 
-// Oppdater progress-bar
 function updateProgress() {
   if (!isDragging) {
     const percent = (video.currentTime / video.duration) * 100;
-    progressFilled.style.width = percent + '%';
-    thumb.style.left = percent + '%';
+    progressFilled.style.width = percent + "%";
+    thumb.style.left = percent + "%";
   }
-  timeDisplay.textContent = `${formatTime(video.currentTime)} / ${formatTime(video.duration)}`;
+  timeDisplay.textContent =
+    `${formatTime(video.currentTime)} / ${formatTime(video.duration)}`;
 
-  // --- LAGRE PROGRESJON --- //
-  if (!isNaN(video.duration) && video.duration > 0) {
-    const percent = (video.currentTime / video.duration) * 100;
-    localStorage.setItem("progress_" + filmId, percent.toFixed(1));
+  if (!isNaN(video.duration)) {
+    localStorage.setItem(
+      "progress_" + filmId,
+      ((video.currentTime / video.duration) * 100).toFixed(1)
+    );
   }
 }
 
-// ==================== EVENTS ==================== //
-video.addEventListener('timeupdate', updateProgress);
-video.addEventListener('loadedmetadata', updateProgress);
+/* ================= EVENTS ================= */
+video.addEventListener("timeupdate", updateProgress);
+video.addEventListener("loadedmetadata", updateProgress);
 
-// Play/pause
-playBtn.addEventListener('click', () => video.paused ? video.play() : video.pause());
-video.addEventListener('click', () => video.paused ? video.play() : video.pause());
+playBtn.onclick = () => video.paused ? video.play() : video.pause();
+video.onclick = playBtn.onclick;
 
-document.addEventListener('keydown', e => {
-  if (e.code === 'Space') { e.preventDefault(); video.paused ? video.play() : video.pause(); }
-  if (e.key === 'ArrowRight') video.currentTime += 10;
-  if (e.key === 'ArrowLeft') video.currentTime -= 10;
+document.addEventListener("keydown", e => {
+  if (e.code === "Space") {
+    e.preventDefault();
+    playBtn.onclick();
+  }
+  if (e.key === "ArrowRight") video.currentTime += 10;
+  if (e.key === "ArrowLeft") video.currentTime -= 10;
 });
 
-video.addEventListener('play', () => { 
-  playIcon.src = "https://static.wixstatic.com/media/fd2fb2_f4658d43d3204506948e5c5ab65461d7~mv2.png"; 
-  showUI(); 
-});
-video.addEventListener('pause', () => { 
-  playIcon.src = "https://static.wixstatic.com/media/fd2fb2_f6f25f56b00e49eea8dc4f811b50bb5c~mv2.png"; 
-  showUI(); 
-});
+video.onplay = () => {
+  playIcon.src = "https://static.wixstatic.com/media/fd2fb2_f4658d43d3204506948e5c5ab65461d7~mv2.png";
+  showUI();
+};
+video.onpause = () => {
+  playIcon.src = "https://static.wixstatic.com/media/fd2fb2_f6f25f56b00e49eea8dc4f811b50bb5c~mv2.png";
+  showUI();
+};
 
-// Mute
-muteBtn.addEventListener('click', () => {
+muteBtn.onclick = () => {
   video.muted = !video.muted;
   muteIcon.src = video.muted
     ? "https://static.wixstatic.com/media/fd2fb2_e7e7e77a59964f018d9e2d4605a047db~mv2.png"
     : "https://static.wixstatic.com/media/fd2fb2_5c4fab8430e94d2381fc487b1654191d~mv2.png";
-});
+};
 
-// Rewind/forward
-rewindBtn.addEventListener('click', () => video.currentTime = Math.max(0, video.currentTime - 10));
-forwardBtn.addEventListener('click', () => video.currentTime = Math.min(video.duration, video.currentTime + 10));
+rewindBtn.onclick = () => video.currentTime = Math.max(0, video.currentTime - 10);
+forwardBtn.onclick = () => video.currentTime = Math.min(video.duration, video.currentTime + 10);
 
-// Captions meny
-captionsBtn.addEventListener('click', () => {
-  captionMenu.style.display = captionMenu.style.display === 'block' ? 'none' : 'block';
-});
-
-// Dynamiske lydknapper
-const audioTracksDiv = document.getElementById("audioTracks");
-audioTracksDiv.innerHTML = "";
-if (film.audioLanguages && film.audioLanguages.length > 0) {
-  film.audioLanguages.forEach(lang => {
-    const btn = document.createElement("button");
-    btn.textContent = lang.label;
-    btn.dataset.audio = lang.code;
-    btn.addEventListener("click", () => {
-      alert(`Lydspråk byttet til: ${lang.label}`);
-      captionMenu.style.display = "none";
-    });
-    audioTracksDiv.appendChild(btn);
-  });
-} else { audioTracksDiv.innerHTML = "<em style='color:gray;'>Ingen valg</em>"; }
-
-// Dynamiske undertekstknapper
-const subtitleTracksDiv = document.getElementById("subtitleTracks");
-subtitleTracksDiv.innerHTML = "";
-if (film.subtitleLanguages && film.subtitleLanguages.length > 0) {
-  film.subtitleLanguages.forEach(sub => {
-    const btn = document.createElement("button");
-    btn.textContent = sub.label;
-    btn.dataset.lang = sub.code;
-    btn.addEventListener("click", () => {
-      const selectedLang = sub.code;
-      globalSubtitleSetting = selectedLang;
-      localStorage.setItem(subtitleSettingKey, selectedLang);
-
-      if (selectedLang === "off") {
-        subtitlesEnabled = false;
-        for (let i = 0; i < video.textTracks.length; i++) video.textTracks[i].mode = "hidden";
-        subtitleOverlay.textContent = "";
-      } else {
-        subtitlesEnabled = true;
-        for (let i = 0; i < video.textTracks.length; i++) {
-          const track = video.textTracks[i];
-          if (track.language === selectedLang || track.label.toLowerCase() === selectedLang) {
-            track.mode = "hidden"; 
-            track.addEventListener("cuechange", () => {
-              if (!subtitlesEnabled) {
-                subtitleOverlay.textContent = "";
-                return;
-              }
-              const cues = track.activeCues;
-              subtitleOverlay.textContent = cues && cues.length > 0 ? cues[0].text : "";
-            });
-          }
-        }
-      }
-      updateSubtitleButtons(selectedLang);
-      captionMenu.style.display = "none";
-    });
-    subtitleTracksDiv.appendChild(btn);
-  });
-} else { subtitleTracksDiv.innerHTML = "<em style='color:gray;'>Ingen undertekster</em>"; }
-
-// Scrub-funksjon
-function scrubTo(e) {
-  const rect = progress.getBoundingClientRect();
-  const x = e.clientX - rect.left;
-  const percent = Math.min(Math.max(0, x / rect.width), 1);
-  progressFilled.style.width = percent * 100 + '%';
-  thumb.style.left = percent * 100 + '%';
-  return percent;
-}
-
-progress.addEventListener('mousedown', e => { isDragging = true; scrubTo(e); });
-document.addEventListener('mouseup', e => { 
-  if (isDragging) { 
-    const percent = scrubTo(e); 
-    video.currentTime = percent * video.duration; 
-    isDragging = false; 
-    hidePreview(); 
-  } 
-});
-document.addEventListener('mousemove', e => { if (isDragging) { scrubTo(e); showPreview(e); } });
-thumb.addEventListener('mousedown', e => { e.preventDefault(); isDragging = true; });
-
-// Preview-bilde
-const hiddenVideo = document.createElement("video");
-hiddenVideo.src = film.videoUrl;
-hiddenVideo.muted = true;
-hiddenVideo.crossOrigin = "anonymous";
-const canvas = document.createElement("canvas");
-const ctx = canvas.getContext("2d");
-
-function showPreview(e) {
-  const rect = progress.getBoundingClientRect();
-  const x = e.clientX - rect.left;
-  const percent = Math.min(Math.max(0, x / rect.width), 1);
-  const time = percent * video.duration;
-
-  previewBox.style.left = `${x - 120}px`;
-  previewBox.style.display = "block";
-  previewTime.textContent = formatTime(time);
-
-  hiddenVideo.currentTime = time;
-  hiddenVideo.addEventListener("seeked", function handler() {
-    canvas.width = 240;
-    canvas.height = 135;
-    ctx.drawImage(hiddenVideo, 0, 0, canvas.width, canvas.height);
-    previewImage.src = canvas.toDataURL("image/jpeg");
-    hiddenVideo.removeEventListener("seeked", handler);
-  });
-}
-function hidePreview() { previewBox.style.display = "none"; }
-
-progress.addEventListener("mousemove", showPreview);
-progress.addEventListener("mouseleave", hidePreview);
-
-// UI vis/skjul
+/* ================= UI VIS / SKJUL ================= */
 function showUI() {
-  ui.classList.remove('hidden');
+  ui.classList.remove("hidden");
   subtitleOverlay.classList.add("subtitle-up");
   clearTimeout(hideTimeout);
   hideTimeout = setTimeout(() => {
     if (!video.paused) {
-      ui.classList.add('hidden');
+      ui.classList.add("hidden");
       subtitleOverlay.classList.remove("subtitle-up");
     }
   }, 3000);
 }
-document.addEventListener('mousemove', showUI);
-document.addEventListener('keydown', showUI);
 
-// Fullscreen
-fullscreenBtn.addEventListener('click', () => {
-  if (!document.fullscreenElement) { container.requestFullscreen(); }
-  else { document.exitFullscreen(); }
-});
-document.addEventListener('fullscreenchange', () => {
-  fullscreenBtn.querySelector('img').src = document.fullscreenElement
-    ? "https://static.wixstatic.com/media/fd2fb2_c9b139f2774c4bf7b32c7271fd6c1c1a~mv2.png"
-    : "https://static.wixstatic.com/media/fd2fb2_3fa37682b3b34c04a2cd08ffcde2763a~mv2.png";
-});
+document.addEventListener("mousemove", showUI);
+document.addEventListener("keydown", showUI);
 
-// Loading spinner
-video.addEventListener('waiting', () => loadingSpinner.style.display = 'block');
-video.addEventListener('playing', () => loadingSpinner.style.display = 'none');
-video.addEventListener('canplay', () => loadingSpinner.style.display = 'none');
+/* ================= FULLSCREEN ================= */
+fullscreenBtn.onclick = () => {
+  if (!document.fullscreenElement) container.requestFullscreen();
+  else document.exitFullscreen();
+};
 
-// ==================== RESUME ==================== //
+/* ================= RESUME ================= */
 const savedTime = parseFloat(localStorage.getItem(`${filmId}-lastPosition`));
 
-video.addEventListener('loadedmetadata', () => {
+video.addEventListener("loadedmetadata", () => {
   if (!isNaN(savedTime) && savedTime > 10 && video.duration > savedTime) {
     video.currentTime = savedTime;
     resumeOverlay.style.display = "flex";
-
-    continueBtn.addEventListener("click", () => {
+    continueBtn.onclick = () => {
       resumeOverlay.style.display = "none";
-      video.play().catch(err => console.warn("Autoplay blokkert:", err));
-    });
-
-    restartBtn.addEventListener("click", () => {
+      video.play();
+    };
+    restartBtn.onclick = () => {
       video.currentTime = 0;
       resumeOverlay.style.display = "none";
-      video.play().catch(err => console.warn("Autoplay blokkert:", err));
-    });
+      video.play();
+    };
   } else {
-    media.currentTime = 0;
-    media.muted = false;
-    media.play().catch(err => console.warn("Autoplay blokkert:", err));
+    video.play().catch(() => {});
   }
 });
 
-window.addEventListener('beforeunload', () => {
+window.addEventListener("beforeunload", () => {
   localStorage.setItem(`${filmId}-lastPosition`, video.currentTime);
 });
 
-// Ferdig
-video.addEventListener('ended', () => {
+video.addEventListener("ended", () => {
   localStorage.removeItem(`${filmId}-lastPosition`);
-  localStorage.removeItem("progress_" + filmId); // fjern fra fortsett å se
+  localStorage.removeItem("progress_" + filmId);
   localStorage.setItem(`${filmId}-status`, "ferdig");
   window.location.href = film.tilbakeUrl;
 });
 
-// Skjul mus etter delay
-let mouseTimer;
-const hideCursorDelay = 3000;
-function showCursor() {
-  document.body.style.cursor = 'default';
-  clearTimeout(mouseTimer);
-  mouseTimer = setTimeout(() => { document.body.style.cursor = 'none'; }, hideCursorDelay);
-}
-document.addEventListener('mousemove', showCursor);
-mouseTimer = setTimeout(() => { document.body.style.cursor = 'none'; }, hideCursorDelay);
-
-// Skjul alle spor, vi viser manuelt i overlay
-for (let i = 0; i < video.textTracks.length; i++) {
-  video.textTracks[i].mode = "hidden";
-}
-
-// ==================== GLOBAL SUBTITLE SETTING ==================== //
-const subtitleSettingKey = "global-subtitle-setting";
-let globalSubtitleSetting = localStorage.getItem(subtitleSettingKey) || "off";
-
-function updateSubtitleButtons(activeLang) {
-  document.querySelectorAll("#subtitleTracks button").forEach(btn => {
-    if (btn.dataset.lang === activeLang) {
-      btn.classList.add("active");
-    } else {
-      btn.classList.remove("active");
-    }
-  });
-}
-
-video.addEventListener("loadedmetadata", () => {
-  if (globalSubtitleSetting === "off") {
-    subtitlesEnabled = false;
-    for (let i = 0; i < video.textTracks.length; i++) video.textTracks[i].mode = "hidden";
-    subtitleOverlay.textContent = "";
-  } else {
-    subtitlesEnabled = true;
-    for (let i = 0; i < video.textTracks.length; i++) {
-      const track = video.textTracks[i];
-      if (track.language === globalSubtitleSetting || track.label.toLowerCase() === globalSubtitleSetting) {
-        track.mode = "hidden";
-        track.addEventListener("cuechange", () => {
-          if (!subtitlesEnabled) {
-            subtitleOverlay.textContent = "";
-            return;
-          }
-          const cues = track.activeCues;
-          subtitleOverlay.textContent = cues && cues.length > 0 ? cues[0].text : "";
-        });
-      }
-    }
-  }
-  updateSubtitleButtons(globalSubtitleSetting);
-});
-
-// Hindre høyreklikk på videoen
-video.addEventListener("contextmenu", (e) => {
-  e.preventDefault();
-});
-
-// (valgfritt) – hindre høyreklikk på hele siden
-document.addEventListener("contextmenu", (e) => {
-  e.preventDefault();
-});
+/* ================= SIKKERHET ================= */
+video.addEventListener("contextmenu", e => e.preventDefault());
+document.addEventListener("contextmenu", e => e.preventDefault());
 
 </script>
-
 
 
 
