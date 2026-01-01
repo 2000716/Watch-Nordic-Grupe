@@ -881,8 +881,26 @@ if (navn && filmer?.[navn] && !sesong && !episode) {
 }
 
 /* ================= BASIC SETUP ================= */
+
+// Oppdater dokumenttittel
 document.title = film.tittel;
 
+// Oppdater filmtittel i UI
+const movieTitleEl = document.querySelector(".movie-title");
+if (movieTitleEl && film?.tittel) {
+  movieTitleEl.textContent = film.tittel;
+}
+
+// Sett tilbakeknapp
+const backButton = document.getElementById("backButton");
+if (backButton && tilbakeUrl) {
+  backButton.addEventListener("click", (e) => {
+    e.preventDefault();
+    window.location.href = tilbakeUrl;
+  });
+}
+
+// Last video
 const video = document.getElementById("video");
 video.querySelector("source").src = film.videoUrl;
 
@@ -1231,6 +1249,7 @@ document.addEventListener("contextmenu", (e) => {
 });
 
 </script>
+
 
 
 
