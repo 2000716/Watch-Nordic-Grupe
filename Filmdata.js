@@ -794,12 +794,37 @@ const filmer = {
   publishDate: "2025-12-24T00:00:00", // ISO datoformat
   expireDate: "2027-01-01T23:59:59"
 },
+
+           "teddybjørnens-jul": {
+    tittel: "Teddybjørnens jul",
+    bakgrunn: "https://image.tmdb.org/t/p/original/AeWXXgE0KHOzxuuzJFMnW5z3ppO.jpg",
+    logo: "",     
+    poster: "https://snakkomtro.com/wp-content/uploads/2024/11/652957f9498ecd0a23672435-1701180011078.jpeg",
+    posterVertikal: "https://image.tmdb.org/t/p/original/ltk2gZxM0UEXvbyptuviGMBiRqk.jpg", // portrett
+    beskrivelse: "Inspirert av Alf Prøysens «Teddybjørnens vise» kommer en morsom og sjarmerende julefilm for hele familien. Når Mariann får øye på en teddybjørn i en lykkebod, settes julefreden på vent for en eventyrlig reise.",
+    metadata: ["Norge", "2022", "Alle", "Familie", "1 t 15 min"],
+    imdb: "https://www.imdb.com/title/tt21054736?ref_ext_viaplay",
+    skuespillere: "Marte Klerck-Nilssen, John F. Brungot, Vegard Strand Eide",
+    regissor: "Andrea Eckerbom",
+  watchUrl: "film-mal.html?id=teddybjørnens-jul",
+  videoUrl:"https://vixsrc.to/playlist/399080.m3u8?token=9905ec2e3070f3c003c60ff75486c083&expires=1772484847&h=1",
+  subtitleUrl: "teddy.VTT",
+  tilbakeUrl: "film.html?navn=teddybjørnens-jul",
+  audioLanguages: [
+    { code: "no", label: "Norsk" } ],
+  subtitleLanguages: [ { code: "no", label: "Norsk" },
+    { code: "off", label: "Av" }
+  ],
+  publishDate: "2025-12-24T00:00:00", // ISO datoformat
+  expireDate: "2027-01-01T23:59:59"
+},
   
   };
 
    
   
     
+
 
 
 
