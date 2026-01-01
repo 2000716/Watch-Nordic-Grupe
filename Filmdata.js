@@ -815,7 +815,7 @@ const filmer = {
   subtitleLanguages: [ { code: "no", label: "Norsk" },
     { code: "off", label: "Av" }
   ],
-  publishDate: "2026-01-02T00:00:00", // ISO datoformat
+  publishDate: "2026-01-01T00:00:00", // ISO datoformat
   expireDate: "2027-01-01T23:59:59"
 },
   
@@ -824,6 +824,7 @@ const filmer = {
    
   
     
+
 
 
 
