@@ -833,47 +833,45 @@ video::cue {
 
 <script>
 /* ===================== MEDIA (FILM / SERIE) ===================== */
-const urlParams = new URLSearchParams(window.location.search);
+const params = new URLSearchParams(window.location.search);
 
-const type = urlParams.get("type"); // film | serie
-const id = urlParams.get("id")?.toLowerCase();
-const sesong = urlParams.get("s");
-const episode = urlParams.get("e");
+const navn = params.get("navn");
+const sesong = params.get("sesong");
+const episode = params.get("episode");
 
 let media;
 let tilbakeUrl = "";
 let mediaId = "";
 
-if (type === "film") {
-  if (!filmer[id]) {
-    alert("Filmen finnes ikke");
-    location.href = "filmer.html";
-  }
-  media = filmer[id];
-  tilbakeUrl = media.tilbakeUrl;
-  mediaId = `film-${id}`;
+/* === FILM === */
+if (navn && filmer[navn] && !sesong && !episode) {
+  const film = filmer[navn];
 
-} else if (type === "serie") {
-  const serie = serier[id];
+  media = film;
+  tilbakeUrl = film.tilbakeUrl || "filmer.html";
+  mediaId = `film-${navn}`;
 
-  if (
-    !serie ||
-    !serie.sesonger[sesong] ||
-    !serie.sesonger[sesong].episoder[episode]
-  ) {
-    alert("Episoden finnes ikke");
-    location.href = "serier.html";
-  }
+/* === SERIE / EPISODE === */
+} else if (
+  navn &&
+  serier[navn] &&
+  sesong &&
+  episode &&
+  serier[navn].sesonger?.[sesong]?.episoder?.[episode]
+) {
+  const serie = serier[navn];
+  const ep = serie.sesonger[sesong].episoder[episode];
 
-  media = serie.sesonger[sesong].episoder[episode];
-  media.tittel = `${serie.tittel} – S${sesong}E${episode}: ${media.tittel}`;
-  tilbakeUrl = "serie.html?id=" + id;
-  mediaId = `serie-${id}-s${sesong}-e${episode}`;
+  media = ep;
+  media.tittel = `${serie.tittel} – S${sesong}E${episode}: ${ep.tittel}`;
+  tilbakeUrl = `serie.html?navn=${navn}`;
+  mediaId = `serie-${navn}-s${sesong}-e${episode}`;
 
 } else {
   alert("Ugyldig innhold");
-  location.href = "index.html";
+  location.href = "Hovedside.html";
 }
+
 
 document.title = media.tittel;
 
@@ -1045,6 +1043,7 @@ video.addEventListener("ended", () => {
 video.oncontextmenu = e => e.preventDefault();
 document.oncontextmenu = e => e.preventDefault();
 </script>
+
 
 
 
