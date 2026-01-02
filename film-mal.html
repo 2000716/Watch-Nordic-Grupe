@@ -732,11 +732,11 @@ video::cue {
 </head>
 <body>
   <div class="container" id="container">
-    <video id="video" preload="metadata">
-      <source src="" type="video/mp4">
-      <track label="Norsk" kind="subtitles" srclang="no" src="" default>
-      Din nettleser støtter ikke videoavspilling.
-    </video>
+ <video id="video" preload="metadata" crossorigin="anonymous">
+  <track label="Norsk" kind="subtitles" srclang="no" src="" default>
+  Din nettleser støtter ikke videoavspilling.
+</video>
+
     <div class="subtitle-overlay" id="subtitleOverlay"></div>
 
 
@@ -902,12 +902,14 @@ if (backButton && tilbakeUrl) {
 
 // Last video
 const video = document.getElementById("video");
-video.querySelector("source").src = film.videoUrl;
+
+video.src = film.videoUrl; // 🔥 KRITISK FIX
 
 const track = video.querySelector("track");
 if (track && film.subtitleUrl) track.src = film.subtitleUrl;
 
 video.load();
+
 
 /* ================= DOM ELEMENTS ================= */
 const ui = document.getElementById("ui");
@@ -1249,6 +1251,7 @@ document.addEventListener("contextmenu", (e) => {
 });
 
 </script>
+
 
 
 
