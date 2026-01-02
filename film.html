@@ -1230,16 +1230,20 @@ if (type === "serie" && data.sesonger) {
 
   const sesongNumre = Object.keys(data.sesonger);
 
-  // === Lag sesongknapper ===
-  sesongNumre.forEach((s, index) => {
-    const btn = document.createElement("button");
-    btn.textContent = `Sesong ${s}`;
-    btn.className = "season-btn";
-    if (index === 0) btn.classList.add("active");
+ // === Lag sesongknapper ===
+sesongNumre.forEach((s, index) => {
+  const btn = document.createElement("button");
+  btn.textContent = `Sesong ${s}`;
+  btn.className = "season-btn";
+  if (index === 0) btn.classList.add("active");
 
-    btn.addEventListener("click", () => visSesong(s));
-    seasonButtons.appendChild(btn);
-  });
+  btn.addEventListener("click", () => visSesong(s));
+  seasonButtons.appendChild(btn);
+});
+
+// ✅ Vis første sesong automatisk
+visSesong(sesongNumre[0]);
+
 
   // === Vis episoder ===
   function visSesong(sesongNr) {
@@ -1426,6 +1430,7 @@ if (data.logo && data.logo.trim() !== "") {
 </html>
 
  
+
 
 
 
