@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<DOCTYPE html>
 <html lang="no">
 <head>
   <meta charset="UTF-8" />
@@ -1000,10 +1000,10 @@ img, video {
     <button id="soundBtn"><i class="fas fa-volume-mute"></i></button>
   </div>
 
- <div class="logo-container">
-  <!-- logo-bilde fjernet -->
-</div>
-
+  <div class="content-wrapper">
+    <div class="logo-container">
+      <img class="film-logo" src="" alt="Filmlogo" />
+    </div>
 
     <div class="left-content">
       <div class="text-button-container">
@@ -1406,16 +1406,21 @@ window.addEventListener("scroll", () => {
   }
 });
 
-const logoContainer = document.querySelector(".logo-container");
+ const logoContainer = document.querySelector(".logo-container");
+const filmLogo = document.querySelector(".film-logo");
 
-// fjern evt. gammelt innhold
-logoContainer.innerHTML = "";
+if (data.logo && data.logo.trim() !== "") {
+  // Logo finnes → vis bildet
+  filmLogo.src = data.logo;
+  filmLogo.style.display = "block";
+} else {
+  filmLogo.style.display = "none";
 
-const titleEl = document.createElement("div");
-titleEl.className = "text-logo";
+  const titleEl = document.createElement("div");
+  titleEl.className = "text-logo";   // 👈 bruker samme stil som logo
+  titleEl.textContent = data.tittel;
 
-logoContainer.appendChild(titleEl);
-
+  logoContainer.appendChild(titleEl);
 }
 
 
@@ -1425,6 +1430,11 @@ logoContainer.appendChild(titleEl);
 </html>
 
  
+
+
+
+
+
 
 
 
