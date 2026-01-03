@@ -1406,21 +1406,17 @@ window.addEventListener("scroll", () => {
   }
 });
 
- const logoContainer = document.querySelector(".logo-container");
-const filmLogo = document.querySelector(".film-logo");
+const logoContainer = document.querySelector(".logo-container");
 
-if (data.logo && data.logo.trim() !== "") {
-  // Logo finnes → vis bildet
-  filmLogo.src = data.logo;
-  filmLogo.style.display = "block";
-} else {
-  filmLogo.style.display = "none";
+// fjern evt. gammelt innhold
+logoContainer.innerHTML = "";
 
-  const titleEl = document.createElement("div");
-  titleEl.className = "text-logo";   // 👈 bruker samme stil som logo
-  titleEl.textContent = data.tittel;
+const titleEl = document.createElement("div");
+titleEl.className = "text-logo";
+titleEl.textContent = data.tittel;
 
-  logoContainer.appendChild(titleEl);
+logoContainer.appendChild(titleEl);
+
 }
 
 
@@ -1430,6 +1426,7 @@ if (data.logo && data.logo.trim() !== "") {
 </html>
 
  
+
 
 
 
