@@ -767,8 +767,33 @@ const filmer = {
   publishDate: "2026-01-01T00:00:00", // ISO datoformat
   expireDate: "2027-01-01T23:59:59"
 },
+
+             "no-time-to-die": {
+    tittel: "No time to die",
+    bakgrunn: "https://image.tmdb.org/t/p/original/pMtohpZMsHMfYAPaxRvYmUtKgtF.jpg",
+    logo: "https://media.themoviedb.org/t/p/w500/h02wT4F1aPBkQ94NlSx3ypOI5xl.png",     
+    poster: "https://image.tmdb.org/t/p/original/dnxrremCrghG7z97zDeGPNrl75A.jpg",
+    posterVertikal: "https://image.tmdb.org/t/p/original/iUgygt3fscRoKWCV1d0C7FbM9TP.jpg", // portrett
+    beskrivelse: "James Bond har forlatt aktiv tjeneste. Freden hans blir kortvarig når Felix Leiter, en gammel venn fra CIA, dukker opp og ber om hjelp, noe som leder Bond på sporet av en mystisk skurk bevæpnet med farlig ny teknologi.",
+    metadata: ["England", "2022", "12 år", "Action", "2 t 43 min"],
+    imdb: "https://www.imdb.com/title/tt2382320/",
+    skuespillere: "Daniel Craig, Ana de Armas, Rami Malek",
+    regissor: "Cary Joji Fukunaga",
+  watchUrl: "film-mal.html?id=no-time-to-die",
+  videoUrl:"https://vixsrc.to/playlist/399080.m3u8?token=9905ec2e3070f3c003c60ff75486c083&expires=1772484847&h=1",
+  subtitleUrl: "no-time-to-die.VTT",
+  tilbakeUrl: "film.html?navn=no-time-to-die",
+  audioLanguages: [
+    { code: "no", label: "Engelsk" } ],
+  subtitleLanguages: [ { code: "no", label: "Norsk" },
+    { code: "off", label: "Av" }
+  ],
+  publishDate: "2026-01-20T00:00:00", // ISO datoformat
+  expireDate: "2027-01-01T23:59:59"
+},
   
   };
 
    
   
+
