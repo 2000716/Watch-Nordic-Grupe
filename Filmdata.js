@@ -466,23 +466,6 @@ const filmer = {
     expireDate: "2026-11-15T23:59:59",
   },
 
-    "dark-crystal": {
-    tittel: "Dark Crystal",
-    bakgrunn: "https://pbs.twimg.com/media/D_h6SFfXkAE5l03.jpg:large",
-    logo: "https://www.boom-studios.com/wp-content/uploads/2023/11/DarkCrystal_Stacked_White-1024x740.png",
-    poster: "https://s3.amazonaws.com/nightjarprod/content/uploads/sites/344/2024/12/08224242/fZPxRaa6gvCyGCh9Xk5kyPqz7fp.jpg",
-    posterVertikal: "https://images.squarespace-cdn.com/content/v1/5b18735a3917ee20d18a2117/68445461-2516-404c-abb1-ceaf37147108/maxresdefault.jpg", // portrett
-    beskrivelse: "Geflings prøver å redde verden fra ondskap i denne forseggjorte fantasy-filmen fra regissørene Jim Henson og Frank Oz.",
-    metadata: ["USA", "1982", "Alle", "Familie", "1 t 29 min"],
-    imdb: "https://www.imdb.com/fr/title/tt0083791/",
-    skuespillere: "Jim Henson, Kathryn Mullen, Frank Oz",
-    regissor: "Jim Henson",
-    watchUrl: "film-mal.html?id=dark-crystal",
-    publishDate: "2025-11-01T00:00:00", // ISO datoformat
-    expireDate: "2027-11-15T23:59:59",
-  },
-
-
         "sauen-shaun-feirer-jul": {
     tittel: "Sauen Shaun feirer jul",
     bakgrunn: "https://occ-0-8407-2218.1.nflxso.net/dnm/api/v6/6AYY37jfdO6hpXcMjf9Yu5cnmO0/AAAABQU4tesNj6oOG7YHhKHa5IZECNxDSBDHbt7P8FWUTu7-rslIOwXFfWepqLrH8LBboQFxtkbPSiLtRTgLqcmcNucHkXtUpdprmtoO.jpg?r=f2d",
@@ -587,24 +570,6 @@ const filmer = {
     expireDate: "2027-11-15T23:59:59",
   },
 
-  
-    "bukkene-bruse-på-badeland": {
-    tittel: "Bukkene Bruse På Badeland",
-    bakgrunn: "https://gfx.nrk.no/TvSHoqEH2RZNUGu8GkUPQgV9GzD5Lnx9JM5xRu-b0fgQ",
-    logo: "https://gfx.nrk.no/sFLofcs-6z2yRECoqj1OswexUISYWnn9tiKLHazGYnwA",
-    trailer: "https://video.wixstatic.com/video/fd2fb2_01e27bfa32554edcbed3b23ce9d6ad1d/1080p/mp4/file.mp4", // 🎥 NY 
-    poster: "https://gfx.nrk.no/sTYD5OcGTwLgaejFDJJtfw2nPPgGbstPXGsG39nryCpw",
-    posterVertikal: "https://i-viaplay-com.akamaized.net/viaplay-prod/291/964/1709901113-992977647b04853547970001d520ea437bc8d372.jpg?width=400&height=600", // portrett
-    beskrivelse: "De tre bukkene Bruse gidder ikke å dra til setra for å gjøre seg fete nok en gang. Det blir alt for mye styr med trollet. I år skal de på badeland!",
-    metadata: ["Norge", "2023", "Alle", "Familie", "1 t 7 min"],
-    imdb: "https://www.imdb.com/title/tt21421052/",
-    skuespillere: "Astrid Lammetun, William Ashurst, Trond Fausa Aurvåg, Will Ashurst, Regina Tucker",
-    regissor: "William AshurstWill Ashurst",
-    watchUrl: "film-mal.html?id=bukkene-bruse-på-badeland",
-    publishDate: "2026-01-01T00:00:00", // ISO datoformat
-    expireDate: "2027-11-15T23:59:59",
-  },
-
       "how-the-grinch-stole-christmas": {
     tittel: "How the Grinch Stole Christmas",
     bakgrunn: "https://www.level44.co/wp-content/uploads/2024/11/531787-1920x1080-desktop-1080p-how-the-grinch-stole-christmas-background.jpg",
@@ -625,22 +590,6 @@ const filmer = {
     subtitleLanguages:  [ { code: "no", label: "Norsk" },
       { code: "off", label: "Av" } ],
     publishDate: "2025-12-01T00:00:00", // ISO datoformat
-    expireDate: "2027-11-15T23:59:59",
-  },
-    "wicked": {
-    tittel: "Wicked",
-    bakgrunn: "https://pixel.disco.skyshowtime.com/uuid/40ec0ebf-cb29-3777-ab59-8de374eab89b/LAND_16_9?language=en-US&proposition=SKYSHOWTIME&version=640aa566-6134-3649-905c-c5c3955ab2ad",
-    logo: "https://www.skyshowtime.com/dam/commerce/assets/web/hero/wicked/logo/wicked_logo_all.png",
-    trailer: "https://video.wixstatic.com/video/fd2fb2_9bcac6e53ba24f609eb363e63dc85ba5/1080p/mp4/file.mp4", // 🎥 NY 
-    poster: "https://pixel.disco.skyshowtime.com/uuid/40ec0ebf-cb29-3777-ab59-8de374eab89b/COVER_TITLE_WIDE/640/480?language=nb-NO&proposition=SKYSHOWTIME&version=5737f7cb-b768-3675-928e-95b250e44e96",
-    posterVertikal: "https://pixel.disco.skyshowtime.com/uuid/40ec0ebf-cb29-3777-ab59-8de374eab89b/COVER_TITLE_TALL?language=nb-NO&proposition=SKYSHOWTIME&version=caa8a3bb-1ab1-3893-8dba-fceb0a612a5c", // portrett
-    beskrivelse: "Elphaba, misforstått på grunn av hennes grønne hud, knytter et usannsynlig vennskap med den populære studenten Galinda ved Shiz University i Land of Oz.",
-    metadata: ["USA", "2024", "9 år", "Familie", "2 t 40 min"],
-    imdb: "https://www.imdb.com/title/tt19847976/",
-    skuespillere: "Cynthia Erivo, Ariana Grande-Butera, Jonathan Bailey, Jeff Goldblum, Bowen Yang",
-    regissor: "Jon M. Chu",
-    watchUrl: "film-mal.html?id=wicked",
-    publishDate: "2026-01-10T00:00:00", // ISO datoformat
     expireDate: "2027-11-15T23:59:59",
   },
   
@@ -823,128 +772,3 @@ const filmer = {
 
    
   
-    
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
