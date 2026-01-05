@@ -958,6 +958,37 @@ img, video {
     padding: 14px;
     font-size: 16px;
   }
+  /* === FILM UTLØPT OVERLAY === */
+#expiredOverlay {
+  position: fixed;
+  inset: 0;
+  background: #091b1e; /* velg fargen du vil */
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 99999;
+}
+
+#expiredOverlay.active {
+  display: flex;
+}
+
+.expired-content {
+  text-align: center;
+  color: #fff;
+}
+
+.dead-smiley {
+  font-size: 80px;
+  letter-spacing: 10px;
+  margin-bottom: 20px;
+}
+
+.expired-content h1 {
+  font-size: clamp(22px, 4vw, 36px);
+  font-weight: 700;
+}
+
 }
 
 
@@ -1040,6 +1071,14 @@ img, video {
     <a href="Kontakt.html">Kontakt</a> |
     <a href="Personvern.html">Personvern</a>
   </div>
+
+  <div id="expiredOverlay">
+  <div class="expired-content">
+    <div class="dead-smiley">X&nbsp;&nbsp;X</div>
+    <h1>Denne filmen er ikke tilgjengelig</h1>
+  </div>
+</div>
+
 </footer>
   
 <script src="Filmdata.js"></script>
@@ -1422,6 +1461,20 @@ if (data.logo && data.logo.trim() !== "") {
 
   logoContainer.appendChild(titleEl);
 }
+  /* === FILM HAR GÅTT UT === */
+if (data.expireDate) {
+  const nå = new Date();
+  const expire = new Date(data.expireDate);
+
+  if (nå > expire) {
+    // Skjul alt innhold
+    document.body.style.overflow = "hidden";
+
+    // Vis overlay
+    document.getElementById("expiredOverlay").classList.add("active");
+  }
+}
+
 
 
 </script>
@@ -1430,6 +1483,7 @@ if (data.logo && data.logo.trim() !== "") {
 </html>
 
  
+
 
 
 
