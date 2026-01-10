@@ -1317,10 +1317,12 @@ background: linear-gradient(
   pointer-events: none !important;
 }
 
-.gallery-wrapper:hover .scroll-button {
+/* Vis piler når man holder over galleriet */
+.gallery-wrapper:hover .scroll-button:not(.hidden) {
   opacity: 1;
   pointer-events: auto;
 }
+
 
 .gallery-wrapper:hover .scroll-button.hidden {
   opacity: 0;
@@ -2031,6 +2033,7 @@ activeFilms.forEach(film => {
 
   
 </script>
+
 
 
 
