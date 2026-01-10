@@ -804,7 +804,7 @@ const filmer = {
     skuespillere: "Bjørn Sundquist, Axel Bøyum, Odin Waage, Jonas Hoff Oftebro, Andrea Berntzen",
     regissor: "Daniel Fahre",
   watchUrl: "film-mal.html?id=blücher",
-  videoUrl:"https://vixsrc.to/playlist/399080.m3u8?token=9905ec2e3070f3c003c60ff75486c083&expires=1772484847&h=1",
+  videoUrl:"https://vixsrc.to/playlist/600839.m3u8?token=618c0aa47333e2a711f1921cbd6aa5ec&expires=1773250837&h=1",
   subtitleUrl: "blücher.VTT",
   tilbakeUrl: "film.html?navn=blücher",
   audioLanguages: [
@@ -820,6 +820,7 @@ const filmer = {
 
    
   
+
 
 
 
