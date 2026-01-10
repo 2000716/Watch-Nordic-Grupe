@@ -94,9 +94,9 @@ const filmer = {
   "dog-man": {
     tittel: "Dog Man",
     bakgrunn: "https://andersonvision.com/wp-content/uploads/2025/03/Dog-Man-blu-ray-7-scaled.jpg",
-    logo: "https://www.universalpictures.co.uk/tl_files/content/movies/dog_man/title.png",
-    poster: "https://m.media-amazon.com/images/S/pv-target-images/44839e4a60bb8205258ba5fb43d1369c8a3cdd27f628692f6d0bd5c6c0c35ca6.jpg",
-    posterVertikal: "https://i-viaplay-com.akamaized.net/viaplay-prod/849/40/1740747124-2e6f862a9638dd9cefc70ddf014a388f6f2ada76.jpg?width=400&height=600", // portrett
+    logo: "https://pixel.disco.skyshowtime.com/uuid/b54c1978-2513-3c56-88ef-f71b9a6c77ad/LOGO_TITLE_WIDE/1416/2500?language=nb-NO&proposition=SKYSHOWTIME&version=c33eb1cd-83a8-321d-aa3d-3c36b002c02a&image-format=webp",
+    poster: "https://m.media-amazon.com/images/S/pv-target-images/aa806940f222d351c001077076e03c607e65fa8182efb056bc405c868fe3724b.jpg",
+    posterVertikal: "https://pixel.disco.skyshowtime.com/uuid/b54c1978-2513-3c56-88ef-f71b9a6c77ad/COVER_TITLE_TALL?language=nb-NO&proposition=SKYSHOWTIME&version=d65aacb5-d171-3aeb-bc1d-d5bce76c8337", // portrett
     beskrivelse: "Etter at en politimann og politihunden hans smelter sammen for å bli Hundemannen, må han stoppe skurken katten Petey.",
     metadata: ["USA", "2025", "7+", "Familie", "1 t 29 min"],
     imdb: "https://www.imdb.com/title/tt10954718/?ref_=nv_sr_srsg_1_tt_6_nm_1_in_0_q_dOg%2520man",
@@ -796,4 +796,5 @@ const filmer = {
 
    
   
+
 
