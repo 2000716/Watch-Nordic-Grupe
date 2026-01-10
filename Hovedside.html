@@ -320,16 +320,26 @@ background: linear-gradient(
   background: linear-gradient(to left, #091B1E, rgba(9, 27, 30, 0));
 }
 
-.gallery-wrapper:hover .scroll-button:not(.hidden),
-.gallery-wrapper:hover .fade-left:not(.fade-hidden),
-.gallery-wrapper:hover .fade-right:not(.fade-hidden) {
+.scroll-button {
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+.gallery-wrapper:hover .scroll-button:not(.hidden) {
   opacity: 1;
   pointer-events: auto;
 }
 
-.fade-hidden {
-  display: none;
+.scroll-button.hidden {
+  display: none !important;
 }
+
+
+.fade-hidden {
+  display: none !important;
+}
+
 
 .scroll-button {
   position: absolute;
@@ -882,11 +892,6 @@ background: linear-gradient(
 
   .banner-left .film-logo {
     width: 200px;
-  }
-
-  #halloween-gallery a {
-    width: 100px;
-    height: 150px;
   }
 }
 
@@ -1986,6 +1991,7 @@ activeFilms.forEach(film => {
 
   
 </script>
+
 
 
 
