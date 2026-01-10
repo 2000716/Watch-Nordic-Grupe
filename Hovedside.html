@@ -1371,9 +1371,9 @@ background: linear-gradient(
           <h2>Nye filmer på Watch</h2>
           <div class="gallery-wrapper">
             <div class="fade-left"></div>
-            <button class="scroll-button left" onclick="scrollGallery(this, -1)">❮</button>
+         <button class="scroll-button left">❮</button>
             <div class="image-gallery" id="nye-filmer-galleri"></div>
-            <button class="scroll-button right" onclick="scrollGallery(this, 1)">❯</button>
+            <button class="scroll-button right">❯</button>
             <div class="fade-right"></div>
           </div>
         </section>
@@ -1383,9 +1383,9 @@ background: linear-gradient(
   <h2>Fortsett å se</h2>
   <div class="gallery-wrapper">
     <div class="fade-left"></div>
-    <button class="scroll-button left" onclick="scrollGallery(this, -1)">❮</button>
+     <button class="scroll-button left">❮</button>
     <div class="image-gallery" id="fortsett-galleri"></div>
-    <button class="scroll-button right" onclick="scrollGallery(this, 1)">❯</button>
+     <button class="scroll-button right">❯</button>
     <div class="fade-right"></div>
   </div>
 </section>
@@ -1414,13 +1414,9 @@ background: linear-gradient(
   <h2>Populære serier</h2>
   <div class="gallery-wrapper">
     <div class="fade-left"></div>
-
-    <button class="scroll-button left" onclick="scrollGallery(this, -1)">❮</button>
-
+    <button class="scroll-button left">❮</button>
     <div class="image-gallery" id="serier-galleri"></div>
-
-    <button class="scroll-button right" onclick="scrollGallery(this, 1)">❯</button>
-
+    <button class="scroll-button right">❯</button>
     <div class="fade-right"></div>
   </div>
 </section>
@@ -1430,9 +1426,9 @@ background: linear-gradient(
   <h2>Topp 10 filmer nå</h2>
   <div class="gallery-wrapper">
     <div class="fade-left"></div>
-    <button class="scroll-button left" onclick="scrollGallery(this, -1)">❮</button>
+    <button class="scroll-button left">❮</button>
     <div class="top10-gallery" id="topp10-filmer-galleri"></div>
-    <button class="scroll-button right" onclick="scrollGallery(this, 1)">❯</button>
+    <button class="scroll-button right">❯</button>
     <div class="fade-right"></div>
   </div>
 </section> 
@@ -1441,12 +1437,12 @@ background: linear-gradient(
   <h2>Kommende filmer</h2>
   <div class="gallery-wrapper">
     <div class="fade-left"></div>
-    <button class="scroll-button left" onclick="scrollGallery(this, -1)">❮</button>
+  <button class="scroll-button left">❮</button>
     
     <!-- Her fylles filmene inn av JS -->
     <div class="coming-movies-gallery" id="kommer-snart-galleri"></div>
     
-    <button class="scroll-button right" onclick="scrollGallery(this, 1)">❯</button>
+<button class="scroll-button right">❯</button>
     <div class="fade-right"></div>
   </div>
 </section>
@@ -1456,9 +1452,9 @@ background: linear-gradient(
           <h2>Barn</h2>
           <div class="gallery-wrapper">
             <div class="fade-left"></div>
-            <button class="scroll-button left" onclick="scrollGallery(this, -1)">❮</button>
-            <div class="image-gallery" id="barn-galleri"></div>
-            <button class="scroll-button right" onclick="scrollGallery(this, 1)">❯</button>
+           <button class="scroll-button left">❮</button>
+          <div class="image-gallery" id="barn-galleri"></div>
+           <button class="scroll-button right">❯</button>
             <div class="fade-right"></div>
           </div>
         </section>
@@ -1974,6 +1970,7 @@ activeFilms.forEach(film => {
 
   
 </script>
+
 
 
 
