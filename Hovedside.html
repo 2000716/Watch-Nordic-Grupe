@@ -85,8 +85,9 @@ main {
 
 
 
-.content-wrapper {
-  width: 85%;              /* mindre bredde = mer luft på sidene */
+
+ .content-wrapper {
+  width: 92%;   /* ← gjør raden bredere */
   max-width: 1400px;       /* begrenser bredden på store skjermer */
   margin: 0 auto;          /* sentrerer innholdet */
   padding: 0 20px;         /* litt ekstra luft inni */
@@ -390,8 +391,8 @@ background: linear-gradient(
 }
 
 .image-gallery a img {
-  width: 220px;
-  height: 124px;
+  width: 250px;   /* ← større kort */
+  height: 140px;  /* proporsjonalt */
   object-fit: cover;
   border-radius: 5px;
   display: block;
@@ -1972,6 +1973,7 @@ activeFilms.forEach(film => {
 
   
 </script>
+
 
 
 
