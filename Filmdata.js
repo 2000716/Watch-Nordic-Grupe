@@ -791,10 +791,35 @@ const filmer = {
   publishDate: "2026-01-20T00:00:00", // ISO datoformat
   expireDate: "2027-01-01T23:59:59"
 },
+
+    "blücher": {
+    tittel: "Blücher",
+    bakgrunn: "https://image.tmdb.org/t/p/original/9DWvNSqPqeFC1tVjfeYK3SnNQIS.jpg",
+    logo: "",     
+    poster: "https://image.tmdb.org/t/p/original/wgI2lwF84s0S8F13b17k357GkYN.jpg",
+    posterVertikal: "https://image.tmdb.org/t/p/original/lHyKx8MlxjIGbkgfgeriJM8VPnC.jpg", // portrett
+    beskrivelse: "Natt til 9. april 1940 står oberst Birger Eriksen overfor sitt livs største dilemma. Flere fremmede skip er observert seilende gjennom den tette tåken i Oslofjorden. Ingen vet hvor skipene kommer fra, eller hva de skal. Skal han angripe eller ikke?",
+    metadata: ["Norge", "2025", "12 år", "Action", "1 t 34 min"],
+    imdb: "https://www.imdb.com/title/tt32080656?ref_ext_viaplay",
+    skuespillere: "Bjørn Sundquist, Axel Bøyum, Odin Waage, Jonas Hoff Oftebro, Andrea Berntzen",
+    regissor: "Daniel Fahre",
+  watchUrl: "film-mal.html?id=blücher",
+  videoUrl:"https://vixsrc.to/playlist/399080.m3u8?token=9905ec2e3070f3c003c60ff75486c083&expires=1772484847&h=1",
+  subtitleUrl: "blücher.VTT",
+  tilbakeUrl: "film.html?navn=blücher",
+  audioLanguages: [
+    { code: "no", label: "Norsk" } ],
+  subtitleLanguages: [ { code: "no", label: "Norsk" },
+    { code: "off", label: "Av" }
+  ],
+  publishDate: "2026-01-30T00:00:00", // ISO datoformat
+  expireDate: "2027-01-01T23:59:59"
+},
   
   };
 
    
   
+
 
 
