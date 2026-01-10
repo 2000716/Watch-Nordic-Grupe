@@ -1602,24 +1602,40 @@ adjustBannerVideo(bannerVideo, heroBanner);
 
 
 // ==================== UNIVERSAL SCROLL FUNKSJON ==================== //
-function scrollGallery(button, direction) {
-  const wrapper = button.closest(".gallery-wrapper");
-  if (!wrapper) return;
-
-  const gallery =
-    wrapper.querySelector(".image-gallery") ||
-    wrapper.querySelector(".coming-movies-gallery") ||
-    wrapper.querySelector(".top10-gallery");
+document.querySelectorAll(".gallery-wrapper").forEach(wrapper => {
+  const gallery = wrapper.querySelector(".image-gallery, .coming-movies-gallery, .top10-gallery");
+  const left = wrapper.querySelector(".scroll-button.left");
+  const right = wrapper.querySelector(".scroll-button.right");
+  const fadeL = wrapper.querySelector(".fade-left");
+  const fadeR = wrapper.querySelector(".fade-right");
 
   if (!gallery) return;
 
-  const scrollAmount = gallery.clientWidth * 0.8;
+  const update = () => {
+    const max = gallery.scrollWidth - gallery.clientWidth;
+    const pos = gallery.scrollLeft;
 
-  gallery.scrollBy({
-    left: direction * scrollAmount,
-    behavior: "smooth"
+    const canScroll = max > 5;
+
+    left.classList.toggle("hidden", !canScroll || pos <= 5);
+    right.classList.toggle("hidden", !canScroll || pos >= max - 5);
+
+    fadeL.classList.toggle("fade-hidden", !canScroll || pos <= 5);
+    fadeR.classList.toggle("fade-hidden", !canScroll || pos >= max - 5);
+  };
+
+  left.addEventListener("click", () => {
+    gallery.scrollBy({ left: -gallery.clientWidth * 0.85, behavior: "smooth" });
   });
-}
+
+  right.addEventListener("click", () => {
+    gallery.scrollBy({ left: gallery.clientWidth * 0.85, behavior: "smooth" });
+  });
+
+  gallery.addEventListener("scroll", update);
+  window.addEventListener("resize", update);
+  update();
+});
 
 
 // ==================== DYNAMISK GALLERI-LASTING ==================== //
@@ -1970,6 +1986,7 @@ activeFilms.forEach(film => {
 
   
 </script>
+
 
 
 
