@@ -391,8 +391,9 @@ background: linear-gradient(
 }
 
 .image-gallery a img {
-  width: 300px;   /* STØRRE */
-  height: 170px;  /* riktig 16:9 */
+  width: 330px;
+  aspect-ratio: 2.2 / 1; /* ekstra avlang */
+  height: auto;
   object-fit: cover;
   border-radius: 5px;
   display: block;
@@ -1973,6 +1974,7 @@ activeFilms.forEach(film => {
 
   
 </script>
+
 
 
 
