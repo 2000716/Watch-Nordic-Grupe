@@ -795,7 +795,7 @@ const filmer = {
     "blücher": {
     tittel: "Blücher",
     bakgrunn: "https://image.tmdb.org/t/p/original/9DWvNSqPqeFC1tVjfeYK3SnNQIS.jpg",
-    logo: "",     
+    logo: "https://static.wixstatic.com/media/fd2fb2_b01c499d00d34e4f8c03edb12e2f6cf1~mv2.png",     
     poster: "https://image.tmdb.org/t/p/original/wgI2lwF84s0S8F13b17k357GkYN.jpg",
     posterVertikal: "https://image.tmdb.org/t/p/original/lHyKx8MlxjIGbkgfgeriJM8VPnC.jpg", // portrett
     beskrivelse: "Natt til 9. april 1940 står oberst Birger Eriksen overfor sitt livs største dilemma. Flere fremmede skip er observert seilende gjennom den tette tåken i Oslofjorden. Ingen vet hvor skipene kommer fra, eller hva de skal. Skal han angripe eller ikke?",
@@ -820,6 +820,7 @@ const filmer = {
 
    
   
+
 
 
 
