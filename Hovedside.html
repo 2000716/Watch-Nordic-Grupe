@@ -18,20 +18,21 @@ html, body {
   margin: 0;
   min-height: 100vh;
 
-  /* Start HELT svart */
+  /* Helt svart på toppen, fargegradert nedover */
   background: linear-gradient(
     to bottom,
-    #000000 80%,
-    #000000 70%,
-    #05090a 50%,
-    #091B1E 70%,
-    #0b2f33 70%,
-    #0f3f3a 90%
+    #000000 0%,      /* HELT svart på toppen */
+    #000000 20%,     /* fortsatt svart */
+    #05090a 40%,     /* veldig mørk grå / nesten svart */
+    #091B1E 60%,     /* mørk blågrønn */
+    #0b2f33 80%,     /* mørkere grønnblå */
+    #0f3f3a 100%     /* nederst */
   );
 
   color: #f2f2f2;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
 }
+
 
 
 
@@ -2109,6 +2110,7 @@ activeFilms.forEach(film => {
 
   
 </script>
+
 
 
 
