@@ -14,26 +14,19 @@
   padding: 0;
 }
 
-html, body {
+html,
+body {
   margin: 0;
-  min-height: 100vh;
-
-  /* Helt svart på toppen, fargegradert nedover */
-  background: linear-gradient(
-    to bottom,
-    #00000 0%,      /* HELT svart på toppen */
-    #000000 0%,     /* fortsatt svart */
-    #05090a 40%,     /* veldig mørk grå / nesten svart */
-    #091B1E 60%,     /* mørk blågrønn */
-    #0b2f33 80%,     /* mørkere grønnblå */
-    #0f3f3a 100%     /* nederst */
-  );
-
+  background:
+    radial-gradient(circle at 15% 25%, rgba(30, 80, 160, 0.18), transparent 45%), /* mørk blå */
+    radial-gradient(circle at 75% 30%, rgba(20, 120, 90, 0.18), transparent 45%), /* mørk grønn */
+    radial-gradient(circle at 50% 85%, rgba(60, 140, 110, 0.20), transparent 42%), /* lys grønn over svart */
+    linear-gradient(180deg, #020202, #0b0f0d); /* svart med grønn hint */
+  
   color: #f2f2f2;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  min-height: 100vh;
 }
-
-
 
 
 
@@ -155,43 +148,36 @@ main {
   content: "";
   position: absolute;
   inset: 0;
-  /* Gradient som følger bakgrunnsfargene */
-  background: linear-gradient(
-    to bottom,
-    #000000 0%,        /* helt svart på toppen */
-    #000000 20%,       /* fortsatt svart */
-    #05090a 40%,       /* mørk nesten svart */
-    #091B1E 60%,       /* mørk blågrønn */
-    #0b2f33 80%,       /* mørkere grønnblå */
-    #0f3f3a 100%       /* nederst */
-  );
+background: linear-gradient(
+  to top,
+  rgba(9, 27, 30, 1) 10%,
+  rgba(9, 27, 30, 0.6) 50%,
+  rgba(9, 27, 30, 0) 90%
+);
+
   z-index: 1;
-  pointer-events: none;
 }
 
-.banner-image,
-.banner-video {
+.banner-image {
   width: 100%;
   height: 100%;
   object-fit: cover;
   display: block;
 }
 
-
 .banner-content {
   position: absolute;
   top: 25%;
   left: 80px;
+  transform: translateY(-15%);
   z-index: 2;
-  color: white;
   display: flex;
   flex-direction: column;
+  align-items: flex-start;
   gap: 16px;
   max-width: 600px;
-  /* myk fade fra toppen til bunnen */
-  background: linear-gradient(to bottom, rgba(0,0,0,0.0), rgba(0,0,0,0.6));
+  color: white;
 }
-
 
   .banner-video {
   width: 100%;
@@ -2117,12 +2103,6 @@ activeFilms.forEach(film => {
 
   
 </script>
-
-
-
-
-
-
 
 
 
