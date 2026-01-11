@@ -3,321 +3,294 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Konto</title>
-  <link rel="icon" type="image/png" href="https://static.wixstatic.com/media/fd2fb2_39376e4ee55b460ab7a3ebbfcf35fef7~mv2.png" />
+  <title>Konto – Administrer</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
 
   <style>
+    :root {
+      --bg: #141414;
+      --card: #1f1f1f;
+      --muted: #b3b3b3;
+      --accent: #e50914; /* Netflix-rød */
+      --accent2: #00a8e1; /* SkyShowtime-blå vibe */
+    }
+
+    * { box-sizing: border-box; }
+
     body {
-      background: #061113;
-      color: white;
-      font-family: sans-serif;
       margin: 0;
-    }
-
-    h1 {
-      text-align: center;
-      padding: 30px 0 10px;
-      font-size: 36px;
-    }
-
-    .konto-container {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      padding: 40px;
-      gap: 20px;
-    }
-
-    .info-section {
-      max-width: 400px;
-      flex: 1;
-      order: 1;
-    }
-
-    .info-section h4 {
-      color: #a0a0a0;
-      margin: 0 0 8px 4px;
-      font-size: 14px;
-    }
-
-    .info-box {
-      background: #161b22;
-      border-radius: 10px;
-      padding: 20px;
-      margin-bottom: 30px;
-      position: relative;
-    }
-
-    .text-content {
-      font-size: 18px;
+      background: var(--bg);
       color: white;
-      min-height: 24px;
-      outline: none;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     }
 
-    .edit-button {
-      position: absolute;
-      right: 15px;
-      top: 50%;
-      transform: translateY(-50%);
+    header {
+      padding: 20px 40px;
+      border-bottom: 1px solid #222;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    header h1 {
+      font-size: 22px;
+      margin: 0;
+      font-weight: 600;
+    }
+
+    header button {
       background: none;
-      border: none;
-      color: #fff;
-      font-size: 24px;
-      cursor: pointer;
-      display: none;
-    }
-
-    .info-box:hover .edit-button {
-      display: block;
-    }
-
-    .knapp {
-      background-color: #a0a0a0;
+      border: 1px solid var(--muted);
       color: white;
-      padding: 12px 24px;
-      border: none;
-      border-radius: 8px;
-      font-size: 16px;
-      margin: 8px 10px 0 0;
+      padding: 8px 16px;
+      border-radius: 4px;
       cursor: pointer;
     }
 
-    .knapp:hover {
-      background-color: #fff;
-      color: #000;
+    header button:hover { border-color: white; }
+
+    .container {
+      max-width: 1100px;
+      margin: auto;
+      padding: 40px;
+      display: grid;
+      grid-template-columns: 280px 1fr;
+      gap: 40px;
     }
 
-    .profil-section {
-      flex: 0 0 auto;
-      display: flex;
-      justify-content: center;
-      align-items: flex-start;
-      margin-left: 30px;
-      margin-top: 10px;
-      order: 2;
+    /* SIDEBAR / PROFIL */
+    .sidebar {
+      text-align: center;
     }
 
-    .profilbilde-wrapper {
-      position: relative;
-    }
-
-    .profilbilde-container {
+    .avatar {
       width: 160px;
       height: 160px;
-      border-radius: 50%;
+      border-radius: 6px;
       overflow: hidden;
-      background-color: rgba(160, 160, 160, 0.1);
-      border: 4px solid transparent;
+      margin: auto;
       cursor: pointer;
+      border: 3px solid transparent;
     }
 
-    .profilbilde-container img {
+    .avatar:hover { border-color: var(--accent); }
+
+    .avatar img {
       width: 100%;
       height: 100%;
       object-fit: cover;
     }
 
-    .edit-icon-rund {
-      position: absolute;
-      bottom: 8px;
-      right: 8px;
-      width: 36px;
-      height: 36px;
-      background-color: #fff;
-      color: #000;
-      border-radius: 50%;
+    .profile-name {
+      margin-top: 16px;
+      font-size: 20px;
+      font-weight: 500;
+    }
+
+    .profile-actions {
+      margin-top: 20px;
       display: flex;
-      justify-content: center;
-      align-items: center;
-      font-size: 18px;
-      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .profile-actions button {
+      background: none;
+      border: 1px solid var(--muted);
+      color: white;
+      padding: 10px;
+      border-radius: 4px;
       cursor: pointer;
     }
 
-    .modal {
-      position: fixed;
-      top: 0; left: 0;
-      width: 100vw;
-      height: 100vh;
-      background-color: rgba(0, 0, 0, 0.6);
-      display: none;
-      justify-content: center;
-      align-items: center;
-      z-index: 999;
+    .profile-actions button:hover {
+      border-color: white;
     }
 
-    .modal-content {
-      background-color: #fff;
-      color: #000;
-      padding: 20px;
-      border-radius: 10px;
-      text-align: center;
-      max-width: 300px;
+    /* CONTENT */
+    .content h2 {
+      font-size: 22px;
+      margin-bottom: 20px;
+      font-weight: 600;
     }
 
-    .modal-content button {
-      padding: 10px 20px;
-      margin: 0 10px;
-      border: none;
+    .card {
+      background: var(--card);
       border-radius: 6px;
-      cursor: pointer;
+      padding: 20px;
+      margin-bottom: 20px;
     }
 
-    .modal-content .ja { background-color: red; color: white; }
-    .modal-content .nei { background-color: gray; color: white; }
+    .row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 14px 0;
+      border-bottom: 1px solid #2a2a2a;
+    }
 
-    /* Mobilvisning */
-    @media (max-width: 768px) {
-      .konto-container {
-        flex-direction: column;
-        align-items: center;
+    .row:last-child { border-bottom: none; }
+
+    .label {
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .value {
+      font-size: 16px;
+    }
+
+    .row button {
+      background: none;
+      border: 1px solid var(--muted);
+      color: white;
+      padding: 6px 14px;
+      border-radius: 4px;
+      cursor: pointer;
+      margin-left: 10px;
+    }
+
+    .row button:hover { border-color: white; }
+
+    .danger {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    .danger:hover {
+      background: var(--accent);
+      color: white;
+    }
+
+    /* MOBIL */
+    @media (max-width: 900px) {
+      .container {
+        grid-template-columns: 1fr;
         padding: 20px;
-      }
-
-      .profil-section {
-        order: -1; /* Flytter profilbildet øverst */
-        margin: 0 0 20px 0;
-      }
-
-      .info-section {
-        order: 2;
-        width: 100%;
-        max-width: 400px;
       }
     }
   </style>
 </head>
 <body>
 
-  <h1>Administrer profilen</h1>
+<header>
+  <h1>Konto</h1>
+  <button onclick="loggUt()">Logg ut</button>
+</header>
 
-  <div class="konto-container">
-    <div class="profil-section">
-      <div class="profilbilde-wrapper">
-        <div class="profilbilde-container" onclick="velgProfil()">
-          <img id="profilbilde" src="https://via.placeholder.com/160" alt="Profilbilde" />
+<div class="container">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="avatar" onclick="velgProfil()">
+      <img id="profilbilde" src="https://via.placeholder.com/160" />
+    </div>
+    <div class="profile-name" id="navnDisplay"></div>
+
+    <div class="profile-actions">
+      <button onclick="velgProfil()">Endre profilbilde</button>
+      <button onclick="bekreftSlettBruker()" class="danger">Slett profil</button>
+    </div>
+  </aside>
+
+  <!-- CONTENT -->
+  <section class="content">
+    <h2>Kontodetaljer</h2>
+
+    <div class="card">
+      <div class="row">
+        <div>
+          <div class="label">E-post</div>
+          <div class="value" id="epostDisplay"></div>
         </div>
-        <div class="edit-icon-rund" onclick="velgProfil()" title="Endre profilbilde">✎</div>
+        <button onclick="rediger('epostDisplay')">Endre</button>
+      </div>
+
+      <div class="row">
+        <div>
+          <div class="label">Passord</div>
+          <div class="value">********</div>
+        </div>
+        <button>Endre</button>
+      </div>
+
+      <div class="row">
+        <div>
+          <div class="label">Abonnement</div>
+          <div class="value">Premium • 4 skjermer • 4K</div>
+        </div>
+        <button>Administrer</button>
       </div>
     </div>
 
-    <div class="info-section">
-      <h4>Navn</h4>
-      <div class="info-box">
-        <div id="navnDisplay" class="text-content" contenteditable="false"></div>
-        <button class="edit-button" onclick="gjørRedigerbar('navnDisplay')">✎</button>
+    <h2>Preferanser</h2>
+    <div class="card">
+      <div class="row">
+        <div>
+          <div class="label">Autoplay</div>
+          <div class="value">På</div>
+        </div>
+        <button>Endre</button>
       </div>
 
-      <h4>E-post</h4>
-      <div class="info-box">
-        <div id="epostDisplay" class="text-content" contenteditable="false"></div>
-        <button class="edit-button" onclick="gjørRedigerbar('epostDisplay')">✎</button>
+      <div class="row">
+        <div>
+          <div class="label">Foreldrekontroll</div>
+          <div class="value">Av</div>
+        </div>
+        <button>Konfigurer</button>
       </div>
-
-      <h4>Passord</h4>
-      <div class="info-box">
-        <div class="text-content">********</div>
-      </div>
-
-      <a href="Hovedside.html" class="knapp">Ferdig</a>
-      <button class="knapp" onclick="loggUt()">Logg ut</button>
     </div>
-  </div>
+  </section>
+</div>
 
-  <div id="modal" class="modal">
-    <div class="modal-content">
-      <p>Vil du fjerne denne brukeren?</p>
-      <button class="ja" onclick="slettBruker()">Ja</button>
-      <button class="nei" onclick="lukkModal()">Nei</button>
-    </div>
-  </div>
+<script>
+  if (!localStorage.getItem("epost")) {
+    window.location.href = "Innlogging.html";
+  }
 
-  <script>
-    // Hvis ikke innlogget – redirect
-    if (!localStorage.getItem("epost") || !localStorage.getItem("passord")) {
-      window.location.href = "Innlogging.html";
+  const navnEl = document.getElementById("navnDisplay");
+  const epostEl = document.getElementById("epostDisplay");
+
+  navnEl.innerText = localStorage.getItem("navn") || "Profil";
+  epostEl.innerText = localStorage.getItem("epost") || "";
+
+  const bilde = localStorage.getItem("profilbilde");
+  if (bilde) document.getElementById("profilbilde").src = bilde;
+
+  function velgProfil() {
+    window.location.href = "Registreringsside.html";
+  }
+
+  function rediger(id) {
+    const el = document.getElementById(id);
+    const ny = prompt("Skriv ny verdi", el.innerText);
+    if (!ny) return;
+
+    if (id === "epostDisplay") {
+      localStorage.setItem("epost", ny);
     }
 
-    const navnEl = document.getElementById("navnDisplay");
-    const epostEl = document.getElementById("epostDisplay");
-    const gammelEpost = localStorage.getItem("epost");
+    el.innerText = ny;
+  }
 
-    navnEl.innerText = localStorage.getItem("navn") || "";
-    epostEl.innerText = gammelEpost || "";
+  function bekreftSlettBruker() {
+    if (!confirm("Vil du slette denne profilen permanent?")) return;
+    localStorage.clear();
+    window.location.href = "index.html";
+  }
 
-    const bilde = localStorage.getItem("profilbilde");
-    if (bilde) {
-      document.getElementById("profilbilde").src = bilde;
-    }
-
-    function velgProfil() {
-      window.location.href = "Registreringsside.html";
-    }
-
-    function gjørRedigerbar(id) {
-      const el = document.getElementById(id);
-      el.contentEditable = true;
-      el.focus();
-    }
-
-    function lagreInfo() {
-      const nyttNavn = navnEl.innerText.trim();
-      const nyEpost = epostEl.innerText.trim();
-      const passord = localStorage.getItem("passord");
-
-      if (!nyttNavn || !nyEpost) return;
-      const epostRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      if (!epostRegex.test(nyEpost)) return;
-
-      const brukere = JSON.parse(localStorage.getItem("brukere") || "{}");
-
-      if (nyEpost !== gammelEpost) delete brukere[gammelEpost];
-      brukere[nyEpost] = { navn: nyttNavn, passord };
-
-      localStorage.setItem("brukere", JSON.stringify(brukere));
-      localStorage.setItem("navn", nyttNavn);
-      localStorage.setItem("epost", nyEpost);
-
-      navnEl.contentEditable = false;
-      epostEl.contentEditable = false;
-    }
-
-    document.body.addEventListener("click", e => {
-      if (!e.target.closest(".info-box") && !e.target.classList.contains("edit-button")) {
-        lagreInfo();
-      }
-    });
-
-    function bekreftSlettBruker() {
-      document.getElementById("modal").style.display = "flex";
-    }
-
-    function slettBruker() {
-      const brukere = JSON.parse(localStorage.getItem("brukere") || "{}");
-      const epost = localStorage.getItem("epost");
-
-      delete brukere[epost];
-      localStorage.setItem("brukere", JSON.stringify(brukere));
-      localStorage.clear();
-
-      window.location.href = "index.html";
-    }
-
-    function lukkModal() {
-      document.getElementById("modal").style.display = "none";
-    }
-
-    function loggUt() {
-      localStorage.removeItem("epost");
-      localStorage.removeItem("passord");
-      localStorage.removeItem("navn");
-      window.location.href = "Innlogging.html";
-    }
-  </script>
+  function loggUt() {
+    localStorage.removeItem("epost");
+    localStorage.removeItem("passord");
+    window.location.href = "Innlogging.html";
+  }
+</script>
 
 </body>
 </html>
+
+</html>
+
 
 
