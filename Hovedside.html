@@ -1368,6 +1368,53 @@ background: linear-gradient(
   transform: translateY(-50%) scale(1.08);
 }
 
+/* === OVERLAY PÅ GALLERIBILDER === */
+.gallery-item {
+  position: relative;
+  overflow: hidden;
+}
+
+/* Selve faiden */
+.image-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to top,
+    rgba(0, 0, 0, 0.85) 0%,
+    rgba(0, 0, 0, 0.6) 35%,
+    rgba(0, 0, 0, 0) 70%
+  );
+  opacity: 0;
+  transition: opacity 0.35s ease;
+  display: flex;
+  align-items: flex-end;
+  pointer-events: none;
+}
+
+/* Innhold nederst */
+.overlay-content {
+  padding: 14px;
+  width: 100%;
+}
+
+.overlay-title {
+  font-size: 15px;
+  font-weight: bold;
+  color: #fff;
+  margin-bottom: 4px;
+}
+
+.overlay-meta {
+  font-size: 13px;
+  color: #cfcfcf;
+}
+
+/* Vis overlay ved hover */
+.gallery-item:hover .image-overlay {
+  opacity: 1;
+}
+
+
 
 
 
@@ -1689,12 +1736,23 @@ document.querySelectorAll(".gallery-wrapper").forEach(wrapper => {
 function createMovieElement(filmKey, film) {
   const link = document.createElement("a");
   link.href = `film.html?navn=${filmKey}`;
-  const img = document.createElement("img");
-  img.src = film.poster;
-  img.alt = film.tittel;
-  link.appendChild(img);
+  link.classList.add("gallery-item");
+
+  link.innerHTML = `
+    <img src="${film.poster}" alt="${film.tittel}">
+    <div class="image-overlay">
+      <div class="overlay-content">
+        <div class="overlay-title">${film.tittel}</div>
+        <div class="overlay-meta">
+          ${(film.metadata || []).join(" • ")}
+        </div>
+      </div>
+    </div>
+  `;
+
   return link;
 }
+
 
 function createUpcomingMovieElement(filmKey, film) {
   const link = document.createElement("div");
@@ -2033,6 +2091,7 @@ activeFilms.forEach(film => {
 
   
 </script>
+
 
 
 
