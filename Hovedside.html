@@ -155,36 +155,43 @@ main {
   content: "";
   position: absolute;
   inset: 0;
+  /* Gradient som følger bakgrunnsfargene */
   background: linear-gradient(
     to bottom,
-    rgba(0, 0, 0, 0) 0%,
-    rgba(0, 0, 0, 0.35) 40%,
-    rgba(0, 0, 0, 0.75) 70%,
-    rgba(0, 0, 0, 1) 100%
+    #000000 0%,        /* helt svart på toppen */
+    #000000 20%,       /* fortsatt svart */
+    #05090a 40%,       /* mørk nesten svart */
+    #091B1E 60%,       /* mørk blågrønn */
+    #0b2f33 80%,       /* mørkere grønnblå */
+    #0f3f3a 100%       /* nederst */
   );
   z-index: 1;
+  pointer-events: none;
 }
 
-.banner-image {
+.banner-image,
+.banner-video {
   width: 100%;
   height: 100%;
   object-fit: cover;
   display: block;
 }
 
+
 .banner-content {
   position: absolute;
   top: 25%;
   left: 80px;
-  transform: translateY(-15%);
   z-index: 2;
+  color: white;
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
   gap: 16px;
   max-width: 600px;
-  color: white;
+  /* myk fade fra toppen til bunnen */
+  background: linear-gradient(to bottom, rgba(0,0,0,0.0), rgba(0,0,0,0.6));
 }
+
 
   .banner-video {
   width: 100%;
@@ -2110,6 +2117,7 @@ activeFilms.forEach(film => {
 
   
 </script>
+
 
 
 
