@@ -15,17 +15,19 @@
 }
 
 html,
- body {
+body {
   margin: 0;
   background:
-    radial-gradient(circle at 10% 20%, rgba(0,168,225,0.25), transparent 40%),
-    radial-gradient(circle at 80% 30%, rgba(229,9,20,0.25), transparent 45%),
-    radial-gradient(circle at 50% 80%, rgba(180,90,255,0.25), transparent 40%),
-    linear-gradient(180deg, #0e0e0e, #141414);
-  color: white;
+    radial-gradient(circle at 15% 25%, rgba(30, 80, 160, 0.18), transparent 45%), /* mørk blå */
+    radial-gradient(circle at 75% 30%, rgba(20, 120, 90, 0.18), transparent 45%), /* mørk grønn */
+    radial-gradient(circle at 50% 85%, rgba(120, 120, 120, 0.12), transparent 40%), /* grå */
+    linear-gradient(180deg, #050505, #121212); /* svart → mørk grå */
+  
+  color: #f2f2f2;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   min-height: 100vh;
 }
+
 
 /* Navigasjon til venstre */
 .vertical-nav {
@@ -2099,6 +2101,7 @@ activeFilms.forEach(film => {
 
   
 </script>
+
 
 
 
