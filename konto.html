@@ -66,7 +66,7 @@
     .avatar {
       width: 160px;
       height: 160px;
-      border-radius: 6px;
+      border-radius: 50%;
       overflow: hidden;
       margin: auto;
       cursor: pointer;
@@ -175,7 +175,10 @@
 
 <header>
   <h1>Konto</h1>
-  <button onclick="loggUt()">Logg ut</button>
+  <div>
+    <button onclick="window.location.href='Hovedside.html'">Tilbake til hovedsiden</button>
+    <button onclick="loggUt()">Logg ut</button>
+  </div>
 </header>
 
 <div class="container">
@@ -288,8 +291,6 @@
 </script>
 
 </body>
-</html>
-
 </html>
 
 
