@@ -1,156 +1,227 @@
 <!DOCTYPE html>
 <html lang="no">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Hvem ser på? – Watch Nordic</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hvem ser på? – Watch Nordic</title>
 
-  <style>
-    :root {
-      --bg: #141414;
-      --muted: #b3b3b3;
-      --accent: #e50914;
-    }
+<style>
+:root {
+  --bg: #141414;
+  --card: #1f1f1f;
+  --muted: #b3b3b3;
+  --accent: #e50914;
+}
 
-    body {
-      margin: 0;
-      background: var(--bg);
-      color: white;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh;
-      text-align: center;
-    }
+* {
+  box-sizing: border-box;
+}
 
-    h1 {
-      font-size: 36px;
-      font-weight: 500;
-      margin-bottom: 40px;
-    }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: white;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
 
-    .profiles {
-      display: flex;
-      gap: 40px;
-      flex-wrap: wrap;
-      justify-content: center;
-    }
+h1 {
+  font-size: 36px;
+  font-weight: 500;
+  margin-bottom: 40px;
+}
 
-    .profile {
-      cursor: pointer;
-      transition: transform 0.2s ease;
-    }
+.profiles {
+  display: flex;
+  gap: 40px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
 
-    .profile:hover {
-      transform: scale(1.08);
-    }
+.profile {
+  cursor: pointer;
+  text-align: center;
+  transition: transform 0.2s ease;
+}
 
-    .avatar {
-      width: 140px;
-      height: 140px;
-      border-radius: 50%;
-      overflow: hidden;
-      border: 3px solid transparent;
-      margin-bottom: 12px;
-    }
+.profile:hover {
+  transform: scale(1.08);
+}
 
-    .profile:hover .avatar {
-      border-color: var(--accent);
-    }
+.avatar {
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 3px solid transparent;
+  background: var(--card);
+  position: relative;
+}
 
-    .avatar img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
+.profile.active .avatar {
+  border-color: var(--accent);
+}
 
-    .name {
-      font-size: 18px;
-      color: var(--muted);
-    }
+.profile:hover .avatar {
+  border-color: var(--accent);
+}
 
-    .add-profile {
-      margin-top: 50px;
-      background: none;
-      border: 1px solid var(--muted);
-      color: white;
-      padding: 12px 26px;
-      border-radius: 4px;
-      cursor: pointer;
-    }
+.avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
 
-    .add-profile:hover {
-      border-color: white;
-    }
+.kids-badge {
+  position: absolute;
+  bottom: 6px;
+  right: 6px;
+  background: #ffc107;
+  color: black;
+  font-size: 12px;
+  padding: 2px 6px;
+  border-radius: 12px;
+  font-weight: 600;
+}
 
-    footer {
-      position: absolute;
-      bottom: 20px;
-      font-size: 12px;
-      color: #8c8c8c;
-      max-width: 900px;
-      line-height: 1.6;
-      padding: 0 20px;
-    }
-  </style>
+.name {
+  margin-top: 12px;
+  font-size: 18px;
+  color: var(--muted);
+}
+
+.actions {
+  margin-top: 40px;
+  display: flex;
+  gap: 16px;
+}
+
+button {
+  background: none;
+  border: 1px solid var(--muted);
+  color: white;
+  padding: 12px 26px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+button:hover {
+  border-color: white;
+}
+
+.manage-mode .delete {
+  display: block;
+}
+
+.delete {
+  display: none;
+  margin-top: 6px;
+  font-size: 13px;
+  color: #ff6b6b;
+  cursor: pointer;
+}
+
+footer {
+  position: absolute;
+  bottom: 20px;
+  font-size: 12px;
+  color: #8c8c8c;
+  text-align: center;
+  padding: 0 20px;
+}
+</style>
 </head>
+
 <body>
 
 <h1>Hvem ser på?</h1>
 
 <div class="profiles" id="profiles"></div>
 
-<button class="add-profile" onclick="leggTilProfil()">Legg til profil</button>
+<div class="actions">
+  <button onclick="leggTilProfil()">Legg til profil</button>
+  <button onclick="toggleManage()">Administrer profiler</button>
+</div>
 
 <footer>
-  © 2026 Watch Nordic AS. Alle varemerker, logoer, tjenestenavn og øvrige immaterielle rettigheter knyttet til Watch Nordic tilhører Watch Nordic AS eller benyttes under lisens. Alle rettigheter forbeholdt.
+© 2026 Watch Nordic AS. Alle rettigheter forbeholdt.
 </footer>
 
 <script>
-  /* Midlertidige profiler (kan utvides senere) */
-  const profiler = JSON.parse(localStorage.getItem("profiler") || "[]");
+const MAX_PROFILER = 5;
+let manageMode = false;
 
-  // Hvis ingen profiler finnes → lag standard
-  if (profiler.length === 0) {
-    profiler.push(
-      {
-        navn: localStorage.getItem("navn") || "Profil",
-        bilde: localStorage.getItem("profilbilde") || "https://via.placeholder.com/140"
-      },
-      {
-        navn: "Barn",
-        bilde: "https://via.placeholder.com/140/888/fff?text=Barn"
-      }
-    );
+let profiler = JSON.parse(localStorage.getItem("profiler"));
 
-    localStorage.setItem("profiler", JSON.stringify(profiler));
-  }
+if (!profiler || profiler.length === 0) {
+  profiler = [
+    { navn: "Profil", bilde: "https://via.placeholder.com/140", barn: false },
+    { navn: "Barn", bilde: "https://via.placeholder.com/140/888/fff?text=Barn", barn: true }
+  ];
+  localStorage.setItem("profiler", JSON.stringify(profiler));
+}
 
-  const container = document.getElementById("profiles");
+const aktivProfil = localStorage.getItem("aktivProfil");
+const container = document.getElementById("profiles");
 
+function renderProfiler() {
+  container.innerHTML = "";
   profiler.forEach((profil, index) => {
     const div = document.createElement("div");
     div.className = "profile";
+    if (index == aktivProfil) div.classList.add("active");
+
     div.innerHTML = `
-      <div class="avatar"><img src="${profil.bilde}" /></div>
+      <div class="avatar">
+        <img src="${profil.bilde}">
+        ${profil.barn ? `<div class="kids-badge">👶</div>` : ""}
+      </div>
       <div class="name">${profil.navn}</div>
+      <div class="delete" onclick="slettProfil(${index})">Slett</div>
     `;
 
-    div.onclick = () => velgProfil(index);
+    div.onclick = () => {
+      if (!manageMode) velgProfil(index);
+    };
+
     container.appendChild(div);
   });
 
-  function velgProfil(index) {
-    localStorage.setItem("aktivProfil", index);
-    window.location.href = "Hovedside.html";
-  }
+  document.body.classList.toggle("manage-mode", manageMode);
+}
 
-  function leggTilProfil() {
-    window.location.href = "Registreringsside.html";
+renderProfiler();
+
+function velgProfil(index) {
+  localStorage.setItem("aktivProfil", index);
+  window.location.href = "Hovedside.html";
+}
+
+function leggTilProfil() {
+  if (profiler.length >= MAX_PROFILER) {
+    alert("Maks antall profiler nådd");
+    return;
   }
+  window.location.href = "Registreringsside.html";
+}
+
+function toggleManage() {
+  manageMode = !manageMode;
+  renderProfiler();
+}
+
+function slettProfil(index) {
+  if (!confirm("Vil du slette denne profilen?")) return;
+  profiler.splice(index, 1);
+  localStorage.setItem("profiler", JSON.stringify(profiler));
+  renderProfiler();
+}
 </script>
 
 </body>
 </html>
+
