@@ -1979,8 +1979,14 @@ function renderSeries(galleryId) {
       </div>
     `;
 
-    gallery.appendChild(link);
-  });
+  gallery.appendChild(
+  createGalleryItem(
+    `film.html?navn=${key}`,
+    serie.poster,
+    serie.tittel,
+    serie.metadata || []
+  )
+);
 }
 
 
@@ -2124,6 +2130,7 @@ activeFilms.forEach(film => {
 
   
 </script>
+
 
 
 
