@@ -1950,14 +1950,21 @@ function renderSeries(galleryId) {
     const serie = serier[key];
 
     const link = document.createElement("a");
-    // 🔥 RIKTIG SIDE: film-mal / infosiden
     link.href = `film.html?navn=${key}`;
+    link.classList.add("gallery-item"); // ✅
 
-    const img = document.createElement("img");
-    img.src = serie.poster;
-    img.alt = serie.tittel;
+    link.innerHTML = `
+      <img src="${serie.poster}" alt="${serie.tittel}">
+      <div class="image-overlay">
+        <div class="overlay-content">
+          <div class="overlay-title">${serie.tittel}</div>
+          <div class="overlay-meta">
+            ${(serie.metadata || []).join(" • ")}
+          </div>
+        </div>
+      </div>
+    `;
 
-    link.appendChild(img);
     gallery.appendChild(link);
   });
 }
@@ -2103,6 +2110,7 @@ activeFilms.forEach(film => {
 
   
 </script>
+
 
 
 
