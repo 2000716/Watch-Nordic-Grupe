@@ -823,7 +823,7 @@ const filmer = {
     poster: "https://image.tmdb.org/t/p/original/cQMfWsFzQXUKfaoGSjhHXDjDSSX.jpg",
     posterVertikal: "https://image.tmdb.org/t/p/original/pDWYW9v8fmJdA7N0I1MOdQA3ETq.jpg", // portrett
     beskrivelse: "Svampebob og vennene fra Bikinibunnen setter seil i sitt største eventyr til nå! Svampebob vil bevise for herr Krabbe at han er modig, så han følger en mystisk spøkelsessjørøver til de dypeste dybdene.",
-    metadata: ["USA", "2025", "7 år", "Animasjon", "1 t 28 min"],
+    metadata: ["USA", "2026", "7 år", "Animasjon", "1 t 28 min"],
     imdb: "https://www.imdb.com/title/tt23572848/",
     skuespillere: "Tom Kenny, Clancy Brown, Rodger Bumpass, Bill Fagerbakke, Carolyn Lawrence, Mr. Lawrence, Regina Hall, Mark Hamill",
     regissor: "Derek Drymon",
@@ -844,6 +844,7 @@ const filmer = {
 
    
   
+
 
 
 
