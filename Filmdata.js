@@ -833,7 +833,8 @@ const filmer = {
   tilbakeUrl: "film.html?navn=svampeBob-jakten-på-firkant",
   audioLanguages: [
     { code: "no", label: "Engelsk" } ],
-
+subtitleLanguages: [ { code: "no", label: "Norsk" },
+    { code: "off", label: "Av" }
   ],
   publishDate: "2026-02-01T00:00:00", // ISO datoformat
   expireDate: "2027-01-01T23:59:59"
@@ -843,6 +844,7 @@ const filmer = {
 
    
   
+
 
 
 
