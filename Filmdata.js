@@ -815,11 +815,36 @@ const filmer = {
   publishDate: "2026-01-30T00:00:00", // ISO datoformat
   expireDate: "2027-01-01T23:59:59"
 },
+
+      "svampeBob-jakten-på-firkant": {
+    tittel: "SvampeBob: Jakten på Firkant",
+    bakgrunn: "https://image.tmdb.org/t/p/original/xFwsArspdwZcns7dTa0ys4ZLOtd.jpg",
+    logo: "https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/c9a27e0a-52f7-4cec-a932-b6246308a58e/dkfheo7-4b3f7971-53de-4a90-90fd-3c1303513f50.png?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7InBhdGgiOiIvZi9jOWEyN2UwYS01MmY3LTRjZWMtYTkzMi1iNjI0NjMwOGE1OGUvZGtmaGVvNy00YjNmNzk3MS01M2RlLTRhOTAtOTBmZC0zYzEzMDM1MTNmNTAucG5nIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmZpbGUuZG93bmxvYWQiXX0.C1slfg_V2R9lSufGw6CYEdtiYo9R9gjfJwcw3Zhfiks",     
+    poster: "https://image.tmdb.org/t/p/original/cQMfWsFzQXUKfaoGSjhHXDjDSSX.jpg",
+    posterVertikal: "https://image.tmdb.org/t/p/original/pDWYW9v8fmJdA7N0I1MOdQA3ETq.jpg", // portrett
+    beskrivelse: "Svampebob og vennene fra Bikinibunnen setter seil i sitt største eventyr til nå! Svampebob vil bevise for herr Krabbe at han er modig, så han følger en mystisk spøkelsessjørøver til de dypeste dybdene.",
+    metadata: ["USA", "2025", "7 år", "Animasjon", "1 t 28 min"],
+    imdb: "https://www.imdb.com/title/tt23572848/",
+    skuespillere: "Tom Kenny, Clancy Brown, Rodger Bumpass, Bill Fagerbakke, Carolyn Lawrence, Mr. Lawrence, Regina Hall, Mark Hamill",
+    regissor: "Derek Drymon",
+  watchUrl: "film-mal.html?id=svampeBob-jakten-på-firkant",
+  videoUrl:"https://vixsrc.to/playlist/600839.m3u8?token=618c0aa47333e2a711f1921cbd6aa5ec&expires=1773250837&h=1",
+  subtitleUrl: "svampeBob-jakten-på-firkant.VTT",
+  tilbakeUrl: "film.html?navn=svampeBob-jakten-på-firkant",
+  audioLanguages: [
+    { code: "no", label: "Engelsk" } ],
+  subtitleLanguages: [ { code: "no", label: "Norsk" },
+    { code: "off", label: "Av" }
+  ],
+  publishDate: "2026-02-01T00:00:00", // ISO datoformat
+  expireDate: "2027-01-01T23:59:59"
+},
   
   };
 
    
   
+
 
 
 
