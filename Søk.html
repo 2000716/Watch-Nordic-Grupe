@@ -3,19 +3,24 @@
 <head>
   <meta charset="UTF-8">
   <title>Søk | Watch Nordic™</title>
-    <link rel="icon" type="image/png" href="https://static.wixstatic.com/media/fd2fb2_39376e4ee55b460ab7a3ebbfcf35fef7~mv2.png" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
- <style>
+
+  <link rel="icon" type="image/png"
+        href="https://static.wixstatic.com/media/fd2fb2_39376e4ee55b460ab7a3ebbfcf35fef7~mv2.png" />
+
+  <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+
+  <style>
 * {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
 }
- html, body {
- overflow-x: hidden;   /* Hindrer all scrolling til siden */
-  width: 100%;          /* Sikrer at ingenting blir bredere enn vinduet */
-}
 
+html, body {
+  width: 100%;
+  overflow-x: hidden;
+}
 
 html {
   font-size: clamp(14px, 1vw + 10px, 18px);
@@ -25,289 +30,255 @@ body {
   background-color: black;
   color: #fff;
   font-family: 'Segoe UI', sans-serif;
-  opacity: 0;
-  transition: opacity 1s ease;
 }
 
-body.loaded {
-  opacity: 1;
-}
-
-/* === Navigasjon === */
-.vertical-nav {
-  width: 70px;
-  height: 100vh;
-  background-color: #091B1E;
+/* ================= TOPPMENY ================= */
+.top-nav {
   position: fixed;
   top: 0;
   left: 0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  z-index: 100;
-  transition: transform 0.3s ease;
-  padding-top: 16px;
-}
-
-.vertical-nav.collapsed {
-  transform: translateX(-100%);
-}
-
-.nav-icons-wrapper {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-}
-
-.profilmeny {
-  margin-bottom: 20px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
   width: 100%;
+  height: 70px;
+  background: #091B1E;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 40px;
+  z-index: 500;
 }
 
-.profilmeny img {
-  width: 48px;
-  height: 48px;
-  border-radius: 50%;
-  object-fit: cover;
-  border: 2px solid #fff;
+.nav-left {
+  display: flex;
+  align-items: center;
+  gap: 30px;
 }
 
-.nav-icon {
-  color: white;
-  font-size: 22px;
-  padding: 16px 0;
+.watch-logo {
+  height: 40px;
+}
+
+.nav-links {
+  display: flex;
+  gap: 22px;
+}
+
+.nav-links a {
+  color: #bfbfbf;
   text-decoration: none;
-  text-align: center;
-  width: 100%;
-  transition: color 0.3s ease;
-  cursor: pointer;
-  background: none;
-  border: none;
+  font-size: 15px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: color 0.2s ease;
 }
 
-.nav-icon:hover,
-.nav-icon.active {
+.nav-links a:hover,
+.nav-links a.active {
   color: #00FFCC;
 }
 
-.menu-toggle {
-  position: fixed;
-  top: 50%;
-  left: 70px;
-  transform: translateY(-50%);
-  z-index: 101;
-  background-color: #091b1e;
-  border: none;
-  border-radius: 0 12px 12px 0;
-  padding: 12px 16px;
-  color: white;
-  cursor: pointer;
-  transition: left 0.3s ease;
-  width: 50px;
-  height: 120px;
+.nav-right {
   display: flex;
   align-items: center;
-  justify-content: center;
-  font-size: 28px;
+  gap: 20px;
 }
 
-.vertical-nav.collapsed + .menu-toggle {
-  left: 0;
+.nav-search {
+  color: white;
+  font-size: 18px;
 }
 
-/* SØKEFELT */
+.nav-search:hover {
+  color: #00FFCC;
+}
+
+.profilmeny img {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #fff;
+  cursor: pointer;
+}
+
+/* ================= MAIN ================= */
+main {
+  padding: 110px 20px 40px;
+}
+
+h1 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+/* ================= SØK ================= */
 .search-box {
-  margin-bottom: 20px; 
-  display: flex; 
+  display: flex;
   justify-content: center;
+  margin-bottom: 30px;
 }
 
 .search-box input {
-  width: 100%; 
+  width: 100%;
   max-width: 500px;
   padding: 10px 15px;
-  border-radius: 5px; 
+  border-radius: 5px;
   border: 1px solid #00FFCC;
-  background: rgba(9,27,30,0.6); 
-  color: white; 
+  background: rgba(9,27,30,0.6);
+  color: white;
   font-size: 16px;
 }
 
-.search-box input::placeholder { 
-  color: #bbb; 
+.search-box input::placeholder {
+  color: #bbb;
 }
 
-/* FILM GRID */
-.film-grid { 
-  display: flex; 
-  flex-wrap: wrap; 
-  gap: 20px; 
-  justify-content: center; /* sentrerer filmkort */
-  align-items: flex-start;
+/* ================= FILMER ================= */
+.film-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
 }
 
 .film-card {
-  width: 300px; 
-  aspect-ratio: 16 / 9; 
+  width: 300px;
+  aspect-ratio: 16 / 9;
   cursor: pointer;
-  transition: transform 0.2s ease, box-shadow 0.3s ease;
-  border-radius: 10px; 
-  overflow: hidden; 
-  position: relative; 
+  border-radius: 10px;
+  overflow: hidden;
   background: #111;
+  transition: transform 0.2s ease, box-shadow 0.3s ease;
 }
 
-.film-card img { 
-  width: 100%; 
-  height: 100%; 
-  object-fit: cover; 
-  display: block; 
+.film-card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
-.film-card:hover { 
-  transform: scale(1.05); 
-  box-shadow: 0 0 15px #00FFCC; 
+.film-card:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 15px #00FFCC;
 }
 
-/* FOOTER */
-.footer { 
-  margin-top: 40px; 
-  padding: 20px; 
-  text-align: center; 
-  color: #515151; 
-  font-size: 14px; 
+/* ================= FOOTER ================= */
+.footer {
+  margin-top: 40px;
+  padding: 20px;
+  text-align: center;
+  color: #515151;
+  font-size: 14px;
 }
 
-.footer a { 
-  color: #b1b1b1; 
-  margin: 0 10px; 
-  text-decoration: none; 
-  transition: color 0.2s; 
+.footer a {
+  color: #b1b1b1;
+  margin: 0 10px;
+  text-decoration: none;
 }
 
-.footer a:hover { 
-  color: #00FFCC; 
+.footer a:hover {
+  color: #00FFCC;
 }
   </style>
 </head>
+
 <body>
 
-</style> 
 <header class="top-nav">
   <div class="nav-left">
-      <img class="watch-logo" src="https://static.wixstatic.com/media/fd2fb2_a4b2ace62dff4605a0387f46aad8a404~mv2.png" alt="Watch Logo" />
+    <img class="watch-logo"
+         src="https://static.wixstatic.com/media/fd2fb2_a4b2ace62dff4605a0387f46aad8a404~mv2.png"
+         alt="Watch Logo">
 
-<nav class="nav-links">
-  <a href="Hovedside.html" class="active"><i class="fas fa-house-user"></i> Start</a>
-  <a href="Serier.html"><i class="fas fa-th-large"></i> Serier</a>
-  <a href="Film.html"><i class="fas fa-film"></i> Filmer</a>
-  <a href="Nyheter.html"><i class="fas fa-fire-flame-curved"></i> Nytt og populært</a>
-  <a href="Min-Liste.html"><i class="fas fa-plus-square"></i> Min liste</a>
-</nav>
-    </div>
-
-
+    <nav class="nav-links">
+      <a href="Hovedside.html" class="active"><i class="fas fa-house-user"></i> Start</a>
+      <a href="Serier.html"><i class="fas fa-th-large"></i> Serier</a>
+      <a href="Film.html"><i class="fas fa-film"></i> Filmer</a>
+      <a href="Nyheter.html"><i class="fas fa-fire-flame-curved"></i> Nytt og populært</a>
+      <a href="Min-Liste.html"><i class="fas fa-plus-square"></i> Min liste</a>
+    </nav>
+  </div>
 
   <div class="nav-right">
     <a href="Søk.html" class="nav-search"><i class="fas fa-search"></i></a>
     <div class="profilmeny" onclick="gåTilKonto()">
-      <img id="menyProfilbilde" src="https://via.placeholder.com/100" alt="Min profil" />
+      <img id="menyProfilbilde"
+           src="https://via.placeholder.com/100"
+           alt="Min profil">
     </div>
   </div>
 </header>
 
 <main>
   <h1>Søk etter filmer</h1>
+
   <div class="search-box">
-    <input type="text" id="searchInput" placeholder="Skriv inn tittel, skuespiller, regissør eller metadata...">
+    <input type="text" id="searchInput"
+           placeholder="Skriv inn tittel, skuespiller, regissør eller metadata...">
   </div>
+
   <div id="filmGrid" class="film-grid"></div>
 </main>
 
 <footer class="footer">
-  <div class="footer-links"><a href="#">Hjelp</a> | <a href="#">Kontakt</a> | <a href="#">Om</a></div>
-  <div class="footer-copy">&copy; 2025 Min Strømmetjeneste</div>
+  <div>
+    <a href="#">Hjelp</a> |
+    <a href="#">Kontakt</a> |
+    <a href="#">Om</a>
+  </div>
+  <div>&copy; 2025 Min Strømmetjeneste</div>
 </footer>
 
 <script src="Filmdata.js"></script>
 <script src="Seriedata.js"></script>
+
 <script>
-  // Autentisering og profilbilde
-  const epost = localStorage.getItem("epost");
-  const passord = localStorage.getItem("passord");
-  if (!epost || !passord) window.location.href = "Startside.html";
+const epost = localStorage.getItem("epost");
+const passord = localStorage.getItem("passord");
+if (!epost || !passord) window.location.href = "Startside.html";
 
-  const lagretBilde = localStorage.getItem("profilbilde");
-  if (lagretBilde) document.getElementById("menyProfilbilde").src = lagretBilde;
+const lagretBilde = localStorage.getItem("profilbilde");
+if (lagretBilde) document.getElementById("menyProfilbilde").src = lagretBilde;
 
-  const filmGrid = document.getElementById("filmGrid");
-  const searchInput = document.getElementById("searchInput");
+const filmGrid = document.getElementById("filmGrid");
+const searchInput = document.getElementById("searchInput");
 
-  // Last tidligere søk fra localStorage
-  let tidligereSøk = JSON.parse(localStorage.getItem("tidligereSøk")) || [];
+let tidligereSøk = JSON.parse(localStorage.getItem("tidligereSøk")) || [];
+const nå = Date.now();
+tidligereSøk = tidligereSøk.filter(item => nå - item.timestamp < 48 * 60 * 60 * 1000);
+localStorage.setItem("tidligereSøk", JSON.stringify(tidligereSøk));
 
-  // Slett søk eldre enn 48 timer
-  const nå = Date.now();
-  tidligereSøk = tidligereSøk.filter(item => nå - item.timestamp < 48 * 60 * 60 * 1000);
-  localStorage.setItem("tidligereSøk", JSON.stringify(tidligereSøk));
+function visFilmer(liste) {
+  filmGrid.innerHTML = "";
+  liste.forEach(obj => {
+    const navn = obj.navn || obj;
+    const data = filmer[navn];
+    if (!data) return;
 
-  // Funksjon for å vise filmer
-  function visFilmer(filmListe) {
-    filmGrid.innerHTML = "";
-    if (filmListe.length === 0) return;
-    filmListe.forEach(obj => {
-      const filmNavn = obj.navn || obj; // kompatibilitet
-      const data = filmer[filmNavn];
-      if (data) {
-        const card = document.createElement("div");
-        card.className = "film-card";
-        card.innerHTML = `<img src="${data.poster || 'default-poster.jpg'}" alt="${data.tittel}">`;
-        card.addEventListener("click", () => window.location.href = `film.html?navn=${filmNavn}`);
-        filmGrid.appendChild(card);
-      }
-    });
+    const card = document.createElement("div");
+    card.className = "film-card";
+    card.innerHTML = `<img src="${data.poster}" alt="${data.tittel}">`;
+    card.onclick = () => location.href = `film.html?navn=${navn}`;
+    filmGrid.appendChild(card);
+  });
+}
+
+visFilmer(tidligereSøk);
+
+searchInput.addEventListener("input", e => {
+  const søk = e.target.value.toLowerCase().trim();
+  if (!søk) {
+    visFilmer(tidligereSøk);
+    return;
   }
 
-  // Vis tidligere søk først (sentrert)
-  visFilmer(tidligereSøk);
+  const treff = Object.keys(filmer).filter(n =>
+    filmer[n].tittel?.toLowerCase().includes(søk)
+  );
 
-  // Søke-funksjon
-  searchInput.addEventListener("input", e => {
-    const søk = e.target.value.trim().toLowerCase();
-    if (!søk) {
-      visFilmer(tidligereSøk);
-      return;
-    }
-
-    const treff = Object.keys(filmer).filter(filmNavn => {
-      const data = filmer[filmNavn];
-      return (
-        (data.tittel && data.tittel.toLowerCase().includes(søk)) ||
-        (data.metadata && data.metadata.some(m => m.toLowerCase().includes(søk))) ||
-        (data.skuespillere && data.skuespillere.toLowerCase().includes(søk)) ||
-        (data.regissor && data.regissor.toLowerCase().includes(søk))
-      );
-    });
-
-    visFilmer(treff.map(navn => ({ navn })));
-
-    // Oppdater tidligere søk
-    treff.forEach(filmNavn => {
-      if (!tidligereSøk.some(item => item.navn === filmNavn)) {
-        tidligereSøk.unshift({ navn: filmNavn, timestamp: Date.now() });
-      }
-    });
-
-    // Maks 10 i listen
-    tidligereSøk = tidligereSøk.slice(0, 10);
-    localStorage.setItem("tidligereSøk", JSON.stringify(tidligereSøk));
-  });
+  visFilmer(treff.map(navn => ({ navn })));
+});
 </script>
 
 </body>
