@@ -698,7 +698,6 @@ const filmer = {
        "kaptein-sabeltann-og-grevinnen-av-gral": {
     tittel: " Kaptein Sabeltann og Grevinnen av Gral",
     bakgrunn: "https://image.tmdb.org/t/p/original/eL8fgEK8mgDcJZRHzuxbLwevCcr.jpg", 
-    banner: "https://image.tmdb.org/t/p/original/eL8fgEK8mgDcJZRHzuxbLwevCcr.jpg", 
     logo: "https://images-0.rakuten.tv/storage/global-movie/translation/title-treatment/8a102351-3b9a-44c9-a65a-af813b796717-width410-quality90.png",     
     poster: "https://images-prod.ai.tv2.no/v2/image-packs/pfimg_pack_01kc6s12ydf7ar2jzbh050mfz2?height=630",
     posterVertikal: "https://image.tmdb.org/t/p/original/yKtIO2xeQaz7n7ZmQrFm3fCCIQK.jpg", // portrett
@@ -819,6 +818,7 @@ const filmer = {
       "svampeBob-jakten-på-firkant": {
     tittel: "SvampeBob: Jakten på Firkant",
     bakgrunn: "https://image.tmdb.org/t/p/original/xFwsArspdwZcns7dTa0ys4ZLOtd.jpg",
+    banner: "https://image.tmdb.org/t/p/original/kbnX1RtojdspWUhXUAIGccUuAb3.jpg", 
     logo: "https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/c9a27e0a-52f7-4cec-a932-b6246308a58e/dkfheo7-4b3f7971-53de-4a90-90fd-3c1303513f50.png?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7InBhdGgiOiIvZi9jOWEyN2UwYS01MmY3LTRjZWMtYTkzMi1iNjI0NjMwOGE1OGUvZGtmaGVvNy00YjNmNzk3MS01M2RlLTRhOTAtOTBmZC0zYzEzMDM1MTNmNTAucG5nIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmZpbGUuZG93bmxvYWQiXX0.C1slfg_V2R9lSufGw6CYEdtiYo9R9gjfJwcw3Zhfiks",     
     poster: "https://image.tmdb.org/t/p/original/cQMfWsFzQXUKfaoGSjhHXDjDSSX.jpg",
     posterVertikal: "https://image.tmdb.org/t/p/original/pDWYW9v8fmJdA7N0I1MOdQA3ETq.jpg", // portrett
@@ -844,6 +844,7 @@ const filmer = {
 
    
   
+
 
 
 
