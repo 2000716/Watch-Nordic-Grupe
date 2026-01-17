@@ -828,13 +828,12 @@ const filmer = {
     skuespillere: "Tom Kenny, Clancy Brown, Rodger Bumpass, Bill Fagerbakke, Carolyn Lawrence, Mr. Lawrence, Regina Hall, Mark Hamill",
     regissor: "Derek Drymon",
   watchUrl: "film-mal.html?id=svampeBob-jakten-på-firkant",
-  videoUrl:"https://vixsrc.to/playlist/600839.m3u8?token=618c0aa47333e2a711f1921cbd6aa5ec&expires=1773250837&h=1",
+  videoUrl:"https://archive.org/download/the.-sponge-bob.-movie.-search.for.-square-pants.-2025.1080p.-webrip.-read.-nfo.x-264-sync-up/The.SpongeBob.Movie.Search.for.SquarePants.2025.1080p.WEBRIP.READ.NFO.x264-SyncUP.mkv",
   subtitleUrl: "svampeBob-jakten-på-firkant.VTT",
   tilbakeUrl: "film.html?navn=svampeBob-jakten-på-firkant",
   audioLanguages: [
     { code: "no", label: "Engelsk" } ],
-  subtitleLanguages: [ { code: "no", label: "Norsk" },
-    { code: "off", label: "Av" }
+
   ],
   publishDate: "2026-02-01T00:00:00", // ISO datoformat
   expireDate: "2027-01-01T23:59:59"
@@ -844,6 +843,7 @@ const filmer = {
 
    
   
+
 
 
 
