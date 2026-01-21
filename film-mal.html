@@ -724,69 +724,11 @@ video::cue {
   }
 }
 
-    /* ===== VOLUMKONTROLL ===== */
-
-.volume-wrapper {
-  position: relative;
-  display: flex;
-  align-items: center;
-}
-
-/* Selve boksen */
-.volume-slider {
-  position: absolute;
-  bottom: 45px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 120px;
-  padding: 8px 10px;
-  background: rgba(9, 27, 30, 0.95);
-  border-radius: 8px;
-  display: none;
-}
-
-/* Vis slider når man holder over */
-.volume-wrapper:hover .volume-slider {
-  display: block;
-}
-
-/* Slider-styling */
-.volume-slider input[type="range"] {
-  width: 100%;
-  appearance: none;
-  height: 4px;
-  border-radius: 5px;
-  background: #444;
-  outline: none;
-  cursor: pointer;
-}
-
-/* Fyll-farge */
-.volume-slider input[type="range"]::-webkit-slider-runnable-track {
-  height: 4px;
-  background: linear-gradient(
-    to right,
-    #0fddcb var(--volume, 100%),
-    #444 var(--volume, 100%)
-  );
-}
-
-/* Brikken */
-.volume-slider input[type="range"]::-webkit-slider-thumb {
-  appearance: none;
-  width: 14px;
-  height: 14px;
-  border-radius: 50%;
-  background: #ffffff;
-  margin-top: -5px;
-}
 
 
 
 
-
-
-</style>
+  </style>
 </head>
 <body>
   <div class="container" id="container">
@@ -795,23 +737,26 @@ video::cue {
       <track label="Norsk" kind="subtitles" srclang="no" src="" default>
       Din nettleser støtter ikke videoavspilling.
     </video>
-
     <div class="subtitle-overlay" id="subtitleOverlay"></div>
 
+
     <div id="resumeOverlay" class="resume-overlay">
-      <div class="resume-box">
-        <p>Vil du fortsette der du slapp?</p>
-        <div class="resume-buttons">
-          <button id="continueBtn">Fortsett</button>
-          <button id="restartBtn">Start på nytt</button>
-        </div>
-      </div>
+  <div class="resume-box">
+    <p>Vil du fortsette der du slapp?</p>
+    <div class="resume-buttons">
+      <button id="continueBtn">Fortsett</button>
+      <button id="restartBtn">Start på nytt</button>
     </div>
+  </div>
+</div>
 
     <div class="loading-spinner" id="loadingSpinner"></div>
 
-    <div class="ui" id="ui">
+    <div class="preview-box" id="previewBox">
+  <img id="previewImage" src="" alt="Preview">
+</div>
 
+    <div class="ui" id="ui">
       <div class="top-bar">
         <a href="#" class="back-button" id="backButton">
           <img src="https://static.wixstatic.com/media/fd2fb2_59ea5a2a1ff34303a71a369537dd62c3~mv2.png" alt="Back">
@@ -827,68 +772,51 @@ video::cue {
         </div>
       </div>
 
+      <!-- Preview-boksen med bilde + teller -->
+      <div class="preview-box" id="previewBox">
+       <img id="previewImage" src="" alt="Preview">
+        <div class="preview-time" id="previewTime">00:00</div>
+       </div>
+
+      
       <span class="time-display" id="timeDisplay">00:00</span>
+      
+<div class="controls">
+  <!-- Venstre (tom her) -->
+   <div class="left-controls">
+  <button class="btn like-btn">Kanskje du også vil like?</button>
+</div>
 
-      <div class="controls">
+  <div class="left-controls"></div>
 
-        <!-- VENSTRE -->
-        <div class="left-controls">
-          <button class="btn like-btn">Kanskje du også vil like?</button>
-        </div>
 
-        <!-- MIDTEN -->
-        <div class="center-controls">
-          <button class="btn" id="rewindBtn">
-            <img src="https://static.wixstatic.com/media/fd2fb2_a6f7229c8e994a75a12d5849e71156a9~mv2.png">
-          </button>
-
-          <button class="btn" id="playPauseBtn">
-            <img id="playIcon" src="https://static.wixstatic.com/media/fd2fb2_f6f25f56b00e49eea8dc4f811b50bb5c~mv2.png">
-          </button>
-
-          <button class="btn" id="forwardBtn">
-            <img src="https://static.wixstatic.com/media/fd2fb2_08262621a72944c498e8124d461ce786~mv2.png">
-          </button>
-        </div>
-
-        <!-- HØYRE -->
-        <div class="right-controls">
-
-          <!-- 🔊 VOLUM MED SLIDER -->
-          <div class="volume-wrapper">
-
-            <button class="btn" id="muteBtn">
-              <img id="muteIcon"
-                src="https://static.wixstatic.com/media/fd2fb2_5c4fab8430e94d2381fc487b1654191d~mv2.png">
-            </button>
-
-            <div class="volume-slider">
-              <input type="range"
-                     id="volumeRange"
-                     min="0"
-                     max="1"
-                     step="0.01"
-                     value="1">
-            </div>
-
-          </div>
-
-          <button class="btn" id="captionsBtn">
-            <img src="https://static.wixstatic.com/media/fd2fb2_25072ee44a734507912f0b65f9fc9b0e~mv2.png">
-          </button>
-
-          <button class="btn" id="fullscreenBtn">
-            <img src="https://static.wixstatic.com/media/fd2fb2_3fa37682b3b34c04a2cd08ffcde2763a~mv2.png">
-          </button>
-
-        </div>
-      </div>
-
-      <div class="caption-menu" id="captionMenu"></div>
-
-    </div>
+  <!-- Midten: Rewind - Play/Pause - Forward -->
+  <div class="center-controls">
+    <button class="btn" id="rewindBtn">
+      <img src="https://static.wixstatic.com/media/fd2fb2_a6f7229c8e994a75a12d5849e71156a9~mv2.png" alt="Rewind">
+    </button>
+    <button class="btn" id="playPauseBtn">
+      <img id="playIcon" src="https://static.wixstatic.com/media/fd2fb2_f6f25f56b00e49eea8dc4f811b50bb5c~mv2.png" alt="Play/Pause">
+    </button>
+    <button class="btn" id="forwardBtn">
+      <img src="https://static.wixstatic.com/media/fd2fb2_08262621a72944c498e8124d461ce786~mv2.png" alt="Forward">
+    </button>
   </div>
 
+  <!-- Høyre: Mute - Captions - Fullscreen -->
+  <div class="right-controls">
+    <button class="btn" id="muteBtn">
+      <img id="muteIcon" src="https://static.wixstatic.com/media/fd2fb2_5c4fab8430e94d2381fc487b1654191d~mv2.png" alt="Mute">
+    </button>
+    <button class="btn" id="captionsBtn">
+      <img src="https://static.wixstatic.com/media/fd2fb2_25072ee44a734507912f0b65f9fc9b0e~mv2.png" alt="Captions">
+    </button>
+    <button class="btn" id="fullscreenBtn" title="Fullskjerm">
+      <img src="https://static.wixstatic.com/media/fd2fb2_3fa37682b3b34c04a2cd08ffcde2763a~mv2.png" alt="Fullscreen">
+   
+    </button>
+  </div>
+</div>
 
 
       <div class="caption-menu" id="captionMenu">
@@ -899,6 +827,7 @@ video::cue {
       </div>
     </div>
   </div>
+
 
 <script src="Filmdata.js"></script>
 <script src="Seriedata.js"></script>
@@ -986,7 +915,6 @@ const playBtn = document.getElementById("playPauseBtn");
 const playIcon = document.getElementById("playIcon");
 const muteBtn = document.getElementById("muteBtn");
 const muteIcon = document.getElementById("muteIcon");
-const volumeRange = document.getElementById("volumeRange");
 const rewindBtn = document.getElementById("rewindBtn");
 const forwardBtn = document.getElementById("forwardBtn");
 const progress = document.getElementById("progress");
@@ -1065,33 +993,7 @@ muteBtn.addEventListener('click', () => {
   muteIcon.src = video.muted
     ? "https://static.wixstatic.com/media/fd2fb2_e7e7e77a59964f018d9e2d4605a047db~mv2.png"
     : "https://static.wixstatic.com/media/fd2fb2_5c4fab8430e94d2381fc487b1654191d~mv2.png";
-
-  // Startvolum
-video.volume = volumeRange.value;
-
-// Endre volum via slider
-volumeRange.addEventListener("input", () => {
-  video.volume = volumeRange.value;
-  video.muted = volumeRange.value == 0;
-
-  muteIcon.src = video.muted
-    ? "https://static.wixstatic.com/media/fd2fb2_e7e7e77a59964f018d9e2d4605a047db~mv2.png"
-    : "https://static.wixstatic.com/media/fd2fb2_5c4fab8430e94d2381fc487b1654191d~mv2.png";
-
-  // Oppdater fargen visuelt
-  volumeRange.style.setProperty(
-    "--volume",
-    `${volumeRange.value * 100}%`
-  );
 });
-
-// Synk når mute brukes
-muteBtn.addEventListener("click", () => {
-  setTimeout(() => {
-    volumeRange.value = video.muted ? 0 : video.volume;
-  }, 0);
-});
-
 
 // Rewind/forward
 rewindBtn.addEventListener('click', () => video.currentTime = Math.max(0, video.currentTime - 10));
@@ -1347,6 +1249,10 @@ document.addEventListener("contextmenu", (e) => {
 });
 
 </script>
+
+
+
+
 
 
 
