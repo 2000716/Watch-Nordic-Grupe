@@ -828,7 +828,7 @@ const filmer = {
     skuespillere: "Tom Kenny, Clancy Brown, Rodger Bumpass, Bill Fagerbakke, Carolyn Lawrence, Mr. Lawrence, Regina Hall, Mark Hamill",
     regissor: "Derek Drymon",
   watchUrl: "film-mal.html?id=svampeBob-jakten-på-firkant",
-  videoUrl:"The.SpongeBob.Movie.Search.for.SquarePants.2025.1080p.AMZN.WEB-DL.DDP5.1.Atmos.H.264-4kHdHub.com.mkv",
+  videoUrl:"The.SpongeBob.Movie.Search.for.SquarePants.2025.1080p.AMZN.WEB-DL.DDP5.1.Atmos.H.264-4kHdHub.com.mp4",
   subtitleUrl: "svampeBob-jakten-på-firkant.VTT",
   tilbakeUrl: "film.html?navn=svampeBob-jakten-på-firkant",
   audioLanguages: [
@@ -844,6 +844,7 @@ subtitleLanguages: [ { code: "no", label: "Norsk" },
 
    
   
+
 
 
 
