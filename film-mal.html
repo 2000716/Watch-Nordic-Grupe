@@ -823,14 +823,30 @@ video::cue {
         </div>
       </div>
 
-      <div class="caption-menu" id="captionMenu">
-        <strong>Lydspråk</strong>
-        <div id="audioTracks"></div>
-        <strong>Undertekster</strong>
-        <div id="subtitleTracks"></div>
-      </div>
-    </div>
+   <div class="caption-menu" id="captionMenu">
+  <div class="menu-section">
+    <div class="menu-title">Lyd</div>
+    <div id="audioTracks"></div>
   </div>
+
+  <div class="menu-section">
+    <div class="menu-title">Undertekster</div>
+    <button class="subtitle-option" data-lang="off">Av</button>
+    <div id="subtitleTracks"></div>
+  </div>
+
+  <div class="menu-section">
+    <div class="menu-title">Utseende</div>
+    <button class="style-btn" data-size="small">Liten tekst</button>
+    <button class="style-btn" data-size="normal">Normal tekst</button>
+    <button class="style-btn" data-size="large">Stor tekst</button>
+
+    <button class="style-btn" data-bg="none">Ingen bakgrunn</button>
+    <button class="style-btn" data-bg="soft">Myk bakgrunn</button>
+    <button class="style-btn" data-bg="full">Full bakgrunn</button>
+  </div>
+</div>
+
 
 
 <script src="Filmdata.js"></script>
@@ -1252,7 +1268,39 @@ document.addEventListener("contextmenu", (e) => {
   e.preventDefault();
 });
 
+  const subtitleStyleKey = "subtitle-style";
+const subtitleBgKey = "subtitle-bg";
+
+// last inn lagrede valg
+const savedSize = localStorage.getItem(subtitleStyleKey) || "normal";
+const savedBg = localStorage.getItem(subtitleBgKey) || "none";
+
+subtitleOverlay.classList.add(savedSize);
+if (savedBg !== "none") subtitleOverlay.classList.add("bg-" + savedBg);
+
+// størrelse
+document.querySelectorAll(".style-btn[data-size]").forEach(btn => {
+  btn.addEventListener("click", () => {
+    subtitleOverlay.classList.remove("small","normal","large");
+    subtitleOverlay.classList.add(btn.dataset.size);
+    localStorage.setItem(subtitleStyleKey, btn.dataset.size);
+  });
+});
+
+// bakgrunn
+document.querySelectorAll(".style-btn[data-bg]").forEach(btn => {
+  btn.addEventListener("click", () => {
+    subtitleOverlay.classList.remove("bg-soft","bg-full");
+    if (btn.dataset.bg !== "none") {
+      subtitleOverlay.classList.add("bg-" + btn.dataset.bg);
+    }
+    localStorage.setItem(subtitleBgKey, btn.dataset.bg);
+  });
+});
+
+
 </script>
+
 
 
 
