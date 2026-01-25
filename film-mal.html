@@ -841,7 +841,7 @@ video {
 
 
 
-  </style>
+</style>
 </head>
 <body>
   <div class="container" id="container">
@@ -850,33 +850,34 @@ video {
       <track label="Norsk" kind="subtitles" srclang="no" src="" default>
       Din nettleser støtter ikke videoavspilling.
     </video>
+
     <div class="subtitle-overlay" id="subtitleOverlay"></div>
 
-
     <div id="resumeOverlay" class="resume-overlay">
-  <div class="resume-box">
-    <p>Vil du fortsette der du slapp?</p>
-    <div class="resume-buttons">
-      <button id="continueBtn">Fortsett</button>
-      <button id="restartBtn">Start på nytt</button>
+      <div class="resume-box">
+        <p>Vil du fortsette der du slapp?</p>
+        <div class="resume-buttons">
+          <button id="continueBtn">Fortsett</button>
+          <button id="restartBtn">Start på nytt</button>
+        </div>
+      </div>
     </div>
-  </div>
-</div>
 
     <div class="loading-spinner" id="loadingSpinner"></div>
 
     <div class="preview-box" id="previewBox">
-  <img id="previewImage" src="" alt="Preview">
-</div>
+      <img id="previewImage" src="" alt="Preview">
+    </div>
 
     <div class="ui" id="ui">
       <div class="top-bar">
         <a href="#" class="back-button" id="backButton">
           <img src="https://static.wixstatic.com/media/fd2fb2_59ea5a2a1ff34303a71a369537dd62c3~mv2.png" alt="Back">
         </a>
-      </div>
 
-      <div class="movie-title">The Curse of the Were-Rabbit</div>
+        <!-- TITTEL FLYTTET HIT -->
+        <div class="movie-title">The Curse of the Were-Rabbit</div>
+      </div>
 
       <div class="progress-container">
         <div class="progress" id="progress">
@@ -887,50 +888,43 @@ video {
 
       <!-- Preview-boksen med bilde + teller -->
       <div class="preview-box" id="previewBox">
-       <img id="previewImage" src="" alt="Preview">
+        <img id="previewImage" src="" alt="Preview">
         <div class="preview-time" id="previewTime">00:00</div>
-       </div>
+      </div>
 
-      
       <span class="time-display" id="timeDisplay">00:00</span>
-      
-<div class="controls">
-  <!-- Venstre (tom her) -->
-   <div class="left-controls">
-  <button class="btn like-btn">Kanskje du også vil like?</button>
-</div>
 
-  <div class="left-controls"></div>
+      <div class="controls">
+        <div class="left-controls">
+          <button class="btn like-btn">Kanskje du også vil like?</button>
+        </div>
 
+        <div class="left-controls"></div>
 
-  <!-- Midten: Rewind - Play/Pause - Forward -->
-  <div class="center-controls">
-    <button class="btn" id="rewindBtn">
-      <img src="https://static.wixstatic.com/media/fd2fb2_a6f7229c8e994a75a12d5849e71156a9~mv2.png" alt="Rewind">
-    </button>
-    <button class="btn" id="playPauseBtn">
-      <img id="playIcon" src="https://static.wixstatic.com/media/fd2fb2_f6f25f56b00e49eea8dc4f811b50bb5c~mv2.png" alt="Play/Pause">
-    </button>
-    <button class="btn" id="forwardBtn">
-      <img src="https://static.wixstatic.com/media/fd2fb2_08262621a72944c498e8124d461ce786~mv2.png" alt="Forward">
-    </button>
-  </div>
+        <div class="center-controls">
+          <button class="btn" id="rewindBtn">
+            <img src="https://static.wixstatic.com/media/fd2fb2_a6f7229c8e994a75a12d5849e71156a9~mv2.png" alt="Rewind">
+          </button>
+          <button class="btn" id="playPauseBtn">
+            <img id="playIcon" src="https://static.wixstatic.com/media/fd2fb2_f6f25f56b00e49eea8dc4f811b50bb5c~mv2.png" alt="Play/Pause">
+          </button>
+          <button class="btn" id="forwardBtn">
+            <img src="https://static.wixstatic.com/media/fd2fb2_08262621a72944c498e8124d461ce786~mv2.png" alt="Forward">
+          </button>
+        </div>
 
-  <!-- Høyre: Mute - Captions - Fullscreen -->
-  <div class="right-controls">
-    <button class="btn" id="muteBtn">
-      <img id="muteIcon" src="https://static.wixstatic.com/media/fd2fb2_5c4fab8430e94d2381fc487b1654191d~mv2.png" alt="Mute">
-    </button>
-    <button class="btn" id="captionsBtn">
-      <img src="https://static.wixstatic.com/media/fd2fb2_25072ee44a734507912f0b65f9fc9b0e~mv2.png" alt="Captions">
-    </button>
-    <button class="btn" id="fullscreenBtn" title="Fullskjerm">
-      <img src="https://static.wixstatic.com/media/fd2fb2_3fa37682b3b34c04a2cd08ffcde2763a~mv2.png" alt="Fullscreen">
-   
-    </button>
-  </div>
-</div>
-
+        <div class="right-controls">
+          <button class="btn" id="muteBtn">
+            <img id="muteIcon" src="https://static.wixstatic.com/media/fd2fb2_5c4fab8430e94d2381fc487b1654191d~mv2.png" alt="Mute">
+          </button>
+          <button class="btn" id="captionsBtn">
+            <img src="https://static.wixstatic.com/media/fd2fb2_25072ee44a734507912f0b65f9fc9b0e~mv2.png" alt="Captions">
+          </button>
+          <button class="btn" id="fullscreenBtn" title="Fullskjerm">
+            <img src="https://static.wixstatic.com/media/fd2fb2_3fa37682b3b34c04a2cd08ffcde2763a~mv2.png" alt="Fullscreen">
+          </button>
+        </div>
+      </div>
 
       <div class="caption-menu" id="captionMenu">
         <strong>Lydspråk</strong>
@@ -1362,6 +1356,7 @@ document.addEventListener("contextmenu", (e) => {
 });
 
 </script>
+
 
 
 
