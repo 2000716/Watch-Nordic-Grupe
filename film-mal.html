@@ -180,50 +180,44 @@ video::cue {
 
 /* Undertekst- og lydmeny */
 .caption-menu {
-  position: absolute;
-  bottom: 120px;
-  right: 20px; /* flyttet til høyre */
-  background: rgba(9, 27, 30, 0.95);
-  border-radius: 10px;
-  padding: 12px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6);
-  display: none;
-  min-width: 180px;
-  z-index: 10000;
+  background: rgba(10, 18, 20, 0.96);
+  backdrop-filter: blur(10px);
+  border-radius: 14px;
+  padding: 14px;
 }
 
+.menu-section {
+  margin-bottom: 12px;
+}
 
-.caption-menu strong {
-  display: block;
-  margin: 8px 0 5px;
-  font-size: 14px;
-  font-weight: bold;
-  color: #fff;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-  padding-bottom: 4px;
+.menu-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: #9ff5ea;
+  margin-bottom: 6px;
 }
 
 .caption-menu button {
-  display: block;
   width: 100%;
-  padding: 8px 12px;
-  margin: 2px 0;
-  background-color: transparent;
+  padding: 8px 10px;
+  margin: 3px 0;
+  border-radius: 8px;
+  background: transparent;
   color: #ddd;
-  border: none;
-  text-align: left;
   font-size: 14px;
-  border-radius: 6px;
   cursor: pointer;
-  transition: background 0.2s ease;
 }
 
-.caption-menu button:hover,
 .caption-menu button.active {
-  background-color: #0fddcb;
+  background: #0fddcb;
   color: #000;
   font-weight: bold;
 }
+
+.caption-menu button:hover {
+  background: rgba(15, 221, 203, 0.2);
+}
+
 
 .watermark {
   position: absolute;  /* følger container, ikke skjermen */
@@ -1300,6 +1294,7 @@ document.querySelectorAll(".style-btn[data-bg]").forEach(btn => {
 
 
 </script>
+
 
 
 
