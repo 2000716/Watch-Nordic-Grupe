@@ -1458,6 +1458,9 @@ background: linear-gradient(
 .image-overlay {
   position: absolute;
   inset: 0;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.35s ease;
 
   background: linear-gradient(
     to top,
@@ -1466,14 +1469,12 @@ background: linear-gradient(
     rgba(0, 0, 0, 0) 70%
   );
 
-  opacity: 0;
-  pointer-events: none;
-
-  transform: scale(1.05);              /* 🔥 NØKKELEN */
+  transform: scale(1.05);       /* matcher bildet */
   transform-origin: center;
 
-  transition: opacity 0.35s ease;
+  border-radius: inherit;        /* 🔥 arver border-radius fra bilde */
 }
+
 
 /* Innhold nederst */
 .overlay-content {
@@ -2183,6 +2184,7 @@ activeFilms.forEach(film => {
 
   
 </script>
+
 
 
 
