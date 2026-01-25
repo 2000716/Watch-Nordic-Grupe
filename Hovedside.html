@@ -1442,13 +1442,8 @@ background: linear-gradient(
    /* ===== GALLERI-ITEM ===== */
 .gallery-item {
   position: relative;
-  display: block;      /* 🔥 VIKTIG */
-  width: 100%;
-  height: 100%;
   overflow: hidden;
 }
-
-
 
 /* Bildet */
 .gallery-item img {
@@ -1462,21 +1457,25 @@ background: linear-gradient(
 /* ===== OVERLAY ===== */
 .image-overlay {
   position: absolute;
-  inset: 0;
-  z-index: 2;
+  top: -5%;
+  left: -5%;
+  width: 110%;
+  height: 110%;
 
-  border-radius: inherit; /* 🔥 VIKTIG */
+  z-index: 2;
+  border-radius: inherit;
 
   background: linear-gradient(
     to top,
-    rgba(0, 0, 0, 0.95) 0%,
-    rgba(0, 0, 0, 0.85) 45%,
-    rgba(0, 0, 0, 0.4) 75%,
-    rgba(0, 0, 0, 0) 100%
+    rgba(0, 0, 0, 0.9) 0%,
+    rgba(0, 0, 0, 0.6) 50%,
+    rgba(0, 0, 0, 0.25) 100%
   );
 
   opacity: 0;
   transition: opacity 0.3s ease;
+  pointer-events: none;
+}
 
   display: flex;
   align-items: flex-end;
@@ -2192,6 +2191,7 @@ activeFilms.forEach(film => {
 
   
 </script>
+
 
 
 
