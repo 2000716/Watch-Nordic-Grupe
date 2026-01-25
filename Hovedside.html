@@ -1457,32 +1457,23 @@ background: linear-gradient(
 /* ===== OVERLAY ===== */
 .image-overlay {
   position: absolute;
-  top: -5%;
-  left: -5%;
-  width: 110%;
-  height: 110%;
-
-  z-index: 2;
-  border-radius: inherit;
+  inset: 0;
 
   background: linear-gradient(
     to top,
-    rgba(0, 0, 0, 0.9) 0%,
-    rgba(0, 0, 0, 0.6) 50%,
-    rgba(0, 0, 0, 0.25) 100%
+    rgba(0, 0, 0, 0.85) 0%,
+    rgba(0, 0, 0, 0.6) 35%,
+    rgba(0, 0, 0, 0) 70%
   );
 
   opacity: 0;
-  transition: opacity 0.3s ease;
   pointer-events: none;
+
+  transform: scale(1.05);              /* 🔥 NØKKELEN */
+  transform-origin: center;
+
+  transition: opacity 0.35s ease;
 }
-
-  display: flex;
-  align-items: flex-end;
-  pointer-events: none;
-}
-
-
 
 /* Innhold nederst */
 .overlay-content {
@@ -1506,6 +1497,7 @@ background: linear-gradient(
 .gallery-item:hover .image-overlay {
   opacity: 1;
 }
+
 
 
 
@@ -2191,6 +2183,7 @@ activeFilms.forEach(film => {
 
   
 </script>
+
 
 
 
