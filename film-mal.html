@@ -236,15 +236,16 @@ video::cue {
 
 /* Filmtittel */
 .movie-title {
-  position: absolute;
-  bottom: 100px;
-  left: 30px;
   color: white;
-  font-size: 28px;
+  font-size: 22px;
   font-weight: bold;
+  margin-left: 14px;      /* avstand fra tilbakeknappen */
+  white-space: nowrap;   /* hindrer linjeskift */
+  overflow: hidden;
+  text-overflow: ellipsis; /* … hvis tittelen er lang */
   text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.8);
-  z-index: 12;
 }
+
 
 /* Loading spinner */
 .loading-spinner {
@@ -1251,6 +1252,7 @@ document.addEventListener("contextmenu", (e) => {
 });
 
 </script>
+
 
 
 
