@@ -47,7 +47,7 @@ const filmer = {
   },
 
   "kaptein-sabeltann": {
-    tittel: "Kaptein Sabeltann",
+    tittel: "Kaptein Sabeltann og den Magiske Diamant",
     bakgrunn: "https://iptvimagecache-playplus-prod-vip.han.telia.se/original/no/imgv3/GnP7NDuB0Rrw7IqKaTNuGddHmo9uH98LTuGRs8nsXJvIiNzbUb2LoKtBRiiR2Yg-OfX6odiC2nMHfm6XZuDZz-iivlYEPLXGpx3QZMpE21N2HaSNGxmn_HIyz30.jpeg",
     logo: "https://static.wixstatic.com/media/fd2fb2_38bcd3561623467f8a05f8fb23488188~mv2.png",
     trailer: "https://video.wixstatic.com/video/fd2fb2_516f105ae8b94969abd830baf696f6d4/360p/mp4/file.mp4", // 🎥 NY 
@@ -844,6 +844,7 @@ subtitleLanguages: [ { code: "no", label: "Norsk" },
 
    
   
+
 
 
 
