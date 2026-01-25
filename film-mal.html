@@ -238,13 +238,14 @@ video::cue {
 .movie-title {
   color: white;
   font-size: 22px;
-  font-weight: bold;
-  margin-left: 14px;      /* avstand fra tilbakeknappen */
-  white-space: nowrap;   /* hindrer linjeskift */
+  font-weight: 400;   /* ← tynnere enn bold */
+  margin-left: 14px;
+  white-space: nowrap;
   overflow: hidden;
-  text-overflow: ellipsis; /* … hvis tittelen er lang */
+  text-overflow: ellipsis;
   text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.8);
 }
+
 
 
 /* Loading spinner */
@@ -1252,6 +1253,7 @@ document.addEventListener("contextmenu", (e) => {
 });
 
 </script>
+
 
 
 
