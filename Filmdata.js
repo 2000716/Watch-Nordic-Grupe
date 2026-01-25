@@ -299,7 +299,7 @@ const filmer = {
     skuespillere: "Hugh Grant, Salma Hayek, Jeremy Piven",
     regissor: "Peter Lord, Jeff Newitt",
      watchUrl: "film-mal.html?id=pirates",
-    videoUrl: "https://vixsrc.to/playlist/580833.m3u8?token=e713c0b134d2be7dc8f2d77213d7fae4&expires=1774563521&h=1",
+    videoUrl: "https://video.wixstatic.com/video/fd2fb2_d929da1da60145be96f418e6338fd0d1/1080p/mp4/file.mp4",
     subtitleUrl: "Pirates.VTT",
     tilbakeUrl: "film.html?navn=pirates",
     audioLanguages: [{ code: "en", label: "Engelsk" }],
@@ -844,6 +844,7 @@ subtitleLanguages: [ { code: "no", label: "Norsk" },
 
    
   
+
 
 
 
