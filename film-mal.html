@@ -180,17 +180,34 @@ video::cue {
 
 /* Undertekst- og lydmeny */
 .caption-menu {
-  background: rgba(10, 18, 20, 0.96);
-  backdrop-filter: blur(10px);
-  border-radius: 14px;
-  padding: 14px;
+  display: none;               /* Skjult som standard */
+  position: absolute;
+  bottom: 60px;                /* over kontrolleren */
+  right: 20px;                 /* litt fra høyre kant */
+  width: 200px;                /* fast, ikke full skjerm */
+  background: rgba(10, 18, 20, 0.9);
+  backdrop-filter: blur(8px);
+  border-radius: 12px;
+  padding: 12px;
+  z-index: 50;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.5);
+  pointer-events: auto;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  transform: translateY(10px);
+  opacity: 0;
 }
 
-.menu-section {
-  margin-bottom: 12px;
+.caption-menu.show {
+  display: block;
+  opacity: 1;
+  transform: translateY(0);
 }
 
-.menu-title {
+.caption-menu .menu-section {
+  margin-bottom: 10px;
+}
+
+.caption-menu .menu-title {
   font-size: 13px;
   font-weight: 600;
   color: #9ff5ea;
@@ -200,12 +217,13 @@ video::cue {
 .caption-menu button {
   width: 100%;
   padding: 8px 10px;
-  margin: 3px 0;
-  border-radius: 8px;
+  margin: 4px 0;
+  border-radius: 6px;
   background: transparent;
   color: #ddd;
   font-size: 14px;
   cursor: pointer;
+  transition: background 0.2s, color 0.2s;
 }
 
 .caption-menu button.active {
@@ -828,16 +846,6 @@ video::cue {
     <button class="subtitle-option" data-lang="off">Av</button>
     <div id="subtitleTracks"></div>
   </div>
-
-  <div class="menu-section">
-    <div class="menu-title">Utseende</div>
-    <button class="style-btn" data-size="small">Liten tekst</button>
-    <button class="style-btn" data-size="normal">Normal tekst</button>
-    <button class="style-btn" data-size="large">Stor tekst</button>
-
-    <button class="style-btn" data-bg="none">Ingen bakgrunn</button>
-    <button class="style-btn" data-bg="soft">Myk bakgrunn</button>
-    <button class="style-btn" data-bg="full">Full bakgrunn</button>
   </div>
 </div>
 
@@ -948,6 +956,26 @@ const subtitleOverlay = document.getElementById("subtitleOverlay");
 const resumeOverlay = document.getElementById("resumeOverlay");
 const continueBtn = document.getElementById("continueBtn");
 const restartBtn = document.getElementById("restartBtn");
+
+  // Hent undertekstmenyen
+const captionMenu = document.getElementById("captionMenu");
+const captionsBtn = document.getElementById("captionsBtn");
+
+// Skjul menyen som standard
+captionMenu.classList.remove("show");
+
+// Når man trykker på knappen
+captionsBtn.addEventListener("click", () => {
+  captionMenu.classList.toggle("show");
+});
+
+// Lukk menyen hvis man klikker utenfor
+document.addEventListener("click", (e) => {
+  if (!captionMenu.contains(e.target) && e.target !== captionsBtn) {
+    captionMenu.classList.remove("show");
+  }
+});
+
 
 /* ================= VARIABLER ================= */
 let isDragging = false;
@@ -1294,6 +1322,7 @@ document.querySelectorAll(".style-btn[data-bg]").forEach(btn => {
 
 
 </script>
+
 
 
 
