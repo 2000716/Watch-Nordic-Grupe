@@ -957,25 +957,6 @@ const resumeOverlay = document.getElementById("resumeOverlay");
 const continueBtn = document.getElementById("continueBtn");
 const restartBtn = document.getElementById("restartBtn");
 
-  // Hent undertekstmenyen
-const captionMenu = document.getElementById("captionMenu");
-const captionsBtn = document.getElementById("captionsBtn");
-
-// Skjul menyen som standard
-captionMenu.classList.remove("show");
-
-// Når man trykker på knappen
-captionsBtn.addEventListener("click", () => {
-  captionMenu.classList.toggle("show");
-});
-
-// Lukk menyen hvis man klikker utenfor
-document.addEventListener("click", (e) => {
-  if (!captionMenu.contains(e.target) && e.target !== captionsBtn) {
-    captionMenu.classList.remove("show");
-  }
-});
-
 
 /* ================= VARIABLER ================= */
 let isDragging = false;
@@ -1322,6 +1303,7 @@ document.querySelectorAll(".style-btn[data-bg]").forEach(btn => {
 
 
 </script>
+
 
 
 
