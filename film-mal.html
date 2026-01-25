@@ -1233,63 +1233,104 @@ for (let i = 0; i < video.textTracks.length; i++) {
 // ==================== GLOBAL SUBTITLE SETTING ==================== //
 const subtitleSettingKey = "global-subtitle-setting";
 let globalSubtitleSetting = localStorage.getItem(subtitleSettingKey) || "off";
+let subtitlesEnabled = globalSubtitleSetting !== "off";
 
+// DOM-elementer
+const subtitleOverlay = document.getElementById("subtitleOverlay");
+const captionMenu = document.getElementById("captionMenu");
+const captionsBtn = document.getElementById("captionsBtn");
+const subtitleTracksDiv = document.getElementById("subtitleTracks");
+
+// ==================== FUNKSJONER ==================== //
+
+// Oppdater aktive knapp i menyen
 function updateSubtitleButtons(activeLang) {
   document.querySelectorAll("#subtitleTracks button").forEach(btn => {
-    if (btn.dataset.lang === activeLang) {
-      btn.classList.add("active");
-    } else {
-      btn.classList.remove("active");
-    }
+    btn.classList.toggle("active", btn.dataset.lang === activeLang);
   });
 }
 
+// Vis/skjul undertekstmeny med animasjon
+captionsBtn.addEventListener("click", () => {
+  captionMenu.classList.toggle("show");
+});
+
+// Bytt undertekst når knapp klikkes
+function initSubtitleButtons() {
+  document.querySelectorAll(".subtitle-option, #subtitleTracks button").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const selectedLang = btn.dataset.lang;
+      globalSubtitleSetting = selectedLang;
+      localStorage.setItem(subtitleSettingKey, selectedLang);
+
+      subtitlesEnabled = selectedLang !== "off";
+
+      for (let i = 0; i < video.textTracks.length; i++) {
+        const track = video.textTracks[i];
+        // Skjul alle
+        track.mode = "hidden";
+
+        // Sett overlay hvis valgt
+        if (subtitlesEnabled &&
+            (track.language === selectedLang || track.label.toLowerCase() === selectedLang)) {
+          track.addEventListener("cuechange", () => {
+            if (!subtitlesEnabled) return;
+            const cues = track.activeCues;
+            subtitleOverlay.textContent = cues && cues.length > 0 ? cues[0].text : "";
+          });
+        }
+      }
+
+      // Fjern tekst hvis off
+      if (!subtitlesEnabled) subtitleOverlay.textContent = "";
+
+      updateSubtitleButtons(selectedLang);
+
+      // Skjul meny
+      captionMenu.classList.remove("show");
+    });
+  });
+}
+
+// ==================== INITIALISERING ==================== //
+
 video.addEventListener("loadedmetadata", () => {
-  if (globalSubtitleSetting === "off") {
-    subtitlesEnabled = false;
-    for (let i = 0; i < video.textTracks.length; i++) video.textTracks[i].mode = "hidden";
-    subtitleOverlay.textContent = "";
-  } else {
+  // Sett riktig språk ved start
+  if (globalSubtitleSetting !== "off") {
     subtitlesEnabled = true;
     for (let i = 0; i < video.textTracks.length; i++) {
       const track = video.textTracks[i];
+      track.mode = "hidden"; // Vi viser manuelt i overlay
       if (track.language === globalSubtitleSetting || track.label.toLowerCase() === globalSubtitleSetting) {
-        track.mode = "hidden";
         track.addEventListener("cuechange", () => {
-          if (!subtitlesEnabled) {
-            subtitleOverlay.textContent = "";
-            return;
-          }
+          if (!subtitlesEnabled) return;
           const cues = track.activeCues;
           subtitleOverlay.textContent = cues && cues.length > 0 ? cues[0].text : "";
         });
       }
     }
+  } else {
+    subtitlesEnabled = false;
+    subtitleOverlay.textContent = "";
   }
+
   updateSubtitleButtons(globalSubtitleSetting);
+  initSubtitleButtons();
 });
 
-// Hindre høyreklikk på videoen
-video.addEventListener("contextmenu", (e) => {
-  e.preventDefault();
-});
+// ==================== STYLING ==================== //
 
-// (valgfritt) – hindre høyreklikk på hele siden
-document.addEventListener("contextmenu", (e) => {
-  e.preventDefault();
-});
-
-  const subtitleStyleKey = "subtitle-style";
+// Hent lagrede brukerpreferanser
+const subtitleStyleKey = "subtitle-style";
 const subtitleBgKey = "subtitle-bg";
-
-// last inn lagrede valg
 const savedSize = localStorage.getItem(subtitleStyleKey) || "normal";
 const savedBg = localStorage.getItem(subtitleBgKey) || "none";
 
+// Påfør lagrede preferanser
 subtitleOverlay.classList.add(savedSize);
 if (savedBg !== "none") subtitleOverlay.classList.add("bg-" + savedBg);
 
-// størrelse
+// Størrelse-knapper
 document.querySelectorAll(".style-btn[data-size]").forEach(btn => {
   btn.addEventListener("click", () => {
     subtitleOverlay.classList.remove("small","normal","large");
@@ -1298,7 +1339,7 @@ document.querySelectorAll(".style-btn[data-size]").forEach(btn => {
   });
 });
 
-// bakgrunn
+// Bakgrunn-knapper
 document.querySelectorAll(".style-btn[data-bg]").forEach(btn => {
   btn.addEventListener("click", () => {
     subtitleOverlay.classList.remove("bg-soft","bg-full");
@@ -1309,8 +1350,14 @@ document.querySelectorAll(".style-btn[data-bg]").forEach(btn => {
   });
 });
 
+// ==================== HINDRE HØYREKLIKK ==================== //
+video.addEventListener("contextmenu", e => e.preventDefault());
+document.addEventListener("contextmenu", e => e.preventDefault());
+
+
 
 </script>
+
 
 
 
