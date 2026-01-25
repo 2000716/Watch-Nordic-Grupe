@@ -288,11 +288,11 @@ const filmer = {
   },
 
      "pirates": {
-    tittel: "Pirates",
-    bakgrunn: "https://imageservice.sky.com/uuid/24859a07-faf9-40f6-83ec-ff8fe241f850/background/2000",
-    logo: "https://occ-0-8407-116.1.nflxso.net/dnm/api/v6/S4oi7EPZbv2UEPaukW54OORa0S8/AAAABSIgtJLTKfdEughLNbzy82Wqd8Kl46Se-AN2nHuvmBc-XWV0uk7VOrH2GMJYrpS-FHXI1bfeDZflhQKfgwztI_xXYgxLqNelAos.png?r=c1b",
+    tittel: "Piratene",
+    bakgrunn: "https://image.tmdb.org/t/p/original/9UZnCIeUVHzZQLDXN7lht2T4ndB.jpg",
+    logo: "https://occ-0-1164-38.1.nflxso.net/dnm/api/v6/beuYL-MTCxPyt5oTOhVnWNGfZug/AAAABXuhtivtN1MAkCfboXHTx4VJNgm2d1mUDkoxZlDohIOSRJFv3lst6jbyEA_aTp_a7XvrouTpOVJsioSIjN9hAvjse9IL6fBvy9gzoCx6Du4.webp?r=e08",
     poster: "https://images-prod.ai.tv2.no/v2/image-packs/pfimg_pack_01k4s3f8b5fn1bgb8e5qjzjtmy?height=630",
-    posterVertikal: "https://i-viaplay-com.akamaized.net/viaplay-prod/889/480/1463401854-6df2cdc3059ce11d81d81c205d50aacae15211e8.jpg?width=400&height=600", // portrett
+    posterVertikal: "https://image.tmdb.org/t/p/original/yeTWxeG1yKMtjvfevHnfK8mC9Ji.jpg", // portrett
     beskrivelse: "En gjeng pirater reiser til London og møter Charles Darwin, en snakkende ape og en fiende som prøver å utslette dem.",
     metadata: ["Storbritannia", "2012", "6+", "Familie", "1 t 24 min"],
     imdb: "https://www.imdb.com/title/tt1430626/",
@@ -844,6 +844,7 @@ subtitleLanguages: [ { code: "no", label: "Norsk" },
 
    
   
+
 
 
 
