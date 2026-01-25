@@ -111,7 +111,7 @@ const filmer = {
       { code: "no", label: "Norsk" },
       { code: "off", label: "Av" }
     ],
-    expireDate: "2026-01-01T23:59:59",
+    expireDate: "2027-01-01T23:59:59",
   },
 
   "dyrene-i-hakkabakkeskogen": {
@@ -844,6 +844,7 @@ subtitleLanguages: [ { code: "no", label: "Norsk" },
 
    
   
+
 
 
 
