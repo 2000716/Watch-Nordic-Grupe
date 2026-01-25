@@ -92,7 +92,7 @@ const filmer = {
   },
 
   "dog-man": {
-    tittel: "Dog Man",
+    tittel: "Hundemannen",
     bakgrunn: "https://andersonvision.com/wp-content/uploads/2025/03/Dog-Man-blu-ray-7-scaled.jpg",
     logo: "https://pixel.disco.skyshowtime.com/uuid/b54c1978-2513-3c56-88ef-f71b9a6c77ad/LOGO_TITLE_WIDE/1416/2500?language=nb-NO&proposition=SKYSHOWTIME&version=c33eb1cd-83a8-321d-aa3d-3c36b002c02a&image-format=webp",
     poster: "https://m.media-amazon.com/images/S/pv-target-images/aa806940f222d351c001077076e03c607e65fa8182efb056bc405c868fe3724b.jpg",
@@ -844,6 +844,7 @@ subtitleLanguages: [ { code: "no", label: "Norsk" },
 
    
   
+
 
 
 
