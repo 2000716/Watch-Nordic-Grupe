@@ -732,6 +732,37 @@ video::cue {
   opacity: 0.95;
 }
 
+   /* Progress streken */
+.progress-filled {
+  width: 0%;
+  height: 100%;
+  background: #0fddcb; /* Samme farge som før */
+  border-radius: 5px;
+  box-shadow: 0 0 8px rgba(15, 221, 203, 0.7); /* glow */
+  transition: width 0.2s ease;
+}
+
+/* Thumb/prikken */
+.thumb {
+  position: absolute;
+  top: 50%;
+  width: 16px;      /* litt større */
+  height: 16px;
+  background: #0fddcb;  /* samme farge som streken */
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  cursor: pointer;
+  z-index: 13;
+  box-shadow: 0 0 12px rgba(15, 221, 203, 0.9); /* glød/lys */
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* Animasjon når man hoverer på prikken */
+.thumb:hover {
+  transform: translate(-50%, -50%) scale(1.4);
+  box-shadow: 0 0 18px rgba(15, 221, 203, 1);
+}
+
 
 
 
@@ -1253,6 +1284,7 @@ document.addEventListener("contextmenu", (e) => {
 });
 
 </script>
+
 
 
 
