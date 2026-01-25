@@ -1438,6 +1438,66 @@ background: linear-gradient(
   inset: 0;
 }
 
+   /* ===== GALLERI-ITEM ===== */
+.gallery-item {
+  position: relative;
+  display: inline-block;
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+/* Bildet */
+.gallery-item img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* ===== OVERLAY ===== */
+.image-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+
+  background: linear-gradient(
+    to top,
+    rgba(0, 0, 0, 0.85) 0%,
+    rgba(0, 0, 0, 0.55) 40%,
+    rgba(0, 0, 0, 0) 75%
+  );
+
+  opacity: 0;
+  transition: opacity 0.3s ease;
+
+  display: flex;
+  align-items: flex-end;
+  pointer-events: none;
+}
+
+/* Innhold nederst */
+.overlay-content {
+  padding: 14px;
+  width: 100%;
+}
+
+.overlay-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 4px;
+}
+
+.overlay-meta {
+  font-size: 13px;
+  color: #d0d0d0;
+}
+
+/* Hover-effekt */
+.gallery-item:hover .image-overlay {
+  opacity: 1;
+}
+
+
 
 
 
@@ -2121,6 +2181,7 @@ activeFilms.forEach(film => {
 
   
 </script>
+
 
 
 
