@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="no">
 <head>
   <meta charset="UTF-8" />
@@ -180,62 +180,50 @@ video::cue {
 
 /* Undertekst- og lydmeny */
 .caption-menu {
-  display: none;               /* Skjult som standard */
   position: absolute;
-  bottom: 60px;                /* over kontrolleren */
-  right: 20px;                 /* litt fra høyre kant */
-  width: 200px;                /* fast, ikke full skjerm */
-  background: rgba(10, 18, 20, 0.9);
-  backdrop-filter: blur(8px);
-  border-radius: 12px;
+  bottom: 120px;
+  right: 20px; /* flyttet til høyre */
+  background: rgba(9, 27, 30, 0.95);
+  border-radius: 10px;
   padding: 12px;
-  z-index: 50;
-  box-shadow: 0 8px 20px rgba(0,0,0,0.5);
-  pointer-events: auto;
-  transition: opacity 0.3s ease, transform 0.3s ease;
-  transform: translateY(10px);
-  opacity: 0;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6);
+  display: none;
+  min-width: 180px;
+  z-index: 10000;
 }
 
-.caption-menu.show {
+
+.caption-menu strong {
   display: block;
-  opacity: 1;
-  transform: translateY(0);
-}
-
-.caption-menu .menu-section {
-  margin-bottom: 10px;
-}
-
-.caption-menu .menu-title {
-  font-size: 13px;
-  font-weight: 600;
-  color: #9ff5ea;
-  margin-bottom: 6px;
+  margin: 8px 0 5px;
+  font-size: 14px;
+  font-weight: bold;
+  color: #fff;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  padding-bottom: 4px;
 }
 
 .caption-menu button {
+  display: block;
   width: 100%;
-  padding: 8px 10px;
-  margin: 4px 0;
-  border-radius: 6px;
-  background: transparent;
+  padding: 8px 12px;
+  margin: 2px 0;
+  background-color: transparent;
   color: #ddd;
+  border: none;
+  text-align: left;
   font-size: 14px;
+  border-radius: 6px;
   cursor: pointer;
-  transition: background 0.2s, color 0.2s;
+  transition: background 0.2s ease;
 }
 
+.caption-menu button:hover,
 .caption-menu button.active {
-  background: #0fddcb;
+  background-color: #0fddcb;
   color: #000;
   font-weight: bold;
 }
-
-.caption-menu button:hover {
-  background: rgba(15, 221, 203, 0.2);
-}
-
 
 .watermark {
   position: absolute;  /* følger container, ikke skjermen */
@@ -835,29 +823,15 @@ video::cue {
         </div>
       </div>
 
-  <div class="caption-menu" id="captionMenu">
-  <div class="menu-section">
-    <div class="menu-title">Lyd</div>
-    <div id="audioTracks"></div>
+      <div class="caption-menu" id="captionMenu">
+        <strong>Lydspråk</strong>
+        <div id="audioTracks"></div>
+        <strong>Undertekster</strong>
+        <div id="subtitleTracks"></div>
+      </div>
+    </div>
   </div>
 
-  <div class="menu-section">
-    <div class="menu-title">Undertekster</div>
-    <button class="subtitle-option" data-lang="off">Av</button>
-    <div id="subtitleTracks"></div>
-  </div>
-
-  <div class="menu-section">
-    <div class="menu-title">Utseende</div>
-    <button class="style-btn" data-size="small">Liten tekst</button>
-    <button class="style-btn" data-size="normal">Normal tekst</button>
-    <button class="style-btn" data-size="large">Stor tekst</button>
-
-    <button class="style-btn" data-bg="none">Ingen bakgrunn</button>
-    <button class="style-btn" data-bg="soft">Myk bakgrunn</button>
-    <button class="style-btn" data-bg="full">Full bakgrunn</button>
-  </div>
-</div>
 
 <script src="Filmdata.js"></script>
 <script src="Seriedata.js"></script>
@@ -964,7 +938,6 @@ const subtitleOverlay = document.getElementById("subtitleOverlay");
 const resumeOverlay = document.getElementById("resumeOverlay");
 const continueBtn = document.getElementById("continueBtn");
 const restartBtn = document.getElementById("restartBtn");
-
 
 /* ================= VARIABLER ================= */
 let isDragging = false;
@@ -1233,137 +1206,53 @@ for (let i = 0; i < video.textTracks.length; i++) {
 // ==================== GLOBAL SUBTITLE SETTING ==================== //
 const subtitleSettingKey = "global-subtitle-setting";
 let globalSubtitleSetting = localStorage.getItem(subtitleSettingKey) || "off";
-let subtitlesEnabled = globalSubtitleSetting !== "off";
 
-// DOM-elementer
-const subtitleOverlay = document.getElementById("subtitleOverlay");
-const captionMenu = document.getElementById("captionMenu");
-const captionsBtn = document.getElementById("captionsBtn");
-const subtitleTracksDiv = document.getElementById("subtitleTracks");
-
-// ==================== FUNKSJONER ==================== //
-
-// Oppdater aktive knapp i menyen
 function updateSubtitleButtons(activeLang) {
   document.querySelectorAll("#subtitleTracks button").forEach(btn => {
-    btn.classList.toggle("active", btn.dataset.lang === activeLang);
+    if (btn.dataset.lang === activeLang) {
+      btn.classList.add("active");
+    } else {
+      btn.classList.remove("active");
+    }
   });
 }
-
-// Vis/skjul undertekstmeny med animasjon
-captionsBtn.addEventListener("click", () => {
-  captionMenu.classList.toggle("show");
-});
-
-// Bytt undertekst når knapp klikkes
-function initSubtitleButtons() {
-  document.querySelectorAll(".subtitle-option, #subtitleTracks button").forEach(btn => {
-    btn.addEventListener("click", () => {
-      const selectedLang = btn.dataset.lang;
-      globalSubtitleSetting = selectedLang;
-      localStorage.setItem(subtitleSettingKey, selectedLang);
-
-      subtitlesEnabled = selectedLang !== "off";
-
-      for (let i = 0; i < video.textTracks.length; i++) {
-        const track = video.textTracks[i];
-        // Skjul alle
-        track.mode = "hidden";
-
-        // Sett overlay hvis valgt
-        if (subtitlesEnabled &&
-            (track.language === selectedLang || track.label.toLowerCase() === selectedLang)) {
-          track.addEventListener("cuechange", () => {
-            if (!subtitlesEnabled) return;
-            const cues = track.activeCues;
-            subtitleOverlay.textContent = cues && cues.length > 0 ? cues[0].text : "";
-          });
-        }
-      }
-
-      // Fjern tekst hvis off
-      if (!subtitlesEnabled) subtitleOverlay.textContent = "";
-
-      updateSubtitleButtons(selectedLang);
-
-      // Skjul meny
-      captionMenu.classList.remove("show");
-    });
-  });
-}
-
-// ==================== INITIALISERING ==================== //
 
 video.addEventListener("loadedmetadata", () => {
-  // Sett riktig språk ved start
-  if (globalSubtitleSetting !== "off") {
+  if (globalSubtitleSetting === "off") {
+    subtitlesEnabled = false;
+    for (let i = 0; i < video.textTracks.length; i++) video.textTracks[i].mode = "hidden";
+    subtitleOverlay.textContent = "";
+  } else {
     subtitlesEnabled = true;
     for (let i = 0; i < video.textTracks.length; i++) {
       const track = video.textTracks[i];
-      track.mode = "hidden"; // Vi viser manuelt i overlay
       if (track.language === globalSubtitleSetting || track.label.toLowerCase() === globalSubtitleSetting) {
+        track.mode = "hidden";
         track.addEventListener("cuechange", () => {
-          if (!subtitlesEnabled) return;
+          if (!subtitlesEnabled) {
+            subtitleOverlay.textContent = "";
+            return;
+          }
           const cues = track.activeCues;
           subtitleOverlay.textContent = cues && cues.length > 0 ? cues[0].text : "";
         });
       }
     }
-  } else {
-    subtitlesEnabled = false;
-    subtitleOverlay.textContent = "";
   }
-
   updateSubtitleButtons(globalSubtitleSetting);
-  initSubtitleButtons();
 });
 
-// ==================== STYLING ==================== //
-
-// Hent lagrede brukerpreferanser
-const subtitleStyleKey = "subtitle-style";
-const subtitleBgKey = "subtitle-bg";
-const savedSize = localStorage.getItem(subtitleStyleKey) || "normal";
-const savedBg = localStorage.getItem(subtitleBgKey) || "none";
-
-// Påfør lagrede preferanser
-subtitleOverlay.classList.add(savedSize);
-if (savedBg !== "none") subtitleOverlay.classList.add("bg-" + savedBg);
-
-// Størrelse-knapper
-document.querySelectorAll(".style-btn[data-size]").forEach(btn => {
-  btn.addEventListener("click", () => {
-    subtitleOverlay.classList.remove("small","normal","large");
-    subtitleOverlay.classList.add(btn.dataset.size);
-    localStorage.setItem(subtitleStyleKey, btn.dataset.size);
-  });
+// Hindre høyreklikk på videoen
+video.addEventListener("contextmenu", (e) => {
+  e.preventDefault();
 });
 
-// Bakgrunn-knapper
-document.querySelectorAll(".style-btn[data-bg]").forEach(btn => {
-  btn.addEventListener("click", () => {
-    subtitleOverlay.classList.remove("bg-soft","bg-full");
-    if (btn.dataset.bg !== "none") {
-      subtitleOverlay.classList.add("bg-" + btn.dataset.bg);
-    }
-    localStorage.setItem(subtitleBgKey, btn.dataset.bg);
-  });
+// (valgfritt) – hindre høyreklikk på hele siden
+document.addEventListener("contextmenu", (e) => {
+  e.preventDefault();
 });
-
-// ==================== HINDRE HØYREKLIKK ==================== //
-video.addEventListener("contextmenu", e => e.preventDefault());
-document.addEventListener("contextmenu", e => e.preventDefault());
-
-
 
 </script>
-
-
-
-
-
-
-
 
 
 
