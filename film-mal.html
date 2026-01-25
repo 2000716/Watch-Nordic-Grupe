@@ -835,7 +835,7 @@ video::cue {
         </div>
       </div>
 
-   <div class="caption-menu" id="captionMenu">
+  <div class="caption-menu" id="captionMenu">
   <div class="menu-section">
     <div class="menu-title">Lyd</div>
     <div id="audioTracks"></div>
@@ -846,10 +846,18 @@ video::cue {
     <button class="subtitle-option" data-lang="off">Av</button>
     <div id="subtitleTracks"></div>
   </div>
+
+  <div class="menu-section">
+    <div class="menu-title">Utseende</div>
+    <button class="style-btn" data-size="small">Liten tekst</button>
+    <button class="style-btn" data-size="normal">Normal tekst</button>
+    <button class="style-btn" data-size="large">Stor tekst</button>
+
+    <button class="style-btn" data-bg="none">Ingen bakgrunn</button>
+    <button class="style-btn" data-bg="soft">Myk bakgrunn</button>
+    <button class="style-btn" data-bg="full">Full bakgrunn</button>
   </div>
 </div>
-
-
 
 <script src="Filmdata.js"></script>
 <script src="Seriedata.js"></script>
@@ -1303,6 +1311,7 @@ document.querySelectorAll(".style-btn[data-bg]").forEach(btn => {
 
 
 </script>
+
 
 
 
