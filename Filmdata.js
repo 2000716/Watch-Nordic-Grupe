@@ -818,7 +818,7 @@ const filmer = {
       "svampeBob-jakten-på-firkant": {
     tittel: "SvampeBob: Jakten på Firkant",
     bakgrunn: "https://image.tmdb.org/t/p/original/xFwsArspdwZcns7dTa0ys4ZLOtd.jpg",
-    banner: "https://image.tmdb.org/t/p/original/kbnX1RtojdspWUhXUAIGccUuAb3.jpg", 
+    banner: "https://cdn.sanity.io/images/j0wdmpyb/production/eb2210c7c854aedf98808c3eea0764c61fedd9f3-2400x1297.jpg", 
     logo: "https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/c9a27e0a-52f7-4cec-a932-b6246308a58e/dkfheo7-4b3f7971-53de-4a90-90fd-3c1303513f50.png?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7InBhdGgiOiIvZi9jOWEyN2UwYS01MmY3LTRjZWMtYTkzMi1iNjI0NjMwOGE1OGUvZGtmaGVvNy00YjNmNzk3MS01M2RlLTRhOTAtOTBmZC0zYzEzMDM1MTNmNTAucG5nIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmZpbGUuZG93bmxvYWQiXX0.C1slfg_V2R9lSufGw6CYEdtiYo9R9gjfJwcw3Zhfiks",     
     poster: "https://image.tmdb.org/t/p/original/cQMfWsFzQXUKfaoGSjhHXDjDSSX.jpg",
     posterVertikal: "https://image.tmdb.org/t/p/original/pDWYW9v8fmJdA7N0I1MOdQA3ETq.jpg", // portrett
@@ -844,6 +844,7 @@ subtitleLanguages: [ { code: "no", label: "Norsk" },
 
    
   
+
 
 
 
