@@ -1513,7 +1513,7 @@ background: linear-gradient(
 
   <div class="nav-right">
     <a href="Søk.html" class="nav-search"><i class="fas fa-search"></i></a>
-    <div class="profilmeny" onclick="gåTilKonto()">
+ <div class="profilmeny" onclick="gåTilProfilvelger()">
       <img id="menyProfilbilde" src="https://via.placeholder.com/100" alt="Min profil" />
     </div>
   </div>
@@ -2171,9 +2171,16 @@ activeFilms.forEach(film => {
     gallery.appendChild(item);
 });
 
+ <script>
+const headerProfil = document.getElementById("menyProfilbilde");
+const lagretBilde = localStorage.getItem("profilbilde");
 
-  
+if (lagretBilde && headerProfil) {
+  headerProfil.src = lagretBilde;
+}
 </script>
+
+
 
 
 
