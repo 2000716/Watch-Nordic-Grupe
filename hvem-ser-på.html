@@ -7,131 +7,125 @@
 
 <style>
 :root {
-  --bg: #141414;
-  --card: #1f1f1f;
-  --muted: #b3b3b3;
-  --accent: #e50914;
+  --bg:#141414;
+  --card:#1f1f1f;
+  --muted:#b3b3b3;
+  --accent:#00a8e1;
 }
 
-* {
-  box-sizing: border-box;
-}
+* { box-sizing:border-box; }
 
 body {
-  margin: 0;
-  background: var(--bg);
-  color: white;
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
+  margin:0;
+  background:
+    radial-gradient(circle at top, rgba(0,168,225,0.15), transparent 40%),
+    #141414;
+  color:white;
+  font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto;
+  min-height:100vh;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
 }
 
 h1 {
-  font-size: 36px;
-  font-weight: 500;
-  margin-bottom: 40px;
+  font-size:38px;
+  font-weight:500;
+  margin-bottom:40px;
 }
 
+/* PROFILES */
 .profiles {
-  display: flex;
-  gap: 40px;
-  flex-wrap: wrap;
-  justify-content: center;
+  display:flex;
+  gap:40px;
+  flex-wrap:wrap;
+  justify-content:center;
 }
 
 .profile {
-  cursor: pointer;
-  text-align: center;
-  transition: transform 0.2s ease;
+  text-align:center;
+  cursor:pointer;
+  transition:transform .2s ease;
 }
 
-.profile:hover {
-  transform: scale(1.08);
-}
+.profile:hover { transform:scale(1.08); }
 
 .avatar {
-  width: 140px;
-  height: 140px;
-  border-radius: 50%;
-  overflow: hidden;
-  border: 3px solid transparent;
-  background: var(--card);
-  position: relative;
+  width:150px;
+  height:150px;
+  border-radius:50%;
+  overflow:hidden;
+  background:var(--card);
+  border:3px solid transparent;
+  position:relative;
 }
 
+.profile:hover .avatar,
 .profile.active .avatar {
-  border-color: var(--accent);
-}
-
-.profile:hover .avatar {
-  border-color: var(--accent);
+  border-color:var(--accent);
 }
 
 .avatar img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
+  width:100%;
+  height:100%;
+  object-fit:cover;
 }
 
 .kids-badge {
-  position: absolute;
-  bottom: 6px;
-  right: 6px;
-  background: #ffc107;
-  color: black;
-  font-size: 12px;
-  padding: 2px 6px;
-  border-radius: 12px;
-  font-weight: 600;
+  position:absolute;
+  bottom:6px;
+  right:6px;
+  background:#ffc107;
+  color:black;
+  font-size:12px;
+  padding:2px 8px;
+  border-radius:12px;
+  font-weight:600;
 }
 
 .name {
-  margin-top: 12px;
-  font-size: 18px;
-  color: var(--muted);
+  margin-top:14px;
+  font-size:18px;
+  color:var(--muted);
 }
 
-.actions {
-  margin-top: 40px;
-  display: flex;
-  gap: 16px;
-}
-
-button {
-  background: none;
-  border: 1px solid var(--muted);
-  color: white;
-  padding: 12px 26px;
-  border-radius: 4px;
-  cursor: pointer;
-}
-
-button:hover {
-  border-color: white;
+/* DELETE */
+.delete {
+  margin-top:6px;
+  font-size:13px;
+  color:#ff6b6b;
+  display:none;
 }
 
 .manage-mode .delete {
-  display: block;
+  display:block;
 }
 
-.delete {
-  display: none;
-  margin-top: 6px;
-  font-size: 13px;
-  color: #ff6b6b;
-  cursor: pointer;
+/* ACTIONS */
+.actions {
+  margin-top:50px;
+  display:flex;
+  gap:16px;
 }
+
+button {
+  background:none;
+  border:1px solid var(--muted);
+  color:white;
+  padding:12px 28px;
+  border-radius:6px;
+  cursor:pointer;
+}
+
+button:hover { border-color:white; }
 
 footer {
-  position: absolute;
-  bottom: 20px;
-  font-size: 12px;
-  color: #8c8c8c;
-  text-align: center;
-  padding: 0 20px;
+  position:absolute;
+  bottom:20px;
+  font-size:12px;
+  color:#8c8c8c;
+  text-align:center;
 }
 </style>
 </head>
@@ -155,25 +149,29 @@ footer {
 const MAX_PROFILER = 5;
 let manageMode = false;
 
-let profiler = JSON.parse(localStorage.getItem("profiler"));
+/* LAST PROFILER */
+let profiler = JSON.parse(localStorage.getItem("profiler")) || [];
 
-if (!profiler || profiler.length === 0) {
+/* STANDARD */
+if (profiler.length === 0) {
   profiler = [
-    { navn: "Profil", bilde: "https://via.placeholder.com/140", barn: false },
-    { navn: "Barn", bilde: "https://via.placeholder.com/140/888/fff?text=Barn", barn: true }
+    { navn:"Profil", bilde:"https://via.placeholder.com/150", barn:false },
+    { navn:"Barn", bilde:"https://via.placeholder.com/150/888/fff?text=Barn", barn:true }
   ];
   localStorage.setItem("profiler", JSON.stringify(profiler));
 }
 
-const aktivProfil = localStorage.getItem("aktivProfil");
+let aktivProfil = Number(localStorage.getItem("aktivProfil")) || 0;
 const container = document.getElementById("profiles");
 
+/* RENDER */
 function renderProfiler() {
   container.innerHTML = "";
+
   profiler.forEach((profil, index) => {
     const div = document.createElement("div");
     div.className = "profile";
-    if (index == aktivProfil) div.classList.add("active");
+    if (index === aktivProfil) div.classList.add("active");
 
     div.innerHTML = `
       <div class="avatar">
@@ -181,7 +179,7 @@ function renderProfiler() {
         ${profil.barn ? `<div class="kids-badge">👶</div>` : ""}
       </div>
       <div class="name">${profil.navn}</div>
-      <div class="delete" onclick="slettProfil(${index})">Slett</div>
+      <div class="delete" onclick="slettProfil(event, ${index})">Slett</div>
     `;
 
     div.onclick = () => {
@@ -196,11 +194,19 @@ function renderProfiler() {
 
 renderProfiler();
 
+/* VELG PROFIL */
 function velgProfil(index) {
+  aktivProfil = index;
   localStorage.setItem("aktivProfil", index);
+
+  /* 🔑 SYNC MED RESTEN AV APPEN */
+  localStorage.setItem("navn", profiler[index].navn);
+  localStorage.setItem("profilbilde", profiler[index].bilde);
+
   window.location.href = "Hovedside.html";
 }
 
+/* LEGG TIL */
 function leggTilProfil() {
   if (profiler.length >= MAX_PROFILER) {
     alert("Maks antall profiler nådd");
@@ -209,18 +215,32 @@ function leggTilProfil() {
   window.location.href = "Registreringsside.html";
 }
 
+/* ADMIN */
 function toggleManage() {
   manageMode = !manageMode;
   renderProfiler();
 }
 
-function slettProfil(index) {
+/* SLETT */
+function slettProfil(e, index) {
+  e.stopPropagation();
   if (!confirm("Vil du slette denne profilen?")) return;
+
   profiler.splice(index, 1);
   localStorage.setItem("profiler", JSON.stringify(profiler));
+
+  if (aktivProfil >= profiler.length) {
+    aktivProfil = 0;
+    localStorage.setItem("aktivProfil", 0);
+  }
+
   renderProfiler();
 }
 </script>
+
+</body>
+</html>
+
 
 </body>
 </html>
