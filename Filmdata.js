@@ -446,6 +446,7 @@ const filmer = {
     "titanic-digital-resurrection": {
     tittel: "Titanic Digital Resurrection",
     bakgrunn: "https://d32qys9a6wm9no.cloudfront.net/images/movies/backdrop/2f/5e55bbdc9efb40b5f6e4c8e54d4afbfd_1280x720.jpg?t=1744244601",
+    banner: "https://atlanticstudios.co.uk/wp-content/uploads/2025/04/4_POST2_1920x1080_TITANIC_THEDIGITALRESURRECTION.png", 
     logo: "https://disney.images.edge.bamgrid.com/ripcut-delivery/v2/variant/disney/b156d077-a608-4f8f-9393-bbb5b8328ce2/compose?format=webp",
     poster: "https://disney.images.edge.bamgrid.com/ripcut-delivery/v2/variant/disney/72158a35-dc7b-4b46-b298-67c100559fed/scale?format=webp&width=600",
     posterVertikal: "https://m.media-amazon.com/images/M/MV5BNDdiNzg1MTAtMWJiOC00ZDFmLTkzOWEtNDRmMTFjMjMwZGNlXkEyXkFqcGc@._V1_FMjpg_UX1000_.jpg", // portrett
@@ -672,6 +673,7 @@ const filmer = {
        "paddington-i-peru": {
     tittel: "Peddington i Peru",
     bakgrunn: "https://image.tmdb.org/t/p/original/7N7CtZftqEvgojR3QloukU0oWPg.jpg",
+    banner: "https://image.tmdb.org/t/p/original/7N7CtZftqEvgojR3QloukU0oWPg.jpg", 
     logo: "https://image.tmdb.org/t/p/original/47ZZ3izUpIRiQK3FYKKa74YkirC.png",     
     poster: "https://i-viaplay-com.akamaized.net/viaplay-prod/307/828/1740152643-17a0f043de12d5829ca42cde98ad9876a0843f86.jpg?width=448&height=252",
     posterVertikal: "https://i-viaplay-com.akamaized.net/viaplay-prod/307/828/1740152641-a11d0bfc07c635e0eb545631bf16a73343031817.jpg?width=400&height=600", // portrett
@@ -698,6 +700,7 @@ const filmer = {
        "kaptein-sabeltann-og-grevinnen-av-gral": {
     tittel: " Kaptein Sabeltann og Grevinnen av Gral",
     bakgrunn: "https://image.tmdb.org/t/p/original/eL8fgEK8mgDcJZRHzuxbLwevCcr.jpg", 
+    banner: "https://image.tmdb.org/t/p/original/eL8fgEK8mgDcJZRHzuxbLwevCcr.jpg", 
     logo: "https://images-0.rakuten.tv/storage/global-movie/translation/title-treatment/8a102351-3b9a-44c9-a65a-af813b796717-width410-quality90.png",     
     poster: "https://images-prod.ai.tv2.no/v2/image-packs/pfimg_pack_01kc6s12ydf7ar2jzbh050mfz2?height=630",
     posterVertikal: "https://image.tmdb.org/t/p/original/yKtIO2xeQaz7n7ZmQrFm3fCCIQK.jpg", // portrett
@@ -818,7 +821,6 @@ const filmer = {
       "svampeBob-jakten-på-firkant": {
     tittel: "SvampeBob: Jakten på Firkant",
     bakgrunn: "https://image.tmdb.org/t/p/original/xFwsArspdwZcns7dTa0ys4ZLOtd.jpg",
-    banner: "https://cdn.sanity.io/images/j0wdmpyb/production/eb2210c7c854aedf98808c3eea0764c61fedd9f3-2400x1297.jpg", 
     logo: "https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/c9a27e0a-52f7-4cec-a932-b6246308a58e/dkfheo7-4b3f7971-53de-4a90-90fd-3c1303513f50.png?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7InBhdGgiOiIvZi9jOWEyN2UwYS01MmY3LTRjZWMtYTkzMi1iNjI0NjMwOGE1OGUvZGtmaGVvNy00YjNmNzk3MS01M2RlLTRhOTAtOTBmZC0zYzEzMDM1MTNmNTAucG5nIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmZpbGUuZG93bmxvYWQiXX0.C1slfg_V2R9lSufGw6CYEdtiYo9R9gjfJwcw3Zhfiks",     
     poster: "https://image.tmdb.org/t/p/original/cQMfWsFzQXUKfaoGSjhHXDjDSSX.jpg",
     posterVertikal: "https://image.tmdb.org/t/p/original/pDWYW9v8fmJdA7N0I1MOdQA3ETq.jpg", // portrett
@@ -844,6 +846,7 @@ subtitleLanguages: [ { code: "no", label: "Norsk" },
 
    
   
+
 
 
 
