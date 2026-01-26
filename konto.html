@@ -1,324 +1,340 @@
 <!DOCTYPE html>
 <html lang="no">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Konto | Watch Nordic™</title>
-  <link rel="icon" type="image/png" href="https://static.wixstatic.com/media/fd2fb2_39376e4ee55b460ab7a3ebbfcf35fef7~mv2.png" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
-  <style>
-    :root {
-      --bg: #141414;
-      --card: #1f1f1f;
-      --muted: #b3b3b3;
-    }
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Konto | Watch Nordic™</title>
 
-    * { box-sizing: border-box; }
+<link rel="icon" type="image/png" href="https://static.wixstatic.com/media/fd2fb2_39376e4ee55b460ab7a3ebbfcf35fef7~mv2.png" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
 
- body {
-  margin: 0;
+<style>
+:root {
+  --bg:#141414;
+  --muted:#b3b3b3;
+}
+
+* { box-sizing:border-box; }
+
+body {
+  margin:0;
   background:
     radial-gradient(circle at 10% 20%, rgba(0,168,225,0.25), transparent 40%),
     linear-gradient(180deg, #0e0e0e, #141414);
-  color: white;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-  min-height: 100vh;
+  color:white;
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  min-height:100vh;
 }
 
-
-    header {
-      padding: 20px 40px;
-      border-bottom: 1px solid #222;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    header h1 {
-      font-size: 22px;
-      margin: 0;
-      font-weight: 600;
-    }
-
-    header button {
-      background: none;
-      border: 1px solid var(--muted);
-      color: white;
-      padding: 8px 16px;
-      border-radius: 4px;
-      cursor: pointer;
-    }
-
-    header button:hover { border-color: white; }
-
-    .container {
-      max-width: 1100px;
-      margin: auto;
-      padding: 40px;
-      display: grid;
-      grid-template-columns: 280px 1fr;
-      gap: 40px;
-    }
-
-   .sidebar {
-  text-align: center;
-  background: rgba(255, 255, 255, 0.06);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border-radius: 16px;
-  padding: 30px 20px;
-  box-shadow: 0 10px 40px rgba(0,0,0,0.4);
-  border: 1px solid rgba(255,255,255,0.08);
+/* HEADER */
+header {
+  padding:20px 40px;
+  border-bottom:1px solid #222;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
 }
 
+header h1 {
+  font-size:22px;
+  margin:0;
+}
 
-    .avatar {
-      width: 160px;
-      height: 160px;
-      border-radius: 50%;
-      overflow: hidden;
-      margin: auto;
-      cursor: pointer;
-      border: 3px solid transparent;
-    }
+header button {
+  background:none;
+  border:1px solid var(--muted);
+  color:white;
+  padding:8px 16px;
+  border-radius:6px;
+  cursor:pointer;
+}
 
-    .avatar:hover { border-color: var(--accent); }
+header button:hover { border-color:white; }
 
-    .avatar img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
+/* LAYOUT */
+.container {
+  max-width:1100px;
+  margin:auto;
+  padding:40px;
+  display:grid;
+  grid-template-columns:280px 1fr;
+  gap:40px;
+}
 
-    .profile-name {
-      margin-top: 16px;
-      font-size: 20px;
-      font-weight: 500;
-    }
+/* SIDEBAR */
+.sidebar {
+  text-align:center;
+  background:rgba(255,255,255,0.06);
+  backdrop-filter:blur(16px);
+  border-radius:16px;
+  padding:30px 20px;
+  border:1px solid rgba(255,255,255,0.08);
+  box-shadow:0 10px 40px rgba(0,0,0,0.4);
+}
 
-    .profile-actions {
-      margin-top: 20px;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
+.avatar {
+  width:160px;
+  height:160px;
+  border-radius:50%;
+  overflow:hidden;
+  margin:auto;
+  cursor:pointer;
+}
 
-    .profile-actions button {
-      background: none;
-      border: 1px solid var(--muted);
-      color: white;
-      padding: 10px;
-      border-radius: 4px;
-      cursor: pointer;
-    }
+.avatar img {
+  width:100%;
+  height:100%;
+  object-fit:cover;
+}
 
-    .profile-actions button:hover {
-      border-color: white;
-    }
+.profile-name {
+  margin-top:16px;
+  font-size:20px;
+}
 
-    /* CONTENT */
-    .content h2 {
-      font-size: 22px;
-      margin-bottom: 20px;
-      font-weight: 600;
-    }
+.profile-actions {
+  margin-top:20px;
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+}
+
+.profile-actions button {
+  background:none;
+  border:1px solid var(--muted);
+  color:white;
+  padding:10px;
+  border-radius:6px;
+  cursor:pointer;
+}
+
+.profile-actions button:hover { border-color:white; }
+
+/* CONTENT */
+.content h2 {
+  font-size:22px;
+  margin-bottom:20px;
+}
 
 .card {
-  background: rgba(255, 255, 255, 0.07);
-  backdrop-filter: blur(18px);
-  -webkit-backdrop-filter: blur(18px);
-  border-radius: 16px;
-  padding: 24px;
-  margin-bottom: 24px;
-  border: 1px solid rgba(255,255,255,0.08);
-  box-shadow: 0 8px 30px rgba(0,0,0,0.35);
+  background:rgba(255,255,255,0.07);
+  backdrop-filter:blur(18px);
+  border-radius:16px;
+  padding:24px;
+  margin-bottom:24px;
+  border:1px solid rgba(255,255,255,0.08);
+  box-shadow:0 8px 30px rgba(0,0,0,0.35);
 }
 
-
-    .row {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 14px 0;
-      border-bottom: 1px solid #2a2a2a;
-    }
-
-    .row:last-child { border-bottom: none; }
-
-    .label {
-      color: var(--muted);
-      font-size: 14px;
-    }
-
-    .value {
-      font-size: 16px;
-    }
-
-    .row button {
-      background: none;
-      border: 1px solid var(--muted);
-      color: white;
-      padding: 6px 14px;
-      border-radius: 4px;
-      cursor: pointer;
-      margin-left: 10px;
-    }
-
-    .row button:hover { border-color: white; }
-
-    .danger {
-      border-color: var(--accent);
-      color: var(--accent);
-    }
-
-    .danger:hover {
-      background: var(--accent);
-      color: white;
-    }
-
-    /* MOBIL */
-    @media (max-width: 900px) {
-      .container {
-        grid-template-columns: 1fr;
-        padding: 20px;
-      }
-    }
-    .card:hover,
-.sidebar:hover {
-  box-shadow:
-    0 0 0 1px rgba(255,255,255,0.1),
-    0 12px 40px rgba(0,168,225,0.15),
-    0 0 60px rgba(229,9,20,0.08);
-  transition: box-shadow 0.3s ease;
+.row {
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:14px 0;
+  border-bottom:1px solid #2a2a2a;
 }
 
-  </style>
+.row:last-child { border-bottom:none; }
+
+.label {
+  color:var(--muted);
+  font-size:14px;
+}
+
+.value {
+  font-size:16px;
+}
+
+.row button {
+  background:none;
+  border:1px solid var(--muted);
+  color:white;
+  padding:6px 14px;
+  border-radius:6px;
+  cursor:pointer;
+}
+
+.row button:hover { border-color:white; }
+
+/* INLINE EDIT */
+.hidden { display:none; }
+
+.edit-field {
+  margin-top:8px;
+}
+
+.edit-field input {
+  width:100%;
+  padding:10px;
+  background:#1a1a1a;
+  border:1px solid #333;
+  border-radius:6px;
+  color:white;
+}
+
+.edit-actions {
+  margin-top:10px;
+  display:flex;
+  gap:10px;
+}
+
+.edit-actions button {
+  padding:8px 16px;
+  border-radius:6px;
+  border:1px solid #444;
+  background:none;
+  color:white;
+  cursor:pointer;
+}
+
+.edit-actions .secondary {
+  color:#aaa;
+}
+
+/* MOBILE */
+@media (max-width:900px) {
+  .container {
+    grid-template-columns:1fr;
+    padding:20px;
+  }
+}
+</style>
 </head>
+
 <body>
 
 <header>
   <h1>Konto</h1>
   <div>
-    <button onclick="window.location.href='Hovedside.html'">Tilbake til hovedsiden</button>
+    <button onclick="window.location.href='Hovedside.html'">Tilbake</button>
     <button onclick="loggUt()">Logg ut</button>
   </div>
 </header>
 
 <div class="container">
 
-  <!-- SIDEBAR -->
-  <aside class="sidebar">
-    <div class="avatar" onclick="velgProfil()">
-      <img id="profilbilde" src="https://via.placeholder.com/160" />
-    </div>
-    <div class="profile-name" id="navnDisplay"></div>
+<!-- SIDEBAR -->
+<aside class="sidebar">
+  <div class="avatar" onclick="velgProfil()">
+    <img id="profilbilde" src="https://via.placeholder.com/160">
+  </div>
+  <div class="profile-name" id="navnDisplay"></div>
 
-    <div class="profile-actions">
-      <button onclick="velgProfil()">Endre profilbilde</button>
-      <button onclick="bekreftSlettBruker()" class="danger">Slett profil</button>
-    </div>
-  </aside>
+  <div class="profile-actions">
+    <button onclick="velgProfil()">Endre profilbilde</button>
+    <button onclick="bekreftSlettBruker()" style="color:#ff4d4d;border-color:#ff4d4d;">Slett profil</button>
+  </div>
+</aside>
 
-  <!-- CONTENT -->
-  <section class="content">
-    <h2>Kontodetaljer</h2>
+<!-- CONTENT -->
+<section class="content">
+<h2>Kontodetaljer</h2>
 
-    <div class="card">
-      <div class="row">
-        <div>
-          <div class="label">E-post</div>
-          <div class="value" id="epostDisplay"></div>
-        </div>
-        <button onclick="rediger('epostDisplay')">Endre</button>
-      </div>
+<div class="card">
 
-      <div class="row">
-        <div>
-          <div class="label">Passord</div>
-          <div class="value">********</div>
-        </div>
-        <button>Endre</button>
-      </div>
+<!-- EPOST -->
+<div class="row" id="epostRow">
+  <div>
+    <div class="label">E-post</div>
+    <div class="value" id="epostView"></div>
 
-      <div class="row">
-        <div>
-          <div class="label">Abonnement</div>
-          <div class="value">Premium • 4 skjermer • 4K</div>
-        </div>
-        <button>Administrer</button>
+    <div class="edit-field hidden">
+      <input type="email" id="epostInput">
+      <div class="edit-actions">
+        <button onclick="lagreEpost()">Lagre</button>
+        <button class="secondary" onclick="avbrytEpost()">Avbryt</button>
       </div>
     </div>
+  </div>
+  <button onclick="endreEpost()">Endre</button>
+</div>
 
-    <h2>Preferanser</h2>
-    <div class="card">
-      <div class="row">
-        <div>
-          <div class="label">Autoplay</div>
-          <div class="value">På</div>
-        </div>
-        <button>Endre</button>
-      </div>
+<!-- PASSORD -->
+<div class="row">
+  <div>
+    <div class="label">Passord</div>
+    <div class="value">********</div>
+  </div>
+  <button>Endre</button>
+</div>
 
-      <div class="row">
-        <div>
-          <div class="label">Foreldrekontroll</div>
-          <div class="value">Av</div>
-        </div>
-        <button>Konfigurer</button>
-      </div>
-    </div>
-  </section>
+<!-- ABONNEMENT -->
+<div class="row">
+  <div>
+    <div class="label">Abonnement</div>
+    <div class="value">Premium • 4 skjermer • 4K</div>
+  </div>
+  <button>Administrer</button>
+</div>
+
+</div>
+</section>
 </div>
 
 <script>
-  if (!localStorage.getItem("epost")) {
-    window.location.href = "Innlogging.html";
-  }
+/* SJEKK INNLOGGING */
+if (!localStorage.getItem("epost")) {
+  window.location.href = "Innlogging.html";
+}
 
-  const navnEl = document.getElementById("navnDisplay");
-  const epostEl = document.getElementById("epostDisplay");
+/* DATA */
+const navnEl = document.getElementById("navnDisplay");
+const epostView = document.getElementById("epostView");
+const epostInput = document.getElementById("epostInput");
+const epostRow = document.getElementById("epostRow");
 
-  navnEl.innerText = localStorage.getItem("navn") || "Profil";
-  epostEl.innerText = localStorage.getItem("epost") || "";
+navnEl.innerText = localStorage.getItem("navn") || "Profil";
+epostView.innerText = localStorage.getItem("epost") || "";
 
-  const bilde = localStorage.getItem("profilbilde");
-  if (bilde) document.getElementById("profilbilde").src = bilde;
+/* PROFILBILDE */
+const bilde = localStorage.getItem("profilbilde");
+if (bilde) document.getElementById("profilbilde").src = bilde;
 
-  function velgProfil() {
-    window.location.href = "Registreringsside.html";
-  }
+/* INLINE EPOST */
+function endreEpost() {
+  epostInput.value = epostView.innerText;
+  epostView.classList.add("hidden");
+  epostRow.querySelector(".edit-field").classList.remove("hidden");
+}
 
-  function rediger(id) {
-    const el = document.getElementById(id);
-    const ny = prompt("Skriv ny verdi", el.innerText);
-    if (!ny) return;
+function lagreEpost() {
+  const ny = epostInput.value.trim();
+  if (!ny) return;
+  localStorage.setItem("epost", ny);
+  epostView.innerText = ny;
+  avbrytEpost();
+}
 
-    if (id === "epostDisplay") {
-      localStorage.setItem("epost", ny);
-    }
+function avbrytEpost() {
+  epostView.classList.remove("hidden");
+  epostRow.querySelector(".edit-field").classList.add("hidden");
+}
 
-    el.innerText = ny;
-  }
+/* BEHOLDTE FUNKSJONER */
+function velgProfil() {
+  window.location.href = "Registreringsside.html";
+}
 
-  function bekreftSlettBruker() {
-    if (!confirm("Vil du slette denne profilen permanent?")) return;
-    localStorage.clear();
-    window.location.href = "index.html";
-  }
+function bekreftSlettBruker() {
+  if (!confirm("Vil du slette profilen permanent?")) return;
+  localStorage.clear();
+  window.location.href = "index.html";
+}
 
-  function loggUt() {
-    localStorage.removeItem("epost");
-    localStorage.removeItem("passord");
-    window.location.href = "Innlogging.html";
-  }
+function loggUt() {
+  localStorage.removeItem("epost");
+  localStorage.removeItem("passord");
+  window.location.href = "Innlogging.html";
+}
 </script>
 
-<footer style="border-top:1px solid #222; padding:30px 40px; color:#8c8c8c; font-size:12px; line-height:1.6;">
-  © 2026 Watch Nordic AS. Alle varemerker, logoer, tjenestenavn og øvrige immaterielle rettigheter knyttet til Watch Nordic tilhører Watch Nordic AS eller benyttes under lisens. Innhold levert i samarbeid med ulike rettighetshavere, produksjonsselskaper og distributører, og alle tilknyttede immaterielle rettigheter tilhører sine respektive eiere. Alle andre varemerker og immaterielle rettigheter som vises på tjenesten tilhører sine respektive eiere. Alle rettigheter forbeholdt.
+<footer style="border-top:1px solid #222;padding:30px 40px;color:#8c8c8c;font-size:12px;">
+© 2026 Watch Nordic AS. Alle rettigheter forbeholdt.
 </footer>
 
 </body>
 </html>
+
 
 
 
