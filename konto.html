@@ -1,17 +1,18 @@
 <!DOCTYPE html>
 <html lang="no">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Konto | Watch Nordic™</title>
 
-<link rel="icon" type="image/png" href="https://static.wixstatic.com/media/fd2fb2_39376e4ee55b460ab7a3ebbfcf35fef7~mv2.png" />
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+<link rel="icon" type="image/png" href="https://static.wixstatic.com/media/fd2fb2_39376e4ee55b460ab7a3ebbfcf35fef7~mv2.png">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
 <style>
 :root {
   --bg:#141414;
   --muted:#b3b3b3;
+  --accent:#00a8e1;
 }
 
 * { box-sizing:border-box; }
@@ -23,7 +24,6 @@ body {
     linear-gradient(180deg, #0e0e0e, #141414);
   color:white;
   font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
-  min-height:100vh;
 }
 
 /* HEADER */
@@ -35,10 +35,7 @@ header {
   align-items:center;
 }
 
-header h1 {
-  font-size:22px;
-  margin:0;
-}
+header h1 { margin:0; font-size:22px; }
 
 header button {
   background:none;
@@ -53,7 +50,7 @@ header button:hover { border-color:white; }
 
 /* LAYOUT */
 .container {
-  max-width:1100px;
+  max-width:1150px;
   margin:auto;
   padding:40px;
   display:grid;
@@ -63,13 +60,12 @@ header button:hover { border-color:white; }
 
 /* SIDEBAR */
 .sidebar {
-  text-align:center;
   background:rgba(255,255,255,0.06);
   backdrop-filter:blur(16px);
   border-radius:16px;
   padding:30px 20px;
+  text-align:center;
   border:1px solid rgba(255,255,255,0.08);
-  box-shadow:0 10px 40px rgba(0,0,0,0.4);
 }
 
 .avatar {
@@ -112,8 +108,8 @@ header button:hover { border-color:white; }
 
 /* CONTENT */
 .content h2 {
+  margin:0 0 20px;
   font-size:22px;
-  margin-bottom:20px;
 }
 
 .card {
@@ -121,16 +117,15 @@ header button:hover { border-color:white; }
   backdrop-filter:blur(18px);
   border-radius:16px;
   padding:24px;
-  margin-bottom:24px;
+  margin-bottom:30px;
   border:1px solid rgba(255,255,255,0.08);
-  box-shadow:0 8px 30px rgba(0,0,0,0.35);
 }
 
 .row {
   display:flex;
   justify-content:space-between;
   align-items:center;
-  padding:14px 0;
+  padding:16px 0;
   border-bottom:1px solid #2a2a2a;
 }
 
@@ -144,17 +139,6 @@ header button:hover { border-color:white; }
 .value {
   font-size:16px;
 }
-
-.row button {
-  background:none;
-  border:1px solid var(--muted);
-  color:white;
-  padding:6px 14px;
-  border-radius:6px;
-  cursor:pointer;
-}
-
-.row button:hover { border-color:white; }
 
 /* INLINE EDIT */
 .hidden { display:none; }
@@ -179,17 +163,15 @@ header button:hover { border-color:white; }
 }
 
 .edit-actions button {
+  background:none;
+  border:1px solid #444;
+  color:white;
   padding:8px 16px;
   border-radius:6px;
-  border:1px solid #444;
-  background:none;
-  color:white;
   cursor:pointer;
 }
 
-.edit-actions .secondary {
-  color:#aaa;
-}
+.secondary { color:#aaa; }
 
 /* MOBILE */
 @media (max-width:900px) {
@@ -222,15 +204,34 @@ header button:hover { border-color:white; }
 
   <div class="profile-actions">
     <button onclick="velgProfil()">Endre profilbilde</button>
-    <button onclick="bekreftSlettBruker()" style="color:#ff4d4d;border-color:#ff4d4d;">Slett profil</button>
+    <button onclick="bekreftSlettBruker()" style="border-color:#ff4d4d;color:#ff4d4d;">
+      Slett profil
+    </button>
   </div>
 </aside>
 
 <!-- CONTENT -->
 <section class="content">
-<h2>Kontodetaljer</h2>
 
+<h2>Kontoinformasjon</h2>
 <div class="card">
+
+<!-- NAVN -->
+<div class="row" id="navnRow">
+  <div>
+    <div class="label">Navn</div>
+    <div class="value" id="navnView"></div>
+
+    <div class="edit-field hidden">
+      <input type="text" id="navnInput">
+      <div class="edit-actions">
+        <button onclick="lagreNavn()">Lagre</button>
+        <button class="secondary" onclick="avbrytNavn()">Avbryt</button>
+      </div>
+    </div>
+  </div>
+  <button onclick="endreNavn()">Endre</button>
+</div>
 
 <!-- EPOST -->
 <div class="row" id="epostRow">
@@ -249,48 +250,101 @@ header button:hover { border-color:white; }
   <button onclick="endreEpost()">Endre</button>
 </div>
 
-<!-- PASSORD -->
+<!-- PASSORD (KUN VISNING) -->
 <div class="row">
   <div>
     <div class="label">Passord</div>
-    <div class="value">********</div>
+    <div class="value">••••••••</div>
   </div>
-  <button>Endre</button>
-</div>
-
-<!-- ABONNEMENT -->
-<div class="row">
-  <div>
-    <div class="label">Abonnement</div>
-    <div class="value">Premium • 4 skjermer • 4K</div>
-  </div>
-  <button>Administrer</button>
 </div>
 
 </div>
+
+<h2>Abonnement</h2>
+<div class="card">
+  <div class="row">
+    <div>
+      <div class="label">Plan</div>
+      <div class="value">Premium</div>
+    </div>
+  </div>
+  <div class="row">
+    <div>
+      <div class="label">Kvalitet</div>
+      <div class="value">4K Ultra HD</div>
+    </div>
+  </div>
+  <div class="row">
+    <div>
+      <div class="label">Skjermer</div>
+      <div class="value">4 samtidige</div>
+    </div>
+  </div>
+</div>
+
+<h2>Preferanser</h2>
+<div class="card">
+  <div class="row">
+    <div>
+      <div class="label">Autoplay</div>
+      <div class="value">På</div>
+    </div>
+  </div>
+  <div class="row">
+    <div>
+      <div class="label">Foreldrekontroll</div>
+      <div class="value">Av</div>
+    </div>
+  </div>
+</div>
+
 </section>
 </div>
 
 <script>
-/* SJEKK INNLOGGING */
 if (!localStorage.getItem("epost")) {
   window.location.href = "Innlogging.html";
 }
 
-/* DATA */
-const navnEl = document.getElementById("navnDisplay");
+const navnDisplay = document.getElementById("navnDisplay");
+const navnView = document.getElementById("navnView");
+const navnInput = document.getElementById("navnInput");
+const navnRow = document.getElementById("navnRow");
+
 const epostView = document.getElementById("epostView");
 const epostInput = document.getElementById("epostInput");
 const epostRow = document.getElementById("epostRow");
 
-navnEl.innerText = localStorage.getItem("navn") || "Profil";
+/* LOAD DATA */
+navnDisplay.innerText = localStorage.getItem("navn") || "Profil";
+navnView.innerText = localStorage.getItem("navn") || "Profil";
 epostView.innerText = localStorage.getItem("epost") || "";
 
-/* PROFILBILDE */
 const bilde = localStorage.getItem("profilbilde");
 if (bilde) document.getElementById("profilbilde").src = bilde;
 
-/* INLINE EPOST */
+/* NAVN */
+function endreNavn() {
+  navnInput.value = navnView.innerText;
+  navnView.classList.add("hidden");
+  navnRow.querySelector(".edit-field").classList.remove("hidden");
+}
+
+function lagreNavn() {
+  const ny = navnInput.value.trim();
+  if (!ny) return;
+  localStorage.setItem("navn", ny);
+  navnView.innerText = ny;
+  navnDisplay.innerText = ny;
+  avbrytNavn();
+}
+
+function avbrytNavn() {
+  navnView.classList.remove("hidden");
+  navnRow.querySelector(".edit-field").classList.add("hidden");
+}
+
+/* EPOST */
 function endreEpost() {
   epostInput.value = epostView.innerText;
   epostView.classList.add("hidden");
@@ -334,11 +388,6 @@ function loggUt() {
 
 </body>
 </html>
-
-
-
-
-
 
 
 
