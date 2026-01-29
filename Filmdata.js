@@ -25,7 +25,37 @@ const filmer = {
    publishDate: "2025-10-02T00:00:00", // ISO datoformat
     expireDate: "2027-11-15T23:59:59",
   },
+
+    "house-on-haunted-hill": {
+    tittel: "House on Haunted Hill",
+    bakgrunn: "https://image.tmdb.org/t/p/original/tS2qaOAG1Yqepp0Hm9AJjH7Zg14.jpg",
+    banner: "https://image.tmdb.org/t/p/original/tS2qaOAG1Yqepp0Hm9AJjH7Zg14.jpg", 
+    logo: "https://image.tmdb.org/t/p/original/ulRnCQUtXRLNnQKu4vRmMAg0llS.png",
+    trailer: "", // 🎥 NY 
+    poster: "https://image.tmdb.org/t/p/original/9S97udaoo9wP5puoeyGlHK4I8iN.jpg",
+    posterVertikal: "https://image.tmdb.org/t/p/original/p0Gh3QubR6WPhfPkKJXuYO76zag.jpg", // portrett
+    beskrivelse: "En millionær tilbyr 10 000 dollar til fem personer som går med på å være innelåst i et stort, skummelt, leid hus over natten med ham og kona.",
+    metadata: ["USA", "1959", "16 år", "Grøsser", "1 t 15 min"],
+    imdb: "https://www.imdb.com/title/tt0051744/?ref_=nv_sr_srsg_0_tt_8_nm_0_in_0_q_house%2520on%2520haunted%2520hill%2520(1959)",
+    skuespillere: "Vincent Price, Carol Ohmart, Richard Long",
+    regissor: "William Castle",
+    watchUrl: "film-mal.html?id=house-on-haunted-hill",
+    videoUrl:"",
+   subtitleUrl: "",
+   tilbakeUrl: "film.html?navn=house-on-haunted-hill",
+  audioLanguages: [
+    { code: "no", label: "Engelsk" } ],
+  subtitleLanguages: [
+    { code: "no", label: "Norsk" },
+    { code: "off", label: "Av" }
+  ],
+   publishDate: "2025-10-02T00:00:00", // ISO datoformat
+    expireDate: "2027-11-15T23:59:59",
+  },
+
+  
   };
+
 
 
 
