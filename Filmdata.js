@@ -80,8 +80,36 @@ const filmer = {
     expireDate: "2027-11-15T23:59:59",
   },
 
+     "sir-bob": {
+    tittel: "SIR BOB",
+    bakgrunn: "https://static.wixstatic.com/media/fd2fb2_f126194a971d4f03b01dc613d114f7f2~mv2.png",
+    banner: "", 
+    logo: "https://static.wixstatic.com/media/fd2fb2_2170901394ea46579b8a21cc7117b234~mv2.png",
+    trailer: "", // 🎥 NY 
+    poster: "https://image.tmdb.org/t/p/original/5TqIPddZaDsza8ID7X5HGwX2Txv.jpg",
+    posterVertikal: "https://image.tmdb.org/t/p/original/A4ErFUf7FGNF3DFjp0CaRchxeNL.jpg", // portrett
+    beskrivelse: "Mona Lisa blir stjålet, SIR BOB er den eneste agenten som er egnet til oppdraget, han drar til Frankriket for å løse den hemmelieg koden.",
+    metadata: ["Norge", "2027", "10 år", "Spenning", ""],
+    imdb: "",
+    skuespillere: "",
+    regissor: "Svein Olav Haukaas Arstein",
+    watchUrl: "film-mal.html?id=sir-bob",
+    videoUrl:"",
+   subtitleUrl: "",
+   tilbakeUrl: "film.html?navn=sir-bob",
+  audioLanguages: [
+    { code: "no", label: "Engelsk" } ],
+  subtitleLanguages: [
+    { code: "no", label: "Norsk" },
+    { code: "off", label: "Av" }
+  ],
+   publishDate: "2027-01-01T00:00:00", // ISO datoformat
+    expireDate: "2029-11-15T23:59:59",
+  },
+
   
   };
+
 
 
 
