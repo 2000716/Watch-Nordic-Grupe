@@ -53,8 +53,36 @@ const filmer = {
     expireDate: "2027-11-15T23:59:59",
   },
 
+      "haxan": {
+    tittel: "Häxan ",
+    bakgrunn: "https://image.tmdb.org/t/p/original/gZwQip2KQRDNZZOEDe0Yi25tW9Z.jpg",
+    banner: "", 
+    logo: "https://beam-images.warnermediacdn.com/BEAM_LWM_DELIVERABLES/730f0be0-7cf9-48ee-86a5-0b1352a85a1d/c3126a93065c93330d8a8e8a440bd604b9d998da.png?submitted=1684661760193&host=wbd-images.prod-vod.h264.io&partner=beamcom&w=4320",
+    trailer: "", // 🎥 NY 
+    poster: "https://image.tmdb.org/t/p/original/5TqIPddZaDsza8ID7X5HGwX2Txv.jpg",
+    posterVertikal: "https://image.tmdb.org/t/p/original/A4ErFUf7FGNF3DFjp0CaRchxeNL.jpg", // portrett
+    beskrivelse: "Fiksjonalisert dokumentar som viser utviklingen av hekseri, fra dens hedenske røtter til forvirring med hysteri i Øst-Europa.",
+    metadata: ["Svergie", "1922", "15 år", "Grøsser", "1 t 45 min"],
+    imdb: "https://www.imdb.com/title/tt0013257/",
+    skuespillere: "Benjamin Christensen, Elisabeth Christensen, Maren Pedersen",
+    regissor: "Benjamin Christensen",
+    watchUrl: "film-mal.html?id=haxan",
+    videoUrl:"",
+   subtitleUrl: "",
+   tilbakeUrl: "film.html?navn=haxan",
+  audioLanguages: [
+    { code: "no", label: "Engelsk" } ],
+  subtitleLanguages: [
+    { code: "no", label: "Norsk" },
+    { code: "off", label: "Av" }
+  ],
+   publishDate: "2025-10-02T00:00:00", // ISO datoformat
+    expireDate: "2027-11-15T23:59:59",
+  },
+
   
   };
+
 
 
 
