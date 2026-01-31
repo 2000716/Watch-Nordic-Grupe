@@ -107,8 +107,34 @@ const filmer = {
     expireDate: "2029-11-15T23:59:59",
   },
 
+       "big-buck-bunny": {
+    tittel: "Big Buck Bunny ",
+    bakgrunn: "https://image.tmdb.org/t/p/original/xtdybjRRZ15mCrPOvEld305myys.jpg",
+    banner: "https://image.tmdb.org/t/p/original/bZxwNUANy2KAYBjM9UyUlqiCMI1.jpg", 
+    logo: "https://studio.blender.org/files/e6/e63751e460f948048f17f52f5c63e556/e63751e460f948048f17f52f5c63e556.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=WPXVUIKB8MLIOWB7INUX%2F20260131%2Feu-central-1%2Fs3%2Faws4_request&X-Amz-Date=20260131T101815Z&X-Amz-Expires=3600&X-Amz-SignedHeaders=host&X-Amz-Signature=38e2108caaac3697bb1bf3517cdd659a04fac538d9d59dad27508872d47b6e5b",
+    trailer: "", // 🎥 NY 
+    poster: "https://image.tmdb.org/t/p/original/8tP7CcCaZma9Ucc5EBKEn8TmYit.jpg",
+    posterVertikal: "https://image.tmdb.org/t/p/original/604UkiLHoZgaSSJPMWeCwsIey2P.jpg", // portrett
+    beskrivelse: "Kaninen JC er lei av å bli ertet av ekornet Frankie og gjengen hans med ynkelige skogsdyr, og bestemmer seg endelig for å slå tilbake.",
+    metadata: ["Nederland", "2008", "Alle", "Animasjon", "8 min"],
+    imdb: "https://www.imdb.com/title/tt1254207/",
+    regissor: "Sacha Goedegebure",
+    watchUrl: "film-mal.html?id=big-buck-bunny",
+    videoUrl:"https://dn720307.ca.archive.org/0/items/big-buck-bunny-2008-4-k-60-fps-blender-animated-short-x-265/Big%20Buck%20Bunny%20%282008%29%204K%2060FPS%20Blender%20Animated%20Short%20-%20x265.mp4",
+   subtitleUrl: "",
+   tilbakeUrl: "film.html?navn=big-buck-bunny",
+  audioLanguages: [
+    { code: "no", label: "Engelsk" } ],
+  subtitleLanguages: [
+    { code: "no", label: "Norsk" },
+    { code: "off", label: "Av" }
+  ],
+   publishDate: "2026-01-01T00:00:00", // ISO datoformat
+    expireDate: "2029-11-15T23:59:59",
+  },
   
   };
+
 
 
 
