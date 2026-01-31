@@ -156,11 +156,12 @@ const filmer = {
     { code: "no", label: "Norsk" },
     { code: "off", label: "Av" }
   ],
-   publishDate: "2027-01-01T00:00:00", // ISO datoformat
+   publishDate: "2026-01-01T00:00:00", // ISO datoformat
     expireDate: "2029-11-15T23:59:59",
   },
   
   };
+
 
 
 
