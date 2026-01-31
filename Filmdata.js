@@ -132,8 +132,36 @@ const filmer = {
    publishDate: "2026-01-01T00:00:00", // ISO datoformat
     expireDate: "2029-11-15T23:59:59",
   },
+
+       "sprite-fright": {
+    tittel: "Sprite Fright",
+    bakgrunn: "https://image.tmdb.org/t/p/original/aXZuvuQpcXivXHasXFAkOhfTTfb.jpg",
+    banner: "https://image.tmdb.org/t/p/original/aCMT1okuiKFnyKHdCOez66rJKyT.jpg", 
+    logo: "https://studio.blender.org/files/68/68ba73baed18be06dec6e896f3910336/68ba73baed18be06dec6e896f3910336.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=WPXVUIKB8MLIOWB7INUX%2F20260131%2Feu-central-1%2Fs3%2Faws4_request&X-Amz-Date=20260131T213811Z&X-Amz-Expires=3600&X-Amz-SignedHeaders=host&X-Amz-Signature=93de4b4e656de710a089fb138b97cd5cd5b1da37457cd98ac76b028b29268c27",
+    trailer: "", // 🎥 NY 
+    poster: "https://blenderartists.org/uploads/default/original/4X/2/6/2/2622f8717947903fdbe61ffd98e2c6622b052021.jpeg",
+    posterVertikal: "https://pics.filmaffinity.com/sprite_fright-557419042-large.jpg", // portrett
+    beskrivelse: "Når en gruppe bråkete tenåringer drar inn i en isolert skog, oppdager de fredelige soppvesener som viser seg å være en uventet naturkraft.",
+    metadata: ["USA", "2021", "10 år", "Spenning", "10 min"],
+    imdb: "https://www.imdb.com/title/tt15804252/",
+    skuespillere: "Valerie LaPointe, Gabriel Bisset-Smith, Nicole Davis",
+    regissor: "Matthew Luhn, Hjalti Hjalmarsson",
+    watchUrl: "film-mal.html?id=sprite-fright",
+    videoUrl:"https://dn721904.ca.archive.org/0/items/sprite-fright-blender-open-movie/Sprite%20Fright%20-%20Blender%20Open%20Movie.mp4",
+   subtitleUrl: "",
+   tilbakeUrl: "film.html?navn=sprite-fright",
+  audioLanguages: [
+    { code: "no", label: "Engelsk" } ],
+  subtitleLanguages: [
+    { code: "no", label: "Norsk" },
+    { code: "off", label: "Av" }
+  ],
+   publishDate: "2027-01-01T00:00:00", // ISO datoformat
+    expireDate: "2029-11-15T23:59:59",
+  },
   
   };
+
 
 
 
