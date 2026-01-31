@@ -142,7 +142,7 @@ const filmer = {
     poster: "https://blenderartists.org/uploads/default/original/4X/2/6/2/2622f8717947903fdbe61ffd98e2c6622b052021.jpeg",
     posterVertikal: "https://pics.filmaffinity.com/sprite_fright-557419042-large.jpg", // portrett
     beskrivelse: "Når en gruppe bråkete tenåringer drar inn i en isolert skog, oppdager de fredelige soppvesener som viser seg å være en uventet naturkraft.",
-    metadata: ["USA", "2021", "10 år", "Spenning", "10 min"],
+    metadata: ["USA", "2021", "10 år", "Animasjon", "10 min"],
     imdb: "https://www.imdb.com/title/tt15804252/",
     skuespillere: "Valerie LaPointe, Gabriel Bisset-Smith, Nicole Davis",
     regissor: "Matthew Luhn, Hjalti Hjalmarsson",
@@ -161,6 +161,7 @@ const filmer = {
   },
   
   };
+
 
 
 
