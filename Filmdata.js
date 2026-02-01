@@ -13,7 +13,7 @@ const filmer = {
     skuespillere: "Charles Chaplin, Edna Purviance, Jackie Coogan",
     regissor: "Charles Chaplin",
     watchUrl: "film-mal.html?id=the-kid",
-    videoUrl:"",
+    videoUrl:"https://dn720708.ca.archive.org/0/items/the-kid-1921_20250723/The%20Kid%20%281921%29.mp4",
    subtitleUrl: "",
    tilbakeUrl: "film.html?navn=the-kid",
   audioLanguages: [
@@ -161,6 +161,7 @@ const filmer = {
   },
   
   };
+
 
 
 
