@@ -479,44 +479,47 @@ background: linear-gradient(
 }
 
 /* Sjanger-galleri */
-/* Rund sjanger-knapp med ikon i sirkelen og tekst under */
+/* Rund sjanger-knapp – STØRRE versjon */
 .genre-gallery a {
   display: flex;
-  flex-direction: column;      /* ikon over teksten */
+  flex-direction: column;
   align-items: center;
   text-decoration: none;
-  font-weight: bold;
+  font-weight: 600;
   transition: all 0.3s ease;
-  margin: 0 10px;
+  margin: 0 16px;              /* mer luft mellom sjangere */
 }
 
-/* Selve sirkelen med ikon */
+/* Selve sirkelen */
 .genre-gallery a .icon-circle {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 70px;
-  height: 70px;
+  width: 100px;                /* ⬅️ større sirkel */
+  height: 100px;
   border-radius: 50%;
   background-color: #A8E6A3;   /* lys grønn */
-  color: #064E3B;              /* mørk farge på ikon */
-  font-size: 24px;
+  color: #053B2E;              /* mørkt ikon */
+  font-size: 36px;             /* ⬅️ større ikon */
   transition: all 0.3s ease;
 }
 
-.genre-gallery a .icon-circle:hover {
-  transform: scale(1.1);
-  background-color: #8DDC8C;   /* mørkere grønn på hover */
+/* Hover-effekt */
+.genre-gallery a:hover .icon-circle {
+  transform: scale(1.12);
+  background-color: #8DDC8C;
 }
 
-/* Teksten under sirkelen */
+/* Tekst under sirkelen */
 .genre-gallery a .genre-label {
-  margin-top: 6px;
-  font-size: 14px;
-  color: #fff;  /* eller mørk farge hvis du ønsker */
+  margin-top: 10px;
+  font-size: 16px;             /* ⬅️ større tekst */
+  color: #ffffff;
   text-align: center;
-  width: 100px; /* tilpass bredden slik at teksten ikke brytes */
+  max-width: 120px;
+  line-height: 1.2;
 }
+
 
 
 /* === Kommende filmer – forbedret utseende === */
@@ -2201,6 +2204,7 @@ activeFilms.forEach(film => {
 });
 
 </script>
+
 
 
 
