@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Forsiden | MOONsky™</title>
+  <title>Forsiden | Watch Nordic™</title>
 
   <link rel="icon" type="image/png" href="https://static.wixstatic.com/media/fd2fb2_39376e4ee55b460ab7a3ebbfcf35fef7~mv2.png" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
@@ -479,34 +479,45 @@ background: linear-gradient(
 }
 
 /* Sjanger-galleri */
+/* Rund sjanger-knapp med ikon i sirkelen og tekst under */
 .genre-gallery a {
   display: flex;
+  flex-direction: column;      /* ikon over teksten */
   align-items: center;
-  justify-content: space-between;
-  min-width: 160px;
-  height: 60px;
-  border-radius: 30px;
-  background: #0d2c30;
-  color: white;
-  font-size: 16px;
-  font-weight: bold;
   text-decoration: none;
-  border: 2px solid transparent;
+  font-weight: bold;
   transition: all 0.3s ease;
-  padding: 0 18px;
+  margin: 0 10px;
 }
 
-.genre-gallery a i {
-  margin-left: 8px;
-  font-size: 18px;
+/* Selve sirkelen med ikon */
+.genre-gallery a .icon-circle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  background-color: #A8E6A3;   /* lys grønn */
+  color: #064E3B;              /* mørk farge på ikon */
+  font-size: 24px;
+  transition: all 0.3s ease;
 }
 
-.genre-gallery a:hover {
-  border: 2px solid #00FFCC;
-  box-shadow: 0 0 10px rgba(0, 255, 204, 0.6);
-  transform: scale(1.05);
-  color: #00FFCC;
+.genre-gallery a .icon-circle:hover {
+  transform: scale(1.1);
+  background-color: #8DDC8C;   /* mørkere grønn på hover */
 }
+
+/* Teksten under sirkelen */
+.genre-gallery a .genre-label {
+  margin-top: 6px;
+  font-size: 14px;
+  color: #fff;  /* eller mørk farge hvis du ønsker */
+  text-align: center;
+  width: 100px; /* tilpass bredden slik at teksten ikke brytes */
+}
+
 
 /* === Kommende filmer – forbedret utseende === */
 .coming-movies-gallery {
@@ -1568,12 +1579,31 @@ background: linear-gradient(
             <div class="fade-left"></div>
             <button class="scroll-button left" onclick="scrollGallery(this, -1)">❮</button>
             <div class="image-gallery genre-gallery">
-              <a href="sjanger.html?navn=barn">Barn / Familie <i class="fas fa-rocket"></i></a>
-              <a href="sjanger.html?navn=komedie">Komedie <i class="fas fa-laugh"></i></a>
-              <a href="sjanger.html?navn=skrekk">Skrekk <i class="fas fa-ghost"></i></a>
-              <a href="sjanger.html?navn=drama">Drama <i class="fas fa-theater-masks"></i></a>
-              <a href="sjanger.html?navn=romantikk">Romantikk <i class="fas fa-heart"></i></a>
-              <a href="sjanger.html?navn=action">Action <i class="fas fa-bolt"></i></a>
+<a href="sjanger.html?navn=barn">
+  <div class="icon-circle"><i class="fas fa-rocket"></i></div>
+  <div class="genre-label">Barn / Familie</div>
+</a>
+<a href="sjanger.html?navn=komedie">
+  <div class="icon-circle"><i class="fas fa-laugh"></i></div>
+  <div class="genre-label">Komedie</div>
+</a>
+<a href="sjanger.html?navn=skrekk">
+  <div class="icon-circle"><i class="fas fa-ghost"></i></div>
+  <div class="genre-label">Skrekk</div>
+</a>
+<a href="sjanger.html?navn=drama">
+  <div class="icon-circle"><i class="fas fa-theater-masks"></i></div>
+  <div class="genre-label">Drama</div>
+</a>
+<a href="sjanger.html?navn=romantikk">
+  <div class="icon-circle"><i class="fas fa-heart"></i></div>
+  <div class="genre-label">Romantikk</div>
+</a>
+<a href="sjanger.html?navn=action">
+  <div class="icon-circle"><i class="fas fa-bolt"></i></div>
+  <div class="genre-label">Action</div>
+</a>
+
             </div>
             <button class="scroll-button right" onclick="scrollGallery(this, 1)">❯</button>
             <div class="fade-right"></div>
@@ -2171,6 +2201,7 @@ activeFilms.forEach(film => {
 });
 
 </script>
+
 
 
 
