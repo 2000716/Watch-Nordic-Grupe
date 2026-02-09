@@ -479,45 +479,47 @@ background: linear-gradient(
 }
 
 /* Sjanger-galleri */
-/* Rund sjanger-knapp – STØRRE versjon */
+/* EKSTRA STORE sjanger-knapper */
 .genre-gallery a {
   display: flex;
   flex-direction: column;
   align-items: center;
   text-decoration: none;
   font-weight: 600;
-  transition: all 0.3s ease;
-  margin: 0 16px;              /* mer luft mellom sjangere */
+  transition: all 0.35s ease;
+  margin: 0 22px;                /* god luft mellom */
 }
 
-/* Selve sirkelen */
+/* Stor sirkel */
 .genre-gallery a .icon-circle {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 100px;                /* ⬅️ større sirkel */
-  height: 100px;
+  width: 140px;                  /* 🚀 STOR */
+  height: 140px;
   border-radius: 50%;
-  background-color: #A8E6A3;   /* lys grønn */
-  color: #053B2E;              /* mørkt ikon */
-  font-size: 36px;             /* ⬅️ større ikon */
-  transition: all 0.3s ease;
+  background: #A8E6A3;            /* lys grønn */
+  color: #043A2B;                 /* mørkt ikon */
+  font-size: 54px;                /* 🚀 STORT ikon */
+  box-shadow: 0 14px 35px rgba(0,0,0,0.35);
+  transition: all 0.35s ease;
 }
 
 /* Hover-effekt */
 .genre-gallery a:hover .icon-circle {
-  transform: scale(1.12);
-  background-color: #8DDC8C;
+  transform: scale(1.15);
+  background: #8DDC8C;
+  box-shadow: 0 18px 45px rgba(0,0,0,0.45);
 }
 
-/* Tekst under sirkelen */
+/* Tekst under */
 .genre-gallery a .genre-label {
-  margin-top: 10px;
-  font-size: 16px;             /* ⬅️ større tekst */
+  margin-top: 14px;
+  font-size: 18px;                /* 🚀 større tekst */
   color: #ffffff;
   text-align: center;
-  max-width: 120px;
-  line-height: 1.2;
+  max-width: 160px;
+  line-height: 1.25;
 }
 
 
@@ -2204,6 +2206,7 @@ activeFilms.forEach(film => {
 });
 
 </script>
+
 
 
 
