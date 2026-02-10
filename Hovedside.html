@@ -1541,6 +1541,51 @@ background: linear-gradient(
     letter-spacing: 2px;
   }
 }
+  /* === Sjangere – mobil tilpasning === */
+@media (max-width: 768px) {
+  .genre-gallery {
+    gap: 12px; /* mindre mellomrom mellom sjangere */
+    padding: 0 10px; /* litt luft på sidene */
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+  }
+
+  .genre-gallery a {
+    min-width: 100px;
+    margin: 0 6px; /* mindre margin */
+    flex-shrink: 0; /* unngå at de krymper for mye */
+    scroll-snap-align: start;
+    text-align: center;
+  }
+
+  .genre-gallery a .icon-circle {
+    width: 80px;   /* mindre sirkel */
+    height: 80px;
+    font-size: 32px; /* mindre ikon */
+  }
+
+  .genre-gallery a .genre-label {
+    font-size: 12px; /* mindre tekst */
+    margin-top: 8px;
+    max-width: 100px;
+    line-height: 1.2;
+  }
+}
+
+/* Ekstra små skjermer (f.eks. mobil <480px) */
+@media (max-width: 480px) {
+  .genre-gallery a .icon-circle {
+    width: 70px;
+    height: 70px;
+    font-size: 28px;
+  }
+
+  .genre-gallery a .genre-label {
+    font-size: 11px;
+    margin-top: 6px;
+  }
+}
+
 
 
 
@@ -2242,6 +2287,7 @@ activeFilms.forEach(film => {
 });
 
 </script>
+
 
 
 
