@@ -1541,32 +1541,33 @@ background: linear-gradient(
     letter-spacing: 2px;
   }
 }
-/* === Sjangere – mobil: oppførsel som vanlige gallerier === */
+/* === Sjangere – mobil: helt runde og scrollbart === */
 @media (max-width: 768px) {
   .genre-gallery {
     display: flex;
-    flex-direction: row;      /* horisontalt */
+    flex-direction: row;      /* horisontalt scroll */
     gap: 12px;                /* mellomrom mellom elementer */
-    overflow-x: auto;         /* gjør scrollbart */
+    overflow-x: auto;         /* scrollbart */
     scroll-snap-type: x mandatory;
     padding: 10px 10px;
   }
 
   .genre-gallery a {
-    flex: 0 0 auto;           /* ikke krymp, behold bredde */
+    flex: 0 0 auto;           /* beholder bredde */
     scroll-snap-align: start; /* snap til start */
     text-align: center;
-    margin: 0;                /* fjern margin som kan lage ekstra rom */
+    margin: 0;
   }
 
   .genre-gallery a .icon-circle {
-    width: 90px;              /* beholder sirkelform */
-    height: 90px;
-    font-size: 36px;
-    border-radius: 50%;       /* sikrer at den er rund */
+    width: 90px;              /* bredde */
+    height: 90px;             /* høyde = bredde */
+    aspect-ratio: 1 / 1;      /* sikrer perfekt sirkel */
+    border-radius: 50%;       /* rund */
     display: flex;
     align-items: center;
     justify-content: center;
+    font-size: 36px;
   }
 
   .genre-gallery a .genre-label {
@@ -1582,6 +1583,7 @@ background: linear-gradient(
   .genre-gallery a .icon-circle {
     width: 75px;
     height: 75px;
+    aspect-ratio: 1 / 1;  /* sikrer sirkel */
     font-size: 28px;
   }
 
@@ -1590,6 +1592,7 @@ background: linear-gradient(
     margin-top: 4px;
   }
 }
+
 
 
 
@@ -2292,6 +2295,7 @@ activeFilms.forEach(film => {
 });
 
 </script>
+
 
 
 
