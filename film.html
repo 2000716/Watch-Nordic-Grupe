@@ -991,21 +991,62 @@ img, video {
   font-weight: 700;
 }
 
-</style> 
+  .watch-logo-text {
+  font-family: 'Montserrat Alternates', sans-serif;
+  font-size: 28px;
+  font-weight: 900;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: #00FFCC;
+
+  display: flex;
+  align-items: center;
+  height: 100%;
+
+  cursor: pointer;
+  user-select: none;
+
+  text-shadow:
+    0 0 6px rgba(0, 255, 204, 0.6),
+    0 0 18px rgba(0, 255, 204, 0.35);
+
+  transition: transform 0.25s ease, text-shadow 0.25s ease;
+}
+
+.watch-logo-text:hover {
+  transform: scale(1.05);
+  text-shadow:
+    0 0 10px rgba(0, 255, 204, 0.9),
+    0 0 26px rgba(0, 255, 204, 0.55);
+}
+
+/* Mobil */
+@media (max-width: 768px) {
+  .watch-logo-text {
+    font-size: 22px;
+    letter-spacing: 2px;
+  }
+}
+
+
+
+
+</style>
+
 <header class="top-nav">
   <div class="nav-left">
-      <img class="watch-logo" src="https://static.wixstatic.com/media/fd2fb2_a4b2ace62dff4605a0387f46aad8a404~mv2.png" alt="Watch Logo" />
-
-<nav class="nav-links">
-  <a href="Hovedside.html" class="active"><i class="fas fa-house-user"></i> Start</a>
-  <a href="Serier.html"><i class="fas fa-th-large"></i> Serier</a>
-  <a href="Film.html"><i class="fas fa-film"></i> Filmer</a>
-  <a href="Nyheter.html"><i class="fas fa-fire-flame-curved"></i> Nytt og populært</a>
-  <a href="Min-Liste.html"><i class="fas fa-plus-square"></i> Min liste</a>
-</nav>
+    <div class="watch-logo-text" onclick="window.location.href='Hovedside.html'">
+      WATCH
     </div>
 
-
+    <nav class="nav-links">
+      <a href="Hovedside.html" class="active"><i class="fas fa-house-user"></i> Start</a>
+      <a href="Serier.html"><i class="fas fa-th-large"></i> Serier</a>
+      <a href="Film.html"><i class="fas fa-film"></i> Filmer</a>
+      <a href="Nyheter.html"><i class="fas fa-fire-flame-curved"></i> Nytt og populært</a>
+      <a href="Min-Liste.html"><i class="fas fa-plus-square"></i> Min liste</a>
+    </nav>
+  </div>
 
   <div class="nav-right">
     <a href="Søk.html" class="nav-search"><i class="fas fa-search"></i></a>
@@ -1014,6 +1055,7 @@ img, video {
     </div>
   </div>
 </header>
+
 
 
 
@@ -1481,6 +1523,7 @@ if (data.expireDate) {
 </html>
 
  
+
 
 
 
