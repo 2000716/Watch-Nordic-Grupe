@@ -1541,29 +1541,29 @@ background: linear-gradient(
     letter-spacing: 2px;
   }
 }
-/* MOBIL – Sjangere blir runde og store som andre gallerier */
+/* MOBIL – Sjangere litt mindre og helt runde */
 @media (max-width: 768px) {
   .genre-gallery a {
-    min-width: auto;      /* fjern flate begrensninger */
+    min-width: auto;
     height: auto;
-    padding: 0;           /* fjern ekstra padding */
+    padding: 0;
   }
 
   .genre-gallery a .icon-circle {
-    width: 120px;
-    height: 120px;        /* bredde = høyde */
-    aspect-ratio: 1 / 1;  /* sikrer perfekt sirkel */
-    font-size: 42px;
-    border-radius: 50%;   /* alltid rund */
+    width: 90px;          /* litt mindre sirkel */
+    height: 90px;         /* bredde = høyde */
+    aspect-ratio: 1 / 1;  /* perfekt sirkel */
+    font-size: 32px;      /* ikon litt mindre */
+    border-radius: 50%;   
     display: flex;
     align-items: center;
     justify-content: center;
   }
 
   .genre-gallery a .genre-label {
-    font-size: 14px;
-    margin-top: 8px;
-    max-width: 130px;
+    font-size: 13px;
+    margin-top: 6px;
+    max-width: 110px;
     text-align: center;
   }
 }
@@ -1571,14 +1571,14 @@ background: linear-gradient(
 /* Ekstra små skjermer <480px */
 @media (max-width: 480px) {
   .genre-gallery a .icon-circle {
-    width: 100px;
-    height: 100px;
-    font-size: 36px;
+    width: 75px;
+    height: 75px;
+    font-size: 28px;
   }
 
   .genre-gallery a .genre-label {
-    font-size: 12px;
-    margin-top: 6px;
+    font-size: 11px;
+    margin-top: 4px;
   }
 }
 
@@ -2284,6 +2284,7 @@ activeFilms.forEach(film => {
 });
 
 </script>
+
 
 
 
