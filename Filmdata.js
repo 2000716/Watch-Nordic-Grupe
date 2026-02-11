@@ -137,7 +137,7 @@ const filmer = {
     tittel: "Sprite Fright",
     bakgrunn: "https://image.tmdb.org/t/p/original/aXZuvuQpcXivXHasXFAkOhfTTfb.jpg",
     banner: "https://image.tmdb.org/t/p/original/aCMT1okuiKFnyKHdCOez66rJKyT.jpg", 
-    logo: "https://studio.blender.org/files/68/68ba73baed18be06dec6e896f3910336/68ba73baed18be06dec6e896f3910336.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=WPXVUIKB8MLIOWB7INUX%2F20260131%2Feu-central-1%2Fs3%2Faws4_request&X-Amz-Date=20260131T213811Z&X-Amz-Expires=3600&X-Amz-SignedHeaders=host&X-Amz-Signature=93de4b4e656de710a089fb138b97cd5cd5b1da37457cd98ac76b028b29268c27",
+    logo: "https://static.wixstatic.com/media/fd2fb2_2e305c6d75944c3ba96c28a00730ad07~mv2.png",
     trailer: "", // 🎥 NY 
     poster: "https://blenderartists.org/uploads/default/original/4X/2/6/2/2622f8717947903fdbe61ffd98e2c6622b052021.jpeg",
     posterVertikal: "https://pics.filmaffinity.com/sprite_fright-557419042-large.jpg", // portrett
@@ -161,6 +161,7 @@ const filmer = {
   },
   
   };
+
 
 
 
