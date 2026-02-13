@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Om oss | Watch Nordic™</title>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+
+<style>
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+}
+
+body{
+  font-family:Arial, sans-serif;
+  background:#091B1E;
+  color:white;
+}
+
+/* ===== LOGO BAR ===== */
+.logo-bar{
+  height:80px;
+  display:flex;
+  align-items:center;
+  justify-content:flex-start;
+  padding-left:40px;
+  background:rgba(9,27,30,0.95);
+}
+
+.watch-logo-text{
+  font-size:28px;
+  font-weight:900;
+  letter-spacing:3px;
+  color:#00FFCC;
+  cursor:pointer;
+  text-shadow:0 0 10px rgba(0,255,204,0.6);
+}
+
+/* ===== HERO ===== */
+.hero{
+  text-align:center;
+  padding:80px 20px 50px;
+  background:linear-gradient(to bottom, rgba(9,27,30,0.9), #091B1E);
+}
+
+.hero h1{
+  font-size:42px;
+  margin-bottom:15px;
+}
+
+.hero p{
+  font-size:18px;
+  color:#ccc;
+  max-width:700px;
+  margin:0 auto;
+}
+
+/* ===== INNHOLD ===== */
+.container{
+  max-width:1100px;
+  margin:60px auto;
+  padding:0 20px;
+}
+
+.section{
+  margin-bottom:70px;
+}
+
+.section h2{
+  color:#00FFCC;
+  margin-bottom:20px;
+  font-size:26px;
+}
+
+.section p{
+  line-height:1.6;
+  color:#bbb;
+  max-width:800px;
+}
+
+/* ===== VERDIER GRID ===== */
+.grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit, minmax(250px, 1fr));
+  gap:25px;
+  margin-top:30px;
+}
+
+.card{
+  background:#0f2a2f;
+  padding:30px;
+  border-radius:12px;
+  text-align:center;
+  transition:0.3s ease;
+}
+
+.card:hover{
+  transform:translateY(-5px);
+  box-shadow:0 10px 25px rgba(0,0,0,0.5);
+}
+
+.card i{
+  font-size:30px;
+  margin-bottom:15px;
+  color:#00FFCC;
+}
+
+.card h3{
+  margin-bottom:10px;
+}
+
+.card p{
+  font-size:14px;
+  color:#bbb;
+}
+
+/* ===== FOOTER ===== */
+.footer{
+  margin-top:80px;
+  padding:30px;
+  text-align:center;
+  font-size:13px;
+  color:#888;
+  border-top:1px solid #222;
+}
+
+@media(max-width:768px){
+  .hero h1{
+    font-size:28px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<!-- LOGO -->
+<div class="logo-bar">
+  <div class="watch-logo-text" onclick="window.location.href='Hovedside.html'">
+    WATCH
+  </div>
+</div>
+
+<!-- HERO -->
+<section class="hero">
+  <h1>Om Watch Nordic</h1>
+  <p>Watch Nordic™ er en moderne strømmetjeneste laget for deg som elsker kvalitetsinnhold – når som helst, hvor som helst.</p>
+</section>
+
+<div class="container">
+
+  <!-- HVEM ER VI -->
+  <div class="section">
+    <h2>Hvem er vi?</h2>
+    <p>
+      Watch Nordic ble startet med en enkel visjon: å gi nordiske seere tilgang til filmer og serier i høy kvalitet,
+      uten kompliserte løsninger. Vi kombinerer teknologi, design og underholdning for å skape en sømløs
+      streamingopplevelse.
+    </p>
+  </div>
+
+  <!-- VÅR MISJON -->
+  <div class="section">
+    <h2>Vår misjon</h2>
+    <p>
+      Vår misjon er å gjøre underholdning tilgjengelig for alle. Vi jobber kontinuerlig med å forbedre
+      plattformen vår slik at du får raskere lasting, bedre anbefalinger og en mer personlig opplevelse.
+    </p>
+  </div>
+
+  <!-- VERDIER -->
+  <div class="section">
+    <h2>Våre verdier</h2>
+
+    <div class="grid">
+
+      <div class="card">
+        <i class="fas fa-star"></i>
+        <h3>Kvalitet</h3>
+        <p>Vi leverer kun innhold og teknologi vi selv er stolte av.</p>
+      </div>
+
+      <div class="card">
+        <i class="fas fa-users"></i>
+        <h3>Brukerfokus</h3>
+        <p>Alt vi bygger starter med brukeropplevelsen.</p>
+      </div>
+
+      <div class="card">
+        <i class="fas fa-lock"></i>
+        <h3>Sikkerhet</h3>
+        <p>Dine data og din konto er alltid trygge hos oss.</p>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+<footer class="footer">
+© 2026 Watch Nordic™ – Om oss
+</footer>
+
+</body>
+</html>
