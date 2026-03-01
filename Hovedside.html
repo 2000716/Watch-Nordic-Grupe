@@ -1598,77 +1598,27 @@ main {
   }
 }
 
-  /* === Stor sjanger-knapp med 10 XP-hjørner === */
-.big-genre-button {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-decoration: none;
-  margin: 40px auto;
+  .barn-knapp {
+  display: block;
+  width: 400px;         /* bredde på boksen */
+  height: 250px;        /* høyde på boksen */
+  border-radius: 20px;  /* myke hjørner */
+  overflow: hidden;
   cursor: pointer;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-.big-genre-button .icon-circle {
-  width: 180px;
-  height: 180px;
-  border-radius: 50%;
-  background: #A8E6A3;
-  color: #043A2B;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 72px;
-  box-shadow: 0 14px 35px rgba(0,0,0,0.35);
-  position: relative;
-  z-index: 2;
-  transition: transform 0.3s ease, background 0.3s ease;
-}
-
-.big-genre-button .genre-label {
-  margin-top: 16px;
-  font-size: 22px;
-  font-weight: 700;
-  color: #fff;
-  text-align: center;
-  z-index: 2;
-}
-
-/* Hover-effekt */
-.big-genre-button:hover .icon-circle {
-  transform: scale(1.15);
-  background: #8DDC8C;
-}
-
-/* XP-hjørner */
-.big-genre-button .xp-corners {
-  position: absolute;
-  top: -10px;
-  left: -10px;
+.barn-knapp img {
   width: 100%;
   height: 100%;
-  pointer-events: none;
-  z-index: 1;
+  object-fit: cover;   /* bildet fyller boksen */
+  display: block;
 }
 
-.big-genre-button .xp-corners span {
-  position: absolute;
-  color: #00FFCC;
-  font-weight: bold;
-  font-size: 14px;
+.barn-knapp:hover {
+  transform: scale(1.05);
+  box-shadow: 0 10px 30px rgba(0, 255, 204, 0.5);
 }
-
-/* Plasser de 10 XP-hjørnene rundt sirkelen */
-.big-genre-button .xp-corners span:nth-child(1) { top: 0; left: 50%; transform: translateX(-50%); }
-.big-genre-button .xp-corners span:nth-child(2) { top: 15%; right: 0; transform: translateY(-50%); }
-.big-genre-button .xp-corners span:nth-child(3) { top: 50%; right: 0; transform: translateY(-50%); }
-.big-genre-button .xp-corners span:nth-child(4) { bottom: 15%; right: 0; transform: translateY(50%); }
-.big-genre-button .xp-corners span:nth-child(5) { bottom: 0; left: 50%; transform: translateX(-50%); }
-.big-genre-button .xp-corners span:nth-child(6) { bottom: 15%; left: 0; transform: translateY(50%); }
-.big-genre-button .xp-corners span:nth-child(7) { top: 50%; left: 0; transform: translateY(-50%); }
-.big-genre-button .xp-corners span:nth-child(8) { top: 15%; left: 0; transform: translateY(-50%); }
-.big-genre-button .xp-corners span:nth-child(9) { top: -5%; left: 20%; }
-.big-genre-button .xp-corners span:nth-child(10) { top: -5%; right: 20%; }
 
 
 </style>
@@ -1811,15 +1761,10 @@ main {
 </section> 
 
  <section class="gallery-section">
-  <h2>Barn / Familie – Stor knapp</h2>
-  <div class="gallery-wrapper" style="justify-content:center;">
-    <a href="sjanger.html?navn=barn" class="big-genre-button">
-      <div class="xp-corners">
-        <span>XP</span><span>XP</span><span>XP</span><span>XP</span><span>XP</span>
-        <span>XP</span><span>XP</span><span>XP</span><span>XP</span><span>XP</span>
-      </div>
-      <div class="icon-circle"><i class="fas fa-child"></i></div>
-      <div class="genre-label">Barn / Familie</div>
+  <h2>Barn / Familie</h2>
+  <div class="gallery-wrapper" style="justify-content: center;">
+    <a href="sjanger.html?navn=barn" class="barn-knapp">
+      <img src="bilder/barn-knapp.jpg" alt="Barn / Familie" />
     </a>
   </div>
 </section>
@@ -2332,6 +2277,7 @@ window.addEventListener("scroll", () => {
   }
 });
 </script>
+
 
 
 
