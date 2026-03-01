@@ -123,160 +123,180 @@ main {
   width: 200px;
 }
 
-/* Hero-banner */
+/* ============================= */
+/*        HERO BANNER           */
+/* ============================= */
+
 .hero-banner {
   position: relative;
-  height: 75vh;
-  min-height: 500px;
+  height: 88vh;
+  min-height: 520px;
+  max-height: 1000px;
   width: 100%;
   overflow: hidden;
-  margin-bottom: 50px;
-  background-color: black;
+  background: #000;
+  display: flex;
+  align-items: center;
 }
 
+/* Bakgrunnsbilde */
+.hero-banner img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  animation: slowZoom 20s ease-in-out infinite alternate;
+}
+
+/* Myk Apple-gradient overlay */
 .hero-banner::after {
   content: "";
   position: absolute;
   inset: 0;
-background: linear-gradient(
-  to top,
-  rgba(9, 27, 30, 1) 10%,
-  rgba(9, 27, 30, 0.6) 50%,
-  rgba(9, 27, 30, 0) 90%
-);
-
+  background: linear-gradient(
+    to right,
+    rgba(0,0,0,0.88) 0%,
+    rgba(0,0,0,0.65) 35%,
+    rgba(0,0,0,0.35) 60%,
+    rgba(0,0,0,0.05) 85%
+  );
   z-index: 1;
 }
 
-.banner-image {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-}
+/* ============================= */
+/*        CONTENT AREA          */
+/* ============================= */
 
 .banner-content {
-  position: absolute;
-  top: 25%;
-  left: 80px;
-  transform: translateY(-15%);
+  position: relative;
   z-index: 2;
+  margin-left: 120px;
+  max-width: 560px;
+
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
-  gap: 16px;
-  max-width: 600px;
-  color: white;
+  gap: 24px;
+
+  animation: appleFade 1s ease;
 }
 
-  .banner-video {
-  width: 100%;
-  height: 100%;
-  object-fit: fill; /* Tvinger full strekking, vil forvrenge videoen */
-}
-
-
-
+/* Logo */
 .film-logo {
-  width: 400px;        /* større standardbredde */
-  max-width: 80%;      /* tillater mer plass */
-  max-height: 250px;   /* høyere vertikal begrensning */
+  width: 360px;
+  max-width: 90%;
+  max-height: 220px;
   object-fit: contain;
-  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.8));
+  filter: drop-shadow(0 8px 25px rgba(0,0,0,0.8));
 }
 
-.banner-meta {
-  font-size: 16px;
-  color: White;
-}
-
+/* Beskrivelse */
 .banner-content p {
-  font-size: 18px;
-  line-height: 1.4;
-  color: #ddd;
-  max-width: 500px;
-  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.8);
-
-  /* NYTT – begrens tekst */
-  display: -webkit-box;
-  -webkit-line-clamp: 3; /* maks 3 linjer – juster tallet */
-  -webkit-box-orient: vertical;
-  overflow: hidden;
+  font-size: 20px;
+  line-height: 1.7;
+  color: rgba(255,255,255,0.85);
+  font-weight: 400;
+  letter-spacing: 0.3px;
+  max-width: 520px;
 }
 
+/* ============================= */
+/*          BUTTONS             */
+/* ============================= */
 
 .banner-buttons {
   display: flex;
   gap: 16px;
+  margin-top: 10px;
 }
 
-.watch-button,
-.details-button {
-  font-size: 18px;
-  font-weight: bold;
-  padding: 12px 40px;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
+/* Hovedknapp (Apple hvit) */
 .watch-button {
-  background-color: #00FFCC;
-  color: black;
+  background: #ffffff;
+  color: #000;
   border: none;
+  font-size: 16px;
+  font-weight: 600;
+  padding: 12px 28px;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: all 0.25s ease;
 }
 
 .watch-button:hover {
-  background-color: #00e6b8;
-  transform: scale(1.05);
+  transform: scale(1.04);
+  background: #f2f2f2;
 }
 
+/* Sekundærknapp */
 .details-button {
-  background: rgba(255, 255, 255, 0.15);
-  color: white;
-  border: 1px solid rgba(255, 255, 255, 0.4);
-  backdrop-filter: blur(4px);
+  background: rgba(255,255,255,0.12);
+  color: #fff;
+  border: 1px solid rgba(255,255,255,0.25);
+  font-size: 16px;
+  font-weight: 500;
+  padding: 12px 28px;
+  border-radius: 999px;
+  backdrop-filter: blur(10px);
+  transition: all 0.25s ease;
 }
 
 .details-button:hover {
-  background: rgba(255, 255, 255, 0.3);
-  transform: scale(1.05);
+  background: rgba(255,255,255,0.2);
+  transform: scale(1.04);
 }
 
-  .banner-content p {
-  display: none !important;
+/* ============================= */
+/*        ANIMATIONS            */
+/* ============================= */
+
+@keyframes appleFade {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
+@keyframes slowZoom {
+  from {
+    transform: scale(1);
+  }
+  to {
+    transform: scale(1.05);
+  }
+}
 
-/* Mobilversjon */
+/* ============================= */
+/*         MOBILE STYLE         */
+/* ============================= */
+
 @media (max-width: 768px) {
+
   .hero-banner {
-    height: 60vh;
-    min-height: 300px;
+    height: 75vh;
   }
 
   .banner-content {
-    bottom: 50px;
-    left: 20px;
-    max-width: 90%;
+    margin-left: 24px;
+    margin-right: 24px;
   }
 
   .film-logo {
-    width: 250px;
+    width: 220px;
   }
 
   .banner-content p {
-    font-size: 14px;
-  }
-
-  .banner-meta {
-    font-size: 13px;
+    font-size: 15px;
   }
 
   .watch-button,
   .details-button {
     font-size: 14px;
-    padding: 8px 20px;
+    padding: 10px 20px;
   }
 }
 
@@ -2281,6 +2301,7 @@ activeFilms.forEach(film => {
 });
 
 </script>
+
 
 
 
