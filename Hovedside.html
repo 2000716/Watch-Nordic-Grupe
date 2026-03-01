@@ -1785,8 +1785,8 @@ background: linear-gradient(
      <footer style="border-top:1px solid #222; padding:30px 40px; color:#8c8c8c; font-size:12px; line-height:1.6;">
 © 2026 Watch Nordic™. Alle varemerker, logoer, tjenestenavn og øvrige immaterielle rettigheter knyttet til Watch Nordic.
     </main>
-  <script src="Filmdata.js"></script> 
-<script src="Seriedata.js"></script> 
+<script src="Filmdata.js"></script>
+<script src="Seriedata.js"></script>
 <script>
 // ==================== AUTENTISERING ==================== //
 const epost = localStorage.getItem("epost");
@@ -1818,6 +1818,13 @@ if (lagretBilde) {
 }
 
 // ==================== HERO-BANNER ==================== //
+function hentTimeFilm() {
+  const filmKeys = Object.keys(filmer).filter(k => filmer[k].banner);
+  if (filmKeys.length === 0) return null;
+
+  const timeIndex = new Date().getHours() % filmKeys.length;
+  return filmer[filmKeys[timeIndex]];
+}
 
 function oppdaterBanner() {
   const film = hentTimeFilm();
@@ -1852,24 +1859,18 @@ function oppdaterBanner() {
   metadata.textContent = film.metadata ? film.metadata.join(" • ") : "";
 
   // === Se nå-knapp ===
-  seNa.onclick = () => {
-    window.location.href = `film-mal.html?id=${film.tittel}`;
-  };
+  seNa.innerHTML = '<i class="fas fa-play"></i> Se nå';
+  seNa.onclick = () => window.location.href = `film-mal.html?id=${film.tittel}`;
 
   // === Legg til i min liste ===
   const key = film.tittel.toLowerCase().replace(/\s+/g, '-');
   let liste = JSON.parse(localStorage.getItem("minListe")) || [];
 
-  // Sett riktig ikon når banner lastes
-  if (liste.includes(key)) {
-    addBtn.innerHTML = '<i class="fas fa-check"></i>';
-  } else {
-    addBtn.innerHTML = '<i class="fas fa-plus"></i>';
-  }
+  // Sett riktig ikon ved lasting
+  addBtn.innerHTML = liste.includes(key) ? '<i class="fas fa-check"></i>' : '<i class="fas fa-plus"></i>';
 
   addBtn.onclick = () => {
     let liste = JSON.parse(localStorage.getItem("minListe")) || [];
-
     if (liste.includes(key)) {
       liste = liste.filter(item => item !== key);
       addBtn.innerHTML = '<i class="fas fa-plus"></i>';
@@ -1877,7 +1878,6 @@ function oppdaterBanner() {
       liste.push(key);
       addBtn.innerHTML = '<i class="fas fa-check"></i>';
     }
-
     localStorage.setItem("minListe", JSON.stringify(liste));
   };
 
@@ -1888,7 +1888,6 @@ function oppdaterBanner() {
       video.style.display = "block";
       video.currentTime = 0;
       video.play();
-
       video.onended = () => {
         video.style.display = "none";
         bilde.style.display = "block";
@@ -1897,21 +1896,14 @@ function oppdaterBanner() {
   }, 5000);
 }
 
-// ==================== HJELPEFUNKSJON: JUSTER VIDEO ==================== //
+// ==================== JUSTER VIDEO ==================== //
 function adjustBannerVideo(videoElement, container) {
   videoElement.addEventListener('loadedmetadata', () => {
     const videoRatio = videoElement.videoWidth / videoElement.videoHeight;
     const containerRatio = container.offsetWidth / container.offsetHeight;
-
-    if (videoRatio < containerRatio) {
-      videoElement.style.width = '100%';
-      videoElement.style.height = '100%';
-      videoElement.style.objectFit = 'cover';
-    } else {
-      videoElement.style.width = '100%';
-      videoElement.style.height = '100%';
-      videoElement.style.objectFit = 'cover';
-    }
+    videoElement.style.width = '100%';
+    videoElement.style.height = '100%';
+    videoElement.style.objectFit = 'cover';
   });
 }
 
@@ -1919,66 +1911,48 @@ const bannerVideo = document.getElementById("banner-video");
 const heroBanner = document.querySelector(".hero-banner");
 adjustBannerVideo(bannerVideo, heroBanner);
 
-
-
-// ==================== UNIVERSAL SCROLL FUNKSJON ==================== //
+// ==================== UNIVERSAL SCROLL ==================== //
 document.querySelectorAll(".gallery-wrapper").forEach(wrapper => {
   const gallery = wrapper.querySelector(".image-gallery, .coming-movies-gallery, .top10-gallery");
   const left = wrapper.querySelector(".scroll-button.left");
   const right = wrapper.querySelector(".scroll-button.right");
   const fadeL = wrapper.querySelector(".fade-left");
   const fadeR = wrapper.querySelector(".fade-right");
-
   if (!gallery) return;
 
   const update = () => {
     const max = gallery.scrollWidth - gallery.clientWidth;
     const pos = gallery.scrollLeft;
-
     const canScroll = max > 5;
-
     left.classList.toggle("hidden", !canScroll || pos <= 5);
     right.classList.toggle("hidden", !canScroll || pos >= max - 5);
-
     fadeL.classList.toggle("fade-hidden", !canScroll || pos <= 5);
     fadeR.classList.toggle("fade-hidden", !canScroll || pos >= max - 5);
   };
 
-  left.addEventListener("click", () => {
-    gallery.scrollBy({ left: -gallery.clientWidth * 0.85, behavior: "smooth" });
-  });
-
-  right.addEventListener("click", () => {
-    gallery.scrollBy({ left: gallery.clientWidth * 0.85, behavior: "smooth" });
-  });
-
+  left?.addEventListener("click", () => gallery.scrollBy({ left: -gallery.clientWidth * 0.85, behavior: "smooth" }));
+  right?.addEventListener("click", () => gallery.scrollBy({ left: gallery.clientWidth * 0.85, behavior: "smooth" }));
   gallery.addEventListener("scroll", update);
   window.addEventListener("resize", update);
   update();
 });
 
-
-// ==================== DYNAMISK GALLERI-LASTING ==================== //
+// ==================== DYNAMISK GALLERI ==================== //
 function createMovieElement(filmKey, film) {
   const link = document.createElement("a");
   link.href = `film.html?navn=${filmKey}`;
   link.classList.add("gallery-item");
-
   link.innerHTML = `
     <img src="${film.poster}" alt="${film.tittel}">
     <div class="image-overlay">
       <div class="overlay-content">
         <div class="overlay-title">${film.tittel}</div>
-        <div class="overlay-meta">
-          ${(film.metadata || []).join(" • ")}
-        </div>
+        <div class="overlay-meta">${(film.metadata || []).join(" • ")}</div>
       </div>
     </div>
   `;
-
   return link;
 }
-
 
 function createUpcomingMovieElement(filmKey, film) {
   const link = document.createElement("div");
@@ -2101,8 +2075,8 @@ function renderUpcoming(galleryId) {
   const gallery = document.getElementById(galleryId);
   if (!gallery) return;
   gallery.innerHTML = "";
-  const currentDate = new Date();
 
+  const currentDate = new Date();
   const upcomingFilms = Object.keys(filmer).filter(key => {
     const film = filmer[key];
     if (!film.publishDate) return false;
@@ -2112,7 +2086,6 @@ function renderUpcoming(galleryId) {
   upcomingFilms.forEach(key => gallery.appendChild(createUpcomingMovieElement(key, filmer[key])));
 }
 
-// ==================== TOPP 10 FILMER ==================== //
 function renderTop10(galleryId) {
   const gallery = document.getElementById(galleryId);
   if (!gallery) return;
@@ -2153,7 +2126,6 @@ function renderTop10(galleryId) {
   });
 }
 
-// ==================== SERIER ==================== //
 function renderSeries(galleryId) {
   const gallery = document.getElementById(galleryId);
   if (!gallery || typeof serier === "undefined") return;
@@ -2165,24 +2137,22 @@ function renderSeries(galleryId) {
 
     const link = document.createElement("a");
     link.href = `film.html?navn=${key}`;
-    link.classList.add("gallery-item"); // ✅
+    link.classList.add("gallery-item");
 
     link.innerHTML = `
       <img src="${serie.poster}" alt="${serie.tittel}">
       <div class="image-overlay">
         <div class="overlay-content">
           <div class="overlay-title">${serie.tittel}</div>
-          <div class="overlay-meta">
-            ${(serie.metadata || []).join(" • ")}
-          </div>
+          <div class="overlay-meta">${(serie.metadata || []).join(" • ")}</div>
         </div>
       </div>
     `;
 
-gallery.appendChild(link); }); }
+    gallery.appendChild(link);
+  });
+}
 
-
-// ==================== FORTSETT Å SE ==================== //
 function renderContinueWatching() {
   const section = document.getElementById("fortsett-section");
   const gallery = document.getElementById("fortsett-galleri");
@@ -2222,10 +2192,8 @@ function renderContinueWatching() {
   });
 }
 
-
 // ==================== INIT ==================== //
 document.addEventListener("DOMContentLoaded", () => {
-
   renderGallery("nye-filmer-galleri", null, true, 10);
   renderTop10("topp10-filmer-galleri");
   renderGallery("barn-galleri", (key) => {
@@ -2237,7 +2205,6 @@ document.addEventListener("DOMContentLoaded", () => {
   renderUpcoming("kommer-snart-galleri");
   renderSeries("serier-galleri");
   oppdaterBanner();
-  renderHalloweenBanner();
   renderContinueWatching();
 
   document.querySelectorAll(".gallery-wrapper").forEach((wrapper) => {
@@ -2247,34 +2214,26 @@ document.addEventListener("DOMContentLoaded", () => {
     const fadeLeft = wrapper.querySelector(".fade-left");
     const fadeRight = wrapper.querySelector(".fade-right");
 
-  function updateScrollState() {
-  if (!gallery) return;
+    function updateScrollState() {
+      if (!gallery) return;
+      const scrollLeft = gallery.scrollLeft;
+      const maxScroll = gallery.scrollWidth - gallery.clientWidth;
+      if (gallery.scrollWidth <= gallery.clientWidth + 1) {
+        leftBtn?.classList.add("hidden");
+        rightBtn?.classList.add("hidden");
+        fadeLeft?.classList.add("fade-hidden");
+        fadeRight?.classList.add("fade-hidden");
+        return;
+      }
+      leftBtn?.classList.toggle("hidden", scrollLeft <= 0);
+      fadeLeft?.classList.toggle("fade-hidden", scrollLeft <= 0);
+      rightBtn?.classList.toggle("hidden", scrollLeft >= maxScroll - 1);
+      fadeRight?.classList.toggle("fade-hidden", scrollLeft >= maxScroll - 1);
+    }
 
-  const scrollLeft = gallery.scrollLeft;
-  const maxScroll = gallery.scrollWidth - gallery.clientWidth;
-
-  // 🚫 Hvis galleriet ikke kan scrolle i det hele tatt
-  if (gallery.scrollWidth <= gallery.clientWidth + 1) {
-    leftBtn?.classList.add("hidden");
-    rightBtn?.classList.add("hidden");
-    fadeLeft?.classList.add("fade-hidden");
-    fadeRight?.classList.add("fade-hidden");
-    return;
-  }
-
-  // ⬅️ Start
-  leftBtn?.classList.toggle("hidden", scrollLeft <= 0);
-  fadeLeft?.classList.toggle("fade-hidden", scrollLeft <= 0);
-
-  // ➡️ Slutt
-  rightBtn?.classList.toggle("hidden", scrollLeft >= maxScroll - 1);
-  fadeRight?.classList.toggle("fade-hidden", scrollLeft >= maxScroll - 1);
-}
-
-
-    if (leftBtn) leftBtn.addEventListener("click", () => gallery.scrollBy({ left: -300, behavior: "smooth" }));
-    if (rightBtn) rightBtn.addEventListener("click", () => gallery.scrollBy({ left: 300, behavior: "smooth" }));
-    if (gallery) gallery.addEventListener("scroll", updateScrollState);
+    leftBtn?.addEventListener("click", () => gallery.scrollBy({ left: -300, behavior: "smooth" }));
+    rightBtn?.addEventListener("click", () => gallery.scrollBy({ left: 300, behavior: "smooth" }));
+    gallery?.addEventListener("scroll", updateScrollState);
     updateScrollState();
   });
 
@@ -2293,54 +2252,7 @@ window.addEventListener("scroll", () => {
     nav.classList.remove("scrolled");
   }
 });
-
-  // Hent dagens dato
-const now = new Date();
-
-// Filtrer bort utgåtte filmer
-const activeFilms = films.filter(film => {
-    const expire = new Date(film.expireDate);
-    return expire > now; // bare filmer som IKKE har gått ut
-});
-
-// Finn galleriet på siden
-const gallery = document.getElementById("gallery");
-
-// Lag film-elementer fra activeFilms
-activeFilms.forEach(film => {
-    const item = document.createElement("a");
-    item.href = film.link;
-    item.className = "film-item";
-
-    item.innerHTML = `
-        <img src="${film.image}" alt="${film.title}">
-    `;
-
-    gallery.appendChild(item);
-});
-
 </script>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
