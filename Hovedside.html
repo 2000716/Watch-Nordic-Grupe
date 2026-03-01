@@ -495,50 +495,48 @@ main {
 }
 
 /* Sjanger-galleri */
-/* EKSTRA STORE sjanger-knapper */
-.genre-gallery a {
+/* ===== NYE SJANGER-KORT ===== */
+
+.genre-gallery {
   display: flex;
-  flex-direction: column;
-  align-items: center;
+  gap: 18px;
+}
+
+.genre-card {
+  position: relative;
+  flex: 0 0 330px;
+  height: 180px;
+  border-radius: 12px;
+  overflow: hidden;
+  background-size: cover;
+  background-position: center;
   text-decoration: none;
-  font-weight: 600;
-  transition: all 0.35s ease;
-  margin: 0 22px;                /* god luft mellom */
-}
-
-/* Stor sirkel */
-.genre-gallery a .icon-circle {
+  transition: transform 0.35s ease;
   display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 140px;                  /* 🚀 STOR */
-  height: 140px;
-  border-radius: 50%;
-  background: #A8E6A3;            /* lys grønn */
-  color: #043A2B;                 /* mørkt ikon */
-  font-size: 54px;                /* 🚀 STORT ikon */
-  box-shadow: 0 14px 35px rgba(0,0,0,0.35);
-  transition: all 0.35s ease;
+  align-items: flex-end;
 }
 
-/* Hover-effekt */
-.genre-gallery a:hover .icon-circle {
-  transform: scale(1.15);
-  background: #8DDC8C;
-  box-shadow: 0 18px 45px rgba(0,0,0,0.45);
+.genre-card:hover {
+  transform: scale(1.06);
 }
 
-/* Tekst under */
-.genre-gallery a .genre-label {
-  margin-top: 14px;
-  font-size: 18px;                /* 🚀 større tekst */
-  color: #ffffff;
-  text-align: center;
-  max-width: 160px;
-  line-height: 1.25;
+/* Gradient nederst */
+.genre-overlay {
+  width: 100%;
+  padding: 18px;
+  background: linear-gradient(
+    to top,
+    rgba(0, 0, 0, 0.85) 0%,
+    rgba(0, 0, 0, 0.6) 50%,
+    rgba(0, 0, 0, 0) 100%
+  );
 }
 
-
+.genre-overlay span {
+  color: white;
+  font-size: 18px;
+  font-weight: 700;
+}
 
 /* === Kommende filmer – forbedret utseende === */
 .coming-movies-gallery {
@@ -1668,34 +1666,58 @@ main {
             <div class="fade-left"></div>
             <button class="scroll-button left" onclick="scrollGallery(this, -1)">❮</button>
             <div class="image-gallery genre-gallery">
-<a href="sjanger.html?navn=barn">
-  <div class="icon-circle"><i class="fas fa-rocket"></i></div>
-  <div class="genre-label">Barn / Familie</div>
-</a>
-<a href="sjanger.html?navn=komedie">
-  <div class="icon-circle"><i class="fas fa-laugh"></i></div>
-  <div class="genre-label">Komedie</div>
-</a>
-<a href="sjanger.html?navn=skrekk">
-  <div class="icon-circle"><i class="fas fa-ghost"></i></div>
-  <div class="genre-label">Skrekk</div>
-</a>
-<a href="sjanger.html?navn=drama">
-  <div class="icon-circle"><i class="fas fa-theater-masks"></i></div>
-  <div class="genre-label">Drama</div>
-</a>
-<a href="sjanger.html?navn=romantikk">
-  <div class="icon-circle"><i class="fas fa-heart"></i></div>
-  <div class="genre-label">Romantikk</div>
-</a>
-<a href="sjanger.html?navn=action">
-  <div class="icon-circle"><i class="fas fa-bolt"></i></div>
-  <div class="genre-label">Action</div>
-</a>
-  <a href="sjanger.html?navn=dokumentar">
-  <div class="icon-circle"><i class="fas fa-globe"></i></div>
-  <div class="genre-label">Dokumentar</div>
-</a>
+<div class="image-gallery genre-gallery">
+
+  <a href="sjanger.html?navn=barn" class="genre-card" 
+     style="background-image: url('bilder/barn.jpg');">
+    <div class="genre-overlay">
+      <span>Barn / Familie</span>
+    </div>
+  </a>
+
+  <a href="sjanger.html?navn=komedie" class="genre-card" 
+     style="background-image: url('bilder/komedie.jpg');">
+    <div class="genre-overlay">
+      <span>Komedie</span>
+    </div>
+  </a>
+
+  <a href="sjanger.html?navn=skrekk" class="genre-card" 
+     style="background-image: url('bilder/skrekk.jpg');">
+    <div class="genre-overlay">
+      <span>Skrekk</span>
+    </div>
+  </a>
+
+  <a href="sjanger.html?navn=drama" class="genre-card" 
+     style="background-image: url('bilder/drama.jpg');">
+    <div class="genre-overlay">
+      <span>Drama</span>
+    </div>
+  </a>
+
+  <a href="sjanger.html?navn=romantikk" class="genre-card" 
+     style="background-image: url('bilder/romantikk.jpg');">
+    <div class="genre-overlay">
+      <span>Romantikk</span>
+    </div>
+  </a>
+
+  <a href="sjanger.html?navn=action" class="genre-card" 
+     style="background-image: url('bilder/action.jpg');">
+    <div class="genre-overlay">
+      <span>Action</span>
+    </div>
+  </a>
+
+  <a href="sjanger.html?navn=dokumentar" class="genre-card" 
+     style="background-image: url('bilder/dokumentar.jpg');">
+    <div class="genre-overlay">
+      <span>Dokumentar</span>
+    </div>
+  </a>
+
+</div>
 
             </div>
             <button class="scroll-button right" onclick="scrollGallery(this, 1)">❯</button>
@@ -2234,6 +2256,7 @@ window.addEventListener("scroll", () => {
   }
 });
 </script>
+
 
 
 
