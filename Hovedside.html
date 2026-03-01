@@ -495,47 +495,58 @@ main {
 }
 
 /* Sjanger-galleri */
-/* ===== VERTIKALE SJANGER-KORT ===== */
+/* ===== PREMIUM VERTIKALE SJANGER-KORT ===== */
 
 .genre-gallery {
   display: flex;
-  gap: 18px;
+  gap: 22px;
 }
 
 .genre-card {
   position: relative;
-  flex: 0 0 220px;          /* smalere */
-  height: 330px;            /* høyere – vertikal */
-  border-radius: 14px;
+  flex: 0 0 220px;
+  aspect-ratio: 2 / 3; /* 🔥 Tvinger vertikal ratio */
+  border-radius: 20px; /* 🔥 Fine hjørner */
   overflow: hidden;
-  background-size: cover;
-  background-position: center;
   text-decoration: none;
-  transition: transform 0.35s ease;
+  transition: transform 0.35s ease, box-shadow 0.35s ease;
+  
+  background-size: cover;      /* 🔥 Klipper automatisk */
+  background-position: center; /* 🔥 Sentrerer bildet */
+  background-repeat: no-repeat;
+}
+
+/* Hover */
+.genre-card:hover {
+  transform: scale(1.07);
+  box-shadow: 0 20px 40px rgba(0,0,0,0.6);
+}
+
+/* Gradient overlay */
+.genre-overlay {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  padding: 22px 15px;
+
+  background: linear-gradient(
+    to top,
+    rgba(0,0,0,0.9) 0%,
+    rgba(0,0,0,0.6) 40%,
+    rgba(0,0,0,0) 100%
+  );
+
   display: flex;
+  justify-content: center;  /* 🔥 Midt horisontalt */
   align-items: flex-end;
 }
 
-.genre-card:hover {
-  transform: scale(1.06);
-}
-
-/* Gradient nederst */
-.genre-overlay {
-  width: 100%;
-  padding: 20px;
-  background: linear-gradient(
-    to top,
-    rgba(0, 0, 0, 0.9) 0%,
-    rgba(0, 0, 0, 0.6) 45%,
-    rgba(0, 0, 0, 0) 100%
-  );
-}
-
+/* Tekst */
 .genre-overlay span {
-  color: white;
+  color: #fff;
   font-size: 18px;
   font-weight: 700;
+  text-align: center;
 }
 
 /* === Kommende filmer – forbedret utseende === */
@@ -2256,6 +2267,7 @@ window.addEventListener("scroll", () => {
   }
 });
 </script>
+
 
 
 
