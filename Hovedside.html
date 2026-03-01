@@ -207,41 +207,67 @@ background: linear-gradient(
 
 .banner-buttons {
   display: flex;
-  gap: 16px;
+  align-items: center;
+  gap: 18px;
+  margin-top: 10px;
 }
 
-.watch-button,
-.details-button {
+/* === SE NÅ KNAPP === */
+.watch-button {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
   font-size: 17px;
   font-weight: 600;
-  padding: 14px 38px;
-  border-radius: 14px;
+  padding: 14px 40px;
+
+  border-radius: 50px;
+  border: none;
+
+  background: #00FFCC;
+  color: #003a2f;
+
   cursor: pointer;
-  transition: all 0.3s ease;
-  backdrop-filter: blur(15px);
+  transition: all 0.25s ease;
 }
 
-/* SE NÅ */
-.watch-button {
-  background: rgba(0,255,204,0.15);
-  border: 1px solid rgba(0,255,204,0.6);
-  color: #00FFCC;
+.watch-button i {
+  font-size: 16px;
 }
 
 .watch-button:hover {
-  background: rgba(0,255,204,0.35);
-  box-shadow: 0 0 20px rgba(0,255,204,0.5);
+  transform: scale(1.06);
+  box-shadow: 0 8px 25px rgba(0,255,204,0.6);
 }
 
-/* DETALJER */
-.details-button {
-  background: rgba(255,255,255,0.08);
-  border: 1px solid rgba(255,255,255,0.3);
-  color: #fff;
+
+/* === RUNDT PLUSS-KNAPP === */
+.add-button {
+  width: 52px;
+  height: 52px;
+
+  border-radius: 50%;
+  border: 2px solid white;
+
+  background: rgba(255,255,255,0.1);
+  color: white;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-size: 20px;
+
+  cursor: pointer;
+  transition: all 0.25s ease;
+  backdrop-filter: blur(6px);
 }
 
-.details-button:hover {
-  background: rgba(255,255,255,0.2);
+.add-button:hover {
+  background: white;
+  color: black;
+  transform: scale(1.1);
 }
 
   .banner-content p {
@@ -1622,10 +1648,15 @@ background: linear-gradient(
     <p id="banner-beskrivelse"></p>
     <div id="banner-metadata" class="banner-meta"></div>
     <div class="banner-buttons">
-      <button class="watch-button" id="banner-se-na">Se nå</button>
-      <button class="details-button" id="banner-detaljer">Detaljer</button>
-    </div>
-  </div>
+  <button class="watch-button" id="banner-se-na">
+    <i class="fas fa-play"></i>
+    Se nå
+  </button>
+
+  <button class="add-button" id="banner-add">
+    <i class="fas fa-plus"></i>
+  </button>
+</div>
 </section>
 
 
@@ -1858,6 +1889,23 @@ detaljer.onclick = () => {
 
 // Kjør oppdaterBanner når siden lastes
 oppdaterBanner();
+ const addBtn = document.getElementById("banner-add");
+
+addBtn.onclick = () => {
+  const key = film.tittel.toLowerCase().replace(/\s+/g, '-');
+
+  let liste = JSON.parse(localStorage.getItem("minListe")) || [];
+
+  if (liste.includes(key)) {
+    liste = liste.filter(item => item !== key);
+    addBtn.innerHTML = '<i class="fas fa-plus"></i>';
+  } else {
+    liste.push(key);
+    addBtn.innerHTML = '<i class="fas fa-check"></i>';
+  }
+
+  localStorage.setItem("minListe", JSON.stringify(liste));
+};
 
 // ==================== HJELPEFUNKSJON: JUSTER VIDEO ==================== //
 function adjustBannerVideo(videoElement, container) {
@@ -2282,6 +2330,7 @@ activeFilms.forEach(film => {
 });
 
 </script>
+
 
 
 
