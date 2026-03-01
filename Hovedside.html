@@ -495,58 +495,67 @@ main {
 }
 
 /* Sjanger-galleri */
-/* ===== PREMIUM VERTIKALE SJANGER-KORT ===== */
+/* ===== SJANGER-KORT (VERTIKALE – UTEN STRIPE) ===== */
 
 .genre-gallery {
   display: flex;
   gap: 22px;
 }
 
+/* Selve kortet */
 .genre-card {
   position: relative;
   flex: 0 0 220px;
-  aspect-ratio: 2 / 3; /* 🔥 Tvinger vertikal ratio */
-  border-radius: 20px; /* 🔥 Fine hjørner */
+  aspect-ratio: 2 / 3;        /* Vertikal poster-ratio */
+  border-radius: 20px;        /* Runde hjørner */
   overflow: hidden;
   text-decoration: none;
-  transition: transform 0.35s ease, box-shadow 0.35s ease;
-  
-  background-size: cover;      /* 🔥 Klipper automatisk */
-  background-position: center; /* 🔥 Sentrerer bildet */
+
+  background-size: cover;     /* Klipper automatisk */
+  background-position: center;
   background-repeat: no-repeat;
+
+  transition: transform 0.35s ease, box-shadow 0.35s ease;
 }
 
-/* Hover */
+/* Hover-effekt */
 .genre-card:hover {
   transform: scale(1.07);
   box-shadow: 0 20px 40px rgba(0,0,0,0.6);
 }
 
-/* Gradient overlay */
+/* Tekst-beholder (ingen gradient) */
 .genre-overlay {
   position: absolute;
-  bottom: 0;
+  bottom: 18px;
   width: 100%;
-  padding: 22px 15px;
-
-  background: linear-gradient(
-    to top,
-    rgba(0,0,0,0.9) 0%,
-    rgba(0,0,0,0.6) 40%,
-    rgba(0,0,0,0) 100%
-  );
-
   display: flex;
-  justify-content: center;  /* 🔥 Midt horisontalt */
-  align-items: flex-end;
+  justify-content: center;
 }
 
 /* Tekst */
 .genre-overlay span {
-  color: #fff;
+  color: #ffffff;
   font-size: 18px;
   font-weight: 700;
   text-align: center;
+
+  /* Gjør teksten lesbar uten svart stripe */
+  text-shadow: 0 4px 12px rgba(0,0,0,0.8);
+}
+
+/* ===== MOBIL ===== */
+
+@media (max-width: 768px) {
+
+  .genre-card {
+    flex: 0 0 150px;
+    border-radius: 16px;
+  }
+
+  .genre-overlay span {
+    font-size: 14px;
+  }
 }
 
 /* === Kommende filmer – forbedret utseende === */
@@ -2267,6 +2276,7 @@ window.addEventListener("scroll", () => {
   }
 });
 </script>
+
 
 
 
