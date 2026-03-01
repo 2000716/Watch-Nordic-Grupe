@@ -1819,15 +1819,6 @@ if (lagretBilde) {
 
 // ==================== HERO-BANNER ==================== //
 
-function hentTimeFilm() {
-  // Henter en film basert på time på dagen
-  const filmKeys = Object.keys(filmer).filter(k => filmer[k].banner);
-  if (filmKeys.length === 0) return null;
-
-  const timeIndex = new Date().getHours() % filmKeys.length;
-  return filmer[filmKeys[timeIndex]];
-}
-
 function oppdaterBanner() {
   const film = hentTimeFilm();
   if (!film) return;
@@ -1838,13 +1829,13 @@ function oppdaterBanner() {
   const beskrivelse = document.getElementById("banner-beskrivelse");
   const metadata = document.getElementById("banner-metadata");
   const seNa = document.getElementById("banner-se-na");
-  const detaljer = document.getElementById("banner-detaljer");
+  const addBtn = document.getElementById("banner-add");
 
-  // Sett bannerbilde
+  // === Sett bannerbilde ===
   bilde.src = film.banner || "";
   bilde.style.display = "block";
 
-  // Sett video
+  // === Sett video ===
   if (film.trailer) {
     video.src = film.trailer;
     video.load();
@@ -1854,31 +1845,50 @@ function oppdaterBanner() {
   }
   video.style.display = "none";
 
-  // Sett logo og beskrivelse
+  // === Logo og beskrivelse ===
   logo.src = film.logo || "";
   logo.style.display = film.logo ? "block" : "none";
   beskrivelse.textContent = film.beskrivelse || "";
-
-  // Sett metadata
   metadata.textContent = film.metadata ? film.metadata.join(" • ") : "";
 
-  // Se nå-knapp
-  seNa.onclick = () => window.location.href = `film-mal.html?id=${film.tittel}`;
+  // === Se nå-knapp ===
+  seNa.onclick = () => {
+    window.location.href = `film-mal.html?id=${film.tittel}`;
+  };
 
- // Detaljer-knapp med små bokstaver
-const tittelSmå = film.tittel.toLowerCase().replace(/\s+/g, '-'); // erstatter mellomrom med bindestrek
-detaljer.onclick = () => {
-  const url = `film.html?navn=${tittelSmå}`;
-  window.location.href = url;
-};
+  // === Legg til i min liste ===
+  const key = film.tittel.toLowerCase().replace(/\s+/g, '-');
+  let liste = JSON.parse(localStorage.getItem("minListe")) || [];
 
-  // Spill video etter 5 sekunder hvis tilgjengelig
+  // Sett riktig ikon når banner lastes
+  if (liste.includes(key)) {
+    addBtn.innerHTML = '<i class="fas fa-check"></i>';
+  } else {
+    addBtn.innerHTML = '<i class="fas fa-plus"></i>';
+  }
+
+  addBtn.onclick = () => {
+    let liste = JSON.parse(localStorage.getItem("minListe")) || [];
+
+    if (liste.includes(key)) {
+      liste = liste.filter(item => item !== key);
+      addBtn.innerHTML = '<i class="fas fa-plus"></i>';
+    } else {
+      liste.push(key);
+      addBtn.innerHTML = '<i class="fas fa-check"></i>';
+    }
+
+    localStorage.setItem("minListe", JSON.stringify(liste));
+  };
+
+  // === Spill trailer etter 5 sekunder ===
   setTimeout(() => {
     if (film.trailer) {
       bilde.style.display = "none";
       video.style.display = "block";
       video.currentTime = 0;
       video.play();
+
       video.onended = () => {
         video.style.display = "none";
         bilde.style.display = "block";
@@ -1886,26 +1896,6 @@ detaljer.onclick = () => {
     }
   }, 5000);
 }
-
-// Kjør oppdaterBanner når siden lastes
-oppdaterBanner();
- const addBtn = document.getElementById("banner-add");
-
-addBtn.onclick = () => {
-  const key = film.tittel.toLowerCase().replace(/\s+/g, '-');
-
-  let liste = JSON.parse(localStorage.getItem("minListe")) || [];
-
-  if (liste.includes(key)) {
-    liste = liste.filter(item => item !== key);
-    addBtn.innerHTML = '<i class="fas fa-plus"></i>';
-  } else {
-    liste.push(key);
-    addBtn.innerHTML = '<i class="fas fa-check"></i>';
-  }
-
-  localStorage.setItem("minListe", JSON.stringify(liste));
-};
 
 // ==================== HJELPEFUNKSJON: JUSTER VIDEO ==================== //
 function adjustBannerVideo(videoElement, container) {
@@ -2330,6 +2320,7 @@ activeFilms.forEach(film => {
 });
 
 </script>
+
 
 
 
