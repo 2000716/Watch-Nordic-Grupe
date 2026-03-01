@@ -3,7 +3,7 @@ const filmer = {
     tittel: "The Kid",
     bakgrunn: "https://image.tmdb.org/t/p/original/cvWzCDo3pQyoasvqzRIP7oHK3qn.jpg",
     banner: "https://image.tmdb.org/t/p/original/cvWzCDo3pQyoasvqzRIP7oHK3qn.jpg", 
-    logo: "https://static.wixstatic.com/media/fd2fb2_1f3567ef34f7486888d5738c2a8494fe~mv2.png",
+    logo: "https://static.wixstatic.com/media/fd2fb2_bcc26c34a5a2490dabd3f5b6bdf20bb8~mv2.png",
     trailer: "", // 🎥 NY 
     poster: "https://image.tmdb.org/t/p/original/pMeqhS16RXQhNw2hpBkDvBR7r7Z.jpg",
     posterVertikal: "https://image.tmdb.org/t/p/original/cIIsmZ4az8AaJJoDgtIOS797RCA.jpg", // portrett
@@ -161,6 +161,7 @@ const filmer = {
   },
   
   };
+
 
 
 
