@@ -495,13 +495,12 @@ main {
 }
 
 /* Sjanger-galleri */
-/* ===== SJANGER-KORT (GLASS-EFFEKT) ===== */
+/* ===== SJANGER-KORT (AUTOTILPASSET BILDE) ===== */
 
 .genre-gallery {
   display: flex;
   gap: 22px;
   align-items: flex-start;
-  flex-wrap: wrap; /* gjør at de brytes pent på mindre skjermer */
 }
 
 /* Selve kortet */
@@ -514,11 +513,11 @@ main {
   transition: transform 0.35s ease, box-shadow 0.35s ease;
 }
 
-/* Bildet */
+/* Bildet styrer høyden selv */
 .genre-card img {
   width: 100%;
-  height: auto;              /* Bildet bestemmer høyden */
-  display: block;
+  height: auto;              /* 🔥 Bildet bestemmer høyden */
+  display: block;            /* Fjerner inline-gap */
   object-fit: cover;
   border-radius: inherit;
 }
@@ -529,45 +528,43 @@ main {
   box-shadow: 0 20px 45px rgba(0,0,0,0.6);
 }
 
-/* ===== GLASS OVERLAY ===== */
-
+/* Overlay med myk fade (uten stripe) */
 .genre-overlay {
   position: absolute;
-  bottom: 18px;
-  left: 50%;
-  transform: translateX(-50%);
-
-  padding: 10px 22px;
-  border-radius: 50px;
-
-  background: rgba(255, 255, 255, 0.12);   /* Gjennomsiktig */
-  backdrop-filter: blur(14px);            /* Frostet glass */
-  -webkit-backdrop-filter: blur(14px);
-
-  border: 1px solid rgba(255, 255, 255, 0.25);
-
+  inset: 0;
   display: flex;
+  align-items: flex-end;
   justify-content: center;
-  align-items: center;
+  padding-bottom: 18px;
 
-  transition: all 0.3s ease;
+  background: linear-gradient(
+    to top,
+    rgba(0,0,0,0.7) 0%,
+    rgba(0,0,0,0.4) 35%,
+    rgba(0,0,0,0) 70%
+  );
+
+  transition: background 0.3s ease;
 }
 
-/* Litt mer glow på hover */
+/* Litt sterkere effekt på hover */
 .genre-card:hover .genre-overlay {
-  background: rgba(0, 255, 204, 0.18);
-  border: 1px solid rgba(0, 255, 204, 0.5);
-  box-shadow: 0 0 18px rgba(0, 255, 204, 0.35);
+  background: linear-gradient(
+    to top,
+    rgba(0,0,0,0.85) 0%,
+    rgba(0,0,0,0.5) 40%,
+    rgba(0,0,0,0) 75%
+  );
 }
 
 /* Tekst */
 .genre-overlay span {
   color: #ffffff;
-  font-size: 16px;
+  font-size: 18px;
   font-weight: 700;
-  letter-spacing: 0.5px;
   text-align: center;
-  text-shadow: 0 2px 10px rgba(0,0,0,0.6);
+  text-shadow: 0 4px 14px rgba(0,0,0,0.8);
+  letter-spacing: 0.5px;
 }
 
 /* ===== MOBIL ===== */
@@ -581,11 +578,6 @@ main {
   .genre-card {
     flex: 0 0 150px;
     border-radius: 16px;
-  }
-
-  .genre-overlay {
-    padding: 8px 16px;
-    border-radius: 40px;
   }
 
   .genre-overlay span {
@@ -2311,6 +2303,7 @@ window.addEventListener("scroll", () => {
   }
 });
 </script>
+
 
 
 
