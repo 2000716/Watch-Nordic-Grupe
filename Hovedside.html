@@ -495,102 +495,93 @@ main {
 }
 
 /* Sjanger-galleri */
-/* ===============================
-   SJANGER-GALLERI – VERTIKALT
-   =============================== */
+/* ===== SJANGER-KORT (AUTOTILPASSET BILDE) ===== */
+
 .genre-gallery {
   display: flex;
-  flex-direction: column;  /* Vertikal liste */
-  gap: 20px;               /* Avstand mellom kortene */
-  overflow-y: auto;        /* Scroll vertikalt */
-  max-height: 600px;       /* Maks høyde på ruten */
-  padding: 10px 0;
-  scroll-behavior: smooth;
+  gap: 22px;
+  align-items: flex-start;
 }
 
-.genre-gallery::-webkit-scrollbar {
-  width: 8px;
-}
-
-.genre-gallery::-webkit-scrollbar-thumb {
-  background-color: rgba(255, 255, 255, 0.2);
-  border-radius: 4px;
-}
-
+/* Selve kortet */
 .genre-card {
-  width: 100%;            /* Fyller hele bredden av container */
-  height: 180px;          /* Fast høyde på kortet */
-  border-radius: 12px;
-  overflow: hidden;
   position: relative;
-  background-color: #000;  /* fallback hvis bilde ikke lastes */
-  cursor: pointer;
+  flex: 0 0 220px;
+  border-radius: 20px;
+  overflow: hidden;
+  text-decoration: none;
   transition: transform 0.35s ease, box-shadow 0.35s ease;
 }
 
+/* Bildet styrer høyden selv */
 .genre-card img {
   width: 100%;
-  height: 100%;
-  object-fit: cover;       /* 🔥 fyller hele kortet */
-  object-position: center;
-  display: block;
-  transition: transform 0.3s ease;
+  height: auto;              /* 🔥 Bildet bestemmer høyden */
+  display: block;            /* Fjerner inline-gap */
+  object-fit: cover;
+  border-radius: inherit;
 }
 
+/* Hover-effekt */
 .genre-card:hover {
-  transform: scale(1.05);
-  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.6);
+  transform: scale(1.06);
+  box-shadow: 0 20px 45px rgba(0,0,0,0.6);
 }
 
-/* Tekst-overlay nederst */
+/* Overlay med myk fade (uten stripe) */
 .genre-overlay {
   position: absolute;
-  bottom: 15px;
-  width: 100%;
+  inset: 0;
   display: flex;
+  align-items: flex-end;
   justify-content: center;
-  pointer-events: none; /* hele kortet er klikkbart */
+  padding-bottom: 18px;
+
+  background: linear-gradient(
+    to top,
+    rgba(0,0,0,0.7) 0%,
+    rgba(0,0,0,0.4) 35%,
+    rgba(0,0,0,0) 70%
+  );
+
+  transition: background 0.3s ease;
 }
 
+/* Litt sterkere effekt på hover */
+.genre-card:hover .genre-overlay {
+  background: linear-gradient(
+    to top,
+    rgba(0,0,0,0.85) 0%,
+    rgba(0,0,0,0.5) 40%,
+    rgba(0,0,0,0) 75%
+  );
+}
+
+/* Tekst */
 .genre-overlay span {
   color: #ffffff;
   font-size: 18px;
   font-weight: 700;
   text-align: center;
-  text-shadow: 0 4px 12px rgba(0, 0, 0, 0.85);
+  text-shadow: 0 4px 14px rgba(0,0,0,0.8);
+  letter-spacing: 0.5px;
 }
 
-/* ===============================
-   MOBIL / RESPONSIV
-   =============================== */
+/* ===== MOBIL ===== */
+
 @media (max-width: 768px) {
+
   .genre-gallery {
-    max-height: 400px;
     gap: 14px;
   }
 
   .genre-card {
-    height: 140px;
-    border-radius: 10px;
+    flex: 0 0 150px;
+    border-radius: 16px;
   }
 
   .genre-overlay span {
     font-size: 14px;
-  }
-}
-
-@media (max-width: 480px) {
-  .genre-gallery {
-    max-height: 300px;
-  }
-
-  .genre-card {
-    height: 120px;
-    border-radius: 8px;
-  }
-
-  .genre-overlay span {
-    font-size: 12px;
   }
 }
 /* === Kommende filmer – forbedret utseende === */
@@ -2311,6 +2302,7 @@ window.addEventListener("scroll", () => {
   }
 });
 </script>
+
 
 
 
