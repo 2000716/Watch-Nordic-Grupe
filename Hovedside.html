@@ -495,35 +495,35 @@ main {
 }
 
 /* Sjanger-galleri */
-/* =====================================
-   SJANGER-KORT (VERTIKALE POSTERE)
-   ===================================== */
+/* ===============================
+   SJANGER-KORT (VERTIKALE – KUTTER BILDE)
+   =============================== */
 
 .genre-gallery {
   display: flex;
-  gap: 22px;
-  flex-wrap: wrap;
+  gap: 22px;            /* Avstand mellom kortene */
+  flex-wrap: wrap;       /* Flere rader hvis nødvendig */
   align-items: flex-start;
 }
 
-/* Selve kortet */
+/* Kortet */
 .genre-card {
   position: relative;
-  flex: 0 0 220px;
-  aspect-ratio: 2 / 3; /* 🔥 Fast vertikal poster */
+  width: 220px;          /* Fast bredde */
+  height: 330px;         /* Fast høyde (2:3 ratio) */
   border-radius: 20px;
   overflow: hidden;
   text-decoration: none;
-  background-color: #000;
+  background-color: #000; /* fallback hvis bildet ikke laster */
   transition: transform 0.35s ease, box-shadow 0.35s ease;
 }
 
-/* Bildet fyller hele kortet */
+/* Bildet fyller kortet og klippes automatisk */
 .genre-card img {
   width: 100%;
   height: 100%;
-  object-fit: cover;      /* 🔥 Kutter sidene automatisk */
-  object-position: center; /* Holder fokus i midten */
+  object-fit: cover;       /* 🔥 Beskjærer bildet for å fylle kortet */
+  object-position: center; /* Fokuserer midten av bildet */
   display: block;
 }
 
@@ -540,7 +540,7 @@ main {
   width: 100%;
   display: flex;
   justify-content: center;
-  pointer-events: none; /* gjør at hele kortet fortsatt er klikkbart */
+  pointer-events: none; /* gjør hele kortet klikkbart */
 }
 
 /* Tekst */
@@ -549,22 +549,21 @@ main {
   font-size: 18px;
   font-weight: 700;
   text-align: center;
-  letter-spacing: 0.5px;
   text-shadow: 0 4px 12px rgba(0, 0, 0, 0.85);
 }
 
-/* =====================================
+/* ===============================
    MOBIL
-   ===================================== */
+   =============================== */
 
 @media (max-width: 768px) {
-
   .genre-gallery {
     gap: 14px;
   }
 
   .genre-card {
-    flex: 0 0 150px;
+    width: 150px;
+    height: 225px; /* samme 2:3 ratio */
     border-radius: 16px;
   }
 
@@ -572,7 +571,6 @@ main {
     font-size: 14px;
   }
 }
-
 /* === Kommende filmer – forbedret utseende === */
 .coming-movies-gallery {
   display: flex;
@@ -2291,6 +2289,7 @@ window.addEventListener("scroll", () => {
   }
 });
 </script>
+
 
 
 
