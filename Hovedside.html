@@ -496,54 +496,62 @@ main {
 
 /* Sjanger-galleri */
 /* ===============================
-   SJANGER-KORT (VERTIKALE – KUTTER BILDE)
+   SJANGER-GALLERI – VERTIKALT
    =============================== */
-
 .genre-gallery {
   display: flex;
-  gap: 22px;            /* Avstand mellom kortene */
-  flex-wrap: wrap;       /* Flere rader hvis nødvendig */
-  align-items: flex-start;
+  flex-direction: column;  /* Vertikal liste */
+  gap: 20px;               /* Avstand mellom kortene */
+  overflow-y: auto;        /* Scroll vertikalt */
+  max-height: 600px;       /* Maks høyde på ruten */
+  padding: 10px 0;
+  scroll-behavior: smooth;
 }
 
-/* Kortet */
+.genre-gallery::-webkit-scrollbar {
+  width: 8px;
+}
+
+.genre-gallery::-webkit-scrollbar-thumb {
+  background-color: rgba(255, 255, 255, 0.2);
+  border-radius: 4px;
+}
+
 .genre-card {
-  position: relative;
-  width: 220px;          /* Fast bredde */
-  height: 330px;         /* Fast høyde (2:3 ratio) */
-  border-radius: 20px;
+  width: 100%;            /* Fyller hele bredden av container */
+  height: 180px;          /* Fast høyde på kortet */
+  border-radius: 12px;
   overflow: hidden;
-  text-decoration: none;
-  background-color: #000; /* fallback hvis bildet ikke laster */
+  position: relative;
+  background-color: #000;  /* fallback hvis bilde ikke lastes */
+  cursor: pointer;
   transition: transform 0.35s ease, box-shadow 0.35s ease;
 }
 
-/* Bildet fyller kortet og klippes automatisk */
 .genre-card img {
   width: 100%;
   height: 100%;
-  object-fit: cover;       /* 🔥 Beskjærer bildet for å fylle kortet */
-  object-position: center; /* Fokuserer midten av bildet */
+  object-fit: cover;       /* 🔥 fyller hele kortet */
+  object-position: center;
   display: block;
+  transition: transform 0.3s ease;
 }
 
-/* Hover-effekt */
 .genre-card:hover {
-  transform: scale(1.07);
-  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.6);
+  transform: scale(1.05);
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.6);
 }
 
 /* Tekst-overlay nederst */
 .genre-overlay {
   position: absolute;
-  bottom: 18px;
+  bottom: 15px;
   width: 100%;
   display: flex;
   justify-content: center;
-  pointer-events: none; /* gjør hele kortet klikkbart */
+  pointer-events: none; /* hele kortet er klikkbart */
 }
 
-/* Tekst */
 .genre-overlay span {
   color: #ffffff;
   font-size: 18px;
@@ -553,22 +561,36 @@ main {
 }
 
 /* ===============================
-   MOBIL
+   MOBIL / RESPONSIV
    =============================== */
-
 @media (max-width: 768px) {
   .genre-gallery {
+    max-height: 400px;
     gap: 14px;
   }
 
   .genre-card {
-    width: 150px;
-    height: 225px; /* samme 2:3 ratio */
-    border-radius: 16px;
+    height: 140px;
+    border-radius: 10px;
   }
 
   .genre-overlay span {
     font-size: 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  .genre-gallery {
+    max-height: 300px;
+  }
+
+  .genre-card {
+    height: 120px;
+    border-radius: 8px;
+  }
+
+  .genre-overlay span {
+    font-size: 12px;
   }
 }
 /* === Kommende filmer – forbedret utseende === */
@@ -2289,6 +2311,7 @@ window.addEventListener("scroll", () => {
   }
 });
 </script>
+
 
 
 
