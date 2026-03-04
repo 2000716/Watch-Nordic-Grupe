@@ -496,7 +496,7 @@ main {
 
 /* Sjanger-galleri */
 /* ===== SJANGER-KORT (AUTOTILPASSET BILDE) ===== */
-
+/* Selve galleriet */
 .genre-gallery {
   display: flex;
   gap: 22px;
@@ -510,22 +510,16 @@ main {
   border-radius: 20px;
   overflow: hidden;
   text-decoration: none;
-  transition: transform 0.35s ease, box-shadow 0.35s ease;
+  /* Ingen hover-effekt her */
 }
 
 /* Bildet styrer høyden selv */
 .genre-card img {
   width: 100%;
-  height: auto;              /* 🔥 Bildet bestemmer høyden */
-  display: block;            /* Fjerner inline-gap */
+  height: auto;        /* Bildet bestemmer høyden */
+  display: block;      /* Fjerner inline-gap */
   object-fit: cover;
   border-radius: inherit;
-}
-
-/* Hover-effekt */
-.genre-card:hover {
-  transform: scale(1.06);
-  box-shadow: 0 20px 45px rgba(0,0,0,0.6);
 }
 
 /* Overlay med myk fade (uten stripe) */
@@ -543,18 +537,8 @@ main {
     rgba(0,0,0,0.4) 35%,
     rgba(0,0,0,0) 70%
   );
-
-  transition: background 0.3s ease;
-}
-
-/* Litt sterkere effekt på hover */
-.genre-card:hover .genre-overlay {
-  background: linear-gradient(
-    to top,
-    rgba(0,0,0,0.85) 0%,
-    rgba(0,0,0,0.5) 40%,
-    rgba(0,0,0,0) 75%
-  );
+  /* Ingen hover-effekt her */
+  transition: none;
 }
 
 /* Tekst */
@@ -2302,6 +2286,7 @@ window.addEventListener("scroll", () => {
   }
 });
 </script>
+
 
 
 
