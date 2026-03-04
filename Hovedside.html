@@ -495,60 +495,97 @@ main {
 }
 
 /* Sjanger-galleri */
-/* ===== SJANGER-KORT (VERTIKALE – UTEN STRIPE) ===== */
+/* ===== SJANGER-KORT (GLASS-EFFEKT) ===== */
 
 .genre-gallery {
   display: flex;
   gap: 22px;
+  align-items: flex-start;
+  flex-wrap: wrap; /* gjør at de brytes pent på mindre skjermer */
 }
 
 /* Selve kortet */
 .genre-card {
   position: relative;
   flex: 0 0 220px;
-  aspect-ratio: 2 / 3;        /* Vertikal poster-ratio */
-  border-radius: 20px;        /* Runde hjørner */
+  border-radius: 20px;
   overflow: hidden;
   text-decoration: none;
+  transition: transform 0.35s ease, box-shadow 0.35s ease;
+}
 
-  background-size: cover;     /* Klipper automatisk */
-  background-position: center;
-  background-repeat: no-repeat;
+/* Bildet */
+.genre-card img {
+  width: 100%;
+  height: auto;              /* Bildet bestemmer høyden */
+  display: block;
+  object-fit: cover;
+  border-radius: inherit;
 }
 
 /* Hover-effekt */
 .genre-card:hover {
-  transform: scale(1.07);
-  box-shadow: 0 20px 40px rgba(0,0,0,0.6);
+  transform: scale(1.06);
+  box-shadow: 0 20px 45px rgba(0,0,0,0.6);
 }
 
-/* Tekst-beholder (ingen gradient) */
+/* ===== GLASS OVERLAY ===== */
+
 .genre-overlay {
   position: absolute;
   bottom: 18px;
-  width: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+
+  padding: 10px 22px;
+  border-radius: 50px;
+
+  background: rgba(255, 255, 255, 0.12);   /* Gjennomsiktig */
+  backdrop-filter: blur(14px);            /* Frostet glass */
+  -webkit-backdrop-filter: blur(14px);
+
+  border: 1px solid rgba(255, 255, 255, 0.25);
+
   display: flex;
   justify-content: center;
+  align-items: center;
+
+  transition: all 0.3s ease;
+}
+
+/* Litt mer glow på hover */
+.genre-card:hover .genre-overlay {
+  background: rgba(0, 255, 204, 0.18);
+  border: 1px solid rgba(0, 255, 204, 0.5);
+  box-shadow: 0 0 18px rgba(0, 255, 204, 0.35);
 }
 
 /* Tekst */
 .genre-overlay span {
   color: #ffffff;
-  font-size: 18px;
+  font-size: 16px;
   font-weight: 700;
+  letter-spacing: 0.5px;
   text-align: center;
-
-  /* Gjør teksten lesbar uten svart stripe */
-  text-shadow: 0 4px 12px rgba(0,0,0,0.8);
+  text-shadow: 0 2px 10px rgba(0,0,0,0.6);
 }
 
 /* ===== MOBIL ===== */
 
 @media (max-width: 768px) {
 
+  .genre-gallery {
+    gap: 14px;
+  }
+
   .genre-card {
     flex: 0 0 150px;
     border-radius: 16px;
+  }
+
+  .genre-overlay {
+    padding: 8px 16px;
+    border-radius: 40px;
   }
 
   .genre-overlay span {
@@ -2274,6 +2311,7 @@ window.addEventListener("scroll", () => {
   }
 });
 </script>
+
 
 
 
