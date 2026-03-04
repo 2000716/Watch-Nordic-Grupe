@@ -510,14 +510,16 @@ main {
   border-radius: 20px;
   overflow: hidden;
   text-decoration: none;
-  /* Ingen hover-effekt her */
+
+  transform: none !important;       /* Ingen zoom */
+  transition: none !important;      /* Ingen animasjon */
 }
 
 /* Bildet styrer høyden selv */
 .genre-card img {
   width: 100%;
-  height: auto;        /* Bildet bestemmer høyden */
-  display: block;      /* Fjerner inline-gap */
+  height: auto;
+  display: block;
   object-fit: cover;
   border-radius: inherit;
 }
@@ -537,8 +539,8 @@ main {
     rgba(0,0,0,0.4) 35%,
     rgba(0,0,0,0) 70%
   );
-  /* Ingen hover-effekt her */
-  transition: none;
+
+  transition: none;  /* Ingen hover-effekt */
 }
 
 /* Tekst */
@@ -549,6 +551,19 @@ main {
   text-align: center;
   text-shadow: 0 4px 14px rgba(0,0,0,0.8);
   letter-spacing: 0.5px;
+}
+
+/* Fjern alle hover-effekter */
+.genre-card:hover,
+.genre-card:hover .genre-overlay {
+  transform: none !important;
+  box-shadow: none !important;
+  background: linear-gradient(
+    to top,
+    rgba(0,0,0,0.7) 0%,
+    rgba(0,0,0,0.4) 35%,
+    rgba(0,0,0,0) 70%
+  ) !important;
 }
 
 /* ===== MOBIL ===== */
@@ -2286,6 +2301,7 @@ window.addEventListener("scroll", () => {
   }
 });
 </script>
+
 
 
 
