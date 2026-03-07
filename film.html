@@ -400,38 +400,36 @@ background:#e6e6e6;
 
 /* Apple-style "Mer" knapp */
 
-.more-btn{
+.more-btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
 
-  gap:6px;
+  height: 28px;            /* samme høyde som IMDb-logo */
+  padding: 0 8px;          /* litt horisontal plass til tekst og ikon */
+  font-size: 12px;         /* liten tekst som passer høyden */
+  font-weight: 500;
 
-  padding:6px 12px;       /* mindre knapp */
-  font-size:14px;
-  font-weight:500;
+  color: #fff;
+  background: rgba(255,255,255,0.08);
+  backdrop-filter: blur(12px);
 
-  color:#fff;
-  background:rgba(255,255,255,0.08);
-  backdrop-filter:blur(12px);
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 4px;      /* nesten firkantet */
 
-  border:1px solid rgba(255,255,255,0.15);
-  border-radius:6px;       /* mer firkantet, mindre runding */
-
-  cursor:pointer;
-
+  cursor: pointer;
   transition: all .25s ease;
 }
 
-.more-btn:hover{
-  background:rgba(255,255,255,0.15);
-  transform:translateY(-1px);
-  box-shadow:0 4px 12px rgba(0,0,0,0.35);
+.more-btn:hover {
+  background: rgba(255,255,255,0.15);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.35);
 }
 
-.more-btn:active{
-  transform:translateY(0);
-  box-shadow:0 2px 6px rgba(0,0,0,0.3);
+.more-btn:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.3);
 }
 /* =========================================================
 VIDEO CONTROLS
@@ -1211,6 +1209,7 @@ if (data.expireDate) {
 </html>
 
  
+
 
 
 
