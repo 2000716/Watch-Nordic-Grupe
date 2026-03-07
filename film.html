@@ -282,23 +282,44 @@ margin-bottom:10px;
 color:#eee;
 }
 
+/* === Metadata === */
 .metadata{
 margin-top:12px;
+
 display:flex;
 flex-wrap:wrap;
+
 gap:6px;
+
 font-size:13px;
 color:#ccc;
+
+align-items:center; /* sentrerer alt vertikalt */
 }
 
+/* Metadata tekst */
+.metadata span{
+display:inline-flex;
+align-items:center;
+}
+
+/* Prikkene */
 .metadata span:nth-child(even){
 font-weight:bold;
 font-size:16px;
+line-height:1;
+display:flex;
+align-items:center;
 }
 
+/* IMDB logo */
 .imdb-logo{
 width:28px;
 margin-left:4px;
+
+display:block;
+object-fit:contain;
+
 cursor:pointer;
 transition:.3s;
 }
@@ -307,11 +328,14 @@ transition:.3s;
 filter:brightness(.8);
 }
 
+/* Cast */
 .cast-info{
 flex:0 0 260px;
 max-width:260px;
+
 font-size:13px;
 color:#aaa;
+
 line-height:1.6;
 }
 
@@ -1203,6 +1227,7 @@ if (data.expireDate) {
 </html>
 
  
+
 
 
 
