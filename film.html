@@ -163,12 +163,9 @@ overflow:hidden;
 .background-video{
 position:absolute;
 inset:0;
-
 width:100%;
 height:100%;
-
 object-fit:cover;
-
 transition:opacity 1s ease;
 z-index:0;
 }
@@ -177,8 +174,6 @@ z-index:0;
 opacity:0;
 filter:brightness(.8);
 }
-
-/* Cinematic overlay */
 
 .overlay{
 position:absolute;
@@ -194,9 +189,7 @@ position:absolute;
 bottom:0;
 width:100%;
 height:200px;
-
 background:linear-gradient(to top,#000,transparent);
-
 z-index:1;
 }
 
@@ -211,6 +204,7 @@ left:100px;
 right:100px;
 z-index:2;
 max-width:1400px;
+margin:auto;
 }
 
 .logo-container{
@@ -242,7 +236,6 @@ GLASS INFO PANEL
 ========================================================= */
 
 .text-button-container{
-
 display:flex;
 justify-content:space-between;
 align-items:flex-start;
@@ -263,7 +256,6 @@ border:1px solid rgba(255,255,255,.08);
 box-shadow:
 0 20px 60px rgba(0,0,0,.7),
 inset 0 1px 0 rgba(255,255,255,.05);
-
 }
 
 /* =========================================================
@@ -281,8 +273,6 @@ line-height:1.6;
 margin-bottom:10px;
 color:#eee;
 }
-
-/* Metadata */
 
 .metadata{
 margin-top:12px;
@@ -303,14 +293,11 @@ align-items:center;
 font-weight:bold;
 font-size:16px;
 line-height:1;
-display:flex;
-align-items:center;
 }
 
 .imdb-logo{
 width:28px;
 margin-left:4px;
-display:block;
 object-fit:contain;
 cursor:pointer;
 transition:.3s;
@@ -319,8 +306,6 @@ transition:.3s;
 .imdb-logo:hover{
 filter:brightness(.8);
 }
-
-/* Cast */
 
 .cast-info{
 flex:0 0 260px;
@@ -335,7 +320,7 @@ color:#fff;
 }
 
 /* =========================================================
-AVAILABILITY INFO (TILGANGSTEKST)
+AVAILABILITY INFO
 ========================================================= */
 
 .availability-info{
@@ -398,39 +383,36 @@ transform:scale(1.06);
 background:#e6e6e6;
 }
 
-/* Apple-style "Mer" knapp */
+.more-btn{
+display:inline-flex;
+align-items:center;
+justify-content:center;
 
-.more-btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
+height:22px;
+padding:0 6px;
 
-  height: 22px;          /* lavere høyde */
-  padding: 0 6px;        /* mindre horisontal plass */
-  font-size: 10px;       /* mindre tekst som passer høyden */
-  font-weight: 500;
+font-size:10px;
+font-weight:500;
 
-  color: #fff;
-  background: rgba(255,255,255,0.08);
-  backdrop-filter: blur(12px);
+color:#fff;
 
-  border: 1px solid rgba(255,255,255,0.15);
-  border-radius: 4px;    /* lite avrundet */
+background:rgba(255,255,255,0.08);
+backdrop-filter:blur(12px);
 
-  cursor: pointer;
-  transition: all .25s ease;
+border:1px solid rgba(255,255,255,0.15);
+border-radius:4px;
+
+cursor:pointer;
+
+transition:all .25s ease;
 }
 
-.more-btn:hover {
-  background: rgba(255,255,255,0.15);
-  transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(0,0,0,0.35);
+.more-btn:hover{
+background:rgba(255,255,255,0.15);
+transform:translateY(-1px);
+box-shadow:0 4px 12px rgba(0,0,0,0.35);
 }
 
-.more-btn:active {
-  transform: translateY(0);
-  box-shadow: 0 2px 6px rgba(0,0,0,0.3);
-}
 /* =========================================================
 VIDEO CONTROLS
 ========================================================= */
@@ -465,7 +447,9 @@ RECOMMENDATIONS
 ========================================================= */
 
 .recommendations{
-padding:50px 60px 70px;
+max-width:1400px;
+margin:0 auto;
+padding:60px 100px 80px;
 background:#000;
 }
 
@@ -479,6 +463,7 @@ margin-bottom:20px;
 display:grid;
 grid-template-columns:repeat(auto-fill,minmax(260px,1fr));
 gap:22px;
+width:100%;
 }
 
 .gallery img{
@@ -502,7 +487,7 @@ EPISODES
 .season-buttons{
 display:flex;
 gap:14px;
-padding:30px 60px 10px;
+margin-bottom:10px;
 overflow-x:auto;
 }
 
@@ -532,7 +517,8 @@ font-weight:700;
 display:grid;
 grid-template-columns:repeat(auto-fill,minmax(260px,1fr));
 gap:26px;
-padding:30px 60px 60px;
+width:100%;
+margin-top:20px;
 }
 
 .episode-card{
@@ -644,6 +630,10 @@ gap:20px;
 
 .text-container{
 max-width:100%;
+}
+
+.recommendations{
+padding:40px 20px;
 }
 
 }
@@ -1211,6 +1201,7 @@ if (data.expireDate) {
 </html>
 
  
+
 
 
 
