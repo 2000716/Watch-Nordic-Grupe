@@ -722,16 +722,34 @@ display:flex;
 text-align:center;
 }
 
+/* smiley */
 .dead-smiley{
 font-size:80px;
 letter-spacing:10px;
 margin-bottom:20px;
 }
 
+/* hovedtekst */
 .expired-content h1{
 font-size:clamp(22px,4vw,36px);
+margin-bottom:12px;
 }
 
+/* tilgangstekst */
+.expired-content p{
+font-size:14px;        /* litt mindre tekst */
+color:#ccc;
+display:flex;
+align-items:center;
+justify-content:center;
+gap:8px;               /* mellomrom mellom ikon og tekst */
+margin-top:6px;
+}
+
+/* ikon */
+.expired-content i{
+font-size:14px;
+}
 
 
 
@@ -1227,6 +1245,7 @@ if (data.expireDate) {
 </html>
 
  
+
 
 
 
