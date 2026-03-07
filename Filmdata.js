@@ -111,7 +111,7 @@ const filmer = {
     tittel: "Big Buck Bunny ",
     bakgrunn: "https://image.tmdb.org/t/p/original/xtdybjRRZ15mCrPOvEld305myys.jpg",
     banner: "https://image.tmdb.org/t/p/original/bZxwNUANy2KAYBjM9UyUlqiCMI1.jpg", 
-    logo: "https://studio.blender.org/files/e6/e63751e460f948048f17f52f5c63e556/e63751e460f948048f17f52f5c63e556.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=WPXVUIKB8MLIOWB7INUX%2F20260131%2Feu-central-1%2Fs3%2Faws4_request&X-Amz-Date=20260131T101815Z&X-Amz-Expires=3600&X-Amz-SignedHeaders=host&X-Amz-Signature=38e2108caaac3697bb1bf3517cdd659a04fac538d9d59dad27508872d47b6e5b",
+    logo: "https://static.wikia.nocookie.net/logopedia/images/e/ea/Big_Buck_Bunny.svg/revision/latest?cb=20201022132423",
     trailer: "", // 🎥 NY 
     poster: "https://image.tmdb.org/t/p/original/8tP7CcCaZma9Ucc5EBKEn8TmYit.jpg",
     posterVertikal: "https://image.tmdb.org/t/p/original/604UkiLHoZgaSSJPMWeCwsIey2P.jpg", // portrett
@@ -161,6 +161,7 @@ const filmer = {
   },
   
   };
+
 
 
 
