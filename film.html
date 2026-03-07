@@ -401,39 +401,37 @@ background:#e6e6e6;
 /* Apple-style "Mer" knapp */
 
 .more-btn{
-display:inline-flex;
-align-items:center;
-justify-content:center;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 
-gap:6px;
+  gap:6px;
 
-padding:8px 16px;
+  padding:6px 12px;       /* mindre knapp */
+  font-size:14px;
+  font-weight:500;
 
-font-size:14px;
-font-weight:500;
+  color:#fff;
+  background:rgba(255,255,255,0.08);
+  backdrop-filter:blur(12px);
 
-color:#fff;
+  border:1px solid rgba(255,255,255,0.15);
+  border-radius:6px;       /* mer firkantet, mindre runding */
 
-background:rgba(255,255,255,0.08);
-backdrop-filter:blur(12px);
+  cursor:pointer;
 
-border:1px solid rgba(255,255,255,0.15);
-border-radius:14px; /* mindre rund */
-
-cursor:pointer;
-
-transition:all .3s ease;
+  transition: all .25s ease;
 }
 
 .more-btn:hover{
-background:rgba(255,255,255,0.15);
-transform:translateY(-1px);
-box-shadow:0 6px 20px rgba(0,0,0,0.4);
+  background:rgba(255,255,255,0.15);
+  transform:translateY(-1px);
+  box-shadow:0 4px 12px rgba(0,0,0,0.35);
 }
 
 .more-btn:active{
-transform:translateY(0);
-box-shadow:0 3px 10px rgba(0,0,0,0.35);
+  transform:translateY(0);
+  box-shadow:0 2px 6px rgba(0,0,0,0.3);
 }
 /* =========================================================
 VIDEO CONTROLS
@@ -1213,6 +1211,7 @@ if (data.expireDate) {
 </html>
 
  
+
 
 
 
