@@ -9,6 +9,10 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
  <style>
 
+/* =========================================================
+GLOBAL
+========================================================= */
+
 *{
 box-sizing:border-box;
 margin:0;
@@ -25,18 +29,18 @@ background:#000;
 color:#fff;
 font-family:"Segoe UI",system-ui,-apple-system,sans-serif;
 letter-spacing:.2px;
-opacity:0;
-transition:opacity 1s ease;
 overflow-x:hidden;
+opacity:0;
+transition:opacity .8s ease;
 }
 
 body.loaded{
 opacity:1;
 }
 
-img,video{
+img{
 max-width:100%;
-height:auto;
+display:block;
 }
 
 /* =========================================================
@@ -61,10 +65,10 @@ z-index:500;
 backdrop-filter:blur(18px);
 -webkit-backdrop-filter:blur(18px);
 
-background:rgba(10,15,18,0.55);
+background:rgba(10,15,18,.55);
 border-bottom:1px solid rgba(255,255,255,.05);
 
-transition:background .4s ease,box-shadow .4s ease;
+transition:background .4s ease, box-shadow .4s ease;
 }
 
 .top-nav.scrolled{
@@ -91,9 +95,7 @@ text-shadow:
 0 0 18px rgba(0,255,204,.35);
 
 cursor:pointer;
-user-select:none;
-
-transition:transform .25s ease;
+transition:.25s;
 }
 
 .watch-logo-text:hover{
@@ -110,12 +112,10 @@ color:#bfbfbf;
 text-decoration:none;
 font-size:15px;
 font-weight:500;
-transition:.3s;
+transition:.25s;
 }
 
-.nav-links a:hover{
-color:#fff;
-}
+.nav-links a:hover
 
 .nav-links a.active{
 color:#00ffcc;
@@ -125,47 +125,39 @@ font-weight:700;
 .nav-right{
 display:flex;
 align-items:center;
-gap:14px;
+gap:16px;
 }
 
 .nav-search{
-color:#bfbfbf;
 font-size:18px;
-transition:.3s;
+color:#bfbfbf;
 cursor:pointer;
+transition:.25s;
 }
 
-.nav-search:hover{
-color:#00ffcc;
-}
+.nav-search:hover
 
 .profilmeny img{
-width:42px;
-height:42px;
+width:40px;
+height:40px;
 border-radius:50%;
 border:2px solid #fff;
 object-fit:cover;
 cursor:pointer;
-transition:transform .3s;
-}
-
-.profilmeny img:hover{
-transform:scale(1.05);
 }
 
 /* =========================================================
-HERO
+HERO SECTION
 ========================================================= */
 
 .hero{
 position:relative;
-width:100vw;
-height:100vh;
+width:100%;
+height:85vh;
 overflow:hidden;
 }
 
-.background-image,
-.background-video{
+.hero-bg{
 position:absolute;
 inset:0;
 width:100%;
@@ -174,220 +166,196 @@ object-fit:cover;
 z-index:0;
 }
 
-.background-video{
-opacity:0;
-filter:brightness(.8);
-transition:opacity 1s ease;
-}
-
-.overlay{
+.hero-overlay{
 position:absolute;
 inset:0;
 background:
-linear-gradient(to top,rgba(0,0,0,.9)0%,rgba(0,0,0,.5)40%,transparent 75%),
-linear-gradient(to right,rgba(0,0,0,.7)0%,transparent 50%);
+linear-gradient(to top,rgba(0,0,0,.95),transparent 60%),
+linear-gradient(to right,rgba(0,0,0,.8),transparent 60%);
 z-index:1;
 }
 
-.bottom-fade{
-position:absolute;
-bottom:0;
-width:100%;
-height:200px;
-background:linear-gradient(to top,#000,transparent);
-z-index:1;
-}
-
-/* =========================================================
-HERO CONTENT
-========================================================= */
-
-.content-wrapper{
+.hero-content{
 position:absolute;
 bottom:80px;
 left:100px;
-right:100px;
 z-index:2;
-max-width:1400px;
-margin:auto;
+max-width:550px;
 }
 
-.logo-container{
-max-width:700px;
+.hero-title{
+font-size:48px;
+font-weight:800;
+margin-bottom:12px;
+}
+
+.hero-description{
+font-size:16px;
+line-height:1.6;
+color:#ddd;
+margin-bottom:20px;
+}
+
+/* BUTTONS */
+
+.hero-buttons{
+display:flex;
+gap:14px;
+}
+
+.btn-play{
+background:#fff;
+color:#000;
+padding:14px 34px;
+border:none;
+border-radius:999px;
+font-size:16px;
+font-weight:600;
+cursor:pointer;
+transition:.25s;
+}
+
+.btn-play:hover{
+transform:scale(1.06);
+background:#e6e6e6;
+}
+
+.btn-info{
+background:rgba(255,255,255,.15);
+color:#fff;
+padding:14px 30px;
+border:none;
+border-radius:999px;
+cursor:pointer;
+backdrop-filter:blur(10px);
+}
+
+/* =========================================================
+GALLERY SECTIONS
+========================================================= */
+
+.section{
+padding:50px 80px;
+}
+
+.section-title{
+font-size:22px;
+font-weight:600;
 margin-bottom:16px;
 }
 
-.film-logo{
-max-width:100%;
-max-height:120px;
-object-fit:contain;
+/* SCROLL CONTAINER */
+
+.gallery-wrapper{
+position:relative;
 }
 
-.text-logo{
-font-size:clamp(2rem,3vw,2.4rem);
-font-weight:700;
-line-height:1.2;
-white-space:nowrap;
-}
-
-/* =========================================================
-GLASS INFO PANEL
-========================================================= */
-
-.text-button-container{
-
+.image-gallery{
 display:flex;
-justify-content:space-between;
-align-items:flex-start;
-
-gap:50px;
-
-background:rgba(10,15,18,.55);
-
-backdrop-filter:blur(20px);
--webkit-backdrop-filter:blur(20px);
-
-border-radius:24px;
-
-padding:42px;
-
-border:1px solid rgba(255,255,255,.08);
-
-box-shadow:
-0 20px 60px rgba(0,0,0,.7),
-inset 0 1px 0 rgba(255,255,255,.05);
+gap:18px;
+overflow-x:auto;
+scroll-behavior:smooth;
+padding-bottom:10px;
 }
 
-/* =========================================================
-TEXT AREA
-========================================================= */
-
-.text-container{
-flex:1;
-max-width:60%;
+.image-gallery::-webkit-scrollbar{
+display:none;
 }
 
-.description{
-font-size:16px;
-line-height:1.6;
-margin-bottom:10px;
-color:#eee;
+/* MOVIE CARDS */
+
+.gallery-item{
+flex:0 0 auto;
+width:340px;
+position:relative;
 }
 
-.metadata{
-margin-top:12px;
-display:flex;
-flex-wrap:wrap;
-gap:6px;
-font-size:13px;
-color:#ccc;
+.gallery-item img{
+width:100%;
+height:190px;
+object-fit:cover;
+border-radius:10px;
+transition:.35s;
 }
 
-.metadata span:nth-child(even){
-font-weight:bold;
-font-size:16px;
+.gallery-item:hover img{
+transform:scale(1.05);
 }
 
-.cast-info{
-flex:0 0 260px;
-max-width:260px;
-font-size:13px;
-color:#aaa;
-line-height:1.6;
+/* OVERLAY INFO */
+
+.gallery-overlay{
+position:absolute;
+bottom:0;
+left:0;
+right:0;
+
+padding:10px;
+
+background:linear-gradient(to top,rgba(0,0,0,.85),transparent);
+
+border-radius:0 0 10px 10px;
 }
 
-.cast-info strong{
+.gallery-title{
+font-size:14px;
+font-weight:600;
+}
+
+.gallery-meta{
+font-size:12px;
 color:#fff;
 }
 
 /* =========================================================
-BUTTONS
+APPLE TV STYLE SCROLL BUTTONS
 ========================================================= */
 
-.buttons-column{
-display:flex;
-flex-direction:column;
-gap:15px;
-}
+.scroll-btn{
+position:absolute;
+top:50%;
+transform:translateY(-50%);
+width:46px;
+height:46px;
 
-.watch-button{
-
-background:#fff;
-color:#000;
-
-font-size:17px;
-font-weight:600;
-
-padding:14px 34px;
-
-border-radius:999px;
 border:none;
+border-radius:50%;
 
-cursor:pointer;
+background:rgba(0,0,0,.6);
+color:#fff;
+font-size:20px;
 
 display:flex;
 align-items:center;
 justify-content:center;
 
-gap:10px;
-
-transition:all .25s ease;
-}
-
-.watch-button:hover{
-transform:scale(1.06);
-background:#e6e6e6;
-}
-
-/* =========================================================
-RECOMMENDATIONS
-========================================================= */
-
-.recommendations{
-max-width:1400px;
-margin:0 auto;
-padding:60px 100px 80px;
-background:#000;
-}
-
-.recommendations h2{
-font-size:24px;
-font-weight:600;
-margin-bottom:20px;
-}
-
-/* =========================================================
-GALLERY
-========================================================= */
-
-.gallery{
-display:grid;
-grid-template-columns:repeat(auto-fill,minmax(280px,1fr));
-gap:22px;
-}
-
-.gallery img{
-
-width:100%;
-height:160px;
-
-object-fit:cover;
-
-border-radius:12px;
-
 cursor:pointer;
 
-transition:
-transform .35s ease,
-box-shadow .35s ease;
+opacity:0;
+pointer-events:none;
+
+transition:.25s;
+
+backdrop-filter:blur(8px);
 }
 
-.gallery img:hover{
+.gallery-wrapper:hover .scroll-btn{
+opacity:1;
+pointer-events:auto;
+}
 
-transform:scale(1.08);
+.scroll-left{
+left:-20px;
+}
 
-box-shadow:
-0 20px 40px rgba(0,0,0,.8);
+.scroll-right{
+right:-20px;
+}
+
+.scroll-btn:hover{
+background:#00ffcc;
+color:#000;
+transform:translateY(-50%) scale(1.1);
 }
 
 /* =========================================================
@@ -395,83 +363,46 @@ FOOTER
 ========================================================= */
 
 .site-footer{
-
-background:#000;
-
-color:#aaa;
-
 text-align:center;
-
-padding:30px 10px;
-
+padding:40px 20px;
+color:#aaa;
 font-size:14px;
+background:#000;
 }
 
 .site-footer a{
 color:#00ffcc;
 text-decoration:none;
-margin:0 8px;
+margin:0 10px;
 }
 
-.site-footer a:hover{
-color:#fff;
-}
+.site-footer a:hover
 
 /* =========================================================
 MOBILE
 ========================================================= */
 
-@media(max-width:1024px){
+@media(max-width:900px){
 
-.content-wrapper{
+.section{
+padding:40px 20px;
+}
+
+.hero-content{
 left:20px;
 right:20px;
 }
 
-.text-button-container{
-flex-direction:column;
-gap:20px;
+.hero-title{
+font-size:34px;
 }
 
-.text-container{
-max-width:100%;
+.gallery-item{
+width:220px;
 }
 
-.recommendations{
-padding:40px 20px;
-}
-
-}
-
-@media(max-width:768px){
-
-.hero{
-height:auto;
-min-height:100vh;
-padding-top:70px;
-}
-
-.background-image,
-.background-video{
-height:60vh;
-}
-
-.content-wrapper{
-position:relative;
-bottom:auto;
-padding:16px;
-}
-
-.text-button-container{
-padding:18px;
-}
-
-.watch-button{
-width:100%;
-}
-
-.gallery{
-grid-template-columns:repeat(2,1fr);
+.gallery-item img{
+height:130px;
 }
 
 .nav-links{
@@ -1151,6 +1082,7 @@ window.addEventListener("scroll", () => {
   }
 });
 </script>
+
 
 
 
