@@ -937,8 +937,8 @@ if (backButton && tilbakeUrl) {
 
 // Last video
 const video = document.getElementById("video");
-video.querySelector("source").src = film.videoUrl;
-
+video.querySelector("source").src =
+  film.videoUrl || film.video || film.src;
 const track = video.querySelector("track");
 if (track && film.subtitleUrl) track.src = film.subtitleUrl;
 
