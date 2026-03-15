@@ -2,226 +2,269 @@
 <!DOCTYPE html>
 <html lang="no">
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>Watch Nordic</title>
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
 <style>
 
-body{
+*{
 margin:0;
-font-family:Arial;
-background:#091B1E;
+padding:0;
+box-sizing:border-box;
+}
+
+body{
+font-family:"Segoe UI",system-ui;
+background:#000;
 color:white;
 overflow-x:hidden;
 }
 
 /* NAVBAR */
 
-.navbar{
+.top-nav{
+
 position:fixed;
 top:0;
 width:100%;
 height:70px;
+
 display:flex;
 align-items:center;
 justify-content:space-between;
+
 padding:0 50px;
-background:rgba(9,27,30,0.7);
-backdrop-filter:blur(10px);
-z-index:100;
+
+background:rgba(10,15,18,.55);
+backdrop-filter:blur(18px);
+
+border-bottom:1px solid rgba(255,255,255,.05);
+
+z-index:1000;
 }
 
 .logo{
+
 font-size:28px;
-font-weight:bold;
-color:#00FFCC;
-letter-spacing:2px;
+font-weight:900;
+letter-spacing:3px;
+
+color:#00ffcc;
+
+text-shadow:
+0 0 8px rgba(0,255,204,.5);
 }
 
 .nav-links{
+
 display:flex;
 gap:30px;
 }
 
 .nav-links a{
-color:#ccc;
+
 text-decoration:none;
+color:#bfbfbf;
+
 font-size:15px;
-transition:0.2s;
+
+transition:.3s;
 }
 
 .nav-links a:hover{
 color:white;
 }
 
-/* HERO SLIDER */
+/* HERO */
 
 .hero{
-height:85vh;
+
+height:100vh;
 position:relative;
-background-size:cover;
-background-position:center;
+
 display:flex;
 align-items:flex-end;
-padding:70px;
-margin-top:70px;
-transition:background-image 1s ease;
+
+padding:80px;
+
+background-size:cover;
+background-position:center;
+
 }
 
 .hero::before{
+
 content:"";
+
 position:absolute;
 inset:0;
-background:linear-gradient(
-to top,
-rgba(9,27,30,1),
-rgba(9,27,30,0.7),
-rgba(9,27,30,0.3),
-transparent
-);
+
+background:
+
+linear-gradient(to top,
+rgba(0,0,0,.9),
+rgba(0,0,0,.5),
+transparent);
+
 }
 
+/* HERO CONTENT */
+
 .hero-content{
+
 position:relative;
-max-width:600px;
+
+max-width:700px;
+
+background:rgba(10,15,18,.55);
+
+backdrop-filter:blur(20px);
+
+padding:40px;
+
+border-radius:24px;
+
+border:1px solid rgba(255,255,255,.08);
+
+box-shadow:
+0 20px 60px rgba(0,0,0,.7);
+
 }
 
 .hero h1{
-font-size:60px;
-margin:0;
+
+font-size:55px;
+margin-bottom:10px;
 }
 
 .hero p{
-margin-top:10px;
-color:#ccc;
-line-height:1.4;
+
+color:#ddd;
+line-height:1.6;
 }
 
+/* BUTTONS */
+
 .hero-buttons{
+
 margin-top:20px;
 display:flex;
-gap:10px;
+gap:15px;
+}
+
+.btn{
+
+border:none;
+padding:14px 32px;
+
+border-radius:999px;
+
+font-weight:600;
+cursor:pointer;
+
+display:flex;
+align-items:center;
+gap:8px;
+
+transition:.25s;
 }
 
 .play{
-background:#00FFCC;
-border:none;
-padding:12px 35px;
-border-radius:8px;
-font-weight:bold;
-cursor:pointer;
+
+background:white;
+color:black;
 }
 
-.info{
-background:rgba(255,255,255,0.2);
-border:none;
-padding:12px 30px;
-border-radius:8px;
+.play:hover{
+
+transform:scale(1.05);
+background:#e5e5e5;
+}
+
+.add{
+
+background:rgba(255,255,255,.15);
 color:white;
-cursor:pointer;
+}
+
+.add:hover{
+
+background:rgba(255,255,255,.25);
 }
 
 /* SECTIONS */
 
 .section{
-margin-top:50px;
-padding:0 50px;
+
+padding:70px 100px;
 }
 
 .section h2{
-color:#00FFCC;
-margin-bottom:15px;
+
+font-size:24px;
+margin-bottom:20px;
 }
 
 /* SLIDER */
 
 .slider{
-position:relative;
-}
 
-.gallery{
 display:flex;
-gap:15px;
+gap:18px;
+
 overflow-x:auto;
 scroll-behavior:smooth;
 }
 
-.gallery::-webkit-scrollbar{
+.slider::-webkit-scrollbar{
 display:none;
 }
 
-/* POSTER */
+/* CARDS */
 
 .card{
+
+min-width:260px;
 position:relative;
+
+cursor:pointer;
 }
 
 .card img{
-width:240px;
-border-radius:10px;
-transition:0.25s;
+
+width:100%;
+height:150px;
+
+object-fit:cover;
+
+border-radius:12px;
+
+transition:.35s;
 }
 
 .card:hover img{
-transform:scale(1.1);
+
+transform:scale(1.08);
+
+box-shadow:
+0 20px 40px rgba(0,0,0,.8);
 }
 
-.overlay{
-position:absolute;
-bottom:0;
-left:0;
-right:0;
-padding:15px;
-background:linear-gradient(
-to top,
-rgba(0,0,0,0.9),
-transparent
-);
-opacity:0;
-transition:0.25s;
-border-radius:0 0 10px 10px;
-}
+/* FOOTER */
 
-.card:hover .overlay{
-opacity:1;
-}
+footer{
 
-.overlay h3{
-margin:0;
-font-size:16px;
-}
+padding:40px;
 
-/* ARROWS */
+text-align:center;
 
-.arrow{
-position:absolute;
-top:40%;
-transform:translateY(-50%);
-background:rgba(0,0,0,0.6);
-border:none;
-color:white;
-font-size:22px;
-width:45px;
-height:45px;
-border-radius:50%;
-cursor:pointer;
-z-index:10;
-}
-
-.arrow:hover{
-background:#00FFCC;
-color:black;
-}
-
-.arrow.left{
-left:-10px;
-}
-
-.arrow.right{
-right:-10px;
+color:#888;
 }
 
 </style>
@@ -229,18 +272,21 @@ right:-10px;
 
 <body>
 
-<div class="navbar">
+<header class="top-nav">
 
 <div class="logo">WATCH</div>
 
-<div class="nav-links">
+<nav class="nav-links">
+
 <a href="#">Startside</a>
 <a href="#">Serier</a>
 <a href="#">Filmer</a>
 <a href="#">Min liste</a>
-</div>
 
-</div>
+</nav>
+
+</header>
+
 
 <!-- HERO -->
 
@@ -249,21 +295,25 @@ right:-10px;
 <div class="hero-content">
 
 <h1 id="hero-title"></h1>
+
 <p id="hero-desc"></p>
 
 <div class="hero-buttons">
-<button class="play" id="hero-play">
-<i class="fa fa-play"></i> Se nå
+
+<button class="btn play" id="hero-play">
+<i class="fas fa-play"></i> Se nå
 </button>
 
-<button class="info">
-<i class="fa fa-circle-info"></i> Info
+<button class="btn add">
+<i class="fas fa-plus"></i> Min liste
 </button>
-</div>
 
 </div>
 
 </div>
+
+</div>
+
 
 <!-- FILMER -->
 
@@ -271,21 +321,10 @@ right:-10px;
 
 <h2>Nye filmer</h2>
 
-<div class="slider">
-
-<button class="arrow left" onclick="scrollGallery('film-gallery',-400)">
-<i class="fa fa-chevron-left"></i>
-</button>
-
-<div class="gallery" id="film-gallery"></div>
-
-<button class="arrow right" onclick="scrollGallery('film-gallery',400)">
-<i class="fa fa-chevron-right"></i>
-</button>
+<div class="slider" id="film-gallery"></div>
 
 </div>
 
-</div>
 
 <!-- SERIER -->
 
@@ -293,21 +332,16 @@ right:-10px;
 
 <h2>Populære serier</h2>
 
-<div class="slider">
-
-<button class="arrow left" onclick="scrollGallery('serie-gallery',-400)">
-<i class="fa fa-chevron-left"></i>
-</button>
-
-<div class="gallery" id="serie-gallery"></div>
-
-<button class="arrow right" onclick="scrollGallery('serie-gallery',400)">
-<i class="fa fa-chevron-right"></i>
-</button>
+<div class="slider" id="serie-gallery"></div>
 
 </div>
 
-</div>
+
+<footer>
+
+© 2026 Watch Nordic™
+
+</footer>
 
 
 <script src="Filmdata.js"></script>
@@ -315,32 +349,18 @@ right:-10px;
 
 <script>
 
-/* HERO SLIDER */
-
-let heroIndex = 0
-let heroKeys = []
+/* HERO */
 
 function loadHero(){
 
-heroKeys = Object.keys(filmer)
+const keys = Object.keys(filmer)
 
-updateHero()
+const random = keys[Math.floor(Math.random()*keys.length)]
 
-setInterval(()=>{
-heroIndex++
-if(heroIndex >= heroKeys.length) heroIndex = 0
-updateHero()
-},7000)
-
-}
-
-function updateHero(){
-
-const key = heroKeys[heroIndex]
-const film = filmer[key]
+const film = filmer[random]
 
 document.getElementById("hero").style.backgroundImage =
-`url(${film.banner || film.poster})`
+`url(${film.bakgrunn || film.poster})`
 
 document.getElementById("hero-title").innerText = film.tittel
 
@@ -348,40 +368,44 @@ document.getElementById("hero-desc").innerText =
 film.beskrivelse || ""
 
 document.getElementById("hero-play").onclick = ()=>{
-location.href = "film.html?navn="+key
-}
+
+location.href = "film.html?navn="+random
 
 }
 
+}
 
-/* FILM GALLERI */
+/* FILMER */
 
 function loadFilms(){
 
 const gallery = document.getElementById("film-gallery")
 
-Object.keys(filmer).slice(0,12).forEach(key=>{
+Object.keys(filmer).slice(0,10).forEach(key=>{
 
 const film = filmer[key]
 
 const card = document.createElement("div")
+
 card.className = "card"
 
 card.innerHTML = `
-<a href="film.html?navn=${key}">
-<img src="${film.poster}">
-<div class="overlay">
-<h3>${film.tittel}</h3>
-</div>
-</a>
+
+<img src="${film.posterHorisontal || film.poster}">
+
 `
+
+card.onclick = ()=>{
+
+location.href = "film.html?navn="+key
+
+}
 
 gallery.appendChild(card)
 
 })
 
 }
-
 
 /* SERIER */
 
@@ -389,21 +413,25 @@ function loadSeries(){
 
 const gallery = document.getElementById("serie-gallery")
 
-Object.keys(serier).slice(0,12).forEach(key=>{
+Object.keys(serier).slice(0,10).forEach(key=>{
 
 const serie = serier[key]
 
 const card = document.createElement("div")
+
 card.className = "card"
 
 card.innerHTML = `
-<a href="film.html?navn=${key}">
-<img src="${serie.poster}">
-<div class="overlay">
-<h3>${serie.tittel}</h3>
-</div>
-</a>
+
+<img src="${serie.posterHorisontal || serie.poster}">
+
 `
+
+card.onclick = ()=>{
+
+location.href = "film.html?navn="+key
+
+}
 
 gallery.appendChild(card)
 
@@ -411,31 +439,18 @@ gallery.appendChild(card)
 
 }
 
-
-/* SCROLL */
-
-function scrollGallery(id,amount){
-
-document.getElementById(id).scrollBy({
-left:amount,
-behavior:"smooth"
-})
-
-}
-
-
 /* START */
 
 loadHero()
+
 loadFilms()
+
 loadSeries()
 
 </script>
 
 </body>
 </html>
-```
-
 
 
 
