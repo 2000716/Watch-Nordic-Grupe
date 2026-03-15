@@ -481,14 +481,15 @@ box-shadow:0 20px 40px rgba(0,0,0,.8);
 }
 
 /* =========================================================
-EPISODES
+EPISODES – PREMIUM DESIGN
 ========================================================= */
 
 .season-buttons{
 display:flex;
 gap:14px;
-margin-bottom:10px;
+margin-bottom:20px;
 overflow-x:auto;
+padding-bottom:6px;
 }
 
 .season-btn{
@@ -515,43 +516,83 @@ font-weight:700;
 
 .episode-gallery{
 display:grid;
-grid-template-columns:repeat(auto-fill,minmax(260px,1fr));
-gap:26px;
+grid-template-columns:repeat(auto-fill,minmax(320px,1fr));
+gap:24px;
 width:100%;
-margin-top:20px;
+margin-top:10px;
 }
 
 .episode-card{
-background:#0e0e0e;
+background:#0c0c0c;
 border-radius:18px;
 overflow:hidden;
 cursor:pointer;
-transition:.35s;
+transition:all .35s ease;
+border:1px solid rgba(255,255,255,.05);
 }
 
 .episode-card:hover{
-transform:translateY(-6px);
-box-shadow:0 18px 45px rgba(0,0,0,.6);
+transform:translateY(-8px) scale(1.02);
+box-shadow:0 20px 50px rgba(0,0,0,.8);
+border:1px solid rgba(0,255,204,.25);
 }
 
-.episode-card img{
+/* Thumbnail */
+.episode-thumb{
+position:relative;
+}
+
+.episode-thumb img{
 width:100%;
-height:160px;
+height:180px;
 object-fit:cover;
 }
 
-.episode-info{
-padding:14px 16px 18px;
+/* Play ikon */
+.play-overlay{
+position:absolute;
+inset:0;
+display:flex;
+align-items:center;
+justify-content:center;
+background:rgba(0,0,0,.35);
+opacity:0;
+transition:.3s;
 }
 
-.episode-info h4{
-font-size:15px;
+.episode-card:hover .play-overlay{
+opacity:1;
+}
+
+.play-overlay i{
+font-size:38px;
+background:#00ffcc;
+color:#000;
+padding:14px;
+border-radius:50%;
+}
+
+/* Episode info */
+.episode-info{
+padding:16px;
+}
+
+.episode-title{
+font-size:16px;
+font-weight:600;
 margin-bottom:6px;
 }
 
-.episode-info p{
-font-size:13px;
+.episode-meta{
+font-size:12px;
 color:#aaa;
+margin-bottom:8px;
+}
+
+.episode-desc{
+font-size:13px;
+color:#bbb;
+line-height:1.4;
 }
 
 /* =========================================================
@@ -1019,13 +1060,20 @@ visSesong(sesongNumre[0]);
 
       const epCard = document.createElement("div");
       epCard.className = "episode-card";
-      epCard.innerHTML = `
-        <img src="${ep.thumbnail}" alt="${ep.tittel}">
-        <div class="episode-info">
-          <h4>${epNr}. ${ep.tittel}</h4>
-          <p>${ep.varighet}</p>
-        </div>
-      `;
+     epCard.innerHTML = `
+<div class="episode-thumb">
+  <img src="${ep.thumbnail}" alt="${ep.tittel}">
+  <div class="play-overlay">
+    <i class="fas fa-play"></i>
+  </div>
+</div>
+
+<div class="episode-info">
+  <div class="episode-title">Episode ${epNr}: ${ep.tittel}</div>
+  <div class="episode-meta">${ep.varighet}</div>
+  <div class="episode-desc">${ep.beskrivelse || ""}</div>
+</div>
+`;
 
  epCard.addEventListener("click", () => {
   window.location.href =
