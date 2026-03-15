@@ -1,3 +1,4 @@
+```html
 <!DOCTYPE html>
 <html lang="no">
 <head>
@@ -10,107 +11,223 @@
 <style>
 
 body{
-  margin:0;
-  font-family:Arial;
-  background:#091B1E;
-  color:white;
+margin:0;
+font-family:Arial;
+background:#091B1E;
+color:white;
+overflow-x:hidden;
 }
 
 /* NAVBAR */
 
 .navbar{
-  position:fixed;
-  top:0;
-  width:100%;
-  height:70px;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  padding:0 40px;
-  background:rgba(9,27,30,0.9);
-  z-index:100;
+position:fixed;
+top:0;
+width:100%;
+height:70px;
+display:flex;
+align-items:center;
+justify-content:space-between;
+padding:0 50px;
+background:rgba(9,27,30,0.7);
+backdrop-filter:blur(10px);
+z-index:100;
 }
 
 .logo{
-  font-size:26px;
-  font-weight:bold;
-  color:#00FFCC;
+font-size:28px;
+font-weight:bold;
+color:#00FFCC;
+letter-spacing:2px;
 }
 
 .nav-links{
-  display:flex;
-  gap:25px;
+display:flex;
+gap:30px;
 }
 
 .nav-links a{
-  color:#ccc;
-  text-decoration:none;
+color:#ccc;
+text-decoration:none;
+font-size:15px;
+transition:0.2s;
 }
 
 .nav-links a:hover{
-  color:white;
+color:white;
 }
 
-/* HERO */
+/* HERO SLIDER */
 
 .hero{
-  height:70vh;
-  display:flex;
-  align-items:flex-end;
-  padding:40px;
-  background-size:cover;
-  background-position:center;
+height:85vh;
+position:relative;
+background-size:cover;
+background-position:center;
+display:flex;
+align-items:flex-end;
+padding:70px;
+margin-top:70px;
+transition:background-image 1s ease;
+}
+
+.hero::before{
+content:"";
+position:absolute;
+inset:0;
+background:linear-gradient(
+to top,
+rgba(9,27,30,1),
+rgba(9,27,30,0.7),
+rgba(9,27,30,0.3),
+transparent
+);
+}
+
+.hero-content{
+position:relative;
+max-width:600px;
 }
 
 .hero h1{
-  font-size:48px;
-  margin:0;
+font-size:60px;
+margin:0;
 }
 
-.hero button{
-  margin-top:10px;
-  padding:10px 30px;
-  border:none;
-  background:#00FFCC;
-  font-weight:bold;
+.hero p{
+margin-top:10px;
+color:#ccc;
+line-height:1.4;
 }
 
-/* SEKSJONER */
+.hero-buttons{
+margin-top:20px;
+display:flex;
+gap:10px;
+}
+
+.play{
+background:#00FFCC;
+border:none;
+padding:12px 35px;
+border-radius:8px;
+font-weight:bold;
+cursor:pointer;
+}
+
+.info{
+background:rgba(255,255,255,0.2);
+border:none;
+padding:12px 30px;
+border-radius:8px;
+color:white;
+cursor:pointer;
+}
+
+/* SECTIONS */
 
 .section{
-  margin-top:40px;
-  padding:0 40px;
+margin-top:50px;
+padding:0 50px;
 }
 
 .section h2{
-  color:#00FFCC;
-  margin-bottom:15px;
+color:#00FFCC;
+margin-bottom:15px;
 }
 
-/* GALLERI */
+/* SLIDER */
+
+.slider{
+position:relative;
+}
 
 .gallery{
-  display:flex;
-  gap:15px;
-  overflow-x:auto;
+display:flex;
+gap:15px;
+overflow-x:auto;
+scroll-behavior:smooth;
 }
 
-.gallery img{
-  width:300px;
-  border-radius:6px;
+.gallery::-webkit-scrollbar{
+display:none;
 }
 
-.gallery a{
-  text-decoration:none;
-  color:white;
+/* POSTER */
+
+.card{
+position:relative;
+}
+
+.card img{
+width:240px;
+border-radius:10px;
+transition:0.25s;
+}
+
+.card:hover img{
+transform:scale(1.1);
+}
+
+.overlay{
+position:absolute;
+bottom:0;
+left:0;
+right:0;
+padding:15px;
+background:linear-gradient(
+to top,
+rgba(0,0,0,0.9),
+transparent
+);
+opacity:0;
+transition:0.25s;
+border-radius:0 0 10px 10px;
+}
+
+.card:hover .overlay{
+opacity:1;
+}
+
+.overlay h3{
+margin:0;
+font-size:16px;
+}
+
+/* ARROWS */
+
+.arrow{
+position:absolute;
+top:40%;
+transform:translateY(-50%);
+background:rgba(0,0,0,0.6);
+border:none;
+color:white;
+font-size:22px;
+width:45px;
+height:45px;
+border-radius:50%;
+cursor:pointer;
+z-index:10;
+}
+
+.arrow:hover{
+background:#00FFCC;
+color:black;
+}
+
+.arrow.left{
+left:-10px;
+}
+
+.arrow.right{
+right:-10px;
 }
 
 </style>
 </head>
 
 <body>
-
-<!-- NAVBAR -->
 
 <div class="navbar">
 
@@ -125,35 +242,70 @@ body{
 
 </div>
 
-
 <!-- HERO -->
 
 <div class="hero" id="hero">
-<div>
+
+<div class="hero-content">
+
 <h1 id="hero-title"></h1>
-<button id="hero-button">Se nå</button>
-</div>
+<p id="hero-desc"></p>
+
+<div class="hero-buttons">
+<button class="play" id="hero-play">
+<i class="fa fa-play"></i> Se nå
+</button>
+
+<button class="info">
+<i class="fa fa-circle-info"></i> Info
+</button>
 </div>
 
+</div>
 
-<!-- Nye filmer -->
+</div>
+
+<!-- FILMER -->
 
 <div class="section">
 
 <h2>Nye filmer</h2>
 
+<div class="slider">
+
+<button class="arrow left" onclick="scrollGallery('film-gallery',-400)">
+<i class="fa fa-chevron-left"></i>
+</button>
+
 <div class="gallery" id="film-gallery"></div>
+
+<button class="arrow right" onclick="scrollGallery('film-gallery',400)">
+<i class="fa fa-chevron-right"></i>
+</button>
 
 </div>
 
+</div>
 
-<!-- Serier -->
+<!-- SERIER -->
 
 <div class="section">
 
 <h2>Populære serier</h2>
 
+<div class="slider">
+
+<button class="arrow left" onclick="scrollGallery('serie-gallery',-400)">
+<i class="fa fa-chevron-left"></i>
+</button>
+
 <div class="gallery" id="serie-gallery"></div>
+
+<button class="arrow right" onclick="scrollGallery('serie-gallery',400)">
+<i class="fa fa-chevron-right"></i>
+</button>
+
+</div>
 
 </div>
 
@@ -163,21 +315,40 @@ body{
 
 <script>
 
-/* HERO FILM */
+/* HERO SLIDER */
+
+let heroIndex = 0
+let heroKeys = []
 
 function loadHero(){
 
-const keys = Object.keys(filmer)
-const random = keys[Math.floor(Math.random()*keys.length)]
-const film = filmer[random]
+heroKeys = Object.keys(filmer)
+
+updateHero()
+
+setInterval(()=>{
+heroIndex++
+if(heroIndex >= heroKeys.length) heroIndex = 0
+updateHero()
+},7000)
+
+}
+
+function updateHero(){
+
+const key = heroKeys[heroIndex]
+const film = filmer[key]
 
 document.getElementById("hero").style.backgroundImage =
 `url(${film.banner || film.poster})`
 
 document.getElementById("hero-title").innerText = film.tittel
 
-document.getElementById("hero-button").onclick = () => {
-location.href = "film.html?navn="+random
+document.getElementById("hero-desc").innerText =
+film.beskrivelse || ""
+
+document.getElementById("hero-play").onclick = ()=>{
+location.href = "film.html?navn="+key
 }
 
 }
@@ -189,18 +360,23 @@ function loadFilms(){
 
 const gallery = document.getElementById("film-gallery")
 
-Object.keys(filmer).slice(0,10).forEach(key=>{
+Object.keys(filmer).slice(0,12).forEach(key=>{
 
 const film = filmer[key]
 
-const a = document.createElement("a")
-a.href = "film.html?navn="+key
+const card = document.createElement("div")
+card.className = "card"
 
-a.innerHTML = `
+card.innerHTML = `
+<a href="film.html?navn=${key}">
 <img src="${film.poster}">
+<div class="overlay">
+<h3>${film.tittel}</h3>
+</div>
+</a>
 `
 
-gallery.appendChild(a)
+gallery.appendChild(card)
 
 })
 
@@ -213,19 +389,36 @@ function loadSeries(){
 
 const gallery = document.getElementById("serie-gallery")
 
-Object.keys(serier).slice(0,10).forEach(key=>{
+Object.keys(serier).slice(0,12).forEach(key=>{
 
 const serie = serier[key]
 
-const a = document.createElement("a")
-a.href = "film.html?navn="+key
+const card = document.createElement("div")
+card.className = "card"
 
-a.innerHTML = `
+card.innerHTML = `
+<a href="film.html?navn=${key}">
 <img src="${serie.poster}">
+<div class="overlay">
+<h3>${serie.tittel}</h3>
+</div>
+</a>
 `
 
-gallery.appendChild(a)
+gallery.appendChild(card)
 
+})
+
+}
+
+
+/* SCROLL */
+
+function scrollGallery(id,amount){
+
+document.getElementById(id).scrollBy({
+left:amount,
+behavior:"smooth"
 })
 
 }
@@ -241,7 +434,7 @@ loadSeries()
 
 </body>
 </html>
-
+```
 
 
 
