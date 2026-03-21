@@ -179,6 +179,57 @@ header button:hover { border-color:white; }
     grid-template-columns:1fr;
     padding:20px;
   }
+  /* SMOOTH ANIMATIONS */
+* {
+  transition: all 0.25s ease;
+}
+
+/* HOVER CARDS */
+.card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(255,255,255,0.2);
+}
+
+/* BUTTON UPGRADE */
+button {
+  transition: all 0.2s ease;
+}
+
+button:hover {
+  transform: scale(1.05);
+}
+
+/* INPUT FOCUS */
+input:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px rgba(0,168,225,0.3);
+}
+
+/* AVATAR HOVER */
+.avatar:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 20px rgba(0,168,225,0.5);
+}
+
+/* SUCCESS MESSAGE */
+.toast {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  background: #00a8e1;
+  padding: 12px 18px;
+  border-radius: 8px;
+  color: white;
+  opacity: 0;
+  transform: translateY(20px);
+  pointer-events: none;
+}
+
+.toast.show {
+  opacity: 1;
+  transform: translateY(0);
+}
 }
 </style>
 </head>
@@ -302,84 +353,171 @@ header button:hover { border-color:white; }
 </div>
 
 <script>
-if (!localStorage.getItem("epost")) {
+// ================= STATE =================
+const state = {
+  navn: localStorage.getItem("navn") || "Profil",
+  epost: localStorage.getItem("epost") || "",
+  bilde: localStorage.getItem("profilbilde") || null
+};
+
+// Redirect hvis ikke logget inn
+if (!state.epost) {
   window.location.href = "Innlogging.html";
 }
 
-const navnDisplay = document.getElementById("navnDisplay");
-const navnView = document.getElementById("navnView");
-const navnInput = document.getElementById("navnInput");
-const navnRow = document.getElementById("navnRow");
+// ================= ELEMENTER =================
+const UI = {
+  navnDisplay: document.getElementById("navnDisplay"),
+  navnView: document.getElementById("navnView"),
+  navnInput: document.getElementById("navnInput"),
+  navnRow: document.getElementById("navnRow"),
 
-const epostView = document.getElementById("epostView");
-const epostInput = document.getElementById("epostInput");
-const epostRow = document.getElementById("epostRow");
+  epostView: document.getElementById("epostView"),
+  epostInput: document.getElementById("epostInput"),
+  epostRow: document.getElementById("epostRow"),
 
-/* LOAD DATA */
-navnDisplay.innerText = localStorage.getItem("navn") || "Profil";
-navnView.innerText = localStorage.getItem("navn") || "Profil";
-epostView.innerText = localStorage.getItem("epost") || "";
+  bilde: document.getElementById("profilbilde")
+};
 
-const bilde = localStorage.getItem("profilbilde");
-if (bilde) document.getElementById("profilbilde").src = bilde;
+// ================= INIT =================
+function init() {
+  UI.navnDisplay.innerText = state.navn;
+  UI.navnView.innerText = state.navn;
+  UI.epostView.innerText = state.epost;
 
-/* NAVN */
+  if (state.bilde) {
+    UI.bilde.src = state.bilde;
+  }
+}
+
+init();
+
+// ================= TOAST =================
+function showToast(text) {
+  let toast = document.createElement("div");
+  toast.className = "toast";
+  toast.innerText = text;
+
+  document.body.appendChild(toast);
+
+  setTimeout(() => toast.classList.add("show"), 50);
+
+  setTimeout(() => {
+    toast.classList.remove("show");
+    setTimeout(() => toast.remove(), 300);
+  }, 2000);
+}
+
+// ================= GENERIC EDIT HANDLER =================
+function toggleEdit(row, viewEl, inputEl, show = true) {
+  const editField = row.querySelector(".edit-field");
+
+  if (show) {
+    inputEl.value = viewEl.innerText;
+    viewEl.classList.add("hidden");
+    editField.classList.remove("hidden");
+    inputEl.focus();
+  } else {
+    viewEl.classList.remove("hidden");
+    editField.classList.add("hidden");
+  }
+}
+
+// ================= NAVN =================
 function endreNavn() {
-  navnInput.value = navnView.innerText;
-  navnView.classList.add("hidden");
-  navnRow.querySelector(".edit-field").classList.remove("hidden");
+  toggleEdit(UI.navnRow, UI.navnView, UI.navnInput, true);
 }
 
 function lagreNavn() {
-  const ny = navnInput.value.trim();
-  if (!ny) return;
+  const ny = UI.navnInput.value.trim();
+
+  if (ny.length < 2) {
+    showToast("Navn må være minst 2 tegn");
+    return;
+  }
+
+  state.navn = ny;
   localStorage.setItem("navn", ny);
-  navnView.innerText = ny;
-  navnDisplay.innerText = ny;
-  avbrytNavn();
+
+  UI.navnView.innerText = ny;
+  UI.navnDisplay.innerText = ny;
+
+  toggleEdit(UI.navnRow, UI.navnView, UI.navnInput, false);
+  showToast("Navn oppdatert!");
 }
 
 function avbrytNavn() {
-  navnView.classList.remove("hidden");
-  navnRow.querySelector(".edit-field").classList.add("hidden");
+  toggleEdit(UI.navnRow, UI.navnView, UI.navnInput, false);
 }
 
-/* EPOST */
+// ================= EPOST =================
+function validerEpost(epost) {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(epost);
+}
+
 function endreEpost() {
-  epostInput.value = epostView.innerText;
-  epostView.classList.add("hidden");
-  epostRow.querySelector(".edit-field").classList.remove("hidden");
+  toggleEdit(UI.epostRow, UI.epostView, UI.epostInput, true);
 }
 
 function lagreEpost() {
-  const ny = epostInput.value.trim();
-  if (!ny) return;
+  const ny = UI.epostInput.value.trim();
+
+  if (!validerEpost(ny)) {
+    showToast("Ugyldig e-post!");
+    return;
+  }
+
+  state.epost = ny;
   localStorage.setItem("epost", ny);
-  epostView.innerText = ny;
-  avbrytEpost();
+
+  UI.epostView.innerText = ny;
+
+  toggleEdit(UI.epostRow, UI.epostView, UI.epostInput, false);
+  showToast("E-post oppdatert!");
 }
 
 function avbrytEpost() {
-  epostView.classList.remove("hidden");
-  epostRow.querySelector(".edit-field").classList.add("hidden");
+  toggleEdit(UI.epostRow, UI.epostView, UI.epostInput, false);
 }
 
-/* BEHOLDTE FUNKSJONER */
+// ================= ANDRE FUNKSJONER =================
 function velgProfil() {
   window.location.href = "Registreringsside.html";
 }
 
 function bekreftSlettBruker() {
   if (!confirm("Vil du slette profilen permanent?")) return;
+
   localStorage.clear();
-  window.location.href = "index.html";
+  showToast("Profil slettet");
+
+  setTimeout(() => {
+    window.location.href = "index.html";
+  }, 1000);
 }
 
 function loggUt() {
   localStorage.removeItem("epost");
   localStorage.removeItem("passord");
-  window.location.href = "Innlogging.html";
+
+  showToast("Logger ut...");
+
+  setTimeout(() => {
+    window.location.href = "Innlogging.html";
+  }, 800);
 }
+
+// ================= BONUS: ENTER KEY =================
+document.addEventListener("keydown", (e) => {
+  if (e.key === "Enter") {
+    if (!UI.navnRow.querySelector(".edit-field").classList.contains("hidden")) {
+      lagreNavn();
+    }
+    if (!UI.epostRow.querySelector(".edit-field").classList.contains("hidden")) {
+      lagreEpost();
+    }
+  }
+});
 </script>
 
 <footer style="border-top:1px solid #222;padding:30px 40px;color:#8c8c8c;font-size:12px;">
