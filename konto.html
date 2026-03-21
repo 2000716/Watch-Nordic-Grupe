@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Konto | Watch Nordic™</title>
 
+<link rel="icon" type="image/png" href="https://static.wixstatic.com/media/fd2fb2_39376e4ee55b460ab7a3ebbfcf35fef7~mv2.png">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
 <style>
@@ -14,58 +15,62 @@
   --accent:#00a8e1;
 }
 
-* {
-  box-sizing:border-box;
-  transition: all 0.25s ease;
-}
+* { box-sizing:border-box; }
 
 body {
   margin:0;
-  background: linear-gradient(180deg,#0e0e0e,#141414);
+  background:
+    radial-gradient(circle at 10% 20%, rgba(0,168,225,0.25), transparent 40%),
+    linear-gradient(180deg, #0e0e0e, #141414);
   color:white;
-  font-family:sans-serif;
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
 }
 
 /* HEADER */
 header {
-  padding:20px;
+  padding:20px 40px;
+  border-bottom:1px solid #222;
   display:flex;
   justify-content:space-between;
-  border-bottom:1px solid #222;
+  align-items:center;
 }
 
-button {
+header h1 { margin:0; font-size:22px; }
+
+header button {
   background:none;
-  border:1px solid #444;
+  border:1px solid var(--muted);
   color:white;
-  padding:8px 14px;
+  padding:8px 16px;
   border-radius:6px;
   cursor:pointer;
 }
 
-button:hover {
-  transform:scale(1.05);
-}
+header button:hover { border-color:white; }
 
 /* LAYOUT */
 .container {
+  max-width:1150px;
+  margin:auto;
+  padding:40px;
   display:grid;
   grid-template-columns:280px 1fr;
   gap:40px;
-  padding:40px;
 }
 
 /* SIDEBAR */
 .sidebar {
-  background:#1c1c1c;
-  padding:20px;
+  background:rgba(255,255,255,0.06);
+  backdrop-filter:blur(16px);
   border-radius:16px;
+  padding:30px 20px;
   text-align:center;
+  border:1px solid rgba(255,255,255,0.08);
 }
 
 .avatar {
-  width:150px;
-  height:150px;
+  width:160px;
+  height:160px;
   border-radius:50%;
   overflow:hidden;
   margin:auto;
@@ -78,61 +83,102 @@ button:hover {
   object-fit:cover;
 }
 
-.avatar:hover {
-  transform:scale(1.05);
-  box-shadow:0 0 20px rgba(0,168,225,0.5);
+.profile-name {
+  margin-top:16px;
+  font-size:20px;
 }
 
-/* CARD */
+.profile-actions {
+  margin-top:20px;
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+}
+
+.profile-actions button {
+  background:none;
+  border:1px solid var(--muted);
+  color:white;
+  padding:10px;
+  border-radius:6px;
+  cursor:pointer;
+}
+
+.profile-actions button:hover { border-color:white; }
+
+/* CONTENT */
+.content h2 {
+  margin:0 0 20px;
+  font-size:22px;
+}
+
 .card {
-  background:#1c1c1c;
-  padding:20px;
+  background:rgba(255,255,255,0.07);
+  backdrop-filter:blur(18px);
   border-radius:16px;
-  margin-bottom:20px;
+  padding:24px;
+  margin-bottom:30px;
+  border:1px solid rgba(255,255,255,0.08);
 }
 
 .row {
   display:flex;
   justify-content:space-between;
-  padding:12px 0;
-  border-bottom:1px solid #333;
+  align-items:center;
+  padding:16px 0;
+  border-bottom:1px solid #2a2a2a;
 }
 
-.row:last-child {
-  border-bottom:none;
+.row:last-child { border-bottom:none; }
+
+.label {
+  color:var(--muted);
+  font-size:14px;
 }
 
-/* EDIT */
+.value {
+  font-size:16px;
+}
+
+/* INLINE EDIT */
 .hidden { display:none; }
 
-input {
+.edit-field {
+  margin-top:8px;
+}
+
+.edit-field input {
   width:100%;
   padding:10px;
-  background:#111;
+  background:#1a1a1a;
   border:1px solid #333;
-  color:white;
   border-radius:6px;
+  color:white;
 }
 
-input:focus {
-  border-color:var(--accent);
+.edit-actions {
+  margin-top:10px;
+  display:flex;
+  gap:10px;
 }
 
-/* TOAST */
-.toast {
-  position:fixed;
-  bottom:20px;
-  right:20px;
-  background:var(--accent);
-  padding:10px 16px;
-  border-radius:8px;
-  opacity:0;
-  transform:translateY(20px);
+.edit-actions button {
+  background:none;
+  border:1px solid #444;
+  color:white;
+  padding:8px 16px;
+  border-radius:6px;
+  cursor:pointer;
 }
 
-.toast.show {
-  opacity:1;
-  transform:translateY(0);
+.secondary { color:#aaa; }
+
+/* MOBILE */
+@media (max-width:900px) {
+  .container {
+    grid-template-columns:1fr;
+    padding:20px;
+  }
 }
 </style>
 </head>
@@ -140,8 +186,9 @@ input:focus {
 <body>
 
 <header>
-  <h2>Konto</h2>
+  <h1>Konto</h1>
   <div>
+    <button onclick="window.location.href='Hovedside.html'">Tilbake</button>
     <button onclick="loggUt()">Logg ut</button>
   </div>
 </header>
@@ -150,192 +197,200 @@ input:focus {
 
 <!-- SIDEBAR -->
 <aside class="sidebar">
-  <div class="avatar" onclick="upload.click()">
-    <img id="bilde" src="https://via.placeholder.com/150">
+  <div class="avatar" onclick="velgProfil()">
+    <img id="profilbilde" src="https://via.placeholder.com/160">
   </div>
+  <div class="profile-name" id="navnDisplay"></div>
 
-  <input type="file" id="upload" hidden accept="image/*">
-
-  <h3 id="navn"></h3>
+  <div class="profile-actions">
+    <button onclick="velgProfil()">Endre profilbilde</button>
+    <button onclick="bekreftSlettBruker()" style="border-color:#ff4d4d;color:#ff4d4d;">
+      Slett profil
+    </button>
+  </div>
 </aside>
 
 <!-- CONTENT -->
-<section>
+<section class="content">
 
+<h2>Kontoinformasjon</h2>
 <div class="card">
-<h3>Kontoinfo</h3>
 
+<!-- NAVN -->
+<div class="row" id="navnRow">
+  <div>
+    <div class="label">Navn</div>
+    <div class="value" id="navnView"></div>
+
+    <div class="edit-field hidden">
+      <input type="text" id="navnInput">
+      <div class="edit-actions">
+        <button onclick="lagreNavn()">Lagre</button>
+        <button class="secondary" onclick="avbrytNavn()">Avbryt</button>
+      </div>
+    </div>
+  </div>
+  <button onclick="endreNavn()">Endre</button>
+</div>
+
+<!-- EPOST -->
+<div class="row" id="epostRow">
+  <div>
+    <div class="label">E-post</div>
+    <div class="value" id="epostView"></div>
+
+    <div class="edit-field hidden">
+      <input type="email" id="epostInput">
+      <div class="edit-actions">
+        <button onclick="lagreEpost()">Lagre</button>
+        <button class="secondary" onclick="avbrytEpost()">Avbryt</button>
+      </div>
+    </div>
+  </div>
+  <button onclick="endreEpost()">Endre</button>
+</div>
+
+<!-- PASSORD (KUN VISNING) -->
 <div class="row">
   <div>
-    <div>Navn</div>
-    <div id="navnView"></div>
-    <input id="navnInput" class="hidden">
-  </div>
-  <button onclick="editNavn()">Endre</button>
-</div>
-
-<div class="row">
-  <div>
-    <div>E-post</div>
-    <div id="epostView"></div>
+    <div class="label">Passord</div>
+    <div class="value">••••••••</div>
   </div>
 </div>
 
 </div>
 
+<h2>Abonnement</h2>
 <div class="card">
-<h3>Abonnement</h3>
-
-<div class="row">
-  <div>Plan</div>
-  <div id="plan"></div>
+  <div class="row">
+    <div>
+      <div class="label">Plan</div>
+      <div class="value">Premium</div>
+    </div>
+  </div>
+  <div class="row">
+    <div>
+      <div class="label">Kvalitet</div>
+      <div class="value">4K Ultra HD</div>
+    </div>
+  </div>
+  <div class="row">
+    <div>
+      <div class="label">Skjermer</div>
+      <div class="value">4 samtidige</div>
+    </div>
+  </div>
 </div>
 
-<div class="row">
-  <div>Kvalitet</div>
-  <div id="kvalitet"></div>
-</div>
-
-<div class="row">
-  <div>Skjermer</div>
-  <div id="skjermer"></div>
-</div>
-
-<button onclick="endrePlan('basic')">Basic</button>
-<button onclick="endrePlan('premium')">Premium</button>
-
+<h2>Preferanser</h2>
+<div class="card">
+  <div class="row">
+    <div>
+      <div class="label">Autoplay</div>
+      <div class="value">På</div>
+    </div>
+  </div>
+  <div class="row">
+    <div>
+      <div class="label">Foreldrekontroll</div>
+      <div class="value">Av</div>
+    </div>
+  </div>
 </div>
 
 </section>
 </div>
 
-<script type="module">
-
-// 🔥 FIREBASE IMPORT
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-
-// ⚠️ LEGG INN DIN CONFIG HER
-const firebaseConfig = {
-  apiKey: "DIN_KEY",
-  authDomain: "DIN_APP.firebaseapp.com",
-  projectId: "DIN_ID"
-};
-
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const db = getFirestore(app);
-
-// UI
-const navn = document.getElementById("navn");
-const navnView = document.getElementById("navnView");
-const navnInput = document.getElementById("navnInput");
-const epostView = document.getElementById("epostView");
-const bilde = document.getElementById("bilde");
-const upload = document.getElementById("upload");
-
-// TOAST
-function toast(msg){
-  const t=document.createElement("div");
-  t.className="toast";
-  t.innerText=msg;
-  document.body.appendChild(t);
-  setTimeout(()=>t.classList.add("show"),50);
-  setTimeout(()=>t.remove(),2000);
+<script>
+if (!localStorage.getItem("epost")) {
+  window.location.href = "Innlogging.html";
 }
 
-// AUTH CHECK
-onAuthStateChanged(auth, async (user)=>{
-  if(!user){
-    window.location.href="Innlogging.html";
-    return;
-  }
+const navnDisplay = document.getElementById("navnDisplay");
+const navnView = document.getElementById("navnView");
+const navnInput = document.getElementById("navnInput");
+const navnRow = document.getElementById("navnRow");
 
-  epostView.innerText=user.email;
+const epostView = document.getElementById("epostView");
+const epostInput = document.getElementById("epostInput");
+const epostRow = document.getElementById("epostRow");
 
-  // HENT DATA
-  const ref = doc(db,"brukere",user.uid);
-  const snap = await getDoc(ref);
+/* LOAD DATA */
+navnDisplay.innerText = localStorage.getItem("navn") || "Profil";
+navnView.innerText = localStorage.getItem("navn") || "Profil";
+epostView.innerText = localStorage.getItem("epost") || "";
 
-  if(snap.exists()){
-    const data = snap.data();
+const bilde = localStorage.getItem("profilbilde");
+if (bilde) document.getElementById("profilbilde").src = bilde;
 
-    navn.innerText=data.navn || "Profil";
-    navnView.innerText=data.navn || "Profil";
+/* NAVN */
+function endreNavn() {
+  navnInput.value = navnView.innerText;
+  navnView.classList.add("hidden");
+  navnRow.querySelector(".edit-field").classList.remove("hidden");
+}
 
-    if(data.bilde) bilde.src=data.bilde;
+function lagreNavn() {
+  const ny = navnInput.value.trim();
+  if (!ny) return;
+  localStorage.setItem("navn", ny);
+  navnView.innerText = ny;
+  navnDisplay.innerText = ny;
+  avbrytNavn();
+}
 
-    document.getElementById("plan").innerText=data.plan;
-    document.getElementById("kvalitet").innerText=data.kvalitet;
-    document.getElementById("skjermer").innerText=data.skjermer;
-  }
-});
+function avbrytNavn() {
+  navnView.classList.remove("hidden");
+  navnRow.querySelector(".edit-field").classList.add("hidden");
+}
 
-// ENDRE NAVN
-window.editNavn = ()=>{
-  navnInput.classList.remove("hidden");
-  navnInput.value=navnView.innerText;
-};
+/* EPOST */
+function endreEpost() {
+  epostInput.value = epostView.innerText;
+  epostView.classList.add("hidden");
+  epostRow.querySelector(".edit-field").classList.remove("hidden");
+}
 
-window.lagreNavn = async ()=>{
-  const user=auth.currentUser;
-  const ny=navnInput.value;
+function lagreEpost() {
+  const ny = epostInput.value.trim();
+  if (!ny) return;
+  localStorage.setItem("epost", ny);
+  epostView.innerText = ny;
+  avbrytEpost();
+}
 
-  await setDoc(doc(db,"brukere",user.uid),{
-    navn:ny
-  },{merge:true});
+function avbrytEpost() {
+  epostView.classList.remove("hidden");
+  epostRow.querySelector(".edit-field").classList.add("hidden");
+}
 
-  navn.innerText=ny;
-  navnView.innerText=ny;
-  navnInput.classList.add("hidden");
+/* BEHOLDTE FUNKSJONER */
+function velgProfil() {
+  window.location.href = "Registreringsside.html";
+}
 
-  toast("Navn oppdatert");
-};
+function bekreftSlettBruker() {
+  if (!confirm("Vil du slette profilen permanent?")) return;
+  localStorage.clear();
+  window.location.href = "index.html";
+}
 
-// PROFILBILDE
-upload.addEventListener("change",()=>{
-  const file=upload.files[0];
-  const reader=new FileReader();
-
-  reader.onload=async(e)=>{
-    const base64=e.target.result;
-    bilde.src=base64;
-
-    const user=auth.currentUser;
-
-    await setDoc(doc(db,"brukere",user.uid),{
-      bilde:base64
-    },{merge:true});
-
-    toast("Profilbilde lagret");
-  };
-
-  reader.readAsDataURL(file);
-});
-
-// ABONNEMENT
-window.endrePlan = async(plan)=>{
-  const user=auth.currentUser;
-
-  const data = plan==="premium"
-  ? {plan:"Premium", kvalitet:"4K", skjermer:4}
-  : {plan:"Basic", kvalitet:"HD", skjermer:1};
-
-  await setDoc(doc(db,"brukere",user.uid),data,{merge:true});
-
-  location.reload();
-};
-
-// LOGOUT
-window.loggUt = ()=>{
-  signOut(auth);
-};
-
+function loggUt() {
+  localStorage.removeItem("epost");
+  localStorage.removeItem("passord");
+  window.location.href = "Innlogging.html";
+}
 </script>
+
+<footer style="border-top:1px solid #222;padding:30px 40px;color:#8c8c8c;font-size:12px;">
+© 2026 Watch Nordic AS. Alle rettigheter forbeholdt.
+</footer>
 
 </body>
 </html>
+
+
+
 
 
 
