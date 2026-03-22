@@ -1610,6 +1610,46 @@ main {
     max-width: 110px;
     text-align: center;
   }
+  .kids-banner {
+  position: relative;
+  width: 100%;
+  height: 220px;
+  border-radius: 16px;
+  overflow: hidden;
+  cursor: pointer;
+  margin: 20px 0;
+}
+
+.kids-banner img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.kids-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to right,
+    rgba(9,27,30,0.9),
+    rgba(9,27,30,0.2)
+  );
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding-left: 40px;
+}
+
+.kids-overlay h2 {
+  font-size: 28px;
+  color: #00FFCC;
+  margin-bottom: 8px;
+}
+
+.kids-overlay p {
+  font-size: 16px;
+  color: #fff;
+}
 }
 
 
@@ -1777,17 +1817,13 @@ main {
   </div>
 </section> 
   
-   <section class="gallery-section">
-  <h2>Kommende filmer</h2>
-  <div class="gallery-wrapper">
-    <div class="fade-left"></div>
-  <button class="scroll-button left">❮</button>
-    
-    <!-- Her fylles filmene inn av JS -->
-    <div class="coming-movies-gallery" id="kommer-snart-galleri"></div>
-    
-<button class="scroll-button right">❯</button>
-    <div class="fade-right"></div>
+<section class="gallery-section">
+  <div class="kids-banner" onclick="window.location.href='sjanger.html?navn=barn'">
+    <img src="https://image.tmdb.org/t/p/original/sro8yqKn9AsahA92LOJUZcEj4xK.jpg" alt="Kids banner">
+    <div class="kids-overlay">
+      <h2>For barna</h2>
+      <p>Se filmer og serier for hele familien</p>
+    </div>
   </div>
 </section>
 
