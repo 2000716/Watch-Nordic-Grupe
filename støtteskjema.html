@@ -2,121 +2,48 @@
 <html lang="no">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Watch Støtteordning</title>
-
-<style>
-body {
-  background: #091B1E;
-  color: white;
-  font-family: Arial;
-  padding: 40px;
-}
-
-.container {
-  max-width: 700px;
-  margin: auto;
-}
-
-h1 {
-  color: #00FFCC;
-}
-
-form {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
-input, select, textarea {
-  padding: 12px;
-  border-radius: 8px;
-  border: none;
-  background: #132f33;
-  color: white;
-}
-
-button {
-  background: #00FFCC;
-  color: #003a2f;
-  padding: 14px;
-  border: none;
-  border-radius: 30px;
-  font-weight: bold;
-  cursor: pointer;
-}
-
-.success {
-  display: none;
-  margin-top: 20px;
-  color: #00FFCC;
-}
-</style>
 </head>
 
-<body>
+<body style="background:#091B1E; color:white; font-family:Arial; padding:40px;">
 
-<div class="container">
 <h1>Watch Støtteordning</h1>
-<p>Søk støtte – svar innen 30 dager</p>
 
 <form id="form">
 
-<input type="text" placeholder="Fornavn" required>
-<input type="text" placeholder="Etternavn" required>
-<input type="text" placeholder="Studio / Enkeltpersonforetak" required>
+<input name="fornavn" placeholder="Fornavn" required><br><br>
+<input name="etternavn" placeholder="Etternavn" required><br><br>
+<input name="studio" placeholder="Studio" required><br><br>
 
-<select required>
-<option value="">Velg type</option>
+<select name="type">
 <option>Film</option>
 <option>Kortfilm</option>
 <option>Serie</option>
-</select>
+</select><br><br>
 
-<input type="text" placeholder="Din rolle" required>
-<input type="email" placeholder="E-post" required>
+<input name="rolle" placeholder="Rolle" required><br><br>
+<input name="epost" placeholder="E-post" required><br><br>
 
-<input type="file" accept="image/png" required>
+<input type="file" name="manus" accept="image/png" required><br><br>
 
-<textarea placeholder="Beskrivelse av prosjekt" required></textarea>
+<textarea name="beskrivelse" placeholder="Beskrivelse"></textarea><br><br>
 
-<button type="submit">Send søknad</button>
+<button>Send</button>
 
 </form>
 
-<div class="success" id="msg">
-✅ Søknad sendt! Svar innen 30 dager.
-</div>
-
-</div>
-
 <script>
-document.getElementById("form").addEventListener("submit", function(e){
+document.getElementById("form").addEventListener("submit", async e => {
   e.preventDefault();
 
-  const inputs = this.querySelectorAll("input, select, textarea");
+  const formData = new FormData(e.target);
 
-  const søknad = {
-    fornavn: inputs[0].value,
-    etternavn: inputs[1].value,
-    studio: inputs[2].value,
-    type: inputs[3].value,
-    rolle: inputs[4].value,
-    epost: inputs[5].value,
-    beskrivelse: inputs[7].value,
-    dato: new Date().toISOString(),
-    svarDato: new Date(Date.now() + 30*24*60*60*1000),
-    status: "Under behandling"
-  };
+  const res = await fetch("http://localhost:3000/send", {
+    method: "POST",
+    body: formData
+  });
 
-  let liste = JSON.parse(localStorage.getItem("watch_soknader")) || [];
-  liste.push(søknad);
-
-  localStorage.setItem("watch_soknader", JSON.stringify(liste));
-
-  document.getElementById("msg").style.display = "block";
-
-  this.reset();
+  alert("Søknad sendt!");
 });
 </script>
 
