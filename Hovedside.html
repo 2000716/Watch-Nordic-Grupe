@@ -8,104 +8,153 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
 <style>
+/* ===== BASE ===== */
 body {
   margin:0;
-  font-family: Arial;
-  background:#091B1E;
+  font-family:-apple-system, BlinkMacSystemFont, sans-serif;
+  background:#000;
   color:white;
 }
 
-/* ===== TOPPMENY ===== */
+/* ===== TOP NAV ===== */
 .top-nav {
   position:fixed;
   top:0;
   width:100%;
-  height:70px;
+  padding:20px 40px;
   display:flex;
   justify-content:space-between;
   align-items:center;
-  padding:0 30px;
   z-index:100;
-  background:linear-gradient(to bottom, rgba(9,27,30,0.9), transparent);
+  background:linear-gradient(to bottom, rgba(0,0,0,0.9), transparent);
+}
+
+.logo {
+  font-size:22px;
+  font-weight:600;
 }
 
 .nav-links a {
-  margin:0 10px;
-  color:#ccc;
+  margin-left:20px;
+  color:#aaa;
   text-decoration:none;
+  font-size:14px;
 }
 
-.nav-links a.active {
-  color:#00FFCC;
+.nav-links a:hover {
+  color:white;
 }
 
 /* ===== HERO ===== */
-.hero-banner {
-  height:70vh;
+.hero {
+  height:80vh;
   position:relative;
 }
 
-.hero-banner img,
-.hero-banner video {
+.hero img, .hero video {
   position:absolute;
   width:100%;
   height:100%;
   object-fit:cover;
 }
 
-.banner-content {
+.hero::after {
+  content:"";
   position:absolute;
-  bottom:40px;
-  left:40px;
+  inset:0;
+  background:linear-gradient(to top, #000 10%, transparent 60%);
 }
 
-.film-logo {
+.hero-content {
+  position:absolute;
+  bottom:80px;
+  left:60px;
+  z-index:2;
+  max-width:500px;
+}
+
+.hero-content img {
   width:300px;
+  margin-bottom:20px;
 }
 
-.watch-button {
-  background:#00FFCC;
-  border:none;
-  padding:12px 30px;
+.hero-meta {
+  color:#ccc;
+  font-size:14px;
+  margin-bottom:20px;
+}
+
+.hero-buttons button {
+  margin-right:10px;
+  padding:12px 24px;
   border-radius:30px;
+  border:none;
+  font-size:14px;
 }
 
-/* ===== GALLERI ===== */
-.gallery-section {
-  margin:30px;
+.play-btn {
+  background:white;
+  color:black;
 }
 
-.image-gallery {
+.add-btn {
+  background:rgba(255,255,255,0.2);
+  color:white;
+}
+
+/* ===== ROWS ===== */
+.section {
+  padding:40px 60px;
+}
+
+.section h2 {
+  font-size:18px;
+  margin-bottom:15px;
+  color:#ddd;
+}
+
+.row {
   display:flex;
   gap:12px;
   overflow-x:auto;
 }
 
-.image-gallery img {
-  width:220px;
-  height:120px;
+.row::-webkit-scrollbar {
+  display:none;
+}
+
+.card {
+  min-width:220px;
+  height:125px;
+  border-radius:8px;
+  overflow:hidden;
+  transition:transform 0.3s;
+}
+
+.card img {
+  width:100%;
+  height:100%;
   object-fit:cover;
-  border-radius:6px;
 }
 
-/* ===== FORTSETT ===== */
-.image-with-progress {
-  position:relative;
+.card:hover {
+  transform:scale(1.05);
 }
 
-.progress-bar {
+/* ===== CONTINUE ===== */
+.progress {
   position:absolute;
   bottom:0;
-  height:4px;
+  height:3px;
   width:100%;
   background:rgba(255,255,255,0.2);
 }
 
-.progress-bar::after {
-  content:'';
+.progress::after {
+  content:"";
   position:absolute;
   height:100%;
-  background:#00FFCC;
+  background:white;
   width:var(--progress);
 }
 </style>
@@ -113,121 +162,111 @@ body {
 
 <body>
 
-<!-- TOPPMENY -->
+<!-- NAV -->
 <header class="top-nav">
-  <div>WATCH</div>
+  <div class="logo">Watch</div>
   <nav class="nav-links">
-    <a class="active">Startside</a>
-    <a>Serier</a>
+    <a>Startside</a>
     <a>Filmer</a>
+    <a>Serier</a>
   </nav>
 </header>
 
 <!-- HERO -->
-<section class="hero-banner">
-  <img id="banner-bilde">
-  <video id="banner-video" muted></video>
+<section class="hero">
+  <img id="hero-img">
+  <video id="hero-video" muted></video>
 
-  <div class="banner-content">
-    <img id="banner-logo" class="film-logo">
-    <div id="banner-metadata"></div>
+  <div class="hero-content">
+    <img id="hero-logo">
+    <div id="hero-meta" class="hero-meta"></div>
 
-    <button id="banner-se-na" class="watch-button">
-      ▶ Se nå
-    </button>
+    <div class="hero-buttons">
+      <button class="play-btn" id="playBtn">▶ Se nå</button>
+      <button class="add-btn" id="addBtn">＋</button>
+    </div>
   </div>
 </section>
 
-<!-- NYE FILMER -->
-<section class="gallery-section">
+<!-- NYE -->
+<section class="section">
   <h2>Nye filmer</h2>
-  <div id="nye-filmer-galleri" class="image-gallery"></div>
+  <div id="newRow" class="row"></div>
 </section>
 
 <!-- FORTSETT -->
-<section class="gallery-section" id="fortsett-section" style="display:none;">
+<section class="section" id="continueSection" style="display:none;">
   <h2>Fortsett å se</h2>
-  <div id="fortsett-galleri" class="image-gallery"></div>
+  <div id="continueRow" class="row"></div>
 </section>
 
-<!-- JS DATA (BEHOLDT) -->
 <script src="Filmdata.js"></script>
 <script src="Seriedata.js"></script>
 
 <script>
 
 /* ===== HERO ===== */
-function hentTimeFilm() {
+function setHero() {
   const keys = Object.keys(filmer);
-  const index = new Date().getHours() % keys.length;
-  return filmer[keys[index]];
-}
+  const film = filmer[keys[new Date().getHours() % keys.length]];
 
-function oppdaterBanner() {
-  const film = hentTimeFilm();
+  heroImg.src = film.banner;
+  heroLogo.src = film.logo;
+  heroMeta.innerText = film.metadata.join(" • ");
 
-  document.getElementById("banner-bilde").src = film.banner;
-  document.getElementById("banner-logo").src = film.logo;
-  document.getElementById("banner-metadata").innerText = film.metadata.join(" • ");
-
-  document.getElementById("banner-se-na").onclick = () => {
+  playBtn.onclick = () => {
     window.location.href = "film-mal.html?id=" + film.tittel;
   };
 }
 
-/* ===== NYE FILMER ===== */
-function renderNyeFilmer() {
-  const galleri = document.getElementById("nye-filmer-galleri");
+/* ===== ROW ===== */
+function createCard(film) {
+  const div = document.createElement("div");
+  div.className = "card";
 
+  const img = document.createElement("img");
+  img.src = film.poster;
+
+  div.appendChild(img);
+  return div;
+}
+
+/* ===== NYE ===== */
+function renderNew() {
   Object.keys(filmer).slice(0,10).forEach(key => {
-    const film = filmer[key];
-
-    const img = document.createElement("img");
-    img.src = film.poster;
-
-    galleri.appendChild(img);
+    newRow.appendChild(createCard(filmer[key]));
   });
 }
 
-/* ===== FORTSETT ===== */
-function renderFortsett() {
-  const galleri = document.getElementById("fortsett-galleri");
-  const section = document.getElementById("fortsett-section");
-
-  let finnes = false;
+/* ===== CONTINUE ===== */
+function renderContinue() {
+  let found = false;
 
   Object.keys(filmer).forEach(key => {
     const progress = localStorage.getItem("progress_" + key);
 
     if(progress && progress < 100) {
-      finnes = true;
+      found = true;
 
-      const div = document.createElement("div");
-      div.className = "image-with-progress";
-
-      const img = document.createElement("img");
-      img.src = filmer[key].poster;
+      const div = createCard(filmer[key]);
 
       const bar = document.createElement("div");
-      bar.className = "progress-bar";
+      bar.className = "progress";
       bar.style.setProperty("--progress", progress + "%");
 
-      div.appendChild(img);
       div.appendChild(bar);
-
-      galleri.appendChild(div);
+      continueRow.appendChild(div);
     }
   });
 
-  if(finnes) section.style.display = "block";
+  if(found) continueSection.style.display = "block";
 }
 
-/* ===== START ===== */
-document.addEventListener("DOMContentLoaded", () => {
-  oppdaterBanner();
-  renderNyeFilmer();
-  renderFortsett();
-});
+/* ===== INIT ===== */
+setHero();
+renderNew();
+renderContinue();
+
 </script>
 
 </body>
