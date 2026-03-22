@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+<meta charset="UTF-8">
+<title>Admin - Watch Støtteordning</title>
+
+<style>
+body {
+  background: #091B1E;
+  color: white;
+  font-family: Arial;
+  padding: 20px;
+}
+
+.card {
+  background: #132f33;
+  padding: 15px;
+  margin-bottom: 15px;
+  border-radius: 10px;
+}
+
+button {
+  margin-top: 10px;
+  margin-right: 5px;
+  padding: 8px 12px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.approve { background: #00FFCC; }
+.reject { background: #ff4d4d; }
+</style>
+</head>
+
+<body>
+
+<h1>Innkomne søknader</h1>
+
+<div id="liste"></div>
+
+<script>
+function hent(){
+  const container = document.getElementById("liste");
+  container.innerHTML = "";
+
+  const data = JSON.parse(localStorage.getItem("watch_soknader")) || [];
+
+  data.forEach((s, i) => {
+    const div = document.createElement("div");
+    div.className = "card";
+
+    div.innerHTML = `
+    <b>${s.fornavn} ${s.etternavn}</b><br>
+    ${s.studio}<br>
+    Type: ${s.type}<br>
+    Rolle: ${s.rolle}<br>
+    E-post: ${s.epost}<br><br>
+    ${s.beskrivelse}<br><br>
+    Status: <b>${s.status}</b><br>
+    Svar dato: ${new Date(s.svarDato).toLocaleDateString()}<br>
+
+    <button class="approve" onclick="godkjenn(${i})">Godkjenn</button>
+    <button class="reject" onclick="avslå(${i})">Avslå</button>
+    `;
+
+    container.appendChild(div);
+  });
+}
+
+function godkjenn(i){
+  let data = JSON.parse(localStorage.getItem("watch_soknader"));
+  data[i].status = "Godkjent";
+  localStorage.setItem("watch_soknader", JSON.stringify(data));
+
+  alert("📩 E-post sendt!\n\nStatus: Godkjent");
+
+  hent();
+}
+
+function avslå(i){
+  let data = JSON.parse(localStorage.getItem("watch_soknader"));
+  data[i].status = "Avslått";
+  localStorage.setItem("watch_soknader", JSON.stringify(data));
+
+  alert("📩 E-post sendt!\n\nStatus: Avslått");
+
+  hent();
+}
+
+hent();
+</script>
+
+</body>
+</html>
