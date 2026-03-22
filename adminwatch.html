@@ -1,90 +1,50 @@
 <!DOCTYPE html>
-<html lang="no">
+<html>
 <head>
 <meta charset="UTF-8">
-<title>Admin - Watch Støtteordning</title>
-
-<style>
-body {
-  background: #091B1E;
-  color: white;
-  font-family: Arial;
-  padding: 20px;
-}
-
-.card {
-  background: #132f33;
-  padding: 15px;
-  margin-bottom: 15px;
-  border-radius: 10px;
-}
-
-button {
-  margin-top: 10px;
-  margin-right: 5px;
-  padding: 8px 12px;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-}
-
-.approve { background: #00FFCC; }
-.reject { background: #ff4d4d; }
-</style>
+<title>Admin</title>
 </head>
 
-<body>
+<body style="background:#091B1E; color:white; font-family:Arial;">
 
-<h1>Innkomne søknader</h1>
+<h1>Admin</h1>
 
 <div id="liste"></div>
 
 <script>
-function hent(){
-  const container = document.getElementById("liste");
-  container.innerHTML = "";
+async function hent() {
+  const res = await fetch("http://localhost:3000/soknader");
+  const data = await res.json();
 
-  const data = JSON.parse(localStorage.getItem("watch_soknader")) || [];
+  const div = document.getElementById("liste");
+  div.innerHTML = "";
 
-  data.forEach((s, i) => {
-    const div = document.createElement("div");
-    div.className = "card";
+  data.forEach(s => {
+    const el = document.createElement("div");
 
-    div.innerHTML = `
+    el.innerHTML = `
+    <hr>
     <b>${s.fornavn} ${s.etternavn}</b><br>
-    ${s.studio}<br>
-    Type: ${s.type}<br>
-    Rolle: ${s.rolle}<br>
-    E-post: ${s.epost}<br><br>
-    ${s.beskrivelse}<br><br>
-    Status: <b>${s.status}</b><br>
-    Svar dato: ${new Date(s.svarDato).toLocaleDateString()}<br>
+    ${s.type} | ${s.rolle}<br>
+    ${s.beskrivelse}<br>
+    Status: ${s.status}<br>
 
-    <button class="approve" onclick="godkjenn(${i})">Godkjenn</button>
-    <button class="reject" onclick="avslå(${i})">Avslå</button>
+    <button onclick="update(${s.id}, 'Godkjent')">Godkjenn</button>
+    <button onclick="update(${s.id}, 'Avslått')">Avslå</button>
     `;
 
-    container.appendChild(div);
+    div.appendChild(el);
   });
 }
 
-function godkjenn(i){
-  let data = JSON.parse(localStorage.getItem("watch_soknader"));
-  data[i].status = "Godkjent";
-  localStorage.setItem("watch_soknader", JSON.stringify(data));
+async function update(id, status) {
+  await fetch("http://localhost:3000/status/" + id, {
+    method: "POST",
+    headers: {"Content-Type": "application/json"},
+    body: JSON.stringify({status})
+  });
 
-  alert("📩 E-post sendt!\n\nStatus: Godkjent");
-
-  hent();
-}
-
-function avslå(i){
-  let data = JSON.parse(localStorage.getItem("watch_soknader"));
-  data[i].status = "Avslått";
-  localStorage.setItem("watch_soknader", JSON.stringify(data));
-
-  alert("📩 E-post sendt!\n\nStatus: Avslått");
-
+  alert("Oppdatert + e-post sendt (simulert)");
   hent();
 }
 
