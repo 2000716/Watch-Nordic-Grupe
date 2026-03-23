@@ -466,18 +466,64 @@ gap:22px;
 width:100%;
 }
 
-.gallery img{
-width:100%;
-height:150px;
-object-fit:cover;
-border-radius:12px;
-cursor:pointer;
-transition:transform .35s ease,box-shadow .35s ease;
+.gallery{
+display:flex;
+gap:18px;
+overflow-x:auto;
+scroll-behavior:smooth;
+padding-bottom:10px;
 }
 
-.gallery img:hover{
+.gallery::-webkit-scrollbar{
+display:none;
+}
+
+.movie-card{
+min-width:280px;
+height:160px;
+border-radius:14px;
+overflow:hidden;
+position:relative;
+cursor:pointer;
+flex-shrink:0;
+transition:transform .35s ease, box-shadow .35s ease;
+}
+
+.movie-card img{
+width:100%;
+height:100%;
+object-fit:cover;
+transition:transform .4s ease;
+}
+
+.movie-card:hover{
 transform:scale(1.08);
-box-shadow:0 20px 40px rgba(0,0,0,.8);
+z-index:5;
+box-shadow:0 25px 60px rgba(0,0,0,.9);
+}
+
+.movie-card:hover img{
+transform:scale(1.1);
+}
+
+.movie-overlay{
+position:absolute;
+inset:0;
+background:linear-gradient(to top, rgba(0,0,0,.9), transparent 60%);
+opacity:0;
+transition:.3s;
+display:flex;
+align-items:flex-end;
+padding:12px;
+}
+
+.movie-card:hover .movie-overlay{
+opacity:1;
+}
+
+.movie-title{
+font-size:14px;
+font-weight:600;
 }
 
 /* =========================================================
@@ -1095,19 +1141,22 @@ anbefalte.forEach(n => {
     const kilde = type === "film" ? filmer : serier;
     const item = kilde[n];
     
-    const img = document.createElement("img");
+const card = document.createElement("div");
+card.className = "movie-card";
 
-    // HENT HORISONTAL POSTER HER 👇
-    img.src = item.posterHorisontal || item.poster || item.bakgrunn;
+card.innerHTML = `
+  <img src="${item.posterHorisontal || item.poster || item.bakgrunn}" alt="${item.tittel}">
+  <div class="movie-overlay">
+    <div class="movie-title">${item.tittel}</div>
+  </div>
+`;
 
-    img.alt = item.tittel;
+card.addEventListener("click", () => {
+  const side = type === "film" ? "film.html" : "serie.html";
+  window.location.href = `${side}?navn=${n}`;
+});
 
-    img.addEventListener("click", () => {
-      const side = type === "film" ? "film.html" : "serie.html";
-      window.location.href = `${side}?navn=${n}`;
-    });
-
-    gallery.appendChild(img);
+gallery.appendChild(card);
 });
 
 }
