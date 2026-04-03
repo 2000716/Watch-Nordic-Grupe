@@ -896,19 +896,20 @@ if (navn && filmer?.[navn] && !sesong && !episode) {
   episode &&
   serier[navn].sesonger?.[sesong]?.episoder?.[episode]
 ) {
-// ===== SERIE EPISODE =====
-const serie = serier[navn];
-const ep = serie.sesonger[sesong].episoder[episode];
+  // ===== SERIE EPISODE =====
+  const serie = serier[navn];
+  const ep = serie.sesonger[sesong].episoder[episode];
 
-const film = {
-  ...ep,
-  audioLanguages: serie.audioLanguages || [],
-  subtitleLanguages: serie.subtitleLanguages || [],
-  tilbakeUrl: `serie.html?navn=${navn}`,  // ✅ Korrekt bruk
-  tittel: `${serie.tittel} – S${sesong}E${episode}: ${ep.tittel}`
-};
+  film = {  // ✅ bruk eksisterende variabel
+    ...ep,
+    audioLanguages: serie.audioLanguages || [],
+    subtitleLanguages: serie.subtitleLanguages || [],
+    tilbakeUrl: `serie.html?navn=${navn}`, 
+    tittel: `${serie.tittel} – S${sesong}E${episode}: ${ep.tittel}`
+  };
 
   filmId = `serie-${navn}-s${sesong}-e${episode}`;
+}
 
 } else {
   alert("Ugyldig innhold");
