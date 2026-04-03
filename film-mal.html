@@ -883,38 +883,47 @@ let filmId = "";
 let tilbakeUrl = "";
 
 /* ================= RESOLVE MEDIA ================= */
+let film = null;
+let filmId = null;
+let tilbakeUrl = null;
+
 if (navn && filmer?.[navn] && !sesong && !episode) {
   // ===== FILM =====
   film = filmer[navn];
   filmId = `film-${navn}`;
   tilbakeUrl = film.tilbakeUrl || "filmer.html";
 
-} else if (
-  navn &&
-  serier?.[navn] &&
-  sesong &&
-  episode &&
-  serier[navn].sesonger?.[sesong]?.episoder?.[episode]
-) {
-  // ===== SERIE EPISODE =====
+} else if (navn && serier?.[navn]) {
   const serie = serier[navn];
-  const ep = serie.sesonger[sesong].episoder[episode];
 
-  film = {
-    ...ep,
-    audioLanguages: serie.audioLanguages || [],
-    subtitleLanguages: serie.subtitleLanguages || [],
-    tilbakeUrl: serie.tilbakeUrl || `serie.html?navn=${navn}`, // <- rettet her
-    tittel: `${serie.tittel} – S${sesong}E${episode}: ${ep.tittel}`
-  };
+  if (sesong && episode && serie.sesonger?.[sesong]?.episoder?.[episode]) {
+    // ===== SERIE EPISODE =====
+    const ep = serie.sesonger[sesong].episoder[episode];
 
-  filmId = `serie-${navn}-s${sesong}-e${episode}`;
+    film = {
+      ...ep,
+      audioLanguages: serie.audioLanguages || [],
+      subtitleLanguages: serie.subtitleLanguages || [],
+      tilbakeUrl: serie.tilbakeUrl || `serie.html?navn=${navn}`, // peker tilbake til serien
+      tittel: `${serie.tittel} – S${sesong}E${episode}: ${ep.tittel}`
+    };
+
+    filmId = `serie-${navn}-s${sesong}-e${episode}`;
+
+  } else {
+    // ===== SERIEOVERSIKT =====
+    film = {
+      ...serie,
+      tilbakeUrl: "serier.html", // generisk tilbake til serielisten
+      tittel: serie.tittel
+    };
+    filmId = `serie-${navn}`;
+  }
 
 } else {
   alert("Ugyldig innhold");
   window.location.href = "Hovedside.html";
 }
-
 /* ================= BASIC SETUP ================= */
 
 // Oppdater dokumenttittel
