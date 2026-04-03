@@ -42,10 +42,9 @@ const serier = {
             tittel: "Vår i Mummidalen",
             beskrivelse: "Våren kommer til Mummidalen og nye eventyr begynner.",
             varighet: "24 min",
-
             thumbnail:
               "https://image.tmdb.org/t/p/original/hOpVGMZZ7MYaYjNN2eJzVKFbLVt.jpg",
-
+            tilbakeUrl: "serie.html?navn=i-mummidalen",
             videoUrl:
               "https://archive.org/download/folder_202411/I%20Mummidalen/Season%201/I%20Mummidalen%20-%201x01%20-%20V%C3%A5r%20i%20Mummidalen.mp4"
           },
