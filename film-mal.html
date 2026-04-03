@@ -883,51 +883,38 @@ let filmId = "";
 let tilbakeUrl = "";
 
 /* ================= RESOLVE MEDIA ================= */
-let film = null;
-let filmId = null;
-let tilbakeUrl = null;
-
 if (navn && filmer?.[navn] && !sesong && !episode) {
   // ===== FILM =====
   film = filmer[navn];
   filmId = `film-${navn}`;
   tilbakeUrl = film.tilbakeUrl || "filmer.html";
 
-} else if (navn && serier?.[navn]) {
+} else if (
+  navn &&
+  serier?.[navn] &&
+  sesong &&
+  episode &&
+  serier[navn].sesonger?.[sesong]?.episoder?.[episode]
+) {
+  // ===== SERIE EPISODE =====
   const serie = serier[navn];
+  const ep = serie.sesonger[sesong].episoder[episode];
 
-  if (sesong && episode && serie.sesonger?.[sesong]?.episoder?.[episode]) {
-    // ===== SERIE EPISODE =====
-    const ep = serie.sesonger[sesong].episoder[episode];
+  film = {
+    ...ep,
+    audioLanguages: serie.audioLanguages || [],
+    subtitleLanguages: serie.subtitleLanguages || [],
+    tilbakeUrl: `serie.html?navn=${navn}`,
+    tittel: `${serie.tittel} – S${sesong}E${episode}: ${ep.tittel}`
+  };
 
-    film = {
-      ...ep,
-      audioLanguages: serie.audioLanguages || [],
-      subtitleLanguages: serie.subtitleLanguages || [],
-      tilbakeUrl: ep.tilbakeUrl || serie.tilbakeUrl || `serie.html?navn=${navn}`, // peker tilbake til serien
-      tittel: `${serie.tittel} – S${sesong}E${episode}: ${ep.tittel}`
-    };
-
-    filmId = `serie-${navn}-s${sesong}-e${episode}`;
-
-  } else {
-    // ===== SERIEOVERSIKT =====
-    film = {
-      ...serie,
-      tilbakeUrl: serie.tilbakeUrl || "serier.html", // generisk tilbake til serielisten
-      tittel: serie.tittel
-    };
-    filmId = `serie-${navn}`;
-  }
+  filmId = `serie-${navn}-s${sesong}-e${episode}`;
 
 } else {
-  // Ingen gyldig film/serie
   alert("Ugyldig innhold");
   window.location.href = "Hovedside.html";
 }
 
-// Sett global tilbakeUrl
-tilbakeUrl = film.tilbakeUrl;
 /* ================= BASIC SETUP ================= */
 
 // Oppdater dokumenttittel
@@ -1297,6 +1284,9 @@ document.addEventListener("contextmenu", (e) => {
 });
 
 </script>
+
+
+
 
 
 
