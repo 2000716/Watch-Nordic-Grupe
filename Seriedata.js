@@ -1,8 +1,6 @@
 const serier = {
   "i-mummidalen": {
     tittel: "I Mummidalen",
-    tilbakeUrl: "serier.html",
-
     bakgrunn: "https://image.tmdb.org/t/p/original/231meoDrNjyUqF0sD0xItVw1h7g.jpg",
     logo: "https://image.tmdb.org/t/p/original/cD5TMSmqtRMsuGFCD7QtSWH2bot.png",
     poster: "https://image.tmdb.org/t/p/w1280/9yjEMASvxhJGSUq7peDpWgBO5JW.jpg",
