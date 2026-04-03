@@ -904,7 +904,7 @@ if (navn && filmer?.[navn] && !sesong && !episode) {
       ...ep,
       audioLanguages: serie.audioLanguages || [],
       subtitleLanguages: serie.subtitleLanguages || [],
-      tilbakeUrl: serie.tilbakeUrl || `serie.html?navn=${navn}`, // peker tilbake til serien
+      tilbakeUrl: ep.tilbakeUrl || serie.tilbakeUrl || `serie.html?navn=${navn}`, // peker tilbake til serien
       tittel: `${serie.tittel} – S${sesong}E${episode}: ${ep.tittel}`
     };
 
@@ -914,16 +914,20 @@ if (navn && filmer?.[navn] && !sesong && !episode) {
     // ===== SERIEOVERSIKT =====
     film = {
       ...serie,
-      tilbakeUrl: "serier.html", // generisk tilbake til serielisten
+      tilbakeUrl: serie.tilbakeUrl || "serier.html", // generisk tilbake til serielisten
       tittel: serie.tittel
     };
     filmId = `serie-${navn}`;
   }
 
 } else {
+  // Ingen gyldig film/serie
   alert("Ugyldig innhold");
   window.location.href = "Hovedside.html";
 }
+
+// Sett global tilbakeUrl
+tilbakeUrl = film.tilbakeUrl;
 /* ================= BASIC SETUP ================= */
 
 // Oppdater dokumenttittel
