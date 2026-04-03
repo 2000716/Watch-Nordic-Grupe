@@ -45,7 +45,8 @@ const serier = {
             thumbnail:
               "https://image.tmdb.org/t/p/original/hOpVGMZZ7MYaYjNN2eJzVKFbLVt.jpg",
             videoUrl:
-              "https://archive.org/download/folder_202411/I%20Mummidalen/Season%201/I%20Mummidalen%20-%201x01%20-%20V%C3%A5r%20i%20Mummidalen.mp4"
+              "https://archive.org/download/folder_202411/I%20Mummidalen/Season%201/I%20Mummidalen%20-%201x01%20-%20V%C3%A5r%20i%20Mummidalen.mp4",
+            tilbakeUrl: "serie.html?navn=i-mummidalen"
           },
 
           2: {
@@ -58,7 +59,8 @@ const serier = {
               "https://i.ytimg.com/vi/S2cmnlwM1n0/maxresdefault.jpg",
 
             videoUrl:
-              "https://archive.org/download/folder_202411/I%20Mummidalen/Season%201/I%20Mummidalen%20-%201x02%20-%20Trollmannens%20hatt.mp4"
+              "https://archive.org/download/folder_202411/I%20Mummidalen/Season%201/I%20Mummidalen%20-%201x02%20-%20Trollmannens%20hatt.mp4",
+            tilbakeUrl: "serie.html?navn=i-mummidalen"
           }
 
         }
