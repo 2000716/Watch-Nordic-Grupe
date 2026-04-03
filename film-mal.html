@@ -904,7 +904,7 @@ if (navn && filmer?.[navn] && !sesong && !episode) {
     ...ep,
     audioLanguages: serie.audioLanguages || [],
     subtitleLanguages: serie.subtitleLanguages || [],
-    tilbakeUrl = serie.tilbakeUrl || "film.html";
+   tilbakeUrl: `Serier.html?navn=${navn}`,
     tittel: `${serie.tittel} – S${sesong}E${episode}: ${ep.tittel}`
   };
 
