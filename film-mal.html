@@ -929,9 +929,14 @@ if (movieTitleEl && film?.tittel) {
 // Sett tilbakeknapp
 const backButton = document.getElementById("backButton");
 if (backButton && tilbakeUrl) {
-  backButton.addEventListener("click", (e) => {
-    e.preventDefault();
-    window.location.href = tilbakeUrl;
+  backButton.addEventListener("click", () => {
+    // Prøv først å gå tilbake i historikk (mer naturlig)
+    if (window.history.length > 1) {
+      window.history.back();
+    } else {
+      // fallback hvis ingen historikk
+      window.location.href = tilbakeUrl;
+    }
   });
 }
 
