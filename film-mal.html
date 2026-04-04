@@ -926,17 +926,13 @@ if (movieTitleEl && film?.tittel) {
   movieTitleEl.textContent = film.tittel;
 }
 
-// Sett tilbakeknapp
+// Sett tilbakeknapp (fikset)
 const backButton = document.getElementById("backButton");
-if (backButton && tilbakeUrl) {
+
+if (backButton) {
   backButton.addEventListener("click", () => {
-    // Prøv først å gå tilbake i historikk (mer naturlig)
-    if (window.history.length > 1) {
-      window.history.back();
-    } else {
-      // fallback hvis ingen historikk
-      window.location.href = tilbakeUrl;
-    }
+    const riktigUrl = `film.html?navn=${navn}`;
+    window.location.href = riktigUrl;
   });
 }
 
