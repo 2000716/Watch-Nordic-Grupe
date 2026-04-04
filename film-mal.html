@@ -1214,9 +1214,32 @@ window.addEventListener('beforeunload', () => {
 // Ferdig
 video.addEventListener('ended', () => {
   localStorage.removeItem(`${filmId}-lastPosition`);
-  localStorage.removeItem("progress_" + filmId); // fjern fra fortsett å se
+  localStorage.removeItem("progress_" + filmId);
   localStorage.setItem(`${filmId}-status`, "ferdig");
-  window.location.href = film.tilbakeUrl;
+
+  // ==== AUTO NESTE EPISODE ====
+  if (navn && sesong && episode && serier?.[navn]) {
+    const s = parseInt(sesong);
+    const e = parseInt(episode);
+
+    const serie = serier[navn];
+    const currentSeason = serie.sesonger[s];
+
+    // Neste episode i samme sesong
+    if (currentSeason?.episoder?.[e + 1]) {
+      window.location.href = `film-mal.html?navn=${navn}&sesong=${s}&episode=${e + 1}`;
+      return;
+    }
+
+    // Første episode i neste sesong
+    if (serie.sesonger[s + 1]?.episoder?.[1]) {
+      window.location.href = `film-mal.html?navn=${navn}&sesong=${s + 1}&episode=1`;
+      return;
+    }
+  }
+
+  // ==== FALLBACK (tilbake til serie/film-side) ====
+  window.location.href = `film.html?navn=${navn}`;
 });
 
 // Skjul mus etter delay
