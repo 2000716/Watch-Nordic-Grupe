@@ -10,6 +10,7 @@ const serier = {
     imdb: "https://www.imdb.com/title/tt0247117/",
     skuespillere: "Johnny Depp, Helena Bonham Carter",
     skapere: "Tim Burton",
+    tilbakeUrl: "serie.html?navn=i-mummidalen",
     expireDate: "2026-11-15T23:59:59",
 
     audioLanguages: [],
@@ -26,7 +27,6 @@ const serier = {
             beskrivelse: "Endelig er det vår og Mummitrollet begir seg ut på oppdagelsesferd sammen med Snusmumrikken og Sniff.",
             varighet: "23 min",
             thumbnail: "https://media.themoviedb.org/t/p/w454_and_h254_face/hOpVGMZZ7MYaYjNN2eJzVKFbLVt.jpg",
-            tilbakeUrl: "serie.html?navn=i-mummidalen",
             videoUrl: "https://archive.org/download/folder_202411/I%20Mummidalen/Season%201/I%20Mummidalen%20-%201x01%20-%20V%C3%A5r%20i%20Mummidalen.mp4"
           },
           2: {
