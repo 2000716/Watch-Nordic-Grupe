@@ -901,12 +901,12 @@ if (navn && filmer?.[navn] && !sesong && !episode) {
   const ep = serie.sesonger[sesong].episoder[episode];
 
   film = {
-    ...ep,
-    audioLanguages: serie.audioLanguages || [],
-    subtitleLanguages: serie.subtitleLanguages || [],
-    tilbakeUrl: `serie.html?navn=${navn}&sesong=${sesong}`
-    tittel: `${serie.tittel} – S${sesong}E${episode}: ${ep.tittel}`
-  };
+  ...ep,
+  audioLanguages: serie.audioLanguages || [],
+  subtitleLanguages: serie.subtitleLanguages || [],
+  tilbakeUrl: `serie.html?navn=${navn}&sesong=${sesong}`,
+  tittel: `${serie.tittel} – S${sesong}E${episode}: ${ep.tittel}`
+};
 
   filmId = `serie-${navn}-s${sesong}-e${episode}`;
 
