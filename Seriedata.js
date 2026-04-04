@@ -60,6 +60,14 @@ const serier = {
             varighet: "23 min",
             thumbnail: "https://media.themoviedb.org/t/p/w454_and_h254_face/fUS845xMJYwAj0X5DynWvdJyQ88.jpg",
             videoUrl: "https://archive.org/download/folder_202411/I%20Mummidalen/Season%201/I%20Mummidalen%20-%201x05%20-%20Tredronningen.mp4"
+             },
+          6: {
+            episodeNummer: 6,
+            tittel: "Små gjester",
+            beskrivelse: "En dag så kommer to veldig små gjester til Mummihuset. De har med seg en koffert så Mummipappa forstår de har kommet for å bli og bygger en liten seng til dem. Alle er veldig nysgjerrige på hva som er i kofferten.",
+            varighet: "23 min",
+            thumbnail: "https://media.themoviedb.org/t/p/w454_and_h254_face/nRFdPRyHtjibDCMtpd6Nboj7vkT.jpg",
+            videoUrl: "https://archive.org/download/folder_202411/I%20Mummidalen/Season%201/I%20Mummidalen%20-%201x06%20-%20Sm%C3%A5%20gjester.mp4"
           }
         }
       }
