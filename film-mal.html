@@ -781,20 +781,18 @@ video::cue {
 
 <button id="skipIntroBtn" style="
   position: absolute;
-  top: 20px;       
-  right: 20px;     
-  padding: 16px 24px; 
-  font-size: 18px; 
-  font-weight: bold; 
-  border-radius: 8px; 
-  border: none; 
-  background: #0fddcb; 
-  color: black; 
-  cursor: pointer; 
-  z-index: 10000; 
-  opacity: 0;           
-  transition: opacity 1s ease; /* Fade inn */
-  pointer-events: none; 
+  right: 20px;             /* flyttet til høyre */
+  bottom: 150px;           /* litt høyere opp */
+  display: none;
+  padding: 14px 22px;      /* større knapp */
+  border: none;
+  border-radius: 12px;     /* rundere hjørner */
+  background: #0fddcb;
+  color: black;
+  font-weight: bold;
+  font-size: 16px;         /* større tekst */
+  cursor: pointer;
+  z-index: 10000;
 ">
   Hopp over intro
 </button>
@@ -1330,36 +1328,20 @@ document.addEventListener("contextmenu", (e) => {
   const skipIntroBtn = document.getElementById("skipIntroBtn");
 
 // Juster disse hvis introen er lengre/kortere
-const skipIntroBtn = document.getElementById("skipIntroBtn");
+const introStart = film.introStart ?? 0;
+const introEnd = film.introEnd ?? 60;
 
-// Sjekk om dette er en serieepisode
-const isSerieEpisode = navn && serier?.[navn] && sesong && episode;
+video.addEventListener("timeupdate", () => {
+  if (video.currentTime >= introStart && video.currentTime <= introEnd) {
+    skipIntroBtn.style.display = "block";
+  } else {
+    skipIntroBtn.style.display = "none";
+  }
+});
 
-if (isSerieEpisode) {
-  const introTid = serier[navn].introDuration || 0;
-
-  // Lytt til videons tid
-  video.addEventListener("timeupdate", () => {
-    if (video.currentTime < introTid) {
-      // Fade inn
-      skipIntroBtn.style.display = "block";
-      skipIntroBtn.style.pointerEvents = "auto";
-      skipIntroBtn.style.opacity = 1;
-    } else {
-      // Skjul umiddelbart uten fade
-      skipIntroBtn.style.display = "none";
-      skipIntroBtn.style.pointerEvents = "none";
-      skipIntroBtn.style.opacity = 0;
-    }
-  });
-
-  // Klikk for å hoppe over intro
-  skipIntroBtn.addEventListener("click", () => {
-    video.currentTime = introTid;
-  });
-} else {
-  skipIntroBtn.style.display = "none"; // skjul for filmer
-}
+skipIntroBtn.addEventListener("click", () => {
+  video.currentTime = introEnd;
+});
 
 </script>
 
