@@ -779,6 +779,23 @@ video::cue {
       Din nettleser støtter ikke videoavspilling.
     </video>
 
+    <button id="skipIntroBtn" style="
+  position:absolute;
+  left:20px;
+  bottom:120px;
+  display:none;
+  padding:10px 16px;
+  border:none;
+  border-radius:8px;
+  background:#0fddcb;
+  color:black;
+  font-weight:bold;
+  cursor:pointer;
+  z-index:10000;
+">
+  Hopp over intro
+</button>
+
     <div class="subtitle-overlay" id="subtitleOverlay"></div>
 
     <div id="resumeOverlay" class="resume-overlay">
@@ -1305,6 +1322,24 @@ video.addEventListener("contextmenu", (e) => {
 // (valgfritt) – hindre høyreklikk på hele siden
 document.addEventListener("contextmenu", (e) => {
   e.preventDefault();
+});
+
+  const skipIntroBtn = document.getElementById("skipIntroBtn");
+
+// Juster disse hvis introen er lengre/kortere
+const introStart = film.introStart ?? 0;
+const introEnd = film.introEnd ?? 60;
+
+video.addEventListener("timeupdate", () => {
+  if (video.currentTime >= introStart && video.currentTime <= introEnd) {
+    skipIntroBtn.style.display = "block";
+  } else {
+    skipIntroBtn.style.display = "none";
+  }
+});
+
+skipIntroBtn.addEventListener("click", () => {
+  video.currentTime = introEnd;
 });
 
 </script>
