@@ -902,10 +902,11 @@ let tilbakeUrl = "";
 
 /* ================= RESOLVE MEDIA ================= */
 if (navn && filmer?.[navn] && !sesong && !episode) {
-  // ===== FILM =====
+  // FILM
   film = filmer[navn];
   filmId = `film-${navn}`;
   tilbakeUrl = film.tilbakeUrl || "filmer.html";
+  isSerie = false;
 
 } else if (
   navn &&
@@ -914,19 +915,21 @@ if (navn && filmer?.[navn] && !sesong && !episode) {
   episode &&
   serier[navn].sesonger?.[sesong]?.episoder?.[episode]
 ) {
-  // ===== SERIE EPISODE =====
+  // SERIE
   const serie = serier[navn];
   const ep = serie.sesonger[sesong].episoder[episode];
 
-film = {
-  ...ep,
-  audioLanguages: serie.audioLanguages || [],
-  subtitleLanguages: serie.subtitleLanguages || [],
-  tilbakeUrl: `film.html?navn=${navn}`,
-  tittel: `${serie.tittel} – S${sesong}E${episode}: ${ep.tittel}`
-};
+  film = {
+    ...ep,
+    audioLanguages: serie.audioLanguages || [],
+    subtitleLanguages: serie.subtitleLanguages || [],
+    tilbakeUrl: `film.html?navn=${navn}`,
+    tittel: `${serie.tittel} – S${sesong}E${episode}: ${ep.tittel}`
+  };
 
   filmId = `serie-${navn}-s${sesong}-e${episode}`;
+  isSerie = true;
+}
 
 } else {
   alert("Ugyldig innhold");
@@ -1328,10 +1331,17 @@ document.addEventListener("contextmenu", (e) => {
   const skipIntroBtn = document.getElementById("skipIntroBtn");
 
 // Juster disse hvis introen er lengre/kortere
-const introStart = film.introStart ?? 0;
-const introEnd = film.introEnd ?? 60;
+const hasIntro = isSerie && film.introStart != null && film.introEnd != null;
+
+const introStart = film.introStart;
+const introEnd = film.introEnd;
 
 video.addEventListener("timeupdate", () => {
+  if (!isSerie) {
+    skipIntroBtn.style.display = "none";
+    return;
+  }
+
   if (video.currentTime >= introStart && video.currentTime <= introEnd) {
     skipIntroBtn.style.display = "block";
   } else {
