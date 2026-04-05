@@ -112,7 +112,7 @@ const serier = {
             introEnd: 89
           }
         }
-      }
+      },
         "the-titanic-archive": {
     tittel: "The Titanic Archive",
     bakgrunn: "https://drive.google.com/file/d/1LddVkNAUUS7V3WWMPNncbsWOdIRgn_fT/view?usp=sharing",
