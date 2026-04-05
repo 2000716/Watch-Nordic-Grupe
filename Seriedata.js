@@ -8,8 +8,8 @@ const serier = {
     beskrivelse: "Mummitrollet bor i Mummidalen i et høyt, sylinderformet, blått hus som Mummipappa bygde etter sin stormfulle ungdom med hattifnattene. Mummipappa bærer alltid en svart flosshatt og Mummimamma forkle og håndveske. Mummitrollet leker med Snorkfrøken, Sniff, Snusmumriken og Lille My. Hufsa og Isfruen er skikkelser som de fleste i Mummidalen er redde for.",
     metadata: ["Finland", "1990", "Alle", "Fantasy", "Animasjon"],
     imdb: "https://www.imdb.com/title/tt0247117/",
-    skuespillere: "Johnny Depp, Helena Bonham Carter",
-    skapere: "Tim Burton",
+    skuespillere: "",
+    skapere: "Tove Jansson, Lars Jansson",
     tilbakeUrl: "serie.html?navn=i-mummidalen",
     expireDate: "2026-11-15T23:59:59",
 
