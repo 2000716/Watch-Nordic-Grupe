@@ -963,16 +963,22 @@ document.querySelector(".cast-info").innerHTML = `
 `;
 
 /* === Se nå-knapp === */
+/* === Se nå-knapp – fungerer for filmer og serier === */
 const watchBtn = document.getElementById("watchBtn");
 let statusKey = `${type}-${navn}-status`;
 let status = localStorage.getItem(statusKey);
 
+// Oppdater knappens tekst og ikon basert på status
 function oppdaterWatchKnapp() {
   const icon = watchBtn.querySelector("i");
   const text = watchBtn.querySelector("span");
+
   if (status === "påbegynt") {
     icon.className = "fas fa-play";
     text.textContent = " Gjenoppta";
+  } else if (status === "ferdig") {
+    icon.className = "fas fa-check";
+    text.textContent = type === "film" ? " Sett ferdig" : " Ferdig";
   } else {
     icon.className = "fas fa-play";
     text.textContent = type === "film" ? " Se nå" : " Se episode";
@@ -980,16 +986,18 @@ function oppdaterWatchKnapp() {
 }
 oppdaterWatchKnapp();
 
+// Klikk-handling
 watchBtn.addEventListener("click", () => {
   if (erUpublisert) return;
 
   if (type === "film") {
+    // Film: marker påbegynt og gå til watchUrl
     localStorage.setItem(statusKey, "påbegynt");
     status = "påbegynt";
     oppdaterWatchKnapp();
     window.location.href = data.watchUrl;
   } else if (type === "serie") {
-    // Hent siste sete episode fra localStorage
+    // Serie: hent siste sette episode
     const sisteEpKey = `${navn}-siste-episode`;
     let sisteEp = JSON.parse(localStorage.getItem(sisteEpKey));
 
@@ -999,11 +1007,12 @@ watchBtn.addEventListener("click", () => {
       sesongNr = sisteEp.sesong;
       epNr = sisteEp.episode;
     } else {
-      // Default til første episode første sesong
+      // Default: første sesong, første episode
       sesongNr = Object.keys(data.sesonger)[0];
       epNr = Object.keys(data.sesonger[sesongNr].episoder)[0];
     }
 
+    // Marker påbegynt
     localStorage.setItem(statusKey, "påbegynt");
     status = "påbegynt";
     oppdaterWatchKnapp();
@@ -1170,10 +1179,11 @@ visSesong(sesongNumre[0]);
 `;
 
 epCard.addEventListener("click", () => {
-  // Lagre siste sete episode
+  // Lagre siste sette episode
   const sisteEpKey = `${navn}-siste-episode`;
   localStorage.setItem(sisteEpKey, JSON.stringify({ sesong: sesongNr, episode: epNr }));
 
+  // Gå til episode
   window.location.href =
     `film-mal.html?navn=${encodeURIComponent(navn)}&sesong=${sesongNr}&episode=${epNr}`;
 });
