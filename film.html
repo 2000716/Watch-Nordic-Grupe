@@ -982,10 +982,35 @@ oppdaterWatchKnapp();
 
 watchBtn.addEventListener("click", () => {
   if (erUpublisert) return;
-  localStorage.setItem(statusKey, "påbegynt");
-  status = "påbegynt";
-  oppdaterWatchKnapp();
-  window.location.href = data.watchUrl;
+
+  if (type === "film") {
+    localStorage.setItem(statusKey, "påbegynt");
+    status = "påbegynt";
+    oppdaterWatchKnapp();
+    window.location.href = data.watchUrl;
+  } else if (type === "serie") {
+    // Hent siste sete episode fra localStorage
+    const sisteEpKey = `${navn}-siste-episode`;
+    let sisteEp = JSON.parse(localStorage.getItem(sisteEpKey));
+
+    let sesongNr, epNr;
+
+    if (sisteEp) {
+      sesongNr = sisteEp.sesong;
+      epNr = sisteEp.episode;
+    } else {
+      // Default til første episode første sesong
+      sesongNr = Object.keys(data.sesonger)[0];
+      epNr = Object.keys(data.sesonger[sesongNr].episoder)[0];
+    }
+
+    localStorage.setItem(statusKey, "påbegynt");
+    status = "påbegynt";
+    oppdaterWatchKnapp();
+
+    // Gå til episode
+    window.location.href = `film-mal.html?navn=${encodeURIComponent(navn)}&sesong=${sesongNr}&episode=${epNr}`;
+  }
 });
 
 /* === Ferdig markering etter video === */
@@ -1144,7 +1169,11 @@ visSesong(sesongNumre[0]);
 </div>
 `;
 
- epCard.addEventListener("click", () => {
+epCard.addEventListener("click", () => {
+  // Lagre siste sete episode
+  const sisteEpKey = `${navn}-siste-episode`;
+  localStorage.setItem(sisteEpKey, JSON.stringify({ sesong: sesongNr, episode: epNr }));
+
   window.location.href =
     `film-mal.html?navn=${encodeURIComponent(navn)}&sesong=${sesongNr}&episode=${epNr}`;
 });
