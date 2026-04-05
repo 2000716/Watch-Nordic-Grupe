@@ -93,21 +93,21 @@ const serier = {
         episoder: {
           1: {
             episodeNummer: 1,
-            tittel: "Små gjester (S2)",
-            beskrivelse: "Sesong 2 starter med nye eventyr.",
+            tittel: "Kofferten",
+            beskrivelse: "Hufsa vet hva kofferten inneholder og kommer for å ta den. Snorkfrøken finner også ut hva som er i den, men det gjør bare problemet større. Bare Mummimamma har en plan, men vil det fungere?",
             varighet: "23 min",
-            thumbnail: "https://media.themoviedb.org/t/p/w454_and_h254_face/nRFdPRyHtjibDCMtpd6Nboj7vkT.jpg",
-            videoUrl: "https://archive.org/download/folder_202411/I%20Mummidalen/Season%201/I%20Mummidalen%20-%201x06%20-%20Sm%C3%A5%20gjester.mp4",
+            thumbnail: "https://media.themoviedb.org/t/p/w454_and_h254_face/AlbxYt87bCqyZcxkD1zMMCq7ufQ.jpg",
+            videoUrl: "https://archive.org/download/folder_202411/I%20Mummidalen/Season%201/I%20Mummidalen%20-%201x07%20-%20Kofferten.mp4",
             introStart: 2,
             introEnd: 89
           },
           2: {
             episodeNummer: 2,
-            tittel: "Trollmannens hatt (S2)",
-            beskrivelse: "Magien fortsetter i sesong 2.",
+            tittel: "Tufsla og Vifslas hemmelighet ",
+            beskrivelse: "En virkelig katastrofe har skjedd: Mummimammas veske er forsvunnet! Når hun endelig finner vesken blir Mummimamma så glad at hun steller i stand en fest!",
             varighet: "23 min",
-            thumbnail: "https://media.themoviedb.org/t/p/w454_and_h254_face/mlKjfZ60zdcNOCd8QH3YHYHIDMd.jpg",
-            videoUrl: "https://archive.org/download/folder_202411/I%20Mummidalen/Season%201/I%20Mummidalen%20-%201x02%20-%20Trollmannens%20hatt.mp4",
+            thumbnail: "https://media.themoviedb.org/t/p/w454_and_h254_face/hShuV3QSOe7XX7PwtyHem68Xd7q.jpg",
+            videoUrl: "https://archive.org/download/folder_202411/I%20Mummidalen/Season%201/I%20Mummidalen%20-%201x08%20-%20Tufsla%20og%20Vifslas%20hemmelighet.mp4",
             introStart: 2,
             introEnd: 89
           }
