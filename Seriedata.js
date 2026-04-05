@@ -113,6 +113,60 @@ const serier = {
           }
         }
       }
+        "the-titanic-archive": {
+    tittel: "The Titanic Archive",
+    bakgrunn: "https://drive.google.com/file/d/1LddVkNAUUS7V3WWMPNncbsWOdIRgn_fT/view?usp=sharing",
+    logo: "https://drive.google.com/file/d/1PkqpTBZDm9da3eQa0EWdvwg_KPd7zRfH/view?usp=sharing",
+    poster: "https://drive.google.com/file/d/17UD87g2M7MFkrpOJsNc0zPTi_9HGWuV6/view?usp=sharing",
+    posterVertikal: "https://drive.google.com/file/d/17UD87g2M7MFkrpOJsNc0zPTi_9HGWuV6/view?usp=sharing",
+    beskrivelse: "I denne dokumentaren tar Watch Originals med deg hendelsesforløpet til Titanic og historiene til offrene.",
+    metadata: ["Norge", "2026", "16", "Dokumentar"],
+    imdb: "",
+    skuespillere: "",
+    skapere: "Svein Olav Haukaas Arstein",
+    tilbakeUrl: "serie.html?navn=the-titanic-archive",
+    expireDate: "2026-11-15T23:59:59",
+
+    audioLanguages: [],
+    subtitleLanguages: [],
+
+    sesonger: {
+
+      // ================= SESONG 1 =================
+      1: {
+        sesongNummer: 1,
+        beskrivelse: "Sesong 1",
+        episoder: {
+          1: {
+            episodeNummer: 1,
+            tittel: "Titianic",
+            beskrivelse: "Jomfruturen til Titanic, båten som ikke kunen synke.",
+            varighet: "5 min",
+            thumbnail: "https://drive.google.com/file/d/17UD87g2M7MFkrpOJsNc0zPTi_9HGWuV6/view?usp=sharing",
+            videoUrl: "",
+            introStart: 2,
+            introEnd: 89
+          },
+          2: {
+            episodeNummer: 2,
+            tittel: "Båtten i dypet",
+            beskrivelse: "Rettsaken er i gang og i dypet ligger Titanic.",
+            varighet: "5 min",
+            thumbnail: "https://drive.google.com/file/d/17UD87g2M7MFkrpOJsNc0zPTi_9HGWuV6/view?usp=sharing",
+            videoUrl: "",
+            introStart: 2,
+            introEnd: 89
+          },
+          3: {
+            episodeNummer: 3,
+            tittel: "offrenes brev",
+            beskrivelse: "Offreen blir etterlatt og flere viser frem deres tolkning og historei far hendelsesforløpet.",
+            varighet: "5 min",
+            thumbnail: "https://drive.google.com/file/d/17UD87g2M7MFkrpOJsNc0zPTi_9HGWuV6/view?usp=sharing",
+            videoUrl: "",
+            introStart: 2,
+            introEnd: 89
+   
 
     }
   }
