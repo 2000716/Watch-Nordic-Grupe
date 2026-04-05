@@ -112,10 +112,10 @@ const serier = {
 
   "the-titanic-archive": {
     tittel: "The Titanic Archive",
-    bakgrunn: "https://drive.google.com/file/d/1LddVkNAUUS7V3WWMPNncbsWOdIRgn_fT/view?usp=sharing",
-    logo: "https://drive.google.com/file/d/1PkqpTBZDm9da3eQa0EWdvwg_KPd7zRfH/view?usp=sharing",
+    bakgrunn: "https://static.wixstatic.com/media/d9ace9_d2791cd525fb43239a80524ce10b435c~mv2.png",
+    logo: "https://static.wixstatic.com/media/d9ace9_a9a200d5078e4797997dc8f8d22a467a~mv2.png",
     poster: "https://drive.google.com/file/d/17UD87g2M7MFkrpOJsNc0zPTi_9HGWuV6/view?usp=sharing",
-    posterVertikal: "https://drive.google.com/file/d/17UD87g2M7MFkrpOJsNc0zPTi_9HGWuV6/view?usp=sharing",
+    posterVertikal: "https://static.wixstatic.com/media/d9ace9_f312e0fdb80c4fd5bc06fd3fdabee8ad~mv2.png",
     beskrivelse: "I denne dokumentaren tar Watch Originals med deg hendelsesforløpet til Titanic og historiene til offrene.",
     metadata: ["Norge", "2026", "16", "Dokumentar"],
     imdb: "",
@@ -135,7 +135,7 @@ const serier = {
             tittel: "Titianic",
             beskrivelse: "Jomfruturen til Titanic, båten som ikke kunen synke.",
             varighet: "5 min",
-            thumbnail: "https://drive.google.com/file/d/17UD87g2M7MFkrpOJsNc0zPTi_9HGWuV6/view?usp=sharing",
+            thumbnail: "https://static.wixstatic.com/media/d9ace9_d2791cd525fb43239a80524ce10b435c~mv2.png",
             videoUrl: "",
             introStart: 2,
             introEnd: 89
@@ -145,7 +145,7 @@ const serier = {
             tittel: "Båtten i dypet",
             beskrivelse: "Rettsaken er i gang og i dypet ligger Titanic.",
             varighet: "5 min",
-            thumbnail: "https://drive.google.com/file/d/17UD87g2M7MFkrpOJsNc0zPTi_9HGWuV6/view?usp=sharing",
+            thumbnail: "https://static.wixstatic.com/media/d9ace9_d2791cd525fb43239a80524ce10b435c~mv2.png",
             videoUrl: "",
             introStart: 2,
             introEnd: 89
@@ -155,7 +155,7 @@ const serier = {
             tittel: "offrenes brev",
             beskrivelse: "Offreen blir etterlatt og flere viser frem deres tolkning og historei far hendelsesforløpet.",
             varighet: "5 min",
-            thumbnail: "https://drive.google.com/file/d/17UD87g2M7MFkrpOJsNc0zPTi_9HGWuV6/view?usp=sharing",
+            thumbnail: "https://static.wixstatic.com/media/d9ace9_d2791cd525fb43239a80524ce10b435c~mv2.png",
             videoUrl: "",
             introStart: 2,
             introEnd: 89
