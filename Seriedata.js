@@ -12,13 +12,9 @@ const serier = {
     skapere: "Tove Jansson, Lars Jansson",
     tilbakeUrl: "serie.html?navn=i-mummidalen",
     expireDate: "2026-11-15T23:59:59",
-
     audioLanguages: [],
     subtitleLanguages: [],
-
     sesonger: {
-
-      // ================= SESONG 1 =================
       1: {
         sesongNummer: 1,
         beskrivelse: "Sesong 1",
@@ -85,8 +81,6 @@ const serier = {
           }
         }
       },
-
-      // ================= SESONG 2 =================
       2: {
         sesongNummer: 2,
         beskrivelse: "Sesong 2",
@@ -112,8 +106,11 @@ const serier = {
             introEnd: 89
           }
         }
-      },
-        "the-titanic-archive": {
+      }
+    }
+  }, // <-- KOMMA MELLOM SERIER
+
+  "the-titanic-archive": {
     tittel: "The Titanic Archive",
     bakgrunn: "https://drive.google.com/file/d/1LddVkNAUUS7V3WWMPNncbsWOdIRgn_fT/view?usp=sharing",
     logo: "https://drive.google.com/file/d/1PkqpTBZDm9da3eQa0EWdvwg_KPd7zRfH/view?usp=sharing",
@@ -126,13 +123,9 @@ const serier = {
     skapere: "Svein Olav Haukaas Arstein",
     tilbakeUrl: "serie.html?navn=the-titanic-archive",
     expireDate: "2026-11-15T23:59:59",
-
     audioLanguages: [],
     subtitleLanguages: [],
-
     sesonger: {
-
-      // ================= SESONG 1 =================
       1: {
         sesongNummer: 1,
         beskrivelse: "Sesong 1",
@@ -166,11 +159,9 @@ const serier = {
             videoUrl: "",
             introStart: 2,
             introEnd: 89
-   
-
+          }
+        }
+      }
     }
   }
 };
-
-
-
