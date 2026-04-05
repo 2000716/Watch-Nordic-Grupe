@@ -266,15 +266,21 @@ GLASS INFO PANEL
   overflow: hidden;
 }
 
-.text-button-container::after {
+.text-button-container::before {
   content: "";
   position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  height: 80px; /* hvor langt fade går */
-  background: linear-gradient(to top, rgba(10,15,18,1), rgba(10,15,18,0));
-  pointer-events: none; /* så det ikke blokkerer knappene */
+  top: 0;                /* Juster topp etter behov */
+  right: -120px;          /* Hvor langt ut lommen skal stikke */
+  width: 120px;           /* Bredden på lommen */
+  height: 100%;           /* Samme høyde som glass-containeren */
+  background: rgba(10, 15, 18, 0.55); /* Samme som glass-containeren */
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-radius: 24px;    /* Rund hjørner som containeren */
+  box-shadow: 
+    0 20px 60px rgba(0,0,0,.7),
+    inset 0 1px 0 rgba(255,255,255,.05);
+  z-index: 0;             /* ligger bak alt innhold */
 }
 
 /* =========================================================
