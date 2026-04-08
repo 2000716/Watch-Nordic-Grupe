@@ -1650,81 +1650,6 @@ main {
   font-size: 16px;
   color: #fff;
 }
-
-  /* === BANNER KONTROLLER === */
-.banner-controls {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-}
-
-/* Piler */
-.banner-arrow {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 46px;
-  height: 46px;
-  border-radius: 50%;
-  border: none;
-  background: rgba(0,0,0,0.4);
-  color: white;
-  font-size: 20px;
-  cursor: pointer;
-  pointer-events: auto;
-  transition: all 0.25s ease;
-  backdrop-filter: blur(6px);
-}
-
-.banner-arrow.left {
-  left: 20px;
-}
-
-.banner-arrow.right {
-  right: 20px;
-}
-
-.banner-arrow:hover {
-  background: rgba(0,255,204,0.9);
-  color: black;
-  transform: translateY(-50%) scale(1.1);
-}
-
-/* === DOTS / PROGRESS === */
-.banner-dots {
-  position: absolute;
-  bottom: 20px;
-  left: 50%;
-  transform: translateX(-50%);
-  display: flex;
-  gap: 8px;
-  pointer-events: auto;
-}
-
-/* Hver "prikk" = avlang */
-.banner-dot {
-  width: 30px;
-  height: 4px;
-  border-radius: 10px;
-  background: rgba(255,255,255,0.3);
-  overflow: hidden;
-  cursor: pointer;
-}
-
-/* Progress inni */
-.banner-dot::after {
-  content: "";
-  display: block;
-  height: 100%;
-  width: 0%;
-  background: #00FFCC;
-  transition: width linear;
-}
-
-/* Aktiv */
-.banner-dot.active::after {
-  width: 100%;
-}
 }
 
 
@@ -1757,44 +1682,28 @@ main {
 
 
   
-<!-- Hero Banner -->
+        <!-- Hero Banner -->
 <section class="hero-banner">
-
-  <!-- Bilde / video -->
   <img class="banner-image" id="banner-bilde" src="" alt="Film Banner" />
   <video id="banner-video" class="banner-video" playsinline preload="none"></video>
 
-  <!-- Innhold -->
   <div class="banner-content">
     <img class="film-logo" id="banner-logo" src="" alt="Film Logo" />
     <p id="banner-beskrivelse"></p>
     <div id="banner-metadata" class="banner-meta"></div>
-
     <div class="banner-buttons">
-      <button class="watch-button" id="banner-se-na">
-        <i class="fas fa-play"></i>
-        Se nå
-      </button>
+  <button class="watch-button" id="banner-se-na">
+    <i class="fas fa-play"></i>
+    Se nå
+  </button>
 
-      <button class="add-button" id="banner-add">
-        <i class="fas fa-plus"></i>
-      </button>
-    </div>
-  </div>
-
-  <!-- 🔥 NYTT: Piler + dots -->
-  <div class="banner-controls">
-
-    <!-- Piler -->
-    <button class="banner-arrow left" id="banner-prev">❮</button>
-    <button class="banner-arrow right" id="banner-next">❯</button>
-
-    <!-- Dots / progress -->
-    <div class="banner-dots" id="banner-dots"></div>
-
-  </div>
-
+  <button class="add-button" id="banner-add">
+    <i class="fas fa-plus"></i>
+  </button>
+</div>
 </section>
+
+
 
         <section class="gallery-section">
           <h2>Nye filmer på Watch Nordic</h2>
@@ -1892,68 +1801,16 @@ if (lagretBilde) {
 }
 
 // ==================== HERO-BANNER ==================== //
+function hentTimeFilm() {
+  const filmKeys = Object.keys(filmer).filter(k => filmer[k].banner);
+  if (filmKeys.length === 0) return null;
 
-// 🔁 Global state
-let bannerListe = [];
-let bannerIndex = 0;
-let bannerInterval;
-let bannerTimeout;
-
-// ==================== HENT ALT INNHOLD ==================== //
-function hentBannerListe() {
-  const filmListe = Object.values(filmer || []);
-  const serieListe = Object.values(serier || []);
-
-  let altInnhold = [...filmListe, ...serieListe].filter(item => item.banner);
-
-  altInnhold.sort((a, b) => new Date(b.publishDate || 0) - new Date(a.publishDate || 0));
-
-  return altInnhold;
+  const timeIndex = new Date().getHours() % filmKeys.length;
+  return filmer[filmKeys[timeIndex]];
 }
 
-// ==================== DOTS ==================== //
-function renderBannerDots() {
-  const dotsContainer = document.getElementById("banner-dots");
-  if (!dotsContainer) return;
-
-  dotsContainer.innerHTML = "";
-
-  bannerListe.forEach((_, index) => {
-    const dot = document.createElement("div");
-    dot.classList.add("banner-dot");
-
-    dot.onclick = () => {
-      bannerIndex = index;
-      restartBanner();
-    };
-
-    dotsContainer.appendChild(dot);
-  });
-}
-
-function updateDots() {
-  const dots = document.querySelectorAll(".banner-dot");
-
-  dots.forEach((dot, i) => {
-    dot.classList.remove("active");
-
-    // restart animation
-    dot.style.transition = "none";
-    dot.style.setProperty("--progress", "0%");
-    dot.offsetWidth;
-
-    if (i === bannerIndex) {
-      dot.classList.add("active");
-
-      // start progress animasjon
-      dot.style.transition = "width 60s linear";
-    }
-  });
-}
-
-// ==================== OPPDATER BANNER ==================== //
 function oppdaterBanner() {
-  const film = bannerListe[bannerIndex];
+  const film = hentTimeFilm();
   if (!film) return;
 
   const bilde = document.getElementById("banner-bilde");
@@ -1964,169 +1821,78 @@ function oppdaterBanner() {
   const seNa = document.getElementById("banner-se-na");
   const addBtn = document.getElementById("banner-add");
 
-  const erSerie = film.episoder !== undefined;
-
-  // === RESET ===
-  clearTimeout(bannerTimeout);
-  video.pause();
-  video.currentTime = 0;
-  video.style.display = "none";
+  // === Sett bannerbilde ===
+  bilde.src = film.banner || "";
   bilde.style.display = "block";
 
-  // === FADE UT ===
-  bilde.style.opacity = 0;
-  video.style.opacity = 0;
+  // === Sett video ===
+  if (film.trailer) {
+    video.src = film.trailer;
+    video.load();
+    video.muted = true;
+  } else {
+    video.removeAttribute("src");
+  }
+  video.style.display = "none";
 
-  setTimeout(() => {
+  // === Logo og beskrivelse ===
+  logo.src = film.logo || "";
+  logo.style.display = film.logo ? "block" : "none";
+  beskrivelse.textContent = film.beskrivelse || "";
+  metadata.textContent = film.metadata ? film.metadata.join(" • ") : "";
 
-    // === BILDE ===
-    bilde.src = film.banner || "";
+  // === Se nå-knapp ===
+  seNa.innerHTML = '<i class="fas fa-play"></i> Se nå';
+  seNa.onclick = () => window.location.href = `film-mal.html?id=${film.tittel}`;
 
-    // === VIDEO ===
-    if (film.trailer) {
-      video.src = film.trailer;
-      video.load();
-      video.muted = true;
-    } else {
-      video.removeAttribute("src");
-    }
+  // === Legg til i min liste ===
+  const key = film.tittel.toLowerCase().replace(/\s+/g, '-');
+  let liste = JSON.parse(localStorage.getItem("minListe")) || [];
 
-    // === LOGO ===
-    logo.src = film.logo || "";
-    logo.style.display = film.logo ? "block" : "none";
+  // Sett riktig ikon ved lasting
+  addBtn.innerHTML = liste.includes(key) ? '<i class="fas fa-check"></i>' : '<i class="fas fa-plus"></i>';
 
-    // === BESKRIVELSE ===
-    beskrivelse.textContent = film.beskrivelse || "";
-
-    // === METADATA ===
-    if (film.metadata) {
-      metadata.textContent = (erSerie ? ["Serie", ...film.metadata] : film.metadata).join(" • ");
-    } else {
-      metadata.textContent = erSerie ? "Serie" : "";
-    }
-
-    // === SE NÅ ===
-    seNa.innerHTML = '<i class="fas fa-play"></i> Se nå';
-    seNa.onclick = () => {
-      if (erSerie) {
-        window.location.href = `serie.html?id=${film.tittel}`;
-      } else {
-        window.location.href = `film-mal.html?id=${film.tittel}`;
-      }
-    };
-
-    // === MIN LISTE ===
-    const key = film.tittel.toLowerCase().replace(/\s+/g, '-');
+  addBtn.onclick = () => {
     let liste = JSON.parse(localStorage.getItem("minListe")) || [];
-
-    addBtn.innerHTML = liste.includes(key)
-      ? '<i class="fas fa-check"></i>'
-      : '<i class="fas fa-plus"></i>';
-
-    addBtn.onclick = () => {
-      let liste = JSON.parse(localStorage.getItem("minListe")) || [];
-
-      if (liste.includes(key)) {
-        liste = liste.filter(item => item !== key);
-        addBtn.innerHTML = '<i class="fas fa-plus"></i>';
-      } else {
-        liste.push(key);
-        addBtn.innerHTML = '<i class="fas fa-check"></i>';
-      }
-
-      localStorage.setItem("minListe", JSON.stringify(liste));
-    };
-
-    // === FADE IN ===
-    bilde.style.opacity = 1;
-    video.style.opacity = 1;
-
-    // === TRAILER ===
-    if (film.trailer) {
-      bannerTimeout = setTimeout(() => {
-        bilde.style.display = "none";
-        video.style.display = "block";
-        video.play();
-
-        video.onended = () => {
-          video.style.display = "none";
-          bilde.style.display = "block";
-        };
-      }, 5000);
+    if (liste.includes(key)) {
+      liste = liste.filter(item => item !== key);
+      addBtn.innerHTML = '<i class="fas fa-plus"></i>';
+    } else {
+      liste.push(key);
+      addBtn.innerHTML = '<i class="fas fa-check"></i>';
     }
+    localStorage.setItem("minListe", JSON.stringify(liste));
+  };
 
-    updateDots();
-
-  }, 200);
-}
-
-// ==================== RESTART ==================== //
-function restartBanner() {
-  clearInterval(bannerInterval);
-  oppdaterBanner();
-
-  bannerInterval = setInterval(() => {
-    bannerIndex = (bannerIndex + 1) % bannerListe.length;
-    oppdaterBanner();
-  }, 60000);
-}
-
-// ==================== START ==================== //
-function startBannerKarusell() {
-  bannerListe = hentBannerListe();
-  if (bannerListe.length === 0) return;
-
-  bannerIndex = 0;
-
-  renderBannerDots();
-  oppdaterBanner();
-
-  bannerInterval = setInterval(() => {
-    bannerIndex = (bannerIndex + 1) % bannerListe.length;
-    oppdaterBanner();
-  }, 60000);
+  // === Spill trailer etter 5 sekunder ===
+  setTimeout(() => {
+    if (film.trailer) {
+      bilde.style.display = "none";
+      video.style.display = "block";
+      video.currentTime = 0;
+      video.play();
+      video.onended = () => {
+        video.style.display = "none";
+        bilde.style.display = "block";
+      };
+    }
+  }, 5000);
 }
 
 // ==================== JUSTER VIDEO ==================== //
 function adjustBannerVideo(videoElement, container) {
-  if (!videoElement || !container) return;
-
-  videoElement.addEventListener("loadedmetadata", () => {
-    videoElement.style.width = "100%";
-    videoElement.style.height = "100%";
-    videoElement.style.objectFit = "cover";
+  videoElement.addEventListener('loadedmetadata', () => {
+    const videoRatio = videoElement.videoWidth / videoElement.videoHeight;
+    const containerRatio = container.offsetWidth / container.offsetHeight;
+    videoElement.style.width = '100%';
+    videoElement.style.height = '100%';
+    videoElement.style.objectFit = 'cover';
   });
 }
 
-// ==================== INIT ==================== //
-document.addEventListener("DOMContentLoaded", () => {
-
-  const bannerVideo = document.getElementById("banner-video");
-  const heroBanner = document.querySelector(".hero-banner");
-
-  adjustBannerVideo(bannerVideo, heroBanner);
-  startBannerKarusell();
-
-  // ⏮ PILER
-  document.getElementById("banner-prev")?.addEventListener("click", () => {
-    bannerIndex = (bannerIndex - 1 + bannerListe.length) % bannerListe.length;
-    restartBanner();
-  });
-
-  document.getElementById("banner-next")?.addEventListener("click", () => {
-    bannerIndex = (bannerIndex + 1) % bannerListe.length;
-    restartBanner();
-  });
-
-  // ⏸ PAUSE VED HOVER
-  heroBanner?.addEventListener("mouseenter", () => {
-    clearInterval(bannerInterval);
-  });
-
-  heroBanner?.addEventListener("mouseleave", () => {
-    restartBanner();
-  });
-});
+const bannerVideo = document.getElementById("banner-video");
+const heroBanner = document.querySelector(".hero-banner");
+adjustBannerVideo(bannerVideo, heroBanner);
 
 // ==================== UNIVERSAL SCROLL ==================== //
 document.querySelectorAll(".gallery-wrapper").forEach(wrapper => {
