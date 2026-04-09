@@ -2140,33 +2140,64 @@ function renderContinueWatching() {
   const section = document.getElementById("fortsett-section");
   const gallery = document.getElementById("fortsett-galleri");
   if (!section || !gallery) return;
+
   gallery.innerHTML = "";
 
-  const fortsettFilmer = Object.keys(filmer).filter((key) => {
+  let items = [];
+
+  // === FILMER ===
+  Object.keys(filmer).forEach((key) => {
     const progress = localStorage.getItem("progress_" + key);
-    return progress && progress > 0 && progress < 100;
+    if (progress && progress > 0 && progress < 100) {
+      items.push({
+        key,
+        data: filmer[key],
+        type: "film"
+      });
+    }
   });
 
-  if (fortsettFilmer.length === 0) {
+  // === SERIER ===
+  if (typeof serier !== "undefined") {
+    Object.keys(serier).forEach((key) => {
+      const progress = localStorage.getItem("progress_" + key);
+      if (progress && progress > 0 && progress < 100) {
+        items.push({
+          key,
+          data: serier[key],
+          type: "serie"
+        });
+      }
+    });
+  }
+
+  if (items.length === 0) {
     section.style.display = "none";
     return;
   }
+
   section.style.display = "block";
 
-  fortsettFilmer.forEach((key) => {
-    const film = filmer[key];
-    const progress = localStorage.getItem("progress_" + key);
+  items.forEach((item) => {
+    const progress = localStorage.getItem("progress_" + item.key);
+
     const link = document.createElement("a");
-    link.href = `film-mal.html?id=${key}`;
+
+    // 🔥 forskjell film/serie
+    if (item.type === "film") {
+      link.href = `film-mal.html?id=${item.key}`;
+    } else {
+      link.href = `serie.html?id=${item.key}`; // lag egen side hvis du ikke har
+    }
+
     link.classList.add("image-with-progress");
 
     const img = document.createElement("img");
-    img.src = film.poster;
-    img.alt = film.tittel;
+    img.src = item.data.poster;
+    img.alt = item.data.tittel;
 
     const progressBar = document.createElement("div");
     progressBar.classList.add("progress-bar");
-    progressBar.setAttribute("data-progress", progress);
     progressBar.style.setProperty("--progress", progress + "%");
 
     link.appendChild(img);
@@ -2174,7 +2205,6 @@ function renderContinueWatching() {
     gallery.appendChild(link);
   });
 }
-
 // ==================== INIT ==================== //
 document.addEventListener("DOMContentLoaded", () => {
   renderGallery("nye-filmer-galleri", null, true, 10);
