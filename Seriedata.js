@@ -112,7 +112,7 @@ const serier = {
 
   "the-titanic-archive": {
     tittel: "The Titanic Archive",
-    bakgrunn: "https://static.wixstatic.com/media/d9ace9_d2791cd525fb43239a80524ce10b435c~mv2.png",
+    bakgrunn: "https://static.wixstatic.com/media/d9ace9_0d59e15afbca471ba942b417054476a3~mv2.jpg",
     logo: "https://static.wixstatic.com/media/d9ace9_a9a200d5078e4797997dc8f8d22a467a~mv2.png",
     poster: "https://static.wixstatic.com/media/d9ace9_7e0bc76a75f140c28a7e34baca393cdf~mv2.png",
     posterVertikal: "https://static.wixstatic.com/media/d9ace9_f312e0fdb80c4fd5bc06fd3fdabee8ad~mv2.png",
@@ -133,9 +133,9 @@ const serier = {
           1: {
             episodeNummer: 1,
             tittel: "Titianic",
-            beskrivelse: "Jomfruturen til Titanic, båten som ikke kunen synke.",
+            beskrivelse: "Jomfruturen for RMS Titanic er i gang, uten at noen vet at den ender i tragedie. ",
             varighet: "5 min",
-            thumbnail: "https://static.wixstatic.com/media/d9ace9_d2791cd525fb43239a80524ce10b435c~mv2.png",
+            thumbnail: "https://static.wixstatic.com/media/d9ace9_0d59e15afbca471ba942b417054476a3~mv2.jpg",
             videoUrl: "",
             introStart: 2,
             introEnd: 89
@@ -143,9 +143,9 @@ const serier = {
           2: {
             episodeNummer: 2,
             tittel: "Båtten i dypet",
-            beskrivelse: "Rettsaken er i gang og i dypet ligger Titanic.",
+            beskrivelse: "Rettsaken er i gang, mens i dypet ligger RMS Titanic som et stille vitne til tragedien.",
             varighet: "5 min",
-            thumbnail: "https://static.wixstatic.com/media/d9ace9_d2791cd525fb43239a80524ce10b435c~mv2.png",
+            thumbnail: "https://static.wixstatic.com/media/d9ace9_0d59e15afbca471ba942b417054476a3~mv2.jpg",
             videoUrl: "",
             introStart: 2,
             introEnd: 89
@@ -153,9 +153,9 @@ const serier = {
           3: {
             episodeNummer: 3,
             tittel: "offrenes brev",
-            beskrivelse: "Offreen blir etterlatt og flere viser frem deres tolkning og historei far hendelsesforløpet.",
+            beskrivelse: "Ofrene blir etterlatt, mens flere gir sine tolkninger og fortellinger om hendelsesforløpet.",
             varighet: "5 min",
-            thumbnail: "https://static.wixstatic.com/media/d9ace9_d2791cd525fb43239a80524ce10b435c~mv2.png",
+            thumbnail: "https://static.wixstatic.com/media/d9ace9_0d59e15afbca471ba942b417054476a3~mv2.jpg",
             videoUrl: "",
             introStart: 2,
             introEnd: 89
