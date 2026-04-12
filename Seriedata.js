@@ -137,8 +137,8 @@ const serier = {
             varighet: "5 min",
             thumbnail: "https://static.wixstatic.com/media/d9ace9_0d59e15afbca471ba942b417054476a3~mv2.jpg",
             videoUrl: "https://video.wixstatic.com/video/d9ace9_b70998c45f2f4284b9b764582a0db2f2/1080p/mp4/file.mp4",
-            introStart:0,
-            introEnd:0
+           introStart: 2,
+            introEnd: 89
           },
           2: {
             episodeNummer: 2,
