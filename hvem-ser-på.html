@@ -90,7 +90,6 @@ h1 {
   color:var(--muted);
 }
 
-/* DELETE */
 .delete {
   margin-top:6px;
   font-size:13px;
@@ -102,7 +101,6 @@ h1 {
   display:block;
 }
 
-/* ACTIONS */
 .actions {
   margin-top:50px;
   display:flex;
@@ -146,21 +144,32 @@ footer {
 </footer>
 
 <script>
+
 const MAX_PROFILER = 5;
 let manageMode = false;
 
-/* LAST PROFILER */
+/* LOAD PROFILES */
 let profiler = JSON.parse(localStorage.getItem("profiler")) || [];
 
-/* STANDARD */
+/* DEFAULT PROFILES */
 if (profiler.length === 0) {
   profiler = [
-    { navn:"Profil", bilde:"https://via.placeholder.com/150", barn:false },
-    { navn:"Barn", bilde:"https://via.placeholder.com/150/888/fff?text=Barn", barn:true }
+    {
+      navn: "Bruker 1",
+      bilde: "https://api.dicebear.com/7.x/avataaars/svg?seed=User1",
+      barn: false
+    },
+    {
+      navn: "Barn",
+      bilde: "https://api.dicebear.com/7.x/bottts/svg?seed=Kid",
+      barn: true
+    }
   ];
+
   localStorage.setItem("profiler", JSON.stringify(profiler));
 }
 
+/* ACTIVE PROFILE */
 let aktivProfil = Number(localStorage.getItem("aktivProfil")) || 0;
 const container = document.getElementById("profiles");
 
@@ -169,13 +178,18 @@ function renderProfiler() {
   container.innerHTML = "";
 
   profiler.forEach((profil, index) => {
+
     const div = document.createElement("div");
     div.className = "profile";
+
     if (index === aktivProfil) div.classList.add("active");
 
     div.innerHTML = `
       <div class="avatar">
-        <img src="${profil.bilde}">
+        <img src="${profil.barn
+          ? "https://api.dicebear.com/7.x/bottts/svg?seed=Kid"
+          : profil.bilde
+        }">
         ${profil.barn ? `<div class="kids-badge">👶</div>` : ""}
       </div>
       <div class="name">${profil.navn}</div>
@@ -194,36 +208,43 @@ function renderProfiler() {
 
 renderProfiler();
 
-/* VELG PROFIL */
+/* SELECT PROFILE */
 function velgProfil(index) {
   aktivProfil = index;
   localStorage.setItem("aktivProfil", index);
 
-  /* 🔑 SYNC MED RESTEN AV APPEN */
-  localStorage.setItem("navn", profiler[index].navn);
-  localStorage.setItem("profilbilde", profiler[index].bilde);
+  const profil = profiler[index];
+
+  localStorage.setItem("navn", profil.navn);
+  localStorage.setItem("profilbilde",
+    profil.barn
+      ? "https://api.dicebear.com/7.x/bottts/svg?seed=Kid"
+      : profil.bilde
+  );
 
   window.location.href = "Hovedside.html";
 }
 
-/* LEGG TIL */
+/* ADD PROFILE */
 function leggTilProfil() {
   if (profiler.length >= MAX_PROFILER) {
     alert("Maks antall profiler nådd");
     return;
   }
+
   window.location.href = "Registreringsside.html";
 }
 
-/* ADMIN */
+/* ADMIN MODE */
 function toggleManage() {
   manageMode = !manageMode;
   renderProfiler();
 }
 
-/* SLETT */
+/* DELETE PROFILE */
 function slettProfil(e, index) {
   e.stopPropagation();
+
   if (!confirm("Vil du slette denne profilen?")) return;
 
   profiler.splice(index, 1);
@@ -231,16 +252,14 @@ function slettProfil(e, index) {
 
   if (aktivProfil >= profiler.length) {
     aktivProfil = 0;
-    localStorage.setItem("aktivProfil", 0);
   }
 
+  localStorage.setItem("aktivProfil", aktivProfil);
   renderProfiler();
 }
+
 </script>
 
 </body>
 </html>
-
-
-
 
