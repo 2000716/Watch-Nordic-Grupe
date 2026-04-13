@@ -1706,7 +1706,7 @@ main {
 
 
         <section class="gallery-section">
-          <h2>Nye filmer på Watch Nordic</h2>
+          <h2>Nye filmer og serier på Watch Nordic</h2>
           <div class="gallery-wrapper">
             <div class="fade-left"></div>
          <button class="scroll-button left">❮</button>
@@ -1724,6 +1724,17 @@ main {
      <button class="scroll-button left">❮</button>
     <div class="image-gallery" id="fortsett-galleri"></div>
      <button class="scroll-button right">❯</button>
+    <div class="fade-right"></div>
+  </div>
+</section>
+
+  <section class="gallery-section">
+  <h2>Filmer</h2>
+  <div class="gallery-wrapper">
+    <div class="fade-left"></div>
+    <button class="scroll-button left">❮</button>
+    <div class="image-gallery" id="filmer-galleri"></div>
+    <button class="scroll-button right">❯</button>
     <div class="fade-right"></div>
   </div>
 </section>
@@ -2205,10 +2216,69 @@ function renderContinueWatching() {
     gallery.appendChild(link);
   });
 }
+  function renderMixedContent(galleryId, limit = 10) {
+  const gallery = document.getElementById(galleryId);
+  if (!gallery) return;
+
+  gallery.innerHTML = "";
+
+  let items = [];
+
+  // FILMER
+  Object.keys(filmer).forEach(key => {
+    items.push({
+      key,
+      data: filmer[key],
+      type: "film",
+      date: new Date(filmer[key].publishDate || 0)
+    });
+  });
+
+  // SERIER
+  if (typeof serier !== "undefined") {
+    Object.keys(serier).forEach(key => {
+      items.push({
+        key,
+        data: serier[key],
+        type: "serie",
+        date: new Date(serier[key].publishDate || 0)
+      });
+    });
+  }
+
+  // sorter nyeste først
+  items.sort((a, b) => b.date - a.date);
+
+  // begrens antall
+  items.slice(0, limit).forEach(item => {
+    const link = document.createElement("a");
+
+    if (item.type === "film") {
+      link.href = `film-mal.html?id=${item.key}`;
+    } else {
+      link.href = `serie.html?id=${item.key}`;
+    }
+
+    link.classList.add("gallery-item");
+
+    link.innerHTML = `
+      <img src="${item.data.poster}" alt="${item.data.tittel}">
+      <div class="image-overlay">
+        <div class="overlay-content">
+          <div class="overlay-title">${item.data.tittel}</div>
+          <div class="overlay-meta">${(item.data.metadata || []).join(" • ")}</div>
+        </div>
+      </div>
+    `;
+
+    gallery.appendChild(link);
+  });
+}
 // ==================== INIT ==================== //
 document.addEventListener("DOMContentLoaded", () => {
-  renderGallery("nye-filmer-galleri", null, true, 10);
+  renderMixedContent("nye-filmer-galleri", 10);
   renderTop10("topp10-filmer-galleri");
+  renderGallery("filmer-galleri", null, true, 20); // (nytt galleri)
   renderGallery("barn-galleri", (key) => {
     const film = filmer[key];
     return film.metadata.some(
