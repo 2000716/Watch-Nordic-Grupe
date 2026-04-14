@@ -182,7 +182,7 @@ header button:hover { border-color:white; }
   <h1>Konto</h1>
   <div>
     <!-- 🔥 FIX: går til hvem-ser-på -->
-    <button onclick="window.location.href='HvemSerPa.html'">Tilbake</button>
+    <button onclick="window.location.href='Hvem-ser-på.html'">Tilbake</button>
     <button onclick="loggUt()">Logg ut</button>
   </div>
 </header>
@@ -261,7 +261,7 @@ header button:hover { border-color:white; }
 
 /* LOGIN CHECK */
 if (!localStorage.getItem("epost")) {
-  window.location.href = "Innlogging.html";
+  window.location.href = "Innloggings side.html";
 }
 
 /* DATA */
@@ -274,7 +274,7 @@ let aktiv = profiler[aktivProfil];
 
 /* SIKKERHET */
 if (!aktiv) {
-  window.location.href = "HvemSerPa.html";
+  window.location.href = "hvem-ser-på.html";
 }
 
 /* LOAD UI */
@@ -335,12 +335,12 @@ function avbrytEpost() {
 
 /* 🔥 NY: GÅ TIL PROFILBILDE SIDE */
 function endreProfilbilde() {
-  window.location.href = "profilbilde.html";
+  window.location.href = "Registreringsside.html";
 }
 
 /* NAV */
 function velgProfil() {
-  window.location.href = "HvemSerPa.html";
+  window.location.href = "hvem-ser-på.html";
 }
 
 /* SLETT */
@@ -352,13 +352,13 @@ function bekreftSlettBruker() {
   localStorage.setItem("profiler", JSON.stringify(profiler));
   localStorage.setItem("aktivProfil", 0);
 
-  window.location.href = "HvemSerPa.html";
+  window.location.href = "hvem-ser-på.html";
 }
 
 /* LOGG UT */
 function loggUt() {
   localStorage.clear();
-  window.location.href = "Innlogging.html";
+  window.location.href = "Innloggings side.html";
 }
 
 </script>
