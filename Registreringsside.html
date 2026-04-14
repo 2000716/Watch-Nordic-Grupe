@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Velg Profilbilde – Watch Nordic</title>
+
   <style>
     body {
       background: #0d1117;
@@ -24,12 +25,6 @@
       max-width: 900px;
     }
 
-    .rad-tittel {
-      font-size: 1.2rem;
-      margin-bottom: 15px;
-      font-weight: bold;
-    }
-
     .bilder-rad {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
@@ -46,8 +41,6 @@
     .bilde-navn {
       margin-top: 8px;
       font-size: 0.9rem;
-      text-align: center;
-      word-break: break-word;
     }
 
     .profilbilde-valg {
@@ -55,9 +48,8 @@
       height: 140px;
       border-radius: 50%;
       object-fit: cover;
-      overflow: hidden;
       border: 3px solid transparent;
-      transition: border 0.3s ease, box-shadow 0.3s ease, transform 0.2s ease;
+      transition: 0.3s;
       cursor: pointer;
     }
 
@@ -73,48 +65,21 @@
 
     .tilbake-knapp {
       margin-top: 40px;
-      background-color: white;
+      background: white;
       color: #0d1117;
       padding: 14px 28px;
-      font-size: 1rem;
       font-weight: bold;
       border: none;
       border-radius: 10px;
       cursor: pointer;
-      text-decoration: none;
-      transition: background-color 0.3s ease, transform 0.2s ease;
     }
 
     .tilbake-knapp:hover {
-      background-color: #e1e1e1;
       transform: scale(1.05);
-    }
-
-    @media (max-width: 768px) {
-      h1 {
-        font-size: 1.6rem;
-      }
-      .profilbilde-valg {
-        width: 110px;
-        height: 110px;
-      }
-    }
-
-    @media (max-width: 480px) {
-      h1 {
-        font-size: 1.4rem;
-      }
-      .profilbilde-valg {
-        width: 90px;
-        height: 90px;
-      }
-      .bilder-rad {
-        grid-template-columns: repeat(3, 1fr);
-        gap: 15px;
-      }
     }
   </style>
 </head>
+
 <body>
 
 <h1>Velg Profilbilde</h1>
@@ -124,6 +89,7 @@
 <button class="tilbake-knapp" onclick="tilbakeTilKonto()">Lagre og tilbake</button>
 
 <script>
+
 const rader = [
   {
     bilder: [
@@ -139,7 +105,7 @@ const rader = [
       'https://static.wixstatic.com/media/fd2fb2_4c90736292b44b59929074fa97b847b3~mv2.png',
       'https://static.wixstatic.com/media/fd2fb2_bda02652f6384ce59dfaf168afecdb64~mv2.png'
     ],
-    navn: [] // ingen navn vises
+    navn: []
   },
   {
     bilder: [
@@ -148,88 +114,75 @@ const rader = [
       'https://static.wixstatic.com/media/fd2fb2_be285b95911e4afab861aaba9bcb33ef~mv2.jpg'
     ],
     navn: ["Victor","Emely","Victoria"]
-  },
-  {
-    bilder: [
-      'https://static.wixstatic.com/media/fd2fb2_23d60dafae70488987c6dae5e236ed57~mv2.jpg',
-      'https://static.wixstatic.com/media/fd2fb2_4e3da719249a405b98066d613854c98d~mv2.jpg',
-      'https://static.wixstatic.com/media/fd2fb2_f0b2ad82bc114a4f9f4ce884236d533d~mv2.jpg'
-    ],
-    navn: ["Klatremus","Mikkel Rev","Morten"]
   }
 ];
 
-const hovedContainer = document.getElementById('hoved-container');
-let valgtBilde = localStorage.getItem('profilbilde') || null;
+const container = document.getElementById("hoved-container");
 
+/* HENT FRA RIKTIG KEY */
+let valgtBilde = localStorage.getItem("valgtProfilbilde") || null;
+
+/* VIS VALG */
 function oppdaterValg() {
-  document.querySelectorAll('.profilbilde-valg').forEach(img => {
-    img.classList.toggle('selected', img.src === valgtBilde);
+  document.querySelectorAll(".profilbilde-valg").forEach(img => {
+    img.classList.toggle("selected", img.src === valgtBilde);
   });
 }
 
+/* LAG GRID */
 function lagRader() {
   rader.forEach(rad => {
-    const radWrapper = document.createElement('div');
-    radWrapper.className = 'rad-container';
 
-    const tittelEl = document.createElement('div');
-    tittelEl.className = 'rad-tittel';
-    tittelEl.textContent = rad.tittel;
+    const radDiv = document.createElement("div");
+    radDiv.className = "rad-container";
 
-    const bilderRad = document.createElement('div');
-    bilderRad.className = 'bilder-rad';
+    const grid = document.createElement("div");
+    grid.className = "bilder-rad";
 
-    rad.bilder.forEach((url,i) => {
-      const container = document.createElement('div');
-      container.className = 'bilde-container';
+    rad.bilder.forEach((url, i) => {
 
-      const img = document.createElement('img');
+      const box = document.createElement("div");
+      box.className = "bilde-container";
+
+      const img = document.createElement("img");
       img.src = url;
-      img.alt = `Profilbilde fra ${rad.tittel}`;
-      img.className = 'profilbilde-valg';
-      img.addEventListener('click', () => {
+      img.className = "profilbilde-valg";
+
+      img.onclick = () => {
         valgtBilde = url;
         oppdaterValg();
-      });
+      };
 
-      container.appendChild(img);
+      box.appendChild(img);
 
-      // Legg kun til navn hvis rad.navn finnes og ikke er tom
-      if (rad.navn && rad.navn.length > 0) {
-        const navn = document.createElement('div');
-        navn.className = 'bilde-navn';
-        navn.textContent = rad.navn[i];
-        container.appendChild(navn);
+      if (rad.navn.length) {
+        const navn = document.createElement("div");
+        navn.className = "bilde-navn";
+        navn.innerText = rad.navn[i];
+        box.appendChild(navn);
       }
 
-      bilderRad.appendChild(container);
+      grid.appendChild(box);
     });
 
-    radWrapper.appendChild(tittelEl);
-    radWrapper.appendChild(bilderRad);
-    hovedContainer.appendChild(radWrapper);
+    radDiv.appendChild(grid);
+    container.appendChild(radDiv);
   });
 }
 
+/* LAGRE OG GÅ TILBAKE */
 function tilbakeTilKonto() {
   if (valgtBilde) {
-    localStorage.setItem('profilbilde', valgtBilde);
+    localStorage.setItem("valgtProfilbilde", valgtBilde);
   }
-  window.location.href = 'konto.html';
+
+  window.location.href = "konto.html";
 }
 
 lagRader();
 oppdaterValg();
+
 </script>
 
 </body>
 </html>
-
-
-
-
-
-
-
-
