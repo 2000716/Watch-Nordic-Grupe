@@ -131,13 +131,21 @@ header button:hover { border-color:white; }
 
 .row:last-child { border-bottom:none; }
 
-.label { color:var(--muted); font-size:14px; }
+.label {
+  color:var(--muted);
+  font-size:14px;
+}
 
-.value { font-size:16px; }
+.value {
+  font-size:16px;
+}
 
+/* INLINE EDIT */
 .hidden { display:none; }
 
-.edit-field { margin-top:8px; }
+.edit-field {
+  margin-top:8px;
+}
 
 .edit-field input {
   width:100%;
@@ -165,8 +173,12 @@ header button:hover { border-color:white; }
 
 .secondary { color:#aaa; }
 
+/* MOBILE */
 @media (max-width:900px) {
-  .container { grid-template-columns:1fr; padding:20px; }
+  .container {
+    grid-template-columns:1fr;
+    padding:20px;
+  }
 }
 </style>
 </head>
@@ -185,14 +197,13 @@ header button:hover { border-color:white; }
 
 <!-- SIDEBAR -->
 <aside class="sidebar">
-  <div class="avatar">
+  <div class="avatar" onclick="velgProfil()">
     <img id="profilbilde" src="https://via.placeholder.com/160">
   </div>
-
   <div class="profile-name" id="navnDisplay"></div>
 
   <div class="profile-actions">
-    <button onclick="velgProfil()">Bytt profil</button>
+    <button onclick="velgProfil()">Endre profilbilde</button>
     <button onclick="bekreftSlettBruker()" style="border-color:#ff4d4d;color:#ff4d4d;">
       Slett profil
     </button>
@@ -205,7 +216,8 @@ header button:hover { border-color:white; }
 <h2>Kontoinformasjon</h2>
 <div class="card">
 
-<div class="row">
+<!-- NAVN -->
+<div class="row" id="navnRow">
   <div>
     <div class="label">Navn</div>
     <div class="value" id="navnView"></div>
@@ -221,7 +233,8 @@ header button:hover { border-color:white; }
   <button onclick="endreNavn()">Endre</button>
 </div>
 
-<div class="row">
+<!-- EPOST -->
+<div class="row" id="epostRow">
   <div>
     <div class="label">E-post</div>
     <div class="value" id="epostView"></div>
@@ -237,6 +250,7 @@ header button:hover { border-color:white; }
   <button onclick="endreEpost()">Endre</button>
 </div>
 
+<!-- PASSORD (KUN VISNING) -->
 <div class="row">
   <div>
     <div class="label">Passord</div>
@@ -248,86 +262,93 @@ header button:hover { border-color:white; }
 
 <h2>Abonnement</h2>
 <div class="card">
-  <div class="row"><div><div class="label">Plan</div><div class="value">Premium</div></div></div>
-  <div class="row"><div><div class="label">Kvalitet</div><div class="value">4K Ultra HD</div></div></div>
-  <div class="row"><div><div class="label">Skjermer</div><div class="value">4 samtidige</div></div></div>
+  <div class="row">
+    <div>
+      <div class="label">Plan</div>
+      <div class="value">Premium</div>
+    </div>
+  </div>
+  <div class="row">
+    <div>
+      <div class="label">Kvalitet</div>
+      <div class="value">4K Ultra HD</div>
+    </div>
+  </div>
+  <div class="row">
+    <div>
+      <div class="label">Skjermer</div>
+      <div class="value">4 samtidige</div>
+    </div>
+  </div>
 </div>
 
 <h2>Preferanser</h2>
 <div class="card">
-  <div class="row"><div><div class="label">Autoplay</div><div class="value">På</div></div></div>
-  <div class="row"><div><div class="label">Foreldrekontroll</div><div class="value">Av</div></div></div>
+  <div class="row">
+    <div>
+      <div class="label">Autoplay</div>
+      <div class="value">På</div>
+    </div>
+  </div>
+  <div class="row">
+    <div>
+      <div class="label">Foreldrekontroll</div>
+      <div class="value">Av</div>
+    </div>
+  </div>
 </div>
 
 </section>
 </div>
 
 <script>
-
-/* LOGIN CHECK */
 if (!localStorage.getItem("epost")) {
   window.location.href = "Innlogging.html";
 }
 
-/* DATA */
-let profiler = JSON.parse(localStorage.getItem("profiler")) || [];
-let aktivProfil = Number(localStorage.getItem("aktivProfil")) || 0;
-let aktiv = profiler[aktivProfil];
-
-/* ELEMENTS */
 const navnDisplay = document.getElementById("navnDisplay");
 const navnView = document.getElementById("navnView");
 const navnInput = document.getElementById("navnInput");
+const navnRow = document.getElementById("navnRow");
 
 const epostView = document.getElementById("epostView");
 const epostInput = document.getElementById("epostInput");
+const epostRow = document.getElementById("epostRow");
 
-/* BARNEBILDE FIX */
-if (aktiv?.barn) {
-  aktiv.bilde = "https://api.dicebear.com/7.x/bottts/svg?seed=Kid";
-}
-
-/* LOAD UI */
-if (aktiv) {
-  navnDisplay.innerText = aktiv.navn;
-  navnView.innerText = aktiv.navn;
-  document.getElementById("profilbilde").src = aktiv.bilde;
-}
-
+/* LOAD DATA */
+navnDisplay.innerText = localStorage.getItem("navn") || "Profil";
+navnView.innerText = localStorage.getItem("navn") || "Profil";
 epostView.innerText = localStorage.getItem("epost") || "";
+
+const bilde = localStorage.getItem("profilbilde");
+if (bilde) document.getElementById("profilbilde").src = bilde;
 
 /* NAVN */
 function endreNavn() {
   navnInput.value = navnView.innerText;
-  document.querySelector(".edit-field").classList.remove("hidden");
   navnView.classList.add("hidden");
+  navnRow.querySelector(".edit-field").classList.remove("hidden");
 }
 
 function lagreNavn() {
   const ny = navnInput.value.trim();
   if (!ny) return;
-
-  aktiv.navn = ny;
-  profiler[aktivProfil] = aktiv;
-
-  localStorage.setItem("profiler", JSON.stringify(profiler));
-
+  localStorage.setItem("navn", ny);
   navnView.innerText = ny;
   navnDisplay.innerText = ny;
-
   avbrytNavn();
 }
 
 function avbrytNavn() {
-  document.querySelector(".edit-field").classList.add("hidden");
   navnView.classList.remove("hidden");
+  navnRow.querySelector(".edit-field").classList.add("hidden");
 }
 
 /* EPOST */
 function endreEpost() {
   epostInput.value = epostView.innerText;
   epostView.classList.add("hidden");
-  epostInput.parentElement.classList.remove("hidden");
+  epostRow.querySelector(".edit-field").classList.remove("hidden");
 }
 
 function lagreEpost() {
@@ -340,35 +361,25 @@ function lagreEpost() {
 
 function avbrytEpost() {
   epostView.classList.remove("hidden");
-  epostInput.parentElement.classList.add("hidden");
+  epostRow.querySelector(".edit-field").classList.add("hidden");
 }
 
-/* PROFIL */
+/* BEHOLDTE FUNKSJONER */
 function velgProfil() {
-  window.location.href = "HvemSerPa.html";
+  window.location.href = "Registreringsside.html";
 }
 
-/* DELETE */
 function bekreftSlettBruker() {
   if (!confirm("Vil du slette profilen permanent?")) return;
-
-  profiler.splice(aktivProfil, 1);
-  localStorage.setItem("profiler", JSON.stringify(profiler));
-
-  localStorage.setItem("aktivProfil", 0);
-
-  window.location.href = "HvemSerPa.html";
+  localStorage.clear();
+  window.location.href = "index.html";
 }
 
-/* LOGOUT */
 function loggUt() {
   localStorage.removeItem("epost");
   localStorage.removeItem("passord");
-  localStorage.removeItem("aktivProfil");
-
   window.location.href = "Innlogging.html";
 }
-
 </script>
 
 <footer style="border-top:1px solid #222;padding:30px 40px;color:#8c8c8c;font-size:12px;">
@@ -377,5 +388,4 @@ function loggUt() {
 
 </body>
 </html>
-
 
