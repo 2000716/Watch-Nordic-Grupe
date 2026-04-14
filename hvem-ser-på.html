@@ -140,14 +140,6 @@ let profiler = JSON.parse(localStorage.getItem("profiler")) || [
 
 const container = document.getElementById("profiles");
 
-/* AUTO LOGIN */
-const sist = localStorage.getItem("aktivProfil");
-if (sist !== null) {
-  setTimeout(() => {
-    velgProfil(Number(sist));
-  }, 500);
-}
-
 /* RENDER */
 function renderProfiler() {
   container.innerHTML = "";
