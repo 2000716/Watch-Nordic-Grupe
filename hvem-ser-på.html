@@ -148,11 +148,10 @@ footer {
 const MAX_PROFILER = 5;
 let manageMode = false;
 
-/* LOAD PROFILES */
 let profiler = JSON.parse(localStorage.getItem("profiler")) || [];
 
-/* DEFAULT PROFILES */
-if (profiler.length === 0) {
+/* DEFAULT */
+if (!Array.isArray(profiler) || profiler.length === 0) {
   profiler = [
     {
       navn: "Bruker 1",
@@ -165,12 +164,12 @@ if (profiler.length === 0) {
       barn: true
     }
   ];
-
   localStorage.setItem("profiler", JSON.stringify(profiler));
 }
 
-/* ACTIVE PROFILE */
-let aktivProfil = Number(localStorage.getItem("aktivProfil")) || 0;
+let aktivProfil = Number(localStorage.getItem("aktivProfil"));
+if (isNaN(aktivProfil)) aktivProfil = 0;
+
 const container = document.getElementById("profiles");
 
 /* RENDER */
@@ -182,23 +181,34 @@ function renderProfiler() {
     const div = document.createElement("div");
     div.className = "profile";
 
-    if (index === aktivProfil) div.classList.add("active");
+    if (index === aktivProfil) {
+      div.classList.add("active");
+    }
 
     div.innerHTML = `
       <div class="avatar">
-        <img src="${profil.barn
-          ? "https://api.dicebear.com/7.x/bottts/svg?seed=Kid"
-          : profil.bilde
-        }">
+        <img src="${profil.bilde}">
         ${profil.barn ? `<div class="kids-badge">👶</div>` : ""}
       </div>
       <div class="name">${profil.navn}</div>
-      <div class="delete" onclick="slettProfil(event, ${index})">Slett</div>
+      ${manageMode ? `<div class="delete">Slett</div>` : ""}
     `;
 
-    div.onclick = () => {
-      if (!manageMode) velgProfil(index);
-    };
+    /* KLIKK */
+    div.addEventListener("click", () => {
+      if (!manageMode) {
+        velgProfil(index);
+      }
+    });
+
+    /* SLETT */
+    if (manageMode) {
+      const deleteBtn = div.querySelector(".delete");
+      deleteBtn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        slettProfil(index);
+      });
+    }
 
     container.appendChild(div);
   });
@@ -208,27 +218,27 @@ function renderProfiler() {
 
 renderProfiler();
 
-/* SELECT PROFILE */
+/* VELG PROFIL (som Netflix) */
 function velgProfil(index) {
-  aktivProfil = index;
-  localStorage.setItem("aktivProfil", index);
-
   const profil = profiler[index];
 
-  localStorage.setItem("navn", profil.navn);
-  localStorage.setItem("profilbilde",
-    profil.barn
-      ? "https://api.dicebear.com/7.x/bottts/svg?seed=Kid"
-      : profil.bilde
-  );
+  localStorage.setItem("aktivProfil", index);
+  localStorage.setItem("aktivNavn", profil.navn);
+  localStorage.setItem("aktivBilde", profil.bilde);
+  localStorage.setItem("erBarn", profil.barn);
 
-  window.location.href = "Hovedside.html";
+  /* liten delay for smooth følelse */
+  document.body.style.opacity = "0.5";
+
+  setTimeout(() => {
+    window.location.href = "Hovedside.html";
+  }, 300);
 }
 
-/* ADD PROFILE */
+/* LEGG TIL */
 function leggTilProfil() {
   if (profiler.length >= MAX_PROFILER) {
-    alert("Maks antall profiler nådd");
+    alert("Maks 5 profiler!");
     return;
   }
 
@@ -241,11 +251,9 @@ function toggleManage() {
   renderProfiler();
 }
 
-/* DELETE PROFILE */
-function slettProfil(e, index) {
-  e.stopPropagation();
-
-  if (!confirm("Vil du slette denne profilen?")) return;
+/* SLETT */
+function slettProfil(index) {
+  if (!confirm("Slette denne profilen?")) return;
 
   profiler.splice(index, 1);
   localStorage.setItem("profiler", JSON.stringify(profiler));
