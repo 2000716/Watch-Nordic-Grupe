@@ -21,7 +21,6 @@ body {
   font-family:system-ui;
 }
 
-/* HEADER */
 header {
   display:flex;
   justify-content:space-between;
@@ -38,7 +37,6 @@ header button {
   border-radius:6px;
 }
 
-/* LAYOUT */
 .container {
   display:grid;
   grid-template-columns:280px 1fr;
@@ -46,7 +44,6 @@ header button {
   padding:40px;
 }
 
-/* SIDEBAR */
 .sidebar {
   text-align:center;
 }
@@ -76,18 +73,11 @@ header button {
   font-size:20px;
 }
 
-/* CONTENT */
 .card {
   background:#1c1c1c;
   padding:20px;
   border-radius:10px;
   margin-bottom:20px;
-}
-
-.row {
-  display:flex;
-  justify-content:space-between;
-  margin-bottom:15px;
 }
 
 .hidden { display:none; }
@@ -115,7 +105,6 @@ input {
 
 <div class="container">
 
-<!-- SIDEBAR -->
 <div class="sidebar">
   <div class="avatar" onclick="endreProfilbilde()">
     <img id="profilbilde">
@@ -129,7 +118,6 @@ input {
   <button onclick="slettProfil()" style="color:red;">Slett profil</button>
 </div>
 
-<!-- CONTENT -->
 <div>
 
 <div class="card">
@@ -163,24 +151,38 @@ input {
 
 /* LOGIN */
 if (!localStorage.getItem("epost")) {
-  window.location.href = "Innlogging.html";
+  window.location.href = "Innloggings side.html";
 }
 
 /* DATA */
 let profiler = JSON.parse(localStorage.getItem("profiler")) || [];
 let aktivProfil = Number(localStorage.getItem("aktivProfil")) || 0;
-let aktiv = profiler[aktivProfil];
 
 /* FAILSAFE */
-if (!aktiv) {
-  window.location.href = "HvemSerPa.html";
+if (!profiler[aktivProfil]) {
+  window.location.href = "hvem-ser-på.html";
 }
 
-/* LOAD */
+let aktiv = profiler[aktivProfil];
+
+/* 🔥 FIX: hent nytt bilde fra registrering */
+let nyttBilde = localStorage.getItem("valgtProfilbilde");
+
+if (nyttBilde) {
+  profiler[aktivProfil].bilde = nyttBilde;
+  localStorage.setItem("profiler", JSON.stringify(profiler));
+  localStorage.removeItem("valgtProfilbilde");
+
+  aktiv = profiler[aktivProfil];
+}
+
+/* LOAD UI */
 function loadUI() {
   document.getElementById("navnDisplay").innerText = aktiv.navn;
   document.getElementById("navnView").innerText = aktiv.navn;
-  document.getElementById("profilbilde").src = aktiv.bilde;
+
+  document.getElementById("profilbilde").src =
+    aktiv.bilde || "https://api.dicebear.com/7.x/avataaars/svg?seed=user";
 
   document.getElementById("epostView").innerText =
     localStorage.getItem("epost") || "";
@@ -225,16 +227,16 @@ function lagreEpost() {
 /* PROFILBILDE */
 function endreProfilbilde() {
   localStorage.setItem("redigerProfilIndex", aktivProfil);
-  window.location.href = "profilbilde.html";
+  window.location.href = "profilbilder.html";
 }
 
 /* NAV */
 function tilbake() {
-  window.location.href = "HvemSerPa.html";
+  window.location.href = "hvem-ser-på.html";
 }
 
 function velgProfil() {
-  window.location.href = "HvemSerPa.html";
+  window.location.href = "hvem-ser-på.html";
 }
 
 /* SLETT */
@@ -246,13 +248,13 @@ function slettProfil() {
   localStorage.setItem("profiler", JSON.stringify(profiler));
   localStorage.setItem("aktivProfil", 0);
 
-  window.location.href = "HvemSerPa.html";
+  window.location.href = "hvem-ser-på.html";
 }
 
 /* LOGG UT */
 function loggUt() {
   localStorage.clear();
-  window.location.href = "Innlogging.html";
+  window.location.href = "Innloggings side.html";
 }
 
 </script>
