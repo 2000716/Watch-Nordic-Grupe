@@ -271,36 +271,52 @@ if (!localStorage.getItem("epost")) {
 
 /* DATA */
 let profiler = JSON.parse(localStorage.getItem("profiler")) || [];
-let aktivProfil = Number(localStorage.getItem("aktivProfil")) || 0;
+let aktivProfil = Number(localStorage.getItem("aktivProfil"));
+
+if (isNaN(aktivProfil)) aktivProfil = 0;
+
 let aktiv = profiler[aktivProfil];
 
 /* ELEMENTS */
 const navnDisplay = document.getElementById("navnDisplay");
 const navnView = document.getElementById("navnView");
 const navnInput = document.getElementById("navnInput");
+const navnEditField = navnInput.closest(".edit-field");
 
 const epostView = document.getElementById("epostView");
 const epostInput = document.getElementById("epostInput");
+const epostEditField = epostInput.closest(".edit-field");
 
-/* BARNEBILDE FIX */
-if (aktiv?.barn) {
+/* SIKKERHET */
+if (!aktiv) {
+  window.location.href = "HvemSerPa.html";
+}
+
+/* BARNEBILDE */
+if (aktiv.barn) {
   aktiv.bilde = "https://api.dicebear.com/7.x/bottts/svg?seed=Kid";
 }
 
 /* LOAD UI */
-if (aktiv) {
+function loadUI() {
   navnDisplay.innerText = aktiv.navn;
   navnView.innerText = aktiv.navn;
   document.getElementById("profilbilde").src = aktiv.bilde;
+
+  epostView.innerText = localStorage.getItem("epost") || "";
 }
 
-epostView.innerText = localStorage.getItem("epost") || "";
+loadUI();
 
-/* NAVN */
+
+// =====================
+// NAVN (FIXA)
+// =====================
 function endreNavn() {
-  navnInput.value = navnView.innerText;
-  document.querySelector(".edit-field").classList.remove("hidden");
+  navnInput.value = aktiv.navn;
+
   navnView.classList.add("hidden");
+  navnEditField.classList.remove("hidden");
 }
 
 function lagreNavn() {
@@ -312,55 +328,76 @@ function lagreNavn() {
 
   localStorage.setItem("profiler", JSON.stringify(profiler));
 
-  navnView.innerText = ny;
-  navnDisplay.innerText = ny;
-
+  loadUI();
   avbrytNavn();
 }
 
 function avbrytNavn() {
-  document.querySelector(".edit-field").classList.add("hidden");
+  navnEditField.classList.add("hidden");
   navnView.classList.remove("hidden");
 }
 
-/* EPOST */
+
+// =====================
+// EPOST (FIXA)
+// =====================
 function endreEpost() {
   epostInput.value = epostView.innerText;
+
   epostView.classList.add("hidden");
-  epostInput.parentElement.classList.remove("hidden");
+  epostEditField.classList.remove("hidden");
 }
 
 function lagreEpost() {
   const ny = epostInput.value.trim();
   if (!ny) return;
+
   localStorage.setItem("epost", ny);
-  epostView.innerText = ny;
+
+  loadUI();
   avbrytEpost();
 }
 
 function avbrytEpost() {
+  epostEditField.classList.add("hidden");
   epostView.classList.remove("hidden");
-  epostInput.parentElement.classList.add("hidden");
 }
 
-/* PROFIL */
+
+// =====================
+// PROFIL NAVIGASJON
+// =====================
 function velgProfil() {
   window.location.href = "HvemSerPa.html";
 }
 
-/* DELETE */
+
+// =====================
+// SLETT PROFIL (TRYGG)
+// =====================
 function bekreftSlettBruker() {
   if (!confirm("Vil du slette profilen permanent?")) return;
 
   profiler.splice(aktivProfil, 1);
-  localStorage.setItem("profiler", JSON.stringify(profiler));
 
-  localStorage.setItem("aktivProfil", 0);
+  if (profiler.length === 0) {
+    localStorage.removeItem("profiler");
+    localStorage.removeItem("aktivProfil");
+    window.location.href = "HvemSerPa.html";
+    return;
+  }
+
+  let nyAktiv = 0;
+  localStorage.setItem("profiler", JSON.stringify(profiler));
+  localStorage.setItem("aktivProfil", nyAktiv);
 
   window.location.href = "HvemSerPa.html";
 }
 
-/* LOGOUT */
+
+// =====================
+// LOGG UT
+// =====================
 function loggUt() {
   localStorage.removeItem("epost");
   localStorage.removeItem("passord");
