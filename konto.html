@@ -75,6 +75,11 @@ header button:hover { border-color:white; }
   overflow:hidden;
   margin:auto;
   cursor:pointer;
+  transition:.2s;
+}
+
+.avatar:hover {
+  transform:scale(1.05);
 }
 
 .avatar img {
@@ -176,7 +181,8 @@ header button:hover { border-color:white; }
 <header>
   <h1>Konto</h1>
   <div>
-    <button onclick="window.location.href='Hovedside.html'">Tilbake</button>
+    <!-- 🔥 FIX: går til hvem-ser-på -->
+    <button onclick="window.location.href='HvemSerPa.html'">Tilbake</button>
     <button onclick="loggUt()">Logg ut</button>
   </div>
 </header>
@@ -185,8 +191,10 @@ header button:hover { border-color:white; }
 
 <!-- SIDEBAR -->
 <aside class="sidebar">
-  <div class="avatar">
-    <img id="profilbilde" src="https://via.placeholder.com/160">
+
+  <!-- 🔥 KLIKK → PROFILBILDE SIDE -->
+  <div class="avatar" onclick="endreProfilbilde()">
+    <img id="profilbilde" src="">
   </div>
 
   <div class="profile-name" id="navnDisplay"></div>
@@ -246,19 +254,6 @@ header button:hover { border-color:white; }
 
 </div>
 
-<h2>Abonnement</h2>
-<div class="card">
-  <div class="row"><div><div class="label">Plan</div><div class="value">Premium</div></div></div>
-  <div class="row"><div><div class="label">Kvalitet</div><div class="value">4K Ultra HD</div></div></div>
-  <div class="row"><div><div class="label">Skjermer</div><div class="value">4 samtidige</div></div></div>
-</div>
-
-<h2>Preferanser</h2>
-<div class="card">
-  <div class="row"><div><div class="label">Autoplay</div><div class="value">På</div></div></div>
-  <div class="row"><div><div class="label">Foreldrekontroll</div><div class="value">Av</div></div></div>
-</div>
-
 </section>
 </div>
 
@@ -277,46 +272,27 @@ if (isNaN(aktivProfil)) aktivProfil = 0;
 
 let aktiv = profiler[aktivProfil];
 
-/* ELEMENTS */
-const navnDisplay = document.getElementById("navnDisplay");
-const navnView = document.getElementById("navnView");
-const navnInput = document.getElementById("navnInput");
-const navnEditField = navnInput.closest(".edit-field");
-
-const epostView = document.getElementById("epostView");
-const epostInput = document.getElementById("epostInput");
-const epostEditField = epostInput.closest(".edit-field");
-
 /* SIKKERHET */
 if (!aktiv) {
   window.location.href = "HvemSerPa.html";
 }
 
-/* BARNEBILDE */
-if (aktiv.barn) {
-  aktiv.bilde = "https://api.dicebear.com/7.x/bottts/svg?seed=Kid";
-}
-
 /* LOAD UI */
 function loadUI() {
-  navnDisplay.innerText = aktiv.navn;
-  navnView.innerText = aktiv.navn;
+  document.getElementById("navnDisplay").innerText = aktiv.navn;
+  document.getElementById("navnView").innerText = aktiv.navn;
   document.getElementById("profilbilde").src = aktiv.bilde;
 
-  epostView.innerText = localStorage.getItem("epost") || "";
+  document.getElementById("epostView").innerText = localStorage.getItem("epost") || "";
 }
 
 loadUI();
 
-
-// =====================
-// NAVN (FIXA)
-// =====================
+/* NAVN */
 function endreNavn() {
   navnInput.value = aktiv.navn;
-
   navnView.classList.add("hidden");
-  navnEditField.classList.remove("hidden");
+  navnInput.closest(".edit-field").classList.remove("hidden");
 }
 
 function lagreNavn() {
@@ -325,7 +301,6 @@ function lagreNavn() {
 
   aktiv.navn = ny;
   profiler[aktivProfil] = aktiv;
-
   localStorage.setItem("profiler", JSON.stringify(profiler));
 
   loadUI();
@@ -333,19 +308,15 @@ function lagreNavn() {
 }
 
 function avbrytNavn() {
-  navnEditField.classList.add("hidden");
+  navnInput.closest(".edit-field").classList.add("hidden");
   navnView.classList.remove("hidden");
 }
 
-
-// =====================
-// EPOST (FIXA)
-// =====================
+/* EPOST */
 function endreEpost() {
   epostInput.value = epostView.innerText;
-
   epostView.classList.add("hidden");
-  epostEditField.classList.remove("hidden");
+  epostInput.closest(".edit-field").classList.remove("hidden");
 }
 
 function lagreEpost() {
@@ -353,67 +324,44 @@ function lagreEpost() {
   if (!ny) return;
 
   localStorage.setItem("epost", ny);
-
   loadUI();
   avbrytEpost();
 }
 
 function avbrytEpost() {
-  epostEditField.classList.add("hidden");
+  epostInput.closest(".edit-field").classList.add("hidden");
   epostView.classList.remove("hidden");
 }
 
+/* 🔥 NY: GÅ TIL PROFILBILDE SIDE */
+function endreProfilbilde() {
+  window.location.href = "profilbilde.html";
+}
 
-// =====================
-// PROFIL NAVIGASJON
-// =====================
+/* NAV */
 function velgProfil() {
   window.location.href = "HvemSerPa.html";
 }
 
-
-// =====================
-// SLETT PROFIL (TRYGG)
-// =====================
+/* SLETT */
 function bekreftSlettBruker() {
   if (!confirm("Vil du slette profilen permanent?")) return;
 
   profiler.splice(aktivProfil, 1);
 
-  if (profiler.length === 0) {
-    localStorage.removeItem("profiler");
-    localStorage.removeItem("aktivProfil");
-    window.location.href = "HvemSerPa.html";
-    return;
-  }
-
-  let nyAktiv = 0;
   localStorage.setItem("profiler", JSON.stringify(profiler));
-  localStorage.setItem("aktivProfil", nyAktiv);
+  localStorage.setItem("aktivProfil", 0);
 
   window.location.href = "HvemSerPa.html";
 }
 
-
-// =====================
-// LOGG UT
-// =====================
+/* LOGG UT */
 function loggUt() {
-  localStorage.removeItem("epost");
-  localStorage.removeItem("passord");
-  localStorage.removeItem("aktivProfil");
-
+  localStorage.clear();
   window.location.href = "Innlogging.html";
 }
 
 </script>
 
-<footer style="border-top:1px solid #222;padding:30px 40px;color:#8c8c8c;font-size:12px;">
-© 2026 Watch Nordic AS. Alle rettigheter forbeholdt.
-</footer>
-
 </body>
 </html>
-
-
-
