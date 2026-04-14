@@ -35,7 +35,6 @@ h1 {
   margin-bottom:60px;
 }
 
-/* GRID */
 .profiles {
   display:flex;
   gap:60px;
@@ -43,7 +42,6 @@ h1 {
   justify-content:center;
 }
 
-/* PROFILE */
 .profile {
   cursor:pointer;
   transition:.25s;
@@ -55,7 +53,6 @@ h1 {
   transform:scale(1.1);
 }
 
-/* AVATAR */
 .avatar {
   width:160px;
   height:160px;
@@ -70,14 +67,12 @@ h1 {
   border-color:white;
 }
 
-/* IMAGE */
 .avatar img {
   width:100%;
   height:100%;
   object-fit:cover;
 }
 
-/* NAME */
 .name {
   margin-top:16px;
   font-size:18px;
@@ -88,7 +83,6 @@ h1 {
   color:white;
 }
 
-/* EDIT ICON */
 .edit-btn {
   margin-top:10px;
   font-size:16px;
@@ -105,7 +99,6 @@ h1 {
   color:white;
 }
 
-/* ADD PROFILE */
 .add-profile .avatar {
   display:flex;
   align-items:center;
@@ -132,17 +125,25 @@ h1 {
 
 const MAX_PROFILER = 5;
 
-/* HENT BILDE FRA REGISTRERING */
-let lagretBilde = localStorage.getItem("valgtProfilbilde");
+/* HENT MIDLERTIDIG BILDE */
+let valgtBilde = localStorage.getItem("valgtProfilbilde");
 
-/* PROFILER */
-let profiler = JSON.parse(localStorage.getItem("profiler")) || [
-  {
-    navn:"Bruker 1",
-    bilde: lagretBilde || "https://api.dicebear.com/7.x/avataaars/svg?seed=User1",
-    pin:null
-  }
-];
+/* LAST PROFILER */
+let profiler = JSON.parse(localStorage.getItem("profiler"));
+
+/* FØRSTE GANG (ingen profiler finnes) */
+if (!profiler) {
+  profiler = [
+    {
+      navn: "Bruker 1",
+      bilde: valgtBilde || "https://api.dicebear.com/7.x/avataaars/svg?seed=User1",
+      pin: null
+    }
+  ];
+
+  localStorage.setItem("profiler", JSON.stringify(profiler));
+  localStorage.removeItem("valgtProfilbilde"); // viktig!
+}
 
 const container = document.getElementById("profiles");
 
@@ -167,24 +168,23 @@ function renderProfiler() {
       </div>
     `;
 
-    /* SELECT PROFILE */
+    /* VELG PROFIL */
     div.addEventListener("click", () => {
       velgProfil(index);
     });
 
-    /* EDIT ICON → konto.html */
+    /* REDIGER */
     div.querySelector(".edit-btn").addEventListener("click", (e) => {
       e.stopPropagation();
 
       localStorage.setItem("redigerProfilIndex", index);
-
       window.location.href = "konto.html";
     });
 
     container.appendChild(div);
   });
 
-  /* ADD PROFILE */
+  /* LEGG TIL PROFIL */
   if (profiler.length < MAX_PROFILER) {
     const add = document.createElement("div");
     add.className = "profile add-profile";
@@ -202,7 +202,7 @@ function renderProfiler() {
 
 renderProfiler();
 
-/* SELECT PROFILE */
+/* VELG PROFIL */
 function velgProfil(index) {
   const profil = profiler[index];
 
@@ -224,20 +224,24 @@ function velgProfil(index) {
   }, 300);
 }
 
-/* ADD PROFILE */
+/* LEGG TIL PROFIL */
 function leggTilProfil() {
   if (profiler.length >= MAX_PROFILER) return;
 
   const navn = prompt("Navn:");
   if (!navn) return;
 
+  const valgtBilde = localStorage.getItem("valgtProfilbilde");
+
   profiler.push({
-    navn,
-    bilde: localStorage.getItem("valgtProfilbilde") || `https://api.dicebear.com/7.x/avataaars/svg?seed=${navn}`,
-    pin:null
+    navn: navn,
+    bilde: valgtBilde || `https://api.dicebear.com/7.x/avataaars/svg?seed=${navn}`,
+    pin: null
   });
 
   localStorage.setItem("profiler", JSON.stringify(profiler));
+  localStorage.removeItem("valgtProfilbilde"); // viktig!
+
   renderProfiler();
 }
 
