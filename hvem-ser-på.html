@@ -7,7 +7,8 @@
 
   <link rel="icon" type="image/png" href="https://static.wixstatic.com/media/fd2fb2_39376e4ee55b460ab7a3ebbfcf35fef7~mv2.png" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
- <style>
+
+<style>
 :root {
   --bg:#0b0b0b;
   --muted:#9e9e9e;
@@ -47,6 +48,7 @@ h1 {
   cursor:pointer;
   transition:.25s;
   text-align:center;
+  position:relative;
 }
 
 .profile:hover {
@@ -86,10 +88,10 @@ h1 {
   color:white;
 }
 
-/* EDIT */
+/* EDIT ICON */
 .edit-btn {
   margin-top:10px;
-  font-size:14px;
+  font-size:16px;
   color:#aaa;
   opacity:0;
   transition:.2s;
@@ -101,7 +103,6 @@ h1 {
 
 .edit-btn:hover {
   color:white;
-  text-decoration:underline;
 }
 
 /* ADD PROFILE */
@@ -131,10 +132,14 @@ h1 {
 
 const MAX_PROFILER = 5;
 
+/* HENT BILDE FRA REGISTRERING */
+let lagretBilde = localStorage.getItem("valgtProfilbilde");
+
+/* PROFILER */
 let profiler = JSON.parse(localStorage.getItem("profiler")) || [
   {
     navn:"Bruker 1",
-    bilde:"https://api.dicebear.com/7.x/avataaars/svg?seed=User1",
+    bilde: lagretBilde || "https://api.dicebear.com/7.x/avataaars/svg?seed=User1",
     pin:null
   }
 ];
@@ -156,18 +161,24 @@ function renderProfiler() {
       </div>
 
       <div class="name">${profil.navn}</div>
-      <div class="edit-btn">Rediger</div>
+
+      <div class="edit-btn">
+        <i class="fa-solid fa-pen"></i>
+      </div>
     `;
 
-    /* SELECT */
+    /* SELECT PROFILE */
     div.addEventListener("click", () => {
       velgProfil(index);
     });
 
-    /* EDIT */
+    /* EDIT ICON → konto.html */
     div.querySelector(".edit-btn").addEventListener("click", (e) => {
       e.stopPropagation();
-      redigerProfil(index);
+
+      localStorage.setItem("redigerProfilIndex", index);
+
+      window.location.href = "konto.html";
     });
 
     container.appendChild(div);
@@ -195,7 +206,6 @@ renderProfiler();
 function velgProfil(index) {
   const profil = profiler[index];
 
-  /* PIN CHECK */
   if (profil.pin) {
     const input = prompt("Skriv PIN:");
 
@@ -214,26 +224,7 @@ function velgProfil(index) {
   }, 300);
 }
 
-/* EDIT */
-function redigerProfil(index) {
-  const profil = profiler[index];
-
-  let nyttNavn = prompt("Endre navn:", profil.navn);
-  if (nyttNavn) profil.navn = nyttNavn;
-
-  let settPin = confirm("Vil du legge til/endre PIN?");
-  if (settPin) {
-    let nyPin = prompt("Ny PIN (4 tall):");
-    if (nyPin) profil.pin = nyPin;
-  }
-
-  profiler[index] = profil;
-  localStorage.setItem("profiler", JSON.stringify(profiler));
-
-  renderProfiler();
-}
-
-/* ADD */
+/* ADD PROFILE */
 function leggTilProfil() {
   if (profiler.length >= MAX_PROFILER) return;
 
@@ -242,7 +233,7 @@ function leggTilProfil() {
 
   profiler.push({
     navn,
-    bilde:`https://api.dicebear.com/7.x/avataaars/svg?seed=${navn}`,
+    bilde: localStorage.getItem("valgtProfilbilde") || `https://api.dicebear.com/7.x/avataaars/svg?seed=${navn}`,
     pin:null
   });
 
