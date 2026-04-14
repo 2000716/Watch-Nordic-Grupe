@@ -12,40 +12,60 @@
 :root {
   --bg:#141414;
   --muted:#b3b3b3;
+  --accent:#00a8e1;
 }
+
+* { box-sizing:border-box; }
 
 body {
   margin:0;
-  background:#141414;
+  background:
+    radial-gradient(circle at 10% 20%, rgba(0,168,225,0.25), transparent 40%),
+    linear-gradient(180deg, #0e0e0e, #141414);
   color:white;
-  font-family:system-ui;
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
 }
 
+/* HEADER */
 header {
-  display:flex;
-  justify-content:space-between;
   padding:20px 40px;
   border-bottom:1px solid #222;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
 }
+
+header h1 { margin:0; font-size:22px; }
 
 header button {
   background:none;
-  border:1px solid #555;
+  border:1px solid var(--muted);
   color:white;
   padding:8px 16px;
-  cursor:pointer;
   border-radius:6px;
+  cursor:pointer;
 }
 
+header button:hover { border-color:white; }
+
+/* LAYOUT */
 .container {
+  max-width:1150px;
+  margin:auto;
+  padding:40px;
   display:grid;
   grid-template-columns:280px 1fr;
   gap:40px;
-  padding:40px;
 }
 
+/* SIDEBAR */
 .sidebar {
+  background:rgba(255,255,255,0.06);
+  backdrop-filter:blur(16px);
+  border-radius:16px;
+  padding:30px 20px;
   text-align:center;
+  border:1px solid rgba(255,255,255,0.08);
 }
 
 .avatar {
@@ -55,11 +75,6 @@ header button {
   overflow:hidden;
   margin:auto;
   cursor:pointer;
-  transition:.2s;
-}
-
-.avatar:hover {
-  transform:scale(1.05);
 }
 
 .avatar img {
@@ -69,26 +84,89 @@ header button {
 }
 
 .profile-name {
-  margin-top:15px;
+  margin-top:16px;
   font-size:20px;
 }
 
-.card {
-  background:#1c1c1c;
-  padding:20px;
-  border-radius:10px;
-  margin-bottom:20px;
+.profile-actions {
+  margin-top:20px;
+  display:flex;
+  flex-direction:column;
+  gap:10px;
 }
+
+.profile-actions button {
+  background:none;
+  border:1px solid var(--muted);
+  color:white;
+  padding:10px;
+  border-radius:6px;
+  cursor:pointer;
+}
+
+.profile-actions button:hover { border-color:white; }
+
+/* CONTENT */
+.content h2 {
+  margin:0 0 20px;
+  font-size:22px;
+}
+
+.card {
+  background:rgba(255,255,255,0.07);
+  backdrop-filter:blur(18px);
+  border-radius:16px;
+  padding:24px;
+  margin-bottom:30px;
+  border:1px solid rgba(255,255,255,0.08);
+}
+
+.row {
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:16px 0;
+  border-bottom:1px solid #2a2a2a;
+}
+
+.row:last-child { border-bottom:none; }
+
+.label { color:var(--muted); font-size:14px; }
+
+.value { font-size:16px; }
 
 .hidden { display:none; }
 
-input {
+.edit-field { margin-top:8px; }
+
+.edit-field input {
   width:100%;
-  padding:8px;
-  margin-top:5px;
-  background:#111;
+  padding:10px;
+  background:#1a1a1a;
   border:1px solid #333;
+  border-radius:6px;
   color:white;
+}
+
+.edit-actions {
+  margin-top:10px;
+  display:flex;
+  gap:10px;
+}
+
+.edit-actions button {
+  background:none;
+  border:1px solid #444;
+  color:white;
+  padding:8px 16px;
+  border-radius:6px;
+  cursor:pointer;
+}
+
+.secondary { color:#aaa; }
+
+@media (max-width:900px) {
+  .container { grid-template-columns:1fr; padding:20px; }
 }
 </style>
 </head>
@@ -98,106 +176,135 @@ input {
 <header>
   <h1>Konto</h1>
   <div>
-    <button onclick="tilbake()">Tilbake</button>
+    <button onclick="window.location.href='Hovedside.html'">Tilbake</button>
     <button onclick="loggUt()">Logg ut</button>
   </div>
 </header>
 
 <div class="container">
 
-<div class="sidebar">
-  <div class="avatar" onclick="endreProfilbilde()">
-    <img id="profilbilde">
+<!-- SIDEBAR -->
+<aside class="sidebar">
+  <div class="avatar">
+    <img id="profilbilde" src="https://via.placeholder.com/160">
   </div>
 
   <div class="profile-name" id="navnDisplay"></div>
 
-  <br>
-  <button onclick="velgProfil()">Bytt profil</button>
-  <br><br>
-  <button onclick="slettProfil()" style="color:red;">Slett profil</button>
-</div>
-
-<div>
-
-<div class="card">
-  <h3>Navn</h3>
-  <div id="navnView"></div>
-
-  <div id="navnEdit" class="hidden">
-    <input id="navnInput">
-    <button onclick="lagreNavn()">Lagre</button>
+  <div class="profile-actions">
+    <button onclick="velgProfil()">Bytt profil</button>
+    <button onclick="bekreftSlettBruker()" style="border-color:#ff4d4d;color:#ff4d4d;">
+      Slett profil
+    </button>
   </div>
+</aside>
 
+<!-- CONTENT -->
+<section class="content">
+
+<h2>Kontoinformasjon</h2>
+<div class="card">
+
+<div class="row">
+  <div>
+    <div class="label">Navn</div>
+    <div class="value" id="navnView"></div>
+
+    <div class="edit-field hidden">
+      <input type="text" id="navnInput">
+      <div class="edit-actions">
+        <button onclick="lagreNavn()">Lagre</button>
+        <button class="secondary" onclick="avbrytNavn()">Avbryt</button>
+      </div>
+    </div>
+  </div>
   <button onclick="endreNavn()">Endre</button>
 </div>
 
-<div class="card">
-  <h3>E-post</h3>
-  <div id="epostView"></div>
+<div class="row">
+  <div>
+    <div class="label">E-post</div>
+    <div class="value" id="epostView"></div>
 
-  <div id="epostEdit" class="hidden">
-    <input id="epostInput">
-    <button onclick="lagreEpost()">Lagre</button>
+    <div class="edit-field hidden">
+      <input type="email" id="epostInput">
+      <div class="edit-actions">
+        <button onclick="lagreEpost()">Lagre</button>
+        <button class="secondary" onclick="avbrytEpost()">Avbryt</button>
+      </div>
+    </div>
   </div>
-
   <button onclick="endreEpost()">Endre</button>
 </div>
 
+<div class="row">
+  <div>
+    <div class="label">Passord</div>
+    <div class="value">••••••••</div>
+  </div>
 </div>
+
+</div>
+
+<h2>Abonnement</h2>
+<div class="card">
+  <div class="row"><div><div class="label">Plan</div><div class="value">Premium</div></div></div>
+  <div class="row"><div><div class="label">Kvalitet</div><div class="value">4K Ultra HD</div></div></div>
+  <div class="row"><div><div class="label">Skjermer</div><div class="value">4 samtidige</div></div></div>
+</div>
+
+<h2>Preferanser</h2>
+<div class="card">
+  <div class="row"><div><div class="label">Autoplay</div><div class="value">På</div></div></div>
+  <div class="row"><div><div class="label">Foreldrekontroll</div><div class="value">Av</div></div></div>
+</div>
+
+</section>
 </div>
 
 <script>
 
-/* LOGIN */
+/* LOGIN CHECK */
 if (!localStorage.getItem("epost")) {
-  window.location.href = "Innloggings side.html";
+  window.location.href = "Innlogging.html";
 }
 
 /* DATA */
 let profiler = JSON.parse(localStorage.getItem("profiler")) || [];
 let aktivProfil = Number(localStorage.getItem("aktivProfil")) || 0;
-
-/* FAILSAFE */
-if (!profiler[aktivProfil]) {
-  window.location.href = "hvem-ser-på.html";
-}
-
 let aktiv = profiler[aktivProfil];
 
-/* 🔥 FIX: hent nytt bilde fra registrering */
-let nyttBilde = localStorage.getItem("valgtProfilbilde");
+/* ELEMENTS */
+const navnDisplay = document.getElementById("navnDisplay");
+const navnView = document.getElementById("navnView");
+const navnInput = document.getElementById("navnInput");
 
-if (nyttBilde) {
-  profiler[aktivProfil].bilde = nyttBilde;
-  localStorage.setItem("profiler", JSON.stringify(profiler));
-  localStorage.removeItem("valgtProfilbilde");
+const epostView = document.getElementById("epostView");
+const epostInput = document.getElementById("epostInput");
 
-  aktiv = profiler[aktivProfil];
+/* BARNEBILDE FIX */
+if (aktiv?.barn) {
+  aktiv.bilde = "https://api.dicebear.com/7.x/bottts/svg?seed=Kid";
 }
 
 /* LOAD UI */
-function loadUI() {
-  document.getElementById("navnDisplay").innerText = aktiv.navn;
-  document.getElementById("navnView").innerText = aktiv.navn;
-
-  document.getElementById("profilbilde").src =
-    aktiv.bilde || "https://api.dicebear.com/7.x/avataaars/svg?seed=user";
-
-  document.getElementById("epostView").innerText =
-    localStorage.getItem("epost") || "";
+if (aktiv) {
+  navnDisplay.innerText = aktiv.navn;
+  navnView.innerText = aktiv.navn;
+  document.getElementById("profilbilde").src = aktiv.bilde;
 }
 
-loadUI();
+epostView.innerText = localStorage.getItem("epost") || "";
 
 /* NAVN */
 function endreNavn() {
-  document.getElementById("navnEdit").classList.remove("hidden");
-  document.getElementById("navnInput").value = aktiv.navn;
+  navnInput.value = navnView.innerText;
+  document.querySelector(".edit-field").classList.remove("hidden");
+  navnView.classList.add("hidden");
 }
 
 function lagreNavn() {
-  let ny = document.getElementById("navnInput").value.trim();
+  const ny = navnInput.value.trim();
   if (!ny) return;
 
   aktiv.navn = ny;
@@ -205,59 +312,70 @@ function lagreNavn() {
 
   localStorage.setItem("profiler", JSON.stringify(profiler));
 
-  loadUI();
-  document.getElementById("navnEdit").classList.add("hidden");
+  navnView.innerText = ny;
+  navnDisplay.innerText = ny;
+
+  avbrytNavn();
+}
+
+function avbrytNavn() {
+  document.querySelector(".edit-field").classList.add("hidden");
+  navnView.classList.remove("hidden");
 }
 
 /* EPOST */
 function endreEpost() {
-  document.getElementById("epostEdit").classList.remove("hidden");
-  document.getElementById("epostInput").value = localStorage.getItem("epost");
+  epostInput.value = epostView.innerText;
+  epostView.classList.add("hidden");
+  epostInput.parentElement.classList.remove("hidden");
 }
 
 function lagreEpost() {
-  let ny = document.getElementById("epostInput").value.trim();
+  const ny = epostInput.value.trim();
   if (!ny) return;
-
   localStorage.setItem("epost", ny);
-  loadUI();
-  document.getElementById("epostEdit").classList.add("hidden");
+  epostView.innerText = ny;
+  avbrytEpost();
 }
 
-/* PROFILBILDE */
-function endreProfilbilde() {
-  localStorage.setItem("redigerProfilIndex", aktivProfil);
-  window.location.href = "profilbilder.html";
+function avbrytEpost() {
+  epostView.classList.remove("hidden");
+  epostInput.parentElement.classList.add("hidden");
 }
 
-/* NAV */
-function tilbake() {
-  window.location.href = "hvem-ser-på.html";
-}
-
+/* PROFIL */
 function velgProfil() {
-  window.location.href = "hvem-ser-på.html";
+  window.location.href = "HvemSerPa.html";
 }
 
-/* SLETT */
-function slettProfil() {
-  if (!confirm("Slette profil?")) return;
+/* DELETE */
+function bekreftSlettBruker() {
+  if (!confirm("Vil du slette profilen permanent?")) return;
 
   profiler.splice(aktivProfil, 1);
-
   localStorage.setItem("profiler", JSON.stringify(profiler));
+
   localStorage.setItem("aktivProfil", 0);
 
-  window.location.href = "hvem-ser-på.html";
+  window.location.href = "HvemSerPa.html";
 }
 
-/* LOGG UT */
+/* LOGOUT */
 function loggUt() {
-  localStorage.clear();
-  window.location.href = "Innloggings side.html";
+  localStorage.removeItem("epost");
+  localStorage.removeItem("passord");
+  localStorage.removeItem("aktivProfil");
+
+  window.location.href = "Innlogging.html";
 }
 
 </script>
 
+<footer style="border-top:1px solid #222;padding:30px 40px;color:#8c8c8c;font-size:12px;">
+© 2026 Watch Nordic AS. Alle rettigheter forbeholdt.
+</footer>
+
 </body>
 </html>
+
+
