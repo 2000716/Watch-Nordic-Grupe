@@ -7,8 +7,8 @@
 
 <style>
 :root {
-  --bg:#141414;
-  --card:#1f1f1f;
+  --bg:#0f0f0f;
+  --card:#1c1c1c;
   --muted:#b3b3b3;
   --accent:#00a8e1;
 }
@@ -17,9 +17,7 @@
 
 body {
   margin:0;
-  background:
-    radial-gradient(circle at top, rgba(0,168,225,0.15), transparent 40%),
-    #141414;
+  background: radial-gradient(circle at top, rgba(0,168,225,0.15), transparent 40%), var(--bg);
   color:white;
   font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto;
   min-height:100vh;
@@ -30,15 +28,16 @@ body {
 }
 
 h1 {
-  font-size:38px;
-  font-weight:500;
-  margin-bottom:40px;
+  font-size:42px;
+  font-weight:600;
+  margin-bottom:50px;
+  letter-spacing:0.5px;
 }
 
 /* PROFILES */
 .profiles {
   display:flex;
-  gap:40px;
+  gap:50px;
   flex-wrap:wrap;
   justify-content:center;
 }
@@ -46,77 +45,94 @@ h1 {
 .profile {
   text-align:center;
   cursor:pointer;
-  transition:transform .2s ease;
-  position:relative;
+  transition:transform .25s ease;
 }
 
-.profile:hover { transform:scale(1.08); }
+.profile:hover {
+  transform:scale(1.12);
+}
 
+/* AVATAR */
 .avatar {
-  width:150px;
-  height:150px;
+  width:160px;
+  height:160px;
   border-radius:50%;
   overflow:hidden;
   background:var(--card);
   border:3px solid transparent;
-  position:relative;
+  transition:.3s;
+  box-shadow:0 0 0 transparent;
 }
 
-.profile:hover .avatar,
-.profile.active .avatar {
+.profile:hover .avatar {
   border-color:var(--accent);
+  box-shadow:0 0 25px rgba(0,168,225,0.4);
 }
 
+.profile.active .avatar {
+  border-color:white;
+}
+
+/* IMAGE */
 .avatar img {
   width:100%;
   height:100%;
   object-fit:cover;
 }
 
+/* KIDS BADGE */
 .kids-badge {
   position:absolute;
-  bottom:6px;
-  right:6px;
+  bottom:8px;
+  right:8px;
   background:#ffc107;
   color:black;
   font-size:12px;
-  padding:2px 8px;
+  padding:3px 8px;
   border-radius:12px;
   font-weight:600;
 }
 
 /* ✏️ EDIT BUTTON */
 .edit-btn {
-  position:absolute;
-  bottom:8px;
-  left:8px;
-  width:36px;
-  height:36px;
+  margin:12px auto 0;
+  width:40px;
+  height:40px;
   border-radius:50%;
-  background:rgba(0,0,0,0.7);
+  background:#2a2a2a;
   display:flex;
   align-items:center;
   justify-content:center;
-  font-size:16px;
+  font-size:18px;
   cursor:pointer;
   transition:0.2s;
   opacity:0;
+  transform:scale(0.8);
 }
 
-.profile:hover .edit-btn {
+.manage-mode .edit-btn {
   opacity:1;
+  transform:scale(1);
 }
 
 .edit-btn:hover {
   background:var(--accent);
+  transform:scale(1.1);
 }
 
+/* NAME */
 .name {
   margin-top:14px;
   font-size:18px;
   color:var(--muted);
+  transition:0.2s;
 }
 
+.profile:hover .name {
+  color:white;
+}
+
+/* DELETE */
 .delete {
   margin-top:6px;
   font-size:13px;
@@ -128,29 +144,34 @@ h1 {
   display:block;
 }
 
+/* BUTTONS */
 .actions {
-  margin-top:50px;
+  margin-top:60px;
   display:flex;
-  gap:16px;
+  gap:20px;
 }
 
 button {
   background:none;
   border:1px solid var(--muted);
   color:white;
-  padding:12px 28px;
+  padding:12px 30px;
   border-radius:6px;
   cursor:pointer;
+  transition:0.2s;
 }
 
-button:hover { border-color:white; }
+button:hover {
+  border-color:white;
+  transform:scale(1.05);
+}
 
+/* FOOTER */
 footer {
   position:absolute;
   bottom:20px;
   font-size:12px;
   color:#8c8c8c;
-  text-align:center;
 }
 </style>
 </head>
@@ -167,7 +188,7 @@ footer {
 </div>
 
 <footer>
-© 2026 Watch Nordic AS. Alle rettigheter forbeholdt.
+© 2026 Watch Nordic AS
 </footer>
 
 <script>
@@ -215,9 +236,10 @@ function renderProfiler() {
     div.innerHTML = `
       <div class="avatar">
         <img src="${profil.bilde}">
-        ${profil.barn ? `<div class="kids-badge">👶</div>` : ""}
-        <div class="edit-btn">✏️</div>
       </div>
+
+      <div class="edit-btn">✏️</div>
+
       <div class="name">${profil.navn}</div>
       ${manageMode ? `<div class="delete">Slett</div>` : ""}
     `;
@@ -232,7 +254,7 @@ function renderProfiler() {
     /* ✏️ REDIGER */
     const editBtn = div.querySelector(".edit-btn");
     editBtn.addEventListener("click", (e) => {
-      e.stopPropagation(); // hindrer profil-klikk
+      e.stopPropagation();
       redigerProfil(index);
     });
 
@@ -262,14 +284,14 @@ function velgProfil(index) {
   localStorage.setItem("aktivBilde", profil.bilde);
   localStorage.setItem("erBarn", profil.barn);
 
-  document.body.style.opacity = "0.5";
+  document.body.style.opacity = "0.4";
 
   setTimeout(() => {
     window.location.href = "Hovedside.html";
-  }, 300);
+  }, 250);
 }
 
-/* REDIGER PROFIL */
+/* REDIGER */
 function redigerProfil(index) {
   localStorage.setItem("redigerProfil", index);
   window.location.href = "Konto.html";
@@ -310,4 +332,3 @@ function slettProfil(index) {
 
 </body>
 </html>
-
