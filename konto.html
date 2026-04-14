@@ -12,60 +12,43 @@
 :root {
   --bg:#141414;
   --muted:#b3b3b3;
-  --accent:#00a8e1;
 }
-
-* { box-sizing:border-box; }
 
 body {
   margin:0;
-  background:
-    radial-gradient(circle at 10% 20%, rgba(0,168,225,0.25), transparent 40%),
-    linear-gradient(180deg, #0e0e0e, #141414);
+  background:#141414;
   color:white;
-  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  font-family:system-ui;
 }
 
 /* HEADER */
 header {
-  padding:20px 40px;
-  border-bottom:1px solid #222;
   display:flex;
   justify-content:space-between;
-  align-items:center;
+  padding:20px 40px;
+  border-bottom:1px solid #222;
 }
-
-header h1 { margin:0; font-size:22px; }
 
 header button {
   background:none;
-  border:1px solid var(--muted);
+  border:1px solid #555;
   color:white;
   padding:8px 16px;
-  border-radius:6px;
   cursor:pointer;
+  border-radius:6px;
 }
-
-header button:hover { border-color:white; }
 
 /* LAYOUT */
 .container {
-  max-width:1150px;
-  margin:auto;
-  padding:40px;
   display:grid;
   grid-template-columns:280px 1fr;
   gap:40px;
+  padding:40px;
 }
 
 /* SIDEBAR */
 .sidebar {
-  background:rgba(255,255,255,0.06);
-  backdrop-filter:blur(16px);
-  border-radius:16px;
-  padding:30px 20px;
   text-align:center;
-  border:1px solid rgba(255,255,255,0.08);
 }
 
 .avatar {
@@ -89,89 +72,33 @@ header button:hover { border-color:white; }
 }
 
 .profile-name {
-  margin-top:16px;
+  margin-top:15px;
   font-size:20px;
 }
 
-.profile-actions {
-  margin-top:20px;
-  display:flex;
-  flex-direction:column;
-  gap:10px;
-}
-
-.profile-actions button {
-  background:none;
-  border:1px solid var(--muted);
-  color:white;
-  padding:10px;
-  border-radius:6px;
-  cursor:pointer;
-}
-
-.profile-actions button:hover { border-color:white; }
-
 /* CONTENT */
-.content h2 {
-  margin:0 0 20px;
-  font-size:22px;
-}
-
 .card {
-  background:rgba(255,255,255,0.07);
-  backdrop-filter:blur(18px);
-  border-radius:16px;
-  padding:24px;
-  margin-bottom:30px;
-  border:1px solid rgba(255,255,255,0.08);
+  background:#1c1c1c;
+  padding:20px;
+  border-radius:10px;
+  margin-bottom:20px;
 }
 
 .row {
   display:flex;
   justify-content:space-between;
-  align-items:center;
-  padding:16px 0;
-  border-bottom:1px solid #2a2a2a;
+  margin-bottom:15px;
 }
-
-.row:last-child { border-bottom:none; }
-
-.label { color:var(--muted); font-size:14px; }
-
-.value { font-size:16px; }
 
 .hidden { display:none; }
 
-.edit-field { margin-top:8px; }
-
-.edit-field input {
+input {
   width:100%;
-  padding:10px;
-  background:#1a1a1a;
+  padding:8px;
+  margin-top:5px;
+  background:#111;
   border:1px solid #333;
-  border-radius:6px;
   color:white;
-}
-
-.edit-actions {
-  margin-top:10px;
-  display:flex;
-  gap:10px;
-}
-
-.edit-actions button {
-  background:none;
-  border:1px solid #444;
-  color:white;
-  padding:8px 16px;
-  border-radius:6px;
-  cursor:pointer;
-}
-
-.secondary { color:#aaa; }
-
-@media (max-width:900px) {
-  .container { grid-template-columns:1fr; padding:20px; }
 }
 </style>
 </head>
@@ -181,8 +108,7 @@ header button:hover { border-color:white; }
 <header>
   <h1>Konto</h1>
   <div>
-    <!-- 🔥 FIX: går til hvem-ser-på -->
-    <button onclick="window.location.href='Hvem-ser-på.html'">Tilbake</button>
+    <button onclick="tilbake()">Tilbake</button>
     <button onclick="loggUt()">Logg ut</button>
   </div>
 </header>
@@ -190,175 +116,143 @@ header button:hover { border-color:white; }
 <div class="container">
 
 <!-- SIDEBAR -->
-<aside class="sidebar">
-
-  <!-- 🔥 KLIKK → PROFILBILDE SIDE -->
+<div class="sidebar">
   <div class="avatar" onclick="endreProfilbilde()">
-    <img id="profilbilde" src="">
+    <img id="profilbilde">
   </div>
 
   <div class="profile-name" id="navnDisplay"></div>
 
-  <div class="profile-actions">
-    <button onclick="velgProfil()">Bytt profil</button>
-    <button onclick="bekreftSlettBruker()" style="border-color:#ff4d4d;color:#ff4d4d;">
-      Slett profil
-    </button>
-  </div>
-</aside>
+  <br>
+  <button onclick="velgProfil()">Bytt profil</button>
+  <br><br>
+  <button onclick="slettProfil()" style="color:red;">Slett profil</button>
+</div>
 
 <!-- CONTENT -->
-<section class="content">
+<div>
 
-<h2>Kontoinformasjon</h2>
 <div class="card">
+  <h3>Navn</h3>
+  <div id="navnView"></div>
 
-<div class="row">
-  <div>
-    <div class="label">Navn</div>
-    <div class="value" id="navnView"></div>
-
-    <div class="edit-field hidden">
-      <input type="text" id="navnInput">
-      <div class="edit-actions">
-        <button onclick="lagreNavn()">Lagre</button>
-        <button class="secondary" onclick="avbrytNavn()">Avbryt</button>
-      </div>
-    </div>
+  <div id="navnEdit" class="hidden">
+    <input id="navnInput">
+    <button onclick="lagreNavn()">Lagre</button>
   </div>
+
   <button onclick="endreNavn()">Endre</button>
 </div>
 
-<div class="row">
-  <div>
-    <div class="label">E-post</div>
-    <div class="value" id="epostView"></div>
+<div class="card">
+  <h3>E-post</h3>
+  <div id="epostView"></div>
 
-    <div class="edit-field hidden">
-      <input type="email" id="epostInput">
-      <div class="edit-actions">
-        <button onclick="lagreEpost()">Lagre</button>
-        <button class="secondary" onclick="avbrytEpost()">Avbryt</button>
-      </div>
-    </div>
+  <div id="epostEdit" class="hidden">
+    <input id="epostInput">
+    <button onclick="lagreEpost()">Lagre</button>
   </div>
+
   <button onclick="endreEpost()">Endre</button>
 </div>
 
-<div class="row">
-  <div>
-    <div class="label">Passord</div>
-    <div class="value">••••••••</div>
-  </div>
 </div>
-
-</div>
-
-</section>
 </div>
 
 <script>
 
-/* LOGIN CHECK */
+/* LOGIN */
 if (!localStorage.getItem("epost")) {
-  window.location.href = "Innloggings side.html";
+  window.location.href = "Innlogging.html";
 }
 
 /* DATA */
 let profiler = JSON.parse(localStorage.getItem("profiler")) || [];
-let aktivProfil = Number(localStorage.getItem("aktivProfil"));
-
-if (isNaN(aktivProfil)) aktivProfil = 0;
-
+let aktivProfil = Number(localStorage.getItem("aktivProfil")) || 0;
 let aktiv = profiler[aktivProfil];
 
-/* SIKKERHET */
+/* FAILSAFE */
 if (!aktiv) {
-  window.location.href = "hvem-ser-på.html";
+  window.location.href = "HvemSerPa.html";
 }
 
-/* LOAD UI */
+/* LOAD */
 function loadUI() {
   document.getElementById("navnDisplay").innerText = aktiv.navn;
   document.getElementById("navnView").innerText = aktiv.navn;
   document.getElementById("profilbilde").src = aktiv.bilde;
 
-  document.getElementById("epostView").innerText = localStorage.getItem("epost") || "";
+  document.getElementById("epostView").innerText =
+    localStorage.getItem("epost") || "";
 }
 
 loadUI();
 
 /* NAVN */
 function endreNavn() {
-  navnInput.value = aktiv.navn;
-  navnView.classList.add("hidden");
-  navnInput.closest(".edit-field").classList.remove("hidden");
+  document.getElementById("navnEdit").classList.remove("hidden");
+  document.getElementById("navnInput").value = aktiv.navn;
 }
 
 function lagreNavn() {
-  const ny = navnInput.value.trim();
+  let ny = document.getElementById("navnInput").value.trim();
   if (!ny) return;
 
   aktiv.navn = ny;
   profiler[aktivProfil] = aktiv;
+
   localStorage.setItem("profiler", JSON.stringify(profiler));
 
   loadUI();
-  avbrytNavn();
-}
-
-function avbrytNavn() {
-  navnInput.closest(".edit-field").classList.add("hidden");
-  navnView.classList.remove("hidden");
+  document.getElementById("navnEdit").classList.add("hidden");
 }
 
 /* EPOST */
 function endreEpost() {
-  epostInput.value = epostView.innerText;
-  epostView.classList.add("hidden");
-  epostInput.closest(".edit-field").classList.remove("hidden");
+  document.getElementById("epostEdit").classList.remove("hidden");
+  document.getElementById("epostInput").value = localStorage.getItem("epost");
 }
 
 function lagreEpost() {
-  const ny = epostInput.value.trim();
+  let ny = document.getElementById("epostInput").value.trim();
   if (!ny) return;
 
   localStorage.setItem("epost", ny);
   loadUI();
-  avbrytEpost();
+  document.getElementById("epostEdit").classList.add("hidden");
 }
 
-function avbrytEpost() {
-  epostInput.closest(".edit-field").classList.add("hidden");
-  epostView.classList.remove("hidden");
-}
-
-/* 🔥 NY: GÅ TIL PROFILBILDE SIDE */
+/* PROFILBILDE */
 function endreProfilbilde() {
-  window.location.href = "Registreringsside.html";
+  localStorage.setItem("redigerProfilIndex", aktivProfil);
+  window.location.href = "profilbilde.html";
 }
 
 /* NAV */
+function tilbake() {
+  window.location.href = "HvemSerPa.html";
+}
+
 function velgProfil() {
-  window.location.href = "hvem-ser-på.html";
+  window.location.href = "HvemSerPa.html";
 }
 
 /* SLETT */
-function bekreftSlettBruker() {
-  if (!confirm("Vil du slette profilen permanent?")) return;
+function slettProfil() {
+  if (!confirm("Slette profil?")) return;
 
   profiler.splice(aktivProfil, 1);
 
   localStorage.setItem("profiler", JSON.stringify(profiler));
   localStorage.setItem("aktivProfil", 0);
 
-  window.location.href = "hvem-ser-på.html";
+  window.location.href = "HvemSerPa.html";
 }
 
 /* LOGG UT */
 function loggUt() {
   localStorage.clear();
-  window.location.href = "Innloggings side.html";
+  window.location.href = "Innlogging.html";
 }
 
 </script>
