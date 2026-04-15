@@ -28,21 +28,15 @@ body {
   transition:opacity .3s;
 }
 
-/* WRAPPER */
 .container {
   text-align:center;
-  backdrop-filter: blur(10px);
 }
 
-/* TITLE */
 h1 {
   font-size:46px;
   margin-bottom:70px;
-  font-weight:600;
-  letter-spacing:.5px;
 }
 
-/* GRID */
 .profiles {
   display:flex;
   gap:70px;
@@ -50,7 +44,6 @@ h1 {
   justify-content:center;
 }
 
-/* PROFILE */
 .profile {
   cursor:pointer;
   transition:.35s;
@@ -62,7 +55,6 @@ h1 {
   transform:scale(1.15);
 }
 
-/* AVATAR */
 .avatar {
   width:170px;
   height:170px;
@@ -71,7 +63,6 @@ h1 {
   background:var(--card);
   border:2px solid transparent;
   transition:.35s;
-  position:relative;
 }
 
 .profile:hover .avatar {
@@ -85,25 +76,21 @@ h1 {
   object-fit:cover;
 }
 
-/* NAME */
 .name {
   margin-top:18px;
   font-size:18px;
   color:var(--muted);
-  transition:.25s;
 }
 
 .profile:hover .name {
   color:white;
 }
 
-/* EDIT BUTTON */
 .edit-btn {
   position:absolute;
   bottom:55px;
   right:15px;
   background:rgba(0,0,0,0.6);
-  backdrop-filter: blur(6px);
   padding:8px;
   border-radius:50%;
   font-size:14px;
@@ -115,23 +102,12 @@ h1 {
   opacity:1;
 }
 
-.edit-btn:hover {
-  background:var(--accent);
-}
-
-/* ADD PROFILE */
 .add-profile .avatar {
   display:flex;
   align-items:center;
   justify-content:center;
   font-size:60px;
   color:#777;
-}
-
-.add-profile:hover .avatar {
-  border-color:var(--accent);
-  color:white;
-  box-shadow:0 0 20px rgba(0,170,255,0.4);
 }
 </style>
 </head>
@@ -147,24 +123,34 @@ h1 {
 
 const MAX_PROFILER = 5;
 
-/* HENT MIDLERTIDIG BILDE */
-let valgtBilde = localStorage.getItem("valgtProfilbilde");
-
 /* LAST PROFILER */
 let profiler = JSON.parse(localStorage.getItem("profiler"));
+
+/* 🔥 NYTT: HENT BILDE FRA PROFILBILDE-SIDEN */
+let valgtBilde = localStorage.getItem("valgtProfilbilde");
+let redigerIndex = localStorage.getItem("redigerProfilIndex");
+
+/* 🔥 HVIS VI KOMMER FRA BILDEVELGER */
+if (valgtBilde && redigerIndex !== null && profiler) {
+  profiler[redigerIndex].bilde = valgtBilde;
+
+  localStorage.setItem("profiler", JSON.stringify(profiler));
+
+  localStorage.removeItem("valgtProfilbilde");
+  localStorage.removeItem("redigerProfilIndex");
+}
 
 /* FØRSTE GANG */
 if (!profiler) {
   profiler = [
     {
       navn: "Bruker 1",
-      bilde: valgtBilde || "https://api.dicebear.com/7.x/avataaars/svg?seed=User1",
+      bilde: "https://api.dicebear.com/7.x/avataaars/svg?seed=User1",
       pin: null
     }
   ];
 
   localStorage.setItem("profiler", JSON.stringify(profiler));
-  localStorage.removeItem("valgtProfilbilde");
 }
 
 const container = document.getElementById("profiles");
@@ -253,16 +239,13 @@ function leggTilProfil() {
   const navn = prompt("Navn:");
   if (!navn) return;
 
-  const valgtBilde = localStorage.getItem("valgtProfilbilde");
-
   profiler.push({
     navn: navn,
-    bilde: valgtBilde || `https://api.dicebear.com/7.x/avataaars/svg?seed=${navn}`,
+    bilde: `https://api.dicebear.com/7.x/avataaars/svg?seed=${navn}`,
     pin: null
   });
 
   localStorage.setItem("profiler", JSON.stringify(profiler));
-  localStorage.removeItem("valgtProfilbilde");
 
   renderProfiler();
 }
