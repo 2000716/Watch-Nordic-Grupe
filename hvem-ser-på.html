@@ -10,13 +10,15 @@
 
 <style>
 :root {
-  --bg:#0b0b0b;
+  --bg:#0a0a0a;
+  --card:#141414;
   --muted:#9e9e9e;
+  --accent:#00aaff;
 }
 
 body {
   margin:0;
-  background:var(--bg);
+  background:radial-gradient(circle at top, #111, #050505);
   color:white;
   font-family:system-ui,-apple-system,"Segoe UI",Roboto;
   display:flex;
@@ -26,45 +28,55 @@ body {
   transition:opacity .3s;
 }
 
+/* WRAPPER */
 .container {
   text-align:center;
+  backdrop-filter: blur(10px);
 }
 
+/* TITLE */
 h1 {
-  font-size:42px;
-  margin-bottom:60px;
+  font-size:46px;
+  margin-bottom:70px;
+  font-weight:600;
+  letter-spacing:.5px;
 }
 
+/* GRID */
 .profiles {
   display:flex;
-  gap:60px;
+  gap:70px;
   flex-wrap:wrap;
   justify-content:center;
 }
 
+/* PROFILE */
 .profile {
   cursor:pointer;
-  transition:.25s;
+  transition:.35s;
   text-align:center;
   position:relative;
 }
 
 .profile:hover {
-  transform:scale(1.1);
+  transform:scale(1.15);
 }
 
+/* AVATAR */
 .avatar {
-  width:160px;
-  height:160px;
+  width:170px;
+  height:170px;
   border-radius:50%;
   overflow:hidden;
-  background:#1a1a1a;
+  background:var(--card);
   border:2px solid transparent;
-  transition:.3s;
+  transition:.35s;
+  position:relative;
 }
 
 .profile:hover .avatar {
-  border-color:white;
+  border-color:var(--accent);
+  box-shadow:0 0 25px rgba(0,170,255,0.5);
 }
 
 .avatar img {
@@ -73,22 +85,30 @@ h1 {
   object-fit:cover;
 }
 
+/* NAME */
 .name {
-  margin-top:16px;
+  margin-top:18px;
   font-size:18px;
   color:var(--muted);
+  transition:.25s;
 }
 
 .profile:hover .name {
   color:white;
 }
 
+/* EDIT BUTTON */
 .edit-btn {
-  margin-top:10px;
-  font-size:16px;
-  color:#aaa;
+  position:absolute;
+  bottom:55px;
+  right:15px;
+  background:rgba(0,0,0,0.6);
+  backdrop-filter: blur(6px);
+  padding:8px;
+  border-radius:50%;
+  font-size:14px;
   opacity:0;
-  transition:.2s;
+  transition:.3s;
 }
 
 .profile:hover .edit-btn {
@@ -96,20 +116,22 @@ h1 {
 }
 
 .edit-btn:hover {
-  color:white;
+  background:var(--accent);
 }
 
+/* ADD PROFILE */
 .add-profile .avatar {
   display:flex;
   align-items:center;
   justify-content:center;
-  font-size:50px;
+  font-size:60px;
   color:#777;
 }
 
 .add-profile:hover .avatar {
-  border-color:white;
+  border-color:var(--accent);
   color:white;
+  box-shadow:0 0 20px rgba(0,170,255,0.4);
 }
 </style>
 </head>
@@ -131,7 +153,7 @@ let valgtBilde = localStorage.getItem("valgtProfilbilde");
 /* LAST PROFILER */
 let profiler = JSON.parse(localStorage.getItem("profiler"));
 
-/* FØRSTE GANG (ingen profiler finnes) */
+/* FØRSTE GANG */
 if (!profiler) {
   profiler = [
     {
@@ -142,7 +164,7 @@ if (!profiler) {
   ];
 
   localStorage.setItem("profiler", JSON.stringify(profiler));
-  localStorage.removeItem("valgtProfilbilde"); // viktig!
+  localStorage.removeItem("valgtProfilbilde");
 }
 
 const container = document.getElementById("profiles");
@@ -240,7 +262,7 @@ function leggTilProfil() {
   });
 
   localStorage.setItem("profiler", JSON.stringify(profiler));
-  localStorage.removeItem("valgtProfilbilde"); // viktig!
+  localStorage.removeItem("valgtProfilbilde");
 
   renderProfiler();
 }
