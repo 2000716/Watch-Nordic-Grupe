@@ -126,21 +126,6 @@ const MAX_PROFILER = 5;
 /* LAST PROFILER */
 let profiler = JSON.parse(localStorage.getItem("profiler"));
 
-/* 🔥 NYTT: HENT BILDE FRA PROFILBILDE-SIDEN */
-let valgtBilde = localStorage.getItem("valgtProfilbilde");
-let redigerIndex = localStorage.getItem("redigerProfilIndex");
-
-/* 🔥 HVIS VI KOMMER FRA BILDEVELGER */
-if (valgtBilde && redigerIndex !== null && profiler) {
-  profiler[redigerIndex].bilde = valgtBilde;
-
-  localStorage.setItem("profiler", JSON.stringify(profiler));
-
-  localStorage.removeItem("valgtProfilbilde");
-  localStorage.removeItem("redigerProfilIndex");
-}
-
-/* FØRSTE GANG */
 if (!profiler) {
   profiler = [
     {
@@ -149,8 +134,20 @@ if (!profiler) {
       pin: null
     }
   ];
+  localStorage.setItem("profiler", JSON.stringify(profiler));
+}
+
+/* 🔥 HENT ENDRING FRA KONTO/BILDEVELGER */
+let valgtBilde = localStorage.getItem("valgtProfilbilde");
+let aktivProfilIndex = localStorage.getItem("aktivProfil");
+
+/* Hvis bilde er endret → oppdater riktig profil */
+if (valgtBilde && aktivProfilIndex !== null && profiler[aktivProfilIndex]) {
+  profiler[aktivProfilIndex].bilde = valgtBilde;
 
   localStorage.setItem("profiler", JSON.stringify(profiler));
+
+  localStorage.removeItem("valgtProfilbilde");
 }
 
 const container = document.getElementById("profiles");
