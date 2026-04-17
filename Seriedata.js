@@ -114,7 +114,7 @@ const serier = {
     tittel: "The Titanic Archive",
     bakgrunn: "https://static.wixstatic.com/media/d9ace9_3d752a11a2d04c3fb9d02873d4cb659a~mv2.png",
     logo: "https://static.wixstatic.com/media/d9ace9_a9a200d5078e4797997dc8f8d22a467a~mv2.png",
-    poster: "https://static.wixstatic.com/media/d9ace9_7e0bc76a75f140c28a7e34baca393cdf~mv2.png",
+    poster: "https://static.wixstatic.com/media/d9ace9_2d7b7487a34b4d09bb824dd07baa47a1~mv2.png",
     posterVertikal: "https://static.wixstatic.com/media/d9ace9_f312e0fdb80c4fd5bc06fd3fdabee8ad~mv2.png",
     beskrivelse: "I denne dokumentaren tar Watch Originals deg med gjennom hendelsesforløpet til RMS Titanic og forliset i 1912. Du får et innblikk i de viktigste øyeblikkene før, under og etter katastrofen. Samtidig fortelles sterke historier om noen av menneskene som mistet livet om bord.",
     metadata: ["2026", "10+", "Dokumentar"],
