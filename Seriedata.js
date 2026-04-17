@@ -112,7 +112,7 @@ const serier = {
 
   "the-titanic-archive": {
     tittel: "The Titanic Archive",
-    bakgrunn: "https://static.wixstatic.com/media/d9ace9_0d59e15afbca471ba942b417054476a3~mv2.jpg",
+    bakgrunn: "https://static.wixstatic.com/media/d9ace9_3d752a11a2d04c3fb9d02873d4cb659a~mv2.png",
     logo: "https://static.wixstatic.com/media/d9ace9_a9a200d5078e4797997dc8f8d22a467a~mv2.png",
     poster: "https://static.wixstatic.com/media/d9ace9_7e0bc76a75f140c28a7e34baca393cdf~mv2.png",
     posterVertikal: "https://static.wixstatic.com/media/d9ace9_f312e0fdb80c4fd5bc06fd3fdabee8ad~mv2.png",
