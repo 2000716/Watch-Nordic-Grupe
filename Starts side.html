@@ -18,161 +18,102 @@
 }
 
 body {
-  font-family: Arial, sans-serif;
   background: #091B1E;
+  font-family: Arial, sans-serif;
   color: white;
 }
 
 /* NAVBAR */
 .navbar {
-  position: absolute;
+  position: fixed;
   top: 0;
   width: 100%;
-  padding: 20px 50px;
+  height: 70px;
+
   display: flex;
+  align-items: center;
   justify-content: space-between;
-  z-index: 10;
+
+  padding: 0 50px;
+  z-index: 100;
+
+  background: linear-gradient(
+    to bottom,
+    rgba(9,27,30,0.9),
+    rgba(9,27,30,0)
+  );
 }
 
+/* LOGO */
 .logo {
-  font-size: 26px;
+  font-size: 28px;
   font-weight: 900;
+  letter-spacing: 3px;
   color: #00FFCC;
-  letter-spacing: 2px;
+
+  text-shadow:
+    0 0 6px rgba(0,255,204,0.6),
+    0 0 18px rgba(0,255,204,0.3);
+}
+
+/* BUTTONS */
+.nav-buttons {
+  display: flex;
+  gap: 15px;
 }
 
 .nav-buttons a {
-  margin-left: 15px;
   text-decoration: none;
-  padding: 8px 18px;
-  border-radius: 4px;
   font-weight: bold;
+  padding: 8px 20px;
+  border-radius: 4px;
+  transition: 0.3s;
 }
 
+/* LOGG INN */
 .login {
   border: 1px solid white;
   color: white;
 }
 
+/* REGISTRER */
 .signup {
   background: #00FFCC;
   color: black;
 }
 
-/* HERO */
-.hero {
+/* HOVER */
+.nav-buttons a:hover {
+  opacity: 0.85;
+}
+
+/* SENTRERT TEKST (valgfritt) */
+.center-content {
   height: 100vh;
-  position: relative;
-  overflow: hidden;
-}
-
-.hero img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.hero::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(
-    to top,
-    #091B1E 10%,
-    rgba(9,27,30,0.4) 60%,
-    transparent 100%
-  );
-}
-
-/* HERO CONTENT */
-.hero-content {
-  position: absolute;
-  bottom: 120px;
-  left: 50px;
-  max-width: 600px;
-}
-
-.hero-content h1 {
-  font-size: 48px;
-  margin-bottom: 15px;
-}
-
-.hero-content p {
-  color: #ccc;
-  margin-bottom: 25px;
-}
-
-/* BUTTONS */
-.cta-buttons {
   display: flex;
-  gap: 15px;
-}
-
-.cta-buttons a {
-  padding: 12px 30px;
-  border-radius: 50px;
-  font-weight: bold;
-  text-decoration: none;
-}
-
-.start {
-  background: #00FFCC;
-  color: black;
-}
-
-.more {
-  border: 2px solid white;
-  color: white;
-}
-
-/* SEKSJON */
-.section {
-  padding: 60px 50px;
-}
-
-.section h2 {
-  margin-bottom: 20px;
-  color: #00FFCC;
-}
-
-/* FILM GRID */
-.movie-row {
-  display: flex;
-  gap: 15px;
-  overflow-x: auto;
-}
-
-.movie-row img {
-  width: 250px;
-  border-radius: 6px;
-  transition: transform 0.3s ease;
-}
-
-.movie-row img:hover {
-  transform: scale(1.05);
-}
-
-/* FOOTER */
-.footer {
-  padding: 30px;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
   text-align: center;
-  color: #777;
-  font-size: 14px;
+}
+
+.center-content h1 {
+  font-size: 42px;
+  margin-bottom: 10px;
+}
+
+.center-content p {
+  color: #aaa;
 }
 
 /* MOBIL */
 @media(max-width:768px) {
-  .hero-content h1 {
-    font-size: 28px;
-  }
-
-  .hero-content {
-    left: 20px;
-    right: 20px;
-  }
-
   .navbar {
-    padding: 15px 20px;
+    padding: 0 20px;
+  }
+
+  .logo {
+    font-size: 22px;
   }
 }
 
@@ -181,56 +122,20 @@ body {
 
 <body>
 
-<!-- NAV -->
+<!-- NAVBAR -->
 <div class="navbar">
   <div class="logo">WATCH</div>
+
   <div class="nav-buttons">
     <a href="login.html" class="login">Logg inn</a>
-    <a href="registrer.html" class="signup">Start nå</a>
+    <a href="registrer.html" class="signup">Registrer</a>
   </div>
 </div>
 
-<!-- HERO -->
-<section class="hero">
-  <img src="https://images.unsplash.com/photo-1601933470928-c9b6d0fddfbc" alt="Film banner">
-
-  <div class="hero-content">
-    <h1>Se filmer og serier uten grenser</h1>
-    <p>Stream tusenvis av titler – når som helst, hvor som helst.</p>
-
-    <div class="cta-buttons">
-      <a href="registrer.html" class="start">
-        <i class="fas fa-play"></i> Start gratis
-      </a>
-      <a href="#info" class="more">Les mer</a>
-    </div>
-  </div>
-</section>
-
-<!-- POPULÆRT -->
-<section class="section">
-  <h2>Populært nå</h2>
-  <div class="movie-row">
-    <img src="https://via.placeholder.com/300x170">
-    <img src="https://via.placeholder.com/300x170">
-    <img src="https://via.placeholder.com/300x170">
-    <img src="https://via.placeholder.com/300x170">
-  </div>
-</section>
-
-<!-- ORIGINALS -->
-<section class="section">
-  <h2>Watch Originals</h2>
-  <div class="movie-row">
-    <img src="https://via.placeholder.com/300x170">
-    <img src="https://via.placeholder.com/300x170">
-    <img src="https://via.placeholder.com/300x170">
-  </div>
-</section>
-
-<!-- FOOTER -->
-<div class="footer">
-  © 2026 Watch Nordic™
+<!-- VALGFRITT INNHOLD -->
+<div class="center-content">
+  <h1>Velkommen til Watch</h1>
+  <p>Stream filmer og serier</p>
 </div>
 
 </body>
