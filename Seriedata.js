@@ -117,7 +117,7 @@ const serier = {
     poster: "https://static.wixstatic.com/media/d9ace9_2d7b7487a34b4d09bb824dd07baa47a1~mv2.png",
     posterVertikal: "https://static.wixstatic.com/media/d9ace9_f312e0fdb80c4fd5bc06fd3fdabee8ad~mv2.png",
     beskrivelse: "I denne dokumentaren tar Watch Originals deg med gjennom hendelsesforløpet til RMS Titanic og forliset i 1912. Du får et innblikk i de viktigste øyeblikkene før, under og etter katastrofen. Samtidig fortelles sterke historier om noen av menneskene som mistet livet om bord.",
-    metadata: ["2026", "10+", "Dokumentar"],
+    metadata: ["2026", "10+", "Dokumentar", "4K"],
     imdb: "",
     skuespillere: "",
     skapere: "Svein Olav Haukaas Arstein",
