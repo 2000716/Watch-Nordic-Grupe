@@ -7,396 +7,249 @@
   <link rel="icon" type="image/png" href="https://static.wixstatic.com/media/fd2fb2_39376e4ee55b460ab7a3ebbfcf35fef7~mv2.png" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
   <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    html, body {
-      font-family: 'Poppins', sans-serif;
-      background: radial-gradient(circle at top left, #020c0e, #061113 60%, #0b1c20 100%);
-      color: white;
-      overflow-x: hidden;
-    }
-
     body {
-      display: flex;
-      flex-direction: column;
-      scroll-behavior: smooth;
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      background: #061113;
+      color: white;
     }
 
-    /* --- Glødende bakgrunn --- */
-    body::before {
-      content: "";
+    /* TOP BAR */
+    .topbar {
       position: fixed;
-      top: 0;
-      left: 0;
-      width: 120%;
-      height: 120%;
-      background: radial-gradient(circle at 20% 20%, rgba(0,255,180,0.08), transparent 40%),
-                  radial-gradient(circle at 80% 80%, rgba(0,200,120,0.08), transparent 40%);
-      z-index: -1;
-      animation: pulse 15s ease-in-out infinite alternate;
-    }
-
-    @keyframes pulse {
-      0% { transform: scale(1); opacity: 0.7; }
-      100% { transform: scale(1.1); opacity: 1; }
-    }
-
-    /* Top-bar */
-    .top-bar {
-      background: rgba(6, 17, 19, 0.85);
-      backdrop-filter: blur(8px);
-      box-shadow: 0 2px 20px rgba(0, 255, 180, 0.1);
+      width: 100%;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 10px 30px;
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      z-index: 9999;
-      transition: 0.3s;
+      padding: 15px 30px;
+      background: rgba(6,17,19,0.85);
+      backdrop-filter: blur(10px);
+      z-index: 1000;
     }
 
-    .top-bar img {
-      height: 40px;
-      transition: transform 0.3s;
+    .logo {
+      font-size: 20px;
+      font-weight: 600;
+      color: #00ffcc;
     }
 
-    .top-bar img:hover {
-      transform: scale(1.05);
-    }
-
-    .auth-buttons {
-      display: flex;
-      gap: 10px;
-    }
-
-    .auth-buttons button {
-      background: linear-gradient(90deg, #00e0b2, #00cc88, #00ff99);
-      color: black;
+    .login-btn {
+      background: linear-gradient(90deg,#00e0b2,#00ff99);
       border: none;
-      padding: 7px 16px;
+      padding: 8px 18px;
       border-radius: 25px;
-      font-size: 14px;
-      cursor: pointer;
-      transition: 0.3s;
       font-weight: bold;
-      box-shadow: 0 0 10px rgba(0,255,180,0.25);
+      cursor: pointer;
+      color: black;
     }
 
-    .auth-buttons button:hover {
-      transform: scale(1.05);
-      box-shadow: 0 0 25px rgba(0,255,180,0.6);
-      filter: brightness(1.1);
-    }
-
-    /* Hero */
+    /* HERO */
     .hero {
-      background: url('https://static.wixstatic.com/media/fd2fb2_cb01bba1adf84bf1aa5ef6ec7cb2f055~mv2.png') no-repeat center center / cover;
       height: 100vh;
       display: flex;
-      justify-content: flex-start;
       align-items: center;
-      position: relative;
-      padding-left: 60px;
-      text-align: left;
-      overflow: hidden;
+      padding: 0 60px;
+      background:
+        linear-gradient(to bottom, rgba(0,0,0,0.6), #061113),
+        url('https://static.wixstatic.com/media/fd2fb2_cb01bba1adf84bf1aa5ef6ec7cb2f055~mv2.png') center/cover;
     }
 
-    .hero::after {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background: rgba(0,0,0,0.4);
-    }
-
-    .overlay {
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      height: 200px;
-      background: linear-gradient(to bottom, rgba(6, 17, 19, 0) 0%, #061113 100%);
-      z-index: 1;
-    }
-
-    .main-content {
-      position: relative;
-      z-index: 2;
+    .hero-content {
       max-width: 500px;
-      animation: fadeInUp 1.5s ease;
-    }
-
-    @keyframes fadeInUp {
-      from { opacity: 0; transform: translateY(30px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    .hero-logo {
-      width: 130px;
-      margin-bottom: 20px;
-      filter: drop-shadow(0 0 10px rgba(0,255,180,0.4));
     }
 
     .hero-small-text {
-      font-size: 1rem;
-      margin-bottom: 8px;
       color: #a8ffe4;
-      letter-spacing: 0.5px;
+      margin-bottom: 10px;
     }
 
     .tagline {
-      font-size: 1.4rem;
+      font-size: 1.6rem;
       margin-bottom: 20px;
       line-height: 1.4;
-      color: #dcfff1;
     }
 
     .cta-button {
-      background: linear-gradient(90deg, #00e0b2, #00cc88, #00ff99);
-      color: #000;
-      padding: 12px 26px;
-      font-size: 16px;
+      background: linear-gradient(90deg,#00e0b2,#00ff99);
       border: none;
+      padding: 12px 26px;
       border-radius: 30px;
-      cursor: pointer;
       font-weight: bold;
-      transition: 0.3s;
-      box-shadow: 0 0 20px rgba(0,255,180,0.3);
+      cursor: pointer;
+      color: black;
     }
 
-    .cta-button:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 0 30px rgba(0,255,180,0.6);
-      filter: brightness(1.1);
+    .subtext {
+      margin-top: 10px;
+      font-size: 0.9rem;
+      color: #9deed4;
     }
 
-    /* Seksjoner */
+    /* SECTION */
     .section {
       padding: 80px 30px;
-      background-color: transparent;
       text-align: center;
     }
 
     .section h2 {
-      font-size: 2rem;
-      margin-bottom: 20px;
-      background: linear-gradient(90deg, #00e0b2, #00cc88, #00ff99);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
+      color: #00ffcc;
+      margin-bottom: 15px;
     }
 
     .section p {
-      font-size: 1.1rem;
+      max-width: 600px;
+      margin: auto;
       color: #bcd2c4;
-      max-width: 700px;
-      margin: 0 auto;
     }
 
-    .section-2 {
+    /* DEVICES */
+    .icons {
       display: flex;
-      align-items: center;
       justify-content: center;
+      gap: 40px;
       flex-wrap: wrap;
-      gap: 50px;
-      padding: 80px 30px;
+      margin-top: 30px;
     }
 
-    .section-2 img {
-      max-width: 420px;
-      width: 100%;
-      border-radius: 20px;
-      transition: transform 0.4s;
-      box-shadow: none; /* Ingen skygge */
+    .icons div {
+      text-align: center;
     }
 
-    .section-2 img:hover {
-      transform: scale(1.05);
-    }
-
-    .section-2-text {
-      max-width: 500px;
-      text-align: left;
+    .icons i {
+      font-size: 28px;
+      color: #00ff99;
+      margin-bottom: 10px;
     }
 
     /* FAQ */
-    .accordion {
-      background-color: rgba(255,255,255,0.05);
-      color: white;
-      cursor: pointer;
-      padding: 18px;
+    .faq button {
       width: 100%;
-      text-align: left;
+      padding: 15px;
+      margin-top: 10px;
+      background: rgba(255,255,255,0.05);
       border: none;
+      color: white;
+      text-align: left;
+      cursor: pointer;
       border-radius: 8px;
-      outline: none;
-      transition: background 0.3s, transform 0.2s;
-      margin-top: 12px;
-    }
-
-    .accordion:hover {
-      background-color: rgba(255,255,255,0.1);
-      transform: scale(1.01);
     }
 
     .panel {
-      padding: 0 16px;
-      background-color: rgba(255,255,255,0.03);
-      border-left: 2px solid #00e0b2;
       max-height: 0;
       overflow: hidden;
-      transition: max-height 0.3s ease-out;
-      border-radius: 8px;
-      margin-top: 4px;
-    }
-
-    /* Footer */
-    .footer-links {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 25px;
-      padding: 40px;
-      background-color: rgba(6,17,19,0.8);
-      backdrop-filter: blur(10px);
-      font-size: 15px;
-    }
-
-    .footer-links a {
-      color: #70ffd6;
-      text-decoration: none;
       transition: 0.3s;
+      padding: 0 10px;
     }
 
-    .footer-links a:hover {
-      text-decoration: underline;
-      color: #fff;
-    }
-
+    /* FOOTER */
     .footer {
       text-align: center;
-      padding: 25px;
-      font-size: 14px;
+      padding: 30px;
       color: #88b59b;
-      background-color: rgba(6,17,19,0.9);
-      border-top: 1px solid rgba(255,255,255,0.1);
     }
 
-    /* Mobiltilpasning */
-    @media (max-width: 768px) {
+    @media(max-width:768px){
       .hero {
-        padding: 120px 20px 40px;
-        text-align: center;
-        justify-content: center;
-      }
-
-      .section-2 {
-        flex-direction: column;
-        text-align: center;
-      }
-
-      .section-2-text {
+        padding: 120px 20px;
         text-align: center;
       }
     }
   </style>
+
 </head>
+
 <body>
 
-<!-- Top-bar -->
-<div class="top-bar">
-  <img src="https://static.wixstatic.com/media/fd2fb2_fbee16e300b2404b97b23de096df1dd8~mv2.png" alt="Watch Nordic logo" />
-  <div class="auth-buttons">
-    <button onclick="window.location.href='Innloggings side.html'">Logg inn</button>
-  </div>
+<!-- TOPBAR -->
+
+<div class="topbar">
+  <div class="logo">Watch Nordic</div>
+  <button class="login-btn" onclick="window.location.href='Innloggings side.html'">Logg inn</button>
 </div>
 
-<!-- Hero -->
+<!-- HERO -->
+
 <div class="hero">
-  <div class="overlay"></div>
-  <div class="main-content">
-    <img src="https://static.wixstatic.com/media/fd2fb2_fbee16e300b2404b97b23de096df1dd8~mv2.png" 
-         alt="Watch Nordic logo" 
-         class="hero-logo" />
-    <p class="hero-small-text">Start din prøveperiode Gratis*</p>
-    <p class="tagline">Begynn å strømme med en Watch Nordic-konto og få tilgang til hundrevis av filmer og serier.</p>
-    <button class="cta-button" onclick="window.location.href='Innloggings side.html'">REGISTRER DEG NÅ!</button>
+  <div class="hero-content">
+
+```
+<p class="hero-small-text">Start din gratis prøveperiode</p>
+
+<p class="tagline">
+  Strøm filmer og serier i krystallklar 4K Ultra HD – når som helst, hvor som helst.
+</p>
+
+<button class="cta-button" onclick="window.location.href='Innloggings side.html'">
+  REGISTRER DEG NÅ
+</button>
+
+<p class="subtext">
+  Ingen bindingstid • Se på alle enheter • Avslutt når du vil
+</p>
+```
+
   </div>
 </div>
 
-<!-- Seksjon 2 -->
-<div class="section section-2">
-  <img src="https://static.wixstatic.com/media/fd2fb2_9c2a2bb3a44947b49c45811839dbb444~mv2.png" alt="Se alt du vil" />
-  <div class="section-2-text">
-    <h2>Se alt du vil,<br> når du vil</h2>
-    <p>Uansett tid på døgnet – se dine favorittfilmer og serier uten avbrudd. Oppdag nytt innhold hver uke.</p>
-  </div>
-</div>
+<!-- SECTION -->
 
-<!-- Ny seksjon – Opprett profil -->
-<div class="section section-2">
-  <div class="section-2-text">
-    <h2>Opprett en profil<br> og strøm dine favoritter</h2>
-    <p>Med din egen konto får du personlig tilpassede anbefalinger og kan fortsette der du slapp.</p>
-  </div>
-  <img src="https://static.wixstatic.com/media/fd2fb2_228d8218cca5424d8d1ff36c7ee8ffd1~mv2.png" alt="Opprett profil" />
-</div>
-
-<!-- Seksjon 3 – FAQ -->
 <div class="section">
+  <h2>Underholdning uten grenser</h2>
+  <p>
+    Oppdag et voksende bibliotek av filmer og serier – alltid tilgjengelig i høy kvalitet uten avbrudd.
+  </p>
+</div>
+
+<!-- DEVICES + 4K -->
+
+<div class="section">
+  <h2>Se hvor du vil – i topp kvalitet</h2>
+  <p>Watch Nordic fokuserer på kvalitet og 4K-opplevelse.</p>
+
+  <div class="icons">
+    <div><i class="fas fa-tv"></i><p>Smart-TV</p></div>
+    <div><i class="fas fa-mobile-alt"></i><p>Mobil</p></div>
+    <div><i class="fas fa-tablet-alt"></i><p>Nettbrett</p></div>
+    <div><i class="fas fa-laptop"></i><p>PC & Mac</p></div>
+    <div><i class="fas fa-film"></i><p>4K Ultra HD</p></div>
+  </div>
+</div>
+
+<!-- FAQ -->
+
+<div class="section faq">
   <h2>Ofte stilte spørsmål</h2>
-  <button class="accordion">Hva er Watch Nordic?</button>
-  <div class="panel">
-    <p>Watch Nordic er en nordisk strømmetjeneste med filmer, serier og dokumentarer på ett sted.</p>
-  </div>
 
-  <button class="accordion">Hvor mye koster det?</button>
-  <div class="panel">
-    <p>Vi tilbyr en gratis prøveperiode. Etter det kan du velge mellom fleksible abonnement.</p>
-  </div>
+<button>Hva er Watch Nordic?</button>
 
-  <button class="accordion">Kan jeg si opp når som helst?</button>
-  <div class="panel">
-    <p>Ja! Det er ingen bindingstid. Du kan avslutte abonnementet når som helst.</p>
-  </div>
+  <div class="panel"><p>En nordisk strømmetjeneste med filmer og serier.</p></div>
+
+<button>Hva koster det?</button>
+
+  <div class="panel"><p>Gratis prøveperiode, deretter abonnement.</p></div>
+
+<button>Kan jeg avslutte?</button>
+
+  <div class="panel"><p>Ja, når som helst uten binding.</p></div>
 </div>
 
-<!-- Footer lenker -->
-<div class="footer-links">
-  <a href="#">Support</a>
-  <a href="#">Om Watch Nordic</a>
-  <a href="#">Personvern</a>
-  <a href="#">Vilkår</a>
-</div>
+<!-- FOOTER -->
 
-<!-- Footer -->
 <div class="footer">
-  &copy; 2025 Watch Nordic Group
+  © 2025 Watch Nordic
 </div>
 
 <script>
-  const acc = document.querySelectorAll(".accordion");
-  acc.forEach(btn => {
-    btn.addEventListener("click", function () {
-      this.classList.toggle("active");
-      const panel = this.nextElementSibling;
-      if (panel.style.maxHeight) {
-        panel.style.maxHeight = null;
-      } else {
-        panel.style.maxHeight = panel.scrollHeight + "px";
-      }
+  document.querySelectorAll(".faq button").forEach(btn=>{
+    btn.addEventListener("click",()=>{
+      const panel = btn.nextElementSibling;
+      panel.style.maxHeight = panel.style.maxHeight ? null : panel.scrollHeight+"px";
     });
   });
 </script>
+
 </body>
 </html>
-
-
 
 
 
