@@ -12,7 +12,7 @@ const serier = {
     skapere: "Tove Jansson, Lars Jansson",
     tilbakeUrl: "serie.html?navn=i-mummidalen",
     publishDate: "2025-10-04T00:00:00", // ISO datoformat
-    expireDate: "2026-01-10T23:59:59",
+    expireDate: "2026-10-10T23:59:59",
     audioLanguages: [],
     subtitleLanguages: [],
     sesonger: {
