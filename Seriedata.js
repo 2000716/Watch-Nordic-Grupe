@@ -11,7 +11,8 @@ const serier = {
     skuespillere: "",
     skapere: "Tove Jansson, Lars Jansson",
     tilbakeUrl: "serie.html?navn=i-mummidalen",
-    expireDate: "2026-11-15T23:59:59",
+    publishDate: "2025-10-02T00:00:00", // ISO datoformat
+    expireDate: "2027-11-15T23:59:59",
     audioLanguages: [],
     subtitleLanguages: [],
     sesonger: {
@@ -122,7 +123,8 @@ const serier = {
     skuespillere: "",
     skapere: "Svein Olav Haukaas Arstein",
     tilbakeUrl: "serie.html?navn=the-titanic-archive",
-    expireDate: "2026-11-15T23:59:59",
+    publishDate: "2025-10-02T00:00:00", // ISO datoformat
+    expireDate: "2027-11-15T23:59:59",
     audioLanguages: [],
     subtitleLanguages: [],
     sesonger: {
