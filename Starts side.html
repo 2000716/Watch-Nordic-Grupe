@@ -2,256 +2,260 @@
 <html lang="no">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Velkommen | Watch Nordic™</title>
-  <link rel="icon" type="image/png" href="https://static.wixstatic.com/media/fd2fb2_39376e4ee55b460ab7a3ebbfcf35fef7~mv2.png" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
-  <style>
-    body {
-      margin: 0;
-      font-family: 'Poppins', sans-serif;
-      background: #061113;
-      color: white;
-    }
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Watch Nordic™</title>
 
-    /* TOP BAR */
-    .topbar {
-      position: fixed;
-      width: 100%;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 15px 30px;
-      background: rgba(6,17,19,0.85);
-      backdrop-filter: blur(10px);
-      z-index: 1000;
-    }
+  <link rel="icon" type="image/png" href="https://static.wixstatic.com/media/fd2fb2_39376e4ee55b460ab7a3ebbfcf35fef7~mv2.png"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
 
-    .logo {
-      font-size: 20px;
-      font-weight: 600;
-      color: #00ffcc;
-    }
+<style>
+* {margin:0;padding:0;box-sizing:border-box;}
 
-    .login-btn {
-      background: linear-gradient(90deg,#00e0b2,#00ff99);
-      border: none;
-      padding: 8px 18px;
-      border-radius: 25px;
-      font-weight: bold;
-      cursor: pointer;
-      color: black;
-    }
+body {
+  font-family:'Poppins',sans-serif;
+  background:#020c0e;
+  color:white;
+}
 
-    /* HERO */
-    .hero {
-      height: 100vh;
-      display: flex;
-      align-items: center;
-      padding: 0 60px;
-      background:
-        linear-gradient(to bottom, rgba(0,0,0,0.6), #061113),
-        url('https://static.wixstatic.com/media/fd2fb2_cb01bba1adf84bf1aa5ef6ec7cb2f055~mv2.png') center/cover;
-    }
+/* Topbar */
+.top-bar {
+  position:fixed;
+  top:0;left:0;right:0;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:15px 30px;
+  background:rgba(0,0,0,0.7);
+  backdrop-filter:blur(10px);
+  z-index:999;
+}
 
-    .hero-content {
-      max-width: 500px;
-    }
+.top-bar img {height:40px;}
 
-    .hero-small-text {
-      color: #a8ffe4;
-      margin-bottom: 10px;
-    }
+.auth-buttons button {
+  background:#00e0b2;
+  border:none;
+  padding:8px 18px;
+  border-radius:25px;
+  font-weight:bold;
+  cursor:pointer;
+}
 
-    .tagline {
-      font-size: 1.6rem;
-      margin-bottom: 20px;
-      line-height: 1.4;
-    }
+/* Hero */
+.hero {
+  height:100vh;
+  background:url('https://static.wixstatic.com/media/fd2fb2_cb01bba1adf84bf1aa5ef6ec7cb2f055~mv2.png') center/cover;
+  display:flex;
+  align-items:center;
+  padding:60px;
+  position:relative;
+}
 
-    .cta-button {
-      background: linear-gradient(90deg,#00e0b2,#00ff99);
-      border: none;
-      padding: 12px 26px;
-      border-radius: 30px;
-      font-weight: bold;
-      cursor: pointer;
-      color: black;
-    }
+.hero::after {
+  content:"";
+  position:absolute;
+  inset:0;
+  background:linear-gradient(to right, rgba(0,0,0,0.8), transparent);
+}
 
-    .subtext {
-      margin-top: 10px;
-      font-size: 0.9rem;
-      color: #9deed4;
-    }
+.main-content {
+  position:relative;
+  max-width:500px;
+}
 
-    /* SECTION */
-    .section {
-      padding: 80px 30px;
-      text-align: center;
-    }
+.hero-logo {width:140px;margin-bottom:20px;}
 
-    .section h2 {
-      color: #00ffcc;
-      margin-bottom: 15px;
-    }
+.tagline {font-size:1.4rem;margin:15px 0;color:#dff;}
 
-    .section p {
-      max-width: 600px;
-      margin: auto;
-      color: #bcd2c4;
-    }
+.cta-button {
+  background:#00e0b2;
+  padding:12px 25px;
+  border:none;
+  border-radius:30px;
+  font-weight:bold;
+  cursor:pointer;
+}
 
-    /* DEVICES */
-    .icons {
-      display: flex;
-      justify-content: center;
-      gap: 40px;
-      flex-wrap: wrap;
-      margin-top: 30px;
-    }
+/* Sections */
+.section {
+  padding:80px 40px;
+  border-top:1px solid rgba(255,255,255,0.05);
+  text-align:center;
+}
 
-    .icons div {
-      text-align: center;
-    }
+.section h2 {
+  margin-bottom:15px;
+  font-size:2rem;
+  color:#00ffcc;
+}
 
-    .icons i {
-      font-size: 28px;
-      color: #00ff99;
-      margin-bottom: 10px;
-    }
+.section p {
+  color:#bcd2c4;
+}
 
-    /* FAQ */
-    .faq button {
-      width: 100%;
-      padding: 15px;
-      margin-top: 10px;
-      background: rgba(255,255,255,0.05);
-      border: none;
-      color: white;
-      text-align: left;
-      cursor: pointer;
-      border-radius: 8px;
-    }
+/* Devices */
+.device-icons {
+  display:flex;
+  justify-content:center;
+  gap:40px;
+  margin-top:30px;
+  flex-wrap:wrap;
+}
 
-    .panel {
-      max-height: 0;
-      overflow: hidden;
-      transition: 0.3s;
-      padding: 0 10px;
-    }
+.device-icons div {
+  text-align:center;
+}
 
-    /* FOOTER */
-    .footer {
-      text-align: center;
-      padding: 30px;
-      color: #88b59b;
-    }
+.device-icons i {
+  font-size:32px;
+  color:#00e0b2;
+  margin-bottom:10px;
+}
 
-    @media(max-width:768px){
-      .hero {
-        padding: 120px 20px;
-        text-align: center;
-      }
-    }
-  </style>
+/* Quality */
+.quality-icons {
+  display:flex;
+  justify-content:center;
+  gap:50px;
+  margin-top:30px;
+  flex-wrap:wrap;
+}
 
+.quality-icons i {
+  font-size:34px;
+  color:#00ff99;
+}
+
+/* Content Row */
+.content-row {
+  display:flex;
+  gap:15px;
+  overflow-x:auto;
+  padding-top:20px;
+}
+
+.content-row img {
+  height:180px;
+  border-radius:10px;
+  transition:0.3s;
+}
+
+.content-row img:hover {
+  transform:scale(1.08);
+}
+
+/* Footer */
+.footer {
+  text-align:center;
+  padding:30px;
+  color:#88b59b;
+  background:#061113;
+}
+
+/* FAQ */
+.accordion {
+  background:#111;
+  color:white;
+  padding:15px;
+  border:none;
+  margin-top:10px;
+  width:100%;
+  text-align:left;
+  cursor:pointer;
+}
+
+.panel {
+  max-height:0;
+  overflow:hidden;
+  transition:0.3s;
+  background:#0b1c20;
+  padding:0 10px;
+}
+</style>
 </head>
 
 <body>
 
-<!-- TOPBAR -->
-
-<div class="topbar">
-  <div class="logo">Watch Nordic</div>
-  <button class="login-btn" onclick="window.location.href='Innloggings side.html'">Logg inn</button>
-</div>
-
-<!-- HERO -->
-
-<div class="hero">
-  <div class="hero-content">
-
-```
-<p class="hero-small-text">Start din gratis prøveperiode</p>
-
-<p class="tagline">
-  Strøm filmer og serier i krystallklar 4K Ultra HD – når som helst, hvor som helst.
-</p>
-
-<button class="cta-button" onclick="window.location.href='Innloggings side.html'">
-  REGISTRER DEG NÅ
-</button>
-
-<p class="subtext">
-  Ingen bindingstid • Se på alle enheter • Avslutt når du vil
-</p>
-```
-
+<div class="top-bar">
+  <img src="https://static.wixstatic.com/media/fd2fb2_fbee16e300b2404b97b23de096df1dd8~mv2.png">
+  <div class="auth-buttons">
+    <button onclick="window.location.href='Innloggings side.html'">Logg inn</button>
   </div>
 </div>
 
-<!-- SECTION -->
-
-<div class="section">
-  <h2>Underholdning uten grenser</h2>
-  <p>
-    Oppdag et voksende bibliotek av filmer og serier – alltid tilgjengelig i høy kvalitet uten avbrudd.
-  </p>
+<div class="hero">
+  <div class="main-content">
+    <img src="https://static.wixstatic.com/media/fd2fb2_fbee16e300b2404b97b23de096df1dd8~mv2.png" class="hero-logo">
+    <p>Start gratis prøveperiode</p>
+    <p class="tagline">Stream filmer og serier i topp kvalitet – når du vil.</p>
+    <button class="cta-button">REGISTRER DEG</button>
+  </div>
 </div>
 
-<!-- DEVICES + 4K -->
-
+<!-- Devices -->
 <div class="section">
-  <h2>Se hvor du vil – i topp kvalitet</h2>
-  <p>Watch Nordic fokuserer på kvalitet og 4K-opplevelse.</p>
+  <h2>Se hvor du vil</h2>
+  <p>Fungerer på alle dine enheter</p>
 
-  <div class="icons">
-    <div><i class="fas fa-tv"></i><p>Smart-TV</p></div>
+  <div class="device-icons">
+    <div><i class="fas fa-tv"></i><p>TV</p></div>
     <div><i class="fas fa-mobile-alt"></i><p>Mobil</p></div>
     <div><i class="fas fa-tablet-alt"></i><p>Nettbrett</p></div>
-    <div><i class="fas fa-laptop"></i><p>PC & Mac</p></div>
+    <div><i class="fas fa-laptop"></i><p>PC</p></div>
+    <div><i class="fas fa-gamepad"></i><p>Konsoll</p></div>
+  </div>
+</div>
+
+<!-- Quality -->
+<div class="section">
+  <h2>4K kvalitet</h2>
+  <p>Watch Nordic fokuserer på høy kvalitet med 4K Ultra HD og fantastisk lyd.</p>
+
+  <div class="quality-icons">
     <div><i class="fas fa-film"></i><p>4K Ultra HD</p></div>
+    <div><i class="fas fa-volume-up"></i><p>Dolby lyd</p></div>
+    <div><i class="fas fa-wifi"></i><p>Stabil streaming</p></div>
+  </div>
+</div>
+
+<!-- Content -->
+<div class="section">
+  <h2>Populært nå</h2>
+  <div class="content-row">
+    <img src="https://via.placeholder.com/300x180">
+    <img src="https://via.placeholder.com/300x180">
+    <img src="https://via.placeholder.com/300x180">
+    <img src="https://via.placeholder.com/300x180">
   </div>
 </div>
 
 <!-- FAQ -->
-
-<div class="section faq">
+<div class="section">
   <h2>Ofte stilte spørsmål</h2>
 
-<button>Hva er Watch Nordic?</button>
+  <button class="accordion">Hva er Watch Nordic?</button>
+  <div class="panel"><p>En strømmetjeneste med filmer og serier.</p></div>
 
-  <div class="panel"><p>En nordisk strømmetjeneste med filmer og serier.</p></div>
-
-<button>Hva koster det?</button>
-
-  <div class="panel"><p>Gratis prøveperiode, deretter abonnement.</p></div>
-
-<button>Kan jeg avslutte?</button>
-
-  <div class="panel"><p>Ja, når som helst uten binding.</p></div>
+  <button class="accordion">Kan jeg si opp?</button>
+  <div class="panel"><p>Ja, når som helst.</p></div>
 </div>
-
-<!-- FOOTER -->
 
 <div class="footer">
   © 2025 Watch Nordic
 </div>
 
 <script>
-  document.querySelectorAll(".faq button").forEach(btn=>{
-    btn.addEventListener("click",()=>{
-      const panel = btn.nextElementSibling;
-      panel.style.maxHeight = panel.style.maxHeight ? null : panel.scrollHeight+"px";
-    });
-  });
+document.querySelectorAll(".accordion").forEach(btn=>{
+  btn.onclick=()=>{
+    let p=btn.nextElementSibling;
+    p.style.maxHeight = p.style.maxHeight ? null : p.scrollHeight+"px";
+  }
+});
 </script>
 
 </body>
 </html>
-
-
 
 
 
