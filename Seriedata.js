@@ -5,7 +5,7 @@ const serier = {
     logo: "https://image.tmdb.org/t/p/original/cD5TMSmqtRMsuGFCD7QtSWH2bot.png",
     poster: "https://image.tmdb.org/t/p/w1280/9yjEMASvxhJGSUq7peDpWgBO5JW.jpg",
     posterVertikal: "https://image.tmdb.org/t/p/original/pU0MiRPaoNeiXZRnJjJ0UOmZiUA.jpg",
-    beskrivelse: "Mummitrollet bor i Mummidalen i et høyt, sylinderformet, blått hus som Mummipappa bygde etter sin stormfulle ungdom med hattifnattene. Mummipappa bærer alltid en svart flosshatt og Mummimamma forkle og håndveske. Mummitrollet leker med Snorkfrøken, Sniff, Snusmumriken og Lille My. Hufsa og Isfruen er skikkelser som de fleste i Mummidalen er redde for.",
+    beskrivelse: "Mummitrollet bor i Mummidalen i et høyt, sylinderformet, blått hus som Mummipappa bygde etter sin stormfulle ungdom med hattifnattene. Mummipappa bærer alltid en svart flosshatt og Mummimamma forkle og håndveske.",
     metadata: ["1990", "Alle", "Animasjon"],
     imdb: "https://www.imdb.com/title/tt0247117/",
     skuespillere: "",
