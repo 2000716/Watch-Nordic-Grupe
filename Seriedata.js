@@ -22,7 +22,7 @@ const serier = {
           1: {
             episodeNummer: 1,
             tittel: "Vår i Mummidalen",
-            beskrivelse: "Endelig er det vår og Mummitrollet begir seg ut på oppdagelsesferd sammen med Snusmumrikken og Sniff.",
+            beskrivelse: "I Mummidalen sover de i tre måneder under vinteren. Endelig er det vår og Mummitrollet begir seg ut på oppdagelsesferd sammen med Snusmumrikken og Sniff. De finner en mystisk hatt og en rekke merkelige ting begynner å skje.",
             varighet: "23 min",
             thumbnail: "https://media.themoviedb.org/t/p/w454_and_h254_face/hOpVGMZZ7MYaYjNN2eJzVKFbLVt.jpg",
             videoUrl: "https://archive.org/download/folder_202411/I%20Mummidalen/Season%201/I%20Mummidalen%20-%201x01%20-%20V%C3%A5r%20i%20Mummidalen.mp4",
@@ -32,7 +32,7 @@ const serier = {
           2: {
             episodeNummer: 2,
             tittel: "Trollmannens hatt",
-            beskrivelse: "Den magiske hatten som de har prøvd å bli kvitt tidligere, dukker opp igjen.",
+            beskrivelse: "Den magiske hatten som de har prøvd å bli kvitt tidligere, dukker opp igjen. Den setter seg fast i sanden ved elven, og elven blir forvandlet til bringebærsaft. Mummitrollet finner hatten og gjemmer den i kjelleren – han vil at det for alltid skal være bringebærsaft i elven.",
             varighet: "23 min",
             thumbnail: "https://media.themoviedb.org/t/p/w454_and_h254_face/mlKjfZ60zdcNOCd8QH3YHYHIDMd.jpg",
             videoUrl: "https://archive.org/download/folder_202411/I%20Mummidalen/Season%201/I%20Mummidalen%20-%201x02%20-%20Trollmannens%20hatt.mp4",
@@ -42,7 +42,7 @@ const serier = {
           3: {
             episodeNummer: 3,
             tittel: "Båten på stranden",
-            beskrivelse: "Mummitrollet og vennene går på fjelltur...",
+            beskrivelse: "Mummitrollet og vennene går på fjelltur. De møter Hemulen, som er lei seg. Han har nemlig samlet sitt siste frimerke, slik at samlingen hans nå er komplett, og hva skal han nå samle på? Hemulen forteller dem om et båtvrak på stranda, og de starter å reparere båten.",
             varighet: "23 min",
             thumbnail: "https://media.themoviedb.org/t/p/w454_and_h254_face/yx65m4QrcIsaPMoWOlOazliUeFD.jpg",
             videoUrl: "https://archive.org/download/folder_202411/I%20Mummidalen/Season%201/I%20Mummidalen%20-%201x03%20-%20B%C3%A5ten%20p%C3%A5%20stranden.mp4",
@@ -52,7 +52,7 @@ const serier = {
           4: {
             episodeNummer: 4,
             tittel: "Hatifnattøya",
-            beskrivelse: "Mummifamilien drar ut på eventyr...",
+            beskrivelse: "Mummifamilien og vennene deres drar ut på eventyr i den nyreparerte båten, og de ankommer snart en øde øy. Det viser seg imidlertid at den ikke er så øde allikevel – det viser seg nemlig å bo noen merkelige skapninger der, Hatifnattene.",
             varighet: "23 min",
             thumbnail: "https://media.themoviedb.org/t/p/w454_and_h254_face/eAG8eadBIprNbONQwW15zPtktzr.jpg",
             videoUrl: "https://archive.org/download/folder_202411/I%20Mummidalen/Season%201/I%20Mummidalen%20-%201x04%20-%20Hatifnatt%C3%B8ya.mp4",
@@ -62,7 +62,7 @@ const serier = {
           5: {
             episodeNummer: 5,
             tittel: "Tredronningen",
-            beskrivelse: "Stormen bringer med seg mange rare ting...",
+            beskrivelse: "Våre venner har glemt å fortøye båten skikkelig i stormen, og de blir angrepet av mange Hatifnatter. Stormen bringer med seg mange, rare ting, og det beste funnet gjør Snusmumriken.",
             varighet: "23 min",
             thumbnail: "https://media.themoviedb.org/t/p/w454_and_h254_face/fUS845xMJYwAj0X5DynWvdJyQ88.jpg",
             videoUrl: "https://archive.org/download/folder_202411/I%20Mummidalen/Season%201/I%20Mummidalen%20-%201x05%20-%20Tredronningen.mp4",
@@ -72,7 +72,7 @@ const serier = {
           6: {
             episodeNummer: 6,
             tittel: "Små gjester",
-            beskrivelse: "To små gjester ankommer Mummihuset...",
+            beskrivelse: "En dag så kommer to veldig små gjester til Mummihuset. De har med seg en koffert så Mummipappa forstår de har kommet for å bli og bygger en liten seng til dem. Alle er veldig nysgjerrige på hva som er i kofferten.",
             varighet: "23 min",
             thumbnail: "https://media.themoviedb.org/t/p/w454_and_h254_face/nRFdPRyHtjibDCMtpd6Nboj7vkT.jpg",
             videoUrl: "https://archive.org/download/folder_202411/I%20Mummidalen/Season%201/I%20Mummidalen%20-%201x06%20-%20Sm%C3%A5%20gjester.mp4",
