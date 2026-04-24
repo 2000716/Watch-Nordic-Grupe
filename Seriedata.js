@@ -25,7 +25,7 @@ const serier = {
             beskrivelse: "I Mummidalen sover de i tre måneder under vinteren. Endelig er det vår og Mummitrollet begir seg ut på oppdagelsesferd sammen med Snusmumrikken og Sniff. De finner en mystisk hatt og en rekke merkelige ting begynner å skje.",
             varighet: "23 min",
             thumbnail: "https://media.themoviedb.org/t/p/w454_and_h254_face/hOpVGMZZ7MYaYjNN2eJzVKFbLVt.jpg",
-            subtitleUrl: "",
+            subtitleUrl: "i-mummidalen.VTT",
             videoUrl: "https://archive.org/download/folder_202411/I%20Mummidalen/Season%201/I%20Mummidalen%20-%201x01%20-%20V%C3%A5r%20i%20Mummidalen.mp4",
            audioLanguages: [{ code: "no", label: "Norsk" }],
            subtitleLanguages: [ { code: "no", label: "Norsk" },],
