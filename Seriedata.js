@@ -28,7 +28,7 @@ const serier = {
             subtitleUrl: "i-mummidalen.VTT",
             videoUrl: "https://archive.org/download/folder_202411/I%20Mummidalen/Season%201/I%20Mummidalen%20-%201x01%20-%20V%C3%A5r%20i%20Mummidalen.mp4",
            audioLanguages: [{ code: "no", label: "Norsk" }],
-           subtitleLanguages: [ { code: "no", label: "Norsk" },],
+           subtitleLanguages: [ { code: "no", label: "Norsk" }, { code: "off", label: "Av" } ],
             introStart: 2,
             introEnd: 89
           },
