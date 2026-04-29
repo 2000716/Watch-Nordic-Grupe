@@ -132,7 +132,33 @@ const filmer = {
    publishDate: "2026-01-01T00:00:00", // ISO datoformat
     expireDate: "2029-11-15T23:59:59",
   },
-  
+
+         "wing-it": {
+    tittel: "Wing It",
+    bakgrunn: "https://studio.blender.org/files/public/thumbnail/c2/6d/c26d3b56aeb6bc9bf1ba6ee8e27b7ccd_m.webp",
+    banner: "https://studio.blender.org/files/public/thumbnail/c2/6d/c26d3b56aeb6bc9bf1ba6ee8e27b7ccd_m.webp", 
+    logo: "https://studio.blender.org/files/public/logo/97/cd/97cd0265392e567290abd8fa2aa6b82c.png",
+    trailer: "", // 🎥 NY 
+    poster: "https://www.blendernation.com/wp-content/uploads/2023/09/4c0c5ec3c2380059942395be8570912c.jpg",
+    posterVertikal: "https://studio.blender.org/files/cache/04/61/046118290346d04eee9444bb5aa0e80c.jpg", // portrett
+    beskrivelse: "En anspent ingeniør får uvelkomment besøk av en entusiastisk wannabe-pilot, noe som fører til at begge blir skutt opp i luften i en romferge som er ute av kontroll.",
+    metadata: ["USA", "2023", "Alle", "Animasjon", "4 min"],
+    imdb: "https://www.imdb.com/title/tt29100749/",
+    skuespillere: "",
+    regissor: "Rik Schutte",
+    watchUrl: "film-mal.html?id=wing-it",
+    videoUrl:"https://video.wixstatic.com/video/d9ace9_3e29721f57c84b2f9652b0f1b7185a26/1080p/mp4/file.mp4",
+   subtitleUrl: "",
+   tilbakeUrl: "film.html?navn=wing-it",
+  audioLanguages: [
+    { code: "no", label: "Engelsk" } ],
+  subtitleLanguages: [
+    { code: "no", label: "Norsk" },
+    { code: "off", label: "Av" }
+  ],
+   publishDate: "2026-01-01T00:00:00", // ISO datoformat
+    expireDate: "2029-11-15T23:59:59",
+  },
   };
 
 
