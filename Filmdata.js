@@ -2,7 +2,7 @@ const filmer = {
   "the-kid": {
     tittel: "The Kid",
     bakgrunn: "https://image.tmdb.org/t/p/original/cvWzCDo3pQyoasvqzRIP7oHK3qn.jpg",
-    banner: "https://image.tmdb.org/t/p/original/cvWzCDo3pQyoasvqzRIP7oHK3qn.jpg", 
+    banner: "", 
     logo: "https://static.wixstatic.com/media/fd2fb2_bcc26c34a5a2490dabd3f5b6bdf20bb8~mv2.png",
     trailer: "", // 🎥 NY 
     poster: "https://image.tmdb.org/t/p/original/pMeqhS16RXQhNw2hpBkDvBR7r7Z.jpg",
@@ -29,7 +29,7 @@ const filmer = {
     "house-on-haunted-hill": {
     tittel: "House on Haunted Hill",
     bakgrunn: "https://image.tmdb.org/t/p/original/tS2qaOAG1Yqepp0Hm9AJjH7Zg14.jpg",
-    banner: "https://image.tmdb.org/t/p/original/tS2qaOAG1Yqepp0Hm9AJjH7Zg14.jpg", 
+    banner: "", 
     logo: "https://image.tmdb.org/t/p/original/ulRnCQUtXRLNnQKu4vRmMAg0llS.png",
     trailer: "", // 🎥 NY 
     poster: "https://image.tmdb.org/t/p/original/9S97udaoo9wP5puoeyGlHK4I8iN.jpg",
@@ -83,7 +83,7 @@ const filmer = {
        "big-buck-bunny": {
     tittel: "Big Buck Bunny ",
     bakgrunn: "https://image.tmdb.org/t/p/original/xtdybjRRZ15mCrPOvEld305myys.jpg",
-    banner: "https://image.tmdb.org/t/p/original/bZxwNUANy2KAYBjM9UyUlqiCMI1.jpg", 
+    banner: "", 
     logo: "https://static.wikia.nocookie.net/logopedia/images/e/ea/Big_Buck_Bunny.svg/revision/latest?cb=20201022132423",
     trailer: "", // 🎥 NY 
     poster: "https://image.tmdb.org/t/p/original/8tP7CcCaZma9Ucc5EBKEn8TmYit.jpg",
@@ -109,7 +109,7 @@ const filmer = {
        "sprite-fright": {
     tittel: "Sprite Fright",
     bakgrunn: "https://image.tmdb.org/t/p/original/aXZuvuQpcXivXHasXFAkOhfTTfb.jpg",
-    banner: "https://image.tmdb.org/t/p/original/aCMT1okuiKFnyKHdCOez66rJKyT.jpg", 
+    banner: "", 
     logo: "https://static.wixstatic.com/media/fd2fb2_2e305c6d75944c3ba96c28a00730ad07~mv2.png",
     trailer: "", // 🎥 NY 
     poster: "https://blenderartists.org/uploads/default/original/4X/2/6/2/2622f8717947903fdbe61ffd98e2c6622b052021.jpeg",
@@ -134,7 +134,7 @@ const filmer = {
   },
 
          "wing-it": {
-    tittel: "Wing It",
+    tittel: "Wing It! - A Pet Project",
     bakgrunn: "https://static.wixstatic.com/media/d9ace9_c4277ef5983b479c839d1e8f3673d4cf~mv2.jpg",
     banner: "https://static.wixstatic.com/media/d9ace9_aae8c315149e4e57b48ca0670dbad5ce~mv2.jpg", 
     logo: "https://studio.blender.org/files/public/logo/97/cd/97cd0265392e567290abd8fa2aa6b82c.png",
