@@ -135,8 +135,8 @@ const filmer = {
 
          "wing-it": {
     tittel: "Wing It",
-    bakgrunn: "https://studio.blender.org/files/public/thumbnail/c2/6d/c26d3b56aeb6bc9bf1ba6ee8e27b7ccd_m.webp",
-    banner: "https://studio.blender.org/files/public/thumbnail/c2/6d/c26d3b56aeb6bc9bf1ba6ee8e27b7ccd_m.webp", 
+    bakgrunn: "https://static.wixstatic.com/media/d9ace9_c4277ef5983b479c839d1e8f3673d4cf~mv2.jpg",
+    banner: "https://static.wixstatic.com/media/d9ace9_aae8c315149e4e57b48ca0670dbad5ce~mv2.jpg", 
     logo: "https://studio.blender.org/files/public/logo/97/cd/97cd0265392e567290abd8fa2aa6b82c.png",
     trailer: "", // 🎥 NY 
     poster: "https://www.blendernation.com/wp-content/uploads/2023/09/4c0c5ec3c2380059942395be8570912c.jpg",
