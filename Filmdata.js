@@ -136,7 +136,7 @@ const filmer = {
          "wing-it": {
     tittel: "Wing It! - A Pet Project",
     bakgrunn: "https://static.wixstatic.com/media/d9ace9_c4277ef5983b479c839d1e8f3673d4cf~mv2.jpg",
-    banner: "https://static.wixstatic.com/media/d9ace9_aae8c315149e4e57b48ca0670dbad5ce~mv2.jpg", 
+    banner: "https://static.wixstatic.com/media/d9ace9_191619e0d6f649328d28d27c21d1cd21~mv2.jpg", 
     logo: "https://studio.blender.org/files/public/logo/97/cd/97cd0265392e567290abd8fa2aa6b82c.png",
     trailer: "", // 🎥 NY 
     poster: "https://www.blendernation.com/wp-content/uploads/2023/09/4c0c5ec3c2380059942395be8570912c.jpg",
