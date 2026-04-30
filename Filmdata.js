@@ -144,7 +144,6 @@ const filmer = {
     beskrivelse: "En anspent ingeniør får uvelkomment besøk av en entusiastisk wannabe-pilot, noe som fører til at begge blir skutt opp i luften i en romferge som er ute av kontroll.",
     metadata: ["USA", "2023", "Alle", "Animasjon", "4 min"],
     imdb: "https://www.imdb.com/title/tt29100749/",
-    skuespillere: "",
     regissor: "Rik Schutte",
     watchUrl: "film-mal.html?id=wing-it",
     videoUrl:"https://video.wixstatic.com/video/d9ace9_3e29721f57c84b2f9652b0f1b7185a26/1080p/mp4/file.mp4",
