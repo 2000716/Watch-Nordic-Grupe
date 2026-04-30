@@ -1667,6 +1667,28 @@ main {
   font-size: 16px;
   color: #fff;
 }
+  .top-nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 70px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  padding: 0 40px;
+}
+
+/* 🔥 Viktig: sentrer menyen */
+.nav-links {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 30px;
+}
 }
 
 
@@ -1674,31 +1696,32 @@ main {
 </style>
 
 <header class="top-nav">
+
   <div class="nav-left">
     <div class="watch-logo-text" onclick="window.location.href='Hovedside.html'">
       WATCH
     </div>
-
-<nav class="nav-links">
-  <a href="Hovedside.html" class="active"><i class="fas fa-house"></i> STARTSIDE</a>
-  <a href="Serier.html"><i class="fas fa-tv"></i> SERIER</a>
-  <a href="Film.html"><i class="fas fa-clapperboard"></i> FILMER</a>
-  <a href="Nyheter.html"><i class="fas fa-star"></i> WATCH ORIGINALS</a>
-  <a href="Min-Liste.html"><i class="fas fa-bookmark"></i> MIN LISTE</a>
-</nav>
-
   </div>
 
-<div class="nav-right">
-  <a href="Søk.html" class="nav-search">
-    <i class="fas fa-search"></i>
-  </a>
+  <nav class="nav-links">
+    <a href="Hovedside.html" class="active"><i class="fas fa-house"></i> STARTSIDE</a>
+    <a href="Serier.html"><i class="fas fa-tv"></i> SERIER</a>
+    <a href="Film.html"><i class="fas fa-clapperboard"></i> FILMER</a>
+    <a href="Nyheter.html"><i class="fas fa-star"></i> WATCH ORIGINALS</a>
+    <a href="Min-Liste.html"><i class="fas fa-bookmark"></i> MIN LISTE</a>
+  </nav>
 
-  <a href="hvem-ser-på.html" class="profilmeny">
-    <img id="menyProfilbilde" src="https://via.placeholder.com/100" alt="Min profil" />
-    <span id="profilNavn">Bruker</span>
-  </a>
-</div>
+  <div class="nav-right">
+    <a href="Søk.html" class="nav-search">
+      <i class="fas fa-search"></i>
+    </a>
+
+    <a href="hvem-ser-på.html" class="profilmeny">
+      <img id="menyProfilbilde" src="https://via.placeholder.com/100" />
+      <span id="profilNavn"></span>
+    </a>
+  </div>
+
 </header>
 
 
