@@ -136,7 +136,7 @@ const serier = {
         episoder: {
           1: {
             episodeNummer: 1,
-            tittel: "Titianic",
+            tittel: "Titanic",
             beskrivelse: "Jomfruturen for RMS Titanic er i gang, uten at noen vet at den ender i tragedie. ",
             varighet: "5 min",
             thumbnail: "https://static.wixstatic.com/media/d9ace9_0d59e15afbca471ba942b417054476a3~mv2.jpg",
@@ -145,7 +145,7 @@ const serier = {
           },
           2: {
             episodeNummer: 2,
-            tittel: "Båtten i dypet",
+            tittel: "Stille vitne",
             beskrivelse: "Rettsaken er i gang, mens i dypet ligger RMS Titanic som et stille vitne til tragedien.",
             varighet: "5 min",
             thumbnail: "https://static.wixstatic.com/media/d9ace9_0d59e15afbca471ba942b417054476a3~mv2.jpg",
@@ -155,7 +155,7 @@ const serier = {
           },
           3: {
             episodeNummer: 3,
-            tittel: "offrenes brev",
+            tittel: "ofrenes brev",
             beskrivelse: "Ofrene blir etterlatt, mens flere gir sine tolkninger og fortellinger om hendelsesforløpet.",
             varighet: "5 min",
             thumbnail: "https://static.wixstatic.com/media/d9ace9_0d59e15afbca471ba942b417054476a3~mv2.jpg",
