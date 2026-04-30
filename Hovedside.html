@@ -56,6 +56,19 @@ html, body {
   object-fit: cover;
   border: 2px solid #fff;
 }
+   .profilmeny {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+}
+
+#profilNavn {
+  font-size: 14px;
+  color: white;
+  font-weight: 500;
+  white-space: nowrap;
+}
 
 .nav-icon {
   color: white;
@@ -1680,8 +1693,10 @@ main {
   <a href="Søk.html" class="nav-search">
     <i class="fas fa-search"></i>
   </a>
+
   <a href="hvem-ser-på.html" class="profilmeny">
     <img id="menyProfilbilde" src="https://via.placeholder.com/100" alt="Min profil" />
+    <span id="profilNavn">Bruker</span>
   </a>
 </div>
 </header>
@@ -1815,6 +1830,12 @@ if (lagretBilde) {
 
   const headerProfil = document.getElementById("headerProfilbilde");
   if (headerProfil) headerProfil.src = lagretBilde;
+  
+  const navn = localStorage.getItem("profilnavn");
+
+if (navn) {
+  const navnElement = document.getElementById("profilNavn");
+  if (navnElement) navnElement.textContent = navn;
 }
 
 // ==================== HERO-BANNER ==================== //
