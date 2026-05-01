@@ -121,10 +121,9 @@ const serier = {
     beskrivelse: "I denne dokumentaren tar Watch Originals deg med gjennom hendelsesforløpet til RMS Titanic og forliset i 1912. Du får et innblikk i de viktigste øyeblikkene før, under og etter katastrofen. Samtidig fortelles sterke historier om noen av menneskene som mistet livet om bord.",
     metadata: ["2026", "10+", "Dokumentar", "4K"],
     imdb: "",
-    skuespillere: "",
     skapere: "Svein Olav Haukaas Arstein",
     tilbakeUrl: "serie.html?navn=the-titanic-archive",
-    publishDate: "2025-10-04T00:00:00", // ISO datoformat
+    publishDate: "2026-05-01T00:00:00", // ISO datoformat
     expireDate: "2027-11-15T23:59:59",
     audioLanguages: [],
     subtitleLanguages: [],
