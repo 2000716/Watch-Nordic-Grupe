@@ -138,6 +138,7 @@ const serier = {
             beskrivelse: "Jomfruturen for RMS Titanic er i gang, uten at noen vet at den ender i tragedie. ",
             varighet: "5 min",
             thumbnail: "https://static.wixstatic.com/media/d9ace9_0d59e15afbca471ba942b417054476a3~mv2.jpg",
+            introVideo: "watch-intro.mp4",
             videoUrl: "https://video.wixstatic.com/video/d9ace9_b70998c45f2f4284b9b764582a0db2f2/1080p/mp4/file.mp4",
           
           },
@@ -147,6 +148,7 @@ const serier = {
             beskrivelse: "Rettsaken er i gang, mens i dypet ligger RMS Titanic som et stille vitne til tragedien.",
             varighet: "5 min",
             thumbnail: "https://static.wixstatic.com/media/d9ace9_0d59e15afbca471ba942b417054476a3~mv2.jpg",
+            introVideo: "watch-intro.mp4",
             videoUrl: "",
             introStart: 2,
             introEnd: 89
@@ -157,6 +159,7 @@ const serier = {
             beskrivelse: "Ofrene blir etterlatt, mens flere gir sine tolkninger og fortellinger om hendelsesforløpet.",
             varighet: "5 min",
             thumbnail: "https://static.wixstatic.com/media/d9ace9_0d59e15afbca471ba942b417054476a3~mv2.jpg",
+            introVideo: "watch-intro.mp4",
             videoUrl: "",
             introStart: 2,
             introEnd: 89
