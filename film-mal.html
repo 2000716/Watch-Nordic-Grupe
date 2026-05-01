@@ -956,10 +956,24 @@ if (backButton) {
   });
 }
 
-// Last video
+// ================= WATCH INTRO SYSTEM =================
 const video = document.getElementById("video");
-video.querySelector("source").src =
-  film.videoUrl || film.video || film.src;
+
+let isPlayingIntro = false;
+let introDuration = 0;
+let mainDuration = 0;
+
+const mainVideoSrc = film.videoUrl || film.video || film.src;
+
+// Sett riktig video (intro først hvis finnes)
+if (film.introVideo) {
+  isPlayingIntro = true;
+  video.src = film.introVideo;
+} else {
+  video.src = mainVideoSrc;
+}
+
+// Undertekster (beholdt)
 const track = video.querySelector("track");
 if (track && film.subtitleUrl) track.src = film.subtitleUrl;
 
@@ -1006,23 +1020,41 @@ function formatTime(time) {
 
 // Oppdater progress-bar
 function updateProgress() {
+
+  if (!video.duration) return;
+
+  let current = video.currentTime;
+  let total = video.duration;
+
+  // Hvis vi er på hovedvideo → legg til intro i timeline
+  if (!isPlayingIntro && introDuration > 0) {
+    current += introDuration;
+    total = introDuration + mainDuration;
+  }
+
+  const percent = (current / total) * 100;
+
   if (!isDragging) {
-    const percent = (video.currentTime / video.duration) * 100;
     progressFilled.style.width = percent + '%';
     thumb.style.left = percent + '%';
   }
-  timeDisplay.textContent = `${formatTime(video.currentTime)} / ${formatTime(video.duration)}`;
 
-  // --- LAGRE PROGRESJON --- //
-  if (!isNaN(video.duration) && video.duration > 0) {
-    const percent = (video.currentTime / video.duration) * 100;
-    localStorage.setItem("progress_" + filmId, percent.toFixed(1));
-  }
+  timeDisplay.textContent = `${formatTime(current)} / ${formatTime(total)}`;
+
+  localStorage.setItem("progress_" + filmId, percent.toFixed(1));
 }
 
 // ==================== EVENTS ==================== //
 video.addEventListener('timeupdate', updateProgress);
-video.addEventListener('loadedmetadata', updateProgress);
+video.addEventListener('loadedmetadata', () => {
+  updateProgress();
+
+  if (isPlayingIntro) {
+    introDuration = video.duration;
+  } else {
+    mainDuration = video.duration;
+  }
+});
 
 // Play/pause
 playBtn.addEventListener('click', () => video.paused ? video.play() : video.pause());
@@ -1233,9 +1265,43 @@ window.addEventListener('beforeunload', () => {
 
 // Ferdig
 video.addEventListener('ended', () => {
+
+  // 🔥 Hvis intro spiller → bytt til hovedvideo
+  if (isPlayingIntro) {
+    isPlayingIntro = false;
+
+    video.src = mainVideoSrc;
+    video.load();
+    video.play().catch(err => console.warn("Autoplay blokkert:", err));
+
+    return;
+  }
+
+  // ===== ORIGINAL LOGIKK =====
   localStorage.removeItem(`${filmId}-lastPosition`);
   localStorage.removeItem("progress_" + filmId);
   localStorage.setItem(`${filmId}-status`, "ferdig");
+
+  if (navn && sesong && episode && serier?.[navn]) {
+    const s = parseInt(sesong);
+    const e = parseInt(episode);
+
+    const serie = serier[navn];
+    const currentSeason = serie.sesonger[s];
+
+    if (currentSeason?.episoder?.[e + 1]) {
+      window.location.href = `film-mal.html?navn=${navn}&sesong=${s}&episode=${e + 1}`;
+      return;
+    }
+
+    if (serie.sesonger[s + 1]?.episoder?.[1]) {
+      window.location.href = `film-mal.html?navn=${navn}&sesong=${s + 1}&episode=1`;
+      return;
+    }
+  }
+
+  window.location.href = `film.html?navn=${navn}`;
+});
 
   // ==== AUTO NESTE EPISODE ====
   if (navn && sesong && episode && serier?.[navn]) {
@@ -1336,6 +1402,14 @@ const introStart = film.introStart;
 const introEnd = film.introEnd;
 
 video.addEventListener("timeupdate", () => {
+
+  // 🔥 VIS KNAPP UNDER WATCH INTRO
+  if (isPlayingIntro) {
+    skipIntroBtn.style.display = "block";
+    return;
+  }
+
+  // Vanlig serie-logikk
   if (!isSerie) {
     skipIntroBtn.style.display = "none";
     return;
@@ -1349,6 +1423,19 @@ video.addEventListener("timeupdate", () => {
 });
 
 skipIntroBtn.addEventListener("click", () => {
+
+  // Hvis WATCH intro spiller
+  if (isPlayingIntro) {
+    isPlayingIntro = false;
+
+    video.src = mainVideoSrc;
+    video.load();
+    video.play();
+
+    return;
+  }
+
+  // Vanlig serie-intro
   video.currentTime = introEnd;
 });
 
