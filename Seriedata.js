@@ -8,7 +8,6 @@ const serier = {
     beskrivelse: "Mummitrollet bor i Mummidalen i et høyt, sylinderformet, blått hus som Mummipappa bygde etter sin stormfulle ungdom med hattifnattene. Mummipappa bærer alltid en svart flosshatt og Mummimamma forkle og håndveske.",
     metadata: ["1990", "Alle", "Animasjon"],
     imdb: "https://www.imdb.com/title/tt0247117/",
-    skuespillere: "",
     skapere: "Tove Jansson, Lars Jansson",
     tilbakeUrl: "serie.html?navn=i-mummidalen",
     expireDate: "2026-10-10T23:59:59",
