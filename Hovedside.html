@@ -1737,9 +1737,7 @@ function renderContinueWatching() {
     // 🔥 forskjell film/serie
     if (item.type === "film") {
       link.href = `film-mal.html?id=${item.key}`;
-    } else {
-      link.href = `serie.html?id=${item.key}`; // lag egen side hvis du ikke har
-    }
+    } 
 
     link.classList.add("image-with-progress");
 
