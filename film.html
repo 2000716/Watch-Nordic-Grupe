@@ -653,6 +653,35 @@ font-size:13px;
 color:#bbb;
 line-height:1.4;
 }
+    /* 🔒 Låst episode */
+.episode-card.locked {
+  opacity: 0.7;
+  pointer-events: none;
+}
+
+.episode-card.locked img {
+  filter: grayscale(100%) brightness(0.6);
+}
+
+/* Klokke-overlay */
+.lock-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0,0,0,0.6);
+  color: #fff;
+  font-size: 13px;
+  text-align: center;
+  gap: 6px;
+}
+
+.lock-overlay i {
+  font-size: 26px;
+  color: #00ffcc;
+}
 
 /* =========================================================
 FOOTER
@@ -1278,38 +1307,73 @@ visSesong(sesongNumre[0]);
 
     const episoder = data.sesonger[sesongNr].episoder;
 
-    Object.keys(episoder).forEach(epNr => {
-      const ep = episoder[epNr];
+Object.keys(episoder).forEach(epNr => {
+  const ep = episoder[epNr];
 
-      const epCard = document.createElement("div");
-      epCard.className = "episode-card";
-     epCard.innerHTML = `
-<div class="episode-thumb">
-  <img src="${ep.thumbnail}" alt="${ep.tittel}">
-  <div class="play-overlay">
-    <i class="fas fa-play"></i>
-  </div>
-</div>
+  const nå = new Date();
+  let erLåst = false;
 
-<div class="episode-info">
-  <div class="episode-title">Episode ${epNr}: ${ep.tittel}</div>
-  <div class="episode-meta">${ep.varighet}</div>
-  <div class="episode-desc">${ep.beskrivelse || ""}</div>
-</div>
-`;
+  if (ep.publishDate && new Date(ep.publishDate) > nå) {
+    erLåst = true;
+  }
 
-epCard.addEventListener("click", () => {
-  // Lagre siste sette episode
-  const sisteEpKey = `${navn}-siste-episode`;
-  localStorage.setItem(sisteEpKey, JSON.stringify({ sesong: sesongNr, episode: epNr }));
+  const epCard = document.createElement("div");
+  epCard.className = "episode-card";
 
-  // Gå til episode
-  window.location.href =
-    `film-mal.html?navn=${encodeURIComponent(navn)}&sesong=${sesongNr}&episode=${epNr}`;
-});
+  if (erLåst) {
+    epCard.classList.add("locked");
+  }
 
-      episodeGallery.appendChild(epCard);
+  let overlayHTML = `
+    <div class="play-overlay">
+      <i class="fas fa-play"></i>
+    </div>
+  `;
+
+  // 🔒 Hvis episode ikke er ute
+  if (erLåst) {
+    const dato = new Date(ep.publishDate).toLocaleDateString("no-NO", {
+      day: "numeric",
+      month: "short"
     });
+
+    overlayHTML = `
+      <div class="lock-overlay">
+        <i class="fas fa-clock"></i>
+        <span>${dato}</span>
+      </div>
+    `;
+  }
+
+  epCard.innerHTML = `
+    <div class="episode-thumb">
+      <img src="${ep.thumbnail}" alt="${ep.tittel}">
+      ${overlayHTML}
+    </div>
+
+    <div class="episode-info">
+      <div class="episode-title">Episode ${epNr}: ${ep.tittel}</div>
+      <div class="episode-meta">${ep.varighet}</div>
+      <div class="episode-desc">${ep.beskrivelse || ""}</div>
+    </div>
+  `;
+
+  // ❌ Ikke klikkbar hvis låst
+  if (!erLåst) {
+    epCard.addEventListener("click", () => {
+      const sisteEpKey = `${navn}-siste-episode`;
+      localStorage.setItem(
+        sisteEpKey,
+        JSON.stringify({ sesong: sesongNr, episode: epNr })
+      );
+
+      window.location.href =
+        `film-mal.html?navn=${encodeURIComponent(navn)}&sesong=${sesongNr}&episode=${epNr}`;
+    });
+  }
+
+  episodeGallery.appendChild(epCard);
+});
   }
 
   // Vis første sesong som standard
