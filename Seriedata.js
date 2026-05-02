@@ -167,5 +167,63 @@ const serier = {
         }
       }
     }
+  }, // <-- KOMMA MELLOM SERIER
+
+  "vasaskipet": {
+    tittel: "Vasaskipet",
+    bakgrunn: "https://static.wixstatic.com/media/d9ace9_87c1f284170d451a9403e1cf47f3e339~mv2.png",
+    logo: "",
+    poster: "https://static.wixstatic.com/media/d9ace9_aa598323b2e8449bb4138c25705ef92d~mv2.png",
+    posterVertikal: "",
+    beskrivelse: "I denne dokumentaren tar Watch Originals deg med på reisen til oppdagelsen av krigsskipet Vasa. Hvordan kunne et så mektig krigsskip synke bare få meter fra kaien? Og hvordan har dette skipet blitt et levende vitnesbyrd om hendelsene på 1600-tallet? ",
+    metadata: ["2026", "10+", "Dokumentar", "4K"],
+    imdb: "",
+    skapere: "Svein Olav Haukaas Arstein",
+    tilbakeUrl: "serie.html?navn=vasaskipet",
+    publishDate: "2026-05-01T00:00:00", // ISO datoformat
+    expireDate: "2027-11-15T23:59:59",
+    audioLanguages: [],
+    subtitleLanguages: [],
+    sesonger: {
+      1: {
+        sesongNummer: 1,
+        beskrivelse: "Sesong 1",
+        episoder: {
+          1: {
+            episodeNummer: 1,
+            tittel: "Vasa",
+            beskrivelse: "Det svenske krigsskipet legger ut fra kaien – hvem kunne tro at reisen skulle få en så brå slutt?",
+            varighet: "5 min",
+            thumbnail: "https://static.wixstatic.com/media/d9ace9_87c1f284170d451a9403e1cf47f3e339~mv2.png",
+            publishDate: "2026-06-10T18:00:00",
+            videoUrl: "",
+          
+          },
+          2: {
+            episodeNummer: 2,
+            tittel: "Hevingen",
+            beskrivelse: "Skipet blir oppdaget, og planene om å heve det fra havets dyp blir satt på dagsorden.",
+            varighet: "5 min",
+            thumbnail: "https://static.wixstatic.com/media/d9ace9_87c1f284170d451a9403e1cf47f3e339~mv2.png",
+            publishDate: "2026-06-10T18:00:00",
+            videoUrl: "",
+            introStart: 2,
+            introEnd: 89
+          },
+          3: {
+            episodeNummer: 3,
+            tittel: "Skipet til liv",
+            beskrivelse: "Vasa står i dag som et storslått vitnesbyrd om Sveriges historie",
+            varighet: "5 min",
+            thumbnail: "https://static.wixstatic.com/media/d9ace9_87c1f284170d451a9403e1cf47f3e339~mv2.png",
+            publishDate: "2026-06-10T18:00:00",
+            videoUrl: "",
+            introStart: 2,
+            introEnd: 89
+          }
+        }
+      }
+    }
   }
+};
 };
