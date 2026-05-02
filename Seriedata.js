@@ -180,7 +180,7 @@ const serier = {
     imdb: "",
     skapere: "Svein Olav Haukaas Arstein",
     tilbakeUrl: "serie.html?navn=vasaskipet",
-    publishDate: "2026-05-01T00:00:00", // ISO datoformat
+    publishDate: "2026-05-02T00:00:00", // ISO datoformat
     expireDate: "2027-11-15T23:59:59",
     audioLanguages: [],
     subtitleLanguages: [],
