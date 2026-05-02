@@ -1791,9 +1791,11 @@ function renderContinueWatching() {
   items.slice(0, limit).forEach(item => {
     const link = document.createElement("a");
 
-  if (item.type === "film") {
+ if (item.type === "film") {
   link.href = `film.html?navn=${item.key}`;
-} 
+} else {
+  link.href = `film.html?navn=${item.key}`;
+}
     link.classList.add("gallery-item");
 
     link.innerHTML = `
