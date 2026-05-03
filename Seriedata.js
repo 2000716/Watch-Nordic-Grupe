@@ -59,9 +59,9 @@ const serier = {
   "vasaskipet": {
     tittel: "Vasaskipet",
     bakgrunn: "https://static.wixstatic.com/media/d9ace9_43006d61b876444e829ebf7b67b90d87~mv2.png",
-    logo: "",
+    logo: "https://static.wixstatic.com/media/d9ace9_ed30737feeeb4b3d8fbff5f0c6b752d6~mv2.png",
     poster: "https://static.wixstatic.com/media/d9ace9_aa598323b2e8449bb4138c25705ef92d~mv2.png",
-    posterVertikal: "",
+    posterVertikal: "https://static.wixstatic.com/media/d9ace9_e5f194829bf140339cb67ca0664781f6~mv2.jpg",
     beskrivelse: "I denne dokumentaren tar Watch Originals deg med på reisen til oppdagelsen av krigsskipet Vasa. Hvordan kunne et så mektig krigsskip synke bare få meter fra kaien? Og hvordan har dette skipet blitt et levende vitnesbyrd om hendelsene på 1600-tallet? ",
     metadata: ["2026", "10+", "Dokumentar", "4K"],
     imdb: "",
