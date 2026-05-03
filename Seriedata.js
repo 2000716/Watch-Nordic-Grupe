@@ -58,7 +58,7 @@ const serier = {
 
   "vasaskipet": {
     tittel: "Vasaskipet",
-    bakgrunn: "https://static.wixstatic.com/media/d9ace9_87c1f284170d451a9403e1cf47f3e339~mv2.png",
+    bakgrunn: "https://static.wixstatic.com/media/d9ace9_43006d61b876444e829ebf7b67b90d87~mv2.png",
     logo: "",
     poster: "https://static.wixstatic.com/media/d9ace9_aa598323b2e8449bb4138c25705ef92d~mv2.png",
     posterVertikal: "",
@@ -81,7 +81,7 @@ const serier = {
             tittel: "Vasa",
             beskrivelse: "Det svenske krigsskipet legger ut fra kaien – hvem kunne tro at reisen skulle få en så brå slutt?",
             varighet: "5 min",
-            thumbnail: "https://static.wixstatic.com/media/d9ace9_87c1f284170d451a9403e1cf47f3e339~mv2.png",
+            thumbnail: "https://static.wixstatic.com/media/d9ace9_43006d61b876444e829ebf7b67b90d87~mv2.png",
             publishDate: "2026-06-10T18:00:00",
             videoUrl: "",
           
@@ -91,7 +91,7 @@ const serier = {
             tittel: "Hevingen",
             beskrivelse: "Skipet blir oppdaget, og planene om å heve det fra havets dyp blir satt på dagsorden.",
             varighet: "5 min",
-            thumbnail: "https://static.wixstatic.com/media/d9ace9_87c1f284170d451a9403e1cf47f3e339~mv2.png",
+            thumbnail: "https://static.wixstatic.com/media/d9ace9_43006d61b876444e829ebf7b67b90d87~mv2.png",
             publishDate: "2026-06-10T18:00:00",
             videoUrl: "",
             introStart: 2,
@@ -102,7 +102,7 @@ const serier = {
             tittel: "Skipet til liv",
             beskrivelse: "Vasa står i dag som et storslått vitnesbyrd om Sveriges historie",
             varighet: "5 min",
-            thumbnail: "https://static.wixstatic.com/media/d9ace9_87c1f284170d451a9403e1cf47f3e339~mv2.png",
+            thumbnail: "https://static.wixstatic.com/media/d9ace9_43006d61b876444e829ebf7b67b90d87~mv2.png",
             publishDate: "2026-06-10T18:00:00",
             videoUrl: "",
             introStart: 2,
