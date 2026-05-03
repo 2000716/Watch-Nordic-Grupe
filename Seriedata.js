@@ -8,7 +8,7 @@ const serier = {
     beskrivelse: "I denne dokumentaren tar Watch Originals deg med gjennom hendelsesforløpet til RMS Titanic og forliset i 1912. Du får et innblikk i de viktigste øyeblikkene før, under og etter katastrofen. Samtidig fortelles sterke historier om noen av menneskene som mistet livet om bord.",
     metadata: ["2026", "10+", "Dokumentar", "4K"],
     imdb: "",
-    skapere: "",
+    skapere: "Watch Nordic Originals Studio",
     tilbakeUrl: "serie.html?navn=the-titanic-archive",
     publishDate: "2026-05-01T00:00:00", // ISO datoformat
     expireDate: "2027-11-15T23:59:59",
@@ -65,7 +65,7 @@ const serier = {
     beskrivelse: "I denne dokumentaren tar Watch Originals deg med på reisen til oppdagelsen av krigsskipet Vasa. Hvordan kunne et så mektig krigsskip synke bare få meter fra kaien? Og hvordan har dette skipet blitt et levende vitnesbyrd om hendelsene på 1600-tallet? ",
     metadata: ["2026", "10+", "Dokumentar", "4K"],
     imdb: "",
-    skapere: "",
+    skapere: "Watch Nordic Originals Studio",
     tilbakeUrl: "serie.html?navn=vasaskipet",
     publishDate: "2026-05-02T00:00:00", // ISO datoformat
     expireDate: "2027-11-15T23:59:59",
