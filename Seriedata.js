@@ -57,7 +57,7 @@ const serier = {
   }, // <-- KOMMA MELLOM SERIER
 
   "vasaskipet": {
-    tittel: "Vasaskipet",
+    tittel: "Vasaskipet - Et stille vitne i tiden",
     bakgrunn: "https://static.wixstatic.com/media/d9ace9_43006d61b876444e829ebf7b67b90d87~mv2.png",
     logo: "https://static.wixstatic.com/media/d9ace9_7e338923e3c84d92b6a2fdbd1599744b~mv2.png",
     poster: "https://static.wixstatic.com/media/d9ace9_7754297ad1094e16b488b2cbd0b238cf~mv2.jpg",
