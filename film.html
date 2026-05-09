@@ -1220,7 +1220,14 @@ if (erUpublisert) {
     btn.style.opacity = "0.5";
     btn.style.cursor = "not-allowed";
   });
-  /* === Deaktiver "Se episode" hvis ingen episoder er ute === */
+  const desc = document.querySelector(".description");
+  const publiseringsDato = new Date(data.publishDate);
+  const datoFormatert = publiseringsDato.toLocaleDateString("no-NO", {
+    year: "numeric",
+    month: "long",
+    day: "numeric"
+  });
+    /* === Deaktiver "Se episode" hvis ingen episoder er ute === */
 if (type === "serie") {
 
   let harPublisertEpisode = false;
@@ -1250,14 +1257,6 @@ if (type === "serie") {
     text.textContent = " Kommer snart";
   }
 }
-
-  const desc = document.querySelector(".description");
-  const publiseringsDato = new Date(data.publishDate);
-  const datoFormatert = publiseringsDato.toLocaleDateString("no-NO", {
-    year: "numeric",
-    month: "long",
-    day: "numeric"
-  });
   const info = document.createElement("p");
   info.style.color = "#ff6666";
   info.style.fontWeight = "bold";
