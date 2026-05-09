@@ -1220,6 +1220,36 @@ if (erUpublisert) {
     btn.style.opacity = "0.5";
     btn.style.cursor = "not-allowed";
   });
+  /* === Deaktiver "Se episode" hvis ingen episoder er ute === */
+if (type === "serie") {
+
+  let harPublisertEpisode = false;
+  const nå = new Date();
+
+  Object.values(data.sesonger).forEach(sesong => {
+    Object.values(sesong.episoder).forEach(ep => {
+
+      // Hvis episode ikke har publishDate → regnes som publisert
+      if (!ep.publishDate || new Date(ep.publishDate) <= nå) {
+        harPublisertEpisode = true;
+      }
+
+    });
+  });
+
+  // Ingen episoder tilgjengelig
+  if (!harPublisertEpisode) {
+    watchBtn.disabled = true;
+    watchBtn.style.opacity = "0.5";
+    watchBtn.style.cursor = "not-allowed";
+
+    const icon = watchBtn.querySelector("i");
+    const text = watchBtn.querySelector("span");
+
+    icon.className = "fas fa-clock";
+    text.textContent = " Kommer snart";
+  }
+}
 
   const desc = document.querySelector(".description");
   const publiseringsDato = new Date(data.publishDate);
