@@ -1179,6 +1179,74 @@ main {
   display: flex;
   gap: 30px;
 }
+  /* ===== NETFLIX STYLE FOOTER ===== */
+
+.footer {
+  width: 100%;
+  padding: 60px 80px 40px;
+  margin-top: 80px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+
+  color: #808080;
+}
+
+.footer-links {
+  width: 100%;
+
+  display: grid;
+  grid-template-columns: repeat(4, minmax(140px, 1fr));
+
+  gap: 18px 40px;
+
+  margin-bottom: 35px;
+}
+
+.footer-links a {
+  color: #808080;
+  text-decoration: none;
+
+  font-size: 14px;
+  transition: color 0.2s ease;
+}
+
+.footer-links a:hover {
+  color: #ffffff;
+}
+
+.footer-copy {
+  font-size: 14px;
+  margin-bottom: 18px;
+  color: #a0a0a0;
+}
+
+.footer-bottom {
+  border-top: 1px solid #222;
+  padding-top: 20px;
+
+  width: 100%;
+
+  font-size: 12px;
+  line-height: 1.7;
+  color: #666;
+}
+
+/* ===== MOBIL ===== */
+
+@media (max-width: 768px) {
+
+  .footer {
+    padding: 40px 20px;
+  }
+
+  .footer-links {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px 20px;
+  }
+
+}
 }
 
 
@@ -1297,22 +1365,30 @@ main {
 </section> 
   
 
-      </div>
-  
-      <footer class="footer">
+<footer class="footer">
+
   <div class="footer-links">
     <a href="om.html">Om Watch Nordic</a>
     <a href="kontakt.html">Kontakt</a>
     <a href="personvern.html">Personvern og informasjonskapsler</a>
     <a href="hjelp.html">Hjelpesenter</a>
-     <a href="støtteskjema.html">Watch Støtteordning</a>
+    <a href="støtteskjema.html">Watch Støtteordning</a>
+    <a href="#">Jobber</a>
+    <a href="#">Vilkår</a>
+    <a href="#">Innstillinger</a>
   </div>
-        <div class="footer-copy">
-          Watch Nordic Grupe™
-        </div>
-     <footer style="border-top:1px solid #222; padding:30px 40px; color:#8c8c8c; font-size:12px; line-height:1.6;">
-© 2026 Watch Nordic™. Alle varemerker, logoer, tjenestenavn og øvrige immaterielle rettigheter knyttet til Watch Nordic.
-    </main>
+
+  <div class="footer-copy">
+    Watch Nordic Gruppe™
+  </div>
+
+  <div class="footer-bottom">
+    © 2026 Watch Nordic™. Alle varemerker, logoer,
+    tjenestenavn og øvrige immaterielle rettigheter
+    knyttet til Watch Nordic.
+  </div>
+
+</footer>
 <script src="Filmdata.js"></script>
 <script src="Seriedata.js"></script>
 <script>
