@@ -80,34 +80,6 @@ const filmer = {
     expireDate: "2027-11-15T23:59:59",
   },
 
-       "big-buck-bunny": {
-    tittel: "Big Buck Bunny ",
-    bakgrunn: "https://image.tmdb.org/t/p/original/xtdybjRRZ15mCrPOvEld305myys.jpg",
-    banner: "", 
-    logo: "https://static.wikia.nocookie.net/logopedia/images/e/ea/Big_Buck_Bunny.svg/revision/latest?cb=20201022132423",
-    trailer: "", // 🎥 NY 
-    poster: "https://image.tmdb.org/t/p/original/8tP7CcCaZma9Ucc5EBKEn8TmYit.jpg",
-    posterVertikal: "https://image.tmdb.org/t/p/original/604UkiLHoZgaSSJPMWeCwsIey2P.jpg", // portrett
-    beskrivelse: "Kaninen JC er lei av å bli ertet av ekornet Frankie og gjengen hans med ynkelige skogsdyr, og bestemmer seg endelig for å slå tilbake.",
-    metadata: ["Nederland", "2008", "Alle", "Animasjon", "8 min"],
-    imdb: "https://www.imdb.com/title/tt1254207/",
-    regissor: "Sacha Goedegebure",
-    lisens: "Creative Commons Attribution 3.0",
-    kilde: "https://www.blender.org/about/license/",
-    watchUrl: "film-mal.html?id=big-buck-bunny",
-    videoUrl:"https://dn720307.ca.archive.org/0/items/big-buck-bunny-2008-4-k-60-fps-blender-animated-short-x-265/Big%20Buck%20Bunny%20%282008%29%204K%2060FPS%20Blender%20Animated%20Short%20-%20x265.mp4",
-   subtitleUrl: "",
-   tilbakeUrl: "film.html?navn=big-buck-bunny",
-  audioLanguages: [
-    { code: "no", label: "Engelsk" } ],
-  subtitleLanguages: [
-    { code: "no", label: "Norsk" },
-    { code: "off", label: "Av" }
-  ],
-   publishDate: "2026-01-01T00:00:00", // ISO datoformat
-    expireDate: "2029-11-15T23:59:59",
-  },
-
        "sprite-fright": {
     tittel: "Sprite Fright",
     bakgrunn: "https://image.tmdb.org/t/p/original/aXZuvuQpcXivXHasXFAkOhfTTfb.jpg",
@@ -121,7 +93,7 @@ const filmer = {
     imdb: "https://www.imdb.com/title/tt15804252/",
     skuespillere: "Valerie LaPointe, Gabriel Bisset-Smith, Nicole Davis",
     regissor: "Matthew Luhn, Hjalti Hjalmarsson",
-    lisens: "Creative Commons Attribution 3.0",
+    lisens: "(CC) Blender Foundation | studio.blender.org",
     kilde: "https://www.blender.org/about/license/",
     watchUrl: "film-mal.html?id=sprite-fright",
     videoUrl:"https://dn721904.ca.archive.org/0/items/sprite-fright-blender-open-movie/Sprite%20Fright%20-%20Blender%20Open%20Movie.mp4",
@@ -162,6 +134,30 @@ const filmer = {
     { code: "off", label: "Av" }
   ],
    publishDate: "2026-04-30T00:00:00", // ISO datoformat
+    expireDate: "2027-01-10T23:59:59",
+  },
+
+    "singularity": {
+    tittel: "Singularity",
+    bakgrunn: "https://studio.blender.org/static/common/images/project-detail/singularity/singularity-story-concept-020_0030.0f6b6798532d.webp",
+    banner: "https://studio.blender.org/static/common/images/project-detail/singularity/singularity-story-concept-040_0010.161a5ac033be.webp", 
+    logo: "https://studio.blender.org/files/public/logo/85/77/8577466d4b7170f4cfe1a9933373e84c.webp",
+    trailer: "", // 🎥 NY 
+    poster: "https://i.ytimg.com/vi/l5OZu-IrXpw/maxresdefault.jpg",
+    posterVertikal: "https://studio.blender.org/files/public/thumbnail/a2/8d/a28d8efeadaea29d70ef1c46bd3f272a-2_o_xs.webp", // portrett
+    beskrivelse: "Når et illevarslende sort hull sluker det iskalde hjemmet til et lite romvesen, må det finne tilflukt blant en gruppe lysende skapninger som overvåkes av et mystisk himmelvesen.",
+    metadata: ["USA", "2026", "Alle", "Animasjon", "7 min"],
+    imdb: "",
+    regissor: "Andy Goralczyk",
+    lisens: "(CC) Blender Foundation | studio.blender.org",
+    kilde: "https://studio.blender.org/projects/singularity/pages/licensing/",
+    watchUrl: "film-mal.html?id=singularity",
+    videoUrl:"https://video.wixstatic.com/video/d9ace9_ada85b14ba45420ba15e7d0855496139/360p/mp4/file.mp4",
+   subtitleUrl: "",
+   tilbakeUrl: "film.html?navn=singularity",
+  audioLanguages: [
+  ],
+   publishDate: "2026-05-11T00:00:00", // ISO datoformat
     expireDate: "2027-01-10T23:59:59",
   },
   };
