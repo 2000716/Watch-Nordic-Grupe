@@ -1004,9 +1004,27 @@ metadataEl.innerHTML = metaHTML + imdbHTML;
 
 /* === Cast-info === */
 const castLabel = type === "film" ? "Regissør" : "Skaper";
+let lisensHTML = "";
+
+if (data.lisens && data.kilde) {
+  lisensHTML = `
+    <p>
+      <strong>Lisens:</strong>
+      <a href="${data.kilde}" target="_blank" style="color:#00ffcc;">
+        ${data.lisens}
+      </a>
+    </p>
+  `;
+}
+
 document.querySelector(".cast-info").innerHTML = `
   <p><strong>Medvirkende:</strong> ${data.skuespillere}</p>
-  <p><strong>${castLabel}:</strong> ${data.skapere || data.regissor || "Ukjent"}</p>
+
+  <p><strong>${castLabel}:</strong>
+    ${data.skapere || data.regissor || "Ukjent"}
+  </p>
+
+  ${lisensHTML}
 `;
 
 /* === Se nå-knapp === */
