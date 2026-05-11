@@ -857,6 +857,15 @@ font-size:clamp(22px,4vw,36px);
   display: flex;
   gap: 30px;
 }
+    .cast-info a{
+  color:#aaa;
+  text-decoration:none;
+  transition:.25s;
+}
+
+.cast-info a:hover{
+  color:#fff;
+}
 
 
 </style>
@@ -1010,7 +1019,7 @@ if (data.lisens && data.kilde) {
   lisensHTML = `
     <p>
       <strong>Lisens:</strong>
-      <a href="${data.kilde}" target="_blank" style="color:#00ffcc;">
+     <a href="${data.kilde}" target="_blank" style="color:#aaa; text-decoration:none;">
         ${data.lisens}
       </a>
     </p>
