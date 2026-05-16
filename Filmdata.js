@@ -152,7 +152,7 @@ const filmer = {
     lisens: "(CC) Blender Foundation | studio.blender.org",
     kilde: "https://studio.blender.org/projects/singularity/pages/licensing/",
     watchUrl: "film-mal.html?id=singularity",
-    videoUrl:"https://video.wixstatic.com/video/d9ace9_ada85b14ba45420ba15e7d0855496139/360p/mp4/file.mp4",
+    videoUrl:"https://video.wixstatic.com/video/d9ace9_da9f9d0843644bb6a5efdaea6852f7b9/360p/mp4/file.mp4",
    subtitleUrl: "",
    tilbakeUrl: "film.html?navn=singularity",
   audioLanguages: [
