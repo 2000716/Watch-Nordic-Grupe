@@ -84,7 +84,7 @@ const filmer = {
     tittel: "Sprite Fright",
     bakgrunn: "https://image.tmdb.org/t/p/original/aXZuvuQpcXivXHasXFAkOhfTTfb.jpg",
     banner: "", 
-    logo: "https://static.wixstatic.com/media/fd2fb2_2e305c6d75944c3ba96c28a00730ad07~mv2.png",
+    logo: "",
     trailer: "", // 🎥 NY 
     poster: "https://blenderartists.org/uploads/default/original/4X/2/6/2/2622f8717947903fdbe61ffd98e2c6622b052021.jpeg",
     posterVertikal: "https://pics.filmaffinity.com/sprite_fright-557419042-large.jpg", // portrett
@@ -113,7 +113,7 @@ const filmer = {
     tittel: "Wing It! - A Pet Project",
     bakgrunn: "https://static.wixstatic.com/media/d9ace9_c4277ef5983b479c839d1e8f3673d4cf~mv2.jpg",
     banner: "https://static.wixstatic.com/media/d9ace9_191619e0d6f649328d28d27c21d1cd21~mv2.jpg", 
-    logo: "https://studio.blender.org/files/public/logo/97/cd/97cd0265392e567290abd8fa2aa6b82c.png",
+    logo: "",
     trailer: "", // 🎥 NY 
     poster: "https://www.blendernation.com/wp-content/uploads/2023/09/4c0c5ec3c2380059942395be8570912c.jpg",
     posterVertikal: "https://studio.blender.org/files/cache/04/61/046118290346d04eee9444bb5aa0e80c.jpg", // portrett
@@ -141,7 +141,7 @@ const filmer = {
     tittel: "Singularity",
     bakgrunn: "https://studio.blender.org/static/common/images/project-detail/singularity/singularity-story-concept-020_0030.0f6b6798532d.webp",
     banner: "https://studio.blender.org/static/common/images/project-detail/singularity/singularity-story-concept-040_0010.161a5ac033be.webp", 
-    logo: "https://studio.blender.org/files/public/logo/85/77/8577466d4b7170f4cfe1a9933373e84c.webp",
+    logo: "",
     trailer: "", // 🎥 NY 
     poster: "https://i.ytimg.com/vi/l5OZu-IrXpw/maxresdefault.jpg",
     posterVertikal: "https://studio.blender.org/files/public/thumbnail/a2/8d/a28d8efeadaea29d70ef1c46bd3f272a-2_o_xs.webp", // portrett
