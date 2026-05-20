@@ -9,7 +9,7 @@ const filmer = {
     poster: "https://image.tmdb.org/t/p/original/pMeqhS16RXQhNw2hpBkDvBR7r7Z.jpg",
     posterVertikal: "https://image.tmdb.org/t/p/original/cIIsmZ4az8AaJJoDgtIOS797RCA.jpg", // portrett
     beskrivelse: "En mor efterlader sit nyfødte barn i en limousine. På en seddel bønfalder hun ejeren om at tage sig af drengen. Men bilen bliver stjålet at tyve, der smider barnet i skraldespanden.",
-    metadata: ["USA", "1921", "Alle", "Komedie", "1 t 8 min"],
+    metadata: ["1921", "Alle", "Komedie", "1 t 8 min"],
     skuespillere: "Charles Chaplin, Edna Purviance, Jackie Coogan",
     regissor: "Charles Chaplin",
     watchUrl: "film-mal.html?id=the-kid",
@@ -36,7 +36,7 @@ const filmer = {
     poster: "https://image.tmdb.org/t/p/original/9S97udaoo9wP5puoeyGlHK4I8iN.jpg",
     posterVertikal: "https://image.tmdb.org/t/p/original/p0Gh3QubR6WPhfPkKJXuYO76zag.jpg", // portrett
     beskrivelse: "En millionær tilbyr 10 000 dollar til fem personer som går med på å være innelåst i et stort, skummelt, leid hus over natten med ham og kona.",
-    metadata: ["USA", "1959", "16 år", "Grøsser", "1 t 15 min"],
+    metadata: ["1959", "16 år", "Grøsser", "1 t 15 min"],
     skuespillere: "Vincent Price, Carol Ohmart, Richard Long",
     regissor: "William Castle",
     watchUrl: "film-mal.html?id=house-on-haunted-hill",
@@ -63,7 +63,7 @@ const filmer = {
     poster: "https://image.tmdb.org/t/p/original/5TqIPddZaDsza8ID7X5HGwX2Txv.jpg",
     posterVertikal: "https://image.tmdb.org/t/p/original/A4ErFUf7FGNF3DFjp0CaRchxeNL.jpg", // portrett
     beskrivelse: "Fiksjonalisert dokumentar som viser utviklingen av hekseri, fra dens hedenske røtter til forvirring med hysteri i Øst-Europa.",
-    metadata: ["Svergie", "1922", "15 år", "Grøsser", "1 t 45 min"],
+    metadata: ["1922", "15 år", "Grøsser", "1 t 45 min"],
     skuespillere: "Benjamin Christensen, Elisabeth Christensen, Maren Pedersen",
     regissor: "Benjamin Christensen",
     watchUrl: "film-mal.html?id=haxan",
@@ -90,7 +90,7 @@ const filmer = {
     poster: "https://blenderartists.org/uploads/default/original/4X/2/6/2/2622f8717947903fdbe61ffd98e2c6622b052021.jpeg",
     posterVertikal: "https://pics.filmaffinity.com/sprite_fright-557419042-large.jpg", // portrett
     beskrivelse: "Når en gruppe bråkete tenåringer drar inn i en isolert skog, oppdager de fredelige soppvesener som viser seg å være en uventet naturkraft.",
-    metadata: ["USA", "2021", "15+ år", "Animasjon", "10 min"],
+    metadata: ["2021", "15+ år", "Animasjon", "10 min"],
     skuespillere: "Valerie LaPointe, Gabriel Bisset-Smith, Nicole Davis",
     regissor: "Matthew Luhn, Hjalti Hjalmarsson",
     lisens: "(CC) Blender Foundation | studio.blender.org",
@@ -119,7 +119,7 @@ const filmer = {
     poster: "https://www.blendernation.com/wp-content/uploads/2023/09/4c0c5ec3c2380059942395be8570912c.jpg",
     posterVertikal: "https://studio.blender.org/files/cache/04/61/046118290346d04eee9444bb5aa0e80c.jpg", // portrett
     beskrivelse: "En anspent ingeniør får uvelkomment besøk av en entusiastisk wannabe-pilot, noe som fører til at begge blir skutt opp i luften i en romferge som er ute av kontroll.",
-    metadata: ["USA", "2023", "Alle", "Animasjon", "4 min"],
+    metadata: ["2023", "Alle", "Animasjon", "4 min"],
     regissor: "Rik Schutte",
     lisens: "(CC) Blender Foundation | studio.blender.org",
     kilde: "https://studio.blender.org/projects/wing-it/pages/licensing/",
@@ -147,7 +147,7 @@ const filmer = {
     poster: "https://i.ytimg.com/vi/l5OZu-IrXpw/maxresdefault.jpg",
     posterVertikal: "https://studio.blender.org/files/public/thumbnail/a2/8d/a28d8efeadaea29d70ef1c46bd3f272a-2_o_xs.webp", // portrett
     beskrivelse: "Når et illevarslende sort hull sluker det iskalde hjemmet til et lite romvesen, må det finne tilflukt blant en gruppe lysende skapninger som overvåkes av et mystisk himmelvesen.",
-    metadata: ["USA", "2026", "Alle", "Animasjon", "7 min"],
+    metadata: ["2026", "Alle", "Animasjon", "7 min"],
     regissor: "Andy Goralczyk",
     lisens: "(CC) Blender Foundation | studio.blender.org",
     kilde: "https://studio.blender.org/projects/singularity/pages/licensing/",
