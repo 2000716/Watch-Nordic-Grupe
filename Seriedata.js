@@ -1,6 +1,7 @@
 const serier = {
   "the-titanic-archive": {
     tittel: "The Titanic Archive",
+    rating: "0.0",
     bakgrunn: "https://static.wixstatic.com/media/d9ace9_3d752a11a2d04c3fb9d02873d4cb659a~mv2.png",
     logo: "https://static.wixstatic.com/media/d9ace9_a9a200d5078e4797997dc8f8d22a467a~mv2.png",
     poster: "https://static.wixstatic.com/media/d9ace9_2d7b7487a34b4d09bb824dd07baa47a1~mv2.png",
@@ -58,6 +59,7 @@ const serier = {
 
   "vasaskipet": {
     tittel: "Vasaskipet - Et stille vitne i tiden",
+    rating: "0.0",
     bakgrunn: "https://static.wixstatic.com/media/d9ace9_43006d61b876444e829ebf7b67b90d87~mv2.png",
     logo: "https://static.wixstatic.com/media/d9ace9_7e338923e3c84d92b6a2fdbd1599744b~mv2.png",
     poster: "https://static.wixstatic.com/media/d9ace9_7754297ad1094e16b488b2cbd0b238cf~mv2.jpg",
