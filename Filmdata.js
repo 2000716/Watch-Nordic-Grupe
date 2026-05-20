@@ -28,7 +28,7 @@ const filmer = {
 
     "house-on-haunted-hill": {
     tittel: "House on Haunted Hill",
-    rating: "8.2",
+    rating: "6.7",
     bakgrunn: "https://image.tmdb.org/t/p/original/tS2qaOAG1Yqepp0Hm9AJjH7Zg14.jpg",
     banner: "", 
     logo: "https://image.tmdb.org/t/p/original/ulRnCQUtXRLNnQKu4vRmMAg0llS.png",
@@ -55,7 +55,7 @@ const filmer = {
 
       "haxan": {
     tittel: "Häxan ",
-    rating: "8.2",
+    rating: "7.6",
     bakgrunn: "https://image.tmdb.org/t/p/original/gZwQip2KQRDNZZOEDe0Yi25tW9Z.jpg",
     banner: "", 
     logo: "https://beam-images.warnermediacdn.com/BEAM_LWM_DELIVERABLES/730f0be0-7cf9-48ee-86a5-0b1352a85a1d/c3126a93065c93330d8a8e8a440bd604b9d998da.png?submitted=1684661760193&host=wbd-images.prod-vod.h264.io&partner=beamcom&w=4320",
@@ -82,7 +82,7 @@ const filmer = {
 
        "sprite-fright": {
     tittel: "Sprite Fright",
-    rating: "8.2",
+    rating: "7.5",
     bakgrunn: "https://image.tmdb.org/t/p/original/aXZuvuQpcXivXHasXFAkOhfTTfb.jpg",
     banner: "", 
     logo: "",
@@ -111,7 +111,7 @@ const filmer = {
 
          "wing-it": {
     tittel: "Wing It! - A Pet Project",
-    rating: "8.2",
+    rating: "6.9",
     bakgrunn: "https://static.wixstatic.com/media/d9ace9_c4277ef5983b479c839d1e8f3673d4cf~mv2.jpg",
     banner: "https://static.wixstatic.com/media/d9ace9_191619e0d6f649328d28d27c21d1cd21~mv2.jpg", 
     logo: "",
@@ -139,7 +139,7 @@ const filmer = {
 
     "singularity": {
     tittel: "Singularity",
-    rating: "8.2",
+    rating: "0.0",
     bakgrunn: "https://studio.blender.org/static/common/images/project-detail/singularity/singularity-story-concept-020_0030.0f6b6798532d.webp",
     banner: "https://studio.blender.org/static/common/images/project-detail/singularity/singularity-story-concept-040_0010.161a5ac033be.webp", 
     logo: "",
