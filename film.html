@@ -1000,45 +1000,15 @@ document.getElementById("backgroundImage").src = data.bakgrunn;
 document.querySelector(".film-logo").src = data.logo;
 document.querySelector(".description").textContent = data.beskrivelse;
 
-/* === Metadata + TMDb rating === */
+/* === Metadata === */
 
 const metadataEl = document.querySelector(".metadata");
 
-async function hentTMDBRating() {
-
-  const apiKey = "DIN_API_KEY";
-
-  try {
-
-    const response = await fetch(
-      `https://api.themoviedb.org/3/search/movie?api_key=${apiKey}&query=${encodeURIComponent(data.tittel)}`
-    );
-
-    const result = await response.json();
-
-    let rating = "⭐ -";
-
-    if (result.results && result.results.length > 0) {
-      rating = `⭐ ${result.results[0].vote_average.toFixed(1)}`;
-    }
-
-    metadataEl.innerHTML = `
-      <span>${rating}</span>
-      <span>•</span>
-      ${data.metadata.map(m => `<span>${m}</span><span>•</span>`).join("")}
-    `;
-
-  } catch (error) {
-
-    metadataEl.innerHTML = `
-      ${data.metadata.map(m => `<span>${m}</span><span>•</span>`).join("")}
-    `;
-
-  }
-
-}
-
-hentTMDBRating();
+metadataEl.innerHTML = `
+  <span>⭐ ${data.rating || "-"}</span>
+  <span>•</span>
+  ${data.metadata.map(m => `<span>${m}</span><span>•</span>`).join("")}
+`;
 
 /* === Cast-info === */
 const castLabel = type === "film" ? "Regissør" : "Skaper";
