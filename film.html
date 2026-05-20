@@ -1007,9 +1007,9 @@ const metadataEl = document.querySelector(".metadata");
 metadataEl.innerHTML = `
   <span>⭐ ${data.rating || "-"}</span>
   <span>•</span>
-  ${data.metadata.map(m => `<span>${m}</span><span>•</span>`).join("")}
+  ${data.metadata.map(m => `<span>${m}</span>`).join('<span>•</span>')}
 `;
-
+  
 /* === Cast-info === */
 const castLabel = type === "film" ? "Regissør" : "Skaper";
 let lisensHTML = "";
