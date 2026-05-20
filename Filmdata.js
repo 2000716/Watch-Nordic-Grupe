@@ -145,7 +145,7 @@ const filmer = {
     logo: "",
     trailer: "", // 🎥 NY 
     poster: "https://i.ytimg.com/vi/l5OZu-IrXpw/maxresdefault.jpg",
-    posterVertikal: "https://studio.blender.org/files/public/thumbnail/a2/8d/a28d8efeadaea29d70ef1c46bd3f272a-2_o_xs.webp", // portrett
+    posterVertikal: "https://image.tmdb.org/t/p/original/tsTGGB6NGVzHMuNXEV328jU0Eyx.jpg", // portrett
     beskrivelse: "Når et illevarslende sort hull sluker det iskalde hjemmet til et lite romvesen, må det finne tilflukt blant en gruppe lysende skapninger som overvåkes av et mystisk himmelvesen.",
     metadata: ["2026", "Alle", "Animasjon", "7 min"],
     regissor: "Andy Goralczyk",
