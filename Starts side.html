@@ -414,14 +414,134 @@
     }
 
     /* ================= FOOTER ================= */
-    footer{
-      padding:40px 60px;
-      border-top:1px solid rgba(255,255,255,0.06);
+   /* ===== PREMIUM STREAMING FOOTER ===== */
 
-      color:#8ea3a3;
-      text-align:center;
-      font-size:14px;
-    }
+.footer {
+  width: 100%;
+  padding: 70px 80px 35px;
+  margin-top: 100px;
+
+  background: none;
+
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+
+  color: #7d7d7d;
+}
+
+/* Sosiale ikoner */
+.footer-socials {
+  display: flex;
+  gap: 22px;
+  margin-bottom: 35px;
+}
+
+.footer-socials a {
+  color: #9b9b9b;
+  font-size: 20px;
+  transition: color 0.25s ease, transform 0.25s ease;
+}
+
+.footer-socials a:hover {
+  color: #ffffff;
+  transform: scale(1.08);
+}
+
+/* Link-grid */
+.footer-links {
+  width: 100%;
+
+  display: grid;
+  grid-template-columns: repeat(4, minmax(140px, 1fr));
+
+  gap: 18px 50px;
+
+  margin-bottom: 35px;
+}
+
+.footer-links a {
+  color: #8a8a8a;
+  text-decoration: none;
+
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.5;
+
+  transition: color 0.2s ease;
+}
+
+.footer-links a:hover {
+  color: #ffffff;
+}
+
+/* Språk/service-knapp */
+.footer-service-btn {
+  margin-bottom: 28px;
+
+  padding: 10px 18px;
+
+  border: 1px solid rgba(255,255,255,0.2);
+  border-radius: 4px;
+
+  background: transparent;
+  color: #a0a0a0;
+
+  font-size: 13px;
+  cursor: pointer;
+
+  transition: all 0.25s ease;
+}
+
+.footer-service-btn:hover {
+  border-color: rgba(255,255,255,0.45);
+  color: #fff;
+}
+
+/* Copyright */
+.footer-copy {
+  font-size: 13px;
+  color: #666;
+  margin-bottom: 8px;
+}
+
+/* Nederste tekst */
+.footer-bottom {
+  max-width: 700px;
+
+  font-size: 12px;
+  line-height: 1.6;
+
+  color: #555;
+}
+
+/* ===== MOBIL ===== */
+
+@media (max-width: 768px) {
+
+  .footer {
+    padding: 45px 22px 30px;
+  }
+
+  .footer-links {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px 20px;
+  }
+
+  .footer-links a {
+    font-size: 13px;
+  }
+
+  .footer-socials {
+    gap: 18px;
+    margin-bottom: 28px;
+  }
+
+  .footer-socials a {
+    font-size: 18px;
+  }
+}
+
 
     /* ================= MOBILE ================= */
     @media(max-width:768px){
