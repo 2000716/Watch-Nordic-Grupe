@@ -2,7 +2,7 @@ const filmer = {
   "the-kid": {
     tittel: "The Kid",
     rating: "8.2",
-    bakgrunn: "https://image.tmdb.org/t/p/original/cvWzCDo3pQyoasvqzRIP7oHK3qn.jpg",
+    bakgrunn: "https://image.tmdb.org/t/p/original/jnZKUavR4Ju4jTFP3HjGxdgSh9g.jpg",
     banner: "", 
     logo: "https://static.wixstatic.com/media/fd2fb2_bcc26c34a5a2490dabd3f5b6bdf20bb8~mv2.png",
     trailer: "", // 🎥 NY 
