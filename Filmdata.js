@@ -40,7 +40,7 @@ const filmer = {
     skuespillere: "Vincent Price, Carol Ohmart, Richard Long",
     regissor: "William Castle",
     watchUrl: "film-mal.html?id=house-on-haunted-hill",
-    videoUrl:"",
+    videoUrl:"https://ia801504.us.archive.org/20/items/house-on-haunted-hill-1959_202511/House%20on%20Haunted%20Hill%20%281959%29/House%20on%20Haunted%20Hill%20-%201959.mp4",
    subtitleUrl: "",
    tilbakeUrl: "film.html?navn=house-on-haunted-hill",
   audioLanguages: [
