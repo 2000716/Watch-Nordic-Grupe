@@ -1179,38 +1179,59 @@ main {
   display: flex;
   gap: 30px;
 }
-/* ===== NETFLIX STYLE FOOTER ===== */
+/* ===== PREMIUM STREAMING FOOTER ===== */
 
 .footer {
   width: 100%;
-  padding: 60px 80px 40px;
-  margin-top: 80px;
+  padding: 70px 80px 35px;
+  margin-top: 100px;
 
-  background: transparent;
-  color: #808080;
+  background: #091B1E;
 
   display: flex;
   flex-direction: column;
   align-items: flex-start;
+
+  color: #7d7d7d;
 }
 
+/* Sosiale ikoner */
+.footer-socials {
+  display: flex;
+  gap: 22px;
+  margin-bottom: 35px;
+}
+
+.footer-socials a {
+  color: #9b9b9b;
+  font-size: 20px;
+  transition: color 0.25s ease, transform 0.25s ease;
+}
+
+.footer-socials a:hover {
+  color: #ffffff;
+  transform: scale(1.08);
+}
+
+/* Link-grid */
 .footer-links {
   width: 100%;
 
   display: grid;
-  grid-template-columns: repeat(4, minmax(120px, 1fr));
+  grid-template-columns: repeat(4, minmax(140px, 1fr));
 
-  gap: 18px 40px;
+  gap: 18px 50px;
 
-  margin-bottom: 40px;
+  margin-bottom: 35px;
 }
 
 .footer-links a {
-  color: #808080;
+  color: #8a8a8a;
   text-decoration: none;
 
   font-size: 14px;
   font-weight: 400;
+  line-height: 1.5;
 
   transition: color 0.2s ease;
 }
@@ -1219,9 +1240,44 @@ main {
   color: #ffffff;
 }
 
+/* Språk/service-knapp */
+.footer-service-btn {
+  margin-bottom: 28px;
+
+  padding: 10px 18px;
+
+  border: 1px solid rgba(255,255,255,0.2);
+  border-radius: 4px;
+
+  background: transparent;
+  color: #a0a0a0;
+
+  font-size: 13px;
+  cursor: pointer;
+
+  transition: all 0.25s ease;
+}
+
+.footer-service-btn:hover {
+  border-color: rgba(255,255,255,0.45);
+  color: #fff;
+}
+
+/* Copyright */
 .footer-copy {
   font-size: 13px;
   color: #666;
+  margin-bottom: 8px;
+}
+
+/* Nederste tekst */
+.footer-bottom {
+  max-width: 700px;
+
+  font-size: 12px;
+  line-height: 1.6;
+
+  color: #555;
 }
 
 /* ===== MOBIL ===== */
@@ -1229,7 +1285,7 @@ main {
 @media (max-width: 768px) {
 
   .footer {
-    padding: 40px 20px 30px;
+    padding: 45px 22px 30px;
   }
 
   .footer-links {
@@ -1241,6 +1297,14 @@ main {
     font-size: 13px;
   }
 
+  .footer-socials {
+    gap: 18px;
+    margin-bottom: 28px;
+  }
+
+  .footer-socials a {
+    font-size: 18px;
+  }
 }
 }
 
@@ -1362,25 +1426,46 @@ main {
 
 <footer class="footer">
 
-  <div class="footer-links">
-    <a href="om.html">Om Watch Nordic</a>
-    <a href="kontakt.html">Kontakt</a>
-    <a href="personvern.html">Personvern og informasjonskapsler</a>
-    <a href="hjelp.html">Hjelpesenter</a>
-    <a href="støtteskjema.html">Watch Støtteordning</a>
-    <a href="#">Jobber</a>
-    <a href="#">Vilkår</a>
-    <a href="#">Innstillinger</a>
+  <!-- Sosiale medier -->
+  <div class="footer-socials">
+    <a href="#"><i class="fab fa-instagram"></i></a>
+    <a href="#"><i class="fab fa-facebook-f"></i></a>
+    <a href="#"><i class="fab fa-youtube"></i></a>
+    <a href="#"><i class="fab fa-x-twitter"></i></a>
   </div>
 
+  <!-- Linker -->
+  <div class="footer-links">
+    <a href="om.html">Om Watch Nordic</a>
+    <a href="kontakt.html">Kontakt oss</a>
+    <a href="personvern.html">Personvern</a>
+    <a href="hjelp.html">Hjelpesenter</a>
+
+    <a href="#">Jobber</a>
+    <a href="#">Investorinformasjon</a>
+    <a href="#">Vilkår</a>
+    <a href="#">Informasjonskapsler</a>
+
+    <a href="#">Juridisk informasjon</a>
+    <a href="#">Bedriftskonto</a>
+    <a href="#">Gavekort</a>
+    <a href="#">Enheter</a>
+  </div>
+
+  <!-- Service-knapp -->
+  <button class="footer-service-btn">
+    Servicekode
+  </button>
+
+  <!-- Copyright -->
   <div class="footer-copy">
-    Watch Nordic Gruppe™
+    © 2026 Watch Nordic™
   </div>
 
   <div class="footer-bottom">
-    © 2026 Watch Nordic™. Alle varemerker, logoer,
-    tjenestenavn og øvrige immaterielle rettigheter
-    knyttet til Watch Nordic.
+    Watch Nordic™ er en nordisk strømmetjeneste for filmer,
+    serier og originalt innhold. Alle varemerker, logoer
+    og immaterielle rettigheter tilhører sine respektive eiere.
   </div>
 
 </footer>
