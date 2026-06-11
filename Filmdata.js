@@ -160,28 +160,6 @@ const filmer = {
    publishDate: "2026-05-11T00:00:00", // ISO datoformat
     expireDate: "2027-01-10T23:59:59",
   },
-
-     "corpse-bride": {
-    tittel: "Corpse Bride",
-    rating: "7.4",
-    bakgrunn: "https://is1-ssl.mzstatic.com/image/thumb/Features211/v4/3a/db/40/3adb40f5-8625-0c48-af03-fcee4bba08f7/mzl.frfwjpft.png/2400x1350sr.webp",
-    banner: "https://is1-ssl.mzstatic.com/image/thumb/Features211/v4/3a/db/40/3adb40f5-8625-0c48-af03-fcee4bba08f7/mzl.frfwjpft.png/2400x1350sr.webp", 
-    logo: "https://is1-ssl.mzstatic.com/image/thumb/Features221/v4/74/52/d2/7452d247-97b3-c9b7-900d-791e1c3148cf/wam8132080267481722784.png/432x162.png",
-    trailer: "", // 🎥 NY 
-    poster: "https://image.tmdb.org/t/p/original/vfXOUsctUj7NdDNEiR35zt5Du0M.jpg",
-    posterVertikal: "https://image.tmdb.org/t/p/original/isb2Qow76GpqYmsSyfdMfsYAjts.jpg", // portrett
-    beskrivelse: "Når en sjenert brudgom praktiserer sine bryllupsløfter i utilsiktet nærvær av en avdød ung kvinne, står hun opp fra graven i den antagelsen at han har giftet seg med henne.",
-    metadata: ["2005", "7+ år", "Animasjon", "1t 17 min"],
-    regissor: "Andy Goralczyk",
-    watchUrl: "film-mal.html?id=corpse-bride",
-    videoUrl:"https://dn710001.ca.archive.org/0/items/Popcornarchive-corpseBride2005AnimationComedyFamily/Popcornarchive-corpseBride2005AnimationComedyFamily.mp4",
-   subtitleUrl: "",
-   tilbakeUrl: "film.html?navn=corpse-bride",
-  audioLanguages: [
-  ],
-   publishDate: "2026-06-11T00:00:00", // ISO datoformat
-    expireDate: "2027-01-10T23:59:59",
-  },
   };
 
 
