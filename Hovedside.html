@@ -1259,6 +1259,21 @@ main {
   display: flex;
   gap: 30px;
 }
+  .banner-title {
+  font-size: 52px;
+  font-weight: 800;
+  color: white;
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  text-shadow: 0 4px 20px rgba(0,0,0,0.6);
+}
+
+@media (max-width: 768px) {
+  .banner-title {
+    font-size: 30px;
+  }
+}
 }
 
 
@@ -1488,11 +1503,25 @@ function oppdaterBanner() {
   }
   video.style.display = "none";
 
-  // === Logo og beskrivelse ===
-  logo.src = film.logo || "";
-  logo.style.display = film.logo ? "block" : "none";
-  beskrivelse.textContent = film.beskrivelse || "";
-  metadata.textContent = film.metadata ? film.metadata.join(" • ") : "";
+// === Logo eller tittel ===
+let titleElement = document.getElementById("banner-title");
+
+if (!titleElement) {
+  titleElement = document.createElement("h1");
+  titleElement.id = "banner-title";
+  titleElement.className = "banner-title";
+  logo.parentNode.insertBefore(titleElement, logo.nextSibling);
+}
+
+if (film.logo) {
+  logo.src = film.logo;
+  logo.style.display = "block";
+  titleElement.style.display = "none";
+} else {
+  logo.style.display = "none";
+  titleElement.textContent = film.tittel || "";
+  titleElement.style.display = "block";
+}
 
   // === Se nå-knapp ===
   seNa.innerHTML = '<i class="fas fa-play"></i> Se nå';
