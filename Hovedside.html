@@ -1259,19 +1259,22 @@ main {
   display: flex;
   gap: 30px;
 }
-  .banner-title {
-  font-size: 52px;
-  font-weight: 800;
+.banner-title {
+  font-size: 110px;
+  font-weight: 900;
+  line-height: 0.9;
   color: white;
-  margin: 0;
   text-transform: uppercase;
-  letter-spacing: 2px;
-  text-shadow: 0 4px 20px rgba(0,0,0,0.6);
+  letter-spacing: 3px;
+  max-width: 700px;
+  margin-bottom: 12px;
+  text-shadow: 0 4px 20px rgba(0,0,0,0.7);
 }
 
 @media (max-width: 768px) {
   .banner-title {
-    font-size: 30px;
+    font-size: 48px;
+    max-width: 90%;
   }
 }
 }
@@ -1522,6 +1525,15 @@ if (film.logo) {
   titleElement.textContent = film.tittel || "";
   titleElement.style.display = "block";
 }
+
+// Beskrivelse og metadata vises alltid
+beskrivelse.textContent = film.beskrivelse || "";
+beskrivelse.style.display = "block";
+
+metadata.textContent = film.metadata
+  ? film.metadata.join(" • ")
+  : "";
+metadata.style.display = "block";
 
   // === Se nå-knapp ===
   seNa.innerHTML = '<i class="fas fa-play"></i> Se nå';
