@@ -115,7 +115,7 @@ const serier = {
     }
    }, // <-- KOMMA MELLOM SERIER
 
-  "apollo11-was-it-real?": {
+  "apollo11-was-it-real": {
     tittel: "Apollo 11 - Was It Real?",
     rating: "0.0",
     bakgrunn: "https://static.wixstatic.com/media/d9ace9_6189bb0756b8437ab689f6f65652f701~mv2.png",
@@ -126,7 +126,7 @@ const serier = {
     metadata: ["2026", "Alle", "Dokumentar", "4K"],
     imdb: "",
     skapere: "Watch Nordic Originals Studio",
-    tilbakeUrl: "serie.html?navn=apollo11-was-it-real?",
+    tilbakeUrl: "serie.html?navn=apollo11-was-it-real",
     publishDate: "2026-06-12T00:00:00", // ISO datoformat
     expireDate: "2027-11-15T23:59:59",
     audioLanguages: [],
