@@ -113,7 +113,7 @@ const serier = {
         }
       }
     }
-      }, // <-- KOMMA MELLOM SERIER
+   }, // <-- KOMMA MELLOM SERIER
 
   "apollo11-was-it-real?": {
     tittel: "Apollo 11 - Was It Real?",
@@ -170,5 +170,5 @@ const serier = {
           }
         }
       }
-  }
+  },
 };
