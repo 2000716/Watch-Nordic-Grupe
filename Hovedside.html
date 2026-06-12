@@ -2071,4 +2071,41 @@ window.addEventListener("scroll", () => {
     nav.classList.remove("scrolled");
   }
 });
+
+  function renderDocumentarySeries(galleryId) {
+  const gallery = document.getElementById(galleryId);
+  if (!gallery || typeof serier === "undefined") return;
+
+  gallery.innerHTML = "";
+
+  Object.keys(serier).forEach(key => {
+    const serie = serier[key];
+
+    const erDokumentar =
+      serie.metadata &&
+      serie.metadata.some(meta =>
+        meta.toLowerCase().includes("dokumentar")
+      );
+
+    if (!erDokumentar) return;
+
+    const link = document.createElement("a");
+    link.href = `film.html?navn=${key}`;
+    link.classList.add("gallery-item");
+
+    link.innerHTML = `
+      <img src="${serie.poster}" alt="${serie.tittel}">
+      <div class="image-overlay">
+        <div class="overlay-content">
+          <div class="overlay-title">${serie.tittel}</div>
+          <div class="overlay-meta">
+            ${(serie.metadata || []).join(" • ")}
+          </div>
+        </div>
+      </div>
+    `;
+
+    gallery.appendChild(link);
+  });
+}
 </script>
