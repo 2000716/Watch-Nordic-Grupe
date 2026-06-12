@@ -167,8 +167,9 @@ const serier = {
             videoUrl: "",
             introStart: 2,
             introEnd: 89
-          }
+              
         }
       }
+    }
   },
 };
