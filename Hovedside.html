@@ -1970,7 +1970,7 @@ function renderContinueWatching() {
 document.addEventListener("DOMContentLoaded", () => {
 
   // === Gallerier ===
-  renderMixedContent("nye-filmer-galleri", 5); // 🔥 Kun 5 nyeste
+  renderMixedContent("nye-filmer-galleri", 5);
   renderTop10("topp10-filmer-galleri");
   renderGallery("filmer-galleri", null, true, 20);
 
@@ -1985,10 +1985,14 @@ document.addEventListener("DOMContentLoaded", () => {
   renderUpcoming("kommer-snart-galleri");
   renderSeries("serier-galleri");
 
+  // Dokumentarserier
+  renderDocumentarySeries("dokumentarserier-galleri");
+
   // === Banner + fortsett ===
   oppdaterBanner();
   renderContinueWatching();
 
+});
   // ==================== SCROLL-KONTROLLER ==================== //
   document.querySelectorAll(".gallery-wrapper").forEach((wrapper) => {
 
