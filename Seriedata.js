@@ -113,5 +113,62 @@ const serier = {
         }
       }
     }
+      }, // <-- KOMMA MELLOM SERIER
+
+  "apollo11-was-it-real?": {
+    tittel: "Apollo 11 - Was It Real?",
+    rating: "0.0",
+    bakgrunn: "https://static.wixstatic.com/media/d9ace9_6189bb0756b8437ab689f6f65652f701~mv2.png",
+    logo: "https://static.wixstatic.com/media/d9ace9_8920f6f7b0b24913a251dde3f208841e~mv2.png",
+    poster: "https://static.wixstatic.com/media/d9ace9_6597c0df53534dfb800580bb6716c27c~mv2.jpg",
+    posterVertikal: "https://static.wixstatic.com/media/d9ace9_bb5d07a805334acaa7917644626f3f56~mv2.jpg",
+    beskrivelse: "I denne dokumentaren tar Watch Originals deg med tilbake til månelandingen med Apollo 11. Men det store spørsmålet mange har stilt seg er: var det ekte?",
+    metadata: ["2026", "Alle", "Dokumentar", "4K"],
+    imdb: "",
+    skapere: "Watch Nordic Originals Studio",
+    tilbakeUrl: "serie.html?navn=apollo11-was-it-real?",
+    publishDate: "2026-06-12T00:00:00", // ISO datoformat
+    expireDate: "2027-11-15T23:59:59",
+    audioLanguages: [],
+    subtitleLanguages: [],
+    sesonger: {
+      1: {
+        sesongNummer: 1,
+        beskrivelse: "Sesong 1",
+        episoder: {
+          1: {
+            episodeNummer: 1,
+            tittel: "Apollo 11",
+            beskrivelse: "Etter mange mislykete forsøk, klarer dem å få Apollo 11 ut i atsmosfæren.",
+            varighet: "5 min",
+            thumbnail: "https://static.wixstatic.com/media/d9ace9_6189bb0756b8437ab689f6f65652f701~mv2.png",
+            publishDate: "2027-06-10T18:00:00",
+            videoUrl: "",
+          
+          },
+          2: {
+            episodeNummer: 2,
+            tittel: "Månelandingen",
+            beskrivelse: "Månelanden er satt i gang, men vil dem komme tilbake?",
+            varighet: "5 min",
+            thumbnail: "https://static.wixstatic.com/media/d9ace9_6189bb0756b8437ab689f6f65652f701~mv2.png",
+            publishDate: "2027-06-10T18:00:00",
+            videoUrl: "",
+            introStart: 2,
+            introEnd: 89
+          },
+          3: {
+            episodeNummer: 3,
+            tittel: "Alt var fake!",
+            beskrivelse: "Teorier og spekulasjoner om at månelandingen er fake øker i avisene.",
+            varighet: "5 min",
+            thumbnail: "https://static.wixstatic.com/media/d9ace9_6189bb0756b8437ab689f6f65652f701~mv2.png",
+            publishDate: "2027-06-10T18:00:00",
+            videoUrl: "",
+            introStart: 2,
+            introEnd: 89
+          }
+        }
+      }
   }
 };
