@@ -67,14 +67,10 @@ const filmer = {
     skuespillere: "Benjamin Christensen, Elisabeth Christensen, Maren Pedersen",
     regissor: "Benjamin Christensen",
     watchUrl: "film-mal.html?id=haxan",
-    videoUrl:"",
+    videoUrl:"https://dn710205.ca.archive.org/0/items/haxan-1922_202312/H%C3%A4xan%20%281922%29.mp4",
    subtitleUrl: "",
    tilbakeUrl: "film.html?navn=haxan",
   audioLanguages: [
-    { code: "no", label: "Engelsk" } ],
-  subtitleLanguages: [
-    { code: "no", label: "Norsk" },
-    { code: "off", label: "Av" }
   ],
    publishDate: "2025-10-02T00:00:00", // ISO datoformat
     expireDate: "2027-11-15T23:59:59",
