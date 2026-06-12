@@ -86,7 +86,7 @@ const filmer = {
     poster: "https://blenderartists.org/uploads/default/original/4X/2/6/2/2622f8717947903fdbe61ffd98e2c6622b052021.jpeg",
     posterVertikal: "https://pics.filmaffinity.com/sprite_fright-557419042-large.jpg", // portrett
     beskrivelse: "Når en gruppe bråkete tenåringer drar inn i en isolert skog, oppdager de fredelige soppvesener som viser seg å være en uventet naturkraft.",
-    metadata: ["2021", "15+ år", "Animasjon", "10 min"],
+    metadata: ["2021", "15 år", "Animasjon", "10 min"],
     skuespillere: "Valerie LaPointe, Gabriel Bisset-Smith, Nicole Davis",
     regissor: "Matthew Luhn, Hjalti Hjalmarsson",
     lisens: "(CC) Blender Foundation | studio.blender.org",
