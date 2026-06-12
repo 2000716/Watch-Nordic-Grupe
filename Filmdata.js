@@ -70,7 +70,7 @@ const filmer = {
     videoUrl:"https://dn710205.ca.archive.org/0/items/haxan-1922_202312/H%C3%A4xan%20%281922%29.mp4",
    subtitleUrl: "",
    tilbakeUrl: "film.html?navn=haxan",
-  audioLanguages: [
+  audioLanguages: [    { code: "no", label: "Svensk" } 
   ],
    publishDate: "2025-10-02T00:00:00", // ISO datoformat
     expireDate: "2027-11-15T23:59:59",
