@@ -1277,6 +1277,45 @@ main {
     font-size: 48px;
     max-width: 90%;
   }
+  .genre-strip {
+  display: flex;
+  gap: 14px;
+}
+
+.genre-card {
+  min-width: 180px;
+  height: 70px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 12px;
+
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.12);
+
+  color: white;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 16px;
+
+  transition: all 0.25s ease;
+}
+
+.genre-card:hover {
+  background: #00FFCC;
+  color: #091B1E;
+  transform: scale(1.04);
+}
+
+@media (max-width:768px) {
+  .genre-card {
+    min-width: 140px;
+    height: 60px;
+    font-size: 14px;
+  }
+
 }
 }
 
@@ -1401,6 +1440,32 @@ main {
     <div class="fade-left"></div>
     <button class="scroll-button left">❮</button>
     <div class="image-gallery" id="dokumentarserier-galleri"></div>
+    <button class="scroll-button right">❯</button>
+    <div class="fade-right"></div>
+  </div>
+</section>
+
+  <section class="gallery-section">
+  <h2>Sjangere</h2>
+  <div class="gallery-wrapper">
+    <div class="fade-left"></div>
+    <button class="scroll-button left">❮</button>
+
+    <div class="genre-strip image-gallery">
+
+      <a href="Barn.html" class="genre-card">Barn</a>
+      <a href="Skrekk.html" class="genre-card">Skrekk</a>
+      <a href="Action.html" class="genre-card">Action</a>
+      <a href="Drama.html" class="genre-card">Drama</a>
+      <a href="Komedie.html" class="genre-card">Komedie</a>
+      <a href="Thriller.html" class="genre-card">Thriller</a>
+      <a href="Dokumentar.html" class="genre-card">Dokumentar</a>
+      <a href="Krim.html" class="genre-card">Krim</a>
+      <a href="SciFi.html" class="genre-card">Sci-Fi</a>
+      <a href="Romantikk.html" class="genre-card">Romantikk</a>
+
+    </div>
+
     <button class="scroll-button right">❯</button>
     <div class="fade-right"></div>
   </div>
