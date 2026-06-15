@@ -655,21 +655,21 @@
     font-size: 32px;
   }
 
-  /* FOOTER */
-  .footer {
-    padding: 40px 16px;
-    align-items: center;
-    text-align: center;
-  }
+/* FOOTER (rettet - beholder original venstrejustering på bunnen) */
+.footer {
+  padding: 40px 16px;
+  align-items: flex-start; /* viktig: ikke center */
+  text-align: left;        /* viktig: beholder original stil */
+}
 
-  .footer-links {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 12px;
-  }
+.footer-links {
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
 
-  .footer-bottom {
-    font-size: 11px;
-  }
+.footer-bottom {
+  font-size: 11px;
+  text-align: left; /* sikrer at den ikke blir sentrert */
 }
 
 /* EKSTRA: veldig små skjermer */
