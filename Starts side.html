@@ -543,47 +543,154 @@
 }
 
 
-    /* ================= MOBILE ================= */
-    @media(max-width:768px){
+  /* ================= MOBILE (FORBEDRET) ================= */
+@media (max-width: 768px) {
 
-      .navbar{
-        padding:0 20px;
-      }
+  /* NAVBAR */
+  .navbar {
+    padding: 12px 16px;
+    height: 70px;
+  }
 
-      .hero-content{
-        margin-left:20px;
-        margin-right:20px;
-      }
+  .logo {
+    font-size: 22px;
+    letter-spacing: 2px;
+  }
 
-      .hero-content h1{
-        font-size:46px;
-      }
+  .nav-buttons {
+    gap: 10px;
+  }
 
-      .hero-content p{
-        font-size:16px;
-      }
+  .nav-buttons a {
+    padding: 10px 14px;
+    font-size: 12px;
+  }
 
-      .section{
-        padding:60px 20px;
-      }
+  /* HERO */
+  .hero {
+    height: 92vh;
+    text-align: center;
+    justify-content: center;
+  }
 
-      .movie-card{
-        min-width:180px;
-      }
+  .hero-content {
+    margin: 0 auto;
+    padding: 0 16px;
+    max-width: 100%;
+  }
 
-      .movie-card img{
-        height:280px;
-      }
+  .hero-content h1 {
+    font-size: 34px;
+    line-height: 1.2;
+  }
 
-      .stats{
-        gap:12px;
-      }
+  .hero-content p {
+    font-size: 15px;
+    margin: 0 auto 25px;
+  }
 
-      .stat-card{
-        flex:1;
-      }
-    }
+  .hero-buttons {
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+  }
 
+  .primary-btn,
+  .secondary-btn {
+    width: 100%;
+    max-width: 280px;
+    text-align: center;
+  }
+
+  .stats {
+    justify-content: center;
+  }
+
+  .stat-card {
+    flex: 1;
+    min-width: 100px;
+  }
+
+  /* SECTION */
+  .section {
+    padding: 50px 16px;
+  }
+
+  .section-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .section h2 {
+    font-size: 24px;
+  }
+
+  /* MOVIES */
+  .movie-row {
+    gap: 12px;
+    padding-bottom: 12px;
+  }
+
+  .movie-card {
+    min-width: 150px;
+  }
+
+  .movie-card img {
+    height: 220px;
+  }
+
+  /* DEVICES */
+  .devices {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 14px;
+  }
+
+  .device {
+    padding: 22px 14px;
+  }
+
+  .device i {
+    font-size: 32px;
+  }
+
+  /* FOOTER */
+  .footer {
+    padding: 40px 16px;
+    align-items: center;
+    text-align: center;
+  }
+
+  .footer-links {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+
+  .footer-bottom {
+    font-size: 11px;
+  }
+}
+
+/* EKSTRA: veldig små skjermer */
+@media (max-width: 420px) {
+
+  .hero-content h1 {
+    font-size: 28px;
+  }
+
+  .movie-card {
+    min-width: 130px;
+  }
+
+  .movie-card img {
+    height: 200px;
+  }
+
+  .devices {
+    grid-template-columns: 1fr;
+  }
+}
   </style>
 </head>
 
