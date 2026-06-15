@@ -541,6 +541,48 @@
     font-size: 18px;
   }
 }
+      .bg-wall {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+
+  display: flex;
+  flex-wrap: wrap;
+
+  transform: perspective(1200px) rotateY(-18deg) scale(1.2);
+  transform-origin: left;
+
+  opacity: 0.25;
+}
+
+/* mørk overlay så teksten din blir lesbar */
+.bg-wall::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to right, #091B1E 40%, transparent);
+}
+
+/* hver film-poster i bakgrunn */
+.bg-item {
+  width: 140px;
+  height: 200px;
+  margin: 10px;
+
+  background-size: cover;
+  background-position: center;
+
+  border-radius: 10px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+
+  filter: brightness(0.8) saturate(1.1);
+  transition: transform 0.3s;
+}
+
+.bg-item:nth-child(even) {
+  transform: translateY(20px);
+}
 
 
   /* ================= MOBILE (FORBEDRET) ================= */
@@ -690,48 +732,7 @@
   .devices {
     grid-template-columns: 1fr;
   }
-  .bg-wall {
-  position: fixed;
-  inset: 0;
-  z-index: -1;
-  overflow: hidden;
 
-  display: flex;
-  flex-wrap: wrap;
-
-  transform: perspective(1200px) rotateY(-18deg) scale(1.2);
-  transform-origin: left;
-
-  opacity: 0.25;
-}
-
-/* mørk overlay så teksten din blir lesbar */
-.bg-wall::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(to right, #091B1E 40%, transparent);
-}
-
-/* hver film-poster i bakgrunn */
-.bg-item {
-  width: 140px;
-  height: 200px;
-  margin: 10px;
-
-  background-size: cover;
-  background-position: center;
-
-  border-radius: 10px;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.6);
-
-  filter: brightness(0.8) saturate(1.1);
-  transition: transform 0.3s;
-}
-
-.bg-item:nth-child(even) {
-  transform: translateY(20px);
-}
   </style>
 </head>
 
