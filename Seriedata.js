@@ -141,7 +141,7 @@ const serier = {
             varighet: "5 min",
             thumbnail: "https://static.wixstatic.com/media/d9ace9_6189bb0756b8437ab689f6f65652f701~mv2.png",
             publishDate: "2027-06-10T18:00:00",
-            videoUrl: ""
+            videoUrl: "https://video.wixstatic.com/video/d9ace9_9c973766d280472d94f62df7fee0ae1b/1080p/mp4/file.mp4"
           },
           2: {
             episodeNummer: 2,
