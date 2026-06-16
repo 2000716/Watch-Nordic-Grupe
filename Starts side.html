@@ -583,6 +583,71 @@
 .bg-item:nth-child(even) {
   transform: translateY(20px);
 }
+    /* ================= HERO POSTER WALL ================= */
+
+.hero-wall{
+  position:absolute;
+  inset:0;
+  overflow:hidden;
+  z-index:0;
+
+  transform:
+    perspective(2000px)
+    rotateY(-22deg)
+    rotateX(4deg)
+    scale(1.25);
+
+  transform-origin:right center;
+
+  opacity:.32;
+}
+
+.wall-row{
+  display:flex;
+  gap:18px;
+  width:max-content;
+  margin-bottom:18px;
+}
+
+.wall-row img{
+  width:260px;
+  height:146px;
+  object-fit:cover;
+  border-radius:10px;
+  box-shadow:0 12px 30px rgba(0,0,0,.45);
+}
+
+.row1{margin-left:420px;}
+.row2{margin-left:180px;}
+.row3{margin-left:350px;}
+.row4{margin-left:120px;}
+
+.hero-content{
+  z-index:2;
+}
+
+@media(max-width:768px){
+
+  .hero-wall{
+    opacity:.15;
+    transform:
+      perspective(1200px)
+      rotateY(-12deg)
+      scale(1.4);
+  }
+
+  .wall-row img{
+    width:150px;
+    height:84px;
+  }
+
+  .row1,
+  .row2,
+  .row3,
+  .row4{
+    margin-left:0;
+  }
+}
 
 
   /* ================= MOBILE (FORBEDRET) ================= */
@@ -754,8 +819,12 @@
   <!-- ================= HERO ================= -->
   <section class="hero">
 
-    <img src="https://images.unsplash.com/photo-1601933470928-c9b6d0fddfbc">
-
+  <div class="hero-wall">
+  <div class="wall-row row1"></div>
+  <div class="wall-row row2"></div>
+  <div class="wall-row row3"></div>
+  <div class="wall-row row4"></div>
+</div>
     <div class="hero-content">
 
       <div class="hero-tag">
@@ -893,6 +962,7 @@
 
   <!-- ================= SCRIPT ================= -->
   <script src="Filmdata.js"></script>
+  <script src="Seriedata.js"></script>
 
   <script>
     const bgWall = document.getElementById("bg-wall");
@@ -936,6 +1006,65 @@ if (typeof filmer !== "undefined") {
         gallery.appendChild(card);
 
       });
+      /* ================= HERO WALL ================= */
+
+const rows = [
+  document.querySelector(".row1"),
+  document.querySelector(".row2"),
+  document.querySelector(".row3"),
+  document.querySelector(".row4")
+];
+
+let posters = [];
+
+/* Filmer */
+if(typeof filmer !== "undefined"){
+
+  Object.values(filmer).forEach(film => {
+
+    if(film.poster){
+      posters.push(film.poster);
+    }
+
+  });
+
+}
+
+/* Serier */
+if(typeof serier !== "undefined"){
+
+  Object.values(serier).forEach(serie => {
+
+    if(serie.poster){
+      posters.push(serie.poster);
+    }
+
+  });
+
+}
+
+/* Bland */
+posters.sort(() => Math.random() - 0.5);
+
+/* Fyll radene */
+rows.forEach(row => {
+
+  for(let i = 0; i < 4; i++){
+
+    posters.forEach(src => {
+
+      const img = document.createElement("img");
+
+      img.src = src;
+      img.loading = "lazy";
+
+      row.appendChild(img);
+
+    });
+
+  }
+
+});
 
     }
 
