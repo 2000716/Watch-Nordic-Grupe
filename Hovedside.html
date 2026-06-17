@@ -875,15 +875,14 @@ html, body {
         padding-top: 60px;
       }
 
-      /* Balansert avstand på sidene – ikke for langt inn, ikke helt ut i kanten */
       main {
-        padding-left: 16px;
-        padding-right: 16px;
+        padding-left: 0px; /* Satt til 0 her slik at galleriene kan scrolle fritt på tvers */
+        padding-right: 0px;
       }
 
-      /* Sørger for at overskriftene flukter perfekt med resten av innholdet */
+      /* Gir overskriftene en trygg og pen avstand fra skjermkanten */
       .gallery-section h2 {
-        padding-left: 0px;
+        padding-left: 16px;
         margin-left: 0px;
         font-size: 17px;
       }
@@ -918,7 +917,7 @@ html, body {
         height: 36px;
       }
 
-      /* Hero-banner mobil */
+      /* Hero-banner mobil (med trygg avstand på innholdet) */
       .hero-banner {
         height: 45vh !important;
         min-height: 280px !important;
@@ -966,7 +965,7 @@ html, body {
       }
 
       /* ==========================================================================
-         BALANSERTE MOBIL-GALLERIER (Uten metadata)
+         FIKSET: STREKKER GALLERIENE UTEN AT BILDENE KUTTES
          ========================================================================== */
       .gallery-section {
         margin-left: 0px !important;
@@ -975,7 +974,8 @@ html, body {
       }
 
       .image-gallery, .top10-gallery {
-        padding: 4px 0px 10px 0px !important; /* Flukter perfekt med sidemarginen til main */
+        /* 16px padding på sidene gjør at første bilde ikke klistrer seg til kanten */
+        padding: 4px 16px 10px 16px !important; 
         gap: 12px !important;
         scroll-snap-type: x mandatory !important;
         -webkit-overflow-scrolling: touch !important;
@@ -987,14 +987,16 @@ html, body {
         transition: none !important;
       }
 
-      /* Bredden på filmkortene utnytter den tilgjengelige plassen optimalt */
+      /* Ved å fjerne fast 'height' og bruke 'aspect-ratio', vil bildet ALDRI bli kuttet */
       .image-gallery a img {
-        width: 260px !important;  
-        height: 124px !important; 
+        width: 250px !important;  /* Gir mer synlig bildeoverflate på mobil */
+        height: auto !important;   /* Lar nettleseren regne ut høyden automatisk */
+        aspect-ratio: 2.2 / 1 !important; /* Beholder det originale PC-forholdet perfekt */
         transform: none !important;
+        object-fit: contain !important; /* Sikrer at hele bildet tegnes opp uten beskjæring */
       }
 
-      /* SKJULER METADATA/OVERLAY PÅ MOBIL */
+      /* Skjuler metadata på mobil */
       .image-overlay {
         display: none !important; 
       }
@@ -1004,30 +1006,29 @@ html, body {
       }
 
       /* ==========================================================================
-         TOP 10 MOBIL-STØRRELSE
+         FIKSET: TOP 10 UTEN KUTTING
          ========================================================================== */
-      .top10-gallery {
-        gap: 20px !important;
-      }
-      
       .top10-item img {
-        width: 125px !important; 
-        height: 188px !important;
+        width: 120px !important; 
+        height: auto !important;
+        aspect-ratio: 1 / 1.5 !important; /* Låser til standard portrett-format (150/225) */
+        transform: none !important;
+        object-fit: contain !important;
       }
 
       .top10-number {
-        font-size: 58px !important;
-        left: -8px !important;
-        bottom: -6px !important;
+        font-size: 55px !important;
+        left: -6px !important;
+        bottom: -4px !important;
         -webkit-text-stroke: 2px #00FFCC !important;
         color: transparent !important;
       }
 
-      /* Kids banner mobil */
+      /* Kids banner mobil (Med trygg avstand fra kantene) */
       .kids-banner {
         height: 130px !important;
-        margin: 20px 0px !important; 
-        width: 100%;
+        margin: 20px 16px !important; 
+        width: calc(100% - 32px) !important;
         border-radius: 10px;
       }
       .kids-overlay {
@@ -1042,6 +1043,10 @@ html, body {
       }
 
       /* Sjanger-gallerier mobil */
+      .genre-gallery {
+        padding: 0 16px !important;
+      }
+      
       .genre-gallery a .icon-circle {
         width: 75px;
         height: 75px;
@@ -1053,7 +1058,7 @@ html, body {
         max-width: 90px;
       }
 
-      /* Footer mobil (Beholder alt innhold, men flukter med main-padding) */
+      /* Footer mobil (Følger samme 16px sidemarginer) */
       .footer {
         padding: 40px 16px 30px;
         margin-top: 60px;
