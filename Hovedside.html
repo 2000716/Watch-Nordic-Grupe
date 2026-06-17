@@ -453,9 +453,9 @@ html, body {
   position: relative;
   border-radius: 5px;
   background: transparent;
-  overflow: hidden; /* Sørger for at overlay og bilde holdes innenfor rammene */
+  overflow: visible; /* Beholder denne slik at pilene flyter fritt */
   border: 2px solid transparent;
-  transition: border 0.3s ease, box-shadow 0.3s ease;
+  transition: border 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
 }
 
 .image-gallery a img {
@@ -465,11 +465,12 @@ html, body {
   object-fit: cover;
   border-radius: 5px;
   display: block;
+  transition: transform 0.3s ease;
 }
 
-/* FIKSET: Fjernet transform: scale(1.05) slik at bildet ikke endrer størrelse */
+/* Beholder zoomen på bildet */
 .image-gallery a:hover img {
-  transform: none; 
+  transform: scale(1.05);
 }
 
 /* Galleri med Fremdriftslinje */
@@ -616,7 +617,7 @@ html, body {
 }
 
 .top10-item:hover {
-  transform: scale(1.05); /* Top 10 har fortsatt zoom, da de ikke bruker Seksjon 6-overlayet */
+  transform: scale(1.05);
 }
 
 .top10-number {
@@ -645,7 +646,7 @@ html, body {
 .gallery-item {
   position: relative !important;
   display: inline-block;
-  overflow: hidden;
+  overflow: hidden; /* Holder zoom-effekten pent på innsiden av bildets hjørner */
   border-radius: 5px;
 }
 
@@ -653,23 +654,24 @@ html, body {
   display: block;
   width: 100%;
   height: auto;
-  transition: none;
+  transition: transform 0.3s ease;
 }
 
 .gallery-item:hover > img {
-  transform: none; 
+  transform: scale(1.05);
 }
 
 .image-overlay {
   position: absolute !important;
-  inset: 0; /* Låser overlayet elektronisk 1:1 til bildets ytterkanter */
+  inset: 0;
   pointer-events: none;
   opacity: 0;
-  transition: opacity 0.3s ease;
+  /* La til transform i transition-listen slik at faden vokser mykt */
+  transition: opacity 0.3s ease, transform 0.3s ease;
   
   background: linear-gradient(
     to top,
-    rgba(0, 0, 0, 0.95) 0%,   
+    rgba(0, 0, 0, 0.95) 0%,   /* Fikset skrivefeil og gjort dypere svart */
     rgba(0, 0, 0, 0.7) 40%,    
     rgba(0, 0, 0, 0) 80%       
   );
@@ -678,11 +680,14 @@ html, body {
   display: flex;
   align-items: flex-end;
   z-index: 2;
-  transform: none;
+  transform: scale(1); /* Starter i normal størrelse */
+  transform-origin: center;
 }
 
+/* SYNKRONISERT: Nå zoomer overlayet nøyaktig like mye som bildet! */
 .gallery-item:hover .image-overlay {
   opacity: 1;
+  transform: scale(1.05); 
 }
 
 .overlay-content {
