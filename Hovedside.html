@@ -71,8 +71,8 @@ html, body {
   z-index: 9999;
   box-sizing: border-box;
   
-  /* Helt usynlig bakgrunn når menyen er øverst */
-  background: transparent;
+  /* Mørk skygge/fade øverst som gjør menyen lettleselig */
+  background: linear-gradient(to bottom, rgba(9, 27, 30, 0.95) 0%, rgba(9, 27, 30, 0.6) 50%, rgba(9, 27, 30, 0) 100%);
   box-shadow: none;
   
   /* Myk overgang når bakgrunnen tones inn */
@@ -198,7 +198,7 @@ html, body {
 .hero-banner {
   position: relative;
   top: 0;                /* Tvinger banneret helt opp til piksel null */
-  margin-top: 0;         /* Eliminerer eventuelle dyttende marginer */
+  margin-top: 0;          /* Eliminerer eventuelle dyttende marginer */
   height: 85vh;          /* Bildet fyller toppen perfekt bak menyen */
   min-height: 600px;
   width: 100%;
@@ -865,8 +865,7 @@ html, body {
         width: 100%;
         padding: 0 20px;
         height: 60px;
-        background: none !important;
-        box-shadow: none !important;
+        /* Beholder gradient-faden her også slik at menyen er lesbar på mobil */
       }
 
       .nav-links {
