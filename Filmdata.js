@@ -109,7 +109,7 @@ const filmer = {
     tittel: "Wing It! - A Pet Project",
     rating: "6.9",
     bakgrunn: "https://static.wixstatic.com/media/d9ace9_c4277ef5983b479c839d1e8f3673d4cf~mv2.jpg",
-    banner: "https://static.wixstatic.com/media/d9ace9_191619e0d6f649328d28d27c21d1cd21~mv2.jpg", 
+    banner: "", 
     logo: "",
     trailer: "", // 🎥 NY 
     poster: "https://www.blendernation.com/wp-content/uploads/2023/09/4c0c5ec3c2380059942395be8570912c.jpg",
@@ -137,7 +137,7 @@ const filmer = {
     tittel: "Singularity",
     rating: "0.0",
     bakgrunn: "https://studio.blender.org/static/common/images/project-detail/singularity/singularity-story-concept-020_0030.0f6b6798532d.webp",
-    banner: "https://studio.blender.org/static/common/images/project-detail/singularity/singularity-story-concept-040_0010.161a5ac033be.webp", 
+    banner: "", 
     logo: "",
     trailer: "", // 🎥 NY 
     poster: "https://i.ytimg.com/vi/l5OZu-IrXpw/maxresdefault.jpg",
