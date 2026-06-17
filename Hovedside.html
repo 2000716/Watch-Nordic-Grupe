@@ -1032,7 +1032,7 @@ html, body {
       }
 
       /* ==========================================================================
-         SØMLØSE GALLERIER (Justert litt bort fra kanten)
+         FIKSET: GALLERIER & TOP 10 FLYTTET BORT FRA VENSTREKANTEN
          ========================================================================== */
       .gallery-section {
         margin-left: 0px !important;
@@ -1040,8 +1040,8 @@ html, body {
         margin-bottom: 22px;
       }
 
+      /* Både bildegalleriet og Top 10 starter nå 24px unna venstrekanten */
       .image-gallery, .top10-gallery {
-        /* Startavstand på 24px drar galleriet akkurat passe bort fra venstrekanten */
         padding: 4px 16px 12px 24px !important; 
         gap: 10px !important;
         scroll-snap-type: x mandatory !important;
@@ -1071,6 +1071,13 @@ html, body {
 
       .gallery-item:hover > img {
         transform: none !important;
+      }
+
+      /* ==========================================================================
+         FIKSET: FJERN NAVIGASJONSPILER PÅ MOBIL
+         ========================================================================== */
+      .prev-btn, .next-btn, .gallery-arrow, .nav-arrow {
+        display: none !important;
       }
 
       /* ==========================================================================
@@ -1131,7 +1138,7 @@ html, body {
       }
 
       /* ==========================================================================
-         DEN RIKTIGE MOBIL-FOOTEREN (Lagt tilbake på plass)
+         DEN RIKTIGE MOBIL-FOOTEREN
          ========================================================================== */
       .footer {
         padding: 40px 16px 30px;
