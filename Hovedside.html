@@ -913,7 +913,7 @@ html, body {
         margin-bottom: 8px;
       }
 
-      /* Toppmeny – Gjennomsiktig med glass-effekt (HBO Max-stil) */
+      /* Toppmeny – HELT GJENNOMSIKTIG (Ingen glass-stripe eller farge bak logoen) */
       .top-nav {
         position: fixed !important;
         top: 0;
@@ -921,17 +921,26 @@ html, body {
         width: 100%;
         padding: 0 16px;
         height: 60px;
-        background: linear-gradient(to bottom, rgba(9, 27, 30, 0.9) 0%, rgba(9, 27, 30, 0.3) 70%, rgba(9, 27, 30, 0) 100%) !important;
-        backdrop-filter: blur(4px);
+        background: transparent !important; /* Fjerner bakgrunnsfarge */
+        backdrop-filter: none !important;    /* Fjerner glass-effekten helt */
+        box-shadow: none !important;
+        border: none !important;
       }
 
       .nav-links {
         display: none;
       }
 
+      /* LOGO ER NÅ HELT LIK SOM PÅ PC */
       .watch-logo-text {
-        font-size: 20px;
-        letter-spacing: 1.5px;
+        font-size: inherit !important;
+        font-weight: inherit !important;
+        letter-spacing: inherit !important;
+        color: inherit !important;
+        background: inherit !important;
+        -webkit-background-clip: inherit !important;
+        -webkit-text-fill-color: inherit !important;
+        text-transform: inherit !important;
       }
 
       .nav-search {
@@ -1120,6 +1129,7 @@ html, body {
       .genre-gallery a .genre-label {
         font-size: 11px;
       }
+
     /* Footer mobil (Følger samme 16px sidemarginer) */
       .footer {
         padding: 40px 16px 30px;
