@@ -890,260 +890,265 @@ html, body {
         height: 34px;
       }
 /* ==========================================================================
-   9. NETFLIX & HBO MAX MOBIL-OPTIMALISERING (768px og nedover)
-   ========================================================================== */
-@media (max-width: 768px) {
-  body {
-    padding-top: 0px; /* Lar banneret flyte helt opp under en gjennomsiktig meny */
-  }
+       9. NETFLIX & HBO MAX MOBIL-OPTIMALISERING (768px og nedover)
+       ========================================================================== */
+    @media (max-width: 768px) {
+      body {
+        padding-top: 0px; /* Lar banneret flyte helt opp under menyen */
+      }
 
-  main {
-    padding-left: 0px !important;
-    padding-right: 0px !important;
-  }
+      main {
+        padding-left: 0px !important;
+        padding-right: 0px !important;
+        margin-left: 0px !important;
+        margin-right: 0px !important;
+      }
 
-  /* Tittel på gallerier – Flyttet til 32px for å matche den nye bildeavstanden */
-  .gallery-section h2 {
-    padding-left: 32px;
-    margin-left: 0px;
-    font-size: 16px;
-    font-weight: 700;
-    letter-spacing: 0.5px;
-    color: #fff; 
-    margin-bottom: 8px;
-  }
+      /* Toppmeny – Helt gjennomsiktig uten filter */
+      .top-nav {
+        position: fixed !important;
+        top: 0;
+        left: 0;
+        width: 100%;
+        padding: 0 32px !important; /* Matcher linjeføringen på 32px */
+        height: 60px;
+        background: transparent !important; 
+        backdrop-filter: none !important;    
+        box-shadow: none !important;
+        border: none !important;
+      }
 
-  /* Toppmeny – HELT GJENNOMSIKTIG (Ingen glass-stripe eller farge bak logoen) */
-  .top-nav {
-    position: fixed !important;
-    top: 0;
-    left: 0;
-    width: 100%;
-    padding: 0 32px; /* Matcher galleriets nye startlinje */
-    height: 60px;
-    background: transparent !important; 
-    backdrop-filter: none !important;    
-    box-shadow: none !important;
-    border: none !important;
-  }
+      .nav-links {
+        display: none !important;
+      }
 
-  .nav-links {
-    display: none;
-  }
+      /* FIKSET WATCH-LOGO FOR MOBIL */
+      .watch-logo-text {
+        font-size: 20px !important; 
+        font-weight: 800 !important;
+        letter-spacing: 0.5px !important;
+        color: #fff !important; 
+        text-transform: uppercase !important;
+        display: inline-block !important;
+      }
 
-  /* FIKSET WATCH-LOGO FOR MOBIL */
-  .watch-logo-text {
-    font-size: 20px !important; /* Definert eksplisitt for mobil i stedet for inherit */
-    font-weight: 800 !important;
-    letter-spacing: 0.5px !important;
-    color: #fff !important; 
-    text-transform: uppercase !important;
-    display: inline-block !important;
-  }
+      .nav-search {
+        font-size: 18px;
+      }
 
-  .nav-search {
-    font-size: 18px;
-  }
+      .profilmeny img {
+        width: 34px;
+        height: 34px;
+      }
 
-  .profilmeny img {
-    width: 34px;
-    height: 34px;
-  }
+      /* HERO BANNER */
+      .hero-banner {
+        height: 55vh !important; 
+        min-height: 360px !important;
+        max-height: 500px !important;
+        margin-bottom: 20px !important;
+      }
 
-  /* ==========================================================================
-     HERO BANNER (Netflix-oppsett)
-     ========================================================================== */
-  .hero-banner {
-    height: 55vh !important; 
-    min-height: 360px !important;
-    max-height: 500px !important;
-    margin-bottom: 20px !important;
-  }
+      .hero-banner::after {
+        background: linear-gradient(
+          to bottom,
+          rgba(9, 27, 30, 0) 40%,
+          rgba(9, 27, 30, 0.4) 60%,
+          rgba(9, 27, 30, 0.8) 80%,
+          #091B1E 100%
+        ) !important;
+      }
 
-  /* Dyp og sømløs fade i bunnen av banneret */
-  .hero-banner::after {
-    background: linear-gradient(
-      to bottom,
-      rgba(9, 27, 30, 0) 40%,
-      rgba(9, 27, 30, 0.4) 60%,
-      rgba(9, 27, 30, 0.8) 80%,
-      #091B1E 100%
-    ) !important;
-  }
+      .banner-content {
+        bottom: 20px !important;
+        left: 32px !important; /* Starter perfekt på 32px-linjen */
+        max-width: calc(100% - 64px);
+        gap: 8px !important;
+      }
 
-  .banner-content {
-    bottom: 20px !important;
-    left: 32px !important; /* Justert inn til 32px for å flukte med galleriene */
-    max-width: calc(100% - 64px);
-    gap: 8px !important;
-  }
+      .film-logo {
+        width: 180px !important;
+        max-height: 75px !important;
+        object-fit: contain !important;
+        background: transparent !important;
+        border: none !important;
+        box-shadow: none !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        filter: drop-shadow(0px 2px 8px rgba(0,0,0,0.5));
+      }
 
-  /* FILMLOGO: Fullstendig renset for striper, skygger eller bakgrunner */
-  .film-logo {
-    width: 180px !important;
-    max-height: 75px !important;
-    object-fit: contain !important;
-    background: transparent !important;
-    border: none !important;
-    box-shadow: none !important;
-    padding: 0 !important;
-    margin: 0 !important;
-    filter: drop-shadow(0px 2px 8px rgba(0,0,0,0.5));
-  }
+      .banner-title {
+        font-size: 28px !important;
+        max-width: 100%;
+      }
 
-  .banner-title {
-    font-size: 28px !important;
-    max-width: 100%;
-  }
+      .banner-content p {
+        font-size: 12px !important;
+        line-height: 1.4;
+        color: #cccccc;
+        max-width: 100%;
+        -webkit-line-clamp: 2;
+      }
 
-  .banner-content p {
-    font-size: 12px !important;
-    line-height: 1.4;
-    color: #cccccc;
-    max-width: 100%;
-    -webkit-line-clamp: 2;
-  }
+      .banner-meta {
+        font-size: 11px !important;
+      }
 
-  .banner-meta {
-    font-size: 11px !important;
-  }
+      .banner-buttons {
+        gap: 10px !important;
+        margin-top: 4px;
+      }
 
-  /* Knapper sentrert eller strømlinjeformet */
-  .banner-buttons {
-    gap: 10px !important;
-    margin-top: 4px;
-  }
+      .watch-button {
+        font-size: 13px !important;
+        padding: 8px 22px !important;
+        font-weight: 700;
+        border-radius: 4px; 
+      }
 
-  .watch-button {
-    font-size: 13px !important;
-    padding: 8px 22px !important;
-    font-weight: 700;
-    border-radius: 4px; 
-  }
+      .add-button {
+        width: 36px !important;
+        height: 36px !important;
+        font-size: 14px !important;
+        border-radius: 4px;
+        background: rgba(255, 255, 255, 0.2);
+      }
 
-  .add-button {
-    width: 36px !important;
-    height: 36px !important;
-    font-size: 14px !important;
-    border-radius: 4px;
-    background: rgba(255, 255, 255, 0.2);
-  }
+      /* SØMLØSE GALLERIER (Perfekt på linje med tittel og logo) */
+      .gallery-section {
+        margin-left: 32px !important; /* Hele seksjonen skyves til 32px-linjen */
+        margin-right: 0px !important;
+        margin-bottom: 22px;
+      }
 
-/* ==========================================================================
-     SØMLØSE GALLERIER (Nå perfekt på linje med tittel og logo)
-     ========================================================================== */
-  .gallery-section {
-    margin-left: 32px !important;  /* Denne sørger for at BÅDE tittel og galleri starter her */
-    margin-right: 0px !important;
-    margin-bottom: 22px;
-  }
+      .gallery-section h2 {
+        padding-left: 0px !important; 
+        margin-left: 0px !important;
+        font-size: 16px;
+        font-weight: 700;
+        letter-spacing: 0.5px;
+        color: #fff; 
+        margin-bottom: 8px;
+      }
 
-  .gallery-section h2 {
-    padding-left: 0px !important; /* Nullstilt fordi .gallery-section fikser linjen */
-    margin-left: 0px;
-    font-size: 16px;
-    font-weight: 700;
-    letter-spacing: 0.5px;
-    color: #fff; 
-    margin-bottom: 8px;
-  }
+      .image-gallery, .top10-gallery {
+        padding: 4px 16px 12px 0px !important; /* 0px i venstre padding gjør at første kort starter presist på 32px */
+        gap: 10px !important;
+        scroll-snap-type: x mandatory !important;
+        -webkit-overflow-scrolling: touch !important;
+      }
 
-  .image-gallery, .top10-gallery {
-    /* Nullstilt venstre-padding slik at første bilde flukter 100% med teksten over */
-    padding: 4px 16px 12px 0px !important; 
-    gap: 10px !important;
-    scroll-snap-type: x mandatory !important;
-    -webkit-overflow-scrolling: touch !important;
-  }
+      /* SKJULER NAVIGASJONSPILER PÅ MOBIL */
+      .scroll-button, .gallery-arrow, .prev-arrow, .next-arrow, .prev, .next, .fade-left, .fade-right {
+        display: none !important;
+        opacity: 0 !important;
+        pointer-events: none !important;
+      }
 
-  /* TOP 10 GALLERI (Gjør det samme her) */
-  .top10-gallery {
-    gap: 16px !important;
-    padding: 4px 16px 12px 0px !important; /* Sørger for at nr. 1 matcher linjen */
-  }
-  /* ==========================================================================
-     TOP 10 GALLERI (Stående plakater)
-     ========================================================================== */
-  .top10-gallery {
-    gap: 16px !important;
-  }
-  
-  .top10-item img {
-    width: 110px !important; 
-    height: auto !important;
-    aspect-ratio: 2 / 3 !important; 
-    object-fit: cover !important;
-    border-radius: 4px !important;
-  }
+      .image-gallery a, .top10-item {
+        scroll-snap-align: start !important;
+        transform: none !important;
+        transition: none !important;
+      }
 
-  .top10-number {
-    font-size: 52px !important;
-    left: -10px !important;
-    bottom: -6px !important;
-    -webkit-text-stroke: 2px rgba(0, 255, 204, 0.8) !important;
-    color: transparent !important;
-  }
+      .image-gallery a img {
+        width: 200px !important;  
+        height: auto !important;
+        aspect-ratio: 16 / 9 !important; 
+        object-fit: cover !important; 
+        border-radius: 4px !important;
+        transform: none !important;
+      }
 
-  /* Kids banner mobil (HBO Max-stil) */
-  .kids-banner {
-    height: 120px !important;
-    margin: 20px 32px !important; /* Flukter med de nye galleriavstandene */
-    width: calc(100% - 64px) !important;
-    border-radius: 6px;
-  }
-  
-  .kids-overlay {
-    padding-left: 20px !important;
-  }
-  
-  .kids-overlay h2 {
-    font-size: 18px !important;
-    margin-bottom: 2px;
-  }
-  
-  .kids-overlay p {
-    font-size: 12px !important;
-  }
+      .image-overlay {
+        display: none !important;  
+      }
 
-  /* Sjanger-knapper mobil */
-  .genre-gallery {
-    padding: 0 32px !important; /* Justert til 32px */
-    gap: 10px !important;
-  }
-  
-  .genre-gallery a .icon-circle {
-    width: 70px;
-    height: 70px;
-    font-size: 24px;
-  }
+      .gallery-item:hover > img {
+        transform: none !important;
+      }
 
-  .genre-gallery a .genre-label {
-    font-size: 11px;
-  }
+      /* TOP 10 GALLERI */
+      .top10-gallery {
+        gap: 16px !important;
+        padding: 4px 16px 12px 0px !important;
+      }
+      
+      .top10-item img {
+        width: 110px !important; 
+        height: auto !important;
+        aspect-ratio: 2 / 3 !important; 
+        object-fit: cover !important;
+        border-radius: 4px !important;
+      }
 
-  /* ==========================================================================
-     DEN RIKTIGE MOBIL-FOOTEREN
-     ========================================================================== */
-  .footer {
-    padding: 40px 32px 30px; /* Justert venstre/høyre til 32px for symmetri */
-    margin-top: 60px;
-  }
+      .top10-number {
+        font-size: 52px !important;
+        left: -10px !important;
+        bottom: -6px !important;
+        -webkit-text-stroke: 2px rgba(0, 255, 204, 0.8) !important;
+        color: transparent !important;
+      }
 
-  .footer-links {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 16px 16px;
-    margin-bottom: 30px;
-  }
+      /* Kids banner mobil */
+      .kids-banner {
+        height: 120px !important;
+        margin: 20px 32px !important; 
+        width: calc(100% - 64px) !important;
+        border-radius: 6px;
+      }
+      
+      .kids-overlay {
+        padding-left: 20px !important;
+      }
+      
+      .kids-overlay h2 {
+        font-size: 18px !important;
+        margin-bottom: 2px;
+      }
+      
+      .kids-overlay p {
+        font-size: 12px !important;
+      }
 
-  .footer-links a {
-    font-size: 13px;
-  }
+      /* Sjanger-knapper mobil */
+      .genre-gallery {
+        padding: 0 32px !important; 
+        gap: 10px !important;
+      }
+      
+      .genre-gallery a .icon-circle {
+        width: 70px;
+        height: 70px;
+        font-size: 24px;
+      }
 
-  .footer-socials {
-    gap: 18px;
-    margin-bottom: 25px;
-  }
-}
+      .genre-gallery a .genre-label {
+        font-size: 11px;
+      }
+
+      /* MOBIL-FOOTER */
+      .footer {
+        padding: 40px 32px 30px !important; 
+        margin-top: 60px;
+      }
+
+      .footer-links {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 16px 16px;
+        margin-bottom: 30px;
+      }
+
+      .footer-links a {
+        font-size: 13px;
+      }
+
+      .footer-socials {
+        gap: 18px;
+        margin-bottom: 25px;
+      }
+    }
   </style>
 
 <header class="top-nav">
