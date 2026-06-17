@@ -851,20 +851,29 @@ html, body {
     margin-right: 0px !important;
   }
 
-  /* Toppmeny – Justert med Flexbox for å dytte elementer til hver sin kant */
+  /* Toppmeny – Justert med mørk feid og lagt litt nærmere kantene (20px) */
   .top-nav {
     position: fixed !important;
     top: 0;
     left: 0;
     width: 100%;
-    padding: 0 32px !important; /* Beholder 32px linjeføring fra skjermkantene */
+    padding: 0 20px !important; /* Justert til 20px for en ren, men ikke for tett plassering */
     height: 60px;
-    background: transparent !important; 
+    
+    /* En myk, mørk feid fra toppen og ned (basert på sidens mørke farge) */
+    background: linear-gradient(
+      to bottom, 
+      rgba(9, 27, 30, 0.95) 0%, 
+      rgba(9, 27, 30, 0.5) 60%, 
+      rgba(9, 27, 30, 0) 100%
+    ) !important; 
+    
     backdrop-filter: none !important;    
     box-shadow: none !important;
     border: none !important;
+    z-index: 9999; /* Sikrer at menyen alltid ligger øverst over banneret */
     
-    /* NYTT: Sørger for at logo tvinges til venstre og søk/profil helt til høyre */
+    /* Sørger for at logo tvinges til venstre og søk/profil helt til høyre */
     display: flex !important;
     justify-content: space-between !important;
     align-items: center !important;
