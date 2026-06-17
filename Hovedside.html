@@ -45,217 +45,161 @@
       padding: 0 20px;
     }
 
-    /* ==========================================================================
-       2. TOPPMENY / NAVIGASJON (PC)
-       ========================================================================== */
-    .top-nav {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 70px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 40px;
-      z-index: 9999;
-      background: transparent;
-      transition: background 0.4s ease, box-shadow 0.4s ease;
-    }
+/* ==========================================================================
+   OPPDATERT TOPPMENY (PC & MOBIL)
+   ========================================================================== */
+.top-nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 70px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 40px;
+  z-index: 9999;
+  
+  /* Helt usynlig bakgrunn når menyen er øverst */
+  background: transparent;
+  box-shadow: none;
+  
+  /* Myk overgang når bakgrunnen tones inn */
+  transition: background 0.4s ease, box-shadow 0.4s ease;
+}
 
-    .top-nav::before {
-      content: "";
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: linear-gradient(to bottom, rgba(9, 27, 30, 0.9), rgba(9, 27, 30, 0));
-      z-index: -1;
-      transition: opacity 0.4s ease, background 0.4s ease;
-      opacity: 1;
-    }
+/* Fjernet den gamle gradient-faden (::before) som lå i toppen tidligere */
+.top-nav::before {
+  display: none;
+}
 
-    /* Scroll-effekter via JS-klasser */
-    .top-nav.scrolled {
-      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.6);
-    }
+/* AKTIV SCROLL-BAKGRUNN: Denne slår inn når du blar nedover siden */
+.top-nav.scrolled {
+  background: rgba(9, 27, 30, 0.95);
+  backdrop-filter: blur(10px); /* Gir en pen glass-effekt over video/bilder bak */
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+}
 
-    .top-nav.scrolled::before {
-      background: rgba(9, 27, 30, 0.95);
-      opacity: 1;
-    }
+/* Venstre side av meny */
+.nav-left {
+  display: flex;
+  align-items: center;
+  gap: 40px;
+}
 
-    /* Venstre side av meny */
-    .nav-left {
-      display: flex;
-      align-items: center;
-      gap: 40px;
-      justify-self: start;
-    }
+/* WATCH LOGO - Helt renset for glød, skygge og animasjon */
+.watch-logo-text {
+  font-family: 'Montserrat Alternates', sans-serif;
+  font-size: 28px;
+  font-weight: 900;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: #00FFCC;
+  display: flex;
+  align-items: center;
+  height: 100%;
+  cursor: pointer;
+  user-select: none;
+  
+  /* Ingen skygger eller hover-effekter */
+  text-shadow: none !important;
+  transform: none !important;
+  transition: none !important;
+}
 
-    .top-nav .watch-logo {
-      width: 130px;
-      height: auto;
-      cursor: pointer;
-    }
+/* Sørger for at den forblir helt uendret ved hover */
+.watch-logo-text:hover {
+  color: #00FFCC !important;
+  transform: none !important;
+  text-shadow: none !important;
+}
 
-    /* Midtstilt meny */
-    .nav-links {
-      position: absolute;
-      left: 50%;
-      transform: translateX(-50%);
-      display: flex;
-      gap: 30px;
-    }
+/* Midtstilt meny */
+.nav-links {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 30px;
+}
 
-    .nav-links a {
-      color: #bfbfbf;
-      text-decoration: none;
-      font-size: 15px;
-      font-weight: 500;
-      transition: color 0.3s ease;
-    }
+.nav-links a {
+  color: #bfbfbf;
+  text-decoration: none;
+  font-size: 15px;
+  font-weight: 500;
+  transition: color 0.3s ease;
+}
 
-    .nav-links a i {
-      margin-right: 6px;
-      font-size: 16px;
-    }
+.nav-links a i {
+  margin-right: 6px;
+  font-size: 16px;
+}
 
-    .nav-links a:hover {
-      color: #ffffff;
-    }
+.nav-links a:hover {
+  color: #ffffff;
+}
 
-    .nav-links a.active {
-      color: #00FFCC;
-      font-weight: 700;
-    }
+.nav-links a.active {
+  color: #00FFCC;
+  font-weight: 700;
+}
 
-    /* Høyre side av meny */
-    .nav-right {
-      display: flex;
-      align-items: center;
-      gap: 15px;
-      justify-self: end;
-    }
+/* Høyre side (Søk og Profil) */
+.nav-right {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
 
-    .nav-search {
-      color: #bfbfbf;
-      font-size: 18px;
-      text-decoration: none;
-      transition: color 0.3s ease;
-    }
+.nav-search {
+  color: #bfbfbf;
+  font-size: 18px;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
 
-    .nav-search:hover {
-      color: #00FFCC;
-    }
+.nav-search:hover {
+  color: #00FFCC;
+}
 
-    /* Logo tekst-variant */
-    .watch-logo-text {
-      font-family: 'Montserrat Alternates', sans-serif;
-      font-size: 28px;
-      font-weight: 900;
-      letter-spacing: 3px;
-      text-transform: uppercase;
-      color: #00FFCC;
-      display: flex;
-      align-items: center;
-      height: 100%;
-      cursor: pointer;
-      user-select: none;
-      text-shadow: 0 0 6px rgba(0, 255, 204, 0.6), 0 0 18px rgba(0, 255, 204, 0.35);
-      transition: transform 0.25s ease, text-shadow 0.25s ease;
-    }
+.profilmeny {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  cursor: pointer;
+}
 
-    .watch-logo-text:hover {
-      transform: scale(1.05);
-      text-shadow: 0 0 10px rgba(0, 255, 204, 0.9), 0 0 26px rgba(0, 255, 204, 0.55);
-    }
+.profilmeny img, #menyProfilbilde {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #ffffff;
+  vertical-align: middle;
+  transform: translateY(1px);
+}
 
-    /* Profilbilde i meny */
-    .profilmeny {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      text-decoration: none;
-      cursor: pointer;
-    }
+/* ==========================================================================
+   RESPONSIV MENY FOR MOBIL
+   ========================================================================== */
+@media (max-width: 768px) {
+  .top-nav {
+    height: 60px;
+    padding: 0 20px;
+    /* Beholder transparent her også til du scroller */
+  }
 
-    .profilmeny img, #menyProfilbilde {
-      width: 42px;
-      height: 42px;
-      border-radius: 50%;
-      object-fit: cover;
-      border: 2px solid #ffffff;
-      vertical-align: middle;
-      transform: translateY(1px);
-    }
+  .nav-links {
+    display: none; /* Skjuler tekstlenker på mobil */
+  }
 
-    #profilNavn {
-      font-size: 14px;
-      color: white;
-      font-weight: 500;
-      white-space: nowrap;
-    }
-
-    /* Gammel/Alternativ vertikal nav (beholdt hvis i bruk) */
-    .vertical-nav {
-      width: 70px;
-      height: 100vh;
-      background-color: transparent;
-      position: fixed;
-      top: 0;
-      left: 0;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      z-index: 100;
-    }
-
-    .nav-icons-wrapper {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-    }
-
-    .nav-icon {
-      color: white;
-      font-size: 22px;
-      padding: 16px 0;
-      text-decoration: none;
-      text-align: center;
-      width: 100%;
-      transition: color 0.3s ease;
-      cursor: pointer;
-      background: none;
-      border: none;
-    }
-
-    .nav-icon:hover, .nav-icon.active {
-      color: white;
-    }
-
-    /* Gammel PC-header reset */
-    .top-header {
-      display: flex;
-      align-items: center;
-      width: 100%;
-      margin-bottom: 20px;
-    }
-
-    .top-header .watch-logo, .top-header img.watch-logo {
-      margin-left: auto;
-      width: 200px;
-    }
-
-    .top-header .header-profil {
-      display: none;
-    }
-
-
+  .watch-logo-text {
+    font-size: 22px;
+    letter-spacing: 2px;
+  }
+}
    /* ==========================================================================
    OPPDATERT HERO BANNER (PC)
    ========================================================================== */
