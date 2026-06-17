@@ -402,186 +402,188 @@ html, body {
     font-size: 16px !important;
   }
 }
-    /* ==========================================================================
-       4. GALLERIER & SEKSJONER (FILMER / SERIER)
-       ========================================================================== */
-    .gallery-section {
-      margin-bottom: 20px;
-      margin-left: 30px;
-      margin-right: 30px;
-      position: relative;
-      z-index: 2;
-    }
+/* ==========================================================================
+   4. GALLERIER & SEKSJONER (FILMER / SERIER)
+   ========================================================================== */
+.gallery-section {
+  margin-bottom: 20px;
+  margin-left: 30px;
+  margin-right: 30px;
+  position: relative;
+  z-index: 2;
+}
 
-    .gallery-section h2 {
-      font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
-      font-size: 17px;
-      font-weight: 500;
-      letter-spacing: 0.3px;
-      color: #00FFCC;
-      margin-bottom: 14px;
-      margin-left: 40px;
-      text-transform: none;
-      padding-left: 10px;
-    }
+.gallery-section h2 {
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+  font-size: 17px;
+  font-weight: 500;
+  letter-spacing: 0.3px;
+  color: #00FFCC;
+  margin-bottom: 14px;
+  margin-left: 40px;
+  text-transform: none;
+  padding-left: 10px;
+}
 
-    .gallery-wrapper {
-      position: relative;
-      display: flex;
-      align-items: center;
-      padding-left: 0;
-      padding-right: 0;
-    }
+.gallery-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  padding-left: 0;
+  padding-right: 0;
+}
 
-    .image-gallery {
-      flex: 1;
-      display: flex;
-      overflow-x: auto;
-      gap: 16px;
-      padding: 10px 16px;
-      scroll-behavior: smooth;
-      -ms-overflow-style: none;
-    }
+.image-gallery {
+  flex: 1;
+  display: flex;
+  overflow-x: auto;
+  gap: 16px;
+  padding: 10px 16px;
+  scroll-behavior: smooth;
+  -ms-overflow-style: none;
+}
 
-    .image-gallery::-webkit-scrollbar {
-      display: none;
-    }
+.image-gallery::-webkit-scrollbar {
+  display: none;
+}
 
-    /* Galleri-elementer (Standard) */
-    .image-gallery a {
-      display: inline-block;
-      position: relative;
-      border-radius: 5px;
-      background: transparent;
-      overflow: visible;
-      border: 2px solid transparent;
-      transition: border 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
-    }
+/* Galleri-elementer (Standard) */
+.image-gallery a {
+  display: inline-block;
+  position: relative;
+  border-radius: 5px;
+  background: transparent;
+  overflow: hidden; /* CRITICAL: Klipper faden og bildet så de ikke rømmer utfor hjørnene */
+  border: 2px solid transparent;
+  transition: border 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
+  z-index: 2;
+}
 
-    .image-gallery a img {
-      width: 330px;
-      aspect-ratio: 2.2 / 1;
-      height: 175px;
-      object-fit: cover;
-      border-radius: 5px;
-      display: block;
-      transition: transform 0.3s ease;
-    }
+/* Hele elementet zoomer synkronisert når du hovrer */
+.image-gallery a:hover {
+  transform: scale(1.05);
+  z-index: 10; /* Løfter det aktive kortet over nabobildene under zoom */
+}
 
-    .image-gallery a:hover img {
-      transform: scale(1.05);
-    }
+.image-gallery a img {
+  width: 330px;
+  aspect-ratio: 2.2 / 1;
+  height: 175px;
+  object-fit: cover;
+  border-radius: 5px;
+  display: block;
+  /* Fjernet transform herfra så den ikke animerer dobbelt */
+}
 
-    /* Galleri med Fremdriftslinje */
-    .image-with-progress {
-      position: relative;
-      width: 220px;
-      height: 124px;
-      border-radius: 8px;
-      overflow: hidden;
-    }
+/* Galleri med Fremdriftslinje */
+.image-with-progress {
+  position: relative;
+  width: 220px;
+  height: 124px;
+  border-radius: 8px;
+  overflow: hidden;
+}
 
-    .image-with-progress img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
+.image-with-progress img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
 
-    .progress-bar {
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      height: 4px;
-      width: 100%;
-      background-color: rgba(255, 255, 255, 0.2);
-    }
+.progress-bar {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 4px;
+  width: 100%;
+  background-color: rgba(255, 255, 255, 0.2);
+}
 
-    .progress-bar::after {
-      content: '';
-      position: absolute;
-      height: 100%;
-      left: 0;
-      top: 0;
-      background-color: #00FFCC;
-      width: var(--progress, 0%);
-      transition: width 0.3s ease;
-    }
+.progress-bar::after {
+  content: '';
+  position: absolute;
+  height: 100%;
+  left: 0;
+  top: 0;
+  background-color: #00FFCC;
+  width: var(--progress, 0%);
+  transition: width 0.3s ease;
+}
 
-    /* Svart/Mørk fade på sidene av gallerier */
-    .fade-left, .fade-right {
-      position: absolute;
-      top: 0;
-      bottom: 0;
-      width: 70px;
-      z-index: 1;
-      pointer-events: none;
-      opacity: 0;
-      transition: opacity 0.3s ease;
-    }
+/* Svart/Mørk fade på sidene av gallerier */
+.fade-left, .fade-right {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 70px;
+  z-index: 1;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
 
-    .fade-left {
-      left: 0;
-      background: linear-gradient(to right, #091B1E, rgba(9, 27, 30, 0));
-    }
+.fade-left {
+  left: 0;
+  background: linear-gradient(to right, #091B1E, rgba(9, 27, 30, 0));
+}
 
-    .fade-right {
-      right: 0;
-      background: linear-gradient(to left, #091B1E, rgba(9, 27, 30, 0));
-    }
+.fade-right {
+  right: 0;
+  background: linear-gradient(to left, #091B1E, rgba(9, 27, 30, 0));
+}
 
-    .fade-hidden {
-      display: none !important;
-    }
+.fade-hidden {
+  display: none !important;
+}
 
-    /* Scroll piler for gallerier */
-    .scroll-button {
-      position: absolute;
-      top: 50%;
-      transform: translateY(-50%);
-      width: 44px;
-      height: 44px;
-      border-radius: 50%;
-      background: rgba(9, 27, 30, 0.75);
-      border: 1px solid rgba(255, 255, 255, 0.25);
-      color: white;
-      font-size: 22px;
-      cursor: pointer;
-      z-index: 3;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.25s ease, background 0.25s ease, transform 0.25s ease;
-      backdrop-filter: blur(6px);
-      user-select: none;
-    }
+/* Scroll piler for gallerier */
+.scroll-button {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: rgba(9, 27, 30, 0.75);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  color: white;
+  font-size: 22px;
+  cursor: pointer;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease, background 0.25s ease, transform 0.25s ease;
+  backdrop-filter: blur(6px);
+  user-select: none;
+}
 
-    .scroll-button.left { left: 10px; }
-    .scroll-button.right { right: 10px; }
+.scroll-button.left { left: 10px; }
+.scroll-button.right { right: 10px; }
 
-    .scroll-button.hidden {
-      display: none !important;
-      opacity: 0 !important;
-      pointer-events: none !important;
-    }
+.scroll-button.hidden {
+  display: none !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
 
-    .scroll-button:hover {
-      background: rgba(0, 255, 204, 0.85);
-      color: #000;
-      transform: translateY(-50%) scale(1.08);
-    }
+.scroll-button:hover {
+  background: rgba(0, 255, 204, 0.85);
+  color: #000;
+  transform: translateY(-50%) scale(1.08);
+}
 
-    /* Vis piler ved hover på container */
-    .gallery-wrapper:hover .scroll-button:not(.hidden) {
-      opacity: 1;
-      pointer-events: auto;
-    }
+.gallery-wrapper:hover .scroll-button:not(.hidden) {
+  opacity: 1;
+  pointer-events: auto;
+}
 
-    .gallery-wrapper:hover .scroll-button.hidden {
-      opacity: 0;
-      pointer-events: none;
-    }
+.gallery-wrapper:hover .scroll-button.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
 
 
     /* ==========================================================================
@@ -647,19 +649,20 @@ html, body {
   position: relative !important;
   display: inline-block;
   overflow: hidden;
-  border-radius: 5px; /* Matcher avrundingen på bildene dine */
+  border-radius: 5px;
+  transition: transform 0.3s ease; /* Lagt til transform-overgang på selve kortet */
+}
+
+/* Sørger for at hele elementet (bilde + fade) zoomer helt likt */
+.gallery-item:hover {
+  transform: scale(1.05);
 }
 
 .gallery-item > img {
   display: block;
   width: 100%;
   height: auto;
-  transition: transform 0.3s ease;
-}
-
-/* Gjør at bildet fakstisk zoomer inn, akkurat som i galleri-stilen din */
-.gallery-item:hover > img {
-  transform: scale(1.05);
+  /* Fjernet scale herfra for å unngå ujevn vekst */
 }
 
 .image-overlay {
@@ -669,21 +672,21 @@ html, body {
   opacity: 0;
   transition: opacity 0.35s ease;
   
-  /* Kraftig og dyp svart fade i bunnen som gjør teksten supertydelig */
+  /* Perfekt mørk fade som ligger som støpt i bunnen */
   background: linear-gradient(
     to top,
-    rgba(0, 0, 0, 0.95) 0%,   /* Nesten helt kullsvart nederst */
-    rgba(0, 0, 0, 0.7) 40%,    /* God og dyp skygge over tekstområdet */
-    rgba(0, 0, 0, 0) 80%       /* Toner helt ut mot toppen (fikset skrivefeil her) */
+    rgba(0, 0, 0, 0.95) 0%,   
+    rgba(0, 0, 0, 0.7) 40%,    
+    rgba(0, 0, 0, 0) 80%       
   );
   
   border-radius: inherit;
   display: flex;
   align-items: flex-end;
   z-index: 2;
+  /* Fjernet transform/scale herfra så den følger forelderen perfekt */
 }
 
-/* Viser den mørke faden og teksten ved hover */
 .gallery-item:hover .image-overlay {
   opacity: 1;
 }
@@ -699,12 +702,12 @@ html, body {
   font-weight: 700;
   color: #fff;
   margin-bottom: 4px;
-  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.6); /* Ekstra tekstbeskyttelse */
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.6);
 }
 
 .overlay-meta {
   font-size: 13px;
-  color: #00FFCC; /* Endret til den fine cyan-fargen din så den matcher resten av Watch Nordic */
+  color: #00FFCC;
   font-weight: 500;
 }
 
