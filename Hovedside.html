@@ -875,16 +875,16 @@ html, body {
         padding-top: 60px;
       }
 
-      /* Hovedskallet har minimal margin for å gi maksimal plass til galleriene */
+      /* Balansert avstand på sidene – ikke for langt inn, ikke helt ut i kanten */
       main {
-        padding-left: 0px;
-        padding-right: 0px;
+        padding-left: 16px;
+        padding-right: 16px;
       }
 
-      /* Overskriftene på galleriene får litt padding så de ikke treffer kanten */
+      /* Sørger for at overskriftene flukter perfekt med resten av innholdet */
       .gallery-section h2 {
-        padding-left: 14px;
-        margin-left: 0;
+        padding-left: 0px;
+        margin-left: 0px;
         font-size: 17px;
       }
 
@@ -966,7 +966,7 @@ html, body {
       }
 
       /* ==========================================================================
-         MAKSIMAL UTNYTTELSE AV PLASS I GALLERIER (Uten metadata)
+         BALANSERTE MOBIL-GALLERIER (Uten metadata)
          ========================================================================== */
       .gallery-section {
         margin-left: 0px !important;
@@ -975,8 +975,8 @@ html, body {
       }
 
       .image-gallery, .top10-gallery {
-        padding: 4px 14px 10px 14px !important; /* Lar bildene flyte helt ut til kanten under scroll */
-        gap: 10px !important;
+        padding: 4px 0px 10px 0px !important; /* Flukter perfekt med sidemarginen til main */
+        gap: 12px !important;
         scroll-snap-type: x mandatory !important;
         -webkit-overflow-scrolling: touch !important;
       }
@@ -987,19 +987,18 @@ html, body {
         transition: none !important;
       }
 
-      /* STREKKER BILDENE: Større og mer dominerende filmkort på mobil */
+      /* Bredden på filmkortene utnytter den tilgjengelige plassen optimalt */
       .image-gallery a img {
-        width: 270px !important;  /* Økt betydelig for å fylle mer av skjermbredden */
-        height: 128px !important; /* Justert høyde for å beholde proporsjonene */
+        width: 260px !important;  
+        height: 124px !important; 
         transform: none !important;
       }
 
       /* SKJULER METADATA/OVERLAY PÅ MOBIL */
       .image-overlay {
-        display: none !important; /* Helt fjernet på mobil */
+        display: none !important; 
       }
 
-      /* Sørger for at ingenting zoomer eller endrer seg ved berøring */
       .gallery-item:hover > img {
         transform: none !important;
       }
@@ -1012,13 +1011,13 @@ html, body {
       }
       
       .top10-item img {
-        width: 130px !important; /* Også strukket litt ekstra for bedre synlighet */
-        height: 195px !important;
+        width: 125px !important; 
+        height: 188px !important;
       }
 
       .top10-number {
-        font-size: 60px !important;
-        left: -10px !important;
+        font-size: 58px !important;
+        left: -8px !important;
         bottom: -6px !important;
         -webkit-text-stroke: 2px #00FFCC !important;
         color: transparent !important;
@@ -1027,8 +1026,8 @@ html, body {
       /* Kids banner mobil */
       .kids-banner {
         height: 130px !important;
-        margin: 20px 14px !important; /* Lagt til luft på siden så det matcher galleri-starten */
-        width: calc(100% - 28px);
+        margin: 20px 0px !important; 
+        width: 100%;
         border-radius: 10px;
       }
       .kids-overlay {
@@ -1054,7 +1053,7 @@ html, body {
         max-width: 90px;
       }
 
-      /* Footer mobil (Beholder alt innhold, tilpasser kun ytterkantene) */
+      /* Footer mobil (Beholder alt innhold, men flukter med main-padding) */
       .footer {
         padding: 40px 16px 30px;
         margin-top: 60px;
