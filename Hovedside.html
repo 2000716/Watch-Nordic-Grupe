@@ -1330,181 +1330,168 @@ if (navn) {
 // ==================== HERO-BANNER ==================== //
 
 function hentBannerInnhold() {
-let bannerInnhold = [];
+  let bannerInnhold = [];
 
-// Filmer
-Object.keys(filmer).forEach(key => {
-if (filmer[key].banner) {
-bannerInnhold.push({
-...filmer[key],
-key,
-type: "film"
-});
-}
-});
+  // Filmer
+  Object.keys(filmer).forEach(key => {
+    if (filmer[key].banner) {
+      bannerInnhold.push({
+        ...filmer[key],
+        key,
+        type: "film"
+      });
+    }
+  });
 
-// Serier
-if (typeof serier !== "undefined") {
-Object.keys(serier).forEach(key => {
-if (serier[key].banner) {
-bannerInnhold.push({
-...serier[key],
-key,
-type: "serie"
-});
-}
-});
+  // Serier
+  if (typeof serier !== "undefined") {
+    Object.keys(serier).forEach(key => {
+      if (serier[key].banner) {
+        bannerInnhold.push({
+          ...serier[key],
+          key,
+          type: "serie"
+        });
+      }
+    });
+  }
+
+  return bannerInnhold;
 }
 
-return bannerInnhold;
-}
+// ==================== BANNER LOGIKK ==================== //
 
 function hentDesktopBanner() {
-const innhold = hentBannerInnhold();
+  const innhold = hentBannerInnhold();
+  if (innhold.length === 0) return null;
 
-if (innhold.length === 0) return null;
-
-const index = new Date().getHours() % innhold.length;
-return innhold[index];
+  const index = new Date().getHours() % innhold.length;
+  return innhold[index];
 }
 
 function hentMobilBanner() {
-const innhold = hentBannerInnhold();
+  const innhold = hentBannerInnhold();
+  if (innhold.length === 0) return null;
 
-if (innhold.length === 0) return null;
-
-const index = (new Date().getHours() + 1) % innhold.length;
-return innhold[index];
+  // litt variasjon fra desktop
+  const index = (new Date().getHours() + 1) % innhold.length;
+  return innhold[index];
 }
+
+// ==================== OPPDATER BANNER ==================== //
 
 function oppdaterBanner() {
+  const erMobil = window.innerWidth <= 768;
 
-const erMobil = window.innerWidth <= 768;
+  const film = erMobil
+    ? hentMobilBanner()
+    : hentDesktopBanner();
 
-const film = erMobil
-? hentMobilBanner()
-: hentDesktopBanner();
+  if (!film) return;
 
-if (!film) return;
+  const bilde = document.getElementById("banner-bilde");
+  const video = document.getElementById("banner-video");
+  const logo = document.getElementById("banner-logo");
+  const beskrivelse = document.getElementById("banner-beskrivelse");
+  const metadata = document.getElementById("banner-metadata");
+  const seNa = document.getElementById("banner-se-na");
+  const addBtn = document.getElementById("banner-add");
 
-const bilde = document.getElementById("banner-bilde");
-const video = document.getElementById("banner-video");
-const logo = document.getElementById("banner-logo");
-const beskrivelse = document.getElementById("banner-beskrivelse");
-const metadata = document.getElementById("banner-metadata");
-const seNa = document.getElementById("banner-se-na");
-const addBtn = document.getElementById("banner-add");
+  // ==================== BANNER BILDE ==================== //
+  bilde.src = erMobil
+    ? (film.bannerMobil || film.banner)
+    : film.banner;
 
-// === Bannerbilde ===
-bilde.src = erMobil
-? (film.bannerMobil || film.banner)
-: film.banner;
-
-bilde.style.display = "block";
-
-// === Video ===
-if (film.trailer) {
-video.src = film.trailer;
-video.load();
-video.muted = true;
-} else {
-video.removeAttribute("src");
-}
-
-video.style.display = "none";
-
-// === Logo eller tittel ===
-let titleElement = document.getElementById("banner-title");
-
-if (!titleElement) {
-titleElement = document.createElement("h1");
-titleElement.id = "banner-title";
-titleElement.className = "banner-title";
-logo.parentNode.insertBefore(titleElement, logo.nextSibling);
-}
-
-if (film.logo) {
-logo.src = film.logo;
-logo.style.display = "block";
-titleElement.style.display = "none";
-} else {
-logo.style.display = "none";
-titleElement.textContent = film.tittel || "";
-titleElement.style.display = "block";
-}
-
-// === Beskrivelse ===
-beskrivelse.textContent = film.beskrivelse || "";
-beskrivelse.style.display = "block";
-
-// === Metadata ===
-metadata.textContent = film.metadata
-? film.metadata.join(" • ")
-: "";
-
-metadata.style.display = "block";
-
-// === Se nå ===
-seNa.innerHTML = '<i class="fas fa-play"></i> Se nå';
-
-seNa.onclick = () => {
-window.location.href = `film.html?navn=${film.key}`;
-};
-
-// === Min liste ===
-const key = film.tittel.toLowerCase().replace(/\s+/g, '-');
-
-let liste = JSON.parse(localStorage.getItem("minListe")) || [];
-
-addBtn.innerHTML = liste.includes(key)
-? '<i class="fas fa-check"></i>'
-: '<i class="fas fa-plus"></i>';
-
-addBtn.onclick = () => {
-
-```
-let liste = JSON.parse(localStorage.getItem("minListe")) || [];
-
-if (liste.includes(key)) {
-
-  liste = liste.filter(item => item !== key);
-
-  addBtn.innerHTML = '<i class="fas fa-plus"></i>';
-
-} else {
-
-  liste.push(key);
-
-  addBtn.innerHTML = '<i class="fas fa-check"></i>';
-}
-
-localStorage.setItem("minListe", JSON.stringify(liste));
-```
-
-};
-
-// === Trailer etter 5 sekunder ===
-setTimeout(() => {
-
-```
-if (!film.trailer) return;
-
-bilde.style.display = "none";
-video.style.display = "block";
-
-video.currentTime = 0;
-
-video.play();
-
-video.onended = () => {
-  video.style.display = "none";
   bilde.style.display = "block";
-};
-```
 
-}, 5000);
+  // ==================== VIDEO ==================== //
+  if (film.trailer) {
+    video.src = film.trailer;
+    video.load();
+    video.muted = true;
+  } else {
+    video.removeAttribute("src");
+  }
+
+  video.style.display = "none";
+
+  // ==================== LOGO / TITTEL ==================== //
+  let titleElement = document.getElementById("banner-title");
+
+  if (!titleElement) {
+    titleElement = document.createElement("h1");
+    titleElement.id = "banner-title";
+    titleElement.className = "banner-title";
+    logo.parentNode.insertBefore(titleElement, logo.nextSibling);
+  }
+
+  if (film.logo) {
+    logo.src = film.logo;
+    logo.style.display = "block";
+    titleElement.style.display = "none";
+  } else {
+    logo.style.display = "none";
+    titleElement.textContent = film.tittel || "";
+    titleElement.style.display = "block";
+  }
+
+  // ==================== TEKST ==================== //
+  beskrivelse.textContent = film.beskrivelse || "";
+  metadata.textContent = film.metadata ? film.metadata.join(" • ") : "";
+
+  beskrivelse.style.display = "block";
+  metadata.style.display = "block";
+
+  // ==================== SE NÅ ==================== //
+  seNa.innerHTML = '<i class="fas fa-play"></i> Se nå';
+  seNa.onclick = () => {
+    window.location.href = `film.html?navn=${film.key}`;
+  };
+
+  // ==================== MIN LISTE ==================== //
+  const key = film.tittel.toLowerCase().replace(/\s+/g, '-');
+  let liste = JSON.parse(localStorage.getItem("minListe")) || [];
+
+  addBtn.innerHTML = liste.includes(key)
+    ? '<i class="fas fa-check"></i>'
+    : '<i class="fas fa-plus"></i>';
+
+  addBtn.onclick = () => {
+    let liste = JSON.parse(localStorage.getItem("minListe")) || [];
+
+    if (liste.includes(key)) {
+      liste = liste.filter(item => item !== key);
+    } else {
+      liste.push(key);
+    }
+
+    localStorage.setItem("minListe", JSON.stringify(liste));
+
+    addBtn.innerHTML = liste.includes(key)
+      ? '<i class="fas fa-check"></i>'
+      : '<i class="fas fa-plus"></i>';
+  };
+
+  // ==================== TRAILER (etter 5 sek) ==================== //
+  setTimeout(() => {
+    if (!film.trailer) return;
+
+    bilde.style.display = "none";
+    video.style.display = "block";
+
+    video.currentTime = 0;
+    video.play();
+
+    video.onended = () => {
+      video.style.display = "none";
+      bilde.style.display = "block";
+    };
+  }, 5000);
 }
 
+// ==================== RESIZE (oppdater banner ved skjermskifte) ==================== //
+window.addEventListener("resize", oppdaterBanner);
+  
   // === Legg til i min liste ===
   const key = film.tittel.toLowerCase().replace(/\s+/g, '-');
   let liste = JSON.parse(localStorage.getItem("minListe")) || [];
