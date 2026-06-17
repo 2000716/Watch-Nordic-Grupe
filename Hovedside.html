@@ -1029,53 +1029,38 @@ html, body {
     background: rgba(255, 255, 255, 0.2);
   }
 
-  /* ==========================================================================
-     SØMLØSE GALLERIER (Flyttet lenger inn fra kanten på venstre side)
+/* ==========================================================================
+     SØMLØSE GALLERIER (Nå perfekt på linje med tittel og logo)
      ========================================================================== */
   .gallery-section {
-    margin-left: 0px !important;
+    margin-left: 32px !important;  /* Denne sørger for at BÅDE tittel og galleri starter her */
     margin-right: 0px !important;
     margin-bottom: 22px;
   }
 
+  .gallery-section h2 {
+    padding-left: 0px !important; /* Nullstilt fordi .gallery-section fikser linjen */
+    margin-left: 0px;
+    font-size: 16px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    color: #fff; 
+    margin-bottom: 8px;
+  }
+
   .image-gallery, .top10-gallery {
-    /* Økt venstre-padding til 32px for å flytte innholdet vekk fra kanten */
-    padding: 4px 16px 12px 32px !important; 
+    /* Nullstilt venstre-padding slik at første bilde flukter 100% med teksten over */
+    padding: 4px 16px 12px 0px !important; 
     gap: 10px !important;
     scroll-snap-type: x mandatory !important;
     -webkit-overflow-scrolling: touch !important;
   }
 
-  /* SKJULER NAVIGASJONSPILER PÅ MOBIL (unødvendig ved touch/sveip) */
-  .gallery-arrow, .prev-arrow, .next-arrow, .prev, .next {
-    display: none !important;
+  /* TOP 10 GALLERI (Gjør det samme her) */
+  .top10-gallery {
+    gap: 16px !important;
+    padding: 4px 16px 12px 0px !important; /* Sørger for at nr. 1 matcher linjen */
   }
-
-  .image-gallery a, .top10-item {
-    scroll-snap-align: start !important;
-    transform: none !important;
-    transition: none !important;
-  }
-
-  /* FILM-KORT: Standard 16:9 widescreen format */
-  .image-gallery a img {
-    width: 200px !important;  
-    height: auto !important;
-    aspect-ratio: 16 / 9 !important; 
-    object-fit: cover !important; 
-    border-radius: 4px !important;
-    transform: none !important;
-  }
-
-  /* Skjuler alt av PC-metadata/hover på mobil */
-  .image-overlay {
-    display: none !important;  
-  }
-
-  .gallery-item:hover > img {
-    transform: none !important;
-  }
-
   /* ==========================================================================
      TOP 10 GALLERI (Stående plakater)
      ========================================================================== */
