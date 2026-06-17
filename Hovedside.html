@@ -402,244 +402,242 @@ html, body {
     font-size: 16px !important;
   }
 }
-/* ==========================================================================
-   4. GALLERIER & SEKSJONER (FILMER / SERIER)
-   ========================================================================== */
-.gallery-section {
-  margin-bottom: 20px;
-  margin-left: 30px;
-  margin-right: 30px;
-  position: relative;
-  z-index: 2;
-}
+  /* ==========================================================================
+       4. GALLERIER & SEKSJONER (FILMER / SERIER)
+       ========================================================================== */
+    .gallery-section {
+      margin-bottom: 20px;
+      margin-left: 30px;
+      margin-right: 30px;
+      position: relative;
+      z-index: 2;
+    }
 
-.gallery-section h2 {
-  font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
-  font-size: 17px;
-  font-weight: 500;
-  letter-spacing: 0.3px;
-  color: #00FFCC;
-  margin-bottom: 14px;
-  margin-left: 40px;
-  text-transform: none;
-  padding-left: 10px;
-}
+    .gallery-section h2 {
+      font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+      font-size: 17px;
+      font-weight: 500;
+      letter-spacing: 0.3px;
+      color: #00FFCC;
+      margin-bottom: 14px;
+      margin-left: 40px;
+      text-transform: none;
+      padding-left: 10px;
+    }
 
-.gallery-wrapper {
-  position: relative;
-  display: flex;
-  align-items: center;
-  padding-left: 0;
-  padding-right: 0;
-}
+    .gallery-wrapper {
+      position: relative;
+      display: flex;
+      align-items: center;
+      padding-left: 0;
+      padding-right: 0;
+    }
 
-.image-gallery {
-  flex: 1;
-  display: flex;
-  overflow-x: auto;
-  gap: 16px;
-  padding: 10px 16px;
-  scroll-behavior: smooth;
-  -ms-overflow-style: none;
-}
+    .image-gallery {
+      flex: 1;
+      display: flex;
+      overflow-x: auto;
+      gap: 16px;
+      padding: 10px 16px;
+      scroll-behavior: smooth;
+      -ms-overflow-style: none;
+    }
 
-.image-gallery::-webkit-scrollbar {
-  display: none;
-}
+    .image-gallery::-webkit-scrollbar {
+      display: none;
+    }
 
-/* Galleri-elementer (Standard) */
-.image-gallery a {
-  display: inline-block;
-  position: relative;
-  border-radius: 5px;
-  background: transparent;
-  overflow: hidden; /* CRITICAL: Klipper faden og bildet så de ikke rømmer utfor hjørnene */
-  border: 2px solid transparent;
-  transition: border 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
-  z-index: 2;
-}
+    /* Galleri-elementer (Standard) */
+    .image-gallery a {
+      display: inline-block;
+      position: relative;
+      border-radius: 5px;
+      background: transparent;
+      overflow: visible;
+      border: 2px solid transparent;
+      transition: border 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
+    }
 
-/* Hele elementet zoomer synkronisert når du hovrer */
-.image-gallery a:hover {
-  transform: scale(1.05);
-  z-index: 10; /* Løfter det aktive kortet over nabobildene under zoom */
-}
+    .image-gallery a img {
+      width: 330px;
+      aspect-ratio: 2.2 / 1;
+      height: 175px;
+      object-fit: cover;
+      border-radius: 5px;
+      display: block;
+      transition: transform 0.3s ease;
+    }
 
-.image-gallery a img {
-  width: 330px;
-  aspect-ratio: 2.2 / 1;
-  height: 175px;
-  object-fit: cover;
-  border-radius: 5px;
-  display: block;
-  /* Fjernet transform herfra så den ikke animerer dobbelt */
-}
+    .image-gallery a:hover img {
+      transform: scale(1.05);
+    }
 
-/* Galleri med Fremdriftslinje */
-.image-with-progress {
-  position: relative;
-  width: 220px;
-  height: 124px;
-  border-radius: 8px;
-  overflow: hidden;
-}
+    /* Galleri med Fremdriftslinje */
+    .image-with-progress {
+      position: relative;
+      width: 220px;
+      height: 124px;
+      border-radius: 8px;
+      overflow: hidden;
+    }
 
-.image-with-progress img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
+    .image-with-progress img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
 
-.progress-bar {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  height: 4px;
-  width: 100%;
-  background-color: rgba(255, 255, 255, 0.2);
-}
+    .progress-bar {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      height: 4px;
+      width: 100%;
+      background-color: rgba(255, 255, 255, 0.2);
+    }
 
-.progress-bar::after {
-  content: '';
-  position: absolute;
-  height: 100%;
-  left: 0;
-  top: 0;
-  background-color: #00FFCC;
-  width: var(--progress, 0%);
-  transition: width 0.3s ease;
-}
+    .progress-bar::after {
+      content: '';
+      position: absolute;
+      height: 100%;
+      left: 0;
+      top: 0;
+      background-color: #00FFCC;
+      width: var(--progress, 0%);
+      transition: width 0.3s ease;
+    }
 
-/* Svart/Mørk fade på sidene av gallerier */
-.fade-left, .fade-right {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  width: 70px;
-  z-index: 1;
-  pointer-events: none;
-  opacity: 0;
-  transition: opacity 0.3s ease;
-}
+    /* Svart/Mørk fade på sidene av gallerier */
+    .fade-left, .fade-right {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      width: 70px;
+      z-index: 1;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
 
-.fade-left {
-  left: 0;
-  background: linear-gradient(to right, #091B1E, rgba(9, 27, 30, 0));
-}
+    .fade-left {
+      left: 0;
+      background: linear-gradient(to right, #091B1E, rgba(9, 27, 30, 0));
+    }
 
-.fade-right {
-  right: 0;
-  background: linear-gradient(to left, #091B1E, rgba(9, 27, 30, 0));
-}
+    .fade-right {
+      right: 0;
+      background: linear-gradient(to left, #091B1E, rgba(9, 27, 30, 0));
+    }
 
-.fade-hidden {
-  display: none !important;
-}
+    .fade-hidden {
+      display: none !important;
+    }
 
-/* Scroll piler for gallerier */
-.scroll-button {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 44px;
-  height: 44px;
-  border-radius: 50%;
-  background: rgba(9, 27, 30, 0.75);
-  border: 1px solid rgba(255, 255, 255, 0.25);
-  color: white;
-  font-size: 22px;
-  cursor: pointer;
-  z-index: 3;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.25s ease, background 0.25s ease, transform 0.25s ease;
-  backdrop-filter: blur(6px);
-  user-select: none;
-}
+    /* Scroll piler for gallerier */
+    .scroll-button {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: rgba(9, 27, 30, 0.75);
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      color: white;
+      font-size: 22px;
+      cursor: pointer;
+      z-index: 3;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.25s ease, background 0.25s ease, transform 0.25s ease;
+      backdrop-filter: blur(6px);
+      user-select: none;
+    }
 
-.scroll-button.left { left: 10px; }
-.scroll-button.right { right: 10px; }
+    .scroll-button.left { left: 10px; }
+    .scroll-button.right { right: 10px; }
 
-.scroll-button.hidden {
-  display: none !important;
-  opacity: 0 !important;
-  pointer-events: none !important;
-}
+    .scroll-button.hidden {
+      display: none !important;
+      opacity: 0 !important;
+      pointer-events: none !important;
+    }
 
-.scroll-button:hover {
-  background: rgba(0, 255, 204, 0.85);
-  color: #000;
-  transform: translateY(-50%) scale(1.08);
-}
+    .scroll-button:hover {
+      background: rgba(0, 255, 204, 0.85);
+      color: #000;
+      transform: translateY(-50%) scale(1.08);
+    }
 
-.gallery-wrapper:hover .scroll-button:not(.hidden) {
-  opacity: 1;
-  pointer-events: auto;
-}
+    /* Vis piler ved hover på container */
+    .gallery-wrapper:hover .scroll-button:not(.hidden) {
+      opacity: 1;
+      pointer-events: auto;
+    }
 
-.gallery-wrapper:hover .scroll-button.hidden {
-  opacity: 0;
-  pointer-events: none;
-}
+    .gallery-wrapper:hover .scroll-button.hidden {
+      opacity: 0;
+      pointer-events: none;
+    }
 
 
-    /* ==========================================================================
-       5. TOP 10 GALLERI
-       ========================================================================== */
-    .top10-gallery {
-      display: flex;
-      flex-direction: row;
-      gap: 30px;
-      padding: 10px 16px;
-      overflow-x: auto;
-      overflow-y: hidden;
-      -webkit-overflow-scrolling: touch;
-    }
+    /* ==========================================================================
+       5. TOP 10 GALLERI
+       ========================================================================== */
+    .top10-gallery {
+      display: flex;
+      flex-direction: row;
+      gap: 30px;
+      padding: 10px 16px;
+      overflow-x: auto;
+      overflow-y: hidden;
+      -webkit-overflow-scrolling: touch;
+    }
 
-    .top10-gallery::-webkit-scrollbar {
-      display: none;
-    }
+    .top10-gallery::-webkit-scrollbar {
+      display: none;
+    }
 
-    .top10-item {
-      position: relative;
-      display: inline-block;
-      border-radius: 8px;
-      cursor: pointer;
-      transition: transform 0.3s ease;
-    }
+    .top10-item {
+      position: relative;
+      display: inline-block;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: transform 0.3s ease;
+    }
 
-    .top10-item img {
-      width: 150px;
-      height: 225px;
-      border-radius: 8px;
-      display: block;
-    }
+    .top10-item img {
+      width: 150px;
+      height: 225px;
+      border-radius: 8px;
+      display: block;
+    }
 
-    .top10-item:hover {
-      transform: scale(1.05);
-    }
+    .top10-item:hover {
+      transform: scale(1.05);
+    }
 
-    .top10-number {
-      position: absolute;
-      bottom: -10px;
-      left: -15px;
-      font-size: 70px;
-      font-weight: 900;
-      line-height: 1;
-      color: transparent;
-      -webkit-text-stroke: 3px #00FFCC;
-      z-index: 2;
-      transition: all 0.3s ease;
-      pointer-events: none;
-    }
+    .top10-number {
+      position: absolute;
+      bottom: -10px;
+      left: -15px;
+      font-size: 70px;
+      font-weight: 900;
+      line-height: 1;
+      color: transparent;
+      -webkit-text-stroke: 3px #00FFCC;
+      z-index: 2;
+      transition: all 0.3s ease;
+      pointer-events: none;
+    }
 
-    .top10-item:hover .top10-number {
-      color: #00FFCC;
-      -webkit-text-stroke: 0;
-    }
+    .top10-item:hover .top10-number {
+      color: #00FFCC;
+      -webkit-text-stroke: 0;
+    }
 
 
 /* ==========================================================================
@@ -649,30 +647,30 @@ html, body {
   position: relative !important;
   display: inline-block;
   overflow: hidden;
-  border-radius: 5px;
-  transition: transform 0.3s ease; /* Lagt til transform-overgang på selve kortet */
-}
-
-/* Sørger for at hele elementet (bilde + fade) zoomer helt likt */
-.gallery-item:hover {
-  transform: scale(1.05);
+  border-radius: 5px; /* Sørger for at hjørnene klippes pent */
 }
 
 .gallery-item > img {
   display: block;
   width: 100%;
   height: auto;
-  /* Fjernet scale herfra for å unngå ujevn vekst */
+  transition: none; /* Fjernet all zoom/skalering på bildet */
+}
+
+/* Sørger for at bildet IKKE endrer størrelse når du holder over det */
+.gallery-item:hover > img {
+  transform: none; 
 }
 
 .image-overlay {
   position: absolute !important;
-  inset: 0;
+  /* inset: 0 tvinger overlayet til å matche bildets størrelse 1:1 */
+  inset: 0; 
   pointer-events: none;
   opacity: 0;
-  transition: opacity 0.35s ease;
+  transition: opacity 0.3s ease;
   
-  /* Perfekt mørk fade som ligger som støpt i bunnen */
+  /* Den svarte faden i bunnen */
   background: linear-gradient(
     to top,
     rgba(0, 0, 0, 0.95) 0%,   
@@ -680,13 +678,14 @@ html, body {
     rgba(0, 0, 0, 0) 80%       
   );
   
-  border-radius: inherit;
+  border-radius: inherit; /* Arver border-radius på 5px fra .gallery-item */
   display: flex;
   align-items: flex-end;
   z-index: 2;
-  /* Fjernet transform/scale herfra så den følger forelderen perfekt */
+  transform: none; /* Fjernet scale(1.05) så den IKKE blir større enn bildet */
 }
 
+/* Går fra usynlig til synlig overlay, uten å endre størrelse */
 .gallery-item:hover .image-overlay {
   opacity: 1;
 }
@@ -710,7 +709,6 @@ html, body {
   color: #00FFCC;
   font-weight: 500;
 }
-
     /* ==========================================================================
        7. BARNE BANNER & SPESIALINNHOLD
        ========================================================================== */
