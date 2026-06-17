@@ -46,6 +46,16 @@
     }
 
 /* ==========================================================================
+   GLOBAL NULLSTILLING (Fjerner den hvite/mørke stripen helt øverst)
+   ========================================================================== */
+html, body {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  background-color: #091B1E;
+}
+
+/* ==========================================================================
    OPPDATERT TOPPMENY (PC & MOBIL)
    ========================================================================== */
 .top-nav {
@@ -59,6 +69,7 @@
   justify-content: space-between;
   padding: 0 40px;
   z-index: 9999;
+  box-sizing: border-box;
   
   /* Helt usynlig bakgrunn når menyen er øverst */
   background: transparent;
@@ -182,30 +193,13 @@
 }
 
 /* ==========================================================================
-   RESPONSIV MENY FOR MOBIL
-   ========================================================================== */
-@media (max-width: 768px) {
-  .top-nav {
-    height: 60px;
-    padding: 0 20px;
-    /* Beholder transparent her også til du scroller */
-  }
-
-  .nav-links {
-    display: none; /* Skjuler tekstlenker på mobil */
-  }
-
-  .watch-logo-text {
-    font-size: 22px;
-    letter-spacing: 2px;
-  }
-}
-/* ==========================================================================
    OPPDATERT HERO BANNER – GÅR HELT TIL TOPPEN (PC)
    ========================================================================== */
 .hero-banner {
   position: relative;
-  height: 85vh;          /* Økt fra 75vh slik at bildet fyller toppen bak menyen */
+  top: 0;                /* Tvinger banneret helt opp til piksel null */
+  margin-top: 0;         /* Eliminerer eventuelle dyttende marginer */
+  height: 85vh;          /* Bildet fyller toppen perfekt bak menyen */
   min-height: 600px;
   width: 100%;
   overflow: hidden;
@@ -249,7 +243,7 @@
 /* Plassering av tekst og knapper – flyttet litt opp for å kompensere for høyere banner */
 .banner-content {
   position: absolute;
-  bottom: 14%;           /* Justert opp fra 12% så teksten ligger trygt over faden */
+  bottom: 14%;           /* Justert opp så teksten ligger trygt over faden */
   left: 60px;
   z-index: 2;
   display: flex;
@@ -346,20 +340,33 @@
   border-color: #ffffff;
 }
 
-
 /* ==========================================================================
-   RESPONSIV KORRIGERING FOR MOBIL 
+   RESPONSIV KORRIGERING FOR MOBIL OG NETTBRETT
    ========================================================================== */
 @media (max-width: 768px) {
+  .top-nav {
+    height: 60px;
+    padding: 0 20px;
+  }
+
+  .nav-links {
+    display: none;
+  }
+
+  .watch-logo-text {
+    font-size: 22px;
+    letter-spacing: 2px;
+  }
+
   .hero-banner {
-    height: 65vh !important;    /* Justert opp slik at bildet fyller toppen også på mobil */
+    height: 65vh !important;    /* Bildet fyller helt til toppen på mobil også */
     min-height: 400px !important;
     max-height: 550px !important;
     margin-bottom: 20px !important;
   }
 
   .banner-content {
-    bottom: 10% !important;     /* Flyttet teksten litt opp fra bunnkanten på mobil */
+    bottom: 10% !important;     
     left: 20px !important;
     max-width: 90%;
     gap: 10px !important;
