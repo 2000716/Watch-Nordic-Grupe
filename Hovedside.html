@@ -200,31 +200,31 @@
     letter-spacing: 2px;
   }
 }
-   /* ==========================================================================
-   OPPDATERT HERO BANNER (PC)
+/* ==========================================================================
+   OPPDATERT HERO BANNER – GÅR HELT TIL TOPPEN (PC)
    ========================================================================== */
 .hero-banner {
   position: relative;
-  height: 75vh;          /* Perfekt høyde for PC slik at innholdet under skimtes */
-  min-height: 550px;
+  height: 85vh;          /* Økt fra 75vh slik at bildet fyller toppen bak menyen */
+  min-height: 600px;
   width: 100%;
   overflow: hidden;
   background-color: #091B1E;
-  margin-bottom: 40px;   /* Gir luft til galleriene under */
+  margin-bottom: 40px;   /* Luft til galleriene under */
   z-index: 0;
 }
 
-/* Myk fade-effekt som smelter bildet inn i bakgrunnen */
+/* Myk og dyp fade-effekt som smelter bildet sømløst inn i bakgrunnen */
 .hero-banner::after {
   content: "";
   position: absolute;
   inset: 0;
   background: linear-gradient(
     to bottom,
-    rgba(9, 27, 30, 0) 40%,      /* Helt gjennomsiktig i toppen */
-    rgba(9, 27, 30, 0.4) 65%,    /* Begynner å duses ut */
-    rgba(9, 27, 30, 0.85) 85%,   /* Kraftigere fade */
-    rgba(9, 27, 30, 1) 100%      /* 100% lik nettsidens bakgrunnsfarge i bunnen */
+    rgba(9, 27, 30, 0) 45%,      /* Helt klart bilde i øvre del bak menyen */
+    rgba(9, 27, 30, 0.3) 65%,    /* Begynner rolig uttoning */
+    rgba(9, 27, 30, 0.8) 85%,    /* Kraftigere fade over tekstområdet */
+    rgba(9, 27, 30, 1) 100%      /* Svartkledd overgang til nettsidens bunnfarge */
   );
   z-index: 1;
 }
@@ -246,10 +246,10 @@
   z-index: 0;
 }
 
-/* Plassering av tekst og knapper nede til venstre */
+/* Plassering av tekst og knapper – flyttet litt opp for å kompensere for høyere banner */
 .banner-content {
   position: absolute;
-  bottom: 12%;           /* Flyttet ned mot bunnen, rett over den mørkeste faden */
+  bottom: 14%;           /* Justert opp fra 12% så teksten ligger trygt over faden */
   left: 60px;
   z-index: 2;
   display: flex;
@@ -260,9 +260,9 @@
   color: white;
 }
 
-/* Fikset tittelstørrelse (Nedskalert fra 110px) */
+/* Fikset tittelstørrelse */
 .banner-title {
-  font-size: 64px;       /* Mer stilrent og mindre dominerende */
+  font-size: 64px;       
   font-weight: 900;
   line-height: 1.05;
   color: white;
@@ -282,7 +282,7 @@
 
 .banner-meta {
   font-size: 15px;
-  color: #00FFCC;        /* Matcher merkefargen din */
+  color: #00FFCC;        
   font-weight: 500;
 }
 
@@ -316,7 +316,7 @@
   border: none;
   background: #00FFCC;
   color: #003a2f;
-  cursor: pointer;       /* Endret til pointer så man skjønner det kan klikkes */
+  cursor: pointer;       
   transition: transform 0.2s ease, background 0.2s ease;
 }
 
@@ -348,25 +348,25 @@
 
 
 /* ==========================================================================
-   RESPONSIV KORRIGERING FOR MOBIL (Legg denne under @media (max-width: 768px))
+   RESPONSIV KORRIGERING FOR MOBIL 
    ========================================================================== */
 @media (max-width: 768px) {
   .hero-banner {
-    height: 55vh !important;    /* Litt mer høyde på mobil så tekst og bilde får plass */
-    min-height: 350px !important;
-    max-height: 500px !important;
+    height: 65vh !important;    /* Justert opp slik at bildet fyller toppen også på mobil */
+    min-height: 400px !important;
+    max-height: 550px !important;
     margin-bottom: 20px !important;
   }
 
   .banner-content {
-    bottom: 8% !important;
+    bottom: 10% !important;     /* Flyttet teksten litt opp fra bunnkanten på mobil */
     left: 20px !important;
     max-width: 90%;
     gap: 10px !important;
   }
 
   .banner-title {
-    font-size: 36px !important; /* Tilpasset mobilskjermer */
+    font-size: 36px !important; 
     line-height: 1.1;
   }
 
