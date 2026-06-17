@@ -1328,121 +1328,182 @@ if (navn) {
 }
 
 // ==================== HERO-BANNER ==================== //
-function hentTimeFilm() {
-  let bannerInnhold = [];
 
-  // Filmer
-  Object.keys(filmer).forEach(key => {
-    const film = filmer[key];
+function hentBannerInnhold() {
+let bannerInnhold = [];
 
-    if (film.banner) {
-      bannerInnhold.push({
-        ...film,
-        key,
-        type: "film"
-      });
-    }
-  });
+// Filmer
+Object.keys(filmer).forEach(key => {
+if (filmer[key].banner) {
+bannerInnhold.push({
+...filmer[key],
+key,
+type: "film"
+});
+}
+});
 
-  // Serier
-  if (typeof serier !== "undefined") {
-    Object.keys(serier).forEach(key => {
-      const serie = serier[key];
+// Serier
+if (typeof serier !== "undefined") {
+Object.keys(serier).forEach(key => {
+if (serier[key].banner) {
+bannerInnhold.push({
+...serier[key],
+key,
+type: "serie"
+});
+}
+});
+}
 
-      if (serie.banner) {
-        bannerInnhold.push({
-          ...serie,
-          key,
-          type: "serie"
-        });
-      }
-    });
-  }
+return bannerInnhold;
+}
 
-  if (bannerInnhold.length === 0) return null;
+function hentDesktopBanner() {
+const innhold = hentBannerInnhold();
 
-  const timeIndex = new Date().getHours() % bannerInnhold.length;
-  return bannerInnhold[timeIndex];
+if (innhold.length === 0) return null;
+
+const index = new Date().getHours() % innhold.length;
+return innhold[index];
+}
+
+function hentMobilBanner() {
+const innhold = hentBannerInnhold();
+
+if (innhold.length === 0) return null;
+
+const index = (new Date().getHours() + 1) % innhold.length;
+return innhold[index];
 }
 
 function oppdaterBanner() {
-  const film = hentTimeFilm();
-  if (!film) return;
 
-  const bilde = document.getElementById("banner-bilde");
-  const video = document.getElementById("banner-video");
-  const logo = document.getElementById("banner-logo");
-  const beskrivelse = document.getElementById("banner-beskrivelse");
-  const metadata = document.getElementById("banner-metadata");
-  const seNa = document.getElementById("banner-se-na");
-  const addBtn = document.getElementById("banner-add");
+const erMobil = window.innerWidth <= 768;
 
-  // === Sett bannerbilde ===
-  bilde.src = film.banner || "";
-  bilde.style.display = "block";
+const film = erMobil
+? hentMobilBanner()
+: hentDesktopBanner();
 
-  // === Sett video ===
-  if (film.trailer) {
-    video.src = film.trailer;
-    video.load();
-    video.muted = true;
-  } else {
-    video.removeAttribute("src");
-  }
-  video.style.display = "none";
+if (!film) return;
+
+const bilde = document.getElementById("banner-bilde");
+const video = document.getElementById("banner-video");
+const logo = document.getElementById("banner-logo");
+const beskrivelse = document.getElementById("banner-beskrivelse");
+const metadata = document.getElementById("banner-metadata");
+const seNa = document.getElementById("banner-se-na");
+const addBtn = document.getElementById("banner-add");
+
+// === Bannerbilde ===
+bilde.src = erMobil
+? (film.bannerMobil || film.banner)
+: film.banner;
+
+bilde.style.display = "block";
+
+// === Video ===
+if (film.trailer) {
+video.src = film.trailer;
+video.load();
+video.muted = true;
+} else {
+video.removeAttribute("src");
+}
+
+video.style.display = "none";
 
 // === Logo eller tittel ===
 let titleElement = document.getElementById("banner-title");
 
 if (!titleElement) {
-  titleElement = document.createElement("h1");
-  titleElement.id = "banner-title";
-  titleElement.className = "banner-title";
-  logo.parentNode.insertBefore(titleElement, logo.nextSibling);
+titleElement = document.createElement("h1");
+titleElement.id = "banner-title";
+titleElement.className = "banner-title";
+logo.parentNode.insertBefore(titleElement, logo.nextSibling);
 }
 
 if (film.logo) {
-  logo.src = film.logo;
-  logo.style.display = "block";
-  titleElement.style.display = "none";
+logo.src = film.logo;
+logo.style.display = "block";
+titleElement.style.display = "none";
 } else {
-  logo.style.display = "none";
-  titleElement.textContent = film.tittel || "";
-  titleElement.style.display = "block";
+logo.style.display = "none";
+titleElement.textContent = film.tittel || "";
+titleElement.style.display = "block";
 }
 
-// Beskrivelse og metadata vises alltid
+// === Beskrivelse ===
 beskrivelse.textContent = film.beskrivelse || "";
 beskrivelse.style.display = "block";
 
+// === Metadata ===
 metadata.textContent = film.metadata
-  ? film.metadata.join(" • ")
-  : "";
+? film.metadata.join(" • ")
+: "";
+
 metadata.style.display = "block";
 
-  // === Se nå-knapp ===
-  seNa.innerHTML = '<i class="fas fa-play"></i> Se nå';
- seNa.onclick = () => {
+// === Se nå ===
+seNa.innerHTML = '<i class="fas fa-play"></i> Se nå';
 
-  if (film.type === "serie") {
+seNa.onclick = () => {
+window.location.href = `film.html?navn=${film.key}`;
+};
 
-    if (film.slug) {
-      window.location.href = `serie.html?navn=${film.slug}`;
-    } else {
-      window.location.href = `film.html?navn=${film.key}`;
-    }
+// === Min liste ===
+const key = film.tittel.toLowerCase().replace(/\s+/g, '-');
 
-  } else {
+let liste = JSON.parse(localStorage.getItem("minListe")) || [];
 
-    if (film.slug) {
-      window.location.href = `film.html?navn=${film.slug}`;
-    } else {
-      window.location.href = `film.html?navn=${film.key}`;
-    }
+addBtn.innerHTML = liste.includes(key)
+? '<i class="fas fa-check"></i>'
+: '<i class="fas fa-plus"></i>';
 
-  }
+addBtn.onclick = () => {
+
+```
+let liste = JSON.parse(localStorage.getItem("minListe")) || [];
+
+if (liste.includes(key)) {
+
+  liste = liste.filter(item => item !== key);
+
+  addBtn.innerHTML = '<i class="fas fa-plus"></i>';
+
+} else {
+
+  liste.push(key);
+
+  addBtn.innerHTML = '<i class="fas fa-check"></i>';
+}
+
+localStorage.setItem("minListe", JSON.stringify(liste));
+```
 
 };
+
+// === Trailer etter 5 sekunder ===
+setTimeout(() => {
+
+```
+if (!film.trailer) return;
+
+bilde.style.display = "none";
+video.style.display = "block";
+
+video.currentTime = 0;
+
+video.play();
+
+video.onended = () => {
+  video.style.display = "none";
+  bilde.style.display = "block";
+};
+```
+
+}, 5000);
+}
 
   // === Legg til i min liste ===
   const key = film.tittel.toLowerCase().replace(/\s+/g, '-');
