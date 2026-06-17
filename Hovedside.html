@@ -837,59 +837,6 @@ html, body {
     }
 
 /* ==========================================================================
-       9. NETFLIX & HBO MAX MOBIL-OPTIMALISERING (768px og nedover)
-       ========================================================================== */
-    @media (max-width: 768px) {
-      body {
-        padding-top: 0px; /* Lar banneret flyte helt opp under en gjennomsiktig meny */
-      }
-
-      main {
-        padding-left: 0px !important;
-        padding-right: 0px !important;
-      }
-
-      /* Tittel på gallerier – Flukter perfekt med Netflix-stil */
-      .gallery-section h2 {
-        padding-left: 16px;
-        margin-left: 0px;
-        font-size: 16px;
-        font-weight: 700;
-        letter-spacing: 0.5px;
-        color: #fff; /* Rene, hvite overskrifter som på Netflix */
-        margin-bottom: 8px;
-      }
-
-      /* Toppmeny – Gjennomsiktig med glass-effekt (HBO Max-stil) */
-      .top-nav {
-        position: fixed !important;
-        top: 0;
-        left: 0;
-        width: 100%;
-        padding: 0 16px;
-        height: 60px;
-        background: linear-gradient(to bottom, rgba(9, 27, 30, 0.9) 0%, rgba(9, 27, 30, 0.3) 70%, rgba(9, 27, 30, 0) 100%) !important;
-        backdrop-filter: blur(4px);
-      }
-
-      .nav-links {
-        display: none;
-      }
-
-      .watch-logo-text {
-        font-size: 20px;
-        letter-spacing: 1.5px;
-      }
-
-      .nav-search {
-        font-size: 18px;
-      }
-
-      .profilmeny img {
-        width: 34px;
-        height: 34px;
-      }
-/* ==========================================================================
    9. NETFLIX & HBO MAX MOBIL-OPTIMALISERING (768px og nedover)
    ========================================================================== */
 @media (max-width: 768px) {
@@ -904,30 +851,48 @@ html, body {
     margin-right: 0px !important;
   }
 
-  /* Toppmeny – Helt gjennomsiktig uten filter */
+  /* Toppmeny – Justert med Flexbox for å dytte elementer til hver sin kant */
   .top-nav {
     position: fixed !important;
     top: 0;
     left: 0;
     width: 100%;
-    padding: 0 32px !important; /* Beholder 32px linjeføring */
+    padding: 0 32px !important; /* Beholder 32px linjeføring fra skjermkantene */
     height: 60px;
     background: transparent !important; 
     backdrop-filter: none !important;    
     box-shadow: none !important;
     border: none !important;
+    
+    /* NYTT: Sørger for at logo tvinges til venstre og søk/profil helt til høyre */
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
   }
 
   .nav-links {
     display: none !important;
   }
 
-  /* WATCH-LOGO FOR MOBIL – NÅ STØRRE, TYKKERE OG GRØNN */
+  /* Sørger for at søkeikonet og profilbildet holder sammen ytterst til høyre */
+  .nav-search, .profilmeny {
+    display: inline-flex !important;
+    align-items: center !important;
+  }
+  
+  /* Hvis søk og profil ligger i en felles container på høyre side, gir dette god luft mellom dem */
+  .top-nav > div:last-child {
+    display: flex !important;
+    align-items: center !important;
+    gap: 16px; 
+  }
+
+  /* WATCH-LOGO FOR MOBIL (Større, tykkere og grønn) */
   .watch-logo-text {
-    font-size: 24px !important;        /* Økt fra 20px til 24px for å bli større */
-    font-weight: 900 !important;        /* Økt fra 800 til 900 for å bli tykkere */
+    font-size: 24px !important; 
+    font-weight: 900 !important;
     letter-spacing: 0.5px !important;
-    color: #00ffcc !important;          /* Endret fra #fff til grønn (matcher top10-tallene) */
+    color: #00ffcc !important; 
     text-transform: uppercase !important;
     display: inline-block !important;
   }
@@ -939,6 +904,7 @@ html, body {
   .profilmeny img {
     width: 34px;
     height: 34px;
+    display: block;
   }
 
   /* HERO BANNER */
