@@ -640,61 +640,73 @@ html, body {
     }
 
 
-    /* ==========================================================================
-       6. HOVER OVERLAY FOR BILDER (.gallery-item)
-       ========================================================================== */
-    .gallery-item {
-      position: relative !important;
-      display: inline-block;
-      overflow: hidden;
-    }
+/* ==========================================================================
+   6. HOVER OVERLAY FOR BILDER (.gallery-item)
+   ========================================================================== */
+.gallery-item {
+  position: relative !important;
+  display: inline-block;
+  overflow: hidden;
+  border-radius: 5px; /* Matcher avrundingen på bildene dine */
+}
 
-    .gallery-item > img {
-      display: block;
-      width: 100%;
-      height: auto;
-    }
+.gallery-item > img {
+  display: block;
+  width: 100%;
+  height: auto;
+  transition: transform 0.3s ease;
+}
 
-    .image-overlay {
-      position: absolute !important;
-      inset: 0;
-      pointer-events: none;
-      opacity: 0;
-      transition: opacity 0.35s ease;
-      background: linear-gradient(
-        to top,
-        rgba(0, 0, 0, 0.85) 0%,
-        rgba(0, 0, 0, 0.6) 35%,
-        rgba(0, 0, 0, 0) 70
-      );
-      transform: scale(1.05);
-      transform-origin: center;
-      border-radius: inherit;
-      display: flex;
-      align-items: flex-end;
-    }
+/* Gjør at bildet fakstisk zoomer inn, akkurat som i galleri-stilen din */
+.gallery-item:hover > img {
+  transform: scale(1.05);
+}
 
-    .gallery-item:hover .image-overlay {
-      opacity: 1;
-    }
+.image-overlay {
+  position: absolute !important;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.35s ease;
+  
+  /* Kraftig og dyp svart fade i bunnen som gjør teksten supertydelig */
+  background: linear-gradient(
+    to top,
+    rgba(0, 0, 0, 0.95) 0%,   /* Nesten helt kullsvart nederst */
+    rgba(0, 0, 0, 0.7) 40%,    /* God og dyp skygge over tekstområdet */
+    rgba(0, 0, 0, 0) 80%       /* Toner helt ut mot toppen (fikset skrivefeil her) */
+  );
+  
+  border-radius: inherit;
+  display: flex;
+  align-items: flex-end;
+  z-index: 2;
+}
 
-    .overlay-content {
-      padding: 14px;
-      width: 100%;
-    }
+/* Viser den mørke faden og teksten ved hover */
+.gallery-item:hover .image-overlay {
+  opacity: 1;
+}
 
-    .overlay-title {
-      font-size: 15px;
-      font-weight: 700;
-      color: #fff;
-      margin-bottom: 4px;
-    }
+.overlay-content {
+  padding: 14px;
+  width: 100%;
+  z-index: 3;
+}
 
-    .overlay-meta {
-      font-size: 13px;
-      color: #d0d0d0;
-    }
+.overlay-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 4px;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.6); /* Ekstra tekstbeskyttelse */
+}
 
+.overlay-meta {
+  font-size: 13px;
+  color: #00FFCC; /* Endret til den fine cyan-fargen din så den matcher resten av Watch Nordic */
+  font-weight: 500;
+}
 
     /* ==========================================================================
        7. BARNE BANNER & SPESIALINNHOLD
