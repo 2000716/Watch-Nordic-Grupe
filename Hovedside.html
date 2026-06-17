@@ -1329,11 +1329,40 @@ if (navn) {
 
 // ==================== HERO-BANNER ==================== //
 function hentTimeFilm() {
-  const filmKeys = Object.keys(filmer).filter(k => filmer[k].banner);
-  if (filmKeys.length === 0) return null;
+  let bannerInnhold = [];
 
-  const timeIndex = new Date().getHours() % filmKeys.length;
-  return filmer[filmKeys[timeIndex]];
+  // Filmer
+  Object.keys(filmer).forEach(key => {
+    const film = filmer[key];
+
+    if (film.banner) {
+      bannerInnhold.push({
+        ...film,
+        key,
+        type: "film"
+      });
+    }
+  });
+
+  // Serier
+  if (typeof serier !== "undefined") {
+    Object.keys(serier).forEach(key => {
+      const serie = serier[key];
+
+      if (serie.banner) {
+        bannerInnhold.push({
+          ...serie,
+          key,
+          type: "serie"
+        });
+      }
+    });
+  }
+
+  if (bannerInnhold.length === 0) return null;
+
+  const timeIndex = new Date().getHours() % bannerInnhold.length;
+  return bannerInnhold[timeIndex];
 }
 
 function oppdaterBanner() {
@@ -1393,7 +1422,27 @@ metadata.style.display = "block";
 
   // === Se nå-knapp ===
   seNa.innerHTML = '<i class="fas fa-play"></i> Se nå';
-  seNa.onclick = () => window.location.href = `film-mal.html?id=${film.tittel}`;
+ seNa.onclick = () => {
+
+  if (film.type === "serie") {
+
+    if (film.slug) {
+      window.location.href = `serie.html?navn=${film.slug}`;
+    } else {
+      window.location.href = `film.html?navn=${film.key}`;
+    }
+
+  } else {
+
+    if (film.slug) {
+      window.location.href = `film.html?navn=${film.slug}`;
+    } else {
+      window.location.href = `film.html?navn=${film.key}`;
+    }
+
+  }
+
+};
 
   // === Legg til i min liste ===
   const key = film.tittel.toLowerCase().replace(/\s+/g, '-');
