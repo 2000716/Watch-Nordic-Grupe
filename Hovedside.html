@@ -889,6 +889,59 @@ html, body {
         width: 34px;
         height: 34px;
       }
+/* ==========================================================================
+       9. NETFLIX & HBO MAX MOBIL-OPTIMALISERING (768px og nedover)
+       ========================================================================== */
+    @media (max-width: 768px) {
+      body {
+        padding-top: 0px; /* Lar banneret flyte helt opp under en gjennomsiktig meny */
+      }
+
+      main {
+        padding-left: 0px !important;
+        padding-right: 0px !important;
+      }
+
+      /* Tittel på gallerier – Flukter perfekt med Netflix-stil */
+      .gallery-section h2 {
+        padding-left: 16px;
+        margin-left: 0px;
+        font-size: 16px;
+        font-weight: 700;
+        letter-spacing: 0.5px;
+        color: #fff; /* Rene, hvite overskrifter som på Netflix */
+        margin-bottom: 8px;
+      }
+
+      /* Toppmeny – Gjennomsiktig med glass-effekt (HBO Max-stil) */
+      .top-nav {
+        position: fixed !important;
+        top: 0;
+        left: 0;
+        width: 100%;
+        padding: 0 16px;
+        height: 60px;
+        background: linear-gradient(to bottom, rgba(9, 27, 30, 0.9) 0%, rgba(9, 27, 30, 0.3) 70%, rgba(9, 27, 30, 0) 100%) !important;
+        backdrop-filter: blur(4px);
+      }
+
+      .nav-links {
+        display: none;
+      }
+
+      .watch-logo-text {
+        font-size: 20px;
+        letter-spacing: 1.5px;
+      }
+
+      .nav-search {
+        font-size: 18px;
+      }
+
+      .profilmeny img {
+        width: 34px;
+        height: 34px;
+      }
 
       /* ==========================================================================
          HERO BANNER (Netflix-oppsett)
