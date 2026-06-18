@@ -1,74 +1,280 @@
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="no">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Innlogging / Registrering</title>
+  <title>Innlogging / Registrering | Watch Nordic™</title>
+  
+  <link rel="icon" type="image/png" href="https://static.wixstatic.com/media/fd2fb2_39376e4ee55b460ab7a3ebbfcf35fef7~mv2.png" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+
   <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
+    /* ================= RESET & BASE ================= */
+    * { 
+      box-sizing: border-box; 
+      margin: 0; 
+      padding: 0; 
+    }
 
-   body {
-  background: 
-    linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)),
-    url('https://static.wixstatic.com/media/fd2fb2_cb01bba1adf84bf1aa5ef6ec7cb2f055~mv2.png') 
-    no-repeat center center fixed;
-  background-size: cover;
-  font-family: Arial, sans-serif;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 100vh;
-  color: white;
-}
+    body {
+      background: #091B1E;
+      font-family: 'Inter', Arial, sans-serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      color: white;
+      overflow-x: hidden;
+      position: relative;
+    }
 
+    /* Fallback bakgrunn hvis JS-postere ikke laster inn */
+    .bg-fallback {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(rgba(9, 27, 30, 0.85), rgba(9, 27, 30, 0.85)),
+                  url('https://static.wixstatic.com/media/fd2fb2_cb01bba1adf84bf1aa5ef6ec7cb2f055~mv2.png') no-repeat center center;
+      background-size: cover;
+      z-index: 1;
+    }
+
+    /* Overleggsgradient for å gi dybde og sikre at teksten er lesbar */
+    .overlay {
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle, rgba(9,27,30,0.6) 0%, rgba(9,27,30,0.95) 100%);
+      z-index: 2;
+    }
+
+    /* ================= 3D POSTER VEGG ================= */
+    .hero-wall {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+      z-index: 1;
+      transform: perspective(2000px) rotateY(-18deg) rotateX(4deg) scale(1.2);
+      transform-origin: right center;
+      opacity: 0.25;
+    }
+
+    .wall-row {
+      display: flex;
+      gap: 16px;
+      width: max-content;
+      margin-bottom: 16px;
+    }
+
+    .wall-row img {
+      width: 240px;
+      height: 135px;
+      object-fit: cover;
+      border-radius: 8px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+    }
+
+    .row1 { margin-left: -100px; }
+    .row2 { margin-left: -250px; }
+    .row3 { margin-left: -50px; }
+    .row4 { margin-left: -180px; }
+
+    /* ================= SKJEMA CONTAINER ================= */
     .container {
-      background-color: rgba(15, 42, 46, 0.5);
-      padding: 40px;
-      border-radius: 12px;
-      box-shadow: 0 0 20px rgba(0,0,0,0.6);
-      max-width: 400px;
+      background-color: rgba(15, 42, 46, 0.45);
+      padding: 45px 40px;
+      border-radius: 24px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.55);
+      max-width: 420px;
       width: 100%;
       text-align: center;
+      z-index: 10;
+      margin: 20px;
+      transition: all 0.3s ease;
     }
 
-    h2 { margin-bottom: 20px; }
-    label { display: block; text-align: left; margin-top: 15px; margin-bottom: 5px; font-size: 14px; }
-    input { width: 100%; padding: 12px; border: none; border-radius: 6px; }
-
-    button {
-      width: 100%; padding: 12px; background-color: #1b5457;
-      color: white; border: none; border-radius: 6px;
-      cursor: pointer; font-size: 16px; margin-top: 20px;
+    .logo-container {
+      font-size: 28px;
+      font-weight: 900;
+      letter-spacing: 4px;
+      color: #00FFCC;
+      margin-bottom: 25px;
+      text-shadow: 0 0 10px rgba(0,255,204,0.5);
     }
-    button:hover { background-color: #247274; }
 
-    .error { color: #ff4c4c; margin-top: 10px; min-height: 20px; }
-    .toggle-text, .forgot-text, .sync-section { margin-top: 15px; font-size: 14px; }
-    .toggle-text a, .forgot-text a { color: #00bfff; cursor: pointer; text-decoration: underline; }
+    h2 { 
+      font-size: 24px;
+      font-weight: 700;
+      margin-bottom: 8px; 
+    }
+    
+    p.subtitle {
+      font-size: 14px;
+      color: #bfc9c9;
+      margin-bottom: 25px;
+    }
+
+    label { 
+      display: block; 
+      text-align: left; 
+      margin-top: 18px; 
+      margin-bottom: 6px; 
+      font-size: 13px; 
+      font-weight: 600;
+      color: #bfc9c9;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    input { 
+      width: 100%; 
+      padding: 14px; 
+      border: 1px solid rgba(255,255,255,0.1); 
+      border-radius: 10px; 
+      background: rgba(9, 27, 30, 0.6);
+      color: white;
+      font-size: 15px;
+      transition: 0.25s ease;
+    }
+
+    input:focus {
+      outline: none;
+      border-color: #00FFCC;
+      box-shadow: 0 0 10px rgba(0, 255, 204, 0.2);
+    }
+
+    button.submit-btn {
+      width: 100%; 
+      padding: 15px; 
+      background-color: #00FFCC;
+      color: #071214; 
+      border: none; 
+      border-radius: 999px;
+      cursor: pointer; 
+      font-size: 16px; 
+      font-weight: 800;
+      margin-top: 25px;
+      transition: 0.3s ease;
+      box-shadow: 0 0 20px rgba(0,255,204,0.25);
+    }
+    
+    button.submit-btn:hover { 
+      transform: translateY(-2px);
+      box-shadow: 0 0 30px rgba(0,255,204,0.45);
+    }
+
+    .error { 
+      color: #ff4c4c; 
+      margin-top: 12px; 
+      min-height: 20px; 
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .toggle-text, .forgot-text { 
+      margin-top: 18px; 
+      font-size: 14px; 
+      color: #bfc9c9;
+    }
+    
+    .toggle-text a, .forgot-text a { 
+      color: #00FFCC; 
+      cursor: pointer; 
+      text-decoration: none; 
+      font-weight: 700;
+    }
+
+    .toggle-text a:hover, .forgot-text a:hover {
+      text-decoration: underline;
+    }
+
+    /* ================= SYNC SEKSJON ================= */
+    .sync-section { 
+      margin-top: 30px; 
+      padding-top: 20px;
+      border-top: 1px solid rgba(255,255,255,0.08);
+      font-size: 13px; 
+      color: #8a9494;
+    }
+
+    .sync-section p {
+      margin-bottom: 12px;
+    }
+
+    .sync-btns {
+      display: flex;
+      gap: 10px;
+    }
+
+    .sync-section button {
+      flex: 1;
+      padding: 10px;
+      background: rgba(255,255,255,0.05);
+      color: white;
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: 600;
+      transition: 0.2s;
+    }
+
+    .sync-section button:hover {
+      background: rgba(255,255,255,0.1);
+      border-color: rgba(255,255,255,0.2);
+    }
+
+    /* ================= MOBIL-TILPASNING ================= */
+    @media (max-width: 768px) {
+      .hero-wall {
+        opacity: 0.15;
+        transform: perspective(1000px) rotateY(-10deg) scale(1.3);
+      }
+      .wall-row img {
+        width: 150px;
+        height: 85px;
+      }
+      .container {
+        padding: 35px 24px;
+      }
+    }
   </style>
 </head>
 <body>
 
+  <div class="bg-fallback"></div>
+  <div class="overlay"></div>
+
+  <div class="hero-wall">
+    <div class="wall-row row1"></div>
+    <div class="wall-row row2"></div>
+    <div class="wall-row row3"></div>
+    <div class="wall-row row4"></div>
+  </div>
+
   <div class="container">
+    <div class="logo-container">WATCH</div>
     <h2 id="formTitle">Logg inn</h2>
+    <p class="subtitle" id="formSubtitle">Vennligst oppgi dine detaljer for å fortsette</p>
 
     <form onsubmit="return handterSkjema()">
       <div id="navnGruppe" style="display: none;">
         <label for="navn">Navn</label>
-        <input type="text" id="navn" placeholder="Fullt navn" autocomplete="name" />
+        <input type="text" id="navn" placeholder="Ditt fulle navn" autocomplete="name" />
       </div>
 
-      <label for="epost">E-post</label>
-      <input type="email" id="epost" placeholder="E-post" autocomplete="email" required />
+      <label for="epost">E-postadresse</label>
+      <input type="email" id="epost" placeholder="navn@domene.no" autocomplete="email" required />
 
       <label for="passord">Passord</label>
-      <input type="password" id="passord" placeholder="Passord" autocomplete="current-password" required />
+      <input type="password" id="passord" placeholder="••••••••" autocomplete="current-password" required />
 
-      <button type="submit" id="submitKnapp">Fortsett</button>
+      <button type="submit" class="submit-btn" id="submitKnapp">Fortsett</button>
       <div class="error" id="feilmelding"></div>
     </form>
 
-    <div class="forgot-text">
+    <div class="forgot-text" id="forgotContainer">
       <a href="Passordfeil.html">Glemt passord?</a>
     </div>
 
@@ -77,15 +283,21 @@
     </div>
 
     <div class="sync-section">
-      <p>Vil du bruke samme innlogging på flere enheter?</p>
-      <button onclick="eksporterBrukere()">Eksporter kode</button>
-      <button onclick="importerBrukere()">Importer kode</button>
+      <p><i class="fa-solid fa-laptop-medical"></i> Synkroniser konto på tvers av enheter</p>
+      <div class="sync-btns">
+        <button onclick="eksporterBrukere()"><i class="fa-solid fa-download"></i> Eksporter kode</button>
+        <button onclick="importerBrukere()"><i class="fa-solid fa-upload"></i> Importer kode</button>
+      </div>
     </div>
   </div>
+
+  <script src="Filmdata.js"></script>
+  <script src="Seriedata.js"></script>
 
   <script>
     let registreringsmodus = false;
 
+    // Prefill lagret info
     window.addEventListener("DOMContentLoaded", () => {
       const lagretEpost = localStorage.getItem("epost");
       const lagretPassord = localStorage.getItem("passord");
@@ -94,6 +306,7 @@
       if (lagretPassord) document.getElementById("passord").value = lagretPassord;
     });
 
+    // Skjemabehandling (Fikset ruting-stabilitet)
     function handterSkjema() {
       const epost = document.getElementById("epost").value.trim().toLowerCase();
       const passord = document.getElementById("passord").value.trim();
@@ -116,14 +329,13 @@
           return false;
         }
 
-        // Lagre ny bruker
         brukere[epost] = { navn, passord };
         localStorage.setItem("brukere", JSON.stringify(brukere));
         localStorage.setItem("epost", epost);
         localStorage.setItem("passord", passord);
         localStorage.setItem("navn", navn);
 
-        window.location.href = "hvem-ser-på";
+        window.location.href = "hvem-ser-på.html"; // Lagt til stabilt filformat
       } else {
         const bruker = brukere[epost];
 
@@ -132,7 +344,7 @@
           localStorage.setItem("passord", passord);
           localStorage.setItem("navn", bruker.navn);
 
-          window.location.href = "hvem-ser-på.html";
+          window.location.href = "hvem-ser-på.html"; // Lagt til stabilt filformat
         } else {
           feilmelding.textContent = "Feil e-post eller passord.";
         }
@@ -141,10 +353,13 @@
       return false;
     }
 
+    // Grensesnittbytte
     function visRegistrering() {
       registreringsmodus = true;
       document.getElementById("formTitle").textContent = "Registrer deg";
+      document.getElementById("formSubtitle").textContent = "Opprett en konto for å starte streamingen";
       document.getElementById("submitKnapp").textContent = "Registrer";
+      document.getElementById("forgotContainer").style.display = "none";
       document.getElementById("toggleText").innerHTML =
         'Allerede medlem? <a onclick="visInnlogging()">Logg inn</a>';
       document.getElementById("navnGruppe").style.display = "block";
@@ -155,7 +370,9 @@
     function visInnlogging() {
       registreringsmodus = false;
       document.getElementById("formTitle").textContent = "Logg inn";
+      document.getElementById("formSubtitle").textContent = "Vennligst oppgi dine detaljer for å fortsette";
       document.getElementById("submitKnapp").textContent = "Fortsett";
+      document.getElementById("forgotContainer").style.display = "block";
       document.getElementById("toggleText").innerHTML =
         'Er du ikke medlem? <a onclick="visRegistrering()">Registrer deg</a>';
       document.getElementById("navnGruppe").style.display = "none";
@@ -163,31 +380,68 @@
       document.getElementById("passord").setAttribute("autocomplete", "current-password");
     }
 
-    // Eksporter/importer funksjon for å dele mellom enheter
+    // Synkroniseringssystem (Eksporter/Importer)
     function eksporterBrukere() {
       const brukere = localStorage.getItem("brukere");
       if (!brukere) {
-        alert("Ingen brukere å eksportere.");
+        alert("Ingen lokale brukere funnet på denne enheten.");
         return;
       }
-      const kode = btoa(brukere); // base64
-      prompt("Kopier denne koden og lim den inn på en annen enhet:", kode);
+      const kode = btoa(unescape(encodeURIComponent(brukere))); // Sikker Base64
+      prompt("Kopier denne synkroniseringskoden:", kode);
     }
 
     function importerBrukere() {
-      const kode = prompt("Lim inn eksportert kode her:");
+      const kode = prompt("Lim inn synkroniseringskoden din her:");
       if (!kode) return;
       try {
-        const json = atob(kode);
+        const json = decodeURIComponent(escape(atob(kode)));
         const brukere = JSON.parse(json);
         localStorage.setItem("brukere", JSON.stringify(brukere));
-        alert("Brukere importert! Du kan nå logge inn.");
+        alert("Synkronisering vellykket! Du kan nå logge inn.");
       } catch (e) {
-        alert("Ugyldig kode.");
+        alert("Ugyldig eller korrupt kode. Vennligst prøv igjen.");
       }
     }
-  </script>
 
+    /* ================= 3D GENERATOR FOR PLAKATER ================= */
+    const rows = [
+      document.querySelector(".row1"),
+      document.querySelector(".row2"),
+      document.querySelector(".row3"),
+      document.querySelector(".row4")
+    ];
+
+    let posters = [];
+
+    if(typeof filmer !== "undefined"){
+      Object.values(filmer).forEach(f => f.poster && posters.push(f.poster));
+    }
+    if(typeof serier !== "undefined"){
+      Object.values(serier).forEach(s => s.poster && posters.push(s.poster));
+    }
+
+    // Sorter tilfeldig
+    posters.sort(() => Math.random() - 0.5);
+
+    // Fyll ut veggen dynamisk hvis bildedata eksisterer
+    if(posters.length > 0) {
+      // Skjul statisk fallback-bilde dersom JS-veggen lages suksessfullt
+      document.querySelector(".bg-fallback").style.background = "#091B1E";
+      
+      rows.forEach(row => {
+        if(row) {
+          for(let i = 0; i < 3; i++){ // Repeter for breddeutvalg
+            posters.forEach(src => {
+              const img = document.createElement("img");
+              img.src = src;
+              img.loading = "lazy";
+              row.appendChild(img);
+            });
+          }
+        }
+      });
+    }
+  </script>
 </body>
 </html>
-
