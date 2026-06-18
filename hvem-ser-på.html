@@ -3,251 +3,439 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Watch Nordic™</title>
+  <title>Hvem ser på? | Watch Nordic™</title>
 
   <link rel="icon" type="image/png" href="https://static.wixstatic.com/media/fd2fb2_39376e4ee55b460ab7a3ebbfcf35fef7~mv2.png" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
 
-<style>
-:root {
-  --bg:#0a0a0a;
-  --card:#141414;
-  --muted:#9e9e9e;
-  --accent:#00aaff;
-}
+  <style>
+    :root {
+      --bg: #091B1E;
+      --card: rgba(255, 255, 255, 0.04);
+      --muted: #bfc9c9;
+      --accent: #00FFCC;
+      --border: rgba(255, 255, 255, 0.08);
+    }
 
-body {
-  margin:0;
-  background:radial-gradient(circle at top, #111, #050505);
-  color:white;
-  font-family:system-ui,-apple-system,"Segoe UI",Roboto;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  height:100vh;
-  transition:opacity .3s;
-}
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
-.container {
-  text-align:center;
-}
+    body {
+      background: var(--bg);
+      color: white;
+      font-family: 'Inter', Arial, sans-serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      overflow-x: hidden;
+      transition: opacity 0.4s ease;
+    }
 
-h1 {
-  font-size:46px;
-  margin-bottom:70px;
-}
+    /* Bakgrunnsglød */
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background: radial-gradient(circle at center, rgba(0,255,204,0.05), transparent 50%);
+      z-index: -1;
+    }
 
-.profiles {
-  display:flex;
-  gap:70px;
-  flex-wrap:wrap;
-  justify-content:center;
-}
+    .container {
+      text-align: center;
+      width: 100%;
+      max-width: 1200px;
+      padding: 40px 20px;
+    }
 
-.profile {
-  cursor:pointer;
-  transition:.35s;
-  text-align:center;
-  position:relative;
-}
+    h1 {
+      font-size: 40px;
+      font-weight: 900;
+      letter-spacing: 1px;
+      margin-bottom: 60px;
+      text-shadow: 0 0 15px rgba(0,255,204,0.15);
+    }
 
-.profile:hover {
-  transform:scale(1.15);
-}
+    .profiles {
+      display: flex;
+      gap: 50px;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-items: flex-start;
+    }
 
-.avatar {
-  width:170px;
-  height:170px;
-  border-radius:50%;
-  overflow:hidden;
-  background:var(--card);
-  border:2px solid transparent;
-  transition:.35s;
-}
+    .profile {
+      cursor: pointer;
+      transition: transform 0.3s ease;
+      text-align: center;
+      position: relative;
+      width: 160px;
+    }
 
-.profile:hover .avatar {
-  border-color:var(--accent);
-  box-shadow:0 0 25px rgba(0,170,255,0.5);
-}
+    .profile:hover {
+      transform: scale(1.08);
+    }
 
-.avatar img {
-  width:100%;
-  height:100%;
-  object-fit:cover;
-}
+    .avatar {
+      width: 150px;
+      height: 150px;
+      border-radius: 50%;
+      overflow: hidden;
+      background: rgba(0, 0, 0, 0.3);
+      border: 3px solid rgba(255,255,255,0.1);
+      transition: all 0.3s ease;
+      margin: 0 auto;
+    }
 
-.name {
-  margin-top:18px;
-  font-size:18px;
-  color:var(--muted);
-}
+    .profile:hover .avatar {
+      border-color: var(--accent);
+      box-shadow: 0 0 25px rgba(0, 255, 204, 0.5);
+    }
 
-.profile:hover .name {
-  color:white;
-}
+    .avatar img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
 
-.edit-btn {
-  position:absolute;
-  bottom:55px;
-  right:15px;
-  background:rgba(0,0,0,0.6);
-  padding:8px;
-  border-radius:50%;
-  font-size:14px;
-  opacity:0;
-  transition:.3s;
-}
+    .name {
+      margin-top: 16px;
+      font-size: 18px;
+      font-weight: 600;
+      color: var(--muted);
+      transition: color 0.25s;
+      word-break: break-word;
+    }
 
-.profile:hover .edit-btn {
-  opacity:1;
-}
+    .profile:hover .name {
+      color: white;
+    }
 
-.add-profile .avatar {
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-size:60px;
-  color:#777;
-}
-</style>
+    /* Redigeringsblyant */
+    .edit-btn {
+      position: absolute;
+      top: 0;
+      right: 5px;
+      background: rgba(9, 27, 30, 0.85);
+      border: 1px solid var(--border);
+      color: var(--accent);
+      padding: 10px;
+      border-radius: 50%;
+      font-size: 14px;
+      opacity: 0;
+      transform: scale(0.8);
+      transition: all 0.25s ease;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+      width: 36px;
+      height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .profile:hover .edit-btn {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    .edit-btn:hover {
+      background: var(--accent);
+      color: #071214;
+    }
+
+    /* Legg til profil knapp */
+    .add-profile .avatar {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 46px;
+      color: rgba(255,255,255,0.4);
+      background: var(--card);
+      border: 2px dashed rgba(255,255,255,0.2);
+    }
+
+    .add-profile:hover .avatar {
+      border-color: var(--accent);
+      border-style: solid;
+      color: var(--accent);
+      background: rgba(0, 255, 204, 0.03);
+    }
+
+    /* MODERN MODAL (POPUP FOR NY PROFIL) */
+    .modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(5, 14, 16, 0.8);
+      backdrop-filter: blur(8px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+      z-index: 1000;
+    }
+
+    .modal.active {
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    .modal-content {
+      background: #0d2529;
+      border: 1px solid var(--border);
+      padding: 35px;
+      border-radius: 24px;
+      width: 100%;
+      max-width: 420px;
+      text-align: center;
+      box-shadow: 0 15px 40px rgba(0,0,0,0.5);
+      transform: translateY(20px);
+      transition: transform 0.3s ease;
+    }
+
+    .modal.active .modal-content {
+      transform: translateY(0);
+    }
+
+    .modal h2 {
+      font-size: 22px;
+      margin-bottom: 20px;
+    }
+
+    .modal input {
+      width: 100%;
+      padding: 14px;
+      background: rgba(0,0,0,0.2);
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 12px;
+      color: white;
+      font-size: 16px;
+      margin-bottom: 25px;
+      outline: none;
+      text-align: center;
+    }
+
+    .modal input:focus {
+      border-color: var(--accent);
+    }
+
+    .modal-actions {
+      display: flex;
+      gap: 12px;
+    }
+
+    .modal-actions button {
+      flex: 1;
+      padding: 12px;
+      border-radius: 10px;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      border: none;
+      transition: 0.2s;
+    }
+
+    .btn-create {
+      background: var(--accent);
+      color: #071214;
+    }
+    .btn-create:hover { background: #00e6b8; }
+
+    .btn-close {
+      background: transparent;
+      border: 1px solid rgba(255,255,255,0.15);
+      color: var(--muted);
+    }
+    .btn-close:hover { color: white; border-color: rgba(255,255,255,0.3); }
+
+    @media (max-width: 768px) {
+      h1 { font-size: 30px; margin-bottom: 40px; }
+      .profiles { gap: 30px; }
+      .profile { width: 130px; }
+      .avatar { width: 120px; height: 120px; }
+    }
+  </style>
 </head>
-
 <body>
 
-<div class="container">
-  <h1>Hvem er det som ser på?</h1>
-  <div class="profiles" id="profiles"></div>
-</div>
+  <div class="container">
+    <h1>Hvem ser på nå?</h1>
+    <div class="profiles" id="profiles"></div>
+  </div>
 
-<script>
-
-const MAX_PROFILER = 5;
-
-/* LAST PROFILER */
-let profiler = JSON.parse(localStorage.getItem("profiler"));
-
-if (!profiler) {
-  profiler = [
-    {
-      navn: "Bruker 1",
-      bilde: "https://api.dicebear.com/7.x/avataaars/svg?seed=User1",
-      pin: null
-    }
-  ];
-  localStorage.setItem("profiler", JSON.stringify(profiler));
-}
-
-/* 🔥 HENT ENDRING FRA KONTO/BILDEVELGER */
-let valgtBilde = localStorage.getItem("valgtProfilbilde");
-let aktivProfilIndex = localStorage.getItem("aktivProfil");
-
-/* Hvis bilde er endret → oppdater riktig profil */
-if (valgtBilde && aktivProfilIndex !== null && profiler[aktivProfilIndex]) {
-  profiler[aktivProfilIndex].bilde = valgtBilde;
-
-  localStorage.setItem("profiler", JSON.stringify(profiler));
-
-  localStorage.removeItem("valgtProfilbilde");
-}
-
-const container = document.getElementById("profiles");
-
-/* RENDER */
-function renderProfiler() {
-  container.innerHTML = "";
-
-  profiler.forEach((profil, index) => {
-
-    const div = document.createElement("div");
-    div.className = "profile";
-
-    div.innerHTML = `
-      <div class="avatar">
-        <img src="${profil.bilde}">
+  <div class="modal" id="addProfileModal">
+    <div class="modal-content">
+      <h2>Opprett ny profil</h2>
+      <input type="text" id="newProfileName" placeholder="Skriv profilnavn..." maxlength="15">
+      <div class="modal-actions">
+        <button class="btn-create" onclick="lagreNyProfil()">Opprett profil</button>
+        <button class="btn-close" onclick="lukkModal()">Avbryt</button>
       </div>
+    </div>
+  </div>
 
-      <div class="name">${profil.navn}</div>
+  <script>
+    const MAX_PROFILER = 5;
+    const container = document.getElementById("profiles");
+    const modal = document.getElementById("addProfileModal");
+    const newProfileNameInput = document.getElementById("newProfileName");
 
-      <div class="edit-btn">
-        <i class="fa-solid fa-pen"></i>
-      </div>
-    `;
+    // Standard fallbackbilde hvis intet annet er valgt
+    const standardBilde = "https://static.wixstatic.com/media/fd2fb2_39376e4ee55b460ab7a3ebbfcf35fef7~mv2.png";
 
-    /* VELG PROFIL */
-    div.addEventListener("click", () => {
-      velgProfil(index);
-    });
+    /* 1. LAST INN PROFILER FRA STORAGE */
+    let profiler = JSON.parse(localStorage.getItem("profiler"));
 
-    /* REDIGER */
-    div.querySelector(".edit-btn").addEventListener("click", (e) => {
-      e.stopPropagation();
-
-      localStorage.setItem("redigerProfilIndex", index);
-      window.location.href = "konto.html";
-    });
-
-    container.appendChild(div);
-  });
-
-  /* LEGG TIL PROFIL */
-  if (profiler.length < MAX_PROFILER) {
-    const add = document.createElement("div");
-    add.className = "profile add-profile";
-
-    add.innerHTML = `
-      <div class="avatar">+</div>
-      <div class="name">Legg til</div>
-    `;
-
-    add.addEventListener("click", leggTilProfil);
-
-    container.appendChild(add);
-  }
-}
-
-renderProfiler();
-
-/* VELG PROFIL */
-function velgProfil(index) {
-  const profil = profiler[index];
-
-  if (profil.pin) {
-    const input = prompt("Skriv PIN:");
-
-    if (input !== profil.pin) {
-      alert("Feil PIN");
-      return;
+    // Hvis det overhode ikke finnes noen profilliste, opprett en standard basert på innlogget bruker
+    if (!profiler) {
+      const globaltNavn = localStorage.getItem("navn") || "Hovedprofil";
+      const globaltBilde = localStorage.getItem("profilbilde") || standardBilde;
+      
+      profiler = [
+        {
+          navn: globaltNavn,
+          bilde: globaltBilde,
+          pin: null
+        }
+      ];
+      localStorage.setItem("profiler", JSON.stringify(profiler));
     }
-  }
 
-  localStorage.setItem("aktivProfil", index);
+    /* 2. SYNKRONISERING AV PROFILBILDE OG NAVN FRA KONTOSIDEN */
+    let aktivProfilIndex = localStorage.getItem("aktivProfil");
+    if (aktivProfilIndex !== null && profiler[aktivProfilIndex]) {
+      // Sjekk om det ligger oppdatert navn eller bilde i løs storage fra konto.html
+      const oppdatertBilde = localStorage.getItem("profilbilde");
+      const oppdatertNavn = localStorage.getItem("navn");
 
-  document.body.style.opacity = "0";
+      let endret = false;
 
-  setTimeout(() => {
-    window.location.href = "Hovedside.html";
-  }, 300);
-}
+      if (oppdatertBilde && profiler[aktivProfilIndex].bilde !== oppdatertBilde) {
+        profiler[aktivProfilIndex].bilde = oppdatertBilde;
+        endret = true;
+      }
+      if (oppdatertNavn && profiler[aktivProfilIndex].navn !== oppdatertNavn) {
+        profiler[aktivProfilIndex].navn = oppdatertNavn;
+        endret = true;
+      }
 
-/* LEGG TIL PROFIL */
-function leggTilProfil() {
-  if (profiler.length >= MAX_PROFILER) return;
+      if (endret) {
+        localStorage.setItem("profiler", JSON.stringify(profiler));
+      }
+    }
 
-  const navn = prompt("Navn:");
-  if (!navn) return;
+    /* 3. BYGG OG VIS PROFILENE PÅ SKJERMEN */
+    function renderProfiler() {
+      container.innerHTML = "";
 
-  profiler.push({
-    navn: navn,
-    bilde: `https://api.dicebear.com/7.x/avataaars/svg?seed=${navn}`,
-    pin: null
-  });
+      profiler.forEach((profil, index) => {
+        const div = document.createElement("div");
+        div.className = "profile";
 
-  localStorage.setItem("profiler", JSON.stringify(profiler));
+        div.innerHTML = `
+          <div class="avatar">
+            <img src="${profil.bilde || standardBilde}">
+          </div>
+          <div class="name">${profil.navn}</div>
+          <div class="edit-btn" title="Administrer konto / endre bilde">
+            <i class="fa-solid fa-pen"></i>
+          </div>
+        `;
 
-  renderProfiler();
-}
+        // Klikk på selve profilen for å velge den og gå til hovedsiden
+        div.addEventListener("click", () => {
+          velgProfil(index);
+        });
 
-</script>
+        // Klikk på blyanten for å gå direkte til kontosiden og redigere akkurat denne profilen
+        div.querySelector(".edit-btn").addEventListener("click", (e) => {
+          e.stopPropagation(); // Hindrer at profilen velges samtidig
+          localStorage.setItem("aktivProfil", index);
+          localStorage.setItem("navn", profil.navn);
+          localStorage.setItem("profilbilde", profil.bilde || standardBilde);
+          window.location.href = "konto.html";
+        });
+
+        container.appendChild(div);
+      });
+
+      /* LEGG TIL PROFIL-KNAPP (vises kun hvis under maksgrensen) */
+      if (profiler.length < MAX_PROFILER) {
+        const addDiv = document.createElement("div");
+        addDiv.className = "profile add-profile";
+
+        addDiv.innerHTML = `
+          <div class="avatar"><i class="fa-solid fa-plus"></i></div>
+          <div class="name">Legg til profil</div>
+        `;
+
+        addDiv.addEventListener("click", åpneModal);
+        container.appendChild(addDiv);
+      }
+    }
+
+    /* 4. VELG EN PROFIL */
+    function velgProfil(index) {
+      const profil = profiler[index];
+
+      if (profil.pin) {
+        const input = prompt(`Skriv PIN-kode for ${profil.navn}:`);
+        if (input !== profil.pin) {
+          alert("Feil PIN-kode!");
+          return;
+        }
+      }
+
+      // Sett aktiv økt slik at hovedsiden og konto vet hvem du er
+      localStorage.setItem("aktivProfil", index);
+      localStorage.setItem("navn", profil.navn);
+      localStorage.setItem("profilbilde", profil.bilde || standardBilde);
+
+      // Flott uttoningseffekt før vi reiser videre
+      document.body.style.opacity = "0";
+      setTimeout(() => {
+        window.location.href = "Hovedside.html";
+      }, 400);
+    }
+
+    /* 5. MODAL LOGIKK FOR NY KONTO */
+    function åpneModal() {
+      newProfileNameInput.value = "";
+      modal.classList.add("active");
+      newProfileNameInput.focus();
+    }
+
+    function lukkModal() {
+      modal.classList.remove("active");
+    }
+
+    function lagreNyProfil() {
+      const navn = newProfileNameInput.value.trim();
+      if (!navn) return alert("Profilen må ha et navn!");
+
+      if (profiler.length >= MAX_PROFILER) return lukkModal();
+
+      // Legg til den nye profilen i arrayen med et kult standardbilde
+      profiler.push({
+        navn: navn,
+        bilde: "https://static.wixstatic.com/media/fd2fb2_3df40a7e62c545afa3918fc10393284d~mv2.png", 
+        pin: null
+      });
+
+      // Lagre den oppdaterte listen i nettleserminnet
+      localStorage.setItem("profiler", JSON.stringify(profiler));
+      
+      lukkModal();
+      renderProfiler();
+    }
+
+    // Kjør funksjonen for å tegne opp siden
+    renderProfiler();
+  </script>
 
 </body>
 </html>
