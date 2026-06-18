@@ -7,52 +7,47 @@
   <link rel="icon" type="image/png" href="https://static.wixstatic.com/media/fd2fb2_39376e4ee55b460ab7a3ebbfcf35fef7~mv2.png" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
   <style>
-    /* =========================================================
-    GLOBAL RESET & BASE STYLES
-    ========================================================= */
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
+/* =========================================================
+   GLOBAL RESET & BASE STYLES
+   ========================================================= */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
 
-    html {
-      font-size: clamp(14px, 1vw + 10px, 18px);
-      scroll-behavior: smooth;
-    }
+html {
+  font-size: clamp(14px, 1vw + 10px, 18px);
+  scroll-behavior: smooth;
+}
 
-    body {
-      background: #000;
-      color: #fff;
-      font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
-      letter-spacing: .2px;
-      opacity: 0;
-      transition: opacity 1s ease;
-      overflow-x: hidden;
-    }
-
-    body.loaded {
-      opacity: 1;
-    }
-
-    img, video {
-      max-width: 100%;
-      height: auto;
-    }
-
-
-/* ==========================================================================
-   GLOBAL NULLSTILLING (Fjerner den hvite/mørke stripen helt øverst)
-   ========================================================================== */
 html, body {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  background-color: #091B1E;
+  background-color: #000000 !important; /* Garanterer helt ren svart bakgrunn på hele siden */
+  color: #fff;
+  font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+  letter-spacing: .2px;
+}
+
+body {
+  opacity: 0;
+  transition: opacity 1s ease;
+  overflow-x: hidden;
+}
+
+body.loaded {
+  opacity: 1;
+}
+
+img, video {
+  max-width: 100%;
+  height: auto;
 }
 
 /* ==========================================================================
-   OPPDATERT TOPPMENY (PC & MOBIL)
+   TOPPMENY (PC & MOBIL) - Beholder de originale fargene
    ========================================================================== */
 .top-nav {
   position: fixed;
@@ -67,24 +62,21 @@ html, body {
   z-index: 9999;
   box-sizing: border-box;
   
-  /* Mørk skygge/fade øverst som gjør menyen lettleselig */
+  /* Original mørkegrønn skygge/fade øverst */
   background: linear-gradient(to bottom, rgba(9, 27, 30, 0.95) 0%, rgba(9, 27, 30, 0.6) 50%, rgba(9, 27, 30, 0) 100%);
   box-shadow: none;
-  
-  /* Myk overgang når bakgrunnen tones inn */
   transition: background 0.4s ease, box-shadow 0.4s ease;
 }
 
-/* Fjernet den gamle gradient-faden (::before) som lå i toppen tidligere */
 .top-nav::before {
   display: none;
 }
 
-/* AKTIV SCROLL-BAKGRUNN: Denne slår inn når du blar nedover siden */
+/* Aktiv scroll-bakgrunn med original grønntone */
 .top-nav.scrolled {
   background: rgba(9, 27, 30, 0.95);
-  backdrop-filter: blur(10px); /* Gir en pen glass-effekt over video/bilder bak */
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.8);
 }
 
 /* Venstre side av meny */
@@ -94,7 +86,7 @@ html, body {
   gap: 40px;
 }
 
-/* WATCH LOGO - Helt renset for glød, skygge og animasjon */
+/* WATCH LOGO */
 .watch-logo-text {
   font-family: 'Montserrat Alternates', sans-serif;
   font-size: 28px;
@@ -107,14 +99,11 @@ html, body {
   height: 100%;
   cursor: pointer;
   user-select: none;
-  
-  /* Ingen skygger eller hover-effekter */
   text-shadow: none !important;
   transform: none !important;
   transition: none !important;
 }
 
-/* Sørger for at den forblir helt uendret ved hover */
 .watch-logo-text:hover {
   color: #00FFCC !important;
   transform: none !important;
@@ -188,725 +177,659 @@ html, body {
   transform: translateY(1px);
 }
 
+/* =========================================================
+   HERO SECTION (Toninger fader til ren svart #000000)
+   ========================================================= */
+.hero {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  background: #000000;
+}
+
+.background-image,
+.background-video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: opacity 1s ease;
+  z-index: 0;
+}
+
+.background-video {
+  opacity: 0;
+  filter: brightness(.8);
+}
+
+.overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, #000000 0%, rgba(0, 0, 0, .5) 40%, transparent 75%),
+              linear-gradient(to right, rgba(0, 0, 0, .7) 0%, transparent 50%);
+  z-index: 1;
+}
+
+.bottom-fade {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: 200px;
+  background: linear-gradient(to top, #000000, transparent);
+  z-index: 1;
+}
+
+/* =========================================================
+   HERO CONTENT & GLASS INFO PANEL
+   ========================================================= */
+.content-wrapper {
+  position: absolute;
+  bottom: 80px;
+  left: 100px;
+  right: 100px;
+  z-index: 2;
+  max-width: 1400px;
+  margin: auto;
+}
+
+.logo-container {
+  width: 100%;
+  max-width: 1100px;
+  margin-bottom: 16px;
+  display: flex;
+  justify-content: flex-start;
+}
+
+.film-logo {
+  max-width: 100%;
+  max-height: 120px;
+  object-fit: contain;
+}
+
+.text-logo {
+  font-size: clamp(2rem, 3vw, 2.4rem);
+  font-weight: 700;
+  line-height: 1.2;
+  white-space: nowrap;
+}
+
+.left-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.text-button-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 50px;
+  background: rgba(10, 15, 18, .55);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-radius: 24px;
+  padding: 42px;
+  border: 1px solid rgba(255, 255, 255, .08);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, .7),
+              inset 0 1px 0 rgba(255, 255, 255, .05);
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.text-container {
+  flex: 1;
+  max-width: 60%;
+}
+
+.description {
+  font-size: 16px;
+  line-height: 1.6;
+  margin-bottom: 10px;
+  color: #eee;
+}
+
+.metadata {
+  margin-top: 12px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  font-size: 13px;
+  color: #ccc;
+  align-items: center;
+}
+
+.metadata span {
+  display: inline-flex;
+  align-items: center;
+}
+
+.metadata span:nth-child(even) {
+  font-weight: bold;
+  font-size: 16px;
+  line-height: 1;
+}
+
+.imdb-logo {
+  width: 28px;
+  margin-left: 4px;
+  object-fit: contain;
+  cursor: pointer;
+  transition: .3s;
+}
+
+.imdb-logo:hover {
+  filter: brightness(.8);
+}
+
+.cast-info {
+  flex: 0 0 260px;
+  max-width: 260px;
+  font-size: 13px;
+  color: #aaa;
+  line-height: 1.6;
+}
+
+.cast-info strong {
+  color: #fff;
+}
+
+.cast-info a {
+  color: #aaa;
+  text-decoration: none;
+  transition: .25s;
+}
+
+.cast-info a:hover {
+  color: #fff;
+}
+
+.availability-info {
+  margin-top: 10px;
+  font-size: 12px;
+  color: #ccc;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255, 255, 255, 0.08);
+  padding: 6px 10px;
+  border-radius: 8px;
+}
+
+.availability-info i {
+  font-size: 13px;
+  color: #fff;
+}
+
+/* Buttons */
+.buttons-column {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.watch-button {
+  background: #fff;
+  color: #000;
+  font-size: 17px;
+  font-weight: 600;
+  padding: 14px 34px;
+  border-radius: 999px;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  transition: all .25s ease;
+}
+
+.watch-button:hover {
+  transform: scale(1.06);
+  background: #e6e6e6;
+}
+
+.more-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 22px;
+  padding: 0 6px;
+  font-size: 10px;
+  font-weight: 500;
+  color: #fff;
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all .25s ease;
+}
+
+.more-btn:hover {
+  background: rgba(255, 255, 255, 0.15);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35);
+}
+
+/* Video Controls */
+.video-controls {
+  position: absolute;
+  top: 20px;
+  right: 30px;
+  z-index: 3;
+  display: flex;
+  gap: 10px;
+  opacity: 0;
+  transition: opacity .5s ease;
+}
+
+.video-controls button {
+  background: rgba(0, 0, 0, .6);
+  border: none;
+  color: #fff;
+  font-size: 20px;
+  padding: 10px 14px;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.video-controls button:hover {
+  background: rgba(255, 255, 255, .2);
+}
+
+/* =========================================================
+   RECOMMENDATIONS & SEKSJONER (Helt beksvart bakgrunn)
+   ========================================================= */
+.recommendations {
+  margin: -60px 100px 0;
+  padding: 0 0 50px;
+  background: #000000;
+  position: relative;
+  z-index: 5;
+}
+
+.recommendations h2 {
+  font-size: 24px;
+  font-weight: 600;
+  margin-bottom: 20px;
+}
+
+.gallery {
+  display: flex;
+  gap: 18px;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  padding-bottom: 10px;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.gallery::-webkit-scrollbar {
+  display: none;
+}
+
+.movie-card {
+  min-width: 280px;
+  height: 160px;
+  border-radius: 14px;
+  overflow: hidden;
+  position: relative;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: transform .35s ease, box-shadow .35s ease;
+}
+
+.movie-card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform .4s ease;
+}
+
+.movie-card:hover {
+  transform: scale(1.08);
+  z-index: 5;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, .9);
+}
+
+.movie-card:hover img {
+  transform: scale(1.1);
+}
+
+.movie-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(0, 0, 0, .9), transparent 60%);
+  opacity: 0;
+  transition: .3s;
+  display: flex;
+  align-items: flex-end;
+  padding: 12px;
+}
+
+.movie-card:hover .movie-overlay {
+  opacity: 1;
+}
+
+.movie-title {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+/* =========================================================
+   EPISODES – PREMIUM DESIGN
+   ========================================================= */
+.season-buttons {
+  display: flex;
+  gap: 14px;
+  margin-bottom: 20px;
+  overflow-x: auto;
+  padding-bottom: 6px;
+}
+
+.season-btn {
+  background: rgba(255, 255, 255, .08);
+  color: #ccc;
+  border: none;
+  padding: 10px 22px;
+  border-radius: 999px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: .25s;
+}
+
+.season-btn:hover {
+  background: rgba(0, 255, 204, .2);
+  color: #00ffcc;
+}
+
+.season-btn.active {
+  background: #00ffcc;
+  color: #000;
+  font-weight: 700;
+}
+
+.episode-gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 24px;
+  width: 100%;
+  margin: 0;
+}
+
+.episode-card {
+  background: #0c0c0c;
+  border-radius: 18px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: all .35s ease;
+  border: 1px solid rgba(255, 255, 255, .05);
+}
+
+.episode-card:hover {
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, .8);
+  border: 1px solid rgba(0, 255, 204, .25);
+}
+
+.episode-thumb {
+  position: relative;
+}
+
+.episode-thumb img {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+}
+
+.play-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, .35);
+  opacity: 0;
+  transition: .3s;
+}
+
+.episode-card:hover .play-overlay {
+  opacity: 1;
+}
+
+.play-overlay i {
+  font-size: 38px;
+  color: #00ffcc;
+  background: none;
+  padding: 0;
+  border-radius: 0;
+}
+
+.episode-info {
+  padding: 16px;
+}
+
+.episode-title {
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+.episode-meta {
+  font-size: 12px;
+  color: #aaa;
+  margin-bottom: 8px;
+}
+
+.episode-desc {
+  font-size: 13px;
+  color: #bbb;
+  line-height: 1.4;
+}
+
+.episode-card.locked {
+  opacity: 0.7;
+  pointer-events: none;
+}
+
+.episode-card.locked img {
+  filter: grayscale(100%) brightness(0.6);
+}
+
+.lock-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.6);
+  color: #fff;
+  font-size: 13px;
+  text-align: center;
+  gap: 6px;
+}
+
+.lock-overlay i {
+  font-size: 26px;
+  color: #00ffcc;
+}
+
+/* =========================================================
+   BUNN / FOOTER (Helt beksvart design)
+   ========================================================= */
+.footer {
+  width: 100%;
+  padding: 70px 80px 35px;
+  margin-top: 100px;
+  background: #000000; /* Låst til ren svart */
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  color: #7d7d7d;
+}
+
+.footer-socials {
+  display: flex;
+  gap: 22px;
+  margin-bottom: 35px;
+}
+
+.footer-socials a {
+  color: #9b9b9b;
+  font-size: 20px;
+  transition: color 0.25s ease, transform 0.25s ease;
+}
+
+.footer-socials a:hover {
+  color: #ffffff;
+  transform: scale(1.08);
+}
+
+.footer-links {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(140px, 1fr));
+  gap: 18px 50px;
+  margin-bottom: 35px;
+}
+
+.footer-links a {
+  color: #8a8a8a;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.5;
+  transition: color 0.2s ease;
+}
+
+.footer-links a:hover {
+  color: #ffffff;
+}
+
+.footer-service-btn {
+  margin-bottom: 28px;
+  padding: 10px 18px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 4px;
+  background: transparent;
+  color: #a0a0a0;
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.footer-service-btn:hover {
+  border-color: rgba(255, 255, 255, 0.45);
+  color: #fff;
+}
+
+.footer-copy {
+  font-size: 13px;
+  color: #666;
+  margin-bottom: 8px;
+}
+
+.footer-bottom {
+  max-width: 700px;
+  font-size: 12px;
+  line-height: 1.6;
+  color: #555;
+}
+
+/* Popup & Expired Overlays */
+.popup-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, .7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 200;
+}
+
+.popup-box {
+  background: #111;
+  color: #fff;
+  max-width: 600px;
+  max-height: 70vh;
+  overflow-y: auto;
+  padding: 20px;
+  border-radius: 12px;
+  position: relative;
+}
+
+.close-btn {
+  position: absolute;
+  top: 10px;
+  right: 14px;
+  font-size: 20px;
+  background: none;
+  border: none;
+  color: #fff;
+  cursor: pointer;
+}
+
+#expiredOverlay {
+  position: fixed;
+  inset: 0;
+  background: #000000; /* Svart utløpt bakgrunn */
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 99999;
+}
+
+#expiredOverlay.active {
+  display: flex;
+}
+
+.expired-content {
+  text-align: center;
+}
+
+.dead-smiley {
+  font-size: 80px;
+  letter-spacing: 10px;
+  margin-bottom: 20px;
+}
+
+.expired-content h1 {
+  font-size: clamp(22px, 4vw, 36px);
+}
+
+/* =========================================================
+   RESPONSIVE MEDIA QUERIES (DESKTOP / NETTBRETT)
+   ========================================================= */
+@media (max-width: 1024px) {
+  .content-wrapper {
+    left: 20px;
+    right: 20px;
+  }
+  .text-button-container {
+    flex-direction: column;
+    gap: 20px;
+  }
+  .text-container {
+    max-width: 100%;
+  }
+  .recommendations {
+    padding: 40px 20px;
+  }
+}
 
-    /* =========================================================
-    HERO SECTION
-    ========================================================= */
-    .hero {
-      position: relative;
-      width: 100vw;
-      height: 100vh;
-      overflow: hidden;
-    }
-
-    .background-image,
-    .background-video {
-      position: absolute;
-      inset: 0;
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      transition: opacity 1s ease;
-      z-index: 0;
-    }
-
-    .background-video {
-      opacity: 0;
-      filter: brightness(.8);
-    }
-
-    .overlay {
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(to top, rgba(0, 0, 0, .9) 0%, rgba(0, 0, 0, .5) 40%, transparent 75%),
-                  linear-gradient(to right, rgba(0, 0, 0, .7) 0%, transparent 50%);
-      z-index: 1;
-    }
-
-    .bottom-fade {
-      position: absolute;
-      bottom: 0;
-      width: 100%;
-      height: 200px;
-      background: linear-gradient(to top, #000, transparent);
-      z-index: 1;
-    }
-
-    /* =========================================================
-    HERO CONTENT
-    ========================================================= */
-    .content-wrapper {
-      position: absolute;
-      bottom: 80px;
-      left: 100px;
-      right: 100px;
-      z-index: 2;
-      max-width: 1400px;
-      margin: auto;
-    }
-
-    .logo-container {
-      width: 100%;
-      max-width: 1100px;
-      margin-bottom: 16px;
-      display: flex;
-      justify-content: flex-start;
-    }
-
-    .film-logo {
-      max-width: 100%;
-      max-height: 120px;
-      object-fit: contain;
-    }
-
-    .text-logo {
-      font-size: clamp(2rem, 3vw, 2.4rem);
-      font-weight: 700;
-      line-height: 1.2;
-      white-space: nowrap;
-    }
-
-    .left-content {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
-
-    /* =========================================================
-    GLASS INFO PANEL
-    ========================================================= */
-    .text-button-container {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      gap: 50px;
-      background: rgba(10, 15, 18, .55);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-      border-radius: 24px;
-      padding: 42px;
-      border: 1px solid rgba(255, 255, 255, .08);
-      box-shadow: 0 20px 60px rgba(0, 0, 0, .7),
-                  inset 0 1px 0 rgba(255, 255, 255, .05);
-      position: relative;
-      overflow: hidden;
-      width: 100%;
-      max-width: 1400px;
-      margin: 0 auto;
-    }
-
-    /* =========================================================
-    TEXT AREA
-    ========================================================= */
-    .text-container {
-      flex: 1;
-      max-width: 60%;
-    }
-
-    .description {
-      font-size: 16px;
-      line-height: 1.6;
-      margin-bottom: 10px;
-      color: #eee;
-    }
-
-    .metadata {
-      margin-top: 12px;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 6px;
-      font-size: 13px;
-      color: #ccc;
-      align-items: center;
-    }
-
-    .metadata span {
-      display: inline-flex;
-      align-items: center;
-    }
-
-    .metadata span:nth-child(even) {
-      font-weight: bold;
-      font-size: 16px;
-      line-height: 1;
-    }
-
-    .imdb-logo {
-      width: 28px;
-      margin-left: 4px;
-      object-fit: contain;
-      cursor: pointer;
-      transition: .3s;
-    }
-
-    .imdb-logo:hover {
-      filter: brightness(.8);
-    }
-
-    .cast-info {
-      flex: 0 0 260px;
-      max-width: 260px;
-      font-size: 13px;
-      color: #aaa;
-      line-height: 1.6;
-    }
-
-    .cast-info strong {
-      color: #fff;
-    }
-
-    .cast-info a {
-      color: #aaa;
-      text-decoration: none;
-      transition: .25s;
-    }
-
-    .cast-info a:hover {
-      color: #fff;
-    }
-
-    /* =========================================================
-    AVAILABILITY INFO
-    ========================================================= */
-    .availability-info {
-      margin-top: 10px;
-      font-size: 12px;
-      color: #ccc;
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      background: rgba(255, 255, 255, 0.08);
-      padding: 6px 10px;
-      border-radius: 8px;
-    }
-
-    .availability-info i {
-      font-size: 13px;
-      color: #fff;
-    }
-
-    /* =========================================================
-    BUTTONS
-    ========================================================= */
-    .buttons-column {
-      display: flex;
-      flex-direction: column;
-      gap: 15px;
-    }
-
-    .watch-button {
-      background: #fff;
-      color: #000;
-      font-size: 17px;
-      font-weight: 600;
-      padding: 14px 34px;
-      border-radius: 999px;
-      border: none;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-      transition: all .25s ease;
-    }
-
-    .watch-button:hover {
-      transform: scale(1.06);
-      background: #e6e6e6;
-    }
-
-    .more-btn {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      height: 22px;
-      padding: 0 6px;
-      font-size: 10px;
-      font-weight: 500;
-      color: #fff;
-      background: rgba(255, 255, 255, 0.08);
-      backdrop-filter: blur(12px);
-      border: 1px solid rgba(255, 255, 255, 0.15);
-      border-radius: 4px;
-      cursor: pointer;
-      transition: all .25s ease;
-    }
-
-    .more-btn:hover {
-      background: rgba(255, 255, 255, 0.15);
-      transform: translateY(-1px);
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35);
-    }
-
-    /* =========================================================
-    VIDEO CONTROLS
-    ========================================================= */
-    .video-controls {
-      position: absolute;
-      top: 20px;
-      right: 30px;
-      z-index: 3;
-      display: flex;
-      gap: 10px;
-      opacity: 0;
-      transition: opacity .5s ease;
-    }
-
-    .video-controls button {
-      background: rgba(0, 0, 0, .6);
-      border: none;
-      color: #fff;
-      font-size: 20px;
-      padding: 10px 14px;
-      border-radius: 10px;
-      cursor: pointer;
-    }
-
-    .video-controls button:hover {
-      background: rgba(255, 255, 255, .2);
-    }
-
-    /* =========================================================
-    RECOMMENDATIONS
-    ========================================================= */
-    .recommendations {
-      margin: -60px 100px 0;
-      padding: 0 0 50px;
-      background: #000;
-      position: relative;
-      z-index: 5;
-    }
-
-    .recommendations h2 {
-      font-size: 24px;
-      font-weight: 600;
-      margin-bottom: 20px;
-    }
-
-    .gallery {
-      display: flex;
-      gap: 18px;
-      overflow-x: auto;
-      scroll-behavior: smooth;
-      padding-bottom: 10px;
-      max-width: 1400px;
-      margin: 0 auto;
-    }
-
-    .gallery::-webkit-scrollbar {
-      display: none;
-    }
-
-    .movie-card {
-      min-width: 280px;
-      height: 160px;
-      border-radius: 14px;
-      overflow: hidden;
-      position: relative;
-      cursor: pointer;
-      flex-shrink: 0;
-      transition: transform .35s ease, box-shadow .35s ease;
-    }
-
-    .movie-card img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      transition: transform .4s ease;
-    }
-
-    .movie-card:hover {
-      transform: scale(1.08);
-      z-index: 5;
-      box-shadow: 0 25px 60px rgba(0, 0, 0, .9);
-    }
-
-    .movie-card:hover img {
-      transform: scale(1.1);
-    }
-
-    .movie-overlay {
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(to top, rgba(0, 0, 0, .9), transparent 60%);
-      opacity: 0;
-      transition: .3s;
-      display: flex;
-      align-items: flex-end;
-      padding: 12px;
-    }
-
-    .movie-card:hover .movie-overlay {
-      opacity: 1;
-    }
-
-    .movie-title {
-      font-size: 14px;
-      font-weight: 600;
-    }
-
-    /* =========================================================
-    EPISODES – PREMIUM DESIGN
-    ========================================================= */
-    .season-buttons {
-      display: flex;
-      gap: 14px;
-      margin-bottom: 20px;
-      overflow-x: auto;
-      padding-bottom: 6px;
-    }
-
-    .season-btn {
-      background: rgba(255, 255, 255, .08);
-      color: #ccc;
-      border: none;
-      padding: 10px 22px;
-      border-radius: 999px;
-      cursor: pointer;
-      font-size: 14px;
-      transition: .25s;
-    }
-
-    .season-btn:hover {
-      background: rgba(0, 255, 204, .2);
-      color: #00ffcc;
-    }
-
-    .season-btn.active {
-      background: #00ffcc;
-      color: #000;
-      font-weight: 700;
-    }
-
-    .episode-gallery {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-      gap: 24px;
-      width: 100%;
-      margin: 0;
-    }
-
-    .episode-card {
-      background: #0c0c0c;
-      border-radius: 18px;
-      overflow: hidden;
-      cursor: pointer;
-      transition: all .35s ease;
-      border: 1px solid rgba(255, 255, 255, .05);
-    }
-
-    .episode-card:hover {
-      transform: translateY(-8px) scale(1.02);
-      box-shadow: 0 20px 50px rgba(0, 0, 0, .8);
-      border: 1px solid rgba(0, 255, 204, .25);
-    }
-
-    .episode-thumb {
-      position: relative;
-    }
-
-    .episode-thumb img {
-      width: 100%;
-      height: 180px;
-      object-fit: cover;
-    }
-
-    .play-overlay {
-      position: absolute;
-      inset: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: rgba(0, 0, 0, .35);
-      opacity: 0;
-      transition: .3s;
-    }
-
-    .episode-card:hover .play-overlay {
-      opacity: 1;
-    }
-
-    .play-overlay i {
-      font-size: 38px;
-      color: #00ffcc;
-      background: none;
-      padding: 0;
-      border-radius: 0;
-    }
-
-    .episode-info {
-      padding: 16px;
-    }
-
-    .episode-title {
-      font-size: 16px;
-      font-weight: 600;
-      margin-bottom: 6px;
-    }
-
-    .episode-meta {
-      font-size: 12px;
-      color: #aaa;
-      margin-bottom: 8px;
-    }
-
-    .episode-desc {
-      font-size: 13px;
-      color: #bbb;
-      line-height: 1.4;
-    }
-
-    .episode-card.locked {
-      opacity: 0.7;
-      pointer-events: none;
-    }
-
-    .episode-card.locked img {
-      filter: grayscale(100%) brightness(0.6);
-    }
-
-    .lock-overlay {
-      position: absolute;
-      inset: 0;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      background: rgba(0, 0, 0, 0.6);
-      color: #fff;
-      font-size: 13px;
-      text-align: center;
-      gap: 6px;
-    }
-
-    .lock-overlay i {
-      font-size: 26px;
-      color: #00ffcc;
-    }
-
-    /* =========================================================
-    PREMIUM STREAMING FOOTER
-    ========================================================= */
-    .footer {
-      width: 100%;
-      padding: 70px 80px 35px;
-      margin-top: 100px;
-      background: none;
-      display: flex;
-      flex-direction: column;
-      align-items: flex-start;
-      color: #7d7d7d;
-    }
-
-    .footer-socials {
-      display: flex;
-      gap: 22px;
-      margin-bottom: 35px;
-    }
-
-    .footer-socials a {
-      color: #9b9b9b;
-      font-size: 20px;
-      transition: color 0.25s ease, transform 0.25s ease;
-    }
-
-    .footer-socials a:hover {
-      color: #ffffff;
-      transform: scale(1.08);
-    }
-
-    .footer-links {
-      width: 100%;
-      display: grid;
-      grid-template-columns: repeat(4, minmax(140px, 1fr));
-      gap: 18px 50px;
-      margin-bottom: 35px;
-    }
-
-    .footer-links a {
-      color: #8a8a8a;
-      text-decoration: none;
-      font-size: 14px;
-      font-weight: 400;
-      line-height: 1.5;
-      transition: color 0.2s ease;
-    }
-
-    .footer-links a:hover {
-      color: #ffffff;
-    }
-
-    .footer-service-btn {
-      margin-bottom: 28px;
-      padding: 10px 18px;
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      border-radius: 4px;
-      background: transparent;
-      color: #a0a0a0;
-      font-size: 13px;
-      cursor: pointer;
-      transition: all 0.25s ease;
-    }
-
-    .footer-service-btn:hover {
-      border-color: rgba(255, 255, 255, 0.45);
-      color: #fff;
-    }
-
-    .footer-copy {
-      font-size: 13px;
-      color: #666;
-      margin-bottom: 8px;
-    }
-
-    .footer-bottom {
-      max-width: 700px;
-      font-size: 12px;
-      line-height: 1.6;
-      color: #555;
-    }
-
-    /* =========================================================
-    POPUP
-    ========================================================= */
-    .popup-overlay {
-      position: fixed;
-      inset: 0;
-      background: rgba(0, 0, 0, .7);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 200;
-    }
-
-    .popup-box {
-      background: #111;
-      color: #fff;
-      max-width: 600px;
-      max-height: 70vh;
-      overflow-y: auto;
-      padding: 20px;
-      border-radius: 12px;
-      position: relative;
-    }
-
-    .close-btn {
-      position: absolute;
-      top: 10px;
-      right: 14px;
-      font-size: 20px;
-      background: none;
-      border: none;
-      color: #fff;
-      cursor: pointer;
-    }
-
-    /* =========================================================
-    EXPIRED OVERLAY
-    ========================================================= */
-    #expiredOverlay {
-      position: fixed;
-      inset: 0;
-      background: #091b1e;
-      display: none;
-      align-items: center;
-      justify-content: center;
-      z-index: 99999;
-    }
-
-    #expiredOverlay.active {
-      display: flex;
-    }
-
-    .expired-content {
-      text-align: center;
-    }
-
-    .dead-smiley {
-      font-size: 80px;
-      letter-spacing: 10px;
-      margin-bottom: 20px;
-    }
-
-    .expired-content h1 {
-      font-size: clamp(22px, 4vw, 36px);
-    }
-
-    /* =========================================================
-    RESPONSIVE MEDIA QUERIES (RESPONSIVITET)
-    ========================================================= */
-    @media (max-width: 1024px) {
-      .content-wrapper {
-        left: 20px;
-        right: 20px;
-      }
-      .text-button-container {
-        flex-direction: column;
-        gap: 20px;
-      }
-      .text-container {
-        max-width: 100%;
-      }
-      .recommendations {
-        padding: 40px 20px;
-      }
-    }
-
-    @media (max-width: 768px) {
-      .top-nav {
-        padding: 0 20px;
-      }
-      .nav-links {
-        display: none;
-      }
-      .hero {
-        height: auto;
-        min-height: 100vh;
-        padding-top: 70px;
-      }
-      .background-image,
-      .background-video {
-        height: 60vh;
-      }
-      .content-wrapper {
-        position: relative;
-        bottom: auto;
-        padding: 16px;
-      }
-      .text-button-container {
-        padding: 18px;
-      }
-      .watch-button {
-        width: 100%;
-      }
-      .gallery {
-        grid-template-columns: repeat(2, 1fr);
-      }
-      .footer {
-        padding: 45px 22px 30px;
-      }
-      .footer-links {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 16px 20px;
-      }
-      .footer-links a {
-        font-size: 13px;
-      }
-      .footer-socials {
-        gap: 18px;
-        margin-bottom: 28px;
-      }
-      .footer-socials a {
-        font-size: 18px;
-      }
-    }
 /* ==========================================================================
-   9. HBO MAX INSPIRERT MOBIL-OPTIMALISERING (768px og nedover)
+   MOBIL-OPTIMALISERING (768px og nedover) - Rent svart uttrykk
    ========================================================================== */
 @media (max-width: 768px) {
   body {
     padding-top: 0px;
-    background-color: #091B1E;
+    background-color: #000000 !important; /* Helt svart mobilbakgrunn */
   }
 
   main {
@@ -916,7 +839,7 @@ html, body {
     margin-right: 0px !important;
   }
 
-  /* TOPPMENY – Transparent Max-look med dyp gradient fra toppen */
+  /* TOPPMENY MOBIL – Beholder originale menyfarger og gradient-fade fra topp */
   .top-nav {
     position: fixed !important;
     top: 0;
@@ -924,12 +847,7 @@ html, body {
     width: 100%;
     padding: 0 20px !important;
     height: 60px;
-    background: linear-gradient(
-      to bottom, 
-      rgba(9, 27, 30, 0.9) 0%, 
-      rgba(9, 27, 30, 0.5) 50%, 
-      transparent 100%
-    ) !important; 
+    background: linear-gradient(to bottom, rgba(9, 27, 30, 0.9) 0%, rgba(9, 27, 30, 0.5) 50%, transparent 100%) !important; 
     backdrop-filter: none !important;    
     box-shadow: none !important;
     border: none !important;
@@ -939,7 +857,6 @@ html, body {
     align-items: center !important;
   }
 
-  /* Fjerner midtmenyen (desktop-lenker) fra mobil */
   .nav-links {
     display: none !important;
   }
@@ -985,21 +902,20 @@ html, body {
     display: block;
   }
 
-  /* HERO-SEKSJON: Ekte Max-look med full integrasjon bak toppmenyen */
+  /* HERO-SEKSJON MOBIL */
   .hero {
-    height: 70vh !important; /* Åpner opp banneret slik som på Max mobil */
+    height: 70vh !important;
     min-height: 450px !important;
     max-height: 600px !important;
     display: flex !important;
     flex-direction: column !important;
-    justify-content: flex-end !important; /* Plasserer automatisk innholdet i bunnen av bildet */
-    background: #091B1E !important;
+    justify-content: flex-end !important;
+    background: #000000 !important; /* Helt svart i bunn av hero */
     position: relative !important;
     margin-top: 0px !important;
     overflow: hidden;
   }
 
-  /* Bannerbildet fungerer nå som et fullverdig bakgrunnslag */
   .background-image,
   .background-video,
   .hero-banner {
@@ -1013,23 +929,22 @@ html, body {
     z-index: 1 !important;
   }
 
-  /* Max Scrim Overlay: Toning for sømløs overgang og maksimal tekstlesbarhet */
+  /* Mobil Scrim Overlay som fader 100% til ren svart (#000000) i bunnen */
   .hero .overlay {
     position: absolute !important;
     inset: 0 !important;
     height: 100% !important;
     background: linear-gradient(
       to bottom,
-      rgba(9, 27, 30, 0.4) 0%,     /* Gjør toppen litt mørkere for å fremheve logo/menyen */
+      rgba(9, 27, 30, 0.4) 0%,     
       transparent 30%,
-      rgba(9, 27, 30, 0.4) 50%,
-      rgba(9, 27, 30, 0.85) 80%,   /* Kraftig mørkning bak tekstinnholdet */
-      #091B1E 100%                 /* Fader 100% over i sidens bakgrunnsfarge */
+      rgba(0, 0, 0, 0.4) 50%,
+      rgba(0, 0, 0, 0.85) 80%,   
+      #000000 100%                 
     ) !important;
     z-index: 2 !important;
   }
 
-  /* INFOBOKS: Ligger trygt over gradienten i bunnen via flex-layout */
   .content-wrapper {
     position: relative !important;
     inset: auto !important;
@@ -1040,11 +955,10 @@ html, body {
     display: flex !important;
     flex-direction: column !important;
     gap: 8px !important;
-    margin-top: 0 !important; /* Unngår negative marginer som kan krasje på små skjermer */
+    margin-top: 0 !important;
     z-index: 10 !important;
   }
 
-  /* Fjerner bokser, rammer og effekter for en helt flat Max-look */
   .text-button-container {
     background: transparent !important;
     backdrop-filter: none !important;
@@ -1090,7 +1004,6 @@ html, body {
     margin-top: 4px !important;
   }
 
-  /* KNAPPER: Full bredde, solide, rektangulære med lett avrunding */
   .buttons-column, .banner-buttons {
     width: 100% !important;
     display: flex !important;
@@ -1099,7 +1012,6 @@ html, body {
     margin-top: 8px !important;
   }
 
-  /* Hovedknapp (Ekte hvit Max-knapp) */
   .watch-button {
     width: 100% !important;
     font-size: 14px !important;
@@ -1113,7 +1025,6 @@ html, body {
     letter-spacing: 0.5px;
   }
 
-  /* Sekundærknapp (Semi-transparent med tynn ramme) */
   .add-button {
     width: 100% !important;
     height: auto !important;
@@ -1128,7 +1039,7 @@ html, body {
     letter-spacing: 0.5px;
   }
 
-  /* EPISODEGALLERI: Vertikal liste tilpasset mobilen */
+  /* EPISODEGALLERI MOBIL */
   .episode-gallery {
     display: flex !important;
     flex-direction: column !important;
@@ -1152,12 +1063,13 @@ html, body {
     aspect-ratio: 16 / 9 !important;
   }
 
-  /* Seksjonsavstander for innholdskaruseller */
+  /* SEKSJONER & KARUSELLER (Svart design) */
   .gallery-section, .recommendations {
     margin-left: 0px !important; 
     margin-right: 0px !important;
-    padding: 20px 0px 20px 20px !important; /* Lar innholdet rulle helt ut til høyre kant */
+    padding: 20px 0px 20px 20px !important;
     margin-top: 10px !important;
+    background: #000000 !important; /* Låst til ren svart bakgrunn på mobil */
   }
 
   .gallery-section h2, .recommendations h2 {
@@ -1168,7 +1080,6 @@ html, body {
     padding-right: 20px;
   }
 
-  /* Horisontal rulling (Karuseller) uten desktop-piler */
   .image-gallery, .gallery {
     display: flex !important;
     margin-left: 0px !important; 
@@ -1177,9 +1088,9 @@ html, body {
     overflow-x: auto !important;
     scroll-snap-type: x mandatory !important;
     -webkit-overflow-scrolling: touch !important;
+    background: #000000 !important;
   }
 
-  /* Skjuler desktop-kontroller fullstendig på mobil */
   .scroll-button, .gallery-arrow, .prev-arrow, .next-arrow, .prev, .next, .fade-left, .fade-right {
     display: none !important;
     opacity: 0 !important;
@@ -1193,7 +1104,6 @@ html, body {
     flex-shrink: 0 !important;
   }
 
-  /* Landskapsbilde-kort (Filmer/Anbefalinger) */
   .image-gallery a img {
     width: 180px !important;  
     height: auto !important;
@@ -1207,13 +1117,14 @@ html, body {
     display: none !important;  
   }
 
-  /* Top 10 Galleri – Stående plakater med store tall */
+  /* Top 10 Galleri */
   .top10-gallery {
     display: flex !important;
     overflow-x: auto !important;
     margin-left: 0px !important; 
     gap: 24px !important; 
     padding: 4px 20px 16px 15px !important;
+    background: #000000 !important;
   }
   
   .top10-item {
@@ -1229,14 +1140,13 @@ html, body {
     border-radius: 6px !important;
   }
 
-  /* Max-stilte store outlinete rangeringstall */
   .top10-number {
     font-size: 64px !important;
     font-weight: 900 !important;
     position: absolute !important;
     left: -22px !important;
     bottom: -10px !important;
-    -webkit-text-stroke: 2px #00ffcc !important; /* Matcher merkevarefargen din rundt tallet */
+    -webkit-text-stroke: 2px #00ffcc !important;
     color: transparent !important;
     z-index: 5;
   }
@@ -1262,12 +1172,13 @@ html, body {
     font-size: 12px !important;
   }
 
-  /* Sjanger-knapper (Karusellform på mobil i steden for grid) */
+  /* Sjanger-knapper */
   .genre-gallery {
     display: flex !important;
     overflow-x: auto !important;
     padding: 0 20px 10px 20px !important; 
     gap: 14px !important;
+    background: #000000 !important;
   }
   
   .genre-gallery a {
@@ -1287,11 +1198,11 @@ html, body {
     margin-top: 6px;
   }
 
-  /* Mobil-footer */
+  /* MOBIL-FOOTER (Fullstendig beksvart) */
   .footer {
     padding: 40px 20px 30px !important; 
     margin-top: 40px;
-    background: rgba(0, 0, 0, 0.2);
+    background: #000000 !important; /* Endret fra transparent mørkegrønn til beksvart */
     border-top: 1px solid rgba(255, 255, 255, 0.05);
   }
 
