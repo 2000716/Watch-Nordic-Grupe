@@ -900,6 +900,335 @@ html, body {
         font-size: 18px;
       }
     }
+    /* ==========================================================================
+   9. NETFLIX & HBO MAX MOBIL-OPTIMALISERING (768px og nedover)
+   ========================================================================== */
+@media (max-width: 768px) {
+  body {
+    padding-top: 0px; /* Lar banneret flyte helt opp under menyen */
+  }
+
+  main {
+    padding-left: 0px !important;
+    padding-right: 0px !important;
+    margin-left: 0px !important;
+    margin-right: 0px !important;
+  }
+
+  /* Toppmeny – Justert med mørk feid og lagt litt nærmere kantene (20px) */
+  .top-nav {
+    position: fixed !important;
+    top: 0;
+    left: 0;
+    width: 100%;
+    padding: 0 20px !important; /* Justert til 20px for en ren, men ikke for tett plassering */
+    height: 60px;
+    
+    /* En myk, mørk feid fra toppen og ned (basert på sidens mørke farge) */
+    background: linear-gradient(
+      to bottom, 
+      rgba(9, 27, 30, 0.95) 0%, 
+      rgba(9, 27, 30, 0.5) 60%, 
+      rgba(9, 27, 30, 0) 100%
+    ) !important; 
+    
+    backdrop-filter: none !important;    
+    box-shadow: none !important;
+    border: none !important;
+    z-index: 9999; /* Sikrer at menyen alltid ligger øverst over banneret */
+    
+    /* Sørger for at logo tvinges til venstre og søk/profil helt til høyre */
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+  }
+
+  /* FJERNER MIDTMENYEN (Hjem, Serier, Filmer) FRA MOBIL */
+  .nav-links {
+    display: none !important;
+  }
+
+  /* Overstyrer absolutte posisjoner fra PC slik at flexbox justerer elementene korrekt */
+  .nav-left {
+    display: flex !important;
+    position: static !important;
+    transform: none !important;
+  }
+
+  .nav-right {
+    display: flex !important;
+    position: static !important;
+    transform: none !important;
+    align-items: center !important;
+    gap: 16px !important; /* Lager god avstand mellom søk- og profilknappen */
+  }
+
+  /* Sørger for at søkeikonet og profilbildet holder sammen ytterst til høyre */
+  .nav-search, .profilmeny {
+    display: inline-flex !important;
+    align-items: center !important;
+  }
+
+  /* WATCH-LOGO FOR MOBIL (Større, tykkere og grønn) */
+  .watch-logo-text {
+    font-size: 24px !important; 
+    font-weight: 900 !important;
+    letter-spacing: 0.5px !important;
+    color: #00ffcc !important; 
+    text-transform: uppercase !important;
+    display: inline-block !important;
+  }
+
+  .nav-search {
+    font-size: 18px;
+  }
+
+  .profilmeny img {
+    width: 34px;
+    height: 34px;
+    display: block;
+  }
+
+  /* HERO BANNER */
+  .hero {
+    height: auto;
+    min-height: 100vh;
+    padding-top: 70px;
+  }
+
+  .background-image,
+  .background-video {
+    height: 60vh;
+  }
+
+  .hero-banner {
+    height: 55vh !important; 
+    min-height: 360px !important;
+    max-height: 500px !important;
+    margin-bottom: 20px !important;
+  }
+
+  .hero-banner::after {
+    background: linear-gradient(
+      to bottom,
+      rgba(9, 27, 30, 0) 40%,
+      rgba(9, 27, 30, 0.4) 60%,
+      rgba(9, 27, 30, 0.8) 80%,
+      #091B1E 100%
+    ) !important;
+  }
+
+  .content-wrapper {
+    position: relative;
+    bottom: auto;
+    padding: 16px;
+    left: auto;
+    right: auto;
+    max-width: 100%;
+    gap: 8px !important;
+  }
+
+  .text-button-container {
+    padding: 18px;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .film-logo {
+    width: 180px !important;
+    max-height: 75px !important;
+    object-fit: contain !important;
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    filter: drop-shadow(0px 2px 8px rgba(0,0,0,0.5));
+  }
+
+  .banner-title {
+    font-size: 28px !important;
+    max-width: 100%;
+  }
+
+  .banner-content p {
+    font-size: 12px !important;
+    line-height: 1.4;
+    color: #cccccc;
+    max-width: 100%;
+    -webkit-line-clamp: 2;
+  }
+
+  .banner-meta {
+    font-size: 11px !important;
+  }
+
+  .banner-buttons {
+    gap: 10px !important;
+    margin-top: 4px;
+  }
+
+  .watch-button {
+    width: 100%;
+    font-size: 13px !important;
+    padding: 8px 22px !important;
+    font-weight: 700;
+    border-radius: 4px; 
+  }
+
+  .add-button {
+    width: 36px !important;
+    height: 36px !important;
+    font-size: 14px !important;
+    border-radius: 4px;
+    background: rgba(255, 255, 255, 0.2);
+  }
+
+  /* Seksjons-ramme (Titlene beholder 32px avstand) */
+  .gallery-section {
+    margin-left: 32px !important; 
+    margin-right: 0px !important;
+    margin-bottom: 22px;
+  }
+
+  .gallery-section h2 {
+    padding-left: 0px !important; 
+    margin-left: 0px !important;
+    font-size: 16px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    color: #fff; 
+    margin-bottom: 8px;
+  }
+
+  /* KUN GALLERIBILDENE (Flyttet til 10px avstand fra venstre skjermkant) */
+  .image-gallery {
+    margin-left: -22px !important; /* Trekker bildene ut fra 32px til nøyaktig 10px fra venstrekant */
+    padding: 4px 10px 12px 10px !important; /* Setter 10px indre luft */
+    gap: 10px !important;
+    scroll-snap-type: x mandatory !important;
+    -webkit-overflow-scrolling: touch !important;
+  }
+
+  /* SKJULER NAVIGASJONSPILER PÅ MOBIL */
+  .scroll-button, .gallery-arrow, .prev-arrow, .next-arrow, .prev, .next, .fade-left, .fade-right {
+    display: none !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+  }
+
+  .gallery {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .image-gallery a, .top10-item {
+    scroll-snap-align: start !important;
+    transform: none !important;
+    transition: none !important;
+  }
+
+  .image-gallery a img {
+    width: 200px !important;  
+    height: auto !important;
+    aspect-ratio: 16 / 9 !important; 
+    object-fit: cover !important; 
+    border-radius: 4px !important;
+    transform: none !important;
+  }
+
+  .image-overlay {
+    display: none !important;  
+  }
+
+  .gallery-item:hover > img {
+    transform: none !important;
+  }
+
+  /* TOP 10 GALLERI (Flyttet til 10px avstand fra venstre skjermkant) */
+  .top10-gallery {
+    margin-left: -22px !important; /* Trekker bildene ut fra 32px til nøyaktig 10px fra venstrekant */
+    gap: 16px !important;
+    padding: 4px 10px 12px 10px !important;
+  }
+  
+  .top10-item img {
+    width: 110px !important; 
+    height: auto !important;
+    aspect-ratio: 2 / 3 !important; 
+    object-fit: cover !important;
+    border-radius: 4px !important;
+  }
+
+  .top10-number {
+    font-size: 52px !important;
+    left: -10px !important;
+    bottom: -6px !important;
+    -webkit-text-stroke: 2px rgba(0, 255, 204, 0.8) !important;
+    color: transparent !important;
+  }
+
+  /* Kids banner mobil */
+  .kids-banner {
+    height: 120px !important;
+    margin: 20px 32px !important; 
+    width: calc(100% - 64px) !important;
+    border-radius: 6px;
+  }
+  
+  .kids-overlay {
+    padding-left: 20px !important;
+  }
+  
+  .kids-overlay h2 {
+    font-size: 18px !important;
+    margin-bottom: 2px;
+  }
+  
+  .kids-overlay p {
+    font-size: 12px !important;
+  }
+
+  /* Sjanger-knapper mobil */
+  .genre-gallery {
+    padding: 0 32px !important; 
+    gap: 10px !important;
+  }
+  
+  .genre-gallery a .icon-circle {
+    width: 70px;
+    height: 70px;
+    font-size: 24px;
+  }
+
+  .genre-gallery a .genre-label {
+    font-size: 11px;
+  }
+
+  /* MOBIL-FOOTER */
+  .footer {
+    padding: 40px 32px 30px !important; 
+    margin-top: 60px;
+  }
+
+  .footer-links {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px 16px;
+    margin-bottom: 30px;
+  }
+
+  .footer-links a {
+    font-size: 13px;
+  }
+
+  .footer-socials {
+    gap: 18px;
+    margin-bottom: 25px;
+  }
+
+  .footer-socials a {
+    font-size: 18px;
+  }
+}
 </style>
 
 <header class="top-nav">
