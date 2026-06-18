@@ -1032,9 +1032,10 @@ main {
   }
 }
   </style>
+</head>
+<body>
 
 <header class="top-nav">
-
   <div class="nav-left">
     <div class="watch-logo-text" onclick="window.location.href='Hovedside.html'">
       WATCH
@@ -1059,12 +1060,8 @@ main {
       <span id="profilNavn"></span>
     </a>
   </div>
-
 </header>
-
-
   
-        <!-- Hero Banner -->
 <section class="hero-banner">
   <img class="banner-image" id="banner-bilde" src="" alt="Film Banner" />
   <video id="banner-video" class="banner-video" playsinline preload="none"></video>
@@ -1074,43 +1071,50 @@ main {
     <p id="banner-beskrivelse"></p>
     <div id="banner-metadata" class="banner-meta"></div>
     <div class="banner-buttons">
-  <button class="watch-button" id="banner-se-na">
-    <i class="fas fa-play"></i>
-    Se nå
-  </button>
-
-  <button class="add-button" id="banner-add">
-    <i class="fas fa-plus"></i>
-  </button>
-</div>
+      <button class="watch-button" id="banner-se-na">
+        <i class="fas fa-play"></i> Se nå
+      </button>
+      <button class="add-button" id="banner-add">
+        <i class="fas fa-plus"></i>
+      </button>
+    </div>
+  </div>
 </section>
 
-
-
-        <section class="gallery-section">
-          <h2>Nylig lagt til</h2>
-          <div class="gallery-wrapper">
-            <div class="fade-left"></div>
-         <button class="scroll-button left">❮</button>
-            <div class="image-gallery" id="nye-filmer-galleri"></div>
-            <button class="scroll-button right">❯</button>
-            <div class="fade-right"></div>
-          </div>
-        </section>
-
-        <!-- ===== Fortsett å se ===== -->
-<section class="gallery-section" id="fortsett-section" style="display:none;">
-  <h2>Fortsett å se</h2>
+<section class="gallery-section" id="barn-seksjon" style="display:none;">
+  <h2>Barne- og familieinnhold</h2>
   <div class="gallery-wrapper">
     <div class="fade-left"></div>
-     <button class="scroll-button left">❮</button>
-    <div class="image-gallery" id="fortsett-galleri"></div>
-     <button class="scroll-button right">❯</button>
+    <button class="scroll-button left">❮</button>
+    <div class="image-gallery" id="barn-galleri"></div>
+    <button class="scroll-button right">❯</button>
     <div class="fade-right"></div>
   </div>
 </section>
 
-  <section class="gallery-section">
+<section class="gallery-section" id="nye-filmer-seksjon">
+  <h2>Nylig lagt til</h2>
+  <div class="gallery-wrapper">
+    <div class="fade-left"></div>
+    <button class="scroll-button left">❮</button>
+    <div class="image-gallery" id="nye-filmer-galleri"></div>
+    <button class="scroll-button right">❯</button>
+    <div class="fade-right"></div>
+  </div>
+</section>
+
+<section class="gallery-section" id="fortsett-section" style="display:none;">
+  <h2>Fortsett å se</h2>
+  <div class="gallery-wrapper">
+    <div class="fade-left"></div>
+    <button class="scroll-button left">❮</button>
+    <div class="image-gallery" id="fortsett-galleri"></div>
+    <button class="scroll-button right">❯</button>
+    <div class="fade-right"></div>
+  </div>
+</section>
+
+<section class="gallery-section" id="alle-filmer-seksjon">
   <h2>Filmer</h2>
   <div class="gallery-wrapper">
     <div class="fade-left"></div>
@@ -1121,7 +1125,7 @@ main {
   </div>
 </section>
 
-  <section class="gallery-section">
+<section class="gallery-section" id="serier-seksjon">
   <h2>Serier</h2>
   <div class="gallery-wrapper">
     <div class="fade-left"></div>
@@ -1131,9 +1135,8 @@ main {
     <div class="fade-right"></div>
   </div>
 </section>
-
   
-        <section class="gallery-section">
+<section class="gallery-section" id="topp10-seksjon">
   <h2>Filmtoppen!</h2>
   <div class="gallery-wrapper">
     <div class="fade-left"></div>
@@ -1144,7 +1147,7 @@ main {
   </div>
 </section> 
 
-  <section class="gallery-section">
+<section class="gallery-section" id="dokumentar-seksjon">
   <h2>Dokumentarserier</h2>
   <div class="gallery-wrapper">
     <div class="fade-left"></div>
@@ -1156,8 +1159,6 @@ main {
 </section>
 
 <footer class="footer">
-
-  <!-- Sosiale medier -->
   <div class="footer-socials">
     <a href="#"><i class="fab fa-instagram"></i></a>
     <a href="#"><i class="fab fa-facebook-f"></i></a>
@@ -1165,25 +1166,21 @@ main {
     <a href="#"><i class="fab fa-x-twitter"></i></a>
   </div>
 
-  <!-- Linker -->
   <div class="footer-links">
     <a href="om.html">Om Watch Nordic</a>
-    <a href="kontakt.html">Kontakt oss</a>
+    <a href="kontakt.html">Contact oss</a>
     <a href="personvern.html">Personvern</a>
     <a href="hjelp.html">Hjelpesenter</a>
-
     <a href="#">Jobber</a>
     <a href="#">Investorinformasjon</a>
     <a href="#">Vilkår</a>
     <a href="#">Informasjonskapsler</a>
-
     <a href="#">Juridisk informasjon</a>
     <a href="#">Bedriftskonto</a>
     <a href="#">Gavekort</a>
     <a href="#">Enheter</a>
   </div>
 
-  <!-- Copyright -->
   <div class="footer-copy">
     © 2026 Watch Nordic™
   </div>
@@ -1191,8 +1188,8 @@ main {
   <div class="footer-bottom">
      Alle varemerker fra WATCH NORDIC™, WATCH NORDIC ORIGINALS™ og alle øvrige tilknyttede immaterielle rettigheter tilhører Watch Nordic Group og brukes under lisens av Watch Nordic™. Alle varemerker, logoer, filmer, serier, bilder, design og øvrige tilknyttede immaterielle rettigheter tilhører sine respektive eiere. Alt innhold er beskyttet av opphavsrett og internasjonale varemerkelover. Alle rettigheter forbeholdt.
   </div>
-
 </footer>
+
 <script src="Filmdata.js"></script>
 <script src="Seriedata.js"></script>
 <script>
@@ -1492,96 +1489,6 @@ function createMovieElement(filmKey, film) {
   return link;
 }
 
-function createUpcomingMovieElement(filmKey, film) {
-  const link = document.createElement("div");
-  link.classList.add("coming-movie-item");
-
-  const banner = document.createElement("img");
-  banner.src = film.bakgrunn || film.poster || "";
-  banner.alt = film.tittel;
-  banner.classList.add("banner");
-  link.appendChild(banner);
-
-  const video = document.createElement("video");
-  if (film.trailer) video.src = film.trailer;
-  video.loop = true;
-  video.playsInline = true;
-  link.appendChild(video);
-
-  if (film.logo) {
-    const logo = document.createElement("img");
-    logo.src = film.logo;
-    logo.alt = film.tittel + " Logo";
-    logo.classList.add("logo");
-    link.appendChild(logo);
-  }
-
-  const info = document.createElement("div");
-  info.classList.add("coming-movie-info");
-
-  const release = document.createElement("p");
-  const icon = document.createElement("i");
-  icon.classList.add("fas", "fa-calendar-alt");
-  release.appendChild(icon);
-
-  if (film.publishDate) {
-    const releaseDate = new Date(film.publishDate);
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
-    releaseDate.setHours(0, 0, 0, 0);
-    const tomorrow = new Date(today);
-    tomorrow.setDate(today.getDate() + 1);
-
-    const dager = ["Søndag", "Mandag", "Tirsdag", "Onsdag", "Torsdag", "Fredag", "Lørdag"];
-    const måneder = ["Januar", "Februar", "Mars", "April", "Mai", "Juni", "Juli", "August", "September", "Oktober", "November", "Desember"];
-
-    let datoTekst = "";
-    if (releaseDate.getTime() === tomorrow.getTime()) {
-      datoTekst = "Kommer i morgen";
-    } else {
-      const diff = (releaseDate - today) / (1000 * 60 * 60 * 24);
-      if (diff > 1 && diff < 7) {
-        datoTekst = "Kommer på " + dager[releaseDate.getDay()];
-      } else {
-        const dag = releaseDate.getDate();
-        const måned = måneder[releaseDate.getMonth()];
-        const år = releaseDate.getFullYear();
-        datoTekst = år === today.getFullYear() ? `Kommer: ${dag}. ${måned}` : `Kommer: ${dag}. ${måned} ${år}`;
-      }
-    }
-    release.appendChild(document.createTextNode(" " + datoTekst));
-  } else {
-    release.appendChild(document.createTextNode(" Kommer: Ukjent"));
-  }
-
-  info.appendChild(release);
-  link.appendChild(info);
-
-  let hoverTimeout;
-  link.addEventListener("mouseenter", () => {
-    link.classList.add("expanded");
-    hoverTimeout = setTimeout(() => {
-      if (film.trailer) {
-        link.classList.add("show-video");
-        video.play();
-      }
-    }, 3000);
-  });
-
-  link.addEventListener("mouseleave", () => {
-    clearTimeout(hoverTimeout);
-    link.classList.remove("expanded", "show-video");
-    video.pause();
-    video.currentTime = 0;
-  });
-
-  link.addEventListener("click", () => {
-    window.location.href = `film.html?navn=${filmKey}`;
-  });
-
-  return link;
-}
-
 // ==================== RENDERING FUNKSJONER ==================== //
 function renderGallery(galleryId, filterFunction, sortByPublishDate = false, limit = null) {
   const gallery = document.getElementById(galleryId);
@@ -1604,21 +1511,6 @@ function renderGallery(galleryId, filterFunction, sortByPublishDate = false, lim
   filmKeys.forEach(key => {
     gallery.appendChild(createMovieElement(key, filmer[key]));
   });
-}
-
-function renderUpcoming(galleryId) {
-  const gallery = document.getElementById(galleryId);
-  if (!gallery) return;
-  gallery.innerHTML = "";
-
-  const currentDate = new Date();
-  const upcomingFilms = Object.keys(filmer).filter(key => {
-    const film = filmer[key];
-    if (!film.publishDate) return false;
-    return new Date(film.publishDate) > currentDate;
-  }).sort((a, b) => new Date(filmer[a].publishDate) - new Date(filmer[b].publishDate));
-
-  upcomingFilms.forEach(key => gallery.appendChild(createUpcomingMovieElement(key, filmer[key])));
 }
 
 function renderTop10(galleryId) {
@@ -1660,7 +1552,6 @@ function renderTop10(galleryId) {
   });
 }
 
-// Modifisert for å sjekke om serier også skal filtreres for barn
 function renderSeries(galleryId) {
   const gallery = document.getElementById(galleryId);
   if (!gallery || typeof serier === "undefined") return;
@@ -1669,7 +1560,6 @@ function renderSeries(galleryId) {
   Object.keys(serier).forEach((key) => {
     const serie = serier[key];
     
-    // Hvis bruker er barn, sjekk om serien er egnet og innenfor aldersgrensen
     if (erInnloggetSomBarn && (!erEgnetForBarn(serie) || !sjekkAldersgrense(serie))) {
       return;
     }
@@ -1701,7 +1591,6 @@ function renderContinueWatching() {
   Object.keys(filmer).forEach((key) => {
     const progress = localStorage.getItem("progress_" + key);
     if (progress && progress > 0 && progress < 100) {
-      // Filtrer ut dersom profilen er barn og filmen ikke er barnevennlig
       if (erInnloggetSomBarn && (!erEgnetForBarn(filmer[key]) || !sjekkAldersgrense(filmer[key]))) return;
       items.push({ key, data: filmer[key], type: "film" });
     }
@@ -1711,7 +1600,6 @@ function renderContinueWatching() {
     Object.keys(serier).forEach((key) => {
       const progress = localStorage.getItem("progress_" + key);
       if (progress && progress > 0 && progress < 100) {
-        // Filtrer ut dersom profilen er barn og serien ikke er barnevennlig
         if (erInnloggetSomBarn && (!erEgnetForBarn(serier[key]) || !sjekkAldersgrense(serier[key]))) return;
         items.push({ key, data: serier[key], type: "serie" });
       }
@@ -1751,112 +1639,60 @@ function renderContinueWatching() {
   });
 }
 
-function renderMixedContent(galleryId, limit = 10) {
-  const gallery = document.getElementById(galleryId);
-  if (!gallery) return;
-  gallery.innerHTML = "";
-
-  let items = [];
-
-  Object.keys(filmer).forEach(key => {
-    items.push({
-      key,
-      data: filmer[key],
-      type: "film",
-      date: new Date(filmer[key].publishDate || 0)
-    });
-  });
-
-  if (typeof serier !== "undefined") {
-    Object.keys(serier).forEach(key => {
-      items.push({
-        key,
-        data: serier[key],
-        type: "serie",
-        date: new Date(serier[key].publishDate || 0)
-      });
-    });
-  }
-
-  items.sort((a, b) => b.date - a.date);
-
-  items.slice(0, limit).forEach(item => {
-    const link = document.createElement("a");
-    link.href = `film.html?navn=${item.key}`;
-    link.classList.add("gallery-item");
-    link.innerHTML = `
-      <img src="${item.data.poster}" alt="${item.data.tittel}">
-      <div class="image-overlay">
-        <div class="overlay-content">
-          <div class="overlay-title">${item.data.tittel}</div>
-          <div class="overlay-meta">${(item.data.metadata || []).join(" • ")}</div>
-        </div>
-      </div>
-    `;
-    gallery.appendChild(link);
-  });
-}
-
-function renderDocumentarySeries(galleryId) {
-  const gallery = document.getElementById(galleryId);
-  if (!gallery || typeof serier === "undefined") return;
-  gallery.innerHTML = "";
-
-  Object.keys(serier).forEach(key => {
-    const serie = serier[key];
-    if (!serie.metadata || !serie.metadata.some(meta => meta.toLowerCase().includes("dokumentar"))) return;
-
-    const link = document.createElement("a");
-    link.href = `film.html?navn=${key}`;
-    link.classList.add("gallery-item");
-    link.innerHTML = `
-      <img src="${serie.poster}" alt="${serie.tittel}">
-      <div class="image-overlay">
-        <div class="overlay-content">
-          <div class="overlay-title">${serie.tittel}</div>
-          <div class="overlay-meta">${(serie.metadata || []).join(" • ")}</div>
-        </div>
-      </div>
-    `;
-    gallery.appendChild(link);
-  });
-}
-
 // ==================== INIT ==================== //
 document.addEventListener("DOMContentLoaded", () => {
   
   if (erInnloggetSomBarn) {
     // SIKKERHET FOR BARNEPROFIL:
-    // 1. Gjemmer seksjonene i HTML som inneholder voksengallerier
+    // 1. Skjul voksenseksjoner
     const skjulSeksjoner = [
       "nye-filmer-seksjon", "topp10-seksjon", "alle-filmer-seksjon", 
-      "kommer-snart-seksjon", "serier-seksjon", "dokumentar-seksjon"
+      "serier-seksjon", "dokumentar-seksjon"
     ];
     skjulSeksjoner.forEach(id => {
       const el = document.getElementById(id);
       if (el) el.style.display = "none";
     });
 
-    // 2. Tegn ut KUN barnegalleriet og sjekk kriteriene grundig!
+    // Vis barnegalleriet i stedet
+    const barnSeksjon = document.getElementById("barn-seksjon");
+    if (barnSeksjon) barnSeksjon.style.display = "block";
+
+    // 2. Render kun det trygge innholdet
     renderGallery("barn-galleri", (key) => {
       const film = filmer[key];
-      // Filmen må ha barnevennlige stikkord (barn/familie/animasjon/alle) og bestå alderssjekken
       return erEgnetForBarn(film) && sjekkAldersgrense(film);
     });
 
   } else {
-    // STANDARD KODELØP FOR VOKSNE PROFILER
-    renderMixedContent("nye-filmer-galleri", 5);
+    // STANDARD LØP FOR VOKSNE PROFILER
+    const nyeFilmerSeksjon = document.getElementById("nye-filmer-seksjon");
+    const filmerSeksjon = document.getElementById("alle-filmer-seksjon");
+    const serierSeksjon = document.getElementById("serier-seksjon");
+    const toppSeksjon = document.getElementById("topp10-seksjon");
+    const dokuSeksjon = document.getElementById("dokumentar-seksjon");
+
+    if(nyeFilmerSeksjon) nyeFilmerSeksjon.style.display = "block";
+    if(filmerSeksjon) filmerSeksjon.style.display = "block";
+    if(serierSeksjon) serierSeksjon.style.display = "block";
+    if(toppSeksjon) toppSeksjon.style.display = "block";
+    if(dokuSeksjon) dokuSeksjon.style.display = "block";
+
+    // Hent innhold til alle gallerier
+    renderGallery("nye-filmer-galleri", null, true, 5);
     renderTop10("topp10-filmer-galleri");
     renderGallery("filmer-galleri", null, true, 20);
-
-    renderGallery("barn-galleri", (key) => {
-      return erEgnetForBarn(filmer[key]);
-    });
-
-    renderUpcoming("kommer-snart-galleri");
     renderSeries("serier-galleri");
-    renderDocumentarySeries("dokumentarserier-galleri");
+    
+    // Vis også barnegalleriet nederst for voksne dersom ønskelig, eller la den være skjult
+    const barnSeksjon = document.getElementById("barn-seksjon");
+    if (barnSeksjon) barnSeksjon.style.display = "block";
+    renderGallery("barn-galleri", (key) => erEgnetForBarn(filmer[key]));
+    
+    // Hent dokumentarer (Filtrert)
+    renderGallery("dokumentarserier-galleri", (key) => {
+      return filmer[key].metadata?.some(meta => meta.toLowerCase().includes("dokumentar"));
+    });
   }
 
   // Kjører uansett profil
@@ -1875,3 +1711,5 @@ window.addEventListener("scroll", () => {
   }
 });
 </script>
+</body>
+</html>
