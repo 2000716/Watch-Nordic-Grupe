@@ -8,55 +8,48 @@
   <link rel="icon" type="image/png" href="https://static.wixstatic.com/media/fd2fb2_39376e4ee55b460ab7a3ebbfcf35fef7~mv2.png" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
   <style>
-    /* ==========================================================================
-       1. GLOBALE STILER & RESETS
-       ========================================================================== */
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    html, body {
-      font-family: Arial, sans-serif;
-      background: #091B1E;
-      color: white;
-      overflow-x: hidden;
-    }
-
-    body {
-      padding-top: 70px;
-    }
-
-    main {
-      margin-left: 80px;
-      margin-right: 80px;
-      padding-top: 0;
-      max-width: 1400px;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-    }
-
-    .content-wrapper {
-      width: 92%;
-      max-width: 1400px;
-      margin: 0 auto;
-      padding: 0 20px;
-    }
-
 /* ==========================================================================
-   GLOBAL NULLSTILLING (Fjerner den hvite/mørke stripen helt øverst)
+   1. GLOBALE STILER & RESETS
    ========================================================================== */
-html, body {
+* {
+  box-sizing: border-box;
   margin: 0;
   padding: 0;
-  box-sizing: border-box;
+}
+
+html, body {
+  font-family: Arial, sans-serif;
+  background: #091B1E;
+  color: white;
+  overflow-x: hidden;
+  margin: 0;
+  padding: 0;
   background-color: #091B1E;
 }
 
+body {
+  padding-top: 70px;
+}
+
+main {
+  margin-left: 80px;
+  margin-right: 80px;
+  padding-top: 0;
+  max-width: 1400px;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.content-wrapper {
+  width: 92%;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
 /* ==========================================================================
-   OPPDATERT TOPPMENY (PC & MOBIL)
+   2. TOPPMENY (Standard for store PC-skjermer)
    ========================================================================== */
 .top-nav {
   position: fixed;
@@ -70,35 +63,28 @@ html, body {
   padding: 0 40px;
   z-index: 9999;
   box-sizing: border-box;
-  
-  /* Mørk skygge/fade øverst som gjør menyen lettleselig */
   background: linear-gradient(to bottom, rgba(9, 27, 30, 0.95) 0%, rgba(9, 27, 30, 0.6) 50%, rgba(9, 27, 30, 0) 100%);
-  box-shadow: none;
-  
-  /* Myk overgang når bakgrunnen tones inn */
   transition: background 0.4s ease, box-shadow 0.4s ease;
 }
 
-/* Fjernet den gamle gradient-faden (::before) som lå i toppen tidligere */
 .top-nav::before {
   display: none;
 }
 
-/* AKTIV SCROLL-BAKGRUNN: Denne slår inn når du blar nedover siden */
 .top-nav.scrolled {
   background: rgba(9, 27, 30, 0.95);
-  backdrop-filter: blur(10px); /* Gir en pen glass-effekt over video/bilder bak */
+  backdrop-filter: blur(10px);
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
 }
 
-/* Venstre side av meny */
+/* Venstre side av meny (Logo) */
 .nav-left {
   display: flex;
   align-items: center;
   gap: 40px;
+  flex-shrink: 0; /* Hindrer at logoen blir klemt på mindre skjermer */
 }
 
-/* WATCH LOGO - Helt renset for glød, skygge og animasjon */
 .watch-logo-text {
   font-family: 'Montserrat Alternates', sans-serif;
   font-size: 28px;
@@ -111,14 +97,11 @@ html, body {
   height: 100%;
   cursor: pointer;
   user-select: none;
-  
-  /* Ingen skygger eller hover-effekter */
   text-shadow: none !important;
   transform: none !important;
   transition: none !important;
 }
 
-/* Sørger for at den forblir helt uendret ved hover */
 .watch-logo-text:hover {
   color: #00FFCC !important;
   transform: none !important;
@@ -132,6 +115,8 @@ html, body {
   transform: translateX(-50%);
   display: flex;
   gap: 30px;
+  white-space: nowrap; /* Tvinger teksten til å holde seg på én linje */
+  transition: gap 0.3s ease;
 }
 
 .nav-links a {
@@ -139,7 +124,7 @@ html, body {
   text-decoration: none;
   font-size: 15px;
   font-weight: 500;
-  transition: color 0.3s ease;
+  transition: color 0.3s ease, font-size 0.3s ease;
 }
 
 .nav-links a i {
@@ -161,6 +146,7 @@ html, body {
   display: flex;
   align-items: center;
   gap: 15px;
+  flex-shrink: 0; /* Hindrer at høyre side blir klemt */
 }
 
 .nav-search {
@@ -193,32 +179,54 @@ html, body {
 }
 
 /* ==========================================================================
-   OPPDATERT HERO BANNER – GÅR HELT TIL TOPPEN (PC)
+   3. OPTIMALISERING FOR SMÅ/MELDGOMSTORE PC-SKJERMER & LAPTOPS (Mellomsteg)
+   Sørger for at menyen ikke krasjer eller krymper stygt på bærbare PC-er
+   ========================================================================== */
+@media (max-width: 1200px) and (min-width: 769px) {
+  .top-nav {
+    padding: 0 20px;
+  }
+  .nav-left {
+    gap: 20px;
+  }
+  .nav-links {
+    gap: 15px; /* Reduserer avstanden mellom lenkene automatisk */
+  }
+  .nav-links a {
+    font-size: 14px; /* Gjør teksten litt mindre så alt får plass */
+  }
+  .watch-logo-text {
+    font-size: 24px;
+    letter-spacing: 2px;
+  }
+}
+
+/* ==========================================================================
+   4. HERO BANNER (PC)
    ========================================================================== */
 .hero-banner {
   position: relative;
-  top: 0;                /* Tvinger banneret helt opp til piksel null */
-  margin-top: 0;          /* Eliminerer eventuelle dyttende marginer */
-  height: 85vh;          /* Bildet fyller toppen perfekt bak menyen */
+  top: 0;
+  margin-top: 0;
+  height: 85vh;
   min-height: 600px;
   width: 100%;
   overflow: hidden;
   background-color: #091B1E;
-  margin-bottom: 40px;   /* Luft til galleriene under */
+  margin-bottom: 40px;
   z-index: 0;
 }
 
-/* Myk og dyp fade-effekt som smelter bildet sømløst inn i bakgrunnen */
 .hero-banner::after {
   content: "";
   position: absolute;
   inset: 0;
   background: linear-gradient(
     to bottom,
-    rgba(9, 27, 30, 0) 45%,      /* Helt klart bilde i øvre del bak menyen */
-    rgba(9, 27, 30, 0.3) 65%,    /* Begynner rolig uttoning */
-    rgba(9, 27, 30, 0.8) 85%,    /* Kraftigere fade over tekstområdet */
-    rgba(9, 27, 30, 1) 100%      /* Svartkledd overgang til nettsidens bunnfarge */
+    rgba(9, 27, 30, 0) 45%,
+    rgba(9, 27, 30, 0.3) 65%,
+    rgba(9, 27, 30, 0.8) 85%,
+    rgba(9, 27, 30, 1) 100%
   );
   z-index: 1;
 }
@@ -240,10 +248,9 @@ html, body {
   z-index: 0;
 }
 
-/* Plassering av tekst og knapper – flyttet litt opp for å kompensere for høyere banner */
 .banner-content {
   position: absolute;
-  bottom: 14%;           /* Justert opp så teksten ligger trygt over faden */
+  bottom: 14%;
   left: 60px;
   z-index: 2;
   display: flex;
@@ -254,7 +261,6 @@ html, body {
   color: white;
 }
 
-/* Fikset tittelstørrelse */
 .banner-title {
   font-size: 64px;       
   font-weight: 900;
@@ -291,7 +297,6 @@ html, body {
   overflow: hidden;
 }
 
-/* Knapper */
 .banner-buttons {
   display: flex;
   align-items: center;
@@ -341,69 +346,7 @@ html, body {
 }
 
 /* ==========================================================================
-   RESPONSIV KORRIGERING FOR MOBIL OG NETTBRETT
-   ========================================================================== */
-@media (max-width: 768px) {
-  .top-nav {
-    height: 60px;
-    padding: 0 20px;
-  }
-
-  .nav-links {
-    display: none;
-  }
-
-  .watch-logo-text {
-    font-size: 22px;
-    letter-spacing: 2px;
-  }
-
-  .hero-banner {
-    height: 65vh !important;    /* Bildet fyller helt til toppen på mobil også */
-    min-height: 400px !important;
-    max-height: 550px !important;
-    margin-bottom: 20px !important;
-  }
-
-  .banner-content {
-    bottom: 10% !important;     
-    left: 20px !important;
-    max-width: 90%;
-    gap: 10px !important;
-  }
-
-  .banner-title {
-    font-size: 36px !important; 
-    line-height: 1.1;
-  }
-
-  .film-logo {
-    width: 180px !important;
-    max-height: 90px !important;
-  }
-
-  .banner-content p {
-    font-size: 13px !important;
-    line-height: 1.4;
-  }
-
-  .banner-meta {
-    font-size: 12px !important;
-  }
-
-  .watch-button {
-    font-size: 14px !important;
-    padding: 10px 24px !important;
-  }
-
-  .add-button {
-    width: 40px !important;
-    height: 40px !important;
-    font-size: 16px !important;
-  }
-}
-/* ==========================================================================
-   4. GALLERIER & SEKSJONER (FILMER / SERIER)
+   5. GALLERIER & SEKSJONER (FILMER / SERIER)
    ========================================================================== */
 .gallery-section {
   margin-bottom: 20px;
@@ -447,13 +390,12 @@ html, body {
   display: none;
 }
 
-/* Galleri-elementer (Standard) */
 .image-gallery a {
   display: inline-block;
   position: relative;
   border-radius: 5px;
   background: transparent;
-  overflow: visible; /* Beholder denne slik at pilene flyter fritt */
+  overflow: visible;
   border: 2px solid transparent;
   transition: border 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
 }
@@ -468,12 +410,10 @@ html, body {
   transition: transform 0.3s ease;
 }
 
-/* Beholder zoomen på bildet */
 .image-gallery a:hover img {
   transform: scale(1.05);
 }
 
-/* Galleri med Fremdriftslinje */
 .image-with-progress {
   position: relative;
   width: 220px;
@@ -508,7 +448,6 @@ html, body {
   transition: width 0.3s ease;
 }
 
-/* Svart/Mørk fade på sidene av gallerier */
 .fade-left, .fade-right {
   position: absolute;
   top: 0;
@@ -534,7 +473,6 @@ html, body {
   display: none !important;
 }
 
-/* Scroll piler for gallerier */
 .scroll-button {
   position: absolute;
   top: 50%;
@@ -583,9 +521,8 @@ html, body {
   pointer-events: none;
 }
 
-
 /* ==========================================================================
-   5. TOP 10 GALLERI
+   6. TOP 10 GALLERI
    ========================================================================== */
 .top10-gallery {
   display: flex;
@@ -639,9 +576,8 @@ html, body {
   -webkit-text-stroke: 0;
 }
 
-
 /* ==========================================================================
-   6. HOVER OVERLAY FOR BILDER (.gallery-item)
+   7. HOVER OVERLAY FOR BILDER (.gallery-item)
    ========================================================================== */
 .gallery-item {
   position: relative !important;
@@ -667,14 +603,12 @@ html, body {
   pointer-events: none;
   opacity: 0;
   transition: opacity 0.3s ease, transform 0.3s ease;
-  
   background: linear-gradient(
     to top,
     rgba(0, 0, 0, 0.95) 0%,   
     rgba(0, 0, 0, 0.7) 40%,    
     rgba(0, 0, 0, 0) 80%       
   );
-  
   border-radius: inherit;
   display: flex;
   align-items: flex-end;
@@ -702,146 +636,141 @@ html, body {
   text-shadow: 0 1px 4px rgba(0, 0, 0, 0.6);
 }
 
-/* ENDRET: Metadata er nå hvit med god lesbarhet */
 .overlay-meta {
   font-size: 13px;
-  color: rgba(255, 255, 255, 0.85); /* Hvit med et lite hint av gjennomsiktighet */
+  color: rgba(255, 255, 255, 0.85);
   font-weight: 500;
   text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
 }
-    /* ==========================================================================
-       7. BARNE BANNER & SPESIALINNHOLD
-       ========================================================================== */
-    .kids-banner {
-      position: relative;
-      width: 100%;
-      height: 220px;
-      border-radius: 16px;
-      overflow: hidden;
-      cursor: pointer;
-      margin: 20px 0;
-    }
-
-    .kids-banner img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-
-    .kids-overlay {
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(
-        to right,
-        rgba(9,27,30,0.9),
-        rgba(9,27,30,0.2)
-      );
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      padding-left: 40px;
-    }
-
-    .kids-overlay h2 {
-      font-size: 28px;
-      color: #00FFCC;
-      margin-bottom: 8px;
-    }
-
-    .kids-overlay p {
-      font-size: 16px;
-      color: #fff;
-    }
-
-
-    /* ==========================================================================
-       8. FOOTER
-       ========================================================================== */
-    .footer {
-      width: 100%;
-      padding: 70px 80px 35px;
-      margin-top: 100px;
-      background: #091B1E;
-      display: flex;
-      flex-direction: column;
-      align-items: flex-start;
-      color: #7d7d7d;
-    }
-
-    .footer-socials {
-      display: flex;
-      gap: 22px;
-      margin-bottom: 35px;
-    }
-
-    .footer-socials a {
-      color: #9b9b9b;
-      font-size: 20px;
-      transition: color 0.25s ease, transform 0.25s ease;
-    }
-
-    .footer-socials a:hover {
-      color: #ffffff;
-      transform: scale(1.08);
-    }
-
-    .footer-links {
-      width: 100%;
-      display: grid;
-      grid-template-columns: repeat(4, minmax(140px, 1fr));
-      gap: 18px 50px;
-      margin-bottom: 35px;
-    }
-
-    .footer-links a {
-      color: #8a8a8a;
-      text-decoration: none;
-      font-size: 14px;
-      font-weight: 400;
-      line-height: 1.5;
-      transition: color 0.2s ease;
-    }
-
-    .footer-links a:hover {
-      color: #ffffff;
-    }
-
-    .footer-service-btn {
-      margin-bottom: 28px;
-      padding: 10px 18px;
-      border: 1px solid rgba(255,255,255,0.2);
-      border-radius: 4px;
-      background: transparent;
-      color: #a0a0a0;
-      font-size: 13px;
-      cursor: pointer;
-      transition: all 0.25s ease;
-    }
-
-    .footer-service-btn:hover {
-      border-color: rgba(255,255,255,0.45);
-      color: #fff;
-    }
-
-    .footer-copy {
-      font-size: 13px;
-      color: #666;
-      margin-bottom: 8px;
-    }
-
-    .footer-bottom {
-      max-width: 700px;
-      font-size: 12px;
-      line-height: 1.6;
-      color: #555;
-    }
 
 /* ==========================================================================
-   9. NETFLIX & HBO MAX MOBIL-OPTIMALISERING (768px og nedover)
+   8. BARNE BANNER & SPESIALINNHOLD
+   ========================================================================== */
+.kids-banner {
+  position: relative;
+  width: 100%;
+  height: 220px;
+  border-radius: 16px;
+  overflow: hidden;
+  cursor: pointer;
+  margin: 20px 0;
+}
+
+.kids-banner img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.kids-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to right, rgba(9,27,30,0.9), rgba(9,27,30,0.2));
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding-left: 40px;
+}
+
+.kids-overlay h2 {
+  font-size: 28px;
+  color: #00FFCC;
+  margin-bottom: 8px;
+}
+
+.kids-overlay p {
+  font-size: 16px;
+  color: #fff;
+}
+
+/* ==========================================================================
+   9. FOOTER
+   ========================================================================== */
+.footer {
+  width: 100%;
+  padding: 70px 80px 35px;
+  margin-top: 100px;
+  background: #091B1E;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  color: #7d7d7d;
+}
+
+.footer-socials {
+  display: flex;
+  gap: 22px;
+  margin-bottom: 35px;
+}
+
+.footer-socials a {
+  color: #9b9b9b;
+  font-size: 20px;
+  transition: color 0.25s ease, transform 0.25s ease;
+}
+
+.footer-socials a:hover {
+  color: #ffffff;
+  transform: scale(1.08);
+}
+
+.footer-links {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(140px, 1fr));
+  gap: 18px 50px;
+  margin-bottom: 35px;
+}
+
+.footer-links a {
+  color: #8a8a8a;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.5;
+  transition: color 0.2s ease;
+}
+
+.footer-links a:hover {
+  color: #ffffff;
+}
+
+.footer-service-btn {
+  margin-bottom: 28px;
+  padding: 10px 18px;
+  border: 1px solid rgba(255,255,255,0.2);
+  border-radius: 4px;
+  background: transparent;
+  color: #a0a0a0;
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.footer-service-btn:hover {
+  border-color: rgba(255,255,255,0.45);
+  color: #fff;
+}
+
+.footer-copy {
+  font-size: 13px;
+  color: #666;
+  margin-bottom: 8px;
+}
+
+.footer-bottom {
+  max-width: 700px;
+  font-size: 12px;
+  line-height: 1.6;
+  color: #555;
+}
+
+/* ==========================================================================
+   10. NETFLIX & HBO MAX MOBIL-OPTIMALISERING (768px og nedover)
    ========================================================================== */
 @media (max-width: 768px) {
   body {
-    padding-top: 0px; /* Lar banneret flyte helt opp under menyen */
+    padding-top: 0px;
   }
 
   main {
@@ -851,29 +780,18 @@ html, body {
     margin-right: 0px !important;
   }
 
-  /* Toppmeny – Justert med mørk feid og lagt litt nærmere kantene (20px) */
   .top-nav {
     position: fixed !important;
     top: 0;
     left: 0;
     width: 100%;
-    padding: 0 20px !important; /* Justert til 20px for en ren, men ikke for tett plassering */
+    padding: 0 20px !important;
     height: 60px;
-    
-    /* En myk, mørk feid fra toppen og ned (basert på sidens mørke farge) */
-    background: linear-gradient(
-      to bottom, 
-      rgba(9, 27, 30, 0.95) 0%, 
-      rgba(9, 27, 30, 0.5) 60%, 
-      rgba(9, 27, 30, 0) 100%
-    ) !important; 
-    
+    background: linear-gradient(to bottom, rgba(9, 27, 30, 0.95) 0%, rgba(9, 27, 30, 0.5) 60%, rgba(9, 27, 30, 0) 100%) !important; 
     backdrop-filter: none !important;    
     box-shadow: none !important;
     border: none !important;
-    z-index: 9999; /* Sikrer at menyen alltid ligger øverst over banneret */
-    
-    /* Sørger for at logo tvinges til venstre og søk/profil helt til høyre */
+    z-index: 9999;
     display: flex !important;
     justify-content: space-between !important;
     align-items: center !important;
@@ -883,20 +801,17 @@ html, body {
     display: none !important;
   }
 
-  /* Sørger for at søkeikonet og profilbildet holder sammen ytterst til høyre */
   .nav-search, .profilmeny {
     display: inline-flex !important;
     align-items: center !important;
   }
   
-  /* Hvis søk og profil ligger i en felles container på høyre side, gir dette god luft mellom dem */
   .top-nav > div:last-child {
     display: flex !important;
     align-items: center !important;
     gap: 16px; 
   }
 
-  /* WATCH-LOGO FOR MOBIL (Større, tykkere og grønn) */
   .watch-logo-text {
     font-size: 24px !important; 
     font-weight: 900 !important;
@@ -916,7 +831,7 @@ html, body {
     display: block;
   }
 
-  /* HERO BANNER */
+  /* HERO BANNER MOBIL */
   .hero-banner {
     height: 55vh !important; 
     min-height: 360px !important;
@@ -925,18 +840,12 @@ html, body {
   }
 
   .hero-banner::after {
-    background: linear-gradient(
-      to bottom,
-      rgba(9, 27, 30, 0) 40%,
-      rgba(9, 27, 30, 0.4) 60%,
-      rgba(9, 27, 30, 0.8) 80%,
-      #091B1E 100%
-    ) !important;
+    background: linear-gradient(to bottom, rgba(9, 27, 30, 0) 40%, rgba(9, 27, 30, 0.4) 60%, rgba(9, 27, 30, 0.8) 80%, #091B1E 100%) !important;
   }
 
   .banner-content {
     bottom: 20px !important;
-    left: 32px !important; /* Beholder 32px linjeføring */
+    left: 32px !important;
     max-width: calc(100% - 64px);
     gap: 8px !important;
   }
@@ -990,7 +899,6 @@ html, body {
     background: rgba(255, 255, 255, 0.2);
   }
 
-  /* Seksjons-ramme (Titlene beholder 32px avstand) */
   .gallery-section {
     margin-left: 32px !important; 
     margin-right: 0px !important;
@@ -1007,16 +915,14 @@ html, body {
     margin-bottom: 8px;
   }
 
-  /* KUN GALLERIBILDENE (Flyttet til 10px avstand fra venstre skjermkant) */
   .image-gallery {
-    margin-left: -22px !important; /* Trekker bildene ut fra 32px til nøyaktig 10px fra venstrekant */
-    padding: 4px 10px 12px 10px !important; /* Setter 10px indre luft */
+    margin-left: -22px !important;
+    padding: 4px 10px 12px 10px !important;
     gap: 10px !important;
     scroll-snap-type: x mandatory !important;
     -webkit-overflow-scrolling: touch !important;
   }
 
-  /* SKJULER NAVIGASJONSPILER PÅ MOBIL */
   .scroll-button, .gallery-arrow, .prev-arrow, .next-arrow, .prev, .next, .fade-left, .fade-right {
     display: none !important;
     opacity: 0 !important;
@@ -1046,9 +952,8 @@ html, body {
     transform: none !important;
   }
 
-  /* TOP 10 GALLERI (Flyttet til 10px avstand fra venstre skjermkant) */
   .top10-gallery {
-    margin-left: -22px !important; /* Trekker bildene ut fra 32px til nøyaktig 10px fra venstrekant */
+    margin-left: -22px !important;
     gap: 16px !important;
     padding: 4px 10px 12px 10px !important;
   }
@@ -1069,7 +974,6 @@ html, body {
     color: transparent !important;
   }
 
-  /* Kids banner mobil */
   .kids-banner {
     height: 120px !important;
     margin: 20px 32px !important; 
@@ -1090,23 +994,6 @@ html, body {
     font-size: 12px !important;
   }
 
-  /* Sjanger-knapper mobil */
-  .genre-gallery {
-    padding: 0 32px !important; 
-    gap: 10px !important;
-  }
-  
-  .genre-gallery a .icon-circle {
-    width: 70px;
-    height: 70px;
-    font-size: 24px;
-  }
-
-  .genre-gallery a .genre-label {
-    font-size: 11px;
-  }
-
-  /* MOBIL-FOOTER */
   .footer {
     padding: 40px 32px 30px !important; 
     margin-top: 60px;
