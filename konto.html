@@ -3,387 +3,611 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Konto | Watch Nordic™</title>
+  <title>Min Konto | Watch Nordic™</title>
 
   <link rel="icon" type="image/png" href="https://static.wixstatic.com/media/fd2fb2_39376e4ee55b460ab7a3ebbfcf35fef7~mv2.png" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
- <style>
-:root {
-  --bg:#141414;
-  --muted:#b3b3b3;
-  --accent:#00a8e1;
-}
+  
+  <style>
+    :root {
+      --bg: #091B1E;
+      --muted: #bfc9c9;
+      --accent: #00FFCC;
+      --card-bg: rgba(255, 255, 255, 0.04);
+      --border: rgba(255, 255, 255, 0.08);
+    }
 
-* { box-sizing:border-box; }
+    * { 
+      box-sizing: border-box; 
+      margin: 0;
+      padding: 0;
+    }
 
-body {
-  margin:0;
-  background:
-    radial-gradient(circle at 10% 20%, rgba(0,168,225,0.25), transparent 40%),
-    linear-gradient(180deg, #0e0e0e, #141414);
-  color:white;
-  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
-}
+    body {
+      background: var(--bg);
+      color: white;
+      font-family: 'Inter', Arial, sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow-x: hidden;
+    }
 
-/* HEADER */
-header {
-  padding:20px 40px;
-  border-bottom:1px solid #222;
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-}
+    /* Bakgrunnsglød */
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background: radial-gradient(circle at top left, rgba(0,255,204,0.08), transparent 35%);
+      z-index: -1;
+    }
 
-header h1 { margin:0; font-size:22px; }
+    /* HEADER */
+    header {
+      padding: 20px 60px;
+      background: rgba(9, 27, 30, 0.65);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
 
-header button {
-  background:none;
-  border:1px solid var(--muted);
-  color:white;
-  padding:8px 16px;
-  border-radius:6px;
-  cursor:pointer;
-}
+    header h1 { 
+      font-size: 24px; 
+      font-weight: 900;
+      letter-spacing: 2px;
+      color: var(--accent);
+      text-shadow: 0 0 10px rgba(0,255,204,0.3);
+    }
 
-header button:hover { border-color:white; }
+    header .nav-btns {
+      display: flex;
+      gap: 12px;
+    }
 
-/* LAYOUT */
-.container {
-  max-width:1150px;
-  margin:auto;
-  padding:40px;
-  display:grid;
-  grid-template-columns:280px 1fr;
-  gap:40px;
-}
+    header button {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.15);
+      color: white;
+      padding: 10px 20px;
+      border-radius: 999px;
+      font-weight: 700;
+      font-size: 14px;
+      cursor: pointer;
+      transition: 0.25s ease;
+    }
 
-/* SIDEBAR */
-.sidebar {
-  background:rgba(255,255,255,0.06);
-  backdrop-filter:blur(16px);
-  border-radius:16px;
-  padding:30px 20px;
-  text-align:center;
-  border:1px solid rgba(255,255,255,0.08);
-}
+    header button:hover { 
+      background: rgba(255,255,255,0.12);
+      border-color: white;
+    }
 
-.avatar {
-  width:160px;
-  height:160px;
-  border-radius:50%;
-  overflow:hidden;
-  margin:auto;
-  cursor:pointer;
-}
+    header button.logout-btn {
+      border-color: rgba(255, 77, 77, 0.4);
+      color: #ff4d4d;
+    }
+    header button.logout-btn:hover {
+      background: rgba(255, 77, 77, 0.1);
+      border-color: #ff4d4d;
+    }
 
-.avatar img {
-  width:100%;
-  height:100%;
-  object-fit:cover;
-}
+    /* LAYOUT CONTAINER */
+    .container {
+      max-width: 1200px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 40px 60px;
+      display: grid;
+      grid-template-columns: 300px 1fr;
+      gap: 40px;
+      flex: 1;
+    }
 
-.profile-name {
-  margin-top:16px;
-  font-size:20px;
-}
+    /* SIDEBAR */
+    .sidebar {
+      background: var(--card-bg);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-radius: 24px;
+      padding: 35px 24px;
+      text-align: center;
+      border: 1px solid var(--border);
+      height: fit-content;
+    }
 
-.profile-actions {
-  margin-top:20px;
-  display:flex;
-  flex-direction:column;
-  gap:10px;
-}
+    .avatar {
+      width: 150px;
+      height: 150px;
+      border-radius: 50%;
+      overflow: hidden;
+      margin: 0 auto 20px;
+      cursor: pointer;
+      border: 3px solid rgba(255,255,255,0.1);
+      transition: 0.3s ease;
+      position: relative;
+    }
 
-.profile-actions button {
-  background:none;
-  border:1px solid var(--muted);
-  color:white;
-  padding:10px;
-  border-radius:6px;
-  cursor:pointer;
-}
+    .avatar:hover {
+      border-color: var(--accent);
+      transform: scale(1.02);
+    }
 
-.profile-actions button:hover { border-color:white; }
+    .avatar img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
 
-/* CONTENT */
-.content h2 {
-  margin:0 0 20px;
-  font-size:22px;
-}
+    .profile-name {
+      font-size: 22px;
+      font-weight: 700;
+      margin-bottom: 25px;
+      word-break: break-word;
+    }
 
-.card {
-  background:rgba(255,255,255,0.07);
-  backdrop-filter:blur(18px);
-  border-radius:16px;
-  padding:24px;
-  margin-bottom:30px;
-  border:1px solid rgba(255,255,255,0.08);
-}
+    .profile-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
 
-.row {
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  padding:16px 0;
-  border-bottom:1px solid #2a2a2a;
-}
+    .profile-actions button {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.1);
+      color: white;
+      padding: 12px;
+      border-radius: 12px;
+      font-weight: 600;
+      font-size: 14px;
+      cursor: pointer;
+      transition: 0.2s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
 
-.row:last-child { border-bottom:none; }
+    .profile-actions button:hover { 
+      background: rgba(255,255,255,0.08);
+      border-color: rgba(255,255,255,0.3);
+    }
 
-.label {
-  color:var(--muted);
-  font-size:14px;
-}
+    .profile-actions button.delete-btn {
+      border-color: rgba(255, 77, 77, 0.2);
+      color: #ff4d4d;
+      margin-top: 15px;
+    }
+    .profile-actions button.delete-btn:hover {
+      background: rgba(255, 77, 77, 0.15);
+      border-color: #ff4d4d;
+    }
 
-.value {
-  font-size:16px;
-}
+    /* MAIN CONTENT */
+    .content h2 {
+      margin: 0 0 18px;
+      font-size: 22px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    
+    .content h2 i {
+      color: var(--accent);
+      font-size: 18px;
+    }
 
-/* INLINE EDIT */
-.hidden { display:none; }
+    .card {
+      background: var(--card-bg);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      border-radius: 24px;
+      padding: 10px 24px;
+      margin-bottom: 35px;
+      border: 1px solid var(--border);
+    }
 
-.edit-field {
-  margin-top:8px;
-}
+    .row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
 
-.edit-field input {
-  width:100%;
-  padding:10px;
-  background:#1a1a1a;
-  border:1px solid #333;
-  border-radius:6px;
-  color:white;
-}
+    .row:last-child { 
+      border-bottom: none; 
+    }
 
-.edit-actions {
-  margin-top:10px;
-  display:flex;
-  gap:10px;
-}
+    .info-block {
+      flex: 1;
+      padding-right: 20px;
+    }
 
-.edit-actions button {
-  background:none;
-  border:1px solid #444;
-  color:white;
-  padding:8px 16px;
-  border-radius:6px;
-  cursor:pointer;
-}
+    .label {
+      color: var(--muted);
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 6px;
+      font-weight: 600;
+    }
 
-.secondary { color:#aaa; }
+    .value {
+      font-size: 16px;
+      font-weight: 500;
+    }
 
-/* MOBILE */
-@media (max-width:900px) {
-  .container {
-    grid-template-columns:1fr;
-    padding:20px;
-  }
-}
-</style>
+    .row button.edit-trigger {
+      background: none;
+      border: 1px solid rgba(255,255,255,0.15);
+      color: white;
+      padding: 8px 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 600;
+      transition: 0.2s;
+    }
+
+    .row button.edit-trigger:hover {
+      background: rgba(255,255,255,0.08);
+      border-color: white;
+    }
+
+    /* INLINE EDIT VISNING */
+    .hidden { 
+      display: none !important; 
+    }
+
+    .edit-field {
+      margin-top: 10px;
+      width: 100%;
+      max-width: 400px;
+    }
+
+    .edit-field input {
+      width: 100%;
+      padding: 12px;
+      background: rgba(9, 27, 30, 0.8);
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 10px;
+      color: white;
+      font-size: 15px;
+      transition: 0.2s;
+    }
+
+    .edit-field input:focus {
+      outline: none;
+      border-color: var(--accent);
+    }
+
+    .edit-actions {
+      margin-top: 12px;
+      display: flex;
+      gap: 10px;
+    }
+
+    .edit-actions button {
+      padding: 8px 16px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    .btn-save {
+      background: var(--accent);
+      color: #071214;
+      border: none;
+    }
+    .btn-save:hover {
+      transform: scale(1.02);
+    }
+
+    .btn-cancel {
+      background: transparent;
+      border: 1px solid rgba(255,255,255,0.15);
+      color: var(--muted);
+    }
+    .btn-cancel:hover {
+      color: white;
+      border-color: rgba(255,255,255,0.3);
+    }
+
+    /* FOOTER */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 30px 60px;
+      color: #666;
+      font-size: 13px;
+      margin-top: auto;
+    }
+
+    /* RESPONSIVE DESIGN (MOBIL & NETTBRETT) */
+    @media (max-width: 960px) {
+      header {
+        padding: 20px 24px;
+      }
+      .container {
+        grid-template-columns: 1fr;
+        padding: 24px;
+        gap: 30px;
+      }
+      .sidebar {
+        padding: 25px 20px;
+      }
+      .avatar {
+        width: 120px;
+        height: 120px;
+      }
+      .card {
+        padding: 5px 16px;
+      }
+      footer {
+        padding: 30px 24px;
+      }
+    }
+  </style>
 </head>
-
 <body>
 
-<header>
-  <h1>Konto</h1>
-  <div>
-    <button onclick="window.location.href='Hovedside.html'">Tilbake</button>
-    <button onclick="loggUt()">Logg ut</button>
-  </div>
-</header>
+  <header>
+    <h1>WATCH</h1>
+    <div class="nav-btns">
+      <button onclick="window.location.href='Hovedside.html'"><i class="fa-solid fa-house"></i> Hovedside</button>
+      <button class="logout-btn" onclick="loggUt()"><i class="fa-solid fa-right-from-bracket"></i> Logg ut</button>
+    </div>
+  </header>
 
-<div class="container">
+  <div class="container">
 
-<!-- SIDEBAR -->
-<aside class="sidebar">
-  <div class="avatar" onclick="velgProfil()">
-    <img id="profilbilde" src="https://via.placeholder.com/160">
-  </div>
-  <div class="profile-name" id="navnDisplay"></div>
-
-  <div class="profile-actions">
-    <button onclick="velgProfil()">Endre profilbilde</button>
-    <button onclick="bekreftSlettBruker()" style="border-color:#ff4d4d;color:#ff4d4d;">
-      Slett profil
-    </button>
-  </div>
-</aside>
-
-<!-- CONTENT -->
-<section class="content">
-
-<h2>Kontoinformasjon</h2>
-<div class="card">
-
-<!-- NAVN -->
-<div class="row" id="navnRow">
-  <div>
-    <div class="label">Navn</div>
-    <div class="value" id="navnView"></div>
-
-    <div class="edit-field hidden">
-      <input type="text" id="navnInput">
-      <div class="edit-actions">
-        <button onclick="lagreNavn()">Lagre</button>
-        <button class="secondary" onclick="avbrytNavn()">Avbryt</button>
+    <aside class="sidebar">
+      <div class="avatar" onclick="velgProfil()">
+        <img id="profilbilde" src="https://static.wixstatic.com/media/fd2fb2_39376e4ee55b460ab7a3ebbfcf35fef7~mv2.png" alt="Profilbilde">
       </div>
-    </div>
-  </div>
-  <button onclick="endreNavn()">Endre</button>
-</div>
+      <div class="profile-name" id="navnDisplay">Laster...</div>
 
-<!-- EPOST -->
-<div class="row" id="epostRow">
-  <div>
-    <div class="label">E-post</div>
-    <div class="value" id="epostView"></div>
-
-    <div class="edit-field hidden">
-      <input type="email" id="epostInput">
-      <div class="edit-actions">
-        <button onclick="lagreEpost()">Lagre</button>
-        <button class="secondary" onclick="avbrytEpost()">Avbryt</button>
+      <div class="profile-actions">
+        <button onclick="velgProfil()"><i class="fa-solid fa-user-gear"></i> Bytt Profil / Rediger</button>
+        <button class="delete-btn" onclick="bekreftSlettBruker()"><i class="fa-solid fa-trash-can"></i> Slett profil permanent</button>
       </div>
-    </div>
+    </aside>
+
+    <section class="content">
+
+      <h2><i class="fa-solid fa-user"></i> Kontoinformasjon</h2>
+      <div class="card">
+
+        <div class="row" id="navnRow">
+          <div class="info-block">
+            <div class="label">Navn</div>
+            <div class="value" id="navnView"></div>
+
+            <div class="edit-field hidden">
+              <input type="text" id="navnInput">
+              <div class="edit-actions">
+                <button class="btn-save" onclick="lagreNavn()">Lagre</button>
+                <button class="btn-cancel" onclick="avbrytNavn()">Avbryt</button>
+              </div>
+            </div>
+          </div>
+          <button class="edit-trigger" onclick="endreNavn()">Endre</button>
+        </div>
+
+        <div class="row" id="epostRow">
+          <div class="info-block">
+            <div class="label">E-postadresse</div>
+            <div class="value" id="epostView"></div>
+
+            <div class="edit-field hidden">
+              <input type="email" id="epostInput">
+              <div class="edit-actions">
+                <button class="btn-save" onclick="lagreEpost()">Lagre</button>
+                <button class="btn-cancel" onclick="avbrytEpost()">Avbryt</button>
+              </div>
+            </div>
+          </div>
+          <button class="edit-trigger" onclick="endreEpost()">Endre</button>
+        </div>
+
+        <div class="row">
+          <div class="info-block">
+            <div class="label">Passord</div>
+            <div class="value">••••••••</div>
+          </div>
+        </div>
+
+      </div>
+
+      <h2><i class="fa-solid fa-id-card"></i> Mitt Abonnement</h2>
+      <div class="card">
+        <div class="row">
+          <div class="info-block">
+            <div class="label">Plan</div>
+            <div class="value">Premium Nordic Ultra</div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="info-block">
+            <div class="label">Kvalitet</div>
+            <div class="value">4K UHD + HDR + Dolby Atmos</div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="info-block">
+            <div class="label">Skjermer</div>
+            <div class="value">4 samtidige enheter</div>
+          </div>
+        </div>
+      </div>
+
+      <h2><i class="fa-solid fa-sliders"></i> Preferanser</h2>
+      <div class="card">
+        <div class="row">
+          <div class="info-block">
+            <div class="label">Neste episode autoplay</div>
+            <div class="value">På</div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="info-block">
+            <div class="label">Foreldrekontroll (Aldersgrense)</div>
+            <div class="value">Deaktivert</div>
+          </div>
+        </div>
+      </div>
+
+    </section>
   </div>
-  <button onclick="endreEpost()">Endre</button>
-</div>
 
-<!-- PASSORD (KUN VISNING) -->
-<div class="row">
-  <div>
-    <div class="label">Passord</div>
-    <div class="value">••••••••</div>
-  </div>
-</div>
+  <footer>
+    © 2026 Watch Nordic Group AS. Alt innhold er beskyttet av varemerkelover. Alle rettigheter forbeholdt.
+  </footer>
 
-</div>
+  <script>
+    // Sikkerhet: Hvis brukeren ikke er logget inn, send dem umiddelbart til logg inn
+    if (!localStorage.getItem("epost")) {
+      window.location.href = "Innlogging.html";
+    }
 
-<h2>Abonnement</h2>
-<div class="card">
-  <div class="row">
-    <div>
-      <div class="label">Plan</div>
-      <div class="value">Premium</div>
-    </div>
-  </div>
-  <div class="row">
-    <div>
-      <div class="label">Kvalitet</div>
-      <div class="value">4K Ultra HD</div>
-    </div>
-  </div>
-  <div class="row">
-    <div>
-      <div class="label">Skjermer</div>
-      <div class="value">4 samtidige</div>
-    </div>
-  </div>
-</div>
+    const navnDisplay = document.getElementById("navnDisplay");
+    const navnView = document.getElementById("navnView");
+    const navnInput = document.getElementById("navnInput");
+    const navnRow = document.getElementById("navnRow");
 
-<h2>Preferanser</h2>
-<div class="card">
-  <div class="row">
-    <div>
-      <div class="label">Autoplay</div>
-      <div class="value">På</div>
-    </div>
-  </div>
-  <div class="row">
-    <div>
-      <div class="label">Foreldrekontroll</div>
-      <div class="value">Av</div>
-    </div>
-  </div>
-</div>
+    const epostView = document.getElementById("epostView");
+    const epostInput = document.getElementById("epostInput");
+    const epostRow = document.getElementById("epostRow");
 
-</section>
-</div>
+    /* HENT AKTUELLE DATA FRA MINNET */
+    let aktivEpost = localStorage.getItem("epost") || "";
+    let aktivNavn = localStorage.getItem("navn") || "Profil";
+    let brukere = JSON.parse(localStorage.getItem("brukere") || "{}");
 
-<script>
-if (!localStorage.getItem("epost")) {
-  window.location.href = "Innlogging.html";
-}
+    // Last inn initiell visning
+    navnDisplay.innerText = aktivNavn;
+    navnView.innerText = aktivNavn;
+    epostView.innerText = aktivEpost;
 
-const navnDisplay = document.getElementById("navnDisplay");
-const navnView = document.getElementById("navnView");
-const navnInput = document.getElementById("navnInput");
-const navnRow = document.getElementById("navnRow");
+    const lagretBilde = localStorage.getItem("profilbilde");
+    if (lagretBilde) {
+      document.getElementById("profilbilde").src = lagretBilde;
+    }
 
-const epostView = document.getElementById("epostView");
-const epostInput = document.getElementById("epostInput");
-const epostRow = document.getElementById("epostRow");
+    /* DYNAMISK REDIGERING: NAVN */
+    function endreNavn() {
+      navnInput.value = navnView.innerText;
+      navnView.classList.add("hidden");
+      navnRow.querySelector(".edit-field").classList.remove("hidden");
+      navnRow.querySelector(".edit-trigger").classList.add("hidden");
+    }
 
-/* LOAD DATA */
-navnDisplay.innerText = localStorage.getItem("navn") || "Profil";
-navnView.innerText = localStorage.getItem("navn") || "Profil";
-epostView.innerText = localStorage.getItem("epost") || "";
+    function lagreNavn() {
+      const nyttNavn = navnInput.value.trim();
+      if (!nyttNavn) return alert("Navnefeltet kan ikke være tomt.");
 
-const bilde = localStorage.getItem("profilbilde");
-if (bilde) document.getElementById("profilbilde").src = bilde;
+      // 1. Oppdater lokaløkten
+      localStorage.setItem("navn", nyttNavn);
+      
+      // 2. Synkroniser inn i global brukerdatabase slik at det huskes til neste innlogging
+      if (brukere[aktivEpost]) {
+        brukere[aktivEpost].navn = nyttNavn;
+        localStorage.setItem("brukere", JSON.stringify(brukere));
+      }
 
-/* NAVN */
-function endreNavn() {
-  navnInput.value = navnView.innerText;
-  navnView.classList.add("hidden");
-  navnRow.querySelector(".edit-field").classList.remove("hidden");
-}
+      navnView.innerText = nyttNavn;
+      navnDisplay.innerText = nyttNavn;
+      avbrytNavn();
+    }
 
-function lagreNavn() {
-  const ny = navnInput.value.trim();
-  if (!ny) return;
-  localStorage.setItem("navn", ny);
-  navnView.innerText = ny;
-  navnDisplay.innerText = ny;
-  avbrytNavn();
-}
+    function avbrytNavn() {
+      navnView.classList.remove("hidden");
+      navnRow.querySelector(".edit-field").classList.add("hidden");
+      navnRow.querySelector(".edit-trigger").classList.remove("hidden");
+    }
 
-function avbrytNavn() {
-  navnView.classList.remove("hidden");
-  navnRow.querySelector(".edit-field").classList.add("hidden");
-}
+    /* DYNAMISK REDIGERING: EPOST (Sikker datamigrasjon) */
+    function endreEpost() {
+      epostInput.value = epostView.innerText;
+      epostView.classList.add("hidden");
+      epostRow.querySelector(".edit-field").classList.remove("hidden");
+      epostRow.querySelector(".edit-trigger").classList.add("hidden");
+    }
 
-/* EPOST */
-function endreEpost() {
-  epostInput.value = epostView.innerText;
-  epostView.classList.add("hidden");
-  epostRow.querySelector(".edit-field").classList.remove("hidden");
-}
+    function lagreEpost() {
+      const nyEpost = epostInput.value.trim().toLowerCase();
+      if (!nyEpost) return alert("E-postfeltet kan ikke være tomt.");
+      if (nyEpost === aktivEpost) { avbrytEpost(); return; }
 
-function lagreEpost() {
-  const ny = epostInput.value.trim();
-  if (!ny) return;
-  localStorage.setItem("epost", ny);
-  epostView.innerText = ny;
-  avbrytEpost();
-}
+      // Sjekk om den nye e-posten allerede tilhører en annen konto
+      if (brukere[nyEpost]) {
+        return alert("Denne e-postadressen er allerede i bruk av en annen konto.");
+      }
 
-function avbrytEpost() {
-  epostView.classList.remove("hidden");
-  epostRow.querySelector(".edit-field").classList.add("hidden");
-}
+      // Migrer brukerprofilen i objektlisten
+      if (brukere[aktivEpost]) {
+        const passordHolder = brukere[aktivEpost].passord;
+        const navnHolder = brukere[aktivEpost].navn;
 
-/* BEHOLDTE FUNKSJONER */
-function velgProfil() {
-  window.location.href = "Registreringsside.html";
-}
+        // Opprett ny nøkkel og slett den gamle
+        brukere[nyEpost] = { navn: navnHolder, passord: passordHolder };
+        delete brukere[aktivEpost];
 
-function bekreftSlettBruker() {
-  if (!confirm("Vil du slette profilen permanent?")) return;
-  localStorage.clear();
-  window.location.href = "index.html";
-}
+        localStorage.setItem("brukere", JSON.stringify(brukere));
+      }
 
-function loggUt() {
-  localStorage.removeItem("epost");
-  localStorage.removeItem("passord");
-  window.location.href = "Innlogging.html";
-}
-</script>
+      // Oppdater aktiv økt
+      localStorage.setItem("epost", nyEpost);
+      aktivEpost = nyEpost; // oppdaterer den globale variabelen i scriptet
+      epostView.innerText = nyEpost;
+      
+      avbrytEpost();
+    }
 
-<footer style="border-top:1px solid #222;padding:30px 40px;color:#8c8c8c;font-size:12px;">
-© 2026 Watch Nordic AS. Alle rettigheter forbeholdt.
-</footer>
+    function avbrytEpost() {
+      epostView.classList.remove("hidden");
+      epostRow.querySelector(".edit-field").classList.add("hidden");
+      epostRow.querySelector(".edit-trigger").classList.remove("hidden");
+    }
 
+    /* GLOBALE SMANKOR-FUNKSJONER */
+    function velgProfil() {
+      // Sendes til profilsiden eller registreringssiden for å bytte bilde
+      window.location.href = "hvem-ser-på.html";
+    }
+
+    function bekreftSlettBruker() {
+      if (!confirm("Er du helt sikker på at du vil slette profilen og fjerne dataen din fra denne enheten permanent? Handlingen kan ikke angres.")) return;
+      
+      // Slett denne spesifikke brukeren fra listen
+      if (brukere[aktivEpost]) {
+        delete brukere[aktivEpost];
+        localStorage.setItem("brukere", JSON.stringify(brukere));
+      }
+
+      // Tøm aktiv økt og rens minnet
+      localStorage.removeItem("epost");
+      localStorage.removeItem("passord");
+      localStorage.removeItem("navn");
+      localStorage.removeItem("profilbilde");
+
+      window.location.href = "Innlogging.html";
+    }
+
+    function loggUt() {
+      localStorage.removeItem("epost");
+      localStorage.removeItem("passord");
+      localStorage.removeItem("navn");
+      localStorage.removeItem("profilbilde");
+      window.location.href = "Innlogging.html";
+    }
+  </script>
 </body>
 </html>
