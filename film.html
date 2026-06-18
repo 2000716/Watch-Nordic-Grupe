@@ -7,43 +7,43 @@
   <link rel="icon" type="image/png" href="https://static.wixstatic.com/media/fd2fb2_39376e4ee55b460ab7a3ebbfcf35fef7~mv2.png" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
   <style>
-/* =========================================================
-   GLOBAL RESET & BASE STYLES
-   ========================================================= */
+/* ==========================================================================
+   1. GLOBALE STILER & RESETS
+   ========================================================================== */
 * {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
 }
 
-html {
-  font-size: clamp(14px, 1vw + 10px, 18px);
-  scroll-behavior: smooth;
-}
-
 html, body {
+  font-family: Arial, sans-serif;
+  background: #091B1E;
+  color: white;
+  overflow-x: hidden;
   margin: 0;
   padding: 0;
-  box-sizing: border-box;
-  background-color: #000000 !important; /* Garanterer helt ren svart bakgrunn på hele siden */
-  color: #fff;
-  font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
-  letter-spacing: .2px;
 }
 
 body {
-  opacity: 0;
-  transition: opacity 1s ease;
-  overflow-x: hidden;
+  padding-top: 0; 
 }
 
-body.loaded {
-  opacity: 1;
+main {
+  margin-left: 80px;
+  margin-right: 80px;
+  padding-top: 0;
+  max-width: 1400px;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
 
-img, video {
-  max-width: 100%;
-  height: auto;
+.content-wrapper {
+  width: 92%;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 20px;
 }
 
 /* ==========================================================================
