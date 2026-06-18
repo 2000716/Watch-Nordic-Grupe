@@ -1210,7 +1210,7 @@ window.addEventListener("storage", () => {
   }
 });
 
-// Sjekk status for barneprofil og aldersgrenser set i foreldrekontroll
+// Sjekk status for barneprofil og aldersgrenser satt i foreldrekontroll
 const erInnloggetSomBarn = localStorage.getItem("isKids") === "true";
 const maksAldersgrense = localStorage.getItem("maksAldersgrense") || "12"; // Standard maks 12 hvis ikke satt
 
@@ -1218,22 +1218,33 @@ const maksAldersgrense = localStorage.getItem("maksAldersgrense") || "12"; // St
 function sjekkAldersgrense(item) {
   if (!item || !item.metadata) return false;
   
-  // Konverterer valgt maksgrense til et tall ("A" blir 0)
-  const maksTall = maksAldersgrense === "A" ? 0 : parseInt(maksAldersgrense, 10);
+  // Konverterer valgt maksgrense til et tall ("A" eller "Alle" blir 0)
+  const maksTall = (maksAldersgrense === "A" || maksAldersgrense === "Alle") ? 0 : parseInt(maksAldersgrense, 10);
   
-  // Finn aldersgrense i varens egne metadata (leter etter tall eller "A")
-  let varensAlder = 0; // Standard til Alle (A)
+  // Finn aldersgrense i varens egne metadata (leter etter tall eller "A"/"Alle")
+  let varensAlder = 0; // Standard til Alle (0)
   item.metadata.forEach(meta => {
     const renTekst = meta.toLowerCase();
     if (renTekst.includes("6")) varensAlder = 6;
     if (renTekst.includes("9")) varensAlder = 9;
     if (renTekst.includes("12")) varensAlder = 12;
     if (renTekst.includes("15")) varensAlder = 15;
+    if (renTekst.includes("16")) varensAlder = 16;
     if (renTekst.includes("18")) varensAlder = 18;
   });
 
   // Returner true hvis innholdet er trygt nok basert på foreldrekontrollen
   return varensAlder <= maksTall;
+}
+
+// Hjelpefunksjon som sjekker om filmen er egnet for en barneprofil basert på sjanger eller merking
+function erEgnetForBarn(item) {
+  if (!item || !item.metadata) return false;
+  
+  return item.metadata.some(meta => {
+    const m = meta.toLowerCase();
+    return m.includes("barn") || m.includes("familie") || m.includes("animasjon") || m === "alle";
+  });
 }
 
 // ==================== NAVIGASJON ==================== //
@@ -1264,12 +1275,9 @@ function hentBannerInnhold() {
   // Filmer
   Object.keys(filmer).forEach(key => {
     if (filmer[key].banner) {
-      // Hvis profil er barn, må innholdet være merket med barn/familie og bestå alderssjekken
+      // Hvis profil er barn, må innholdet være godkjent som barneinnhold og bestå alderssjekken
       if (erInnloggetSomBarn) {
-        const passertBarnFilter = filmer[key].metadata?.some(meta => 
-          meta.toLowerCase().includes("barn") || meta.toLowerCase().includes("familie")
-        );
-        if (!passertBarnFilter || !sjekkAldersgrense(filmer[key])) return;
+        if (!erEgnetForBarn(filmer[key]) || !sjekkAldersgrense(filmer[key])) return;
       }
 
       bannerInnhold.push({
@@ -1286,10 +1294,7 @@ function hentBannerInnhold() {
       if (serier[key].banner) {
         // Samme sjekk for serier i banneret
         if (erInnloggetSomBarn) {
-          const passertBarnFilter = serier[key].metadata?.some(meta => 
-            meta.toLowerCase().includes("barn") || meta.toLowerCase().includes("familie")
-          );
-          if (!passertBarnFilter || !sjekkAldersgrense(serier[key])) return;
+          if (!erEgnetForBarn(serier[key]) || !sjekkAldersgrense(serier[key])) return;
         }
 
         bannerInnhold.push({
@@ -1655,6 +1660,7 @@ function renderTop10(galleryId) {
   });
 }
 
+// Modifisert for å sjekke om serier også skal filtreres for barn
 function renderSeries(galleryId) {
   const gallery = document.getElementById(galleryId);
   if (!gallery || typeof serier === "undefined") return;
@@ -1662,6 +1668,12 @@ function renderSeries(galleryId) {
 
   Object.keys(serier).forEach((key) => {
     const serie = serier[key];
+    
+    // Hvis bruker er barn, sjekk om serien er egnet og innenfor aldersgrensen
+    if (erInnloggetSomBarn && (!erEgnetForBarn(serie) || !sjekkAldersgrense(serie))) {
+      return;
+    }
+
     const link = document.createElement("a");
     link.href = `film.html?navn=${key}`;
     link.classList.add("gallery-item");
@@ -1689,6 +1701,8 @@ function renderContinueWatching() {
   Object.keys(filmer).forEach((key) => {
     const progress = localStorage.getItem("progress_" + key);
     if (progress && progress > 0 && progress < 100) {
+      // Filtrer ut dersom profilen er barn og filmen ikke er barnevennlig
+      if (erInnloggetSomBarn && (!erEgnetForBarn(filmer[key]) || !sjekkAldersgrense(filmer[key]))) return;
       items.push({ key, data: filmer[key], type: "film" });
     }
   });
@@ -1697,6 +1711,8 @@ function renderContinueWatching() {
     Object.keys(serier).forEach((key) => {
       const progress = localStorage.getItem("progress_" + key);
       if (progress && progress > 0 && progress < 100) {
+        // Filtrer ut dersom profilen er barn og serien ikke er barnevennlig
+        if (erInnloggetSomBarn && (!erEgnetForBarn(serier[key]) || !sjekkAldersgrense(serier[key]))) return;
         items.push({ key, data: serier[key], type: "serie" });
       }
     });
@@ -1811,7 +1827,7 @@ document.addEventListener("DOMContentLoaded", () => {
   
   if (erInnloggetSomBarn) {
     // SIKKERHET FOR BARNEPROFIL:
-    // 1. Gjemmer seksjonene i HTML som inneholder voksengallerier (juster ID etter din HTML om nødvendig)
+    // 1. Gjemmer seksjonene i HTML som inneholder voksengallerier
     const skjulSeksjoner = [
       "nye-filmer-seksjon", "topp10-seksjon", "alle-filmer-seksjon", 
       "kommer-snart-seksjon", "serier-seksjon", "dokumentar-seksjon"
@@ -1821,14 +1837,11 @@ document.addEventListener("DOMContentLoaded", () => {
       if (el) el.style.display = "none";
     });
 
-    // 2. Tegn ut KUN barnegalleriet og sjekk aldersgrensen fra foreldrekontrollen!
+    // 2. Tegn ut KUN barnegalleriet og sjekk kriteriene grundig!
     renderGallery("barn-galleri", (key) => {
       const film = filmer[key];
-      const erBarneInnhold = film.metadata?.some(meta =>
-        meta.toLowerCase().includes("barn") || meta.toLowerCase().includes("familie")
-      );
-      // Varen må være merket for barn og passere aldersgrensen fra foreldrekontroll
-      return erBarneInnhold && sjekkAldersgrense(film);
+      // Filmen må ha barnevennlige stikkord (barn/familie/animasjon/alle) og bestå alderssjekken
+      return erEgnetForBarn(film) && sjekkAldersgrense(film);
     });
 
   } else {
@@ -1838,10 +1851,7 @@ document.addEventListener("DOMContentLoaded", () => {
     renderGallery("filmer-galleri", null, true, 20);
 
     renderGallery("barn-galleri", (key) => {
-      const film = filmer[key];
-      return film.metadata?.some(meta =>
-        meta.toLowerCase().includes("barn") || meta.toLowerCase().includes("familie")
-      );
+      return erEgnetForBarn(filmer[key]);
     });
 
     renderUpcoming("kommer-snart-galleri");
