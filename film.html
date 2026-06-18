@@ -916,7 +916,7 @@ html, body {
     margin-right: 0px !important;
   }
 
-  /* Toppmeny – Ligger helt øverst med en svak, mørk gradient */
+  /* Toppmeny – Ligger helt øverst med en svak, mørk gradient over bannerbildet */
   .top-nav {
     position: fixed !important;
     top: 0;
@@ -926,9 +926,9 @@ html, body {
     height: 60px;
     background: linear-gradient(
       to bottom, 
-      rgba(9, 27, 30, 0.8) 0%, 
-      rgba(9, 27, 30, 0.3) 60%, 
-      rgba(9, 27, 30, 0) 100%
+      rgba(9, 27, 30, 0.85) 0%, 
+      rgba(9, 27, 30, 0.4) 60%, 
+      transparent 100__
     ) !important; 
     backdrop-filter: none !important;    
     box-shadow: none !important;
@@ -982,7 +982,7 @@ html, body {
     display: block;
   }
 
-  /* HERO-SEKSJON (Fikset posisjonering for ryddig flyt) */
+  /* HERO-SEKSJON: Bildet strekker seg helt fra toppen (bak menyen) */
   .hero {
     height: auto !important;
     min-height: auto !important;
@@ -990,55 +990,58 @@ html, body {
     flex-direction: column !important;
     background: #091B1E !important;
     position: relative !important;
+    margin-top: 0px !important; /* Starter helt på 0px fra toppen */
   }
 
-  /* Bannerbildet/videoen tar plassen øverst alene med en satt høyde */
+  /* Bannerbildet starter helt øverst og dekker skjermflaten bak menyen */
   .background-image,
   .background-video,
   .hero-banner {
     position: relative !important;
     display: block !important;
     width: 100% !important;
-    height: 50vh !important; 
-    min-height: 300px !important;
-    max-height: 450px !important;
+    height: 55vh !important; 
+    min-height: 360px !important;
+    max-height: 500px !important;
     object-fit: cover !important;
     margin-bottom: 0 !important;
     z-index: 1 !important;
+    top: 0 !important;
   }
 
-  /* Toningen justert slik at den blender bildet rett over i bakgrunnsfargen */
+  /* Toningen ligger kun nederst på bildet for overgang til teksten */
   .hero .overlay {
     position: absolute !important;
     inset: 0 !important;
-    height: 50vh !important;
-    min-height: 300px !important;
-    max-height: 450px !important;
+    height: 55vh !important;
+    min-height: 360px !important;
+    max-height: 500px !important;
     background: linear-gradient(
       to bottom,
-      transparent 40%,
-      rgba(9, 27, 30, 0.5) 70%,
+      transparent 50%,
+      rgba(9, 27, 30, 0.4) 75%,
+      rgba(9, 27, 30, 0.9) 92%,
       #091B1E 100__
     ) !important;
     z-index: 2 !important;
   }
 
-  /* Tekst og info skyves ned og legger seg helt naturlig UNDER bildet */
+  /* INFOBOKS DRAS OPP: Flytter innholdet markant oppover slik at logoen ligger på bildet */
   .content-wrapper {
     position: relative !important;
     inset: auto !important;
-    padding: 20px 24px !important; 
+    padding: 0 24px 20px 24px !important; 
     width: 100% !important;
     max-width: 100% !important;
     box-sizing: border-box !important;
     display: flex !important;
     flex-direction: column !important;
-    gap: 16px !important;
-    margin-top: 0px !important;
+    gap: 14px !important;
+    margin-top: -110px !important; /* Drar logo og info godt oppover rett på bildet */
     z-index: 10 !important;
   }
 
-  /* Infoboksen gjøres gjennomsiktig uten tung bakgrunn under bildet */
+  /* Fjerner bakgrunnsplater slik at teksten blender inn med bildetoningen */
   .text-button-container {
     background: transparent !important;
     backdrop-filter: none !important;
@@ -1047,18 +1050,17 @@ html, body {
     box-shadow: none !important;
     padding: 0 !important;
     flex-direction: column !important;
-    gap: 16px !important;
+    gap: 14px !important;
   }
 
-  /* Sentrerer eller venstrestiller logoen under bildet */
   .logo-container {
-    margin-bottom: 8px !important;
+    margin-bottom: 0px !important;
     justify-content: flex-start !important;
   }
 
   .film-logo {
-    width: 200px !important;
-    max-height: 85px !important;
+    width: 180px !important;
+    max-height: 75px !important;
     object-fit: contain !important;
   }
 
@@ -1067,7 +1069,7 @@ html, body {
   }
 
   .banner-title {
-    font-size: 26px !important;
+    font-size: 24px !important;
   }
 
   .banner-content p, .description {
@@ -1079,14 +1081,14 @@ html, body {
 
   .banner-meta, .metadata {
     font-size: 12px !important;
-    margin-top: 8px !important;
+    margin-top: 6px !important;
   }
 
-  /* Knappene legger seg ryddig under tekst-infoen */
+  /* Knapper */
   .buttons-column, .banner-buttons {
     width: 100% !important;
-    gap: 12px !important;
-    margin-top: 8px !important;
+    gap: 10px !important;
+    margin-top: 4px !important;
   }
 
   .watch-button {
@@ -1106,7 +1108,7 @@ html, body {
     border: 1px solid rgba(255, 255, 255, 0.2) !important;
   }
 
-  /* STREAMING-VENNLIG EPISODE-GALLERI (Sentrerte episodekort på mobil) */
+  /* SENTRERTE EPISODEKORT */
   .episode-gallery {
     display: flex !important;
     flex-direction: column !important;
@@ -1119,7 +1121,7 @@ html, body {
 
   .episode-card {
     width: 100% !important;
-    max-width: 400px !important; /* Forhindrer at kortene blir strukket for langt på brede skjermer */
+    max-width: 400px !important; 
     margin: 0 auto !important;
   }
 
@@ -1128,12 +1130,12 @@ html, body {
     aspect-ratio: 16 / 9 !important;
   }
 
-  /* Seksjons-ramme (Avstand til gallerier) */
+  /* Seksjonsavstander */
   .gallery-section, .recommendations {
     margin-left: 0px !important; 
     margin-right: 0px !important;
     padding: 24px !important;
-    margin-top: 0px !important;
+    margin-top: 10px !important;
   }
 
   .gallery-section h2, .recommendations h2 {
@@ -1143,7 +1145,7 @@ html, body {
     margin-bottom: 12px;
   }
 
-  /* Bildegallerier */
+  /* Bildegallerier og piler */
   .image-gallery {
     margin-left: -22px !important; 
     padding: 4px 10px 12px 10px !important; 
@@ -1152,7 +1154,6 @@ html, body {
     -webkit-overflow-scrolling: touch !important;
   }
 
-  /* Skjuler piler på mobil */
   .scroll-button, .gallery-arrow, .prev-arrow, .next-arrow, .prev, .next, .fade-left, .fade-right {
     display: none !important;
     opacity: 0 !important;
