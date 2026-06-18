@@ -1273,7 +1273,6 @@ function hentBannerInnhold() {
   // Filmer
   Object.keys(filmer).forEach(key => {
     if (filmer[key].banner) {
-      // Hvis profil er barn, må innholdet være godkjent som barneinnhold og bestå alderssjekken
       if (erInnloggetSomBarn) {
         if (!erEgnetForBarn(filmer[key]) || !sjekkAldersgrense(filmer[key])) return;
       }
@@ -1290,7 +1289,6 @@ function hentBannerInnhold() {
   if (typeof serier !== "undefined") {
     Object.keys(serier).forEach(key => {
       if (serier[key].banner) {
-        // Samme sjekk for serier i banneret
         if (erInnloggetSomBarn) {
           if (!erEgnetForBarn(serier[key]) || !sjekkAldersgrense(serier[key])) return;
         }
@@ -1331,7 +1329,6 @@ function oppdaterBanner() {
   const film = erMobil ? hentMobilBanner() : hentDesktopBanner();
 
   if (!film) {
-    // Skjul banneret helt dersom det ikke finnes barnegodkjent innhold til banneret
     const heroSection = document.querySelector(".hero-banner");
     if (heroSection) heroSection.style.display = "none";
     return;
@@ -1345,11 +1342,9 @@ function oppdaterBanner() {
   const seNa = document.getElementById("banner-se-na");
   const addBtn = document.getElementById("banner-add");
 
-  // ==================== BANNER BILDE ==================== //
   bilde.src = erMobil ? (film.bannerMobil || film.banner) : film.banner;
   bilde.style.display = "block";
 
-  // ==================== VIDEO ==================== //
   if (film.trailer) {
     video.src = film.trailer;
     video.load();
@@ -1360,7 +1355,6 @@ function oppdaterBanner() {
 
   video.style.display = "none";
 
-  // ==================== LOGO / TITTEL ==================== //
   let titleElement = document.getElementById("banner-title");
 
   if (!titleElement) {
@@ -1380,20 +1374,17 @@ function oppdaterBanner() {
     titleElement.style.display = "block";
   }
 
-  // ==================== TEKST ==================== //
   beskrivelse.textContent = film.beskrivelse || "";
   metadata.textContent = film.metadata ? film.metadata.join(" • ") : "";
 
   beskrivelse.style.display = "block";
   metadata.style.display = "block";
 
-  // ==================== SE NÅ ==================== //
   seNa.innerHTML = '<i class="fas fa-play"></i> Se nå';
   seNa.onclick = () => {
     window.location.href = `film.html?navn=${film.key}`;
   };
 
-  // ==================== MIN LISTE ==================== //
   const key = film.tittel.toLowerCase().replace(/\s+/g, '-');
   let liste = JSON.parse(localStorage.getItem("minListe")) || [];
 
@@ -1413,7 +1404,6 @@ function oppdaterBanner() {
     addBtn.innerHTML = liste.includes(key) ? '<i class="fas fa-check"></i>' : '<i class="fas fa-plus"></i>';
   };
 
-  // ==================== TRAILER (etter 5 sek) ==================== //
   setTimeout(() => {
     if (!film.trailer) return;
 
@@ -1430,10 +1420,8 @@ function oppdaterBanner() {
   }, 5000);
 }
 
-// ==================== RESIZE ==================== //
 window.addEventListener("resize", oppdaterBanner);
 
-// ==================== JUSTER VIDEO ==================== //
 function adjustBannerVideo(videoElement, container) {
   if (!videoElement || !container) return;
   videoElement.addEventListener('loadedmetadata', () => {
@@ -1473,17 +1461,18 @@ document.querySelectorAll(".gallery-wrapper").forEach(wrapper => {
   update();
 });
 
-// ==================== DYNAMISK GALLERI ==================== //
-function createMovieElement(filmKey, film) {
+// ==================== DYNAMISK GALLERI GENERATOR ==================== //
+// Felles hjelpefunksjon for å generere HTML-elementer for både filmer og serier
+function createGalleryItem(itemKey, item) {
   const link = document.createElement("a");
-  link.href = `film.html?navn=${filmKey}`;
+  link.href = `film.html?navn=${itemKey}`;
   link.classList.add("gallery-item");
   link.innerHTML = `
-    <img src="${film.poster}" alt="${film.tittel}">
+    <img src="${item.poster}" alt="${item.tittel}">
     <div class="image-overlay">
       <div class="overlay-content">
-        <div class="overlay-title">${film.tittel}</div>
-        <div class="overlay-meta">${(film.metadata || []).join(" • ")}</div>
+        <div class="overlay-title">${item.tittel}</div>
+        <div class="overlay-meta">${(item.metadata || []).join(" • ")}</div>
       </div>
     </div>
   `;
@@ -1491,7 +1480,51 @@ function createMovieElement(filmKey, film) {
 }
 
 // ==================== RENDERING FUNKSJONER ==================== //
-function renderGallery(galleryId, filterFunction, sortByPublishDate = false, limit = null) {
+
+// NY: Genererer "Nylig lagt til" med BÅDE filmer og serier blandet sammen
+function renderNyligLagtTil(galleryId, limit = 5) {
+  const gallery = document.getElementById(galleryId);
+  if (!gallery) return;
+  gallery.innerHTML = "";
+
+  const currentDate = new Date();
+  let altInnhold = [];
+
+  // Legg til filmer
+  Object.keys(filmer).forEach(key => {
+    const film = filmer[key];
+    if (erInnloggetSomBarn && (!erEgnetForBarn(film) || !sjekkAldersgrense(film))) return;
+    if (film.publishDate && new Date(film.publishDate) <= currentDate) {
+      altInnhold.push({ key, data: film });
+    } else if (!film.publishDate) {
+      altInnhold.push({ key, data: film });
+    }
+  });
+
+  // Legg til serier
+  if (typeof serier !== "undefined") {
+    Object.keys(serier).forEach(key => {
+      const serie = serier[key];
+      if (erInnloggetSomBarn && (!erEgnetForBarn(serie) || !sjekkAldersgrense(serie))) return;
+      if (serie.publishDate && new Date(serie.publishDate) <= currentDate) {
+        altInnhold.push({ key, data: serie });
+      } else if (!serie.publishDate) {
+        altInnhold.push({ key, data: serie });
+      }
+    });
+  }
+
+  // Sorter etter publishDate (nyeste først)
+  altInnhold.sort((a, b) => new Date(b.data.publishDate || 0) - new Date(a.data.publishDate || 0));
+
+  // Begrens antall og legg til i galleri
+  altInnhold.slice(0, limit).forEach(item => {
+    gallery.appendChild(createGalleryItem(item.key, item.data));
+  });
+}
+
+// Renderspesifikk funksjon for bare filmer
+function renderFilmGallery(galleryId, filterFunction, sortByPublishDate = false, limit = null) {
   const gallery = document.getElementById(galleryId);
   if (!gallery) return;
   gallery.innerHTML = "";
@@ -1510,7 +1543,7 @@ function renderGallery(galleryId, filterFunction, sortByPublishDate = false, lim
   if (limit) filmKeys = filmKeys.slice(0, limit);
 
   filmKeys.forEach(key => {
-    gallery.appendChild(createMovieElement(key, filmer[key]));
+    gallery.appendChild(createGalleryItem(key, filmer[key]));
   });
 }
 
@@ -1565,19 +1598,29 @@ function renderSeries(galleryId) {
       return;
     }
 
-    const link = document.createElement("a");
-    link.href = `film.html?navn=${key}`;
-    link.classList.add("gallery-item");
-    link.innerHTML = `
-      <img src="${serie.poster}" alt="${serie.tittel}">
-      <div class="image-overlay">
-        <div class="overlay-content">
-          <div class="overlay-title">${serie.tittel}</div>
-          <div class="overlay-meta">${(serie.metadata || []).join(" • ")}</div>
-        </div>
-      </div>
-    `;
-    gallery.appendChild(link);
+    gallery.appendChild(createGalleryItem(key, serie));
+  });
+}
+
+// NY: Genererer dokumentarserier basert på "serier"-objektet
+function renderDokumentarSerier(galleryId) {
+  const gallery = document.getElementById(galleryId);
+  if (!gallery || typeof serier === "undefined") return;
+  gallery.innerHTML = "";
+
+  Object.keys(serier).forEach((key) => {
+    const serie = serier[key];
+
+    if (erInnloggetSomBarn && (!erEgnetForBarn(serie) || !sjekkAldersgrense(serie))) {
+      return;
+    }
+
+    // Sjekk om serien har "dokumentar" i metadataene sine
+    const erDokumentar = serie.metadata?.some(meta => meta.toLowerCase().includes("dokumentar"));
+
+    if (erDokumentar) {
+      gallery.appendChild(createGalleryItem(key, serie));
+    }
   });
 }
 
@@ -1645,7 +1688,6 @@ document.addEventListener("DOMContentLoaded", () => {
   
   if (erInnloggetSomBarn) {
     // SIKKERHET FOR BARNEPROFIL:
-    // 1. Skjul voksenseksjoner
     const skjulSeksjoner = [
       "nye-filmer-seksjon", "topp10-seksjon", "alle-filmer-seksjon", 
       "serier-seksjon", "dokumentar-seksjon"
@@ -1655,12 +1697,10 @@ document.addEventListener("DOMContentLoaded", () => {
       if (el) el.style.display = "none";
     });
 
-    // Vis barnegalleriet i stedet
     const barnSeksjon = document.getElementById("barn-seksjon");
     if (barnSeksjon) barnSeksjon.style.display = "block";
 
-    // 2. Render kun det trygge innholdet
-    renderGallery("barn-galleri", (key) => {
+    renderFilmGallery("barn-galleri", (key) => {
       const film = filmer[key];
       return erEgnetForBarn(film) && sjekkAldersgrense(film);
     });
@@ -1680,23 +1720,17 @@ document.addEventListener("DOMContentLoaded", () => {
     if(dokuSeksjon) dokuSeksjon.style.display = "block";
 
     // Hent innhold til alle gallerier
-    renderGallery("nye-filmer-galleri", null, true, 5);
+    renderNyligLagtTil("nye-filmer-galleri", 5); // Viser nå både nye filmer og serier blandet
     renderTop10("topp10-filmer-galleri");
-    renderGallery("filmer-galleri", null, true, 20);
+    renderFilmGallery("filmer-galleri", null, true, 20);
     renderSeries("serier-galleri");
+    renderDokumentarSerier("dokumentarserier-galleri"); // Henter nå ekte dokumentarserier
     
-    // Vis også barnegalleriet nederst for voksne dersom ønskelig, eller la den være skjult
     const barnSeksjon = document.getElementById("barn-seksjon");
     if (barnSeksjon) barnSeksjon.style.display = "block";
-    renderGallery("barn-galleri", (key) => erEgnetForBarn(filmer[key]));
-    
-    // Hent dokumentarer (Filtrert)
-    renderGallery("dokumentarserier-galleri", (key) => {
-      return filmer[key].metadata?.some(meta => meta.toLowerCase().includes("dokumentar"));
-    });
+    renderFilmGallery("barn-galleri", (key) => erEgnetForBarn(filmer[key]));
   }
 
-  // Kjører uansett profil
   oppdaterBanner();
   renderContinueWatching();
 });
