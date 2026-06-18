@@ -16,6 +16,7 @@
       --accent: #00FFCC;
       --border: rgba(255, 255, 255, 0.08);
       --delete: #ff4d4d;
+      --kids-accent: #33b5ff; /* Farge for barneprofil-elementer */
     }
 
     * {
@@ -95,6 +96,12 @@
       box-shadow: 0 0 25px rgba(0, 255, 204, 0.5);
     }
 
+    /* Spesifikk styling for barneprofil ved hover */
+    .profile.kids-profile:hover .avatar {
+      border-color: var(--kids-accent);
+      box-shadow: 0 0 25px rgba(51, 181, 255, 0.5);
+    }
+
     .avatar img {
       width: 100%;
       height: 100%;
@@ -112,6 +119,20 @@
 
     .profile:hover .name {
       color: white;
+    }
+
+    /* Barnemerke (Kids tag) */
+    .kids-badge {
+      display: inline-block;
+      background: var(--kids-accent);
+      color: #071214;
+      font-size: 11px;
+      font-weight: 800;
+      text-transform: uppercase;
+      padding: 2px 8px;
+      border-radius: 20px;
+      margin-top: 6px;
+      letter-spacing: 0.5px;
     }
 
     /* Handling-knapper som dukker opp ved hover */
@@ -223,7 +244,7 @@
       margin-bottom: 20px;
     }
 
-    .modal input {
+    .modal input[type="text"] {
       width: 100%;
       padding: 14px;
       background: rgba(0,0,0,0.2);
@@ -231,13 +252,33 @@
       border-radius: 12px;
       color: white;
       font-size: 16px;
-      margin-bottom: 25px;
+      margin-bottom: 20px;
       outline: none;
       text-align: center;
     }
 
-    .modal input:focus {
+    .modal input[type="text"]:focus {
       border-color: var(--accent);
+    }
+
+    /* Barneprofil checkbox styling */
+    .checkbox-container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 25px;
+      cursor: pointer;
+      user-select: none;
+      font-size: 15px;
+      color: var(--muted);
+    }
+
+    .checkbox-container input {
+      cursor: pointer;
+      width: 18px;
+      height: 18px;
+      accent-color: var(--kids-accent);
     }
 
     .modal-actions {
@@ -289,6 +330,12 @@
     <div class="modal-content">
       <h2>Opprett ny profil</h2>
       <input type="text" id="newProfileName" placeholder="Skriv profilnavn..." maxlength="15">
+      
+      <label class="checkbox-container">
+        <input type="checkbox" id="isKidsProfile">
+        Dette er en barneprofil
+      </label>
+
       <div class="modal-actions">
         <button class="btn-create" onclick="lagreNyProfil()">Opprett profil</button>
         <button class="btn-close" onclick="lukkModal()">Avbryt</button>
@@ -301,8 +348,10 @@
     const container = document.getElementById("profiles");
     const modal = document.getElementById("addProfileModal");
     const newProfileNameInput = document.getElementById("newProfileName");
+    const isKidsProfileInput = document.getElementById("isKidsProfile");
 
     const standardBilde = "https://static.wixstatic.com/media/fd2fb2_39376e4ee55b460ab7a3ebbfcf35fef7~mv2.png";
+    const barnBilde = "https://static.wixstatic.com/media/fd2fb2_3df40a7e62c545afa3918fc10393284d~mv2.png";
 
     /* 1. LAST PROFILER */
     let profiler = JSON.parse(localStorage.getItem("profiler"));
@@ -315,7 +364,8 @@
         {
           navn: globaltNavn,
           bilde: globaltBilde,
-          pin: null
+          pin: null,
+          isKids: false
         }
       ];
       localStorage.setItem("profiler", JSON.stringify(profiler));
@@ -347,18 +397,22 @@
 
       profiler.forEach((profil, index) => {
         const div = document.createElement("div");
-        div.className = "profile";
+        // Legger til en ekstra klasse dersom det er en barneprofil for styling
+        div.className = "profile" + (profil.isKids ? " kids-profile" : "");
 
         // Lag sletteknapp-HTML bare hvis det IKKE er profil nr 1 (indeks 0), så man ikke tømmer alt
         const deleteBtnHtml = index > 0 
           ? `<div class="action-btn delete-btn" title="Slett denne profilen"><i class="fa-solid fa-trash"></i></div>` 
           : '';
 
+        // Legg til en "KIDS" merkelapp under navnet dersom det er en barneprofil
+        const kidsBadgeHtml = profil.isKids ? `<br><span class="kids-badge">Kids</span>` : '';
+
         div.innerHTML = `
           <div class="avatar">
-            <img src="${profil.bilde || standardBilde}">
+            <img src="${profil.bilde || (profil.isKids ? barnBilde : standardBilde)}">
           </div>
-          <div class="name">${profil.navn}</div>
+          <div class="name">${profil.navn}${kidsBadgeHtml}</div>
           <div class="action-btn edit-btn" title="Endre navn og bilde">
             <i class="fa-solid fa-pen"></i>
           </div>
@@ -375,7 +429,7 @@
           e.stopPropagation();
           localStorage.setItem("aktivProfil", index);
           localStorage.setItem("navn", profil.navn);
-          localStorage.setItem("profilbilde", profil.bilde || standardBilde);
+          localStorage.setItem("profilbilde", profil.bilde || (profil.isKids ? barnBilde : standardBilde));
           window.location.href = "konto.html";
         });
 
@@ -440,7 +494,9 @@
 
       localStorage.setItem("aktivProfil", index);
       localStorage.setItem("navn", profil.navn);
-      localStorage.setItem("profilbilde", profil.bilde || standardBilde);
+      localStorage.setItem("profilbilde", profil.bilde || (profil.isKids ? barnBilde : standardBilde));
+      // Lagrer også en global status for om den aktive profilen er en barneprofil eller ikke
+      localStorage.setItem("isKids", profil.isKids ? "true" : "false");
 
       document.body.style.opacity = "0";
       setTimeout(() => {
@@ -451,6 +507,7 @@
     /* 6. MODAL-FUNKSJONER */
     function åpneModal() {
       newProfileNameInput.value = "";
+      isKidsProfileInput.checked = false; // Nullstill sjekkboksen hver gang modalen åpnes
       modal.classList.add("active");
       newProfileNameInput.focus();
     }
@@ -461,13 +518,16 @@
 
     function lagreNyProfil() {
       const navn = newProfileNameInput.value.trim();
+      const erBarn = isKidsProfileInput.checked;
+
       if (!navn) return alert("Profilen må ha et navn!");
       if (profiler.length >= MAX_PROFILER) return lukkModal();
 
       profiler.push({
         navn: navn,
-        bilde: "https://static.wixstatic.com/media/fd2fb2_3df40a7e62c545afa3918fc10393284d~mv2.png", 
-        pin: null
+        bilde: erBarn ? barnBilde : "https://static.wixstatic.com/media/fd2fb2_3df40a7e62c545afa3918fc10393284d~mv2.png", 
+        pin: null,
+        isKids: erBarn // Lagrer om profilen er for barn
       });
 
       localStorage.setItem("profiler", JSON.stringify(profiler));
