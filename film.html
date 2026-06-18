@@ -901,7 +901,7 @@ html, body {
       }
     }
 /* ==========================================================================
-   9. NETFLIX & HBO MAX MOBIL-OPTIMALISERING (768px og nedover)
+   9. HBO MAX INSPIRERT MOBIL-OPTIMALISERING (768px og nedover)
    ========================================================================== */
 @media (max-width: 768px) {
   body {
@@ -916,7 +916,7 @@ html, body {
     margin-right: 0px !important;
   }
 
-  /* Toppmeny – Ligger helt øverst med en svak, mørk gradient over bannerbildet */
+  /* Toppmeny – Transparent Max-look med dyp gradient fra toppen */
   .top-nav {
     position: fixed !important;
     top: 0;
@@ -926,9 +926,9 @@ html, body {
     height: 60px;
     background: linear-gradient(
       to bottom, 
-      rgba(9, 27, 30, 0.85) 0%, 
-      rgba(9, 27, 30, 0.4) 60%, 
-      transparent 100__
+      rgba(9, 27, 30, 0.9) 0%, 
+      rgba(9, 27, 30, 0.5) 50%, 
+      transparent 100%
     ) !important; 
     backdrop-filter: none !important;    
     box-shadow: none !important;
@@ -939,7 +939,7 @@ html, body {
     align-items: center !important;
   }
 
-  /* Fjerner midtmenyen fra mobil */
+  /* Fjerner midtmenyen (desktop-lenker) fra mobil */
   .nav-links {
     display: none !important;
   }
@@ -955,7 +955,7 @@ html, body {
     position: static !important;
     transform: none !important;
     align-items: center !important;
-    gap: 16px !important;
+    gap: 20px !important; /* Litt mer pusterom mellom søk og profil */
   }
 
   .nav-search, .profilmeny {
@@ -964,25 +964,28 @@ html, body {
   }
 
   .watch-logo-text {
-    font-size: 24px !important; 
+    font-size: 22px !important; 
     font-weight: 900 !important;
-    letter-spacing: 0.5px !important;
+    letter-spacing: 1.5px !important;
     color: #00ffcc !important; 
     text-transform: uppercase !important;
     display: inline-block !important;
   }
 
   .nav-search {
-    font-size: 18px;
+    font-size: 20px;
+    color: #ffffff !important;
   }
 
   .profilmeny img {
-    width: 34px;
-    height: 34px;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    border: 1.5px solid #ffffff;
     display: block;
   }
 
-  /* HERO-SEKSJON: Bildet strekker seg helt fra toppen (bak menyen) */
+  /* HERO-SEKSJON: Tilpasset sømløs integrasjon bak toppmenyen */
   .hero {
     height: auto !important;
     min-height: auto !important;
@@ -990,10 +993,10 @@ html, body {
     flex-direction: column !important;
     background: #091B1E !important;
     position: relative !important;
-    margin-top: 0px !important; /* Starter helt på 0px fra toppen */
+    margin-top: 0px !important;
   }
 
-  /* Bannerbildet starter helt øverst og dekker skjermflaten bak menyen */
+  /* Vertikal filmplakat-følelse for mobil (55vh) */
   .background-image,
   .background-video,
   .hero-banner {
@@ -1001,47 +1004,48 @@ html, body {
     display: block !important;
     width: 100% !important;
     height: 55vh !important; 
-    min-height: 360px !important;
-    max-height: 500px !important;
+    min-height: 380px !important;
+    max-height: 520px !important;
     object-fit: cover !important;
     margin-bottom: 0 !important;
     z-index: 1 !important;
     top: 0 !important;
   }
 
-  /* Toningen ligger kun nederst på bildet for overgang til teksten */
+  /* Max Scrim Overlay: Toningen dreg seg lenger opp for maksimal tekstlesbarhet */
   .hero .overlay {
     position: absolute !important;
     inset: 0 !important;
     height: 55vh !important;
-    min-height: 360px !important;
-    max-height: 500px !important;
+    min-height: 380px !important;
+    max-height: 520px !important;
     background: linear-gradient(
       to bottom,
-      transparent 50%,
-      rgba(9, 27, 30, 0.4) 75%,
-      rgba(9, 27, 30, 0.9) 92%,
-      #091B1E 100__
+      rgba(9, 27, 30, 0.2) 0%,
+      transparent 40%,
+      rgba(9, 27, 30, 0.5) 70%,
+      rgba(9, 27, 30, 0.95) 90%,
+      #091B1E 100%
     ) !important;
     z-index: 2 !important;
   }
 
-  /* INFOBOKS DRAS OPP: Flytter innholdet markant oppover slik at logoen ligger på bildet */
+  /* INFOBOKS DRAS OPP: Plasserer innholdet elegant over bunnen av bannerbildet */
   .content-wrapper {
     position: relative !important;
     inset: auto !important;
-    padding: 0 24px 20px 24px !important; 
+    padding: 0 20px 24px 20px !important; 
     width: 100% !important;
     max-width: 100% !important;
     box-sizing: border-box !important;
     display: flex !important;
     flex-direction: column !important;
-    gap: 14px !important;
-    margin-top: -110px !important; /* Drar logo og info godt oppover rett på bildet */
+    gap: 12px !important;
+    margin-top: -120px !important; /* Drar teksten opp i det mørke partiet av bildet */
     z-index: 10 !important;
   }
 
-  /* Fjerner bakgrunnsplater slik at teksten blender inn med bildetoningen */
+  /* Fjerner alt av bokser og rammer for en ren, "flat" Max-look */
   .text-button-container {
     background: transparent !important;
     backdrop-filter: none !important;
@@ -1050,17 +1054,17 @@ html, body {
     box-shadow: none !important;
     padding: 0 !important;
     flex-direction: column !important;
-    gap: 14px !important;
+    gap: 16px !important;
   }
 
   .logo-container {
-    margin-bottom: 0px !important;
+    margin-bottom: 4px !important;
     justify-content: flex-start !important;
   }
 
   .film-logo {
-    width: 180px !important;
-    max-height: 75px !important;
+    width: 160px !important;
+    max-height: 70px !important;
     object-fit: contain !important;
   }
 
@@ -1069,60 +1073,79 @@ html, body {
   }
 
   .banner-title {
-    font-size: 24px !important;
+    font-size: 26px !important;
+    font-weight: 800;
+    letter-spacing: -0.5px;
   }
 
   .banner-content p, .description {
     font-size: 14px !important;
     line-height: 1.5;
-    color: #e0e0e0;
+    color: #e2e8f0;
     max-width: 100% !important;
   }
 
   .banner-meta, .metadata {
     font-size: 12px !important;
-    margin-top: 6px !important;
-  }
-
-  /* Knapper */
-  .buttons-column, .banner-buttons {
-    width: 100% !important;
-    gap: 10px !important;
+    color: #a0aec0;
     margin-top: 4px !important;
   }
 
+  /* KNAPPER: Solide, rektangulære med avrunding, full bredde */
+  .buttons-column, .banner-buttons {
+    width: 100% !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 10px !important;
+    margin-top: 8px !important;
+  }
+
+  /* Hovedknapp (Hvit på Max) */
   .watch-button {
     width: 100% !important;
     font-size: 14px !important;
-    padding: 12px 24px !important;
+    padding: 14px 24px !important;
     font-weight: 700;
-    border-radius: 6px !important; 
+    background-color: #ffffff !important;
+    color: #000000 !important;
+    border: none !important;
+    border-radius: 8px !important; 
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
   }
 
+  /* Sekundærknapp (Gjennomsiktig med tynn ramme) */
   .add-button {
     width: 100% !important;
-    height: 44px !important;
+    height: auto !important;
+    padding: 14px 24px !important;
     font-size: 14px !important;
-    border-radius: 6px !important;
-    background: rgba(255, 255, 255, 0.1) !important;
-    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+    font-weight: 600;
+    border-radius: 8px !important;
+    background: rgba(255, 255, 255, 0.08) !important;
+    border: 1px solid rgba(255, 255, 255, 0.25) !important;
+    color: #ffffff !important;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
   }
 
-  /* SENTRERTE EPISODEKORT */
+  /* EPISODEGALLERI: Sentrert liste nedover */
   .episode-gallery {
     display: flex !important;
     flex-direction: column !important;
     align-items: center !important;
     justify-content: center !important;
-    gap: 20px !important;
+    gap: 24px !important;
     width: 100% !important;
-    padding: 0 24px !important;
+    padding: 0 20px !important;
   }
 
   .episode-card {
     width: 100% !important;
-    max-width: 400px !important; 
-    margin: 0 auto !important;
+    max-width: 100% !important; 
+    background: rgba(255, 255, 255, 0.03) !important;
+    border-radius: 8px !important;
+    overflow: hidden;
   }
 
   .episode-thumb img {
@@ -1134,48 +1157,50 @@ html, body {
   .gallery-section, .recommendations {
     margin-left: 0px !important; 
     margin-right: 0px !important;
-    padding: 24px !important;
+    padding: 20px 0px 20px 20px !important; /* Beholder padding venstre, kutter høyre for edge-to-edge scroll */
     margin-top: 10px !important;
   }
 
   .gallery-section h2, .recommendations h2 {
     font-size: 18px !important;
     font-weight: 700;
-    color: #fff; 
-    margin-bottom: 12px;
+    color: #ffffff; 
+    margin-bottom: 14px;
+    padding-right: 20px;
   }
 
-  /* Bildegallerier og piler */
-  .image-gallery {
-    margin-left: -22px !important; 
-    padding: 4px 10px 12px 10px !important; 
-    gap: 10px !important;
+  /* Horisontal rulling (Karuseller) uten piler */
+  .image-gallery, .gallery {
+    display: flex !important;
+    margin-left: 0px !important; 
+    padding: 4px 20px 16px 0px !important; 
+    gap: 12px !important;
+    overflow-x: auto !important;
     scroll-snap-type: x mandatory !important;
     -webkit-overflow-scrolling: touch !important;
   }
 
+  /* Skjuler desktop-kontroller fullstendig */
   .scroll-button, .gallery-arrow, .prev-arrow, .next-arrow, .prev, .next, .fade-left, .fade-right {
     display: none !important;
     opacity: 0 !important;
     pointer-events: none !important;
   }
 
-  .gallery {
-    display: flex !important;
-  }
-
   .image-gallery a, .top10-item {
     scroll-snap-align: start !important;
     transform: none !important;
     transition: none !important;
+    flex-shrink: 0 !important;
   }
 
+  /* Landskapsbilde-kort (Filmer/Anbefalinger) */
   .image-gallery a img {
-    width: 200px !important;  
+    width: 180px !important;  
     height: auto !important;
     aspect-ratio: 16 / 9 !important; 
     object-fit: cover !important; 
-    border-radius: 4px !important;
+    border-radius: 6px !important;
     transform: none !important;
   }
 
@@ -1183,39 +1208,50 @@ html, body {
     display: none !important;  
   }
 
-  /* Top 10 Galleri */
+  /* Top 10 Galleri – Stående plakater med store tall */
   .top10-gallery {
-    margin-left: -22px !important; 
-    gap: 16px !important;
-    padding: 4px 10px 12px 10px !important;
+    display: flex !important;
+    overflow-x: auto !important;
+    margin-left: 0px !important; 
+    gap: 24px !important; /* Mer avstand for å gi plass til de store tallene */
+    padding: 4px 20px 16px 15px !important;
   }
   
+  .top10-item {
+    position: relative !important;
+    width: 115px !important;
+  }
+
   .top10-item img {
-    width: 110px !important; 
+    width: 115px !important; 
     height: auto !important;
     aspect-ratio: 2 / 3 !important; 
     object-fit: cover !important;
-    border-radius: 4px !important;
+    border-radius: 6px !important;
   }
 
+  /* Max-stilte store outlinete tall */
   .top10-number {
-    font-size: 52px !important;
-    left: -10px !important;
-    bottom: -6px !important;
-    -webkit-text-stroke: 2px rgba(0, 255, 204, 0.8) !important;
+    font-size: 64px !important;
+    font-weight: 900 !important;
+    position: absolute !important;
+    left: -22px !important;
+    bottom: -10px !important;
+    -webkit-text-stroke: 2px #00ffcc !important; /* Merkevarefargen din rundt tallet */
     color: transparent !important;
+    z-index: 5;
   }
 
   /* Kids banner */
   .kids-banner {
-    height: 120px !important;
-    margin: 20px 32px !important; 
-    width: calc(100% - 64px) !important;
-    border-radius: 6px;
+    height: 110px !important;
+    margin: 20px !important; 
+    width: calc(100% - 40px) !important;
+    border-radius: 8px;
   }
   
   .kids-overlay {
-    padding-left: 20px !important;
+    padding-left: 16px !important;
   }
   
   .kids-overlay h2 {
@@ -1227,45 +1263,58 @@ html, body {
     font-size: 12px !important;
   }
 
-  /* Sjanger-knapper */
+  /* Sjanger-knapper (Karusellform på mobil i steden for grid) */
   .genre-gallery {
-    padding: 0 32px !important; 
-    gap: 10px !important;
+    display: flex !important;
+    overflow-x: auto !important;
+    padding: 0 20px 10px 20px !important; 
+    gap: 14px !important;
   }
   
+  .genre-gallery a {
+    flex-shrink: 0 !important;
+  }
+
   .genre-gallery a .icon-circle {
-    width: 70px;
-    height: 70px;
-    font-size: 24px;
+    width: 65px;
+    height: 65px;
+    font-size: 22px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.1);
   }
 
   .genre-gallery a .genre-label {
     font-size: 11px;
+    margin-top: 6px;
   }
 
   /* Mobil-footer */
   .footer {
-    padding: 40px 32px 30px !important; 
-    margin-top: 60px;
+    padding: 40px 20px 30px !important; 
+    margin-top: 40px;
+    background: rgba(0, 0, 0, 0.2);
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
   }
 
   .footer-links {
     grid-template-columns: repeat(2, 1fr);
-    gap: 16px 16px;
+    gap: 16px 20px;
     margin-bottom: 30px;
   }
 
   .footer-links a {
     font-size: 13px;
+    color: #a0aec0;
   }
 
   .footer-socials {
-    gap: 18px;
+    gap: 22px;
     margin-bottom: 25px;
   }
 
   .footer-socials a {
-    font-size: 18px;
+    font-size: 20px;
+    color: #a0aec0;
   }
 }
 
