@@ -15,6 +15,7 @@
       --muted: #bfc9c9;
       --accent: #00FFCC;
       --border: rgba(255, 255, 255, 0.08);
+      --delete: #ff4d4d;
     }
 
     * {
@@ -35,7 +36,6 @@
       transition: opacity 0.4s ease;
     }
 
-    /* Bakgrunnsglød */
     body::before {
       content: "";
       position: fixed;
@@ -114,36 +114,53 @@
       color: white;
     }
 
-    /* Redigeringsblyant */
-    .edit-btn {
+    /* Handling-knapper som dukker opp ved hover */
+    .action-btn {
       position: absolute;
-      top: 0;
-      right: 5px;
-      background: rgba(9, 27, 30, 0.85);
+      background: rgba(9, 27, 30, 0.9);
       border: 1px solid var(--border);
-      color: var(--accent);
       padding: 10px;
       border-radius: 50%;
-      font-size: 14px;
+      font-size: 13px;
       opacity: 0;
       transform: scale(0.8);
       transition: all 0.25s ease;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.4);
       width: 36px;
       height: 36px;
       display: flex;
       align-items: center;
       justify-content: center;
+      z-index: 10;
     }
 
-    .profile:hover .edit-btn {
+    .profile:hover .action-btn {
       opacity: 1;
       transform: scale(1);
     }
 
+    /* Redigeringsblyant */
+    .edit-btn {
+      top: 0;
+      right: 15px;
+      color: var(--accent);
+    }
     .edit-btn:hover {
       background: var(--accent);
       color: #071214;
+    }
+
+    /* Sletteknapp */
+    .delete-btn {
+      top: 0;
+      left: 15px;
+      color: var(--delete);
+      border-color: rgba(255, 77, 77, 0.3);
+    }
+    .delete-btn:hover {
+      background: var(--delete);
+      color: white;
+      border-color: var(--delete);
     }
 
     /* Legg til profil knapp */
@@ -164,7 +181,7 @@
       background: rgba(0, 255, 204, 0.03);
     }
 
-    /* MODERN MODAL (POPUP FOR NY PROFIL) */
+    /* POPUP MODAL FOR NY PROFIL */
     .modal {
       position: fixed;
       inset: 0;
@@ -257,6 +274,7 @@
       .profiles { gap: 30px; }
       .profile { width: 130px; }
       .avatar { width: 120px; height: 120px; }
+      .action-btn { opacity: 1; transform: scale(1); } /* Alltid synlig på mobil */
     }
   </style>
 </head>
@@ -284,13 +302,11 @@
     const modal = document.getElementById("addProfileModal");
     const newProfileNameInput = document.getElementById("newProfileName");
 
-    // Standard fallbackbilde hvis intet annet er valgt
     const standardBilde = "https://static.wixstatic.com/media/fd2fb2_39376e4ee55b460ab7a3ebbfcf35fef7~mv2.png";
 
-    /* 1. LAST INN PROFILER FRA STORAGE */
+    /* 1. LAST PROFILER */
     let profiler = JSON.parse(localStorage.getItem("profiler"));
 
-    // Hvis det overhode ikke finnes noen profilliste, opprett en standard basert på innlogget bruker
     if (!profiler) {
       const globaltNavn = localStorage.getItem("navn") || "Hovedprofil";
       const globaltBilde = localStorage.getItem("profilbilde") || standardBilde;
@@ -305,13 +321,11 @@
       localStorage.setItem("profiler", JSON.stringify(profiler));
     }
 
-    /* 2. SYNKRONISERING AV PROFILBILDE OG NAVN FRA KONTOSIDEN */
+    /* 2. SYNKRONISERING FRÅ KONTOSIDE */
     let aktivProfilIndex = localStorage.getItem("aktivProfil");
     if (aktivProfilIndex !== null && profiler[aktivProfilIndex]) {
-      // Sjekk om det ligger oppdatert navn eller bilde i løs storage fra konto.html
       const oppdatertBilde = localStorage.getItem("profilbilde");
       const oppdatertNavn = localStorage.getItem("navn");
-
       let endret = false;
 
       if (oppdatertBilde && profiler[aktivProfilIndex].bilde !== oppdatertBilde) {
@@ -322,13 +336,12 @@
         profiler[aktivProfilIndex].navn = oppdatertNavn;
         endret = true;
       }
-
       if (endret) {
         localStorage.setItem("profiler", JSON.stringify(profiler));
       }
     }
 
-    /* 3. BYGG OG VIS PROFILENE PÅ SKJERMEN */
+    /* 3. TEGN PROFILER (RENDER) */
     function renderProfiler() {
       container.innerHTML = "";
 
@@ -336,49 +349,84 @@
         const div = document.createElement("div");
         div.className = "profile";
 
+        // Lag sletteknapp-HTML bare hvis det IKKE er profil nr 1 (indeks 0), så man ikke tømmer alt
+        const deleteBtnHtml = index > 0 
+          ? `<div class="action-btn delete-btn" title="Slett denne profilen"><i class="fa-solid fa-trash"></i></div>` 
+          : '';
+
         div.innerHTML = `
           <div class="avatar">
             <img src="${profil.bilde || standardBilde}">
           </div>
           <div class="name">${profil.navn}</div>
-          <div class="edit-btn" title="Administrer konto / endre bilde">
+          <div class="action-btn edit-btn" title="Endre navn og bilde">
             <i class="fa-solid fa-pen"></i>
           </div>
+          ${deleteBtnHtml}
         `;
 
-        // Klikk på selve profilen for å velge den og gå til hovedsiden
+        // Klikk på selve profilen for å velge den
         div.addEventListener("click", () => {
           velgProfil(index);
         });
 
-        // Klikk på blyanten for å gå direkte til kontosiden og redigere akkurat denne profilen
+        // Klikk på redigeringsblyanten
         div.querySelector(".edit-btn").addEventListener("click", (e) => {
-          e.stopPropagation(); // Hindrer at profilen velges samtidig
+          e.stopPropagation();
           localStorage.setItem("aktivProfil", index);
           localStorage.setItem("navn", profil.navn);
           localStorage.setItem("profilbilde", profil.bilde || standardBilde);
           window.location.href = "konto.html";
         });
 
+        // Aktiver klikk på sletteknappen dersom den eksisterer
+        const dBtn = div.querySelector(".delete-btn");
+        if (dBtn) {
+          dBtn.addEventListener("click", (e) => {
+            e.stopPropagation(); // Unngå at profilen logges inn samtidig som den slettes
+            slettProfil(index, profil.navn);
+          });
+        }
+
         container.appendChild(div);
       });
 
-      /* LEGG TIL PROFIL-KNAPP (vises kun hvis under maksgrensen) */
+      /* LEGG TIL PROFIL-KNAPP */
       if (profiler.length < MAX_PROFILER) {
         const addDiv = document.createElement("div");
         addDiv.className = "profile add-profile";
-
         addDiv.innerHTML = `
           <div class="avatar"><i class="fa-solid fa-plus"></i></div>
           <div class="name">Legg til profil</div>
         `;
-
         addDiv.addEventListener("click", åpneModal);
         container.appendChild(addDiv);
       }
     }
 
-    /* 4. VELG EN PROFIL */
+    /* 4. SLETT PROFIL FUNKSJON */
+    function slettProfil(index, navn) {
+      if (!confirm(`Er du sikker på at du vil slette profilen "${navn}"? Alle innstillinger for denne profilen vil forsvinne.`)) return;
+
+      // Slett profilen fra arrayen
+      profiler.splice(index, 1);
+      localStorage.setItem("profiler", JSON.stringify(profiler));
+
+      // Hvis profilen vi slettet var den vi var logget inn på, nullstill aktivProfil til hovedprofilen (0)
+      if (Number(aktivProfilIndex) === index) {
+        localStorage.setItem("aktivProfil", 0);
+        localStorage.setItem("navn", profiler[0].navn);
+        localStorage.setItem("profilbilde", profiler[0].bilde);
+      } else if (Number(aktivProfilIndex) > index) {
+        // Juster indeksen ned et hakk hvis vi slettet en profil som lå foran oss i køen
+        localStorage.setItem("aktivProfil", Number(aktivProfilIndex) - 1);
+      }
+
+      // Oppdater visningen med en gang
+      renderProfiler();
+    }
+
+    /* 5. VELG EN PROFIL */
     function velgProfil(index) {
       const profil = profiler[index];
 
@@ -390,19 +438,17 @@
         }
       }
 
-      // Sett aktiv økt slik at hovedsiden og konto vet hvem du er
       localStorage.setItem("aktivProfil", index);
       localStorage.setItem("navn", profil.navn);
       localStorage.setItem("profilbilde", profil.bilde || standardBilde);
 
-      // Flott uttoningseffekt før vi reiser videre
       document.body.style.opacity = "0";
       setTimeout(() => {
         window.location.href = "Hovedside.html";
       }, 400);
     }
 
-    /* 5. MODAL LOGIKK FOR NY KONTO */
+    /* 6. MODAL-FUNKSJONER */
     function åpneModal() {
       newProfileNameInput.value = "";
       modal.classList.add("active");
@@ -416,24 +462,19 @@
     function lagreNyProfil() {
       const navn = newProfileNameInput.value.trim();
       if (!navn) return alert("Profilen må ha et navn!");
-
       if (profiler.length >= MAX_PROFILER) return lukkModal();
 
-      // Legg til den nye profilen i arrayen med et kult standardbilde
       profiler.push({
         navn: navn,
         bilde: "https://static.wixstatic.com/media/fd2fb2_3df40a7e62c545afa3918fc10393284d~mv2.png", 
         pin: null
       });
 
-      // Lagre den oppdaterte listen i nettleserminnet
       localStorage.setItem("profiler", JSON.stringify(profiler));
-      
       lukkModal();
       renderProfiler();
     }
 
-    // Kjør funksjonen for å tegne opp siden
     renderProfiler();
   </script>
 
