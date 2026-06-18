@@ -33,7 +33,6 @@
       overflow-x: hidden;
     }
 
-    /* Bakgrunnsglød */
     body::before {
       content: "";
       position: fixed;
@@ -42,7 +41,6 @@
       z-index: -1;
     }
 
-    /* HEADER */
     header {
       padding: 20px 60px;
       background: rgba(9, 27, 30, 0.65);
@@ -96,7 +94,6 @@
       border-color: #ff4d4d;
     }
 
-    /* LAYOUT CONTAINER */
     .container {
       max-width: 1200px;
       width: 100%;
@@ -108,7 +105,6 @@
       flex: 1;
     }
 
-    /* SIDEBAR */
     .sidebar {
       background: var(--card-bg);
       backdrop-filter: blur(16px);
@@ -187,7 +183,6 @@
       border-color: #ff4d4d;
     }
 
-    /* MAIN CONTENT */
     .content h2 {
       margin: 0 0 18px;
       font-size: 22px;
@@ -220,9 +215,7 @@
       border-bottom: 1px solid rgba(255,255,255,0.05);
     }
 
-    .row:last-child { 
-      border-bottom: none; 
-    }
+    .row:last-child { border-bottom: none; }
 
     .info-block {
       flex: 1;
@@ -238,10 +231,7 @@
       font-weight: 600;
     }
 
-    .value {
-      font-size: 16px;
-      font-weight: 500;
-    }
+    .value { font-size: 16px; font-weight: 500; }
 
     .row button.edit-trigger {
       background: none;
@@ -260,16 +250,9 @@
       border-color: white;
     }
 
-    /* INLINE EDIT VISNING */
-    .hidden { 
-      display: none !important; 
-    }
+    .hidden { display: none !important; }
 
-    .edit-field {
-      margin-top: 10px;
-      width: 100%;
-      max-width: 400px;
-    }
+    .edit-field { margin-top: 10px; width: 100%; max-width: 400px; }
 
     .edit-field input {
       width: 100%;
@@ -279,19 +262,11 @@
       border-radius: 10px;
       color: white;
       font-size: 15px;
-      transition: 0.2s;
     }
 
-    .edit-field input:focus {
-      outline: none;
-      border-color: var(--accent);
-    }
+    .edit-field input:focus { outline: none; border-color: var(--accent); }
 
-    .edit-actions {
-      margin-top: 12px;
-      display: flex;
-      gap: 10px;
-    }
+    .edit-actions { margin-top: 12px; display: flex; gap: 10px; }
 
     .edit-actions button {
       padding: 8px 16px;
@@ -302,26 +277,9 @@
       transition: 0.2s;
     }
 
-    .btn-save {
-      background: var(--accent);
-      color: #071214;
-      border: none;
-    }
-    .btn-save:hover {
-      transform: scale(1.02);
-    }
+    .btn-save { background: var(--accent); color: #071214; border: none; }
+    .btn-cancel { background: transparent; border: 1px solid rgba(255,255,255,0.15); color: var(--muted); }
 
-    .btn-cancel {
-      background: transparent;
-      border: 1px solid rgba(255,255,255,0.15);
-      color: var(--muted);
-    }
-    .btn-cancel:hover {
-      color: white;
-      border-color: rgba(255,255,255,0.3);
-    }
-
-    /* FOOTER */
     footer {
       border-top: 1px solid var(--border);
       padding: 30px 60px;
@@ -330,29 +288,11 @@
       margin-top: auto;
     }
 
-    /* RESPONSIVE DESIGN (MOBIL & NETTBRETT) */
     @media (max-width: 960px) {
-      header {
-        padding: 20px 24px;
-      }
-      .container {
-        grid-template-columns: 1fr;
-        padding: 24px;
-        gap: 30px;
-      }
-      .sidebar {
-        padding: 25px 20px;
-      }
-      .avatar {
-        width: 120px;
-        height: 120px;
-      }
-      .card {
-        padding: 5px 16px;
-      }
-      footer {
-        padding: 30px 24px;
-      }
+      header { padding: 20px 24px; }
+      .container { grid-template-columns: 1fr; padding: 24px; gap: 30px; }
+      .avatar { width: 120px; height: 120px; }
+      footer { padding: 30px 24px; }
     }
   </style>
 </head>
@@ -368,28 +308,28 @@
 
   <div class="container">
 
+    <!-- SIDEBAR -->
     <aside class="sidebar">
-      <div class="avatar" onclick="velgProfil()">
+      <div class="avatar" onclick="velgProfilbildeSide()">
         <img id="profilbilde" src="https://static.wixstatic.com/media/fd2fb2_39376e4ee55b460ab7a3ebbfcf35fef7~mv2.png" alt="Profilbilde">
       </div>
       <div class="profile-name" id="navnDisplay">Laster...</div>
 
       <div class="profile-actions">
-        <button onclick="velgProfil()"><i class="fa-solid fa-user-gear"></i> Bytt Profil / Rediger</button>
+        <button onclick="velgProfilbildeSide()"><i class="fa-solid fa-user-gear"></i> Endre profilbilde</button>
         <button class="delete-btn" onclick="bekreftSlettBruker()"><i class="fa-solid fa-trash-can"></i> Slett profil permanent</button>
       </div>
     </aside>
 
+    <!-- CONTENT -->
     <section class="content">
-
       <h2><i class="fa-solid fa-user"></i> Kontoinformasjon</h2>
       <div class="card">
-
+        <!-- NAVN -->
         <div class="row" id="navnRow">
           <div class="info-block">
             <div class="label">Navn</div>
             <div class="value" id="navnView"></div>
-
             <div class="edit-field hidden">
               <input type="text" id="navnInput">
               <div class="edit-actions">
@@ -401,11 +341,11 @@
           <button class="edit-trigger" onclick="endreNavn()">Endre</button>
         </div>
 
+        <!-- EPOST -->
         <div class="row" id="epostRow">
           <div class="info-block">
             <div class="label">E-postadresse</div>
             <div class="value" id="epostView"></div>
-
             <div class="edit-field hidden">
               <input type="email" id="epostInput">
               <div class="edit-actions">
@@ -417,62 +357,26 @@
           <button class="edit-trigger" onclick="endreEpost()">Endre</button>
         </div>
 
+        <!-- PASSORD -->
         <div class="row">
           <div class="info-block">
             <div class="label">Passord</div>
             <div class="value">••••••••</div>
           </div>
         </div>
-
       </div>
 
       <h2><i class="fa-solid fa-id-card"></i> Mitt Abonnement</h2>
       <div class="card">
-        <div class="row">
-          <div class="info-block">
-            <div class="label">Plan</div>
-            <div class="value">Premium Nordic Ultra</div>
-          </div>
-        </div>
-        <div class="row">
-          <div class="info-block">
-            <div class="label">Kvalitet</div>
-            <div class="value">4K UHD + HDR + Dolby Atmos</div>
-          </div>
-        </div>
-        <div class="row">
-          <div class="info-block">
-            <div class="label">Skjermer</div>
-            <div class="value">4 samtidige enheter</div>
-          </div>
-        </div>
+        <div class="row"><div class="info-block"><div class="label">Plan</div><div class="value">Premium Nordic Ultra</div></div></div>
+        <div class="row"><div class="info-block"><div class="label">Kvalitet</div><div class="value">4K UHD + HDR</div></div></div>
       </div>
-
-      <h2><i class="fa-solid fa-sliders"></i> Preferanser</h2>
-      <div class="card">
-        <div class="row">
-          <div class="info-block">
-            <div class="label">Neste episode autoplay</div>
-            <div class="value">På</div>
-          </div>
-        </div>
-        <div class="row">
-          <div class="info-block">
-            <div class="label">Foreldrekontroll (Aldersgrense)</div>
-            <div class="value">Deaktivert</div>
-          </div>
-        </div>
-      </div>
-
     </section>
   </div>
 
-  <footer>
-    © 2026 Watch Nordic Group AS. Alt innhold er beskyttet av varemerkelover. Alle rettigheter forbeholdt.
-  </footer>
+  <footer>© 2026 Watch Nordic Group AS. Alle rettigheter forbeholdt.</footer>
 
   <script>
-    // Sikkerhet: Hvis brukeren ikke er logget inn, send dem umiddelbart til logg inn
     if (!localStorage.getItem("epost")) {
       window.location.href = "Innlogging.html";
     }
@@ -481,27 +385,28 @@
     const navnView = document.getElementById("navnView");
     const navnInput = document.getElementById("navnInput");
     const navnRow = document.getElementById("navnRow");
-
     const epostView = document.getElementById("epostView");
     const epostInput = document.getElementById("epostInput");
     const epostRow = document.getElementById("epostRow");
 
-    /* HENT AKTUELLE DATA FRA MINNET */
     let aktivEpost = localStorage.getItem("epost") || "";
     let aktivNavn = localStorage.getItem("navn") || "Profil";
     let brukere = JSON.parse(localStorage.getItem("brukere") || "{}");
 
-    // Last inn initiell visning
     navnDisplay.innerText = aktivNavn;
     navnView.innerText = aktivNavn;
     epostView.innerText = aktivEpost;
 
+    // Last inn valgt bilde
     const lagretBilde = localStorage.getItem("profilbilde");
     if (lagretBilde) {
       document.getElementById("profilbilde").src = lagretBilde;
     }
 
-    /* DYNAMISK REDIGERING: NAVN */
+    function velgProfilbildeSide() {
+      window.location.href = "VelgProfilbilde.html";
+    }
+
     function endreNavn() {
       navnInput.value = navnView.innerText;
       navnView.classList.add("hidden");
@@ -511,17 +416,12 @@
 
     function lagreNavn() {
       const nyttNavn = navnInput.value.trim();
-      if (!nyttNavn) return alert("Navnefeltet kan ikke være tomt.");
-
-      // 1. Oppdater lokaløkten
+      if (!nyttNavn) return;
       localStorage.setItem("navn", nyttNavn);
-      
-      // 2. Synkroniser inn i global brukerdatabase slik at det huskes til neste innlogging
       if (brukere[aktivEpost]) {
         brukere[aktivEpost].navn = nyttNavn;
         localStorage.setItem("brukere", JSON.stringify(brukere));
       }
-
       navnView.innerText = nyttNavn;
       navnDisplay.innerText = nyttNavn;
       avbrytNavn();
@@ -533,7 +433,6 @@
       navnRow.querySelector(".edit-trigger").classList.remove("hidden");
     }
 
-    /* DYNAMISK REDIGERING: EPOST (Sikker datamigrasjon) */
     function endreEpost() {
       epostInput.value = epostView.innerText;
       epostView.classList.add("hidden");
@@ -543,31 +442,17 @@
 
     function lagreEpost() {
       const nyEpost = epostInput.value.trim().toLowerCase();
-      if (!nyEpost) return alert("E-postfeltet kan ikke være tomt.");
-      if (nyEpost === aktivEpost) { avbrytEpost(); return; }
+      if (!nyEpost || nyEpost === aktivEpost) { avbrytEpost(); return; }
+      if (brukere[nyEpost]) return alert("E-posten er opptatt.");
 
-      // Sjekk om den nye e-posten allerede tilhører en annen konto
-      if (brukere[nyEpost]) {
-        return alert("Denne e-postadressen er allerede i bruk av en annen konto.");
-      }
-
-      // Migrer brukerprofilen i objektlisten
       if (brukere[aktivEpost]) {
-        const passordHolder = brukere[aktivEpost].passord;
-        const navnHolder = brukere[aktivEpost].navn;
-
-        // Opprett ny nøkkel og slett den gamle
-        brukere[nyEpost] = { navn: navnHolder, passord: passordHolder };
+        brukere[nyEpost] = { navn: brukere[aktivEpost].navn, passord: brukere[aktivEpost].passord };
         delete brukere[aktivEpost];
-
         localStorage.setItem("brukere", JSON.stringify(brukere));
       }
-
-      // Oppdater aktiv økt
       localStorage.setItem("epost", nyEpost);
-      aktivEpost = nyEpost; // oppdaterer den globale variabelen i scriptet
+      aktivEpost = nyEpost;
       epostView.innerText = nyEpost;
-      
       avbrytEpost();
     }
 
@@ -577,36 +462,21 @@
       epostRow.querySelector(".edit-trigger").classList.remove("hidden");
     }
 
-    /* GLOBALE SMANKOR-FUNKSJONER */
-    function velgProfil() {
-      // Sendes til profilsiden eller registreringssiden for å bytte bilde
-      window.location.href = "hvem-ser-på.html";
-    }
-
-    function bekreftSlettBruker() {
-      if (!confirm("Er du helt sikker på at du vil slette profilen og fjerne dataen din fra denne enheten permanent? Handlingen kan ikke angres.")) return;
-      
-      // Slett denne spesifikke brukeren fra listen
-      if (brukere[aktivEpost]) {
-        delete brukere[aktivEpost];
-        localStorage.setItem("brukere", JSON.stringify(brukere));
-      }
-
-      // Tøm aktiv økt og rens minnet
-      localStorage.removeItem("epost");
-      localStorage.removeItem("passord");
-      localStorage.removeItem("navn");
-      localStorage.removeItem("profilbilde");
-
-      window.location.href = "Innlogging.html";
-    }
-
     function loggUt() {
       localStorage.removeItem("epost");
       localStorage.removeItem("passord");
       localStorage.removeItem("navn");
       localStorage.removeItem("profilbilde");
       window.location.href = "Innlogging.html";
+    }
+
+    function bekreftSlettBruker() {
+      if (!confirm("Vil du slette brukeren permanent?")) return;
+      if (brukere[aktivEpost]) {
+        delete brukere[aktivEpost];
+        localStorage.setItem("brukere", JSON.stringify(brukere));
+      }
+      loggUt();
     }
   </script>
 </body>
