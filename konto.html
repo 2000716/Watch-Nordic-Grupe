@@ -317,7 +317,8 @@
 
       <div class="profile-actions">
         <button onclick="velgProfilbildeSide()"><i class="fa-solid fa-user-gear"></i> Endre profilbilde</button>
-        <button class="delete-btn" onclick="bekreftSlettBruker()"><i class="fa-solid fa-trash-can"></i> Slett profil permanent</button>
+        <!-- Denne knappen endrer tekst og funksjon i skriptet basert på om det er hovedkonto eller ikke -->
+        <button class="delete-btn" id="sletteKnapp" onclick="haandterSletting()"><i class="fa-solid fa-trash-can"></i> Slett profil permanent</button>
       </div>
     </aside>
 
@@ -388,10 +389,13 @@
     const epostView = document.getElementById("epostView");
     const epostInput = document.getElementById("epostInput");
     const epostRow = document.getElementById("epostRow");
+    const sletteKnapp = document.getElementById("sletteKnapp");
 
     let aktivEpost = localStorage.getItem("epost") || "";
     let aktivNavn = localStorage.getItem("navn") || "Profil";
     let brukere = JSON.parse(localStorage.getItem("brukere") || "{}");
+    let profiler = JSON.parse(localStorage.getItem("profiler") || "[]");
+    let aktivProfilIndex = localStorage.getItem("aktivProfil") || "0";
 
     navnDisplay.innerText = aktivNavn;
     navnView.innerText = aktivNavn;
@@ -401,6 +405,13 @@
     const lagretBilde = localStorage.getItem("profilbilde");
     if (lagretBilde) {
       document.getElementById("profilbilde").src = lagretBilde;
+    }
+
+    // SJEKK: Tilpass sletteknappen basert på om man er på Hovedkonto (indeks 0) eller en underprofil
+    if (aktivProfilIndex !== "0") {
+      sletteKnapp.innerHTML = `<i class="fa-solid fa-user-xmark"></i> Slett denne profilen`;
+    } else {
+      sletteKnapp.innerHTML = `<i class="fa-solid fa-trash-can"></i> Slett konto permanent`;
     }
 
     function velgProfilbildeSide() {
@@ -418,10 +429,20 @@
       const nyttNavn = navnInput.value.trim();
       if (!nyttNavn) return;
       localStorage.setItem("navn", nyttNavn);
+      
+      // Oppdater i brukere-objektet
       if (brukere[aktivEpost]) {
         brukere[aktivEpost].navn = nyttNavn;
         localStorage.setItem("brukere", JSON.stringify(brukere));
       }
+
+      // Oppdater i profiler-listen dersom den finnes
+      const idx = Number(aktivProfilIndex);
+      if (profiler[idx]) {
+        profiler[idx].navn = nyttNavn;
+        localStorage.setItem("profiler", JSON.stringify(profiler));
+      }
+
       navnView.innerText = nyttNavn;
       navnDisplay.innerText = nyttNavn;
       avbrytNavn();
@@ -467,16 +488,46 @@
       localStorage.removeItem("passord");
       localStorage.removeItem("navn");
       localStorage.removeItem("profilbilde");
-      window.location.href = "Innlogging.html";
+      localStorage.removeItem("aktivProfil");
+      window.location.href = "Innlogging.html"; // Sender brukeren til startsiden
     }
 
-    function bekreftSlettBruker() {
-      if (!confirm("Vil du slette brukeren permanent?")) return;
-      if (brukere[aktivEpost]) {
-        delete brukere[aktivEpost];
-        localStorage.setItem("brukere", JSON.stringify(brukere));
+    // Kontrollerer hva som skjer når man klikker på sletteknappen i sidestolpen
+    function haandterSletting() {
+      if (aktivProfilIndex !== "0") {
+        // Brukeren er på en UNDERPROFIL -> Slett kun denne profilen
+        if (!confirm(`Er du sikker på at du vil slette profilen "${aktivNavn}"?`)) return;
+        
+        const idx = Number(aktivProfilIndex);
+        if (profiler[idx]) {
+          profiler.splice(idx, 1);
+          localStorage.setItem("profiler", JSON.stringify(profiler));
+        }
+
+        // Sett aktiv profil tilbake til hovedprofilen (0) siden gjeldende profil nå er slettet
+        localStorage.setItem("aktivProfil", "0");
+        if (profiler[0]) {
+          localStorage.setItem("navn", profiler[0].navn);
+          localStorage.setItem("profilbilde", profiler[0].bilde);
+        }
+
+        alert("Profilen ble slettet. Du sendes nå tilbake til startsiden.");
+        window.location.href = "Innlogging.html";
+
+      } else {
+        // Brukeren er på HOVEDKONTOEN -> Slett hele kontoen permanent fra systemet
+        if (!confirm("Vil du slette hele kontoen og alle tilhørende underprofiler permanent?")) return;
+        
+        if (brukere[aktivEpost]) {
+          delete brukere[aktivEpost];
+          localStorage.setItem("brukere", JSON.stringify(brukere));
+        }
+        
+        // Tøm profilene helt
+        localStorage.removeItem("profiler");
+        
+        loggUt(); // Dette tømmer session-data og sender brukeren til Innlogging.html
       }
-      loggUt();
     }
   </script>
 </body>
