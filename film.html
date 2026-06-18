@@ -916,7 +916,7 @@ html, body {
     margin-right: 0px !important;
   }
 
-  /* Toppmeny – Transparent Max-look med dyp gradient fra toppen */
+  /* TOPPMENY – Transparent Max-look med dyp gradient fra toppen */
   .top-nav {
     position: fixed !important;
     top: 0;
@@ -955,7 +955,7 @@ html, body {
     position: static !important;
     transform: none !important;
     align-items: center !important;
-    gap: 20px !important; /* Litt mer pusterom mellom søk og profil */
+    gap: 20px !important;
   }
 
   .nav-search, .profilmeny {
@@ -987,19 +987,19 @@ html, body {
 
   /* HERO-SEKSJON: Ekte Max-look med full integrasjon bak toppmenyen */
   .hero {
-    height: 70vh !important; /* Økt for å gi bildet mer filmatisk rom på mobil */
+    height: 70vh !important; /* Åpner opp banneret slik som på Max mobil */
     min-height: 450px !important;
     max-height: 600px !important;
     display: flex !important;
     flex-direction: column !important;
-    justify-content: flex-end !important; /* Tvinger innholdet elegant ned til bunnen av bildet */
+    justify-content: flex-end !important; /* Plasserer automatisk innholdet i bunnen av bildet */
     background: #091B1E !important;
     position: relative !important;
     margin-top: 0px !important;
     overflow: hidden;
   }
 
-  /* Bannerbildet dekker hele hero-området som en ekte bakgrunn */
+  /* Bannerbildet fungerer nå som et fullverdig bakgrunnslag */
   .background-image,
   .background-video,
   .hero-banner {
@@ -1013,23 +1013,23 @@ html, body {
     z-index: 1 !important;
   }
 
-  /* Max Scrim Overlay: Mer aggressiv mørk toning i bunnen for maksimal tekstlesbarhet */
+  /* Max Scrim Overlay: Toning for sømløs overgang og maksimal tekstlesbarhet */
   .hero .overlay {
     position: absolute !important;
     inset: 0 !important;
     height: 100% !important;
     background: linear-gradient(
       to bottom,
-      rgba(9, 27, 30, 0.4) 0%,     /* Svak mørkning i toppen for å beskytte hvite ikoner/logo */
+      rgba(9, 27, 30, 0.4) 0%,     /* Gjør toppen litt mørkere for å fremheve logo/menyen */
       transparent 30%,
       rgba(9, 27, 30, 0.4) 50%,
-      rgba(9, 27, 30, 0.85) 80%,   /* Dypere skygge der teksten starter */
-      #091B1E 100%                 /* Glir perfekt over i appens bakgrunnsfarge */
+      rgba(9, 27, 30, 0.85) 80%,   /* Kraftig mørkning bak tekstinnholdet */
+      #091B1E 100%                 /* Fader 100% over i sidens bakgrunnsfarge */
     ) !important;
     z-index: 2 !important;
   }
 
-  /* INFOBOKS: Ligger trygt limt til bunnen av bildet via flex-layout (ingen negative marginer) */
+  /* INFOBOKS: Ligger trygt over gradienten i bunnen via flex-layout */
   .content-wrapper {
     position: relative !important;
     inset: auto !important;
@@ -1040,11 +1040,11 @@ html, body {
     display: flex !important;
     flex-direction: column !important;
     gap: 8px !important;
-    margin-top: 0 !important; 
+    margin-top: 0 !important; /* Unngår negative marginer som kan krasje på små skjermer */
     z-index: 10 !important;
   }
 
-  /* Fjerner alt av bokser og rammer for en ren, "flat" Max-look */
+  /* Fjerner bokser, rammer og effekter for en helt flat Max-look */
   .text-button-container {
     background: transparent !important;
     backdrop-filter: none !important;
@@ -1090,7 +1090,7 @@ html, body {
     margin-top: 4px !important;
   }
 
-  /* KNAPPER: Solide, rektangulære med avrunding, full bredde */
+  /* KNAPPER: Full bredde, solide, rektangulære med lett avrunding */
   .buttons-column, .banner-buttons {
     width: 100% !important;
     display: flex !important;
@@ -1099,7 +1099,7 @@ html, body {
     margin-top: 8px !important;
   }
 
-  /* Hovedknapp (Hvit på Max) */
+  /* Hovedknapp (Ekte hvit Max-knapp) */
   .watch-button {
     width: 100% !important;
     font-size: 14px !important;
@@ -1113,7 +1113,7 @@ html, body {
     letter-spacing: 0.5px;
   }
 
-  /* Sekundærknapp (Gjennomsiktig med tynn ramme) */
+  /* Sekundærknapp (Semi-transparent med tynn ramme) */
   .add-button {
     width: 100% !important;
     height: auto !important;
@@ -1128,7 +1128,7 @@ html, body {
     letter-spacing: 0.5px;
   }
 
-  /* EPISODEGALLERI: Sentrert liste nedover */
+  /* EPISODEGALLERI: Vertikal liste tilpasset mobilen */
   .episode-gallery {
     display: flex !important;
     flex-direction: column !important;
@@ -1152,11 +1152,11 @@ html, body {
     aspect-ratio: 16 / 9 !important;
   }
 
-  /* Seksjonsavstander */
+  /* Seksjonsavstander for innholdskaruseller */
   .gallery-section, .recommendations {
     margin-left: 0px !important; 
     margin-right: 0px !important;
-    padding: 20px 0px 20px 20px !important; /* Beholder padding venstre, kutter høyre for edge-to-edge scroll */
+    padding: 20px 0px 20px 20px !important; /* Lar innholdet rulle helt ut til høyre kant */
     margin-top: 10px !important;
   }
 
@@ -1168,7 +1168,7 @@ html, body {
     padding-right: 20px;
   }
 
-  /* Horisontal rulling (Karuseller) uten piler */
+  /* Horisontal rulling (Karuseller) uten desktop-piler */
   .image-gallery, .gallery {
     display: flex !important;
     margin-left: 0px !important; 
@@ -1179,7 +1179,7 @@ html, body {
     -webkit-overflow-scrolling: touch !important;
   }
 
-  /* Skjuler desktop-kontroller fullstendig */
+  /* Skjuler desktop-kontroller fullstendig på mobil */
   .scroll-button, .gallery-arrow, .prev-arrow, .next-arrow, .prev, .next, .fade-left, .fade-right {
     display: none !important;
     opacity: 0 !important;
@@ -1212,7 +1212,7 @@ html, body {
     display: flex !important;
     overflow-x: auto !important;
     margin-left: 0px !important; 
-    gap: 24px !important; /* Mer avstand for å gi plass til de store tallene */
+    gap: 24px !important; 
     padding: 4px 20px 16px 15px !important;
   }
   
@@ -1229,14 +1229,14 @@ html, body {
     border-radius: 6px !important;
   }
 
-  /* Max-stilte store outlinete tall */
+  /* Max-stilte store outlinete rangeringstall */
   .top10-number {
     font-size: 64px !important;
     font-weight: 900 !important;
     position: absolute !important;
     left: -22px !important;
     bottom: -10px !important;
-    -webkit-text-stroke: 2px #00ffcc !important; /* Merkevarefargen rundt tallet */
+    -webkit-text-stroke: 2px #00ffcc !important; /* Matcher merkevarefargen din rundt tallet */
     color: transparent !important;
     z-index: 5;
   }
