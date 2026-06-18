@@ -40,108 +40,154 @@
       height: auto;
     }
 
-    /* =========================================================
-    TOP NAVIGATION
-    ========================================================= */
-    .top-nav {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 70px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 40px; /* Justert fra 50px til 40px basert på din siste endring */
-      z-index: 500;
-      backdrop-filter: blur(18px);
-      -webkit-backdrop-filter: blur(18px);
-      background: rgba(10, 15, 18, 0.55);
-      border-bottom: 1px solid rgba(255, 255, 255, .05);
-      transition: background .4s ease, box-shadow .4s ease;
-    }
 
-    .top-nav.scrolled {
-      background: rgba(10, 15, 18, .95);
-      box-shadow: 0 5px 25px rgba(0, 0, 0, .6);
-    }
+/* ==========================================================================
+   GLOBAL NULLSTILLING (Fjerner den hvite/mørke stripen helt øverst)
+   ========================================================================== */
+html, body {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  background-color: #091B1E;
+}
 
-    .nav-left {
-      display: flex;
-      align-items: center;
-      gap: 40px;
-    }
+/* ==========================================================================
+   OPPDATERT TOPPMENY (PC & MOBIL)
+   ========================================================================== */
+.top-nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 70px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 40px;
+  z-index: 9999;
+  box-sizing: border-box;
+  
+  /* Mørk skygge/fade øverst som gjør menyen lettleselig */
+  background: linear-gradient(to bottom, rgba(9, 27, 30, 0.95) 0%, rgba(9, 27, 30, 0.6) 50%, rgba(9, 27, 30, 0) 100%);
+  box-shadow: none;
+  
+  /* Myk overgang når bakgrunnen tones inn */
+  transition: background 0.4s ease, box-shadow 0.4s ease;
+}
 
-    .watch-logo-text {
-      font-size: 28px;
-      font-weight: 900;
-      letter-spacing: 3px;
-      color: #00ffcc;
-      cursor: pointer;
-      user-select: none;
-      text-shadow: 0 0 6px rgba(0, 255, 204, .6), 0 0 18px rgba(0, 255, 204, .35);
-      transition: transform .25s ease;
-    }
+/* Fjernet den gamle gradient-faden (::before) som lå i toppen tidligere */
+.top-nav::before {
+  display: none;
+}
 
-    .watch-logo-text:hover {
-      transform: scale(1.05);
-    }
+/* AKTIV SCROLL-BAKGRUNN: Denne slår inn når du blar nedover siden */
+.top-nav.scrolled {
+  background: rgba(9, 27, 30, 0.95);
+  backdrop-filter: blur(10px); /* Gir en pen glass-effekt over video/bilder bak */
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+}
 
-    /* Sentrert meny-design */
-    .nav-links {
-      position: absolute;
-      left: 50%;
-      transform: translateX(-50%);
-      display: flex;
-      gap: 30px;
-    }
+/* Venstre side av meny */
+.nav-left {
+  display: flex;
+  align-items: center;
+  gap: 40px;
+}
 
-    .nav-links a {
-      color: #bfbfbf;
-      text-decoration: none;
-      font-size: 15px;
-      font-weight: 500;
-      transition: .3s;
-    }
+/* WATCH LOGO - Helt renset for glød, skygge og animasjon */
+.watch-logo-text {
+  font-family: 'Montserrat Alternates', sans-serif;
+  font-size: 28px;
+  font-weight: 900;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: #00FFCC;
+  display: flex;
+  align-items: center;
+  height: 100%;
+  cursor: pointer;
+  user-select: none;
+  
+  /* Ingen skygger eller hover-effekter */
+  text-shadow: none !important;
+  transform: none !important;
+  transition: none !important;
+}
 
-    .nav-links a:hover {
-      color: #fff;
-    }
+/* Sørger for at den forblir helt uendret ved hover */
+.watch-logo-text:hover {
+  color: #00FFCC !important;
+  transform: none !important;
+  text-shadow: none !important;
+}
 
-    .nav-links a.active {
-      color: #00ffcc;
-      font-weight: 700;
-    }
+/* Midtstilt meny */
+.nav-links {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 30px;
+}
 
-    .nav-right {
-      display: flex;
-      align-items: center;
-      gap: 14px;
-    }
+.nav-links a {
+  color: #bfbfbf;
+  text-decoration: none;
+  font-size: 15px;
+  font-weight: 500;
+  transition: color 0.3s ease;
+}
 
-    .nav-search {
-      color: #bfbfbf;
-      font-size: 18px;
-      transition: .3s;
-    }
+.nav-links a i {
+  margin-right: 6px;
+  font-size: 16px;
+}
 
-    .nav-search:hover {
-      color: #00ffcc;
-    }
+.nav-links a:hover {
+  color: #ffffff;
+}
 
-    .profilmeny img {
-      width: 42px;
-      height: 42px;
-      border-radius: 50%;
-      border: 2px solid #fff;
-      object-fit: cover;
-      cursor: pointer;
-      transition: transform .3s;
-    }
+.nav-links a.active {
+  color: #00FFCC;
+  font-weight: 700;
+}
 
-    .profilmeny img:hover {
-      transform: scale(1.05);
-    }
+/* Høyre side (Søk og Profil) */
+.nav-right {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.nav-search {
+  color: #bfbfbf;
+  font-size: 18px;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.nav-search:hover {
+  color: #00FFCC;
+}
+
+.profilmeny {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.profilmeny img, #menyProfilbilde {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #ffffff;
+  vertical-align: middle;
+  transform: translateY(1px);
+}
+
 
     /* =========================================================
     HERO SECTION
