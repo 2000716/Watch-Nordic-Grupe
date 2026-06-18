@@ -857,7 +857,7 @@ html, body {
         padding: 0 20px;
       }
       .nav-links {
-        display: none; /* Skjuler menyen på mobil slik koden din spesifiserte */
+        display: none;
       }
       .hero {
         height: auto;
@@ -982,59 +982,63 @@ html, body {
     display: block;
   }
 
-  /* HERO-SEKSJON (Strukturert for bilde øverst, tekst under) */
+  /* HERO-SEKSJON (Fikset posisjonering for ryddig flyt) */
   .hero {
     height: auto !important;
     min-height: auto !important;
-    display: flex;
-    flex-direction: column;
-    background: #091B1E;
+    display: flex !important;
+    flex-direction: column !important;
+    background: #091B1E !important;
+    position: relative !important;
   }
 
-  /* Bannerbildet/videoen tar plassen øverst alene */
+  /* Bannerbildet/videoen tar plassen øverst alene med en satt høyde */
   .background-image,
   .background-video,
   .hero-banner {
     position: relative !important;
+    display: block !important;
     width: 100% !important;
-    height: 55vh !important; /* Viser mer av bildet før teksten starter */
-    min-height: 380px !important;
-    max-height: 480px !important;
+    height: 50vh !important; 
+    min-height: 300px !important;
+    max-height: 450px !important;
     object-fit: cover !important;
     margin-bottom: 0 !important;
+    z-index: 1 !important;
   }
 
-  /* Sørger for at toningen kun skjer i bunnen av bildet, rett før teksten starter */
-  .hero-banner::after, .overlay {
+  /* Toningen justert slik at den blender bildet rett over i bakgrunnsfargen */
+  .hero .overlay {
     position: absolute !important;
     inset: 0 !important;
+    height: 50vh !important;
+    min-height: 300px !important;
+    max-height: 450px !important;
     background: linear-gradient(
       to bottom,
-      transparent 50%,
-      rgba(9, 27, 30, 0.4) 75%,
-      rgba(9, 27, 30, 0.9) 90%,
-      #091B1E 100%
+      transparent 40%,
+      rgba(9, 27, 30, 0.5) 70%,
+      #091B1E 100__
     ) !important;
+    z-index: 2 !important;
   }
 
   /* Tekst og info skyves ned og legger seg helt naturlig UNDER bildet */
   .content-wrapper {
     position: relative !important;
-    bottom: auto !important;
-    left: auto !important;
-    right: auto !important;
-    padding: 24px 32px !important; /* Sentrert og fin avstand på linje med galleriene */
+    inset: auto !important;
+    padding: 20px 24px !important; 
     width: 100% !important;
     max-width: 100% !important;
     box-sizing: border-box !important;
-    display: flex;
-    flex-direction: column;
+    display: flex !important;
+    flex-direction: column !important;
     gap: 16px !important;
-    margin-top: -20px; /* Drar teksten pent opp i faden av bildet */
-    z-index: 10;
+    margin-top: 0px !important;
+    z-index: 10 !important;
   }
 
-  /* Infoboksen gjøres gjennomsiktig uten tung bakgrunn for et renere uttrykk under bildet */
+  /* Infoboksen gjøres gjennomsiktig uten tung bakgrunn under bildet */
   .text-button-container {
     background: transparent !important;
     backdrop-filter: none !important;
@@ -1102,22 +1106,41 @@ html, body {
     border: 1px solid rgba(255, 255, 255, 0.2) !important;
   }
 
-  /* Seksjons-ramme (Avstand til gallerier) */
-  .gallery-section {
-    margin-left: 32px !important; 
-    margin-right: 0px !important;
-    margin-bottom: 22px;
-    margin-top: 20px;
+  /* STREAMING-VENNLIG EPISODE-GALLERI (Sentrerte episodekort på mobil) */
+  .episode-gallery {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 20px !important;
+    width: 100% !important;
+    padding: 0 24px !important;
   }
 
-  .gallery-section h2 {
-    padding-left: 0px !important; 
-    margin-left: 0px !important;
-    font-size: 16px;
+  .episode-card {
+    width: 100% !important;
+    max-width: 400px !important; /* Forhindrer at kortene blir strukket for langt på brede skjermer */
+    margin: 0 auto !important;
+  }
+
+  .episode-thumb img {
+    height: auto !important;
+    aspect-ratio: 16 / 9 !important;
+  }
+
+  /* Seksjons-ramme (Avstand til gallerier) */
+  .gallery-section, .recommendations {
+    margin-left: 0px !important; 
+    margin-right: 0px !important;
+    padding: 24px !important;
+    margin-top: 0px !important;
+  }
+
+  .gallery-section h2, .recommendations h2 {
+    font-size: 18px !important;
     font-weight: 700;
-    letter-spacing: 0.5px;
     color: #fff; 
-    margin-bottom: 8px;
+    margin-bottom: 12px;
   }
 
   /* Bildegallerier */
@@ -1137,7 +1160,7 @@ html, body {
   }
 
   .gallery {
-    grid-template-columns: repeat(2, 1fr);
+    display: flex !important;
   }
 
   .image-gallery a, .top10-item {
@@ -1244,6 +1267,7 @@ html, body {
     font-size: 18px;
   }
 }
+
 </style>
 
 <header class="top-nav">
