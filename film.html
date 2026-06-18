@@ -47,46 +47,49 @@ img, video {
 }
 
 /* ==========================================================================
-   TOPPMENY (PC & MOBIL) - Beholder de originale fargene
+   2. TOPPMENY (PC) - NÅ MED TYDELIGERE FADE FOR BEDRE LESBARHET
    ========================================================================== */
 .top-nav {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
-  height: 70px;
+  height: 85px; /* Litt høyere for å gi faden mer rom til å tone ut */
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 0 40px;
   z-index: 9999;
   box-sizing: border-box;
-  
-  /* Original mørkegrønn skygge/fade øverst */
-  background: linear-gradient(to bottom, rgba(9, 27, 30, 0.95) 0%, rgba(9, 27, 30, 0.6) 50%, rgba(9, 27, 30, 0) 100%);
-  box-shadow: none;
-  transition: background 0.4s ease, box-shadow 0.4s ease;
+  /* OPPDATERT: Kraftigere fade fra topp til bunn bak menyen */
+  background: linear-gradient(to bottom, 
+    rgba(9, 27, 30, 0.95) 0%, 
+    rgba(9, 27, 30, 0.75) 40%, 
+    rgba(9, 27, 30, 0.3) 75%, 
+    rgba(9, 27, 30, 0) 100%
+  );
+  transition: background 0.4s ease, box-shadow 0.4s ease, height 0.4s ease;
 }
 
 .top-nav::before {
   display: none;
 }
 
-/* Aktiv scroll-bakgrunn med original grønntone */
+/* Når brukeren scroller nedover, blir bakgrunnen helt solid for kontinuerlig lesbarhet */
 .top-nav.scrolled {
-  background: rgba(9, 27, 30, 0.95);
+  height: 70px;
+  background: rgba(9, 27, 30, 0.98);
   backdrop-filter: blur(10px);
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.8);
+  box-shadow: 0 2px 15px rgba(0, 0, 0, 0.6);
 }
 
-/* Venstre side av meny */
 .nav-left {
   display: flex;
   align-items: center;
   gap: 40px;
+  flex-shrink: 0;
 }
 
-/* WATCH LOGO */
 .watch-logo-text {
   font-family: 'Montserrat Alternates', sans-serif;
   font-size: 28px;
@@ -99,7 +102,7 @@ img, video {
   height: 100%;
   cursor: pointer;
   user-select: none;
-  text-shadow: none !important;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5) !important;
   transform: none !important;
   transition: none !important;
 }
@@ -107,24 +110,27 @@ img, video {
 .watch-logo-text:hover {
   color: #00FFCC !important;
   transform: none !important;
-  text-shadow: none !important;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5) !important;
 }
 
-/* Midtstilt meny */
 .nav-links {
   position: absolute;
   left: 50%;
   transform: translateX(-50%);
   display: flex;
   gap: 30px;
+  white-space: nowrap;
+  transition: gap 0.3s ease;
 }
 
 .nav-links a {
-  color: #bfbfbf;
+  color: #e0e0e0; /* Litt lysere standardfarge for bedre kontrast */
   text-decoration: none;
   font-size: 15px;
   font-weight: 500;
-  transition: color 0.3s ease;
+  /* NYTT: Skygge på teksten for å "løfte" den fra lyse bakgrunner */
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.8), 0 2px 8px rgba(0, 0, 0, 0.8);
+  transition: color 0.3s ease, font-size 0.3s ease;
 }
 
 .nav-links a i {
@@ -141,17 +147,18 @@ img, video {
   font-weight: 700;
 }
 
-/* Høyre side (Søk og Profil) */
 .nav-right {
   display: flex;
   align-items: center;
   gap: 15px;
+  flex-shrink: 0;
 }
 
 .nav-search {
-  color: #bfbfbf;
+  color: #e0e0e0;
   font-size: 18px;
   text-decoration: none;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.8);
   transition: color 0.3s ease;
 }
 
@@ -173,53 +180,33 @@ img, video {
   border-radius: 50%;
   object-fit: cover;
   border: 2px solid #ffffff;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.5);
   vertical-align: middle;
   transform: translateY(1px);
 }
 
-/* =========================================================
-   HERO SECTION (Toninger fader til ren svart #000000)
-   ========================================================= */
-.hero {
-  position: relative;
-  width: 100vw;
-  height: 100vh;
-  overflow: hidden;
-  background: #000000;
+/* ==========================================================================
+   3. OPTIMALISERING FOR SMÅ/MELLOMSTORE PC-SKJERMER & LAPTOPS
+   ========================================================================== */
+@media (max-width: 1200px) and (min-width: 769px) {
+  .top-nav {
+    padding: 0 20px;
+  }
+  .nav-left {
+    gap: 20px;
+  }
+  .nav-links {
+    gap: 15px;
+  }
+  .nav-links a {
+    font-size: 14px;
+  }
+  .watch-logo-text {
+    font-size: 24px;
+    letter-spacing: 2px;
+  }
 }
 
-.background-image,
-.background-video {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transition: opacity 1s ease;
-  z-index: 0;
-}
-
-.background-video {
-  opacity: 0;
-  filter: brightness(.8);
-}
-
-.overlay {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(to top, #000000 0%, rgba(0, 0, 0, .5) 40%, transparent 75%),
-              linear-gradient(to right, rgba(0, 0, 0, .7) 0%, transparent 50%);
-  z-index: 1;
-}
-
-.bottom-fade {
-  position: absolute;
-  bottom: 0;
-  width: 100%;
-  height: 200px;
-  background: linear-gradient(to top, #000000, transparent);
-  z-index: 1;
-}
 
 /* =========================================================
    HERO CONTENT & GLASS INFO PANEL
