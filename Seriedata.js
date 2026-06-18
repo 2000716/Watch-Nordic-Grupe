@@ -119,7 +119,7 @@ const serier = {
     bakgrunn: "https://static.wixstatic.com/media/d9ace9_6189bb0756b8437ab689f6f65652f701~mv2.png",
     banner: "https://static.wixstatic.com/media/d9ace9_6189bb0756b8437ab689f6f65652f701~mv2.png", 
     bannerMobil: "https://static.wixstatic.com/media/d9ace9_7226de1d128a4fa0be3604222034519e~mv2.jpg",
-    logo: "https://static.wixstatic.com/media/d9ace9_8920f6f7b0b24913a251dde3f208841e~mv2.png",
+    logo: "https://static.wixstatic.com/media/d9ace9_902a792e7c704d788fd251674707d925~mv2.png",
     poster: "https://static.wixstatic.com/media/d9ace9_6597c0df53534dfb800580bb6716c27c~mv2.jpg",
     posterVertikal: "https://static.wixstatic.com/media/d9ace9_bb5d07a805334acaa7917644626f3f56~mv2.jpg",
     beskrivelse: "I denne dokumentaren tar Watch Originals deg med tilbake til månelandingen med Apollo 11. Men det store spørsmålet mange har stilt seg er: var det ekte?",
