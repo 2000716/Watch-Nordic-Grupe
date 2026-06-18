@@ -15,6 +15,7 @@
       --accent: #00FFCC;
       --card-bg: rgba(255, 255, 255, 0.04);
       --border: rgba(255, 255, 255, 0.08);
+      --kids-accent: #33b5ff;
     }
 
     * { 
@@ -255,7 +256,7 @@
 
     .edit-field { margin-top: 10px; width: 100%; max-width: 400px; }
 
-    .edit-field input {
+    .edit-field input, .edit-field select {
       width: 100%;
       padding: 12px;
       background: rgba(9, 27, 30, 0.8);
@@ -264,8 +265,9 @@
       color: white;
       font-size: 15px;
     }
+    .edit-field select option { background: #091B1E; color: white; }
 
-    .edit-field input:focus { outline: none; border-color: var(--accent); }
+    .edit-field input:focus, .edit-field select:focus { outline: none; border-color: var(--accent); }
 
     .edit-actions { margin-top: 12px; display: flex; gap: 10px; }
 
@@ -281,6 +283,23 @@
     .btn-save { background: var(--accent); color: #071214; border: none; }
     .btn-cancel { background: transparent; border: 1px solid rgba(255,255,255,0.15); color: var(--muted); }
 
+    /* Foreldrekontroll panel-styling */
+    .parent-lock-screen {
+      text-align: center;
+      padding: 20px 0;
+    }
+    .btn-parent-unlock {
+      background: var(--kids-accent);
+      color: #071214;
+      border: none;
+      padding: 10px 20px;
+      font-weight: 700;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+    .btn-parent-unlock:hover { background: #2299dd; }
+
     footer {
       border-top: 1px solid var(--border);
       padding: 30px 60px;
@@ -290,101 +309,29 @@
       text-align: center;
     }
 
-    /* MOBIL- OG NETTBRETT-TILPASNINGER */
     @media (max-width: 960px) {
-      header { 
-        padding: 15px 20px; 
-      }
-      header h1 {
-        font-size: 20px;
-      }
-      header button {
-        padding: 8px 14px;
-        font-size: 13px;
-      }
+      header { padding: 15px 20px; }
+      header h1 { font-size: 20px; }
+      header button { padding: 8px 14px; font-size: 13px; }
       
-      .container { 
-        grid-template-columns: 1fr; 
-        padding: 20px; 
-        gap: 24px; 
-      }
-
-      .sidebar {
-        padding: 24px 20px;
-        border-radius: 20px;
-      }
-      
-      .avatar { 
-        width: 110px; 
-        height: 110px; 
-        margin-bottom: 12px;
-      }
-
-      .profile-name {
-        font-size: 19px;
-        margin-bottom: 15px;
-      }
-
-      .profile-actions {
-        flex-direction: row;
-        gap: 10px;
-      }
-
-      .profile-actions button {
-        flex: 1;
-        padding: 10px;
-        font-size: 13px;
-        border-radius: 10px;
-      }
-
-      .profile-actions button.delete-btn {
-        margin-top: 0; /* Står på linje med endre-knappen på mobil */
-      }
-
-      .content h2 {
-        font-size: 19px;
-        margin-bottom: 12px;
-      }
-
-      .card {
-        padding: 5px 16px;
-        border-radius: 20px;
-        margin-bottom: 24px;
-      }
-
-      .row {
-        padding: 16px 0;
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 12px;
-      }
-
-      .info-block {
-        padding-right: 0;
-        width: 100%;
-      }
-
-      .row button.edit-trigger {
-        width: 100%;
-        text-align: center;
-        padding: 10px;
-        background: rgba(255,255,255,0.03);
-      }
-
-      .edit-field {
-        max-width: 100%;
-      }
-
-      footer { 
-        padding: 24px 20px; 
-      }
+      .container { grid-template-columns: 1fr; padding: 20px; gap: 24px; }
+      .sidebar { padding: 24px 20px; border-radius: 20px; }
+      .avatar { width: 110px; height: 110px; margin-bottom: 12px; }
+      .profile-name { font-size: 19px; margin-bottom: 15px; }
+      .profile-actions { flex-direction: row; gap: 10px; }
+      .profile-actions button { flex: 1; padding: 10px; font-size: 13px; border-radius: 10px; }
+      .profile-actions button.delete-btn { margin-top: 0; }
+      .content h2 { font-size: 19px; margin-bottom: 12px; }
+      .card { padding: 5px 16px; border-radius: 20px; margin-bottom: 24px; }
+      .row { padding: 16px 0; flex-direction: column; align-items: flex-start; gap: 12px; }
+      .info-block { padding-right: 0; width: 100%; }
+      .row button.edit-trigger { width: 100%; text-align: center; padding: 10px; background: rgba(255,255,255,0.03); }
+      .edit-field { max-width: 100%; }
+      footer { padding: 24px 20px; }
     }
 
-    /* Ekstra tilpasning for veldig små mobilskjermer */
     @media (max-width: 480px) {
-      .profile-actions {
-        flex-direction: column;
-      }
+      .profile-actions { flex-direction: column; }
     }
   </style>
 </head>
@@ -402,12 +349,12 @@
 
     <!-- SIDEBAR -->
     <aside class="sidebar">
-      <div class="avatar" onclick="velgProfilbildeSide()">
+      <div class="avatar" id="avatarContainer" onclick="velgProfilbildeSide()">
         <img id="profilbilde" src="https://static.wixstatic.com/media/fd2fb2_39376e4ee55b460ab7a3ebbfcf35fef7~mv2.png" alt="Profilbilde">
       </div>
       <div class="profile-name" id="navnDisplay">Laster...</div>
 
-      <div class="profile-actions">
+      <div class="profile-actions" id="sidebarActions">
         <button onclick="velgProfilbildeSide()"><i class="fa-solid fa-user-gear"></i> Endre bilde</button>
         <button class="delete-btn" id="sletteKnapp" onclick="haandterSletting()"><i class="fa-solid fa-trash-can"></i> Slett profil permanent</button>
       </div>
@@ -430,7 +377,7 @@
               </div>
             </div>
           </div>
-          <button class="edit-trigger" onclick="endreNavn()">Endre</button>
+          <button class="edit-trigger" id="endreNavnKnapp" onclick="endreNavn()">Endre</button>
         </div>
 
         <!-- EPOST -->
@@ -446,7 +393,7 @@
               </div>
             </div>
           </div>
-          <button class="edit-trigger" onclick="endreEpost()">Endre</button>
+          <button class="edit-trigger" id="endreEpostKnapp" onclick="endreEpost()">Endre</button>
         </div>
 
         <!-- PASSORD -->
@@ -463,6 +410,35 @@
         <div class="row"><div class="info-block"><div class="label">Plan</div><div class="value">Premium Nordic Ultra</div></div></div>
         <div class="row"><div class="info-block"><div class="label">Kvalitet</div><div class="value">4K UHD + HDR</div></div></div>
       </div>
+
+      <!-- FORELDREKONTROLL SEKSJON (Vises bare hvis man er på en barneprofil) -->
+      <div id="foreldreKontrollSeksjon" class="hidden">
+        <h2><i class="fa-solid fa-shield-halved" style="color: var(--kids-accent);"></i> Foreldrekontroll</h2>
+        <div class="card">
+          <!-- SPERRET SKJERM -->
+          <div id="parentLockPanel" class="parent-lock-screen">
+            <p style="margin-bottom: 15px; color: var(--muted);">Dette panelet er låst. Foreldre kan låse opp for å endre aldersgrenser.</p>
+            <button class="btn-parent-unlock" onclick="laasOppForeldreKontroll()"><i class="fa-solid fa-lock"></i> Lås opp med PIN</button>
+          </div>
+
+          <!-- APENT PANEL -->
+          <div id="parentSettingsPanel" class="row hidden" style="border:none;">
+            <div class="info-block">
+              <div class="label">Maks tillatt aldersgrense på hovedsiden</div>
+              <div class="value" id="currentLimitView">Laster...</div>
+              <div class="edit-field" style="margin-top:15px;">
+                <select id="ageRestrictionSelect" onchange="lagreAldersgrense()">
+                  <option value="A">Tillat kun innhold for alle (A)</option>
+                  <option value="6">Maks 6 år</option>
+                  <option value="9">Maks 9 år</option>
+                  <option value="12">Maks 12 år</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
     </section>
   </div>
 
@@ -473,6 +449,8 @@
       window.location.href = "Starts side.html";
     }
 
+    const FORELDRE_PIN = "1234"; // Standard PIN for foreldrekontroll
+
     const navnDisplay = document.getElementById("navnDisplay");
     const navnView = document.getElementById("navnView");
     const navnInput = document.getElementById("navnInput");
@@ -481,6 +459,14 @@
     const epostInput = document.getElementById("epostInput");
     const epostRow = document.getElementById("epostRow");
     const sletteKnapp = document.getElementById("sletteKnapp");
+    
+    // Barneprofil-spesifikke elementer
+    const erInnloggetSomBarn = localStorage.getItem("isKids") === "true";
+    const foreldreKontrollSeksjon = document.getElementById("foreldreKontrollSeksjon");
+    const parentLockPanel = document.getElementById("parentLockPanel");
+    const parentSettingsPanel = document.getElementById("parentSettingsPanel");
+    const ageRestrictionSelect = document.getElementById("ageRestrictionSelect");
+    const currentLimitView = document.getElementById("currentLimitView");
 
     let aktivEpost = localStorage.getItem("epost") || "";
     let aktivNavn = localStorage.getItem("navn") || "Profil";
@@ -497,17 +483,37 @@
       document.getElementById("profilbilde").src = lagretBilde;
     }
 
-    if (aktivProfilIndex !== "0") {
-      sletteKnapp.innerHTML = `<i class="fa-solid fa-user-xmark"></i> Slett profil`;
+    // LOGIKK FOR SPERRING HVIS DET ER EN BARNEPROFIL
+    if (erInnloggetSomBarn) {
+      // Skjul sletteknapp og endre bilde-knapper i sidebar
+      document.getElementById("sidebarActions").classList.add("hidden");
+      document.getElementById("avatarContainer").style.pointerEvents = "none"; // Kan ikke klikke på bilde for å endre
+
+      // Skjul endre-knappene for Navn og E-post
+      document.getElementById("endreNavnKnapp").classList.add("hidden");
+      document.getElementById("endreEpostKnapp").classList.add("hidden");
+
+      // Vis foreldrekontroll-panelet i bunnen
+      foreldreKontrollSeksjon.classList.remove("hidden");
+      
+      // Oppdater tekstvisning for gjeldende grense
+      oppdaterMaksGrenseTekst();
     } else {
-      sletteKnapp.innerHTML = `<i class="fa-solid fa-trash-can"></i> Slett konto`;
+      // Normal oppførsel for voksne
+      if (aktivProfilIndex !== "0") {
+        sletteKnapp.innerHTML = `<i class="fa-solid fa-user-xmark"></i> Slett profil`;
+      } else {
+        sletteKnapp.innerHTML = `<i class="fa-solid fa-trash-can"></i> Slett konto`;
+      }
     }
 
     function velgProfilbildeSide() {
+      if (erInnloggetSomBarn) return;
       window.location.href = "VelgProfilbilde.html";
     }
 
     function endreNavn() {
+      if (erInnloggetSomBarn) return;
       navnInput.value = navnView.innerText;
       navnView.classList.add("hidden");
       navnRow.querySelector(".edit-field").classList.remove("hidden");
@@ -542,6 +548,7 @@
     }
 
     function endreEpost() {
+      if (erInnloggetSomBarn) return;
       epostInput.value = epostView.innerText;
       epostView.classList.add("hidden");
       epostRow.querySelector(".edit-field").classList.remove("hidden");
@@ -576,10 +583,12 @@
       localStorage.removeItem("navn");
       localStorage.removeItem("profilbilde");
       localStorage.removeItem("aktivProfil");
+      localStorage.removeItem("isKids");
       window.location.href = "Starts side.html";
     }
 
     function haandterSletting() {
+      if (erInnloggetSomBarn) return;
       if (aktivProfilIndex !== "0") {
         if (!confirm(`Er du sikker på at du vil slette profilen "${aktivNavn}"?`)) return;
         
@@ -608,6 +617,36 @@
         
         localStorage.removeItem("profiler");
         loggUt(); 
+      }
+    }
+
+    /* FORELDREKONTROLL FUNKSJONER */
+    function laasOppForeldreKontroll() {
+      const pinInput = prompt("Skriv inn PIN-kode for foreldrekontroll (Standard: 1234):");
+      if (pinInput === FORELDRE_PIN) {
+        parentLockPanel.classList.add("hidden");
+        parentSettingsPanel.classList.remove("hidden");
+        
+        // Sett select-boksen til den nåværende lagrede verdien
+        const gjeldendeGrense = localStorage.getItem("maksAldersgrense") || "12";
+        ageRestrictionSelect.value = gjeldendeGrense;
+      } else {
+        alert("Feil PIN-kode! Kun foreldre har tilgang.");
+      }
+    }
+
+    function lagreAldersgrense() {
+      const valgtGrense = ageRestrictionSelect.value;
+      localStorage.setItem("maksAldersgrense", valgtGrense);
+      oppdaterMaksGrenseTekst();
+    }
+
+    function oppdaterMaksGrenseTekst() {
+      const grense = localStorage.getItem("maksAldersgrense") || "12";
+      if (grense === "A") {
+        currentLimitView.innerText = "Tillater kun innhold for Alle (A)";
+      } else {
+        currentLimitView.innerText = `Maks ${grense} år`;
       }
     }
   </script>
