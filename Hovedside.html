@@ -48,21 +48,20 @@ main {
 }
 
 /* ==========================================================================
-   2. TOPPMENY (PC) - NÅ MED TYDELIGERE FADE FOR BEDRE LESBARHET
+   2. TOPPMENY (PC)
    ========================================================================== */
 .top-nav {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
-  height: 85px; /* Litt høyere for å gi faden mer rom til å tone ut */
+  height: 85px;
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 0 40px;
   z-index: 9999;
   box-sizing: border-box;
-  /* OPPDATERT: Kraftigere fade fra topp til bunn bak menyen */
   background: linear-gradient(to bottom, 
     rgba(9, 27, 30, 0.95) 0%, 
     rgba(9, 27, 30, 0.75) 40%, 
@@ -76,7 +75,6 @@ main {
   display: none;
 }
 
-/* Når brukeren scroller nedover, blir bakgrunnen helt solid for kontinuerlig lesbarhet */
 .top-nav.scrolled {
   height: 70px;
   background: rgba(9, 27, 30, 0.98);
@@ -91,27 +89,18 @@ main {
   flex-shrink: 0;
 }
 
-.watch-logo-text {
-  font-family: 'Montserrat Alternates', sans-serif;
-  font-size: 28px;
-  font-weight: 900;
-  letter-spacing: 3px;
-  text-transform: uppercase;
-  color: #00FFCC;
+/* STIL FOR SVG LOGO */
+.watch-logo-svg {
+  height: 35px; /* Juster høyden slik at den passer ditt design */
+  width: auto;
+  cursor: pointer;
   display: flex;
   align-items: center;
-  height: 100%;
-  cursor: pointer;
-  user-select: none;
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5) !important;
-  transform: none !important;
-  transition: none !important;
+  transition: transform 0.2s ease;
 }
 
-.watch-logo-text:hover {
-  color: #00FFCC !important;
-  transform: none !important;
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5) !important;
+.watch-logo-svg:hover {
+  transform: scale(1.02);
 }
 
 .nav-links {
@@ -125,11 +114,10 @@ main {
 }
 
 .nav-links a {
-  color: #e0e0e0; /* Litt lysere standardfarge for bedre kontrast */
+  color: #e0e0e0;
   text-decoration: none;
   font-size: 15px;
   font-weight: 500;
-  /* NYTT: Skygge på teksten for å "løfte" den fra lyse bakgrunner */
   text-shadow: 0 1px 4px rgba(0, 0, 0, 0.8), 0 2px 8px rgba(0, 0, 0, 0.8);
   transition: color 0.3s ease, font-size 0.3s ease;
 }
@@ -202,9 +190,8 @@ main {
   .nav-links a {
     font-size: 14px;
   }
-  .watch-logo-text {
-    font-size: 24px;
-    letter-spacing: 2px;
+  .watch-logo-svg {
+    height: 30px;
   }
 }
 
@@ -353,7 +340,7 @@ main {
 }
 
 /* ==========================================================================
-   5. GALLERIER & SEKSJONER (FILMER / SERIER)
+   5. GALLERIER & SEKSJONER
    ========================================================================== */
 .gallery-section {
   margin-bottom: 20px;
@@ -584,7 +571,7 @@ main {
 }
 
 /* ==========================================================================
-   7. HOVER OVERLAY FOR BILDER (.gallery-item)
+   7. HOVER OVERLAY FOR BILDER
    ========================================================================== */
 .gallery-item {
   position: relative !important;
@@ -793,8 +780,7 @@ main {
     left: 0;
     width: 100%;
     padding: 0 20px !important;
-    height: 65px; /* Litt høyere på mobil også for faden */
-    /* OPPDATERT: Tydeligere fade bak mobilmenyen */
+    height: 65px;
     background: linear-gradient(to bottom, 
       rgba(9, 27, 30, 0.98) 0%, 
       rgba(9, 27, 30, 0.7) 50%, 
@@ -824,14 +810,9 @@ main {
     gap: 16px; 
   }
 
-  .watch-logo-text {
-    font-size: 24px !important; 
-    font-weight: 900 !important;
-    letter-spacing: 0.5px !important;
-    color: #00ffcc !important; 
-    text-transform: uppercase !important;
-    display: inline-block !important;
-    text-shadow: 0 1px 3px rgba(0,0,0,0.6) !important;
+  /* SVG-logo justering for mobil */
+  .watch-logo-svg {
+    height: 26px !important;
   }
 
   .nav-search {
@@ -1037,9 +1018,7 @@ main {
 
 <header class="top-nav">
   <div class="nav-left">
-    <div class="watch-logo-text" onclick="window.location.href='Hovedside.html'">
-      WATCH
-    </div>
+    <img src="https://static.wixstatic.com/shapes/d9ace9_93bbbe01d57a4186ac63ba64e1110b57.svg" alt="Watch Nordic" class="watch-logo-svg" onclick="window.location.href='Hovedside.html'">
   </div>
 
   <nav class="nav-links">
