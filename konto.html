@@ -1,787 +1,654 @@
 <!DOCTYPE html>
 <html lang="no">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Konto | WATCH</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Min Konto | Watch Nordic™</title>
 
-  <link rel="icon" type="image/png" href="https://static.wixstatic.com/media/fd2fb2_39376e4ee55b460ab7a3ebbfcf35fef7~mv2.png" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Montserrat+Alternates:wght@900&display=swap" rel="stylesheet">
-  
-  <style>
-    :root {
-      --bg-main: #091b1e;
-      --bg-card: #0d2529;
-      --bg-input: #123136;
-      --border-subtle: rgba(0, 255, 204, 0.1);
-      --border-focus: rgba(0, 255, 204, 0.4);
-      --text-main: #ffffff;
-      --text-muted: #a2b7b9;
-      --accent: #00FFCC; 
-      --accent-hover: #33ffdd;
-      --danger: #ef4444;
-      --danger-hover: rgba(239, 68, 68, 0.1);
-      --success: #00FFCC;
-    }
+  <link rel="icon" type="image/png" href="https://static.wixstatic.com/media/fd2fb2_39376e4ee55b460ab7a3ebbfcf35fef7~mv2.png" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  
+  <style>
+    :root {
+      --bg: #091B1E;
+      --muted: #bfc9c9;
+      --accent: #00FFCC;
+      --card-bg: rgba(255, 255, 255, 0.04);
+      --border: rgba(255, 255, 255, 0.08);
+      --kids-accent: #33b5ff;
+    }
 
-    * { 
-      box-sizing: border-box; 
-      margin: 0;
-      padding: 0;
-    }
+    * { 
+      box-sizing: border-box; 
+      margin: 0;
+      padding: 0;
+    }
 
-    body {
-      background-color: var(--bg-main);
-      color: var(--text-main);
-      font-family: 'Inter', sans-serif;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      -webkit-font-smoothing: antialiased;
-    }
+    body {
+      background: var(--bg);
+      color: white;
+      font-family: 'Inter', Arial, sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow-x: hidden;
+    }
 
-    /* ==========================================================================
-       TOPPMENY (PC) - HENTET FRA DIN CODEBASE
-       ========================================================================== */
-    .top-nav {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 85px; 
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 40px;
-      z-index: 9999;
-      box-sizing: border-box;
-      background: linear-gradient(to bottom, 
-        rgba(9, 27, 30, 0.95) 0%, 
-        rgba(9, 27, 30, 0.75) 40%, 
-        rgba(9, 27, 30, 0.3) 75%, 
-        rgba(9, 27, 30, 0) 100%
-      );
-      transition: background 0.4s ease, box-shadow 0.4s ease, height 0.4s ease;
-    }
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background: radial-gradient(circle at top left, rgba(0,255,204,0.08), transparent 35%);
+      z-index: -1;
+    }
 
-    .top-nav.scrolled {
-      height: 70px;
-      background: rgba(9, 27, 30, 0.98);
-      backdrop-filter: blur(10px);
-      box-shadow: 0 2px 15px rgba(0, 0, 0, 0.6);
-    }
+    header {
+      padding: 20px 60px;
+      background: rgba(9, 27, 30, 0.65);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
 
-    .nav-left {
-      display: flex;
-      align-items: center;
-      gap: 40px;
-      flex-shrink: 0;
-    }
+    header h1 { 
+      font-size: 24px; 
+      font-weight: 900;
+      letter-spacing: 2px;
+      color: var(--accent);
+      text-shadow: 0 0 10px rgba(0,255,204,0.3);
+    }
 
-    .watch-logo-text {
-      font-family: 'Montserrat Alternates', sans-serif;
-      font-size: 28px;
-      font-weight: 900;
-      letter-spacing: 3px;
-      text-transform: uppercase;
-      color: #00FFCC;
-      display: flex;
-      align-items: center;
-      height: 100%;
-      cursor: pointer;
-      user-select: none;
-      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5) !important;
-      transform: none !important;
-      transition: none !important;
-    }
+    header .nav-btns {
+      display: flex;
+      gap: 12px;
+    }
 
-    .nav-links {
-      position: absolute;
-      left: 50%;
-      transform: translateX(-50%);
-      display: flex;
-      gap: 30px;
-      white-space: nowrap;
-    }
+    header button {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.15);
+      color: white;
+      padding: 10px 20px;
+      border-radius: 999px;
+      font-weight: 700;
+      font-size: 14px;
+      cursor: pointer;
+      transition: 0.25s ease;
+      white-space: nowrap;
+    }
 
-    .nav-links a {
-      color: #e0e0e0; 
-      text-decoration: none;
-      font-size: 15px;
-      font-weight: 500;
-      text-shadow: 0 1px 4px rgba(0, 0, 0, 0.8), 0 2px 8px rgba(0, 0, 0, 0.8);
-      transition: color 0.3s ease;
-    }
+    header button:hover { 
+      background: rgba(255,255,255,0.12);
+      border-color: white;
+    }
 
-    .nav-links a:hover, .nav-links a.active {
-      color: #00FFCC;
-    }
+    header button.logout-btn {
+      border-color: rgba(255, 77, 77, 0.4);
+      color: #ff4d4d;
+    }
+    header button.logout-btn:hover {
+      background: rgba(255, 77, 77, 0.1);
+      border-color: #ff4d4d;
+    }
 
-    .nav-right {
-      display: flex;
-      align-items: center;
-      gap: 20px;
-      flex-shrink: 0;
-    }
+    .container {
+      max-width: 1200px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 40px 60px;
+      display: grid;
+      grid-template-columns: 300px 1fr;
+      gap: 40px;
+      flex: 1;
+    }
 
-    header button.logout-btn {
-      background: transparent;
-      border: 1px solid rgba(0, 255, 204, 0.3);
-      color: var(--text-main);
-      padding: 8px 16px;
-      border-radius: 6px;
-      font-weight: 600;
-      font-size: 13px;
-      cursor: pointer;
-      transition: all 0.2s ease;
-    }
-    header button.logout-btn:hover {
-      background: var(--danger-hover);
-      border-color: var(--danger);
-      color: var(--danger);
-    }
+    .sidebar {
+      background: var(--card-bg);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-radius: 24px;
+      padding: 35px 24px;
+      text-align: center;
+      border: 1px solid var(--border);
+      height: fit-content;
+    }
 
-    /* Dashboard Layout */
-    .dashboard-container {
-      max-width: 1200px;
-      width: 100%;
-      margin: 120px auto 40px; /* Mer margin på topp pga fast meny */
-      padding: 0 5%;
-      display: grid;
-      grid-template-columns: 280px 1fr;
-      gap: 40px;
-      flex: 1;
-    }
+    .avatar {
+      width: 150px;
+      height: 150px;
+      border-radius: 50%;
+      overflow: hidden;
+      margin: 0 auto 20px;
+      cursor: pointer;
+      border: 3px solid rgba(255,255,255,0.1);
+      transition: 0.3s ease;
+      position: relative;
+    }
 
-    /* Sidemeny / Tabs */
-    .settings-nav {
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-    }
+    .avatar:hover {
+      border-color: var(--accent);
+      transform: scale(1.02);
+    }
 
-    .nav-tab-btn {
-      background: transparent;
-      border: none;
-      color: var(--text-muted);
-      padding: 14px 18px;
-      text-align: left;
-      font-size: 15px;
-      font-weight: 500;
-      border-radius: 8px;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      transition: all 0.2s ease;
-    }
+    .avatar img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
 
-    .nav-tab-btn:hover {
-      color: var(--text-main);
-      background: rgba(255, 255, 255, 0.02);
-    }
+    .profile-name {
+      font-size: 22px;
+      font-weight: 700;
+      margin-bottom: 25px;
+      word-break: break-word;
+    }
 
-    .nav-tab-btn.active {
-      color: var(--text-main);
-      background: var(--bg-card);
-      font-weight: 600;
-      border-left: 3px solid var(--accent);
-      border-radius: 0 8px 8px 0;
-    }
+    .profile-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
 
-    /* Innholdspaneler */
-    .tab-content { display: none; }
-    .tab-content.active { display: block; }
-    .tab-content h2 { font-size: 22px; font-weight: 700; margin-bottom: 8px; color: var(--text-main); }
-    .tab-content .section-desc { color: var(--text-muted); font-size: 14px; margin-bottom: 24px; }
+    .profile-actions button {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.1);
+      color: white;
+      padding: 12px;
+      border-radius: 12px;
+      font-weight: 600;
+      font-size: 14px;
+      cursor: pointer;
+      transition: 0.2s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
 
-    /* Kort og struktur */
-    .card {
-      background: var(--bg-card);
-      border: 1px solid var(--border-subtle);
-      border-radius: 12px;
-      padding: 0 24px;
-      margin-bottom: 24px;
-    }
+    .profile-actions button:hover { 
+      background: rgba(255,255,255,0.08);
+      border-color: rgba(255,255,255,0.3);
+    }
 
-    .row {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 24px 0;
-      border-bottom: 1px solid var(--border-subtle);
-    }
-    .row:last-child { border-bottom: none; }
+    .profile-actions button.delete-btn {
+      border-color: rgba(255, 77, 77, 0.2);
+      color: #ff4d4d;
+      margin-top: 15px;
+    }
+    .profile-actions button.delete-btn:hover {
+      background: rgba(255, 77, 77, 0.15);
+      border-color: #ff4d4d;
+    }
 
-    .info-block { flex: 1; padding-right: 20px; }
-    .label { color: var(--text-muted); font-size: 13px; margin-bottom: 4px; }
-    .value { font-size: 15px; font-weight: 500; display: flex; align-items: center; gap: 10px; }
-    
-    .badge {
-      background: rgba(0, 255, 204, 0.1);
-      color: var(--accent);
-      padding: 2px 8px;
-      border-radius: 4px;
-      font-size: 11px;
-      font-weight: 700;
-    }
+    .content h2 {
+      margin: 0 0 18px;
+      font-size: 22px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    
+    .content h2 i {
+      color: var(--accent);
+      font-size: 18px;
+    }
 
-    .edit-trigger {
-      background: none;
-      border: none;
-      color: var(--accent);
-      cursor: pointer;
-      font-size: 14px;
-      font-weight: 600;
-      transition: color 0.2s;
-    }
-    .edit-trigger:hover { color: var(--accent-hover); text-decoration: underline; }
+    .card {
+      background: var(--card-bg);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      border-radius: 24px;
+      padding: 10px 24px;
+      margin-bottom: 35px;
+      border: 1px solid var(--border);
+    }
 
-    /* Profil Hero */
-    .profile-hero {
-      display: flex;
-      align-items: center;
-      gap: 24px;
-      background: var(--bg-card);
-      border: 1px solid var(--border-subtle);
-      padding: 24px;
-      border-radius: 12px;
-      margin-bottom: 24px;
-    }
+    .row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
 
-    .avatar-container { position: relative; width: 90px; height: 90px; cursor: pointer; }
-    .avatar-container img { width: 100%; height: 100%; object-fit: cover; border-radius: 8px; }
-    .avatar-overlay {
-      position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-      background: rgba(0,0,0,0.6); border-radius: 8px;
-      display: flex; align-items: center; justify-content: center; opacity: 0; transition: opacity 0.2s ease;
-    }
-    .avatar-container:hover .avatar-overlay { opacity: 1; }
+    .row:last-child { border-bottom: none; }
 
-    /* Skjemaelementer */
-    .edit-field { margin-top: 14px; width: 100%; max-width: 450px; }
-    .edit-field input, .edit-field select {
-      width: 100%; padding: 12px; background: var(--bg-input);
-      border: 1px solid var(--border-subtle); border-radius: 6px; color: white; font-size: 14px;
-    }
-    .edit-field input:focus, .edit-field select:focus { outline: none; border-color: var(--accent); }
-    
-    .edit-actions { margin-top: 12px; display: flex; gap: 10px; }
-    .edit-actions button, .btn-action {
-      padding: 10px 18px; border-radius: 6px; font-size: 13px; font-weight: 600; cursor: pointer; transition: 0.2s;
-    }
-    .btn-save { background: var(--accent); color: #091b1e; border: none; }
-    .btn-save:hover { background: var(--accent-hover); }
-    .btn-cancel { background: transparent; border: 1px solid rgba(255,255,255,0.15); color: var(--text-main); }
-    .btn-cancel:hover { background: rgba(255,255,255,0.05); }
+    .info-block {
+      flex: 1;
+      padding-right: 20px;
+    }
 
-    .btn-danger-outline { background: transparent; border: 1px solid rgba(239,68,68,0.4); color: var(--danger); }
-    .btn-danger-outline:hover { background: var(--danger-hover); }
+    .label {
+      color: var(--muted);
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 6px;
+      font-weight: 600;
+    }
 
-    /* Switch toggle slider for avanserte innstillinger */
-    .switch {
-      position: relative; display: inline-block; width: 44px; height: 24px;
-    }
-    .switch input { opacity: 0; width: 0; height: 0; }
-    .slider {
-      position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0;
-      background-color: var(--bg-input); border: 1px solid var(--border-subtle);
-      transition: .3s; border-radius: 24px;
-    }
-    .slider:before {
-      position: absolute; content: ""; height: 16px; width: 16px; left: 3px; bottom: 3px;
-      background-color: white; transition: .3s; border-radius: 50%;
-    }
-    input:checked + .slider { background-color: var(--accent); }
-    input:checked + .slider:before { transform: translateX(20px); background-color: #091b1e; }
+    .value { font-size: 16px; font-weight: 500; word-break: break-all; }
 
-    .hidden { display: none !important; }
+    .row button.edit-trigger {
+      background: none;
+      border: 1px solid rgba(255,255,255,0.15);
+      color: white;
+      padding: 8px 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 600;
+      transition: 0.2s;
+    }
 
-    footer {
-      border-top: 1px solid var(--border-subtle); padding: 40px 5%;
-      color: rgba(255,255,255,0.2); font-size: 12px; margin-top: auto; text-align: center;
-    }
+    .row button.edit-trigger:hover {
+      background: rgba(255,255,255,0.08);
+      border-color: white;
+    }
 
-    @media (max-width: 850px) {
-      .top-nav { height: 70px; padding: 0 20px; }
-      .nav-links { display: none; }
-      .dashboard-container { grid-template-columns: 1fr; margin-top: 100px; }
-      .settings-nav { flex-direction: row; overflow-x: auto; padding-bottom: 10px; border-bottom: 1px solid var(--border-subtle); }
-      .nav-tab-btn { white-space: nowrap; }
-      .nav-tab-btn.active { border-left: none; border-bottom: 2px solid var(--accent); border-radius: 0; }
-    }
-  </style>
+    .hidden { display: none !important; }
+
+    .edit-field { margin-top: 10px; width: 100%; max-width: 400px; }
+
+    .edit-field input, .edit-field select {
+      width: 100%;
+      padding: 12px;
+      background: rgba(9, 27, 30, 0.8);
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 10px;
+      color: white;
+      font-size: 15px;
+    }
+    .edit-field select option { background: #091B1E; color: white; }
+
+    .edit-field input:focus, .edit-field select:focus { outline: none; border-color: var(--accent); }
+
+    .edit-actions { margin-top: 12px; display: flex; gap: 10px; }
+
+    .edit-actions button {
+      padding: 8px 16px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    .btn-save { background: var(--accent); color: #071214; border: none; }
+    .btn-cancel { background: transparent; border: 1px solid rgba(255,255,255,0.15); color: var(--muted); }
+
+    /* Foreldrekontroll panel-styling */
+    .parent-lock-screen {
+      text-align: center;
+      padding: 20px 0;
+    }
+    .btn-parent-unlock {
+      background: var(--kids-accent);
+      color: #071214;
+      border: none;
+      padding: 10px 20px;
+      font-weight: 700;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+    .btn-parent-unlock:hover { background: #2299dd; }
+
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 30px 60px;
+      color: #666;
+      font-size: 13px;
+      margin-top: auto;
+      text-align: center;
+    }
+
+    @media (max-width: 960px) {
+      header { padding: 15px 20px; }
+      header h1 { font-size: 20px; }
+      header button { padding: 8px 14px; font-size: 13px; }
+      
+      .container { grid-template-columns: 1fr; padding: 20px; gap: 24px; }
+      .sidebar { padding: 24px 20px; border-radius: 20px; }
+      .avatar { width: 110px; height: 110px; margin-bottom: 12px; }
+      .profile-name { font-size: 19px; margin-bottom: 15px; }
+      .profile-actions { flex-direction: row; gap: 10px; }
+      .profile-actions button { flex: 1; padding: 10px; font-size: 13px; border-radius: 10px; }
+      .profile-actions button.delete-btn { margin-top: 0; }
+      .content h2 { font-size: 19px; margin-bottom: 12px; }
+      .card { padding: 5px 16px; border-radius: 20px; margin-bottom: 24px; }
+      .row { padding: 16px 0; flex-direction: column; align-items: flex-start; gap: 12px; }
+      .info-block { padding-right: 0; width: 100%; }
+      .row button.edit-trigger { width: 100%; text-align: center; padding: 10px; background: rgba(255,255,255,0.03); }
+      .edit-field { max-width: 100%; }
+      footer { padding: 24px 20px; }
+    }
+
+    @media (max-width: 480px) {
+      .profile-actions { flex-direction: column; }
+    }
+  </style>
 </head>
 <body>
 
-  <!-- TOPPMENY (MED DIN LOGO-STRUKTUR OG STIL) -->
-  <div class="top-nav" id="mainHeader">
-    <div class="nav-left">
-      <div class="watch-logo-text" onclick="window.location.href='Hovedside.html'">WATCH</div>
-    </div>
-    <div class="nav-links">
-      <a href="Hovedside.html"><i class="fa-solid fa-house"></i> Hjem</a>
-      <a href="#" class="active"><i class="fa-solid fa-user"></i> Min Konto</a>
-    </div>
-    <div class="nav-right">
-      <button class="logout-btn" onclick="loggUt()">Logg ut</button>
-    </div>
-  </div>
+  <header>
+    <h1>WATCH</h1>
+    <div class="nav-btns">
+      <button onclick="window.location.href='Hovedside.html'"><i class="fa-solid fa-house"></i> Hovedside</button>
+      <button class="logout-btn" onclick="loggUt()"><i class="fa-solid fa-right-from-bracket"></i> Logg Ut</button>
+    </div>
+  </header>
 
-  <div class="dashboard-container">
+  <div class="container">
 
-    <!-- AVANSERT STRØMMETJENESTE SIDEMENY -->
-    <nav class="settings-nav">
-      <button class="nav-tab-btn active" onclick="switchTab('tab-profil', this)">
-        <i class="fa-solid fa-user"></i> Min Profil
-      </button>
-      <button class="nav-tab-btn" onclick="switchTab('tab-konto', this)">
-        <i class="fa-solid fa-gears"></i> Innstillinger & Konto
-      </button>
-      <button class="nav-tab-btn" onclick="switchTab('tab-sprak', this)">
-        <i class="fa-solid fa-language"></i> Språk & Teksting
-      </button>
-      <button class="nav-tab-btn" onclick="switchTab('tab-avspilling', this)">
-        <i class="fa-solid fa-play"></i> Avspillingsinnstillinger
-      </button>
-      <button class="nav-tab-btn" onclick="switchTab('tab-personvern', this)">
-        <i class="fa-solid fa-shield-halved"></i> Personvern & Data
-      </button>
-    </nav>
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+      <div class="avatar" id="avatarContainer" onclick="velgProfilbildeSide()">
+        <img id="profilbilde" src="https://static.wixstatic.com/media/fd2fb2_39376e4ee55b460ab7a3ebbfcf35fef7~mv2.png" alt="Profilbilde">
+      </div>
+      <div class="profile-name" id="navnDisplay">Laster...</div>
 
-    <!-- HOVEDPANEL -->
-    <main class="content-panel">
+      <div class="profile-actions" id="sidebarActions">
+        <button onclick="velgProfilbildeSide()"><i class="fa-solid fa-user-gear"></i> Endre bilde</button>
+        <button class="delete-btn" id="sletteKnapp" onclick="haandterSletting()"><i class="fa-solid fa-trash-can"></i> Slett profil permanent</button>
+      </div>
+    </aside>
 
-      <!-- FANE 1: MIN PROFIL -->
-      <div id="tab-profil" class="tab-content active">
-        <h2>Min Profil</h2>
-        <p class="section-desc">Administrer innstillinger som gjelder spesifikt for denne profilen.</p>
-        
-        <div class="profile-hero">
-          <div class="avatar-container" id="avatarContainer" onclick="velgProfilbildeSide()">
-            <img id="profilbilde" src="https://static.wixstatic.com/media/fd2fb2_39376e4ee55b460ab7a3ebbfcf35fef7~mv2.png" alt="Profilbilde">
-            <div class="avatar-overlay"><i class="fa-solid fa-camera"></i></div>
-          </div>
-          <div>
-            <div style="font-size: 14px; color: var(--text-muted); margin-bottom: 4px;">Aktiv profil</div>
-            <h3 style="font-size: 22px;" id="navnDisplay">Laster...</h3>
-          </div>
-        </div>
+    <!-- CONTENT -->
+    <section class="content">
+      <h2><i class="fa-solid fa-user"></i> Kontoinformasjon</h2>
+      <div class="card">
+        <!-- NAVN -->
+        <div class="row" id="navnRow">
+          <div class="info-block">
+            <div class="label">Navn</div>
+            <div class="value" id="navnView"></div>
+            <div class="edit-field hidden">
+              <input type="text" id="navnInput">
+              <div class="edit-actions">
+                <button class="btn-save" onclick="lagreNavn()">Lagre</button>
+                <button class="btn-cancel" onclick="avbrytNavn()">Avbryt</button>
+              </div>
+            </div>
+          </div>
+          <button class="edit-trigger" id="endreNavnKnapp" onclick="endreNavn()">Endre</button>
+        </div>
 
-        <div class="card">
-          <div class="row" id="navnRow">
-            <div class="info-block">
-              <div class="label">Profilnavn</div>
-              <div class="value" id="navnView"></div>
-              <div class="edit-field hidden">
-                <input type="text" id="navnInput">
-                <div class="edit-actions">
-                  <button class="btn-save" onclick="lagreNavn()">Lagre</button>
-                  <button class="btn-cancel" onclick="avbrytNavn()">Avbryt</button>
-                </div>
-              </div>
-            </div>
-            <button class="edit-trigger" id="endreNavnKnapp" onclick="endreNavn()">Endre</button>
-          </div>
-        </div>
+        <!-- EPOST -->
+        <div class="row" id="epostRow">
+          <div class="info-block">
+            <div class="label">E-postadresse</div>
+            <div class="value" id="epostView"></div>
+            <div class="edit-field hidden">
+              <input type="email" id="epostInput">
+              <div class="edit-actions">
+                <button class="btn-save" onclick="lagreEpost()">Lagre</button>
+                <button class="btn-cancel" onclick="avbrytEpost()">Avbryt</button>
+              </div>
+            </div>
+          </div>
+          <button class="edit-trigger" id="endreEpostKnapp" onclick="endreEpost()">Endre</button>
+        </div>
 
-        <div id="foreldreKontrollSeksjon" class="hidden">
-          <h3 style="font-size: 14px; margin-bottom: 12px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px;">Innholdsbegrensning</h3>
-          <div class="card">
-            <div id="parentLockPanel" style="padding: 24px 0; text-align: center;">
-              <p style="color: var(--text-muted); font-size: 14px; margin-bottom: 14px;">Aldersgrenser og profilbegrensninger er låst.</p>
-              <button class="btn-cancel" style="border-color: var(--accent); color: var(--accent);" onclick="laasOppForeldreKontroll()"><i class="fa-solid fa-lock"></i> Lås opp foreldrekontroll</button>
-            </div>
-            <div id="parentSettingsPanel" class="row hidden" style="border: none;">
-              <div class="info-block">
-                <div class="label">Maksimal tillatt aldersgrense på denne profilen</div>
-                <div class="value" id="currentLimitView">Laster...</div>
-                <div class="edit-field">
-                  <select id="ageRestrictionSelect" onchange="lagreAldersgrense()">
-                    <option value="A">Kun tillatt for alle (A)</option>
-                    <option value="6">Maks aldersgrense 6 år</option>
-                    <option value="9">Maks aldersgrense 9 år</option>
-                    <option value="12">Maks aldersgrense 12 år</option>
-                  </select>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+        <!-- PASSORD -->
+        <div class="row">
+          <div class="info-block">
+            <div class="label">Passord</div>
+            <div class="value">••••••••</div>
+          </div>
+        </div>
+      </div>
 
-      <!-- FANE 2: INNSTILLINGER & KONTO -->
-      <div id="tab-konto" class="tab-content">
-        <h2>Kontoinnstillinger</h2>
-        <p class="section-desc">Overordnet påloggingsinformasjon for hovedbrukeren.</p>
+      <h2><i class="fa-solid fa-id-card"></i> Mitt Abonnement</h2>
+      <div class="card">
+        <div class="row"><div class="info-block"><div class="label">Plan</div><div class="value">Premium Nordic Ultra</div></div></div>
+        <div class="row"><div class="info-block"><div class="label">Kvalitet</div><div class="value">4K UHD + HDR</div></div></div>
+      </div>
 
-        <div class="card">
-          <div class="row" id="epostRow">
-            <div class="info-block">
-              <div class="label">E-postadresse</div>
-              <div class="value" id="epostView"></div>
-              <div class="edit-field hidden">
-                <input type="email" id="epostInput">
-                <div class="edit-actions">
-                  <button class="btn-save" onclick="lagreEpost()">Lagre</button>
-                  <button class="btn-cancel" onclick="avbrytEpost()">Avbryt</button>
-                </div>
-              </div>
-            </div>
-            <button class="edit-trigger" id="endreEpostKnapp" onclick="endreEpost()">Endre</button>
-          </div>
+      <!-- FORELDREKONTROLL SEKSJON (Vises bare hvis man er på en barneprofil) -->
+      <div id="foreldreKontrollSeksjon" class="hidden">
+        <h2><i class="fa-solid fa-shield-halved" style="color: var(--kids-accent);"></i> Foreldrekontroll</h2>
+        <div class="card">
+          <!-- SPERRET SKJERM -->
+          <div id="parentLockPanel" class="parent-lock-screen">
+            <p style="margin-bottom: 15px; color: var(--muted);">Dette panelet er låst. Foreldre kan låse opp for å endre aldersgrenser.</p>
+            <button class="btn-parent-unlock" onclick="laasOppForeldreKontroll()"><i class="fa-solid fa-lock"></i> Lås opp med PIN</button>
+          </div>
 
-          <div class="row">
-            <div class="info-block">
-              <div class="label">Passord</div>
-              <div class="value">••••••••</div>
-            </div>
-            <button class="edit-trigger" onclick="alert('En lenke for tilbakestilling av passord er sendt til din e-post.')">Nullstill</button>
-          </div>
+          <!-- APENT PANEL -->
+          <div id="parentSettingsPanel" class="row hidden" style="border:none;">
+            <div class="info-block">
+              <div class="label">Maks tillatt aldersgrense på hovedsiden</div>
+              <div class="value" id="currentLimitView">Laster...</div>
+              <div class="edit-field" style="margin-top:15px;">
+                <select id="ageRestrictionSelect" onchange="lagreAldersgrense()">
+                  <option value="A">Tillat kun innhold for alle (A)</option>
+                  <option value="6">Maks 6 år</option>
+                  <option value="9">Maks 9 år</option>
+                  <option value="12">Maks 12 år</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
 
-          <div class="row">
-            <div class="info-block">
-              <div class="label">Abonnementsstatus</div>
-              <div class="value">WATCH Free <span class="badge">Digital tilgang</span></div>
-            </div>
-          </div>
-        </div>
+    </section>
+  </div>
 
-        <div style="margin-top: 32px;">
-          <button class="btn-action btn-danger-outline" id="sletteKnapp" onclick="haandterSletting()">Slett konto permanent</button>
-        </div>
-      </div>
+  <footer>© 2026 Watch Nordic Group AS. Alle rettigheter forbeholdt.</footer>
 
-      <!-- FANE 3: SPRÅK & TEKSTING -->
-      <div id="tab-sprak" class="tab-content">
-        <h2>Språk & Teksting</h2>
-        <p class="section-desc">Velg hvordan lyd og tekst skal oppføre seg som standard i spilleren.</p>
+  <script>
+    if (!localStorage.getItem("epost")) {
+      window.location.href = "Starts side.html";
+    }
 
-        <div class="card">
-          <div class="row">
-            <div class="info-block">
-              <div class="label">Visningsspråk for appen</div>
-              <div class="edit-field" style="margin-top:8px;">
-                <select onchange="alert('Endringer vil tre i kraft ved neste oppstart.')">
-                  <option value="no" selected>Norsk (Bokmål)</option>
-                  <option value="se">Svenska</option>
-                  <option value="dk">Dansk</option>
-                  <option value="en">English</option>
-                </select>
-              </div>
-            </div>
-          </div>
+    const FORELDRE_PIN = "1234"; // Standard PIN for foreldrekontroll
 
-          <div class="row">
-            <div class="info-block">
-              <div class="label">Standard Lydspor (Tale)</div>
-              <div class="edit-field" style="margin-top:8px;">
-                <select>
-                  <option value="org">Originalt lydspor (Anbefalt)</option>
-                  <option value="no">Nordisk tale / Norsk synstolkning</option>
-                </select>
-              </div>
-            </div>
-          </div>
+    const navnDisplay = document.getElementById("navnDisplay");
+    const navnView = document.getElementById("navnView");
+    const navnInput = document.getElementById("navnInput");
+    const navnRow = document.getElementById("navnRow");
+    const epostView = document.getElementById("epostView");
+    const epostInput = document.getElementById("epostInput");
+    const epostRow = document.getElementById("epostRow");
+    const sletteKnapp = document.getElementById("sletteKnapp");
+    
+    // Barneprofil-spesifikke elementer
+    const erInnloggetSomBarn = localStorage.getItem("isKids") === "true";
+    const foreldreKontrollSeksjon = document.getElementById("foreldreKontrollSeksjon");
+    const parentLockPanel = document.getElementById("parentLockPanel");
+    const parentSettingsPanel = document.getElementById("parentSettingsPanel");
+    const ageRestrictionSelect = document.getElementById("ageRestrictionSelect");
+    const currentLimitView = document.getElementById("currentLimitView");
 
-          <div class="row">
-            <div class="info-block">
-              <div class="label">Undertekster (Stil og visning)</div>
-              <div class="edit-field" style="margin-top:8px;">
-                <select>
-                  <option value="auto">Automatisk basert på tale</option>
-                  <option value="on">Alltid på</option>
-                  <option value="off">Alltid av</option>
-                </select>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+    let aktivEpost = localStorage.getItem("epost") || "";
+    let aktivNavn = localStorage.getItem("navn") || "Profil";
+    let brukere = JSON.parse(localStorage.getItem("brukere") || "{}");
+    let profiler = JSON.parse(localStorage.getItem("profiler") || "[]");
+    let aktivProfilIndex = localStorage.getItem("aktivProfil") || "0";
 
-      <!-- FANE 4: AVSSPILLINGSINNSTILLINGER (NY STRØMMETJENESTE FUNKSJON) -->
-      <div id="tab-avspilling" class="tab-content">
-        <h2>Avspillingsinnstillinger</h2>
-        <p class="section-desc">Skreddersy videoopplevelsen og dataforbruket når du strømmer.</p>
+    navnDisplay.innerText = aktivNavn;
+    navnView.innerText = aktivNavn;
+    epostView.innerText = aktivEpost;
 
-        <div class="card">
-          <div class="row">
-            <div class="info-block">
-              <div class="label">Spill neste episode automatisk (Autoplay)</div>
-              <div style="font-size: 13px; color: var(--text-muted); margin-top:2px;">Neste video starter automatisk når rulleteksten begynner.</div>
-            </div>
-            <label class="switch">
-              <input type="checkbox" checked>
-              <span class="slider"></span>
-            </label>
-          </div>
+    const lagretBilde = localStorage.getItem("profilbilde");
+    if (lagretBilde) {
+      document.getElementById("profilbilde").src = lagretBilde;
+    }
 
-          <div class="row">
-            <div class="info-block">
-              <div class="label">Forhåndsvisninger med lyd på hjemskjermen</div>
-              <div style="font-size: 13px; color: var(--text-muted); margin-top:2px;">Spill av trailere automatisk når du navigerer i menyene.</div>
-            </div>
-            <label class="switch">
-              <input type="checkbox">
-              <span class="slider"></span>
-            </label>
-          </div>
+    // LOGIKK FOR SPERRING HVIS DET ER EN BARNEPROFIL
+    if (erInnloggetSomBarn) {
+      // Skjul sletteknapp og endre bilde-knapper i sidebar
+      document.getElementById("sidebarActions").classList.add("hidden");
+      document.getElementById("avatarContainer").style.pointerEvents = "none"; // Kan ikke klikke på bilde for å endre
 
-          <div class="row">
-            <div class="info-block">
-              <div class="label">Standard Videokvalitet</div>
-              <div class="edit-field" style="margin-top:8px;">
-                <select id="videoQualitySelect">
-                  <option value="auto" selected>Auto (Tilpasser seg nettverket ditt)</option>
-                  <option value="best">Høyeste kvalitet (Full HD 1080p)</option>
-                  <option value="saver">Datasparing (Mindre båndbredde)</option>
-                </select>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+      // Skjul endre-knappene for Navn og E-post
+      document.getElementById("endreNavnKnapp").classList.add("hidden");
+      document.getElementById("endreEpostKnapp").classList.add("hidden");
 
-      <!-- FANE 5: PERSONVERN & DATA (NY STRØMMETJENESTE FUNKSJON) -->
-      <div id="tab-personvern" class="tab-content">
-        <h2>Personvern & Data</h2>
-        <p class="section-desc">Administrer informasjonen vi bruker til å tilpasse anbefalingene dine.</p>
+      // Vis foreldrekontroll-panelet i bunnen
+      foreldreKontrollSeksjon.classList.remove("hidden");
+      
+      // Oppdater tekstvisning for gjeldende grense
+      oppdaterMaksGrenseTekst();
+    } else {
+      // Normal oppførsel for voksne
+      if (aktivProfilIndex !== "0") {
+        sletteKnapp.innerHTML = `<i class="fa-solid fa-user-xmark"></i> Slett profil`;
+      } else {
+        sletteKnapp.innerHTML = `<i class="fa-solid fa-trash-can"></i> Slett konto`;
+      }
+    }
 
-        <div class="card">
-          <div class="row">
-            <div class="info-block">
-              <div class="label">Tilmålte anbefalinger basert på historikk</div>
-              <div style="font-size: 13px; color: var(--text-muted); margin-top:2px;">Tillat at WATCH foreslår filmer og serier basert på hva du har sett før.</div>
-            </div>
-            <label class="switch">
-              <input type="checkbox" checked>
-              <span class="slider"></span>
-            </label>
-          </div>
+    function velgProfilbildeSide() {
+      if (erInnloggetSomBarn) return;
+      window.location.href = "VelgProfilbilde.html";
+    }
 
-          <div class="row">
-            <div class="info-block">
-              <div class="label">E-post og nyhetsbrev med filmtips</div>
-              <div style="font-size: 13px; color: var(--text-muted); margin-top:2px;">Motta ukentlige oppdateringer om nye premierer.</div>
-            </div>
-            <label class="switch">
-              <input type="checkbox">
-              <span class="slider"></span>
-            </label>
-          </div>
+    function endreNavn() {
+      if (erInnloggetSomBarn) return;
+      navnInput.value = navnView.innerText;
+      navnView.classList.add("hidden");
+      navnRow.querySelector(".edit-field").classList.remove("hidden");
+      navnRow.querySelector(".edit-trigger").classList.add("hidden");
+    }
 
-          <div class="row">
-            <div class="info-block">
-              <div class="label">Tøm seerhistorikk</div>
-              <div style="font-size: 13px; color: var(--text-muted); margin-top:2px;">Dette vil nullstille raden "Fortsett å se" på hjemsiden din.</div>
-            </div>
-            <button class="edit-trigger" style="color: var(--danger);" onclick="alert('Seerhistorikken din har blitt nullstilt.')">Tøm historikk</button>
-          </div>
-        </div>
-      </div>
+    function lagreNavn() {
+      const nyttNavn = navnInput.value.trim();
+      if (!nyttNavn) return;
+      localStorage.setItem("navn", nyttNavn);
+      
+      if (brukere[aktivEpost]) {
+        brukere[aktivEpost].navn = nyttNavn;
+        localStorage.setItem("brukere", JSON.stringify(brukere));
+      }
 
-    </main>
-  </div>
+      const idx = Number(aktivProfilIndex);
+      if (profiler[idx]) {
+        profiler[idx].navn = nyttNavn;
+        localStorage.setItem("profiler", JSON.stringify(profiler));
+      }
 
-  <footer>© 2026 WATCH Group AS. Alle rettigheter forbeholdt.</footer>
+      navnView.innerText = nyttNavn;
+      navnDisplay.innerText = nyttNavn;
+      avbrytNavn();
+    }
 
-  <script>
-    // Header rulleeffekt hentet fra din oppskrift
-    window.addEventListener('scroll', function() {
-      const header = document.getElementById('mainHeader');
-      if (window.scrollY > 50) {
-        header.classList.add('scrolled');
-      } else {
-        header.classList.remove('scrolled');
-      }
-    });
+    function avbrytNavn() {
+      navnView.classList.remove("hidden");
+      navnRow.querySelector(".edit-field").classList.add("hidden");
+      navnRow.querySelector(".edit-trigger").classList.remove("hidden");
+    }
 
-    // Fanebyttesystem
-    function switchTab(tabId, buttonElement) {
-      document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
-      document.querySelectorAll('.nav-tab-btn').forEach(btn => btn.classList.remove('active'));
-      
-      document.getElementById(tabId).classList.add('active');
-      buttonElement.classList.add('active');
-    }
+    function endreEpost() {
+      if (erInnloggetSomBarn) return;
+      epostInput.value = epostView.innerText;
+      epostView.classList.add("hidden");
+      epostRow.querySelector(".edit-field").classList.remove("hidden");
+      epostRow.querySelector(".edit-trigger").classList.add("hidden");
+    }
 
-    // LocalStorage Integrasjon
-    if (!localStorage.getItem("epost")) {
-      window.location.href = "Starts side.html";
-    }
+    function lagreEpost() {
+      const nyEpost = epostInput.value.trim().toLowerCase();
+      if (!nyEpost || nyEpost === aktivEpost) { avbrytEpost(); return; }
+      if (brukere[nyEpost]) return alert("E-posten er opptatt.");
 
-    const FORELDRE_PIN = "1234";
+      if (brukere[aktivEpost]) {
+        brukere[nyEpost] = { navn: brukere[aktivEpost].navn, passord: brukere[aktivEpost].passord };
+        delete brukere[aktivEpost];
+        localStorage.setItem("brukere", JSON.stringify(brukere));
+      }
+      localStorage.setItem("epost", nyEpost);
+      aktivEpost = nyEpost;
+      epostView.innerText = nyEpost;
+      avbrytEpost();
+    }
 
-    const navnDisplay = document.getElementById("navnDisplay");
-    const navnView = document.getElementById("navnView");
-    const navnInput = document.getElementById("navnInput");
-    const navnRow = document.getElementById("navnRow");
-    const epostView = document.getElementById("epostView");
-    const epostInput = document.getElementById("epostInput");
-    const epostRow = document.getElementById("epostRow");
-    const sletteKnapp = document.getElementById("sletteKnapp");
-    
-    const erInnloggetSomBarn = localStorage.getItem("isKids") === "true";
-    const foreldreKontrollSeksjon = document.getElementById("foreldreKontrollSeksjon");
-    const parentLockPanel = document.getElementById("parentLockPanel");
-    const parentSettingsPanel = document.getElementById("parentSettingsPanel");
-    const ageRestrictionSelect = document.getElementById("ageRestrictionSelect");
-    const currentLimitView = document.getElementById("currentLimitView");
+    function avbrytEpost() {
+      epostView.classList.remove("hidden");
+      epostRow.querySelector(".edit-field").classList.add("hidden");
+      epostRow.querySelector(".edit-trigger").classList.remove("hidden");
+    }
 
-    let aktivEpost = localStorage.getItem("epost") || "";
-    let aktivNavn = localStorage.getItem("navn") || "Profil";
-    let brukere = JSON.parse(localStorage.getItem("brukere") || "{}");
-    let profiler = JSON.parse(localStorage.getItem("profiler") || "[]");
-    let aktivProfilIndex = localStorage.getItem("aktivProfil") || "0";
+    function loggUt() {
+      localStorage.removeItem("epost");
+      localStorage.removeItem("passord");
+      localStorage.removeItem("navn");
+      localStorage.removeItem("profilbilde");
+      localStorage.removeItem("aktivProfil");
+      localStorage.removeItem("isKids");
+      window.location.href = "Starts side.html";
+    }
 
-    navnDisplay.innerText = aktivNavn;
-    navnView.innerText = aktivNavn;
-    epostView.innerText = aktivEpost;
+    function haandterSletting() {
+      if (erInnloggetSomBarn) return;
+      if (aktivProfilIndex !== "0") {
+        if (!confirm(`Er du sikker på at du vil slette profilen "${aktivNavn}"?`)) return;
+        
+        const idx = Number(aktivProfilIndex);
+        if (profiler[idx]) {
+          profiler.splice(idx, 1);
+          localStorage.setItem("profiler", JSON.stringify(profiler));
+        }
 
-    const lagretBilde = localStorage.getItem("profilbilde");
-    if (lagretBilde) {
-      document.getElementById("profilbilde").src = lagretBilde;
-    }
+        localStorage.setItem("aktivProfil", "0");
+        if (profiler[0]) {
+          localStorage.setItem("navn", profiler[0].navn);
+          localStorage.setItem("profilbilde", profiler[0].bilde);
+        }
 
-    if (erInnloggetSomBarn) {
-      document.getElementById("avatarContainer").style.pointerEvents = "none";
-      document.getElementById("endreNavnKnapp").classList.add("hidden");
-      document.getElementById("endreEpostKnapp").classList.add("hidden");
-      foreldreKontrollSeksjon.classList.remove("hidden");
-      oppdaterMaksGrenseTekst();
-    } else {
-      if (aktivProfilIndex !== "0") {
-        sletteKnapp.innerHTML = `<i class="fa-solid fa-user-xmark"></i> Slett underprofil`;
-      } else {
-        sletteKnapp.innerHTML = `<i class="fa-solid fa-trash-can"></i> Slett hele kontoen`;
-      }
-    }
+        alert("Profilen ble slettet. Du sendes nå tilbake til startsiden.");
+        window.location.href = "Starts side.html";
 
-    function velgProfilbildeSide() {
-      if (erInnloggetSomBarn) return;
-      window.location.href = "VelgProfilbilde.html";
-    }
+      } else {
+        if (!confirm("Vil du slette hele kontoen og alle tilhørende underprofiler permanent?")) return;
+        
+        if (brukere[aktivEpost]) {
+          delete brukere[aktivEpost];
+          localStorage.setItem("brukere", JSON.stringify(brukere));
+        }
+        
+        localStorage.removeItem("profiler");
+        loggUt(); 
+      }
+    }
 
-    function endreNavn() {
-      if (erInnloggetSomBarn) return;
-      navnInput.value = navnView.innerText;
-      navnView.classList.add("hidden");
-      navnRow.querySelector(".edit-field").classList.remove("hidden");
-      navnRow.querySelector(".edit-trigger").classList.add("hidden");
-    }
+    /* FORELDREKONTROLL FUNKSJONER */
+    function laasOppForeldreKontroll() {
+      const pinInput = prompt("Skriv inn PIN-kode for foreldrekontroll (Standard: 1234):");
+      if (pinInput === FORELDRE_PIN) {
+        parentLockPanel.classList.add("hidden");
+        parentSettingsPanel.classList.remove("hidden");
+        
+        // Sett select-boksen til den nåværende lagrede verdien
+        const gjeldendeGrense = localStorage.getItem("maksAldersgrense") || "12";
+        ageRestrictionSelect.value = gjeldendeGrense;
+      } else {
+        alert("Feil PIN-kode! Kun foreldre har tilgang.");
+      }
+    }
 
-    function lagreNavn() {
-      const nyttNavn = navnInput.value.trim();
-      if (!nyttNavn) return;
-      localStorage.setItem("navn", nyttNavn);
-      
-      if (brukere[aktivEpost]) {
-        brukere[aktivEpost].navn = nyttNavn;
-        localStorage.setItem("brukere", JSON.stringify(brukere));
-      }
+    function lagreAldersgrense() {
+      const valgtGrense = ageRestrictionSelect.value;
+      localStorage.setItem("maksAldersgrense", valgtGrense);
+      oppdaterMaksGrenseTekst();
+    }
 
-      const idx = Number(aktivProfilIndex);
-      if (profiler[idx]) {
-        profiler[idx].navn = nyttNavn;
-        localStorage.setItem("profiler", JSON.stringify(profiler));
-      }
-
-      navnView.innerText = nyttNavn;
-      navnDisplay.innerText = nyttNavn;
-      avbrytNavn();
-    }
-
-    function avbrytNavn() {
-      navnView.classList.remove("hidden");
-      navnRow.querySelector(".edit-field").classList.add("hidden");
-      navnRow.querySelector(".edit-trigger").classList.remove("hidden");
-    }
-
-    function endreEpost() {
-      if (erInnloggetSomBarn) return;
-      epostInput.value = epostView.innerText;
-      epostView.classList.add("hidden");
-      epostRow.querySelector(".edit-field").classList.remove("hidden");
-      epostRow.querySelector(".edit-trigger").classList.add("hidden");
-    }
-
-    function lagreEpost() {
-      const nyEpost = epostInput.value.trim().toLowerCase();
-      if (!nyEpost || nyEpost === aktivEpost) { avbrytEpost(); return; }
-      if (brukere[nyEpost]) return alert("E-posten er opptatt.");
-
-      if (brukere[aktivEpost]) {
-        brukere[nyEpost] = { navn: brukere[aktivEpost].navn, passord: brukere[aktivEpost].passord };
-        delete brukere[aktivEpost];
-        localStorage.setItem("brukere", JSON.stringify(brukere));
-      }
-      localStorage.setItem("epost", nyEpost);
-      aktivEpost = nyEpost;
-      epostView.innerText = nyEpost;
-      avbrytEpost();
-    }
-
-    function avbrytEpost() {
-      epostView.classList.remove("hidden");
-      epostRow.querySelector(".edit-field").classList.add("hidden");
-      epostRow.querySelector(".edit-trigger").classList.remove("hidden");
-    }
-
-    function loggUt() {
-      localStorage.clear();
-      window.location.href = "Starts side.html";
-    }
-
-    function haandterSletting() {
-      if (erInnloggetSomBarn) return;
-      if (aktivProfilIndex !== "0") {
-        if (!confirm(`Er du sikker på at du vil slette underprofilen "${aktivNavn}"?`)) return;
-        const idx = Number(aktivProfilIndex);
-        if (profiler[idx]) {
-          profiler.splice(idx, 1);
-          localStorage.setItem("profiler", JSON.stringify(profiler));
-        }
-        localStorage.setItem("aktivProfil", "0");
-        window.location.href = "Starts side.html";
-      } else {
-        if (!confirm("Vil du slette hele WATCH-kontoen din permanent? Dette kan ikke angres."));
-        if (brukere[aktivEpost]) {
-          delete brukere[aktivEpost];
-          localStorage.setItem("brukere", JSON.stringify(brukere));
-        }
-        loggUt(); 
-      }
-    }
-
-    function laasOppForeldreKontroll() {
-      const pinInput = prompt("Skriv inn din 4-sifrede foreldre-PIN (Standard: 1234):");
-      if (pinInput === FORELDRE_PIN) {
-        parentLockPanel.classList.add("hidden");
-        parentSettingsPanel.classList.remove("hidden");
-        const gjeldendeGrense = localStorage.getItem("maksAldersgrense") || "12";
-        ageRestrictionSelect.value = gjeldendeGrense;
-      } else {
-        alert("Feil PIN-kode.");
-      }
-    }
-
-    function lagreAldersgrense() {
-      const valgtGrense = ageRestrictionSelect.value;
-      localStorage.setItem("maksAldersgrense", valgtGrense);
-      oppdaterMaksGrenseTekst();
-    }
-
-    function oppdaterMaksGrenseTekst() {
-      const grense = localStorage.getItem("maksAldersgrense") || "12";
-      if (grense === "A") {
-        currentLimitView.innerText = "Kun innhold tillatt for alle (A)";
-      } else {
-        currentLimitView.innerText = `Maks ${grense} år`;
-      }
-    }
-  </script>
+    function oppdaterMaksGrenseTekst() {
+      const grense = localStorage.getItem("maksAldersgrense") || "12";
+      if (grense === "A") {
+        currentLimitView.innerText = "Tillater kun innhold for Alle (A)";
+      } else {
+        currentLimitView.innerText = `Maks ${grense} år`;
+      }
+    }
+  </script>
 </body>
 </html>
