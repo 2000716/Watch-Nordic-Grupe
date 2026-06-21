@@ -901,151 +901,90 @@ html, body {
       }
     }
 /* ==========================================================================
-   9. NETFLIX & HBO MAX MOBIL-OPTIMALISERING (768px og nedover)
+   NETFLIX & HBO MAX MOBIL-OPTIMALISERING (768px og nedover)
    ========================================================================== */
 @media (max-width: 768px) {
+  
+  /* 1. GLOBAL NULLSTILLING FOR MOBIL */
   body {
-    padding-top: 0px;
-    background-color: #091B1E;
+    background-color: #000000;
+    padding-bottom: 60px; /* Gir plass til bunnmenyen slik at innhold ikke blir skjult */
   }
 
-  main {
-    padding-left: 0px !important;
-    padding-right: 0px !important;
-    margin-left: 0px !important;
-    margin-right: 0px !important;
-  }
-
-  /* Toppmeny – Ligger fast øverst over banneret med et mørkt slør i toppen */
+  /* 2. TOPPMENY (Forenkles og fjerner unødvendige elementer) */
   .top-nav {
-    position: fixed !important;
-    top: 0;
-    left: 0;
-    width: 100%;
-    padding: 0 20px !important;
+    padding: 0 16px;
     height: 60px;
-    background: linear-gradient(
-      to bottom, 
-      rgba(9, 27, 30, 0.9) 0%, 
-      rgba(9, 27, 30, 0.3) 60%, 
-      transparent 100%
-    ) !important; 
-    backdrop-filter: none !important;    
-    box-shadow: none !important;
-    border: none !important;
-    z-index: 9999;
-    display: flex !important;
-    justify-content: space-between !important;
-    align-items: center !important;
+    background: linear-gradient(to bottom, rgba(0, 0, 0, 0.9) 0%, transparent 100%);
   }
 
-  /* Fjerner midtmenyen fra mobil */
-  .nav-links {
-    display: none !important;
-  }
-
-  .nav-left {
-    display: flex !important;
-    position: static !important;
-    transform: none !important;
-  }
-
-  .nav-right {
-    display: flex !important;
-    position: static !important;
-    transform: none !important;
-    align-items: center !important;
-    gap: 16px !important;
-  }
-
-  .nav-search, .profilmeny {
-    display: inline-flex !important;
-    align-items: center !important;
+  /* Skjuler elementer som flyttes til bunnmenyen eller krever for mye plass */
+  .nav-links, 
+  .nav-right .nav-search, 
+  .profilmeny {
+    display: none !important; 
   }
 
   .watch-logo-text {
-    font-size: 24px !important; 
-    font-weight: 900 !important;
-    letter-spacing: 0.5px !important;
-    color: #00ffcc !important; 
-    text-transform: uppercase !important;
-    display: inline-block !important;
+    font-size: 22px;
+    letter-spacing: 1px;
   }
 
-  .nav-search {
+  /* 3. APP TAB BAR (Fast bunnmeny slik som Netflix/Max på telefon) */
+  .mobile-tab-bar {
+    display: flex;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 60px;
+    background: rgba(10, 10, 10, 0.95);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    border-top: 1px solid #1c1c1c;
+    z-index: 99999;
+    justify-content: space-around;
+    align-items: center;
+    padding-bottom: env(safe-area-inset-bottom); /* Støtte for "home-baren" på nyere iPhones */
+  }
+
+  .mobile-tab-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: #777;
+    text-decoration: none;
+    font-size: 10px;
+    gap: 4px;
+    font-weight: 500;
+  }
+
+  .mobile-tab-item i {
     font-size: 18px;
   }
 
-  .profilmeny img {
-    width: 34px;
-    height: 34px;
-    display: block;
+  .mobile-tab-item.active {
+    color: #00FFCC; /* Matcher merkevarefargen din */
   }
 
-  /* HERO-SEKSJON: Definerer et nydelig, avlangt mobilbanner */
+  /* 4. HERO BANNER (Gjøres om til stående mobil-cover format) */
   .hero {
-    height: auto !important;
-    min-height: auto !important;
-    display: flex !important;
-    flex-direction: column !important;
-    background: #091B1E !important;
-    position: relative !important;
-    margin-top: 0px !important;
+    height: 70vh; /* Tar opp ca 70% av skjermhøyden */
+    width: 100vw;
+  }
+  
+  /* Skjuler video på mobil for å spare mobildata og øke lastehastighet */
+  .background-video {
+    display: none !important; 
   }
 
-  /* Bannerbildet starter helt fra toppen av mobilen under menyen */
-  .background-image,
-  .background-video,
-  .hero-banner {
-    position: relative !important;
-    display: block !important;
-    width: 100% !important;
-    height: 60vh !important; /* Perfekt avlang lengde på bildet */
-    min-height: 440px !important;
-    max-height: 550px !important;
-    object-fit: cover !important;
-    margin-bottom: 0 !important;
-    z-index: 1 !important;
-    top: 0 !important;
-    left: 0 !important;
-  }
-
-  /* Toningen ligger kun over bildet for overgang til bakgrunnsfargen */
-  .hero .overlay {
-    position: absolute !important;
-    top: 0 !important;
-    left: 0 !important;
-    width: 100% !important;
-    height: 60vh !important;
-    min-height: 440px !important;
-    max-height: 550px !important;
-    background: linear-gradient(
-      to bottom,
-      rgba(9, 27, 30, 0.5) 0%,
-      transparent 20%,
-      transparent 50%,
-      rgba(9, 27, 30, 0.8) 80%,
-      #091B1E 100%
-    ) !important;
-    z-index: 2 !important;
-  }
-
-  /* INFOBOKS: Dras perfekt ned mot bunnkanten av bildet for en profesjonell balanse */
   .content-wrapper {
-    position: relative !important;
-    inset: auto !important;
-    padding: 0 24px 20px 24px !important; 
-    width: 100% !important;
-    max-width: 100% !important;
-    box-sizing: border-box !important;
-    display: flex !important;
-    flex-direction: column !important;
-    gap: 12px !important;
-    margin-top: -60px !important; /* Balansert justering: Plasserer alt helt perfekt i bunnen av bildet */
-    z-index: 10 !important;
+    bottom: 20px;
+    left: 16px;
+    right: 16px;
   }
 
-  /* Fjerner bakgrunnsplater slik at teksten blender inn med bildetoningen */
+  /* Fjern den tunge glassplaten slik at teksten ligger elegant direkte over bilde-gradienten */
   .text-button-container {
     background: transparent !important;
     backdrop-filter: none !important;
@@ -1054,230 +993,105 @@ html, body {
     box-shadow: none !important;
     padding: 0 !important;
     flex-direction: column !important;
-    gap: 12px !important;
-  }
-
-  .logo-container {
-    margin-bottom: 0px !important;
-    justify-content: flex-start !important;
-  }
-
-  .film-logo {
-    width: 160px !important; 
-    max-height: 70px !important;
-    object-fit: contain !important;
+    gap: 15px !important;
   }
 
   .text-container {
     max-width: 100% !important;
+    text-align: center; /* Sentrerer tekst og logo på mobilskjermer */
   }
 
-  .banner-title {
-    font-size: 24px !important;
+  .film-logo {
+    max-height: 65px;
+    margin: 0 auto 10px auto;
+    display: block;
   }
 
-  .banner-content p, .description {
-    font-size: 14px !important;
+  .description {
+    font-size: 14px;
     line-height: 1.4;
     color: #e0e0e0;
-    max-width: 100% !important;
+    /* Kutter beskrivelsen etter 3 linjer med en "..." effekt hvis den er for lang */
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
   }
 
-  .banner-meta, .metadata {
-    font-size: 12px !important;
-    margin-top: 4px !important;
+  .metadata {
+    justify-content: center;
+    font-size: 12px;
+    margin-top: 8px;
   }
 
-  /* Knapper – Nøyaktig samme form, høyde og avrunding på begge knapper */
-  .buttons-column, .banner-buttons {
+  /* 5. MOBILKNAPPER (Stables vertikalt og strekker seg over hele bredden) */
+  .buttons-column {
+    width: 100%;
+    gap: 10px;
+  }
+
+  .watch-button, .add-button {
     width: 100% !important;
-    gap: 10px !important;
-    margin-top: 6px !important;
+    justify-content: center;
+    height: 46px;
+    font-size: 15px;
+    border-radius: 6px; /* Litt mindre avrunding gir et mer moderne Max-utseende */
   }
 
-  .watch-button {
-    width: 100% !important;
-    height: 44px !important; 
-    font-size: 14px !important;
-    padding: 0 24px !important; 
-    display: inline-flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    font-weight: 700;
-    border-radius: 6px !important; 
+  /* 6. HORISONTALE FILMRADER (Netflix-karusell med finger-swipe) */
+  .recommendations {
+    padding: 25px 16px;
   }
 
-  .add-button {
-    width: 100% !important;
-    height: 44px !important; 
-    font-size: 14px !important;
-    padding: 0 24px !important;
-    display: inline-flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    border-radius: 6px !important;
-    background: rgba(255, 255, 255, 0.1) !important;
-    border: 1px solid rgba(255, 255, 255, 0.2) !important;
-  }
-
-  /* SENTRERTE EPISODEKORT */
-  .episode-gallery {
-    display: flex !important;
-    flex-direction: column !important;
-    align-items: center !important;
-    justify-content: center !important;
-    gap: 20px !important;
-    width: 100% !important;
-    padding: 0 24px !important;
-  }
-
-  .episode-card {
-    width: 100% !important;
-    max-width: 400px !important; 
-    margin: 0 auto !important;
-  }
-
-  .episode-thumb img {
-    height: auto !important;
-    aspect-ratio: 16 / 9 !important;
-  }
-
-  /* Seksjonsavstander */
-  .gallery-section, .recommendations {
-    margin-left: 0px !important; 
-    margin-right: 0px !important;
-    padding: 24px !important;
-    margin-top: 15px !important;
-  }
-
-  .gallery-section h2, .recommendations h2 {
-    font-size: 18px !important;
-    font-weight: 700;
-    color: #fff; 
-    margin-bottom: 12px;
-  }
-
-  /* Bildegallerier og piler */
-  .image-gallery {
-    margin-left: -22px !important; 
-    padding: 4px 10px 12px 10px !important; 
-    gap: 10px !important;
-    scroll-snap-type: x mandatory !important;
-    -webkit-overflow-scrolling: touch !important;
-  }
-
-  .scroll-button, .gallery-arrow, .prev-arrow, .next-arrow, .prev, .next, .fade-left, .fade-right {
-    display: none !important;
-    opacity: 0 !important;
-    pointer-events: none !important;
+  .recommendations h2 {
+    font-size: 16px;
+    margin-bottom: 10px;
   }
 
   .gallery {
-    display: flex !important;
+    gap: 8px;
+    padding-bottom: 10px;
+    overflow-x: auto; /* Aktiverer sidetrekk */
+    -webkit-overflow-scrolling: touch; /* Gjør swiping silkemyk på iOS */
+    scroll-snap-type: x mandatory;
   }
 
-  .image-gallery a, .top10-item {
-    scroll-snap-align: start !important;
-    transform: none !important;
-    transition: none !important;
-  }
-
-  .image-gallery a img {
-    width: 200px !important;  
-    height: auto !important;
-    aspect-ratio: 16 / 9 !important; 
-    object-fit: cover !important; 
-    border-radius: 4px !important;
-    transform: none !important;
-  }
-
-  .image-overlay {
-    display: none !important;  
-  }
-
-  /* Top 10 Galleri */
-  .top10-gallery {
-    margin-left: -22px !important; 
-    gap: 16px !important;
-    padding: 4px 10px 12px 10px !important;
+  .movie-card {
+    min-width: 150px; /* Justerer bredden slik at man ser neste kort delvis på skjermen */
+    height: 85px;
+    border-radius: 4px;
+    scroll-snap-align: start;
   }
   
-  .top10-item img {
-    width: 110px !important; 
-    height: auto !important;
-    aspect-ratio: 2 / 3 !important; 
-    object-fit: cover !important;
-    border-radius: 4px !important;
+  /* Deaktiverer hover-skalering på mobil da det kan føles hakkete ved berøring */
+  .movie-card:hover {
+    transform: none !important;
   }
 
-  .top10-number {
-    font-size: 52px !important;
-    left: -10px !important;
-    bottom: -6px !important;
-    -webkit-text-stroke: 2px rgba(0, 255, 204, 0.8) !important;
-    color: transparent !important;
+  /* 7. EPISODER (Legges i en ren, vertikal liste på mobil) */
+  .episode-gallery {
+    grid-template-columns: 1fr !important;
+    gap: 16px;
   }
 
-  /* Kids banner */
-  .kids-banner {
-    height: 120px !important;
-    margin: 20px 32px !important; 
-    width: calc(100% - 64px) !important;
+  .episode-card {
     border-radius: 6px;
-  }
-  
-  .kids-overlay {
-    padding-left: 20px !important;
-  }
-  
-  .kids-overlay h2 {
-    font-size: 18px !important;
-    margin-bottom: 2px;
-  }
-  
-  .kids-overlay p {
-    font-size: 12px !important;
+    background: #111;
   }
 
-  /* Sjanger-knapper */
-  .genre-gallery {
-    padding: 0 32px !important; 
-    gap: 10px !important;
-  }
-  
-  .genre-gallery a .icon-circle {
-    width: 70px;
-    height: 70px;
-    font-size: 24px;
+  .episode-thumb img {
+    height: auto;
+    aspect-ratio: 16 / 9;
   }
 
-  .genre-gallery a .genre-label {
-    font-size: 11px;
-  }
-
-  /* Mobil-footer */
+  /* 8. FOOTER */
   .footer {
-    padding: 40px 32px 30px !important; 
-    margin-top: 60px;
+    padding: 30px 16px 100px 16px; /* Ekstra bunn-padding så bunnmenyen ikke dekker teksten */
   }
 
   .footer-links {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 16px 16px;
-    margin-bottom: 30px;
-  }
-
-  .footer-links a {
-    font-size: 13px;
-  }
-
-  .footer-socials {
-    gap: 18px;
-    margin-bottom: 25px;
-  }
-
-  .footer-socials a {
-    font-size: 18px;
+    grid-template-columns: repeat(2, 1fr); /* 2 kolonker i stedet for 4 */
+    gap: 12px;
   }
 }
 </style>
