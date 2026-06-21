@@ -5,6 +5,111 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Min Konto | Watch Nordic™</title>
 
+  <script>
+    var mobileBrowserInterceptUrl = 'https://max.com/intercept/mobile';      
+    var unsupportedInterceptUrl = '/intercept/unsupported.html';
+
+    // Tillat kontosider / innstillinger å være tilgjengelig på mobil web
+    function isSettingsPage(pathname) {        
+      return pathname === '/Konto.html' || pathname === '/parent-code' || pathname === '/settings' || pathname.startsWith('/settings/');      
+    }
+
+    // Tillat profil-sider å være tilgjengelig på mobil web
+    function isProfilesPage(pathname) {        
+      return (          
+        pathname === '/avatar-picker' ||          
+        pathname.startsWith('/avatar-picker/') ||          
+        pathname.startsWith('/confirm-pin/') ||          
+        pathname === '/confirm-password' ||          
+        pathname.startsWith('/content-ratings/') ||          
+        pathname.startsWith('/create-pin/') ||          
+        pathname === '/create-profile' ||          
+        pathname.startsWith('/edit-pin/') ||          
+        pathname.startsWith('/edit-profile/') ||          
+        pathname === '/exit-profile' ||          
+        pathname.startsWith('/display-language/') ||          
+        pathname === '/forgot-password' ||          
+        pathname === '/parent-code' ||          
+        pathname === '/profile-picker' ||          
+        pathname.startsWith('/profile-picker/')        
+      );      
+    }
+
+    // Sjekker om siden skal blokkeres på mobil (hvis det ikke er en innstillingsside)
+    function replaceIfPageNotViewableOnMobileWeb(pathname = window.location.pathname) {        
+      var isMobileViewablePage = isSettingsPage(pathname) || isProfilesPage(pathname);
+
+      if (          
+        !isMobileViewablePage &&          
+        /Mobile|iP(hone|od|ad)|Android|BlackBerry|IEMobile|Kindle|NetFront|Silk-Accelerated|(hpw|web)OS|Fennec|Minimo|Opera M(obi|ini)|Blazer|Dolfin|Dolphin|Skyfire|Zune/i.test(            
+          navigator.userAgent          
+        )        
+      ) {          
+        window.location.replace(mobileBrowserInterceptUrl);        
+      }
+
+      // iPad 2019 eller nyere
+      if (!isMobileViewablePage && navigator.maxTouchPoints > 2 && /MacIntel/i.test(navigator.platform)) {          
+        window.location.replace(mobileBrowserInterceptUrl);        
+      }
+
+      // Xbox og Windows Phone
+      if (!isMobileViewablePage && /Xbox|Windows Phone/i.test(navigator.userAgent)) {          
+        window.location.replace(mobileBrowserInterceptUrl);        
+      }      
+    }
+
+    // Kjør mobilsjekk
+    replaceIfPageNotViewableOnMobileWeb(window.location.pathname);
+
+    // Versjons-sammenligning for utdaterte nettlesere
+    function isSupportedVersion(version, minVersion) {        
+      var splitVersion = version.split('.');        
+      var splitMinVersion = minVersion.split('.');
+
+      for (var i = 0; i < splitMinVersion.length; i++) {          
+        var parsedVersion = parseInt(splitVersion[i] || '0');          
+        var parsedMinVersion = parseInt(splitMinVersion[i]);          
+        if (parsedVersion !== parsedMinVersion) {            
+          return parsedVersion > parsedMinVersion;          
+        }        
+      }        
+      return true;      
+    }
+
+    // Sjekk om nettleseren oppfyller minstekravene
+    function isBrowserSupported() {        
+      var browsers = [          
+        { regex: /Edge?\/([\d\.]*)/, minVersion: '121.0' }, // Edge          
+        { regex: /Chrome\/([\d\.]*)/, minVersion: '116.0' }, // Chrome          
+        { regex: /Version\/([\d\.]*) .*Safari\/(?:[\d\.]*)/, minVersion: '15.0' }, // Safari          
+        { regex: /Firefox\/([\d\.]*)/, minVersion: '115.0' }, // Firefox          
+        { regex: /Trident\/7\.0; .*rv:([\d\.]*)/, block: true }, // IE 11+          
+        { regex: /; MSIE ([\d\.]*);/, block: true } // IE 10 eller eldre        
+      ];
+
+      for (var i = 0; i < browsers.length; i++) {          
+        var browser = browsers[i];          
+        if (browser.block === true) {            
+          if (browser.regex.test(navigator.userAgent)) {              
+            return false;            
+          }          
+        } else if (browser.minVersion !== undefined) {            
+          var group = navigator.userAgent.match(browser.regex);            
+          if (group && group[1]) {              
+            return isSupportedVersion(group[1], browser.minVersion);            
+          }          
+        }        
+      }        
+      return true;      
+    }
+
+    // Hvis nettleseren er for gammel, send til feilsiden
+    if (isBrowserSupported() === false) {        
+      window.location.replace(unsupportedInterceptUrl);      
+    }
+  </script>
+
   <link rel="icon" type="image/png" href="https://static.wixstatic.com/media/fd2fb2_39376e4ee55b460ab7a3ebbfcf35fef7~mv2.png" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
   
@@ -36,7 +141,6 @@
       overflow-x: hidden;
     }
 
-    /* Header (Netflix-inspirert diskret luksus) */
     header {
       padding: 20px 60px;
       background: rgba(9, 27, 30, 0.9);
@@ -66,7 +170,6 @@
       gap: 20px;
     }
 
-    /* Språkvelger-styling (Netflix-look) */
     .lang-selector-wrapper {
       position: relative;
       display: flex;
@@ -108,16 +211,9 @@
       align-items: center;
       gap: 8px;
     }
+    header button:hover { opacity: 0.8; }
+    header button.logout-btn { color: #ff4d4d; }
 
-    header button:hover { 
-      opacity: 0.8;
-    }
-
-    header button.logout-btn {
-      color: #ff4d4d;
-    }
-
-    /* Hovedcontainer */
     .account-wrapper {
       max-width: 1000px;
       width: 100%;
@@ -134,7 +230,6 @@
       padding-bottom: 15px;
     }
 
-    /* Netflix Seksjons-oppbygning */
     .netflix-section {
       display: grid;
       grid-template-columns: 250px 1fr;
@@ -157,7 +252,6 @@
       gap: 15px;
     }
 
-    /* Rader inni innholdet */
     .info-row {
       display: flex;
       justify-content: space-between;
@@ -165,21 +259,10 @@
       font-size: 15px;
     }
 
-    .info-value {
-      font-weight: 500;
-    }
-    
-    .info-value.bold {
-      font-weight: 700;
-    }
+    .info-value { font-weight: 500; }
+    .info-value.bold { font-weight: 700; }
+    .info-subtext { color: var(--muted); font-size: 13px; margin-top: 4px; }
 
-    .info-subtext {
-      color: var(--muted);
-      font-size: 13px;
-      margin-top: 4px;
-    }
-
-    /* Lenker og interaksjon i ekte Netflix-stil */
     .netflix-link {
       color: var(--text-link);
       background: none;
@@ -189,11 +272,8 @@
       text-decoration: none;
       padding: 0;
     }
-    .netflix-link:hover {
-      text-decoration: underline;
-    }
+    .netflix-link:hover { text-decoration: underline; }
 
-    /* Profil-seksjon spesifikk */
     .profile-item {
       display: flex;
       align-items: center;
@@ -204,11 +284,7 @@
       border: 1px solid rgba(255,255,255,0.03);
     }
 
-    .profile-meta {
-      display: flex;
-      align-items: center;
-      gap: 15px;
-    }
+    .profile-meta { display: flex; align-items: center; gap: 15px; }
 
     .profile-avatar-mini {
       width: 60px;
@@ -218,17 +294,9 @@
       border: 2px solid transparent;
       transition: border-color 0.2s;
     }
-    .profile-avatar-mini.clickable:hover {
-      border-color: var(--accent);
-      cursor: pointer;
-    }
+    .profile-avatar-mini.clickable:hover { border-color: var(--accent); cursor: pointer; }
+    .profile-title { font-size: 16px; font-weight: 700; }
 
-    .profile-title {
-      font-size: 16px;
-      font-weight: 700;
-    }
-
-    /* Redigeringsfelt på plass */
     .edit-box {
       background: rgba(0,0,0,0.3);
       padding: 15px;
@@ -248,27 +316,14 @@
       font-size: 14px;
       margin-bottom: 10px;
     }
-    .edit-box input:focus {
-      outline: none;
-      border-color: var(--accent);
-    }
-    .edit-actions-btns {
-      display: flex;
-      gap: 10px;
-    }
-    .edit-actions-btns button {
-      padding: 6px 12px;
-      font-size: 13px;
-      border-radius: 4px;
-      cursor: pointer;
-      font-weight: 600;
-    }
+    .edit-box input:focus { outline: none; border-color: var(--accent); }
+    .edit-actions-btns { display: flex; gap: 10px; }
+    .edit-actions-btns button { padding: 6px 12px; font-size: 13px; border-radius: 4px; cursor: pointer; font-weight: 600; }
     .btn-netflix-save { background: var(--accent); border: none; color: #000; }
     .btn-netflix-cancel { background: transparent; border: 1px solid var(--muted); color: #fff; }
 
     .hidden { display: none !important; }
 
-    /* Foreldrekontroll */
     .parental-lock-banner {
       background: rgba(51, 181, 255, 0.05);
       border: 1px dashed var(--kids-accent);
@@ -288,19 +343,10 @@
       width: 100%;
       margin: 40px auto 0;
     }
-    .footer-links {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 15px;
-      margin-bottom: 30px;
-    }
-    .footer-links a {
-      color: #556264;
-      text-decoration: none;
-    }
+    .footer-links { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; margin-bottom: 30px; }
+    .footer-links a { color: #556264; text-decoration: none; }
     .footer-links a:hover { text-decoration: underline; }
 
-    /* Responsivitet */
     @media (max-width: 740px) {
       header { padding: 20px; }
       .netflix-section { grid-template-columns: 1fr; gap: 15px; }
@@ -310,6 +356,7 @@
   </style>
 </head>
 <body>
+  <noscript>Du må aktivere JavaScript for å kjøre denne applikasjonen.</noscript>
 
   <header>
     <h1 onclick="window.location.href='Hovedside.html'">WATCH</h1>
@@ -327,7 +374,7 @@
     </div>
   </header>
 
-  <div class="account-wrapper">
+  <div class="account-wrapper" id="app-root">
     <h2>Konto</h2>
 
     <div class="netflix-section">
@@ -371,7 +418,7 @@
             <div class="info-subtext">Passord</div>
             <div class="info-value">••••••••••••</div>
           </div>
-          <button class="netflix-link" onclick="alert('Funksjon for å nullstille passord sendes til din e-post.')">Endre passord</button>
+          <button class="netflix-link" onclick="alert('Nullstillingslenke sendt.')">Endre passord</button>
         </div>
 
         <div class="info-row" style="border-top: 1px solid rgba(255,255,255,0.05); padding-top: 15px;">
@@ -396,7 +443,7 @@
             <span class="info-value bold">Premium Nordic Ultra</span> 
             <span style="border: 1px solid var(--accent); font-size: 11px; padding: 1px 4px; border-radius:3px; color: var(--accent); margin-left: 8px;">4K Ultra HD</span>
           </div>
-          <button class="netflix-link" onclick="alert('Her kan brukeren oppgradere/nedgradere')">Bytt abonnement</button>
+          <button class="netflix-link" onclick="alert('Bytt abonnement-funksjon')">Bytt abonnement</button>
         </div>
       </div>
     </div>
@@ -440,7 +487,6 @@
 
       </div>
     </div>
-
   </div>
 
   <footer>
@@ -501,7 +547,6 @@
       document.getElementById("profilbilde").src = lagretBilde;
     }
 
-    // Dynamic layout tilpasning basert på profil
     if (erInnloggetSomBarn) {
       document.getElementById("endreBildeLenke").classList.add("hidden");
       document.getElementById("sletteKnapp").classList.add("hidden");
@@ -523,7 +568,6 @@
 
     function byttSpraak(valgtSpraak) {
       alert("Språk endret til: " + (valgtSpraak === 'no' ? 'Norsk' : valgtSpraak === 'sv' ? 'Svenska' : 'English'));
-      // Her kan du lagre språkvalg i localStorage hvis du har integrert oversettelser.
     }
 
     function velgProfilbildeSide() {
