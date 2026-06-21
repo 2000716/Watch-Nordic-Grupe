@@ -984,12 +984,12 @@ html, body {
 
   /* HERO-SEKSJON: Definerer det avlange formatet for strømmetjeneste-looken */
   .hero {
-    height: 70vh !important; /* Gjør banneret passe avlangt og gir god lengde på mobil */
+    height: 70vh !important; /* Beholder den fine lengden på mobilbanneret */
     min-height: 500px !important;
     max-height: 650px !important;
     display: flex !important;
     flex-direction: column !important;
-    justify-content: flex-end !important; /* Plasserer innholdet helt i bunnen av banneret */
+    justify-content: flex-end !important; /* Låser innholdet helt nede i bunnen av banneret */
     background: #091B1E !important;
     position: relative !important;
     margin-top: 0px !important;
@@ -1021,24 +1021,24 @@ html, body {
       rgba(9, 27, 30, 0.5) 0%,
       transparent 20%,
       transparent 50%,
-      rgba(9, 27, 30, 0.7) 80%,
+      rgba(9, 27, 30, 0.7) 75%,
       #091B1E 100%
     ) !important;
     z-index: 2 !important;
   }
 
-  /* INFOBOKS: Ligger nå perfekt støpt i bunnen av det avlange bildet med god kontrast */
+  /* INFOBOKS: Lagt helt i bunnen (nesten akkurat ved bunnen av banneret) */
   .content-wrapper {
     position: relative !important;
     inset: auto !important;
-    padding: 0 24px 24px 24px !important; 
+    padding: 0 24px 15px 24px !important; /* 15px bunnpadding plasserer knappene helt ned mot kanten */
     width: 100% !important;
     max-width: 100% !important;
     box-sizing: border-box !important;
     display: flex !important;
     flex-direction: column !important;
     gap: 12px !important;
-    margin-top: 0 !important; /* Trenger ikke lenger aggressiv negativ margin da .hero kontrollerer bunnen */
+    margin-top: 0 !important; 
     z-index: 10 !important;
   }
 
@@ -1060,7 +1060,7 @@ html, body {
   }
 
   .film-logo {
-    width: 160px !important; /* Litt mer strømlinjeformet på mobil */
+    width: 160px !important; 
     max-height: 70px !important;
     object-fit: contain !important;
   }
