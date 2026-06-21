@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Konto | Watch Nordic™</title>
+  <title>Konto | Watch™</title>
 
   <link rel="icon" type="image/png" href="https://static.wixstatic.com/media/fd2fb2_39376e4ee55b460ab7a3ebbfcf35fef7~mv2.png" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
@@ -13,19 +13,18 @@
   
   <style>
     :root {
-      --bg-main: #0b0c10;
-      --bg-card: #14161d;
-      --bg-input: #1e222b;
-      --border-subtle: rgba(255, 255, 255, 0.06);
-      --border-focus: rgba(255, 255, 255, 0.2);
+      --bg-main: #06080c;
+      --bg-card: #0f131a;
+      --bg-input: #171d26;
+      --border-subtle: rgba(255, 255, 255, 0.05);
+      --border-focus: rgba(34, 197, 94, 0.4);
       --text-main: #ffffff;
-      --text-muted: #9ca3af;
-      --accent: #7b2cbf; /* Premium lilla/indigo stream-look */
-      --accent-hover: #9d4edd;
+      --text-muted: #8e98a5;
+      --accent: #22c55e; /* Watch original mørkegrønn/neon */
+      --accent-hover: #4ade80;
       --danger: #ef4444;
       --danger-hover: rgba(239, 68, 68, 0.1);
-      --success: #10b981;
-      --kids: #00b4d8;
+      --success: #22c55e;
     }
 
     * { 
@@ -47,7 +46,7 @@
     /* Header */
     header {
       padding: 16px 5%;
-      background: rgba(11, 12, 16, 0.85);
+      background: rgba(6, 8, 12, 0.85);
       backdrop-filter: blur(20px);
       -webkit-backdrop-filter: blur(20px);
       border-bottom: 1px solid var(--border-subtle);
@@ -59,10 +58,11 @@
       z-index: 100;
     }
 
+    /* Beholder original logo */
     header h1 { 
-      font-size: 22px; 
+      font-size: 24px; 
       font-weight: 800;
-      letter-spacing: 3px;
+      letter-spacing: 2px;
       color: var(--text-main);
       cursor: pointer;
     }
@@ -78,10 +78,10 @@
 
     header button {
       background: transparent;
-      border: 1px solid rgba(255,255,255,0.2);
+      border: 1px solid rgba(255,255,255,0.15);
       color: var(--text-main);
       padding: 8px 18px;
-      border-radius: 4px;
+      border-radius: 6px;
       font-weight: 600;
       font-size: 14px;
       cursor: pointer;
@@ -102,113 +102,76 @@
       color: var(--danger);
     }
 
-    /* Container */
-    .container {
-      max-width: 1250px;
+    /* Dashboard Layout (Som HBO Max/Viaplay innstillinger) */
+    .dashboard-container {
+      max-width: 1200px;
       width: 100%;
-      margin: 0 auto;
-      padding: 40px 5%;
+      margin: 40px auto;
+      padding: 0 5%;
       display: grid;
       grid-template-columns: 280px 1fr;
-      gap: 50px;
+      gap: 40px;
       flex: 1;
     }
 
-    /* Sidebar */
-    .sidebar {
-      height: fit-content;
-      position: sticky;
-      top: 100px;
+    /* Sidemeny / Navigasjon i innstillinger */
+    .settings-nav {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
     }
 
-    .profile-card {
-      background: var(--bg-card);
-      border: 1px solid var(--border-subtle);
-      border-radius: 12px;
-      padding: 30px 24px;
-      text-align: center;
-    }
-
-    .avatar {
-      width: 110px;
-      height: 110px;
+    .nav-tab-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      padding: 14px 18px;
+      text-align: left;
+      font-size: 15px;
+      font-weight: 500;
       border-radius: 8px;
-      overflow: hidden;
-      margin: 0 auto 16px;
       cursor: pointer;
-      border: 2px solid transparent;
-      transition: all 0.25s ease;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      transition: all 0.2s ease;
     }
 
-    .avatar:hover {
-      border-color: var(--text-main);
-      transform: scale(1.04);
+    .nav-tab-btn:hover {
+      color: var(--text-main);
+      background: rgba(255, 255, 255, 0.03);
     }
 
-    .avatar img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
+    .nav-tab-btn.active {
+      color: var(--text-main);
+      background: var(--bg-card);
+      font-weight: 600;
+      border-left: 3px solid var(--accent);
+      border-radius: 0 8px 8px 0;
     }
 
-    .profile-name {
-      font-size: 20px;
+    /* Innholdsområde for faner */
+    .tab-content {
+      display: none;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    .tab-content h2 {
+      font-size: 22px;
       font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .tab-content .section-desc {
+      color: var(--text-muted);
+      font-size: 14px;
       margin-bottom: 24px;
     }
 
-    .profile-actions {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
-
-    .profile-actions button {
-      background: var(--bg-input);
-      border: 1px solid transparent;
-      color: var(--text-main);
-      padding: 10px;
-      border-radius: 6px;
-      font-weight: 500;
-      font-size: 13px;
-      cursor: pointer;
-      transition: all 0.2s ease;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-    }
-
-    .profile-actions button:hover { 
-      background: rgba(255,255,255,0.08);
-    }
-
-    .profile-actions button.delete-btn {
-      background: transparent;
-      color: var(--text-muted);
-      font-size: 12px;
-      margin-top: 15px;
-    }
-    .profile-actions button.delete-btn:hover {
-      background: var(--danger-hover);
-      color: var(--danger);
-    }
-
-    /* Kontoinnhold */
-    .content h2 {
-      margin: 0 0 16px;
-      font-size: 18px;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      color: var(--text-muted);
-    }
-
-    .content h2:not(:first-child) {
-      margin-top: 40px;
-    }
-
+    /* Kort og Rader */
     .card {
       background: var(--bg-card);
       border: 1px solid var(--border-subtle);
@@ -247,7 +210,7 @@
     }
 
     .badge {
-      background: rgba(16, 185, 129, 0.15);
+      background: rgba(34, 197, 94, 0.15);
       color: var(--success);
       padding: 2px 8px;
       border-radius: 4px;
@@ -256,44 +219,84 @@
       text-transform: uppercase;
     }
 
-    .row button.edit-trigger {
+    .edit-trigger {
       background: none;
       border: none;
-      color: var(--accent-hover);
+      color: var(--accent);
       cursor: pointer;
       font-size: 14px;
       font-weight: 600;
       transition: color 0.2s;
     }
 
-    .row button.edit-trigger:hover {
-      color: var(--text-main);
+    .edit-trigger:hover {
+      color: var(--accent-hover);
       text-decoration: underline;
     }
 
-    .hidden { display: none !important; }
+    /* Profilredigering bilde-seksjon */
+    .profile-hero {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      padding: 24px;
+      border-radius: 12px;
+      margin-bottom: 24px;
+    }
 
-    /* Redigering inputs */
-    .edit-field { margin-top: 14px; width: 100%; max-width: 400px; }
+    .avatar-container {
+      position: relative;
+      width: 90px;
+      height: 90px;
+      cursor: pointer;
+    }
+
+    .avatar-container img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 8px;
+    }
+
+    .avatar-overlay {
+      position: absolute;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0,0,0,0.6);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      transition: opacity 0.2s ease;
+    }
+
+    .avatar-container:hover .avatar-overlay {
+      opacity: 1;
+    }
+
+    /* Inputs og Skjemaer */
+    .edit-field { margin-top: 14px; width: 100%; max-width: 450px; }
 
     .edit-field input, .edit-field select {
       width: 100%;
       padding: 12px;
       background: var(--bg-input);
-      border: 1px solid transparent;
+      border: 1px solid var(--border-subtle);
       border-radius: 6px;
       color: white;
       font-size: 14px;
       transition: border-color 0.2s;
     }
     .edit-field select option { background: var(--bg-card); color: white; }
-    .edit-field input:focus, .edit-field select:focus { outline: none; border-color: var(--border-focus); }
+    .edit-field input:focus, .edit-field select:focus { outline: none; border-color: var(--accent); }
 
     .edit-actions { margin-top: 12px; display: flex; gap: 10px; }
 
-    .edit-actions button {
-      padding: 8px 16px;
-      border-radius: 4px;
+    .edit-actions button, .btn-action {
+      padding: 10px 18px;
+      border-radius: 6px;
       font-size: 13px;
       font-weight: 600;
       cursor: pointer;
@@ -302,158 +305,211 @@
 
     .btn-save { background: var(--text-main); color: var(--bg-main); border: none; }
     .btn-save:hover { background: rgba(255,255,255,0.9); }
-    .btn-cancel { background: transparent; border: 1px solid rgba(255,255,255,0.2); color: var(--text-main); }
+    .btn-cancel { background: transparent; border: 1px solid rgba(255,255,255,0.15); color: var(--text-main); }
     .btn-cancel:hover { background: rgba(255,255,255,0.05); }
-
-    /* Foreldrekontroll */
-    .parent-lock-screen {
-      text-align: center;
-      padding: 30px 0;
-    }
-    .btn-parent-unlock {
+    
+    .btn-danger-outline {
       background: transparent;
-      color: var(--kids);
-      border: 1px solid var(--kids);
-      padding: 10px 20px;
-      font-weight: 600;
-      border-radius: 6px;
-      cursor: pointer;
-      transition: 0.2s;
+      border: 1px solid rgba(239, 68, 68, 0.4);
+      color: var(--danger);
     }
-    .btn-parent-unlock:hover { background: rgba(0, 180, 216, 0.1); }
+    .btn-danger-outline:hover {
+      background: var(--danger-hover);
+    }
+
+    .hidden { display: none !important; }
+
+    /* Enhetsliste (Viaplay style) */
+    .device-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 16px 0;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+    .device-item:last-child { border-bottom: none; }
+    .device-info { display: flex; align-items: center; gap: 14px; }
+    .device-info i { font-size: 20px; color: var(--text-muted); }
 
     footer {
       border-top: 1px solid var(--border-subtle);
       padding: 40px 5%;
-      color: rgba(255,255,255,0.3);
+      color: rgba(255,255,255,0.25);
       font-size: 12px;
       margin-top: auto;
       text-align: center;
     }
 
-    /* Responsivitet */
-    @media (max-width: 960px) {
-      header { padding: 16px 24px; }
-      .container { grid-template-columns: 1fr; padding: 24px; gap: 30px; }
-      .sidebar { position: static; }
-      .profile-card { display: flex; text-align: left; align-items: center; gap: 20px; padding: 20px; }
-      .avatar { margin: 0; width: 80px; height: 80px; }
-      .profile-name { margin-bottom: 0; flex: 1; }
-      .profile-actions { flex-direction: row; align-items: center; }
-      .profile-actions button.delete-btn { margin-top: 0; }
-      .row { padding: 20px 0; }
-    }
-
-    @media (max-width: 600px) {
-      .profile-card { flex-direction: column; text-align: center; }
-      .profile-actions { flex-direction: column; width: 100%; }
-      .row { flex-direction: column; align-items: flex-start; gap: 10px; }
-      .row button.edit-trigger { padding: 0; }
+    /* Mobil tilpasning */
+    @media (max-width: 850px) {
+      .dashboard-container { grid-template-columns: 1fr; margin: 20px auto; }
+      .settings-nav { flex-direction: row; overflow-x: auto; padding-bottom: 10px; border-bottom: 1px solid var(--border-subtle); }
+      .nav-tab-btn { white-space: nowrap; padding: 10px 14px; }
+      .nav-tab-btn.active { border-left: none; border-bottom: 2px solid var(--accent); border-radius: 0; }
     }
   </style>
 </head>
 <body>
 
   <header>
-    <h1 onclick="window.location.href='Hovedside.html'">WATCH<span>NORDIC</span></h1>
+    <!-- Original logo og farge beholdt -->
+    <h1 onclick="window.location.href='Hovedside.html'">WATCH<span></span></h1>
     <div class="nav-btns">
       <button onclick="window.location.href='Hovedside.html'"><i class="fa-solid fa-house"></i> Hovedside</button>
       <button class="logout-btn" onclick="loggUt()">Logg ut</button>
     </div>
   </header>
 
-  <div class="container">
+  <div class="dashboard-container">
 
-    <aside class="sidebar">
-      <div class="profile-card">
-        <div class="avatar" id="avatarContainer" onclick="velgProfilbildeSide()">
-          <img id="profilbilde" src="https://static.wixstatic.com/media/fd2fb2_39376e4ee55b460ab7a3ebbfcf35fef7~mv2.png" alt="Profilbilde">
-        </div>
-        <div class="profile-name" id="navnDisplay">Laster...</div>
+    <!-- STRØMMETJENESTE SIDEMENY (TABS) -->
+    <nav class="settings-nav">
+      <button class="nav-tab-btn active" onclick="switchTab('tab-profil', this)">
+        <i class="fa-solid fa-user"></i> Min Profil
+      </button>
+      <button class="nav-tab-btn" onclick="switchTab('tab-konto', this)">
+        <i class="fa-solid fa-gear"></i> Innstillinger & Konto
+      </button>
+      <button class="nav-tab-btn" onclick="switchTab('tab-sprak', this)">
+        <i class="fa-solid fa-globe"></i> Språk / Language
+      </button>
+      <button class="nav-tab-btn" onclick="switchTab('tab-enheter', this)">
+        <i class="fa-solid fa-tv"></i> Registrerte enheter
+      </button>
+    </nav>
 
-        <div class="profile-actions" id="sidebarActions">
-          <button onclick="velgProfilbildeSide()"><i class="fa-solid fa-pen-to-square"></i> Endre profil</button>
-          <button class="delete-btn" id="sletteKnapp" onclick="haandterSletting()">Slett profil</button>
-        </div>
-      </div>
-    </aside>
+    <!-- Hovedinnholdspanel -->
+    <main class="content-panel">
 
-    <section class="content">
-      <h2>Kontodetaljer</h2>
-      <div class="card">
-        <div class="row" id="navnRow">
-          <div class="info-block">
-            <div class="label">Profilnavn</div>
-            <div class="value" id="navnView"></div>
-            <div class="edit-field hidden">
-              <input type="text" id="navnInput">
-              <div class="edit-actions">
-                <button class="btn-save" onclick="lagreNavn()">Lagre</button>
-                <button class="btn-cancel" onclick="avbrytNavn()">Avbryt</button>
-              </div>
-            </div>
+      <!-- FANE 1: MIN PROFIL -->
+      <div id="tab-profil" class="tab-content active">
+        <h2>Min Profil</h2>
+        <p class="section-desc">Administrer profilnavn, bilde og foreldrekontroll for denne profilen.</p>
+        
+        <div class="profile-hero">
+          <div class="avatar-container" id="avatarContainer" onclick="velgProfilbildeSide()">
+            <img id="profilbilde" src="https://static.wixstatic.com/media/fd2fb2_39376e4ee55b460ab7a3ebbfcf35fef7~mv2.png" alt="Profilbilde">
+            <div class="avatar-overlay"><i class="fa-solid fa-camera"></i></div>
           </div>
-          <button class="edit-trigger" id="endreNavnKnapp" onclick="endreNavn()">Endre</button>
-        </div>
-
-        <div class="row" id="epostRow">
-          <div class="info-block">
-            <div class="label">E-postadresse</div>
-            <div class="value" id="epostView"></div>
-            <div class="edit-field hidden">
-              <input type="email" id="epostInput">
-              <div class="edit-actions">
-                <button class="btn-save" onclick="lagreEpost()">Lagre</button>
-                <button class="btn-cancel" onclick="avbrytEpost()">Avbryt</button>
-              </div>
-            </div>
-          </div>
-          <button class="edit-trigger" id="endreEpostKnapp" onclick="endreEpost()">Endre</button>
-        </div>
-
-        <div class="row">
-          <div class="info-block">
-            <div class="label">Passord</div>
-            <div class="value">••••••••</div>
-          </div>
-          <button class="edit-trigger" onclick="alert('Funksjon for å tilbakestille passord er sendt til din e-post.')">Nullstill</button>
-        </div>
-      </div>
-
-      <h2>Kontostatus & Innstillinger</h2>
-      <div class="card">
-        <div class="row">
-          <div class="info-block">
-            <div class="label">Kontotype</div>
-            <div class="value">Watch Nordic Free <span class="badge">Aktiv konto</span></div>
+          <div>
+            <div style="font-size: 14px; color: var(--text-muted); margin-bottom: 4px;">Profil i bruk</div>
+            <h3 style="font-size: 22px;" id="navnDisplay">Laster...</h3>
           </div>
         </div>
-        <div class="row">
-          <div class="info-block">
-            <div class="label">Streaming-kvalitet</div>
-            <div class="value">Full HD (1080p) • Inkludert med gratisversjonen</div>
-          </div>
-        </div>
-      </div>
 
-      <div id="foreldreKontrollSeksjon" class="hidden">
-        <h2>Foreldrekontroll</h2>
         <div class="card">
-          <div id="parentLockPanel" class="parent-lock-screen">
-            <p style="margin-bottom: 20px; color: var(--text-muted); font-size: 14px;">Innholdsbegrensninger er låst for denne profilen.</p>
-            <button class="btn-parent-unlock" onclick="laasOppForeldreKontroll()"><i class="fa-solid fa-lock"></i> Endre aldersgrense</button>
+          <div class="row" id="navnRow">
+            <div class="info-block">
+              <div class="label">Profilnavn</div>
+              <div class="value" id="navnView"></div>
+              <div class="edit-field hidden">
+                <input type="text" id="navnInput">
+                <div class="edit-actions">
+                  <button class="btn-save" onclick="lagreNavn()">Lagre</button>
+                  <button class="btn-cancel" onclick="avbrytNavn()">Avbryt</button>
+                </div>
+              </div>
+            </div>
+            <button class="edit-trigger" id="endreNavnKnapp" onclick="endreNavn()">Endre</button>
+          </div>
+        </div>
+
+        <!-- Foreldrekontroll panel plassert her under profil -->
+        <div id="foreldreKontrollSeksjon" class="hidden">
+          <h3 style="font-size: 16px; margin-bottom: 12px; color: var(--text-muted); text-transform: uppercase;">Innholdsbegrensning</h3>
+          <div class="card">
+            <div id="parentLockPanel" style="padding: 24px 0; text-align: center;">
+              <p style="color: var(--text-muted); font-size: 14px; margin-bottom: 14px;">Aldersgrenser og restriksjoner er låst.</p>
+              <button class="btn-cancel" style="border-color: var(--accent); color: var(--accent);" onclick="laasOppForeldreKontroll()"><i class="fa-solid fa-lock"></i> Lås opp foreldrekontroll</button>
+            </div>
+            <div id="parentSettingsPanel" class="row hidden" style="border: none;">
+              <div class="info-block">
+                <div class="label">Maksimal tillatt aldersgrense</div>
+                <div class="value" id="currentLimitView">Laster...</div>
+                <div class="edit-field">
+                  <select id="ageRestrictionSelect" onchange="lagreAldersgrense()">
+                    <option value="A">Kun tillatt for alle (A)</option>
+                    <option value="6">Maks aldersgrense 6 år</option>
+                    <option value="9">Maks aldersgrense 9 år</option>
+                    <option value="12">Maks aldersgrense 12 år</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- FANE 2: INNSTILLINGER & KONTO -->
+      <div id="tab-konto" class="tab-content">
+        <h2>Kontoinnstillinger</h2>
+        <p class="section-desc">Innloggingsinformasjon og abonnementsstatus.</p>
+
+        <div class="card">
+          <div class="row" id="epostRow">
+            <div class="info-block">
+              <div class="label">E-postadresse</div>
+              <div class="value" id="epostView"></div>
+              <div class="edit-field hidden">
+                <input type="email" id="epostInput">
+                <div class="edit-actions">
+                  <button class="btn-save" onclick="lagreEpost()">Lagre</button>
+                  <button class="btn-cancel" onclick="avbrytEpost()">Avbryt</button>
+                </div>
+              </div>
+            </div>
+            <button class="edit-trigger" id="endreEpostKnapp" onclick="endreEpost()">Endre</button>
           </div>
 
-          <div id="parentSettingsPanel" class="row hidden" style="border:none;">
+          <div class="row">
             <div class="info-block">
-              <div class="label">Maksimal tillatt aldersgrense</div>
-              <div class="value" id="currentLimitView">Laster...</div>
-              <div class="edit-field">
-                <select id="ageRestrictionSelect" onchange="lagreAldersgrense()">
-                  <option value="A">Kun innhold tillatt for alle (A)</option>
-                  <option value="6">Maks 6 år</option>
-                  <option value="9">Maks 9 år</option>
-                  <option value="12">Maks 12 år</option>
+              <div class="label">Passord</div>
+              <div class="value">••••••••</div>
+            </div>
+            <button class="edit-trigger" onclick="alert('En lenke for tilbakestilling av passord er sendt til din e-post.')">Nullstill</button>
+          </div>
+
+          <div class="row">
+            <div class="info-block">
+              <div class="label">Kontotype</div>
+              <div class="value">Watch Free <span class="badge">Aktiv</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div style="margin-top: 32px;">
+          <button class="btn-action btn-danger-outline" id="sletteKnapp" onclick="haandterSletting()">Slett konto</button>
+        </div>
+      </div>
+
+      <!-- FANE 3: SPRÅKINNSTILLINGER -->
+      <div id="tab-sprak" class="tab-content">
+        <h2>Språkinnstillinger / Language</h2>
+        <p class="section-desc">Velg foretrukket tekstspråk og lydspor for applikasjonen.</p>
+
+        <div class="card">
+          <div class="row">
+            <div class="info-block">
+              <div class="label">Visningsspråk (App-tekst)</div>
+              <div class="edit-field" style="margin-top:8px;">
+                <select onchange="alert('Språk lagret!')">
+                  <option value="no" selected>Norsk (Bokmål)</option>
+                  <option value="se">Svenska</option>
+                  <option value="dk">Dansk</option>
+                  <option value="en">English</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="info-block">
+              <div class="label">Foretrukket lydspor (Tale)</div>
+              <div class="edit-field" style="margin-top:8px;">
+                <select onchange="alert('Foretrukket tale lagret!')">
+                  <option value="org">Originalspråk (Standard)</option>
+                  <option value="no">Norsk tale (Der det er tilgjengelig)</option>
+                  <option value="en">Engelsk tale</option>
                 </select>
               </div>
             </div>
@@ -461,13 +517,63 @@
         </div>
       </div>
 
-    </section>
+      <!-- FANE 4: ENHETER -->
+      <div id="tab-enheter" class="tab-content">
+        <h2>Registrerte enheter</h2>
+        <p class="section-desc">Oversikt over enheter som er logget inn på din Watch-konto.</p>
+
+        <div class="card" style="padding: 8px 24px;">
+          <div class="device-item">
+            <div class="device-info">
+              <i class="fa-solid fa-laptop"></i>
+              <div>
+                <div style="font-weight:600; font-size:14px;">Denne nettleseren</div>
+                <div style="font-size:12px; color: var(--text-muted);">Aktiv nå • Molde, Norge</div>
+              </div>
+            </div>
+            <span style="font-size: 12px; color: var(--success); font-weight: 600;">NÅVÆRENDE</span>
+          </div>
+
+          <div class="device-item">
+            <div class="device-info">
+              <i class="fa-solid fa-mobile-screen-button"></i>
+              <div>
+                <div style="font-weight:600; font-size:14px;">iPhone 15 Pro</div>
+                <div style="font-size:12px; color: var(--text-muted);">Sist aktiv: I går</div>
+              </div>
+            </div>
+            <button class="edit-trigger" style="color: var(--danger); font-size:12px;" onclick="this.parentElement.remove(); alert('Enhet logget ut.')">Logg ut enhet</button>
+          </div>
+
+          <div class="device-item">
+            <div class="device-info">
+              <i class="fa-solid fa-tv"></i>
+              <div>
+                <div style="font-weight:600; font-size:14px;">Samsung Smart TV 4K</div>
+                <div style="font-size:12px; color: var(--text-muted);">Sist aktiv: 4 dager siden</div>
+              </div>
+            </div>
+            <button class="edit-trigger" style="color: var(--danger); font-size:12px;" onclick="this.parentElement.remove(); alert('Enhet logget ut.')">Logg ut enhet</button>
+          </div>
+        </div>
+      </div>
+
+    </main>
   </div>
 
-  <footer>© 2026 Watch Nordic Group AS. Alle rettigheter forbeholdt.</footer>
+  <footer>© 2026 Watch Group AS. Alle rettigheter forbeholdt.</footer>
 
   <script>
-    // JavaScript logikken forblir nøyaktig den samme slik at du beholder koblingen mot LocalStorage
+    // Fanebytte system (HBO Max / Viaplay arkitektur)
+    function switchTab(tabId, buttonElement) {
+      document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+      document.querySelectorAll('.nav-tab-btn').forEach(btn => btn.classList.remove('active'));
+      
+      document.getElementById(tabId).classList.add('active');
+      buttonElement.classList.add('active');
+    }
+
+    // Gjenoppretting av dine LocalStorage funksjoner
     if (!localStorage.getItem("epost")) {
       window.location.href = "Starts side.html";
     }
@@ -506,7 +612,6 @@
     }
 
     if (erInnloggetSomBarn) {
-      document.getElementById("sidebarActions").classList.add("hidden");
       document.getElementById("avatarContainer").style.pointerEvents = "none";
       document.getElementById("endreNavnKnapp").classList.add("hidden");
       document.getElementById("endreEpostKnapp").classList.add("hidden");
@@ -514,9 +619,9 @@
       oppdaterMaksGrenseTekst();
     } else {
       if (aktivProfilIndex !== "0") {
-        sletteKnapp.innerHTML = `<i class="fa-solid fa-user-xmark"></i> Slett profil`;
+        sletteKnapp.innerHTML = `<i class="fa-solid fa-user-xmark"></i> Slett underprofil`;
       } else {
-        sletteKnapp.innerHTML = `<i class="fa-solid fa-trash-can"></i> Slett konto`;
+        sletteKnapp.innerHTML = `<i class="fa-solid fa-trash-can"></i> Slett hele kontoen`;
       }
     }
 
@@ -591,19 +696,14 @@
     }
 
     function loggUt() {
-      localStorage.removeItem("epost");
-      localStorage.removeItem("passord");
-      localStorage.removeItem("navn");
-      localStorage.removeItem("profilbilde");
-      localStorage.removeItem("aktivProfil");
-      localStorage.removeItem("isKids");
+      localStorage.clear(); // tømmer alt for trygg utlogging
       window.location.href = "Starts side.html";
     }
 
     function haandterSletting() {
       if (erInnloggetSomBarn) return;
       if (aktivProfilIndex !== "0") {
-        if (!confirm(`Er du sikker på at du vil slette profilen "${aktivNavn}"?`)) return;
+        if (!confirm(`Er du sikker på at du vil slette underprofilen "${aktivNavn}"?`)) return;
         
         const idx = Number(aktivProfilIndex);
         if (profiler[idx]) {
@@ -612,29 +712,20 @@
         }
 
         localStorage.setItem("aktivProfil", "0");
-        if (profiler[0]) {
-          localStorage.setItem("navn", profiler[0].navn);
-          localStorage.setItem("profilbilde", profiler[0].bilde);
-        }
-
-        alert("Profilen ble slettet. Du sendes nå tilbake til startsiden.");
         window.location.href = "Starts side.html";
-
       } else {
-        if (!confirm("Vil du slette hele kontoen og alle tilhørende underprofiler permanent?")) return;
+        if (!confirm("Vil du slette hele Watch-kontoen din permanent? Dette kan ikke angres.")) return;
         
         if (brukere[aktivEpost]) {
           delete brukere[aktivEpost];
           localStorage.setItem("brukere", JSON.stringify(brukere));
         }
-        
-        localStorage.removeItem("profiler");
         loggUt(); 
       }
     }
 
     function laasOppForeldreKontroll() {
-      const pinInput = prompt("Skriv inn PIN-kode for foreldrekontroll (Standard: 1234):");
+      const pinInput = prompt("Skriv inn din 4-sifrede foreldre-PIN:");
       if (pinInput === FORELDRE_PIN) {
         parentLockPanel.classList.add("hidden");
         parentSettingsPanel.classList.remove("hidden");
@@ -642,7 +733,7 @@
         const gjeldendeGrense = localStorage.getItem("maksAldersgrense") || "12";
         ageRestrictionSelect.value = gjeldendeGrense;
       } else {
-        alert("Feil PIN-kode! Kun foreldre har tilgang.");
+        alert("Feil PIN-kode.");
       }
     }
 
@@ -655,7 +746,7 @@
     function oppdaterMaksGrenseTekst() {
       const grense = localStorage.getItem("maksAldersgrense") || "12";
       if (grense === "A") {
-        currentLimitView.innerText = "Tillater kun innhold for Alle (A)";
+        currentLimitView.innerText = "Kun innhold tillatt for alle (A)";
       } else {
         currentLimitView.innerText = `Maks ${grense} år`;
       }
