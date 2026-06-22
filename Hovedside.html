@@ -11,12 +11,6 @@
 /* ==========================================================================
    1. GLOBALE STILER & RESETS
    ========================================================================== */
-:root {
-  /* Slik fungerer det: Endrer du denne fargen, endres BÅDE knappen og logoen automatisk! */
-  --accent-color: #00FFCC; 
-  --accent-color-hover: #00e6b8;
-}
-
 * {
   box-sizing: border-box;
   margin: 0;
@@ -95,19 +89,19 @@ main {
   flex-shrink: 0;
 }
 
-/* STIL FOR SVG LOGO - NÅ MED AUTOMATISK FARGE */
+/* STIL FOR SVG LOGO - NÅ MED SAMME GRØNNFARGE SOM KNAPPEN */
 .watch-logo-svg {
   height: 35px; 
   width: auto;
   cursor: pointer;
   display: flex;
   align-items: center;
-  fill: var(--accent-color); /* Sørger for at SVG-vektorer får fargen */
-  color: var(--accent-color); /* Sørger for at eventuell tekst/ikoner får fargen */
+  color: #00FFCC; /* Grønnfargen fra se nå-knappen */
+  fill: #00FFCC;  /* Sørger for at SVG-figurer får fargen */
 }
 
 .watch-logo-svg svg {
-  fill: currentColor; /* Tvinger SVG-innholdet til å bruke fargen spesifisert over */
+  fill: currentColor; /* Tvinger innholdet i SVG-en til å bruke fargen over */
 }
 
 .nav-links {
@@ -139,7 +133,7 @@ main {
 }
 
 .nav-links a.active {
-  color: var(--accent-color); /* Bruker også fellesfargen her */
+  color: #00FFCC;
   font-weight: 700;
 }
 
@@ -159,7 +153,7 @@ main {
 }
 
 .nav-search:hover {
-  color: var(--accent-color);
+  color: #00FFCC;
 }
 
 .profilmeny {
@@ -283,7 +277,7 @@ main {
 
 .banner-meta {
   font-size: 15px;
-  color: var(--accent-color);        
+  color: #00FFCC;        
   font-weight: 500;
 }
 
@@ -314,7 +308,7 @@ main {
   padding: 12px 34px;
   border-radius: 50px;
   border: none;
-  background: var(--accent-color); /* Bruker variabelen */
+  background: #00FFCC;
   color: #003a2f;
   cursor: pointer;       
   transition: transform 0.2s ease, background 0.2s ease;
@@ -322,7 +316,7 @@ main {
 
 .watch-button:hover {
   transform: scale(1.03);
-  background: var(--accent-color-hover); /* Bruker hover-variabelen */
+  background: #00e6b8;
 }
 
 .add-button {
@@ -362,7 +356,7 @@ main {
   font-size: 17px;
   font-weight: 500;
   letter-spacing: 0.3px;
-  color: var(--accent-color);
+  color: #00FFCC;
   margin-bottom: 14px;
   margin-left: 40px;
   text-transform: none;
@@ -444,7 +438,7 @@ main {
   height: 100%;
   left: 0;
   top: 0;
-  background-color: var(--accent-color);
+  background-color: #00FFCC;
   width: var(--progress, 0%);
   transition: width 0.3s ease;
 }
@@ -507,7 +501,7 @@ main {
 }
 
 .scroll-button:hover {
-  background: rgba(0, 255, 204, 0.85); /* Fallback farge beholdt for stabilitet på hover hover */
+  background: rgba(0, 255, 204, 0.85);
   color: #000;
   transform: translateY(-50%) scale(1.08);
 }
@@ -566,14 +560,14 @@ main {
   font-weight: 900;
   line-height: 1;
   color: transparent;
-  -webkit-text-stroke: 3px var(--accent-color);
+  -webkit-text-stroke: 3px #00FFCC;
   z-index: 2;
   transition: all 0.3s ease;
   pointer-events: none;
 }
 
 .top10-item:hover .top10-number {
-  color: var(--accent-color);
+  color: #00FFCC;
   -webkit-text-stroke: 0;
 }
 
@@ -675,7 +669,7 @@ main {
 
 .kids-overlay h2 {
   font-size: 28px;
-  color: var(--accent-color);
+  color: #00FFCC;
   margin-bottom: 8px;
 }
 
