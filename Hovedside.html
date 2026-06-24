@@ -1012,75 +1012,76 @@ main {
   }
 }
   </style>
+</head>
+<body>
 
 <header class="top-nav">
-  <div class="nav-left">
-    <img src="https://static.wixstatic.com/media/d9ace9_081ea242211b45a2801873c3067e1205~mv2.png" alt="Watch Nordic" class="watch-logo-svg" onclick="window.location.href='Hovedside.html'">
-  </div>
+  <div class="nav-left">
+    <img src="https://static.wixstatic.com/media/d9ace9_081ea242211b45a2801873c3067e1205~mv2.png" alt="Watch Nordic" class="watch-logo-svg" onclick="window.location.href='Hovedside.html'">
+  </div>
 
-  <nav class="nav-links">
-    <a href="Hovedside.html" class="active"><i class="fas fa-house"></i> STARTSIDE</a>
-    <a href="Serier.html"><i class="fas fa-tv"></i> SERIER</a>
-    <a href="Film.html"><i class="fas fa-clapperboard"></i> FILMER</a>
-    <a href="Nyheter.html"><i class="fas fa-star"></i> WATCH ORIGINALS</a>
-    <a href="Min-Liste.html"><i class="fas fa-bookmark"></i> MIN LISTE</a>
-  </nav>
+  <nav class="nav-links">
+    <a href="Hovedside.html" class="active"><i class="fas fa-house"></i> STARTSIDE</a>
+    <a href="Serier.html"><i class="fas fa-tv"></i> SERIER</a>
+    <a href="Film.html"><i class="fas fa-clapperboard"></i> FILMER</a>
+    <a href="Nyheter.html"><i class="fas fa-star"></i> WATCH ORIGINALS</a>
+    <a href="Min-Liste.html"><i class="fas fa-bookmark"></i> MIN LISTE</a>
+  </nav>
 
-  <div class="nav-right">
-    <a href="Søk.html" class="nav-search">
-      <i class="fas fa-search"></i>
-    </a>
+  <div class="nav-right">
+    <a href="Søk.html" class="nav-search">
+      <i class="fas fa-search"></i>
+    </a>
 
-    <a href="hvem-ser-på.html" class="profilmeny">
-      <img id="menyProfilbilde" src="https://via.placeholder.com/100" />
-      <span id="profilNavn"></span>
-    </a>
-  </div>
+    <a href="hvem-ser-på.html" class="profilmeny">
+      <img id="menyProfilbilde" src="https://via.placeholder.com/100" />
+      <span id="profilNavn"></span>
+    </a>
+  </div>
 </header>
-  
+  
 <section class="hero-banner">
-  <img class="banner-image" id="banner-bilde" src="" alt="Film Banner" />
-  <video id="banner-video" class="banner-video" playsinline preload="none"></video>
+  <img class="banner-image" id="banner-bilde" src="" alt="Film Banner" />
+  <video id="banner-video" class="banner-video" playsinline preload="none"></video>
 
-  <div class="banner-content">
-    <img class="film-logo" id="banner-logo" src="" alt="Film Logo" />
-    <p id="banner-beskrivelse"></p>
-    <div id="banner-metadata" class="banner-meta"></div>
-    <div class="banner-buttons">
-      <button class="watch-button" id="banner-se-na">
-        <i class="fas fa-play"></i> Se nå
-      </button>
-      <button class="add-button" id="banner-add">
-        <i class="fas fa-plus"></i>
-      </button>
-    </div>
-  </div>
+  <div class="banner-content">
+    <img class="film-logo" id="banner-logo" src="" alt="Film Logo" />
+    <p id="banner-beskrivelse"></p>
+    <div id="banner-metadata" class="banner-meta"></div>
+    <div class="banner-buttons">
+      <button class="watch-button" id="banner-se-na">
+        <i class="fas fa-play"></i> Se nå
+      </button>
+      <button class="add-button" id="banner-add">
+        <i class="fas fa-plus"></i>
+      </button>
+    </div>
+  </div>
 </section>
+
 
 <section class="gallery-section" id="nye-filmer-seksjon">
-  <h2>Nylig lagt til</h2>
-  <div class="gallery-wrapper">
-    <div class="fade-left"></div>
-    <button class="scroll-button left">❮</button>
-    <div class="image-gallery" id="nye-filmer-galleri"></div>
-    <button class="scroll-button right">❯</button>
-    <div class="fade-right"></div>
-  </div>
+  <h2>Nylig lagt til</h2>
+  <div class="gallery-wrapper">
+    <div class="fade-left"></div>
+    <button class="scroll-button left">❮</button>
+    <div class="image-gallery" id="nye-filmer-galleri"></div>
+    <button class="scroll-button right">❯</button>
+    <div class="fade-right"></div>
+  </div>
 </section>
 
-<section class="gallery-section" id="fortsett-section">
-  <h2>Fortsett å se</h2>
-  <div class="gallery-wrapper">
-    <div class="fade-left"></div>
-    <button class="scroll-button left">❮</button>
-    
-    <div class="image-gallery" id="fortsett-galleri">
-      </div>
-    
-    <button class="scroll-button right">❯</button>
-    <div class="fade-right"></div>
-  </div>
+  <section class="gallery-section" id="fortsett-section" style="display:none;">
+  <h2>Fortsett å se</h2>
+  <div class="gallery-wrapper">
+    <div class="fade-left"></div>
+    <button class="scroll-button left">❮</button>
+    <div class="image-gallery" id="fortsett-galleri"></div>
+    <button class="scroll-button right">❯</button>
+    <div class="fade-right"></div>
+  </div>
 </section>
+  
 
   <section class="gallery-section" id="barn-seksjon" style="display:none;">
   <h2>Barne- og familieinnhold</h2>
