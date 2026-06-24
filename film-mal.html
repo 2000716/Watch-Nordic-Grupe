@@ -898,6 +898,7 @@ const episode = urlParams.get("episode") || urlParams.get("e");
 let film;
 let filmId = "";
 let tilbakeUrl = "";
+let isSerie = false;
 
 /* ================= RESOLVE MEDIA ================= */
 if (navn && filmer?.[navn] && !sesong && !episode) {
@@ -1012,10 +1013,13 @@ function updateProgress() {
   }
   timeDisplay.textContent = `${formatTime(video.currentTime)} / ${formatTime(video.duration)}`;
 
-  // --- LAGRE PROGRESJON --- //
+  // --- FIKSET: LAGRE PROGRESJON KOPIERT DIREKTE TIL HOVED-ID (`navn`) --- //
   if (!isNaN(video.duration) && video.duration > 0) {
     const percent = (video.currentTime / video.duration) * 100;
+    
+    // Sparer som progress_filmid for playeren, og progress_navn for hovedsiden din
     localStorage.setItem("progress_" + filmId, percent.toFixed(1));
+    localStorage.setItem("progress_" + navn, percent.toFixed(1));
   }
 }
 
@@ -1201,7 +1205,7 @@ video.addEventListener('waiting', () => loadingSpinner.style.display = 'block');
 video.addEventListener('playing', () => loadingSpinner.style.display = 'none');
 video.addEventListener('canplay', () => loadingSpinner.style.display = 'none');
 
-// ==================== RESUME ==================== //
+/* ================= RESUME LOGIKK ================= */
 const savedTime = parseFloat(localStorage.getItem(`${filmId}-lastPosition`));
 
 video.addEventListener('loadedmetadata', () => {
@@ -1226,14 +1230,18 @@ video.addEventListener('loadedmetadata', () => {
   }
 });
 
-window.addEventListener('beforeunload', () => {
+// Lagrer posisjon løpende under avspilling og ved avslutning
+function lagreSistePosisjon() {
   localStorage.setItem(`${filmId}-lastPosition`, video.currentTime);
-});
+}
+video.addEventListener('timeupdate', lagreSistePosisjon);
+window.addEventListener('beforeunload', lagreSistePosisjon);
 
-// Ferdig
+// Ferdig med avspilling
 video.addEventListener('ended', () => {
   localStorage.removeItem(`${filmId}-lastPosition`);
   localStorage.removeItem("progress_" + filmId);
+  localStorage.removeItem("progress_" + navn); // Fjerner fra hovedsiden også når ferdig
   localStorage.setItem(`${filmId}-status`, "ferdig");
 
   // ==== AUTO NESTE EPISODE ====
@@ -1316,39 +1324,33 @@ video.addEventListener("loadedmetadata", () => {
   updateSubtitleButtons(globalSubtitleSetting);
 });
 
-// Hindre høyreklikk på videoen
-video.addEventListener("contextmenu", (e) => {
-  e.preventDefault();
-});
+// Hindre høyreklikk på videoen og siden
+video.addEventListener("contextmenu", e => e.preventDefault());
+document.addEventListener("contextmenu", e => e.preventDefault());
 
-// (valgfritt) – hindre høyreklikk på hele siden
-document.addEventListener("contextmenu", (e) => {
-  e.preventDefault();
-});
-
-  const skipIntroBtn = document.getElementById("skipIntroBtn");
-
-// Juster disse hvis introen er lengre/kortere
+// Skip Intro Logikk
+const skipIntroBtn = document.getElementById("skipIntroBtn");
 const hasIntro = isSerie && film.introStart != null && film.introEnd != null;
 
 const introStart = film.introStart;
 const introEnd = film.introEnd;
 
 video.addEventListener("timeupdate", () => {
-  if (!isSerie) {
-    skipIntroBtn.style.display = "none";
+  if (!isSerie || !hasIntro) {
+    if(skipIntroBtn) skipIntroBtn.style.display = "none";
     return;
   }
 
   if (video.currentTime >= introStart && video.currentTime <= introEnd) {
-    skipIntroBtn.style.display = "block";
+    if(skipIntroBtn) skipIntroBtn.style.display = "block";
   } else {
-    skipIntroBtn.style.display = "none";
+    if(skipIntroBtn) skipIntroBtn.style.display = "none";
   }
 });
 
-skipIntroBtn.addEventListener("click", () => {
-  video.currentTime = introEnd;
-});
-
+if(skipIntroBtn) {
+  skipIntroBtn.addEventListener("click", () => {
+    video.currentTime = introEnd;
+  });
+}
 </script>
