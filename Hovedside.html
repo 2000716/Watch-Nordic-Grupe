@@ -1440,7 +1440,6 @@ document.querySelectorAll(".gallery-wrapper").forEach(wrapper => {
 });
 
 // ==================== DYNAMISK GALLERI GENERATOR ==================== //
-// Felles hjelpefunksjon for å generere HTML-elementer for både filmer og serier
 function createGalleryItem(itemKey, item) {
   const link = document.createElement("a");
   link.href = `film.html?navn=${itemKey}`;
@@ -1459,7 +1458,7 @@ function createGalleryItem(itemKey, item) {
 
 // ==================== RENDERING FUNKSJONER ==================== //
 
-// NY: Genererer "Nylig lagt til" med BÅDE filmer og serier blandet sammen
+// Genererer "Nylig lagt til" med BÅDE filmer og serier blandet sammen
 function renderNyligLagtTil(galleryId, limit = 5) {
   const gallery = document.getElementById(galleryId);
   if (!gallery) return;
@@ -1580,7 +1579,7 @@ function renderSeries(galleryId) {
   });
 }
 
-// NY: Genererer dokumentarserier basert på "serier"-objektet
+// Genererer dokumentarserier basert på "serier"-objektet
 function renderDokumentarSerier(galleryId) {
   const gallery = document.getElementById(galleryId);
   if (!gallery || typeof serier === "undefined") return;
@@ -1602,6 +1601,7 @@ function renderDokumentarSerier(galleryId) {
   });
 }
 
+// FIKSET: "Fortsett å se" / Continue Watching funksjon
 function renderContinueWatching() {
   const section = document.getElementById("fortsett-section");
   const gallery = document.getElementById("fortsett-galleri");
@@ -1610,24 +1610,27 @@ function renderContinueWatching() {
 
   let items = [];
 
+  // Hent filmer med fremdrift
   Object.keys(filmer).forEach((key) => {
     const progress = localStorage.getItem("progress_" + key);
-    if (progress && progress > 0 && progress < 100) {
+    if (progress && parseFloat(progress) > 0 && parseFloat(progress) < 100) {
       if (erInnloggetSomBarn && (!erEgnetForBarn(filmer[key]) || !sjekkAldersgrense(filmer[key]))) return;
-      items.push({ key, data: filmer[key], type: "film" });
+      items.push({ key, data: filmer[key], type: "film", progress });
     }
   });
 
+  // Hent serier med fremdrift
   if (typeof serier !== "undefined") {
     Object.keys(serier).forEach((key) => {
       const progress = localStorage.getItem("progress_" + key);
-      if (progress && progress > 0 && progress < 100) {
+      if (progress && parseFloat(progress) > 0 && parseFloat(progress) < 100) {
         if (erInnloggetSomBarn && (!erEgnetForBarn(serier[key]) || !sjekkAldersgrense(serier[key]))) return;
-        items.push({ key, data: serier[key], type: "serie" });
+        items.push({ key, data: serier[key], type: "serie", progress });
       }
     });
   }
 
+  // Skjul seksjonen hvis listen er tom
   if (items.length === 0) {
     section.style.display = "none";
     return;
@@ -1636,27 +1639,23 @@ function renderContinueWatching() {
   section.style.display = "block";
 
   items.forEach((item) => {
-    const progress = localStorage.getItem("progress_" + item.key);
     const link = document.createElement("a");
+    // Samordnet til å bruke film.html?navn= for både serier og filmer
+    link.href = `film.html?navn=${item.key}`;
+    link.classList.add("gallery-item", "image-with-progress");
 
-    if (item.type === "film") {
-      link.href = `film-mal.html?id=${item.key}`;
-    } else {
-      link.href = `film.html?navn=${item.key}`;
-    }
-
-    link.classList.add("image-with-progress");
-
-    const img = document.createElement("img");
-    img.src = item.data.poster;
-    img.alt = item.data.tittel;
-
-    const progressBar = document.createElement("div");
-    progressBar.classList.add("progress-bar");
-    progressBar.style.setProperty("--progress", progress + "%");
-
-    link.appendChild(img);
-    link.appendChild(progressBar);
+    link.innerHTML = `
+      <img src="${item.data.poster}" alt="${item.data.tittel}">
+      <div class="progress-container" style="background: rgba(255,255,255,0.2); width: 100%; height: 6px; position: absolute; bottom: 0; left: 0; z-index: 2;">
+        <div class="progress-bar" style="width: ${item.progress}%; height: 100%; background: #E50914;"></div>
+      </div>
+      <div class="image-overlay">
+        <div class="overlay-content">
+          <div class="overlay-title">${item.data.tittel}</div>
+          <div class="overlay-meta">Fortsett å se (${Math.round(item.progress)}%)</div>
+        </div>
+      </div>
+    `;
     gallery.appendChild(link);
   });
 }
@@ -1698,17 +1697,18 @@ document.addEventListener("DOMContentLoaded", () => {
     if(dokuSeksjon) dokuSeksjon.style.display = "block";
 
     // Hent innhold til alle gallerier
-    renderNyligLagtTil("nye-filmer-galleri", 5); // Viser nå både nye filmer og serier blandet
+    renderNyligLagtTil("nye-filmer-galleri", 5); 
     renderTop10("topp10-filmer-galleri");
     renderFilmGallery("filmer-galleri", null, true, 20);
     renderSeries("serier-galleri");
-    renderDokumentarSerier("dokumentarserier-galleri"); // Henter nå ekte dokumentarserier
+    renderDokumentarSerier("dokumentarserier-galleri"); 
     
     const barnSeksjon = document.getElementById("barn-seksjon");
     if (barnSeksjon) barnSeksjon.style.display = "block";
     renderFilmGallery("barn-galleri", (key) => erEgnetForBarn(filmer[key]));
   }
 
+  // Kjøres for alle profiler
   oppdaterBanner();
   renderContinueWatching();
 });
