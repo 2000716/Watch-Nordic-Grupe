@@ -328,7 +328,7 @@ main {
 }
 
 /* ==========================================================================
-   5. GALLERIER & SEKSJONER (NETFLIX / HBO STYLE PROGRESS BAR)
+   5. GALLERIER & SEKSJONER
    ========================================================================== */
 .gallery-section {
   margin-bottom: 20px;
@@ -382,7 +382,9 @@ main {
   transition: border 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
 }
 
-/* FREMDRIFTSLINJE-CONTAINER FOR FILM-KORTET */
+/* ==========================================================================
+   NETFLIX / HBO STYLE PROGRESS BAR
+   ========================================================================== */
 .image-with-progress {
   position: relative;
   width: 330px;
@@ -405,15 +407,14 @@ main {
   transform: scale(1.05);
 }
 
-/* DEN FAKTISKE LINJEN I BUNNEN */
 .progress-bar {
   position: absolute;
   bottom: 0;
   left: 0;
-  height: 5px; 
+  height: 5px; /* Litt tykkere bar for bedre synlighet */
   width: 100%;
   background-color: rgba(255, 255, 255, 0.3);
-  z-index: 5;
+  z-index: 5; /* Ligger øverst i bunnen av bildet */
 }
 
 .progress-bar::after {
@@ -573,7 +574,7 @@ main {
   border-radius: inherit;
   display: flex;
   align-items: flex-end;
-  z-index: 4;
+  z-index: 4; /* Ligger rett under progressbaren */
 }
 
 .image-gallery a:hover .image-overlay {
@@ -584,7 +585,7 @@ main {
   padding: 14px;
   width: 100%;
   z-index: 3;
-  padding-bottom: 18px; 
+  padding-bottom: 18px; /* Gjør plass til progressbaren under teksten */
 }
 
 .overlay-title {
@@ -957,7 +958,6 @@ main {
   </div>
 </section>
 
-
 <section class="gallery-section" id="nye-filmer-seksjon">
   <h2>Nylig lagt til</h2>
   <div class="gallery-wrapper">
@@ -969,17 +969,20 @@ main {
   </div>
 </section>
 
-  <section class="gallery-section" id="fortsett-section" style="display:none;">
+<section class="gallery-section" id="fortsett-section">
   <h2>Fortsett å se</h2>
   <div class="gallery-wrapper">
     <div class="fade-left"></div>
     <button class="scroll-button left">❮</button>
-    <div class="image-gallery" id="fortsett-galleri"></div>
+    
+    <div class="image-gallery" id="fortsett-galleri">
+      </div>
+    
     <button class="scroll-button right">❯</button>
     <div class="fade-right"></div>
   </div>
 </section>
-  
+
   <section class="gallery-section" id="barn-seksjon" style="display:none;">
   <h2>Barne- og familieinnhold</h2>
   <div class="gallery-wrapper">
