@@ -304,7 +304,7 @@ main {
   border: none;
   background: #00FFCC;
   color: #003a2f;
-  cursor: pointer;       
+  cursor: pointer;        
   transition: transform 0.2s ease, background 0.2s ease;
 }
 
@@ -415,11 +415,13 @@ main {
   transform: scale(1.05);
 }
 
+/* FIKSET: Samme dimensjoner og avrunding som standard galleribilder */
 .image-with-progress {
   position: relative;
-  width: 220px;
-  height: 124px;
-  border-radius: 8px;
+  width: 330px;
+  aspect-ratio: 2.2 / 1;
+  height: 175px;
+  border-radius: 5px;
   overflow: hidden;
 }
 
@@ -427,6 +429,12 @@ main {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+/* Zoom-effekt også for bilder med progress bar */
+.image-gallery a:hover .image-with-progress img {
+  transform: scale(1.05);
 }
 
 .progress-bar {
@@ -436,8 +444,10 @@ main {
   height: 4px;
   width: 100%;
   background-color: rgba(255, 255, 255, 0.2);
+  z-index: 3; /* Ligger øverst på bildet */
 }
 
+/* FIKSET: Spolerlinjen byttet til Watch Nordic-grønn (#00FFCC) */
 .progress-bar::after {
   content: '';
   position: absolute;
@@ -939,7 +949,8 @@ main {
     transition: none !important;
   }
 
-  .image-gallery a img {
+  /* Responsiv mobil-justering for både vanlige bilder og fremdriftsbilder */
+  .image-gallery a img, .image-with-progress {
     width: 200px !important;  
     height: auto !important;
     aspect-ratio: 16 / 9 !important; 
@@ -1021,7 +1032,6 @@ main {
   </style>
 </head>
 <body>
-
 
 <header class="top-nav">
   <div class="nav-left">
