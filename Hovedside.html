@@ -402,7 +402,7 @@ main {
 }
 
 /* ==========================================================================
-   5b. EGEN SEKSJON: FORTSETT Å SE (CONTINUE WATCHING)
+   5b. EGEN SEKSJON: FORTSETT Å SE (CONTINUE WATCHING) - IDENTISK BILDETEKSTUR
    ========================================================================== */
 .continue-watching-section {
   margin-bottom: 30px;
@@ -449,45 +449,38 @@ main {
   display: none;
 }
 
+/* 100 % identisk boks/link-styling som de andre galleriene */
 .continue-image-gallery a {
   display: inline-block;
   position: relative;
   border-radius: 5px;
   background: transparent;
-  overflow: visible;
+  overflow: hidden; /* Skjuler spolerlinjen utenfor runder hjørner */
   border: 2px solid transparent;
   transition: border 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
+}
+
+/* 100 % identisk bildestørrelse og oppførsel */
+.continue-image-gallery a img {
+  width: 330px;
+  aspect-ratio: 2.2 / 1;
+  height: 175px;
+  object-fit: cover;
+  border-radius: 5px;
+  display: block;
+  transition: transform 0.3s ease;
 }
 
 .continue-image-gallery a:hover {
   z-index: 10;
 }
 
-/* Container som sikrer nøyaktig samme bildestørrelse som de andre galleriene */
-.image-with-progress {
-  position: relative;
-  width: 330px;
-  aspect-ratio: 2.2 / 1;
-  height: 175px;
-  border-radius: 5px;
-  overflow: hidden;
-}
-
-.image-with-progress img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-  transition: transform 0.3s ease;
-}
-
-/* Hover zoom-effekt på bildet inni fremdrifts-containeren */
-.continue-image-gallery a:hover .image-with-progress img {
+.continue-image-gallery a:hover img {
   transform: scale(1.05);
 }
 
-/* Bakgrunnsspor for spoling */
-.progress-bar {
+/* Grønn Spolerlinje lagt direkte i bilde-linken */
+.continue-image-gallery a .progress-bar {
   position: absolute;
   bottom: 0;
   left: 0;
@@ -497,25 +490,24 @@ main {
   z-index: 3;
 }
 
-/* Selve spolelinjen – Byttet til Watch Nordic-grønn (#00FFCC) */
-.progress-bar::after {
+.continue-image-gallery a .progress-bar::after {
   content: '';
   position: absolute;
   height: 100%;
   left: 0;
   top: 0;
-  background-color: #00FFCC;
+  background-color: #00FFCC; /* Watch Nordic Grønn */
   width: var(--progress, 0%);
   transition: width 0.3s ease;
 }
 
-/* Pil-knapper for fortsett-galleriet */
+/* Pil-aktivering for denne wrapperen */
 .continue-gallery-wrapper:hover .scroll-button:not(.hidden) {
   opacity: 1;
   pointer-events: auto;
 }
 
-/* Felles effekter for skyggevignetter på sidene */
+/* Felles effekter for skyggevignetter og knapper på sidene */
 .fade-left, .fade-right {
   position: absolute;
   top: 15px; 
@@ -971,8 +963,8 @@ main {
     transition: none !important;
   }
 
-  /* Sikrer 16:9 format og riktig mobilskalering for fremdriftsbilder */
-  .image-gallery a img, .image-with-progress {
+  /* Sikrer 16:9 format og lik størrelse på mobil */
+  .image-gallery a img, .continue-image-gallery a img {
     width: 200px !important;  
     height: auto !important;
     aspect-ratio: 16 / 9 !important; 
@@ -1034,6 +1026,7 @@ main {
   </style>
 </head>
 <body>
+  
 <header class="top-nav">
   <div class="nav-left">
     <a href="Hovedside.html" class="watch-logo-svg">
@@ -1102,14 +1095,16 @@ main {
   <div class="continue-gallery-wrapper">
     <button class="scroll-button left hidden"><i class="fa-solid fa-chevron-left"></i></button>
     <button class="scroll-button right"><i class="fa-solid fa-chevron-right"></i></button>
-    <div class="continue-image-gallery"> 
+    <div class="continue-image-gallery">
       <a href="#">
-        <div class="image-with-progress">
-          <img src="DITT_BILDE_HER.jpg" alt="Film tittel">
-          <div class="progress-bar" style="--progress: 65%;"></div>
-        </div>
+        <img src="DITT_BILDE_HER.jpg" alt="Film tittel">
+        <div class="progress-bar" style="--progress: 45%;"></div>
       </a>
-      </div>
+      <a href="#">
+        <img src="NESTE_BILDE.jpg" alt="Film tittel">
+        <div class="progress-bar" style="--progress: 80%;"></div>
+      </a>
+    </div>
   </div>
 </section>
     
