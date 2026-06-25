@@ -339,10 +339,14 @@ main {
    ========================================================================== */
 .gallery-section {
   margin-bottom: 30px;
-  margin-left: 0; /* Endret fra 30px til 0 for full skjermbredde */
-  margin-right: 0; /* Endret fra 30px til 0 for full skjermbredde */
   position: relative;
   z-index: 2;
+  /* Sørger for at galleriet følger samme bredde og sentrering som resten av siden */
+  width: 100%;
+  max-width: 1400px;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 0 20px; 
 }
 
 .gallery-section h2 {
@@ -352,7 +356,7 @@ main {
   letter-spacing: 0.3px;
   color: #00FFCC;
   margin-bottom: 10px;
-  margin-left: 40px; /* Beholder innrykk på tittelen for pen layout */
+  margin-left: 0; /* Endret fra 40px til 0 siden paddingen ligger på .gallery-section nå */
   text-transform: none;
   padding-left: 0;
 }
@@ -370,7 +374,7 @@ main {
   display: flex;
   overflow-x: auto;
   gap: 16px;
-  padding: 10px 40px; /* Gir galleriet luft på start og slutt ved scrolling */
+  padding: 10px 0; /* Fjernet 40px sidepadding så bildene flukter med tittelen */
   scroll-behavior: smooth;
   -ms-overflow-style: none;
 }
