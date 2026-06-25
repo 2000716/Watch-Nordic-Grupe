@@ -1193,6 +1193,19 @@ main {
 <script src="Filmdata.js"></script>
 <script src="Seriedata.js"></script>
 <script>
+// ==================== CSS INJEKSJON FOR VIAPLAY-LÅSING ==================== //
+// Dette tvinger galleriene til å skjule scrollbars og deaktivere manuell scrolling,
+// slik at KUN pilene kan flytte på innholdet.
+const style = document.createElement('style');
+style.textContent = `
+  .image-gallery, .coming-movies-gallery, .top10-gallery {
+    overflow-x: hidden !important; /* Blokkerer scrollbar og manuell scrolling */
+    scroll-behavior: smooth !important;
+    display: flex !important;
+  }
+`;
+document.head.appendChild(style);
+
 // ==================== AUTENTISERING ==================== //
 const epost = localStorage.getItem("epost");
 const passord = localStorage.getItem("passord");
@@ -1384,7 +1397,7 @@ function adjustBannerVideo(videoElement, container) {
 }
 adjustBannerVideo(document.getElementById("banner-video"), document.querySelector(".hero-banner"));
 
-// ==================== STRENG UNIVERSAL SCROLL PRO ==================== //
+// ==================== VIAPLAY STYLE: ABSOLUTT LÅST NAVIGASJON ==================== //
 function oppdaterAlleGalleripiler() {
   document.querySelectorAll(".gallery-wrapper").forEach(wrapper => {
     const gallery = wrapper.querySelector(".image-gallery, .coming-movies-gallery, .top10-gallery");
@@ -1397,10 +1410,10 @@ function oppdaterAlleGalleripiler() {
     const max = gallery.scrollWidth - gallery.clientWidth;
     const pos = gallery.scrollLeft;
     
-    // Knallharde sjekker mot sub-piksler og innholdsoverflyt
-    const kanScrolle = max > 1;
-    const erHeltTilVenstre = pos <= 1;
-    const erHeltTilHoyre = Math.ceil(pos) >= max - 1;
+    // Knallharde nazi-sjekker mot sub-piksler
+    const kanScrolle = max > 5;
+    const erHeltTilVenstre = pos <= 2;
+    const erHeltTilHoyre = Math.ceil(pos) >= max - 2;
 
     // Venstre knapp + fade status
     const skjulVenstre = !kanScrolle || erHeltTilVenstre;
@@ -1420,23 +1433,36 @@ function oppdaterAlleGalleripiler() {
   });
 }
 
-// Initialiser lyttere på wrapperne
+// Initialiser låste klikklyttere
 document.querySelectorAll(".gallery-wrapper").forEach(wrapper => {
   const gallery = wrapper.querySelector(".image-gallery, .coming-movies-gallery, .top10-gallery");
   const left = wrapper.querySelector(".scroll-button.left");
   const right = wrapper.querySelector(".scroll-button.right");
   if (!gallery) return;
 
+  // Låser forhindring av dragging via touch-enheter (valgfritt, sikrer fullstendig knappekontroll)
+  gallery.addEventListener('touchmove', (e) => {
+    // Sletter viaplay-unntak hvis du vil tillate swipe på mobil, fjern e.preventDefault() hvis mobiler skal få swipe.
+    // e.preventDefault(); 
+  }, { passive: true });
+
   left?.addEventListener("click", () => {
-    const steg = gallery.clientWidth > 0 ? gallery.clientWidth * 0.85 : 300;
+    // Scroller nøyaktig 1 hel side av gangen (90% av container-bredden for fin overlapping)
+    const steg = gallery.clientWidth > 0 ? gallery.clientWidth * 0.90 : 400;
     gallery.scrollBy({ left: -steg, behavior: "smooth" });
+    
+    // Tvinger en øyeblikkelig sjekk etter at scroll-animasjonen starter/slutter
+    setTimeout(oppdaterAlleGalleripiler, 400);
   });
 
   right?.addEventListener("click", () => {
-    const steg = gallery.clientWidth > 0 ? gallery.clientWidth * 0.85 : 300;
+    const steg = gallery.clientWidth > 0 ? gallery.clientWidth * 0.90 : 400;
     gallery.scrollBy({ left: steg, behavior: "smooth" });
+    
+    setTimeout(oppdaterAlleGalleripiler, 400);
   });
 
+  // Hører på scroll-events (som utløses av JS-scrollingen vår) for å fjerne piler dynamisk
   gallery.addEventListener("scroll", oppdaterAlleGalleripiler, { passive: true });
 });
 
@@ -1659,14 +1685,13 @@ document.addEventListener("DOMContentLoaded", () => {
   oppdaterBanner();
   renderContinueWatching();
 
-  // STRENGT KRAV: Fyrer av sjekken umiddelbart når innholdet er dyttet inn i DOM!
+  // Fyr av sjekken umiddelbart når elementene er på plass
   oppdaterAlleGalleripiler();
 
-  // SIKKERHETS-TIMEOUT: Bilder kan bruke noen millisekunder på å laste og dytte ut bredden.
-  // Vi tvinger fram re-kalkuleringer rett etterpå for å sikre at pilene stemmer 100%.
+  // Kjører flere tette sjekker under lasting for å garantere riktig pil-visning med en gang
   setTimeout(oppdaterAlleGalleripiler, 50);
-  setTimeout(oppdaterAlleGalleripiler, 300);
-  setTimeout(oppdaterAlleGalleripiler, 1000);
+  setTimeout(oppdaterAlleGalleripiler, 200);
+  setTimeout(oppdaterAlleGalleripiler, 600);
 });
 
 // ==================== NAV SCROLL ==================== //
