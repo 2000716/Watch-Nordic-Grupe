@@ -156,6 +156,35 @@ const filmer = {
    publishDate: "2026-05-11T00:00:00", // ISO datoformat
     expireDate: "2027-01-10T23:59:59",
   },
+
+    "tears-of-steel": {
+    tittel: "Tears of Steel",
+    rating: "5.5",
+    bakgrunn: "https://studio.blender.org/files/public/thumbnail/3c/83/3c833d978e7de4b58eaa1a12be541664_m.webp",
+    banner: "https://studio.blender.org/files/public/thumbnail/3c/83/3c833d978e7de4b58eaa1a12be541664_m.webp", 
+    logo: "https://studio.blender.org/files/public/logo/d9/10/d910023b9c2157ebcc1416026f2b1a03.png",
+    trailer: "", 
+    poster: "https://m.media-amazon.com/images/S/pv-target-images/ac878c08d94a3da94048c54c4585013f2c7672c33ef5236307eba9fb8ae96d38.png",
+    posterVertikal: "https://image.tmdb.org/t/p/original/8qy3jRmaHR7f8VZh3iXCqCWfFsH.jpg",
+    beskrivelse: "I et dystopisk, fremtidig Amsterdam må en gruppe forskere bruke avansert teknologi for å redesigne fortiden og redde verden fra en altetende hær av destruktive roboter.",
+    metadata: ["2021", "12 år", "Sci-Fi", "12 min"],
+    skuespillere: "Derek de Lint, Sergio Hasselbaink, Rogier Schippers",
+    regissor: "Ian Hubert",
+    lisens: "(CC) Blender Studio | Creative Commons BY",
+    kilde: "https://blender.org",
+    watchUrl: "film-mal.html?id=tears-of-steel",
+    videoUrl: "https://dn710604.ca.archive.org/0/items/tearsofsteelblendervfxopenmovie800p/Tears%20of%20Steel%20-%20Blender%20VFX%20Open%20Movie%20800p.mp4",
+    subtitleUrl: "",
+    tilbakeUrl: "film.html?navn=tears-of-steel",
+    audioLanguages: [
+    { code: "no", label: "Engelsk" } ],
+    subtitleLanguages: [
+    { code: "no", label: "Norsk" },
+    { code: "off", label: "Av" }
+  ],
+    publishDate: "2026-06-25T00:00:00",
+    expireDate: "2030-01-01T23:59:59",
+  },
   };
 
 
