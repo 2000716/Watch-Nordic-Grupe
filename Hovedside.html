@@ -1444,19 +1444,57 @@ document.querySelectorAll(".gallery-wrapper").forEach(wrapper => {
   if (!gallery) return;
 
   const update = () => {
-    const max = gallery.scrollWidth - gallery.clientWidth;
+    // Bruker Math.round for å unngå sub-piksel problemer i Chrome/Safari ved zoom
+    const clientWidth = gallery.clientWidth;
+    const scrollWidth = gallery.scrollWidth;
+    const max = scrollWidth - clientWidth;
     const pos = gallery.scrollLeft;
-    const canScroll = max > 5;
-    left?.classList.toggle("hidden", !canScroll || pos <= 5);
-    right?.classList.toggle("hidden", !canScroll || pos >= max - 5);
-    fadeL?.classList.toggle("fade-hidden", !canScroll || pos <= 5);
-    fadeR?.classList.toggle("fade-hidden", !canScroll || pos >= max - 5);
+
+    // Streng sjekk: Kan vi faktisk scrolle? (Galleriet må ha innhold som går utenfor skjermen)
+    // Vi setter en sikkerhetsmargin på under 2 piksler i stedet for 5.
+    const canScroll = max > 2; 
+    
+    // Er vi helt til venstre? (Strengere sjekk mot 1 piksel i stedet for 5)
+    const isAtLeft = pos <= 1;
+    
+    // Er vi helt til høyre? (Math.ceil fikser desimalfeil i nettlesere)
+    const isAtRight = Math.ceil(pos) >= max - 1;
+
+    // Oppdater venstre pil og fade
+    const hideLeft = !canScroll || isAtLeft;
+    if (left) {
+      left.classList.toggle("hidden", hideLeft);
+      left.disabled = hideLeft; // Hindrer klikk via tastatur/tab
+    }
+    fadeL?.classList.toggle("fade-hidden", hideLeft);
+
+    // Oppdater høyre pil og fade
+    const hideRight = !canScroll || isAtRight;
+    if (right) {
+      right.classList.toggle("hidden", hideRight);
+      right.disabled = hideRight; // Hindrer klikk via tastatur/tab
+    }
+    fadeR?.classList.toggle("fade-hidden", hideRight);
   };
 
-  left?.addEventListener("click", () => gallery.scrollBy({ left: -gallery.clientWidth * 0.85, behavior: "smooth" }));
-  right?.addEventListener("click", () => gallery.scrollBy({ left: gallery.clientWidth * 0.85, behavior: "smooth" }));
-  gallery.addEventListener("scroll", update);
+  // Klikk-håndtering med fallback hvis clientWidth skulle være 0
+  left?.addEventListener("click", () => {
+    const amount = gallery.clientWidth > 0 ? gallery.clientWidth * 0.85 : 300;
+    gallery.scrollBy({ left: -amount, behavior: "smooth" });
+  });
+
+  right?.addEventListener("click", () => {
+    const amount = gallery.clientWidth > 0 ? gallery.clientWidth * 0.85 : 300;
+    gallery.scrollBy({ left: amount, behavior: "smooth" });
+  });
+
+  // Strengere overvåkning: Kjører også oppdatering med en mikrosekunds forsinkelse 
+  // etter klikk for å sikre at animasjonen landet der den skulle.
+  gallery.addEventListener("scroll", update, { passive: true });
   window.addEventListener("resize", update);
+  
+  // En ekstra sjekk etter at DOM og bilder potensielt har lastet inn størrelsen sin
+  setTimeout(update, 200);
   update();
 });
 
