@@ -160,9 +160,9 @@ const filmer = {
     "tears-of-steel": {
     tittel: "Tears of Steel",
     rating: "5.5",
-    bakgrunn: "https://studio.blender.org/files/public/thumbnail/3c/83/3c833d978e7de4b58eaa1a12be541664_m.webp",
-    banner: "https://studio.blender.org/files/public/thumbnail/3c/83/3c833d978e7de4b58eaa1a12be541664_m.webp", 
-    bannerMobil: "https://studio.blender.org/files/public/thumbnail/3c/83/3c833d978e7de4b58eaa1a12be541664_m.webp",  
+    bakgrunn: "https://m.media-amazon.com/images/M/MV5BODc0MDgzZDAtOWM5YS00ZTg0LTlhMDEtMjljNmJiZDg5MmExXkEyXkFqcGc@._V1_.jpg",
+    banner: "https://mango.blender.org/wp-content/uploads/2013/05/08_captain_thom.jpg", 
+    bannerMobil: "https://mango.blender.org/wp-content/uploads/2013/05/08_captain_thom.jpg",  
     logo: "",
     trailer: "", 
     poster: "https://m.media-amazon.com/images/S/pv-target-images/ac878c08d94a3da94048c54c4585013f2c7672c33ef5236307eba9fb8ae96d38.png",
