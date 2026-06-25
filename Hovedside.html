@@ -393,16 +393,8 @@ main {
   transition: transform 0.3s ease;
 }
 
-.image-gallery a:hover {
-  z-index: 10; 
-}
-
-.image-gallery a:hover img {
-  transform: scale(1.05);
-}
-
 /* ==========================================================================
-   5b. EGEN SEKSJON: FORTSETT Å SE (CONTINUE WATCHING) - IDENTISK BILDETEKSTUR
+   5b. EGEN SEKSJON: FORTSETT Å SE (CONTINUE WATCHING)
    ========================================================================== */
 .continue-watching-section {
   margin-bottom: 30px;
@@ -449,18 +441,16 @@ main {
   display: none;
 }
 
-/* 100 % identisk boks/link-styling som de andre galleriene */
 .continue-image-gallery a {
   display: inline-block;
   position: relative;
   border-radius: 5px;
   background: transparent;
-  overflow: hidden; /* Skjuler spolerlinjen utenfor runder hjørner */
+  overflow: hidden;
   border: 2px solid transparent;
   transition: border 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
 }
 
-/* 100 % identisk bildestørrelse og oppførsel */
 .continue-image-gallery a img {
   width: 330px;
   aspect-ratio: 2.2 / 1;
@@ -471,15 +461,6 @@ main {
   transition: transform 0.3s ease;
 }
 
-.continue-image-gallery a:hover {
-  z-index: 10;
-}
-
-.continue-image-gallery a:hover img {
-  transform: scale(1.05);
-}
-
-/* Grønn Spolerlinje lagt direkte i bilde-linken */
 .continue-image-gallery a .progress-bar {
   position: absolute;
   bottom: 0;
@@ -496,82 +477,95 @@ main {
   height: 100%;
   left: 0;
   top: 0;
-  background-color: #00FFCC; /* Watch Nordic Grønn */
+  background-color: #00FFCC;
   width: var(--progress, 0%);
   transition: width 0.3s ease;
 }
 
-/* Pil-aktivering for denne wrapperen */
-.continue-gallery-wrapper:hover .scroll-button:not(.hidden) {
-  opacity: 1;
-  pointer-events: auto;
-}
-
-/* Felles effekter for skyggevignetter og knapper på sidene */
+/* Standard/Skjult tilstand for knapper og fade-effekter på touch-enheter */
 .fade-left, .fade-right {
-  position: absolute;
-  top: 15px; 
-  bottom: 15px;
-  width: 70px;
-  z-index: 1;
-  pointer-events: none;
+  display: none;
   opacity: 0;
-  transition: opacity 0.3s ease;
 }
-
-.fade-left {
-  left: 10px; 
-  background: linear-gradient(to right, #091B1E, rgba(9, 27, 30, 0));
-}
-
-.fade-right {
-  right: 10px; 
-  background: linear-gradient(to left, #091B1E, rgba(9, 27, 30, 0));
-}
-
-.fade-hidden { display: none !important; }
 
 .scroll-button {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 44px;
-  height: 44px;
-  border-radius: 50%;
-  background: rgba(9, 27, 30, 0.75);
-  border: 1px solid rgba(255, 255, 255, 0.25);
-  color: white;
-  font-size: 22px;
-  cursor: pointer;
-  z-index: 11; 
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  display: none;
   opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.25s ease, background 0.25s ease, transform 0.25s ease;
-  backdrop-filter: blur(6px);
-  user-select: none;
 }
 
-.scroll-button.left { left: 2px; }
-.scroll-button.right { right: 2px; }
+/* ==========================================================================
+   STRENG PC-KONTROLL (KUN ENHETER MED MUS/HOVER AKTIVERT, DVS. IKKE IPAD/MOBIL)
+   ========================================================================== */
+@media (hover: hover) {
+  .image-gallery a:hover, .continue-image-gallery a:hover {
+    z-index: 10;
+  }
 
-.scroll-button.hidden {
-  display: none !important;
-  opacity: 0 !important;
-  pointer-events: none !important;
-}
+  .image-gallery a:hover img, .continue-image-gallery a:hover img {
+    transform: scale(1.05);
+  }
 
-.scroll-button:hover {
-  background: rgba(0, 255, 204, 0.85);
-  color: #000;
-  transform: translateY(-50%) scale(1.08);
-}
+  /* Aktiver vignettskygger og knapper kun på PC */
+  .fade-left, .fade-right {
+    display: block;
+    position: absolute;
+    top: 15px; 
+    bottom: 15px;
+    width: 70px;
+    z-index: 1;
+    pointer-events: none;
+    opacity: 1;
+    transition: opacity 0.3s ease;
+  }
 
-.gallery-wrapper:hover .scroll-button:not(.hidden) {
-  opacity: 1;
-  pointer-events: auto;
+  .fade-left {
+    left: 10px; 
+    background: linear-gradient(to right, #091B1E, rgba(9, 27, 30, 0));
+  }
+
+  .fade-right {
+    right: 10px; 
+    background: linear-gradient(to left, #091B1E, rgba(9, 27, 30, 0));
+  }
+
+  .scroll-button {
+    display: flex;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: rgba(9, 27, 30, 0.75);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    color: white;
+    font-size: 22px;
+    cursor: pointer;
+    z-index: 11; 
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.25s ease, background 0.25s ease, transform 0.25s ease;
+    backdrop-filter: blur(6px);
+    user-select: none;
+  }
+
+  .scroll-button.left { left: 2px; }
+  .scroll-button.right { right: 2px; }
+
+  .scroll-button:hover {
+    background: rgba(0, 255, 204, 0.85);
+    color: #000;
+    transform: translateY(-50%) scale(1.08);
+  }
+
+  /* Vis piler når man hoverer over wrapperen (Kun på PC) */
+  .gallery-wrapper:hover .scroll-button:not(.hidden),
+  .continue-gallery-wrapper:hover .scroll-button:not(.hidden) {
+    opacity: 1;
+    pointer-events: auto;
+  }
 }
 
 /* ==========================================================================
@@ -604,7 +598,9 @@ main {
   display: block;
 }
 
-.top10-item:hover { transform: scale(1.05); }
+@media (hover: hover) {
+  .top10-item:hover { transform: scale(1.05); }
+}
 
 .top10-number {
   position: absolute;
@@ -620,13 +616,15 @@ main {
   pointer-events: none;
 }
 
-.top10-item:hover .top10-number {
-  color: #00FFCC;
-  -webkit-text-stroke: 0;
+@media (hover: hover) {
+  .top10-item:hover .top10-number {
+    color: #00FFCC;
+    -webkit-text-stroke: 0;
+  }
 }
 
 /* ==========================================================================
-   7. HOVER OVERLAY FOR BILDER
+   7. HOVER OVERLAY FOR BILDER (Kun PC)
    ========================================================================== */
 .gallery-item {
   position: relative !important;
@@ -641,8 +639,6 @@ main {
   height: auto;
   transition: transform 0.3s ease;
 }
-
-.gallery-item:hover > img { transform: scale(1.05); }
 
 .image-overlay {
   position: absolute !important;
@@ -664,9 +660,12 @@ main {
   transform-origin: center;
 }
 
-.gallery-item:hover .image-overlay {
-  opacity: 1;
-  transform: scale(1.05); 
+@media (hover: hover) {
+  .gallery-item:hover > img { transform: scale(1.05); }
+  .gallery-item:hover .image-overlay {
+    opacity: 1;
+    transform: scale(1.05); 
+  }
 }
 
 .overlay-content {
@@ -951,19 +950,13 @@ main {
     -webkit-overflow-scrolling: touch !important;
   }
 
-  .scroll-button, .fade-left, .fade-right {
-    display: none !important;
-    opacity: 0 !important;
-    pointer-events: none !important;
-  }
-
   .image-gallery a, .continue-image-gallery a, .top10-item {
     scroll-snap-align: start !important;
     transform: none !important;
     transition: none !important;
   }
 
-  /* Sikrer 16:9 format og lik størrelse på mobil */
+  /* Sikrer format og lik størrelse på mobil */
   .image-gallery a img, .continue-image-gallery a img {
     width: 200px !important;  
     height: auto !important;
@@ -974,7 +967,6 @@ main {
   }
 
   .image-overlay { display: none !important; }
-  .gallery-item:hover > img { transform: none !important; }
 
   .top10-gallery {
     margin-left: -22px !important;
@@ -1209,16 +1201,29 @@ main {
 <script src="Seriedata.js"></script>
 <script>
 // ==================== CSS INJEKSJON FOR VIAPLAY-LÅSING ==================== //
-// Dette tvinger galleriene til å skjule scrollbars og deaktivere manuell scrolling,
-// slik at KUN pilene kan flytte på innholdet.
+// Dette tvinger galleriene til å skjule scrollbars og deaktivere manuell scrolling på PC (hover),
+// men tillater touch-scrolling på mobil og iPad.
 const style = document.createElement('style');
-style.textContent = `
-  .image-gallery, .coming-movies-gallery, .top10-gallery {
-    overflow-x: hidden !important; /* Blokkerer scrollbar og manuell scrolling */
-    scroll-behavior: smooth !important;
-    display: flex !important;
-  }
-`;
+if (window.matchMedia("(pointer: coarse)").matches) {
+  // iPad, mobil og andre touch-enheter
+  style.textContent = `
+    .image-gallery, .coming-movies-gallery, .top10-gallery, .continue-image-gallery {
+      overflow-x: auto !important; 
+      scroll-behavior: smooth !important;
+      display: flex !important;
+      -webkit-overflow-scrolling: touch !important;
+    }
+  `;
+} else {
+  // Kun PC med mus
+  style.textContent = `
+    .image-gallery, .coming-movies-gallery, .top10-gallery, .continue-image-gallery {
+      overflow-x: hidden !important; 
+      scroll-behavior: smooth !important;
+      display: flex !important;
+    }
+  `;
+}
 document.head.appendChild(style);
 
 // ==================== AUTENTISERING ==================== //
@@ -1414,8 +1419,11 @@ adjustBannerVideo(document.getElementById("banner-video"), document.querySelecto
 
 // ==================== VIAPLAY STYLE: ABSOLUTT LÅST NAVIGASJON ==================== //
 function oppdaterAlleGalleripiler() {
-  document.querySelectorAll(".gallery-wrapper").forEach(wrapper => {
-    const gallery = wrapper.querySelector(".image-gallery, .coming-movies-gallery, .top10-gallery");
+  // Hvis enheten har en touchskjerm (mobil/iPad), avbryter vi funksjonen helt
+  if (window.matchMedia("(pointer: coarse)").matches) return;
+
+  document.querySelectorAll(".gallery-wrapper, .continue-gallery-wrapper").forEach(wrapper => {
+    const gallery = wrapper.querySelector(".image-gallery, .coming-movies-gallery, .top10-gallery, .continue-image-gallery");
     const left = wrapper.querySelector(".scroll-button.left");
     const right = wrapper.querySelector(".scroll-button.right");
     const fadeL = wrapper.querySelector(".fade-left");
@@ -1425,12 +1433,10 @@ function oppdaterAlleGalleripiler() {
     const max = gallery.scrollWidth - gallery.clientWidth;
     const pos = gallery.scrollLeft;
     
-    // Knallharde nazi-sjekker mot sub-piksler
     const kanScrolle = max > 5;
     const erHeltTilVenstre = pos <= 2;
     const erHeltTilHoyre = Math.ceil(pos) >= max - 2;
 
-    // Venstre knapp + fade status
     const skjulVenstre = !kanScrolle || erHeltTilVenstre;
     if (left) {
       left.classList.toggle("hidden", skjulVenstre);
@@ -1438,7 +1444,6 @@ function oppdaterAlleGalleripiler() {
     }
     if (fadeL) fadeL.classList.toggle("fade-hidden", skjulVenstre);
 
-    // Høyre knapp + fade status
     const skjulHoyre = !kanScrolle || erHeltTilHoyre;
     if (right) {
       right.classList.toggle("hidden", skjulHoyre);
@@ -1448,36 +1453,25 @@ function oppdaterAlleGalleripiler() {
   });
 }
 
-// Initialiser låste klikklyttere
-document.querySelectorAll(".gallery-wrapper").forEach(wrapper => {
-  const gallery = wrapper.querySelector(".image-gallery, .coming-movies-gallery, .top10-gallery");
+// Initialiser låste klikklyttere for PC
+document.querySelectorAll(".gallery-wrapper, .continue-gallery-wrapper").forEach(wrapper => {
+  const gallery = wrapper.querySelector(".image-gallery, .coming-movies-gallery, .top10-gallery, .continue-image-gallery");
   const left = wrapper.querySelector(".scroll-button.left");
   const right = wrapper.querySelector(".scroll-button.right");
   if (!gallery) return;
 
-  // Låser forhindring av dragging via touch-enheter (valgfritt, sikrer fullstendig knappekontroll)
-  gallery.addEventListener('touchmove', (e) => {
-    // Sletter viaplay-unntak hvis du vil tillate swipe på mobil, fjern e.preventDefault() hvis mobiler skal få swipe.
-    // e.preventDefault(); 
-  }, { passive: true });
-
   left?.addEventListener("click", () => {
-    // Scroller nøyaktig 1 hel side av gangen (90% av container-bredden for fin overlapping)
     const steg = gallery.clientWidth > 0 ? gallery.clientWidth * 0.90 : 400;
     gallery.scrollBy({ left: -steg, behavior: "smooth" });
-    
-    // Tvinger en øyeblikkelig sjekk etter at scroll-animasjonen starter/slutter
     setTimeout(oppdaterAlleGalleripiler, 400);
   });
 
   right?.addEventListener("click", () => {
     const steg = gallery.clientWidth > 0 ? gallery.clientWidth * 0.90 : 400;
     gallery.scrollBy({ left: steg, behavior: "smooth" });
-    
     setTimeout(oppdaterAlleGalleripiler, 400);
   });
 
-  // Hører på scroll-events (som utløses av JS-scrollingen vår) for å fjerne piler dynamisk
   gallery.addEventListener("scroll", oppdaterAlleGalleripiler, { passive: true });
 });
 
@@ -1655,7 +1649,7 @@ function renderContinueWatching() {
     link.innerHTML = `
       <img src="${item.data.poster}" alt="${item.data.tittel}">
       <div class="progress-container" style="background: rgba(255,255,255,0.2); width: 100%; height: 6px; position: absolute; bottom: 0; left: 0; z-index: 2;">
-        <div class="progress-bar" style="width: ${item.progress}%; height: 100%; background: #E50914;"></div>
+        <div class="progress-bar" style="width: ${item.progress}%; height: 100%; background: #00FFCC;"></div>
       </div>
       <div class="image-overlay">
         <div class="overlay-content">
@@ -1700,10 +1694,8 @@ document.addEventListener("DOMContentLoaded", () => {
   oppdaterBanner();
   renderContinueWatching();
 
-  // Fyr av sjekken umiddelbart når elementene er på plass
   oppdaterAlleGalleripiler();
 
-  // Kjører flere tette sjekker under lasting for å garantere riktig pil-visning med en gang
   setTimeout(oppdaterAlleGalleripiler, 50);
   setTimeout(oppdaterAlleGalleripiler, 200);
   setTimeout(oppdaterAlleGalleripiler, 600);
