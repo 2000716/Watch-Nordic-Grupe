@@ -346,7 +346,7 @@ main {
   margin-left: auto;
   margin-right: auto;
   padding: 0; 
-  overflow: visible; /* Sørger for at ingenting i seksjonen kutter bildene når de zoome */
+  overflow: visible;
 }
 
 .gallery-section h2 {
@@ -356,7 +356,7 @@ main {
   letter-spacing: 0.3px;
   color: #00FFCC;
   margin-bottom: 10px;
-  margin-left: 20px; /* Flyttet til 20px for å flukte perfekt med de nye bildekantene */
+  margin-left: 10px; /* Flyttet til 10px så den matcher bildekanten */
   text-transform: none;
   padding-left: 0;
 }
@@ -367,7 +367,7 @@ main {
   align-items: center;
   padding-left: 0;
   padding-right: 0;
-  overflow: visible; /* Tillater at bildene kan zoome på utsiden av wrapperen uten å bli kuttet */
+  overflow: visible;
 }
 
 .image-gallery {
@@ -375,8 +375,8 @@ main {
   display: flex;
   overflow-x: auto;
   gap: 16px;
-  /* Endret fra 60px til 20px for å dytte galleriet lenger ut mot PC-kantene */
-  padding: 15px 20px; 
+  /* 10px på sidene dytter galleriet maksimalt ut til venstre og høyre */
+  padding: 15px 10px; 
   scroll-behavior: smooth;
   -ms-overflow-style: none;
 }
@@ -390,7 +390,7 @@ main {
   position: relative;
   border-radius: 5px;
   background: transparent;
-  overflow: visible; /* Sørger for at hover-effekten vises fullt ut uten clipping */
+  overflow: visible; 
   border: 2px solid transparent;
   transition: border 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
 }
@@ -405,7 +405,6 @@ main {
   transition: transform 0.3s ease;
 }
 
-/* Sørger for at bildet som hooveres legger seg *over* nabobildene */
 .image-gallery a:hover {
   z-index: 10; 
 }
@@ -448,7 +447,7 @@ main {
   transition: width 0.3s ease;
 }
 
-/* Justert fade-effektene slik at de starter der det nye bildegalleriet starter (20px inn) */
+/* Skygge/fade-effekten flyttet ut til de nye 10px-kantene */
 .fade-left, .fade-right {
   position: absolute;
   top: 15px; 
@@ -461,12 +460,12 @@ main {
 }
 
 .fade-left {
-  left: 20px; /* Matcher galleriets nye startposisjon */
+  left: 10px; 
   background: linear-gradient(to right, #091B1E, rgba(9, 27, 30, 0));
 }
 
 .fade-right {
-  right: 20px; /* Matcher galleriets nye sluttposisjon */
+  right: 10px; 
   background: linear-gradient(to left, #091B1E, rgba(9, 27, 30, 0));
 }
 
@@ -474,7 +473,7 @@ main {
   display: none !important;
 }
 
-/* Pilene er justert så de legger seg pent helt ute ved de nye kantene */
+/* Pilene ligger nå helt ute på kanten (2px fra rammen) for å ikke krasje med bildene */
 .scroll-button {
   position: absolute;
   top: 50%;
@@ -498,8 +497,8 @@ main {
   user-select: none;
 }
 
-.scroll-button.left { left: 5px; }
-.scroll-button.right { right: 5px; }
+.scroll-button.left { left: 2px; }
+.scroll-button.right { right: 2px; }
 
 .scroll-button.hidden {
   display: none !important;
