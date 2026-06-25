@@ -482,12 +482,7 @@ main {
   transition: width 0.3s ease;
 }
 
-/* Standard/Skjult tilstand for knapper og fade-effekter på touch-enheter */
-.fade-left, .fade-right {
-  display: none;
-  opacity: 0;
-}
-
+/* Standard/Skjult tilstand for knapper på touch-enheter */
 .scroll-button {
   display: none;
   opacity: 0;
@@ -505,29 +500,7 @@ main {
     transform: scale(1.05);
   }
 
-  /* Aktiver vignettskygger og knapper kun på PC */
-  .fade-left, .fade-right {
-    display: block;
-    position: absolute;
-    top: 15px; 
-    bottom: 15px;
-    width: 70px;
-    z-index: 1;
-    pointer-events: none;
-    opacity: 1;
-    transition: opacity 0.3s ease;
-  }
-
-  .fade-left {
-    left: 10px; 
-    background: linear-gradient(to right, #091B1E, rgba(9, 27, 30, 0));
-  }
-
-  .fade-right {
-    right: 10px; 
-    background: linear-gradient(to left, #091B1E, rgba(9, 27, 30, 0));
-  }
-
+  /* Aktiver knapper kun på PC */
   .scroll-button {
     display: flex;
     position: absolute;
@@ -567,7 +540,6 @@ main {
     pointer-events: auto;
   }
 }
-
 /* ==========================================================================
    6. TOP 10 GALLERI
    ========================================================================== */
