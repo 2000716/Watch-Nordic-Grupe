@@ -342,7 +342,9 @@ main {
   position: relative;
   z-index: 2;
   width: 100%;
-  max-width: 1400px;
+  /* 1400px gjør at det akkurat blir plass til 4 hele bilder à 330px + gap, 
+     og en liten bit av det 5. bildet før galleriet stopper symmetrisk på begge sider */
+  max-width: 1400px; 
   margin-left: auto;
   margin-right: auto;
   padding: 0; 
@@ -356,7 +358,7 @@ main {
   letter-spacing: 0.3px;
   color: #00FFCC;
   margin-bottom: 10px;
-  margin-left: 10px; /* Flyttet til 10px så den matcher bildekanten */
+  margin-left: 10px; /* Symmetrisk avstand fra kanten */
   text-transform: none;
   padding-left: 0;
 }
@@ -375,8 +377,7 @@ main {
   display: flex;
   overflow-x: auto;
   gap: 16px;
-  /* 10px på sidene dytter galleriet maksimalt ut til venstre og høyre */
-  padding: 15px 10px; 
+  padding: 15px 10px; /* 10px luft på sidene så bildene ikke kuttes ved zoom */
   scroll-behavior: smooth;
   -ms-overflow-style: none;
 }
@@ -396,6 +397,7 @@ main {
 }
 
 .image-gallery a img {
+  /* TILBAKESTILT: Bildene beholder sin originale, faste størrelse */
   width: 330px;
   aspect-ratio: 2.2 / 1;
   height: 175px;
@@ -447,7 +449,6 @@ main {
   transition: width 0.3s ease;
 }
 
-/* Skygge/fade-effekten flyttet ut til de nye 10px-kantene */
 .fade-left, .fade-right {
   position: absolute;
   top: 15px; 
@@ -473,7 +474,6 @@ main {
   display: none !important;
 }
 
-/* Pilene ligger nå helt ute på kanten (2px fra rammen) for å ikke krasje med bildene */
 .scroll-button {
   position: absolute;
   top: 50%;
