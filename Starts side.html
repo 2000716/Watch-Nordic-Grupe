@@ -436,10 +436,133 @@
     .row3{margin-left:350px;}
     .row4{margin-left:120px;}
 
+    /* ================= MODERN COOKIE BANNER STYLE ================= */
+    .cookie-banner {
+      position: fixed;
+      bottom: -100%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 90%;
+      max-width: 850px;
+      background: rgba(9, 27, 30, 0.95);
+      border: 1px solid rgba(0, 255, 204, 0.2);
+      backdrop-filter: blur(20px);
+      border-radius: 24px;
+      padding: 30px;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7), 0 0 40px rgba(0, 255, 204, 0.05);
+      z-index: 99999;
+      transition: bottom 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .cookie-banner.show {
+      bottom: 30px;
+    }
+
+    .cookie-container {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .cookie-text h3 {
+      font-size: 20px;
+      color: #00FFCC;
+      margin-bottom: 10px;
+      font-weight: 800;
+    }
+
+    .cookie-text p {
+      color: #c9d1d1;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    .cookie-text p a {
+      color: #00FFCC;
+      text-decoration: none;
+    }
+
+    .cookie-text p a:hover {
+      text-decoration: underline;
+    }
+
+    /* Innstillinger / Preferanser paneler (Skjult som standard) */
+    .cookie-options {
+      display: none;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 15px;
+      background: rgba(255, 255, 255, 0.03);
+      padding: 15px;
+      border-radius: 14px;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .cookie-option-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 14px;
+      color: white;
+    }
+
+    .cookie-option-item input {
+      accent-color: #00FFCC;
+      width: 18px;
+      height: 18px;
+      cursor: pointer;
+    }
+
+    .cookie-buttons {
+      display: flex;
+      justify-content: flex-end;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .cookie-btn {
+      padding: 12px 24px;
+      border-radius: 999px;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      border: none;
+      transition: 0.25s ease;
+    }
+
+    .cookie-btn.accept {
+      background: #00FFCC;
+      color: #071214;
+      box-shadow: 0 0 20px rgba(0, 255, 204, 0.25);
+    }
+
+    .cookie-btn.accept:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 0 30px rgba(0, 255, 204, 0.4);
+    }
+
+    .cookie-btn.reject {
+      background: rgba(255, 255, 255, 0.06);
+      color: white;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .cookie-btn.reject:hover {
+      background: rgba(255, 255, 255, 0.12);
+    }
+
+    .cookie-btn.customize {
+      background: transparent;
+      color: #bfc9c9;
+      text-decoration: underline;
+    }
+
+    .cookie-btn.customize:hover {
+      color: white;
+    }
+
     /* ================= RESPONSIVE / MEDIA QUERIES (VAKKER MOBIL) ================= */
     @media (max-width: 768px) {
       
-      /* Sentrer teksten og gjør den vakker på mobil */
       .hero {
         height: auto;
         min-height: 95vh;
@@ -449,7 +572,6 @@
         justify-content: center;
       }
 
-      /* Ekstra mørk gradient over 3D-veggen på mobil for maks tekst-kontrast */
       .hero::before {
         background: radial-gradient(circle, rgba(9,27,30,0.7) 0%, rgba(9,27,30,0.98) 90%);
       }
@@ -470,7 +592,6 @@
         margin: 0 auto 30px;
       }
 
-      /* Optimalisert 3D-vegg for mobil-skjermer */
       .hero-wall {
         opacity: .20;
         transform: perspective(1000px) rotateY(-15deg) rotateX(5deg) scale(1.3);
@@ -482,7 +603,6 @@
         margin-bottom: 12px;
       }
 
-      /* Mindre bilder gjør at mønsteret ser mer sofistikert ut på mobil */
       .wall-row img {
         width: 140px;
         height: 85px;
@@ -492,7 +612,6 @@
         margin-left: 0 !important;
       }
 
-      /* Knapper og input justert */
       .hero-buttons {
         justify-content: center;
         flex-direction: column;
@@ -506,7 +625,6 @@
         text-align: center;
       }
 
-      /* Navbar mobil */
       .navbar {
         padding: 12px 20px;
         height: 70px;
@@ -526,7 +644,6 @@
         font-size: 12px;
       }
 
-      /* Seksjoner og filmlister */
       .section {
         padding: 50px 20px;
       }
@@ -560,7 +677,6 @@
         font-size: 32px;
       }
 
-      /* Footer mobil */
       .footer {
         padding: 50px 20px 30px;
         align-items: flex-start;
@@ -574,6 +690,23 @@
       .footer-bottom {
         font-size: 11px;
         text-align: left;
+      }
+
+      /* Kapsel-banner mobil */
+      .cookie-banner {
+        width: calc(100% - 20px);
+        padding: 20px;
+      }
+      .cookie-banner.show {
+        bottom: 10px;
+      }
+      .cookie-buttons {
+        flex-direction: column-reverse;
+        width: 100%;
+      }
+      .cookie-btn {
+        width: 100%;
+        text-align: center;
       }
     }
 
@@ -664,6 +797,41 @@
       </div>
     </div>
   </section>
+
+  <div class="cookie-banner" id="cookieBanner">
+    <div class="cookie-container">
+      <div class="cookie-text">
+        <h3>Vi bryr oss om ditt personvern</h3>
+        <p>
+          Watch Nordic™ bruker informasjonskapsler (cookies) for å forbedre din strømmeopplevelse, 
+          analysere nettstedstrafikk og levere personlig tilpasset innhold og reklame. 
+          Du kan velge å godta alle, avvise valgfrie, eller tilpasse innstillingene dine. 
+          Les mer i våre <a href="personvern.html">retningslinjer for personvern</a>.
+        </p>
+      </div>
+
+      <div class="cookie-options" id="cookieOptions">
+        <div class="cookie-option-item">
+          <label><strong>Nødvendige</strong> (Alltid aktiv)</label>
+          <input type="checkbox" checked disabled>
+        </div>
+        <div class="cookie-option-item">
+          <label><strong>Analyse og ytelse</strong></label>
+          <input type="checkbox" id="cookieAnalytics" checked>
+        </div>
+        <div class="cookie-option-item">
+          <label><strong>Målrettet markedsføring</strong></label>
+          <input type="checkbox" id="cookieMarketing" checked>
+        </div>
+      </div>
+
+      <div class="cookie-buttons">
+        <button class="cookie-btn customize" id="btnCustomize">Tilpass innstillinger</button>
+        <button class="cookie-btn reject" id="btnReject">Avvis alle</button>
+        <button class="cookie-btn accept" id="btnAccept">Godta alle</button>
+      </div>
+    </div>
+  </div>
 
   <footer class="footer">
     <div class="footer-socials">
@@ -762,6 +930,55 @@
         }
       });
     }
+
+    /* ================= COOKIE BANNER JAVASCRIPT LOGIKK ================= */
+    const cookieBanner = document.getElementById("cookieBanner");
+    const cookieOptions = document.getElementById("cookieOptions");
+    const btnAccept = document.getElementById("btnAccept");
+    const btnReject = document.getElementById("btnReject");
+    const btnCustomize = document.getElementById("btnCustomize");
+
+    // Sjekk om brukeren allerede har gjort et valg før
+    window.addEventListener("DOMContentLoaded", () => {
+      const cookieConsent = localStorage.getItem("watch_nordic_cookie_consent");
+      if (!cookieConsent) {
+        // Viser banneret med en liten forsinkelse for en smooth følelse
+        setTimeout(() => {
+          cookieBanner.classList.add("show");
+        }, 1000);
+      }
+    });
+
+    // Funksjon for å lagre valget og lukke banneret
+    function saveConsent(consentType, details) {
+      localStorage.setItem("watch_nordic_cookie_consent", consentType);
+      localStorage.setItem("watch_nordic_cookie_details", JSON.stringify(details));
+      cookieBanner.classList.remove("show");
+    }
+
+    // "Godta alle" klikk
+    btnAccept.addEventListener("click", () => {
+      saveConsent("all", { analytics: true, marketing: true });
+    });
+
+    // "Avvis alle" klikk (kun nødvendige blir stående igjen)
+    btnReject.addEventListener("click", () => {
+      saveConsent("essential", { analytics: false, marketing: false });
+    });
+
+    // "Tilpass" klikk (åpner/lukker sjekkboksene)
+    btnCustomize.addEventListener("click", () => {
+      if (cookieOptions.style.display === "grid") {
+        // Hvis åpen, lagrer vi det brukeren har krysset av på
+        const analytics = document.getElementById("cookieAnalytics").checked;
+        const marketing = document.getElementById("cookieMarketing").checked;
+        saveConsent("custom", { analytics, marketing });
+      } else {
+        // Hvis lukket, vis boksene og endre teksten på knappen til "Lagre valg"
+        cookieOptions.style.display = "grid";
+        btnCustomize.innerText = "Lagre mine valg";
+      }
+    });
   </script>
 </body>
 </html>
