@@ -341,13 +341,12 @@ main {
   margin-bottom: 30px;
   position: relative;
   z-index: 2;
-  /* Sentrerer galleriet på skjermen med maksbredde */
   width: 100%;
   max-width: 1400px;
   margin-left: auto;
   margin-right: auto;
-  /* 60px padding på sidene matcher nøyaktig der banner-knappen starter! */
-  padding: 0 60px; 
+  padding: 0; /* Fjernet padding herfra så bildene kan zoome fritt ut på sidene */
+  overflow: visible; /* Sørger for at ingenting i seksjonen kutter bildene */
 }
 
 .gallery-section h2 {
@@ -357,7 +356,7 @@ main {
   letter-spacing: 0.3px;
   color: #00FFCC;
   margin-bottom: 10px;
-  margin-left: 0; /* Sitter perfekt på linje med bildekanten */
+  margin-left: 60px; /* Sitter perfekt på linje med der banner-knappen og bildene starter */
   text-transform: none;
   padding-left: 0;
 }
@@ -368,8 +367,7 @@ main {
   align-items: center;
   padding-left: 0;
   padding-right: 0;
-  /* VIKTIG: Tillater at bildene kan zoome på utsiden av wrapperen uten å bli kuttet */
-  overflow: visible; 
+  overflow: visible; /* VIKTIG: Tillater at bildene kan zoome på utsiden av wrapperen uten å bli kuttet */
 }
 
 .image-gallery {
@@ -377,9 +375,8 @@ main {
   display: flex;
   overflow-x: auto;
   gap: 16px;
-  /* Lagt til 15px padding i topp og bunn slik at hover-effekten (skaleringen) 
-     ikke blir kuttet i over- eller underkant */
-  padding: 15px 0; 
+  /* 15px topp/bunn gir plass til zoomen. 60px på sidene gjør at galleriet starter perfekt på linje med knappen */
+  padding: 15px 60px; 
   scroll-behavior: smooth;
   -ms-overflow-style: none;
 }
@@ -393,8 +390,7 @@ main {
   position: relative;
   border-radius: 5px;
   background: transparent;
-  /* Endret fra "visible" til "initial" for å forhindre uønsket clipping */
-  overflow: initial; 
+  overflow: visible; /* Endret til visible så hover-effekten vises fullt ut */
   border: 2px solid transparent;
   transition: border 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
 }
@@ -452,10 +448,11 @@ main {
   transition: width 0.3s ease;
 }
 
+/* Justert fade-effektene slik at de starter der bildegalleriet starter (60px inn) */
 .fade-left, .fade-right {
   position: absolute;
-  top: 0;
-  bottom: 0;
+  top: 15px; /* Matcher paddingen på galleriet */
+  bottom: 15px;
   width: 70px;
   z-index: 1;
   pointer-events: none;
@@ -464,12 +461,12 @@ main {
 }
 
 .fade-left {
-  left: 0;
+  left: 60px; /* Starter der bildene starter */
   background: linear-gradient(to right, #091B1E, rgba(9, 27, 30, 0));
 }
 
 .fade-right {
-  right: 0;
+  right: 60px; /* Slutter der bildene slutter */
   background: linear-gradient(to left, #091B1E, rgba(9, 27, 30, 0));
 }
 
@@ -477,6 +474,7 @@ main {
   display: none !important;
 }
 
+/* Justert pilene slik at de legger seg pent på utsiden av bildekantene */
 .scroll-button {
   position: absolute;
   top: 50%;
@@ -489,7 +487,7 @@ main {
   color: white;
   font-size: 22px;
   cursor: pointer;
-  z-index: 3;
+  z-index: 11; /* Høyere enn z-index 10 på hover for å unngå å havne bak bilder */
   display: flex;
   align-items: center;
   justify-content: center;
@@ -500,8 +498,8 @@ main {
   user-select: none;
 }
 
-.scroll-button.left { left: 10px; }
-.scroll-button.right { right: 10px; }
+.scroll-button.left { left: 15px; }
+.scroll-button.right { right: 15px; }
 
 .scroll-button.hidden {
   display: none !important;
@@ -524,7 +522,6 @@ main {
   opacity: 0;
   pointer-events: none;
 }
-
 /* ==========================================================================
    6. TOP 10 GALLERI
    ========================================================================== */
