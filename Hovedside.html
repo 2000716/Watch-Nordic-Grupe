@@ -31,17 +31,17 @@ body {
 }
 
 main {
-  margin-left: 0; /* Endret fra 80px til 0 for full bredde */
-  margin-right: 0; /* Endret fra 80px til 0 for full bredde */
+  margin-left: 0; 
+  margin-right: 0; 
   padding-top: 0;
-  max-width: 100%; /* Endret fra 1400px til 100% */
+  max-width: 100%; 
   min-height: 100vh;
   display: flex;
   flex-direction: column;
 }
 
 .content-wrapper {
-  width: 100%; /* Endret fra 92% til 100% */
+  width: 100%; 
   max-width: 1400px;
   margin: 0 auto;
   padding: 0 20px;
@@ -89,7 +89,6 @@ main {
   flex-shrink: 0;
 }
 
-/* STIL FOR SVG LOGO */
 .watch-logo-svg {
   height: 35px;
   width: auto;
@@ -173,21 +172,11 @@ main {
    3. OPTIMALISERING FOR SMÅ/MELLOMSTORE PC-SKJERMER & LAPTOPS
    ========================================================================== */
 @media (max-width: 1200px) and (min-width: 769px) {
-  .top-nav {
-    padding: 0 20px;
-  }
-  .nav-left {
-    gap: 20px;
-  }
-  .nav-links {
-    gap: 15px;
-  }
-  .nav-links a {
-    font-size: 14px;
-  }
-  .watch-logo-svg {
-    height: 30px;
-  }
+  .top-nav { padding: 0 20px; }
+  .nav-left { gap: 20px; }
+  .nav-links { gap: 15px; }
+  .nav-links a { font-size: 14px; }
+  .watch-logo-svg { height: 30px; }
 }
 
 /* ==========================================================================
@@ -335,15 +324,13 @@ main {
 }
 
 /* ==========================================================================
-   5. GALLERIER & SEKSJONER
+   5a. STANDARD GALLERIER & SEKSJONER
    ========================================================================== */
 .gallery-section {
   margin-bottom: 30px;
   position: relative;
   z-index: 2;
   width: 100%;
-  /* 1400px gjør at det akkurat blir plass til 4 hele bilder à 330px + gap, 
-     og en liten bit av det 5. bildet før galleriet stopper symmetrisk på begge sider */
   max-width: 1400px; 
   margin-left: auto;
   margin-right: auto;
@@ -358,7 +345,7 @@ main {
   letter-spacing: 0.3px;
   color: #00FFCC;
   margin-bottom: 10px;
-  margin-left: 10px; /* Symmetrisk avstand fra kanten */
+  margin-left: 10px; 
   text-transform: none;
   padding-left: 0;
 }
@@ -377,7 +364,7 @@ main {
   display: flex;
   overflow-x: auto;
   gap: 16px;
-  padding: 15px 10px; /* 10px luft på sidene så bildene ikke kuttes ved zoom */
+  padding: 15px 10px; 
   scroll-behavior: smooth;
   -ms-overflow-style: none;
 }
@@ -397,7 +384,6 @@ main {
 }
 
 .image-gallery a img {
-  /* TILBAKESTILT: Bildene beholder sin originale, faste størrelse */
   width: 330px;
   aspect-ratio: 2.2 / 1;
   height: 175px;
@@ -415,7 +401,69 @@ main {
   transform: scale(1.05);
 }
 
-/* FIKSET: Samme dimensjoner og avrunding som standard galleribilder */
+/* ==========================================================================
+   5b. EGEN SEKSJON: FORTSETT Å SE (CONTINUE WATCHING)
+   ========================================================================== */
+.continue-watching-section {
+  margin-bottom: 30px;
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  max-width: 1400px;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 0;
+  overflow: visible;
+}
+
+.continue-watching-section h2 {
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+  font-size: 18px;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+  color: #00FFCC;
+  margin-bottom: 10px;
+  margin-left: 10px;
+  text-transform: none;
+  padding-left: 0;
+}
+
+.continue-gallery-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  overflow: visible;
+}
+
+.continue-image-gallery {
+  flex: 1;
+  display: flex;
+  overflow-x: auto;
+  gap: 16px;
+  padding: 15px 10px;
+  scroll-behavior: smooth;
+  -ms-overflow-style: none;
+}
+
+.continue-image-gallery::-webkit-scrollbar {
+  display: none;
+}
+
+.continue-image-gallery a {
+  display: inline-block;
+  position: relative;
+  border-radius: 5px;
+  background: transparent;
+  overflow: visible;
+  border: 2px solid transparent;
+  transition: border 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
+}
+
+.continue-image-gallery a:hover {
+  z-index: 10;
+}
+
+/* Container som sikrer nøyaktig samme bildestørrelse som de andre galleriene */
 .image-with-progress {
   position: relative;
   width: 330px;
@@ -429,14 +477,16 @@ main {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  display: block;
   transition: transform 0.3s ease;
 }
 
-/* Zoom-effekt også for bilder med progress bar */
-.image-gallery a:hover .image-with-progress img {
+/* Hover zoom-effekt på bildet inni fremdrifts-containeren */
+.continue-image-gallery a:hover .image-with-progress img {
   transform: scale(1.05);
 }
 
+/* Bakgrunnsspor for spoling */
 .progress-bar {
   position: absolute;
   bottom: 0;
@@ -444,10 +494,10 @@ main {
   height: 4px;
   width: 100%;
   background-color: rgba(255, 255, 255, 0.2);
-  z-index: 3; /* Ligger øverst på bildet */
+  z-index: 3;
 }
 
-/* FIKSET: Spolerlinjen byttet til Watch Nordic-grønn (#00FFCC) */
+/* Selve spolelinjen – Byttet til Watch Nordic-grønn (#00FFCC) */
 .progress-bar::after {
   content: '';
   position: absolute;
@@ -459,6 +509,13 @@ main {
   transition: width 0.3s ease;
 }
 
+/* Pil-knapper for fortsett-galleriet */
+.continue-gallery-wrapper:hover .scroll-button:not(.hidden) {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* Felles effekter for skyggevignetter på sidene */
 .fade-left, .fade-right {
   position: absolute;
   top: 15px; 
@@ -480,9 +537,7 @@ main {
   background: linear-gradient(to left, #091B1E, rgba(9, 27, 30, 0));
 }
 
-.fade-hidden {
-  display: none !important;
-}
+.fade-hidden { display: none !important; }
 
 .scroll-button {
   position: absolute;
@@ -527,10 +582,6 @@ main {
   pointer-events: auto;
 }
 
-.gallery-wrapper:hover .scroll-button.hidden {
-  opacity: 0;
-  pointer-events: none;
-}
 /* ==========================================================================
    6. TOP 10 GALLERI
    ========================================================================== */
@@ -538,15 +589,13 @@ main {
   display: flex;
   flex-direction: row;
   gap: 30px;
-  padding: 10px 40px; /* Lagt til 40px padding for å matche de andre galleriene */
+  padding: 10px 40px; 
   overflow-x: auto;
   overflow-y: hidden;
   -webkit-overflow-scrolling: touch;
 }
 
-.top10-gallery::-webkit-scrollbar {
-  display: none;
-}
+.top10-gallery::-webkit-scrollbar { display: none; }
 
 .top10-item {
   position: relative;
@@ -563,9 +612,7 @@ main {
   display: block;
 }
 
-.top10-item:hover {
-  transform: scale(1.05);
-}
+.top10-item:hover { transform: scale(1.05); }
 
 .top10-number {
   position: absolute;
@@ -603,9 +650,7 @@ main {
   transition: transform 0.3s ease;
 }
 
-.gallery-item:hover > img {
-  transform: scale(1.05);
-}
+.gallery-item:hover > img { transform: scale(1.05); }
 
 .image-overlay {
   position: absolute !important;
@@ -658,7 +703,7 @@ main {
    ========================================================================== */
 .kids-banner {
   position: relative;
-  width: calc(100% - 80px); /* Tilpasset slik at den matcher 40px innrykk fra galleriet */
+  width: calc(100% - 80px); 
   margin: 20px auto;
   height: 220px;
   border-radius: 16px;
@@ -741,9 +786,7 @@ main {
   transition: color 0.2s ease;
 }
 
-.footer-links a:hover {
-  color: #ffffff;
-}
+.footer-links a:hover { color: #ffffff; }
 
 .footer-service-btn {
   margin-bottom: 28px;
@@ -779,9 +822,7 @@ main {
    10. MOBIL-OPTIMALISERING (768px og nedover)
    ========================================================================== */
 @media (max-width: 768px) {
-  body {
-    padding-top: 0px; 
-  }
+  body { padding-top: 0px; }
 
   main {
     padding-left: 0px !important;
@@ -811,9 +852,7 @@ main {
     align-items: center !important;
   }
 
-  .nav-links {
-    display: none !important;
-  }
+  .nav-links { display: none !important; }
 
   .nav-search, .profilmeny {
     display: inline-flex !important;
@@ -826,10 +865,7 @@ main {
     gap: 16px; 
   }
 
-  /* SVG-logo justering for mobil */
-  .watch-logo-svg {
-    height: 30px !important;
-  }
+  .watch-logo-svg { height: 30px !important; }
 
   .nav-search {
     font-size: 18px;
@@ -868,35 +904,20 @@ main {
     width: 180px !important;
     max-height: 75px !important;
     object-fit: contain !important;
-    background: transparent !important;
-    border: none !important;
-    box-shadow: none !important;
-    padding: 0 !important;
-    margin: 0 !important;
     filter: drop-shadow(0px 2px 8px rgba(0,0,0,0.5));
   }
 
-  .banner-title {
-    font-size: 28px !important;
-    max-width: 100%;
-  }
+  .banner-title { font-size: 28px !important; }
 
   .banner-content p {
     font-size: 12px !important;
     line-height: 1.4;
     color: #cccccc;
-    max-width: 100%;
     -webkit-line-clamp: 2;
   }
 
-  .banner-meta {
-    font-size: 11px !important;
-  }
-
-  .banner-buttons {
-    gap: 10px !important;
-    margin-top: 4px;
-  }
+  .banner-meta { font-size: 11px !important; }
+  .banner-buttons { gap: 10px !important; margin-top: 4px; }
 
   .watch-button {
     font-size: 13px !important;
@@ -913,13 +934,14 @@ main {
     background: rgba(255, 255, 255, 0.2);
   }
 
-  .gallery-section {
+  /* Mobiljustering for både vanlige gallerier og fortsett-galleriet */
+  .gallery-section, .continue-watching-section {
     margin-left: 32px !important; 
     margin-right: 0px !important;
     margin-bottom: 22px;
   }
 
-  .gallery-section h2 {
+  .gallery-section h2, .continue-watching-section h2 {
     padding-left: 0px !important; 
     margin-left: 0px !important;
     font-size: 16px;
@@ -929,7 +951,7 @@ main {
     margin-bottom: 8px;
   }
 
-  .image-gallery {
+  .image-gallery, .continue-image-gallery {
     margin-left: -22px !important;
     padding: 4px 10px 12px 10px !important;
     gap: 10px !important;
@@ -937,19 +959,19 @@ main {
     -webkit-overflow-scrolling: touch !important;
   }
 
-  .scroll-button, .gallery-arrow, .prev-arrow, .next-arrow, .prev, .next, .fade-left, .fade-right {
+  .scroll-button, .fade-left, .fade-right {
     display: none !important;
     opacity: 0 !important;
     pointer-events: none !important;
   }
 
-  .image-gallery a, .top10-item {
+  .image-gallery a, .continue-image-gallery a, .top10-item {
     scroll-snap-align: start !important;
     transform: none !important;
     transition: none !important;
   }
 
-  /* Responsiv mobil-justering for både vanlige bilder og fremdriftsbilder */
+  /* Sikrer 16:9 format og riktig mobilskalering for fremdriftsbilder */
   .image-gallery a img, .image-with-progress {
     width: 200px !important;  
     height: auto !important;
@@ -959,13 +981,8 @@ main {
     transform: none !important;
   }
 
-  .image-overlay {
-    display: none !important;  
-  }
-
-  .gallery-item:hover > img {
-    transform: none !important;
-  }
+  .image-overlay { display: none !important; }
+  .gallery-item:hover > img { transform: none !important; }
 
   .top10-gallery {
     margin-left: -22px !important;
@@ -996,18 +1013,9 @@ main {
     border-radius: 6px;
   }
   
-  .kids-overlay {
-    padding-left: 20px !important;
-  }
-  
-  .kids-overlay h2 {
-    font-size: 18px !important;
-    margin-bottom: 2px;
-  }
-  
-  .kids-overlay p {
-    font-size: 12px !important;
-  }
+  .kids-overlay { padding-left: 20px !important; }
+  .kids-overlay h2 { font-size: 18px !important; margin-bottom: 2px; }
+  .kids-overlay p { font-size: 12px !important; }
 
   .footer {
     padding: 40px 32px 30px !important; 
@@ -1020,19 +1028,12 @@ main {
     margin-bottom: 30px;
   }
 
-  .footer-links a {
-    font-size: 13px;
-  }
-
-  .footer-socials {
-    gap: 18px;
-    margin-bottom: 25px;
-  }
+  .footer-links a { font-size: 13px; }
+  .footer-socials { gap: 18px; margin-bottom: 25px; }
 }
   </style>
 </head>
 <body>
-
 <header class="top-nav">
   <div class="nav-left">
     <a href="Hovedside.html" class="watch-logo-svg">
@@ -1096,16 +1097,21 @@ main {
     </div>
   </section>
 
-  <section class="gallery-section" id="fortsett-section" style="display:none;">
-    <h2>Fortsett å se</h2>
-    <div class="gallery-wrapper">
-      <div class="fade-left"></div>
-      <button class="scroll-button left">❮</button>
-      <div class="image-gallery" id="fortsett-galleri"></div>
-      <button class="scroll-button right">❯</button>
-      <div class="fade-right"></div>
-    </div>
-  </section>
+<section class="continue-watching-section">
+  <h2>Fortsett å se</h2>
+  <div class="continue-gallery-wrapper">
+    <button class="scroll-button left hidden"><i class="fa-solid fa-chevron-left"></i></button>
+    <button class="scroll-button right"><i class="fa-solid fa-chevron-right"></i></button>
+    <div class="continue-image-gallery"> 
+      <a href="#">
+        <div class="image-with-progress">
+          <img src="DITT_BILDE_HER.jpg" alt="Film tittel">
+          <div class="progress-bar" style="--progress: 65%;"></div>
+        </div>
+      </a>
+      </div>
+  </div>
+</section>
     
   <section class="gallery-section" id="barn-seksjon" style="display:none;">
     <h2>Barne- og familieinnhold</h2>
