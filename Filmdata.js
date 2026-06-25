@@ -162,6 +162,7 @@ const filmer = {
     rating: "5.5",
     bakgrunn: "https://studio.blender.org/files/public/thumbnail/3c/83/3c833d978e7de4b58eaa1a12be541664_m.webp",
     banner: "https://studio.blender.org/files/public/thumbnail/3c/83/3c833d978e7de4b58eaa1a12be541664_m.webp", 
+    bannerMobil: "https://studio.blender.org/files/public/thumbnail/3c/83/3c833d978e7de4b58eaa1a12be541664_m.webp",  
     logo: "https://studio.blender.org/files/public/logo/d9/10/d910023b9c2157ebcc1416026f2b1a03.png",
     trailer: "", 
     poster: "https://m.media-amazon.com/images/S/pv-target-images/ac878c08d94a3da94048c54c4585013f2c7672c33ef5236307eba9fb8ae96d38.png",
