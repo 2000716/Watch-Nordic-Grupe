@@ -175,7 +175,7 @@ const filmer = {
     kilde: "https://blender.org",
     watchUrl: "film-mal.html?id=tears-of-steel",
     videoUrl: "https://dn710604.ca.archive.org/0/items/tearsofsteelblendervfxopenmovie800p/Tears%20of%20Steel%20-%20Blender%20VFX%20Open%20Movie%20800p.mp4",
-    subtitleUrl: "",
+    subtitleUrl: "tears-of-Steel.VTT",
     tilbakeUrl: "film.html?navn=tears-of-steel",
     audioLanguages: [
     { code: "no", label: "Engelsk" } ],
