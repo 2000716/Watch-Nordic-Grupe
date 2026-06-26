@@ -768,65 +768,104 @@ video::cue {
 
 
 
-
 </style>
 </head>
 <body>
-  <div class="container" id="container">
+  <div class="container" id="container" style="position: relative; overflow: hidden; background: #000;">
     
-    <div id="videoWrapper" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; transition: all 0.4s ease-in-out; z-index: 1;">
-      <video id="video" preload="metadata" style="width: 100%; height: 100%; object-fit: contain;">
+    <!-- BAKGRUNNSBILDE FOR NESTE EPISODE (Viskes inn under autoplay) -->
+    <div id="autoplayBackground" style="
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-size: cover;
+      background-position: center;
+      opacity: 0;
+      transition: opacity 0.8s ease-in-out;
+      z-index: 1;
+      transform: scale(1.05);
+    ">
+      <!-- Mørkt lag over bakgrunnsbildet så tekst er lesbar -->
+      <div style="position: absolute; top:0; left:0; width:100%; height:100%; background: linear-gradient(90deg, rgba(0,0,0,0.95) 40%, rgba(0,0,0,0.6) 100%);"></div>
+    </div>
+
+    <!-- VIDEOBEHOLDER (Krympes opp til øverst til høyre ved rulletekst) -->
+    <div id="videoWrapper" style="
+      position: absolute; 
+      top: 0; 
+      left: 0; 
+      width: 100%; 
+      height: 100%; 
+      transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1); 
+      z-index: 2;
+      box-sizing: border-box;
+      border: 0px solid rgba(255,255,255,0);
+    ">
+      <video id="video" preload="metadata" style="width: 100%; height: 100%; object-fit: contain; border-radius: inherit;">
         <source src="" type="video/mp4">
         <track label="Norsk" kind="subtitles" srclang="no" src="" default>
         Din nettleser støtter ikke videoavspilling.
       </video>
     </div>
 
-    <div class="subtitle-overlay" id="subtitleOverlay" style="z-index: 2;"></div>
-    <div class="loading-spinner" id="loadingSpinner" style="z-index: 3;"></div>
+    <!-- UNDERTEKSTER OG LOADING SPINNER -->
+    <div class="subtitle-overlay" id="subtitleOverlay" style="z-index: 3;"></div>
+    <div class="loading-spinner" id="loadingSpinner" style="z-index: 4;"></div>
 
+    <!-- STRØMMETJENESTE-KNAPPER (STRØMLINJEFORMET UTEN EMOJIS) -->
     <button id="skipIntroBtn" style="
       position: absolute;
       right: 30px;
-      bottom: 90px;
+      bottom: 95px;
       display: none;
+      align-items: center;
+      gap: 8px;
       padding: 12px 24px;
-      border: 1px solid rgba(255,255,255,0.3);
+      border: 1px solid rgba(255,255,255,0.4);
       border-radius: 4px;
-      background: rgba(0, 0, 0, 0.7);
-      backdrop-filter: blur(5px);
+      background: rgba(0, 0, 0, 0.75);
+      backdrop-filter: blur(10px);
       color: white;
-      font-weight: bold;
-      font-size: 15px;
-      letter-spacing: 0.5px;
+      font-weight: 600;
+      font-size: 14px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
       cursor: pointer;
       z-index: 10;
-      transition: background 0.2s;
-    " onmouseover="this.style.background='rgba(255,255,255,0.2)'" onmouseout="this.style.background='rgba(0,0,0,0.7)'">
-      ⏭️ Hopp over intro
+      transition: all 0.2s ease;
+    " onmouseover="this.style.background='rgba(255,255,255,1)'; this.style.color='black';" onmouseout="this.style.background='rgba(0,0,0,0.75)'; this.style.color='white';">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M5 13h11.86l-5.43 5.43 1.42 1.42L21.14 12l-8.29-8.29-1.42 1.42L16.86 11H5v2z"/></svg>
+      Hopp over intro
     </button>
 
     <button id="skipOutroBtn" style="
       position: absolute; 
       right: 30px; 
-      bottom: 90px; 
+      bottom: 95px; 
       display: none; 
+      align-items: center;
+      gap: 8px;
       padding: 12px 24px; 
-      border: 1px solid rgba(255,255,255,0.3); 
+      border: 1px solid rgba(255,255,255,0.4); 
       border-radius: 4px; 
-      background: rgba(0, 0, 0, 0.7); 
-      backdrop-filter: blur(5px);
+      background: rgba(0, 0, 0, 0.75); 
+      backdrop-filter: blur(10px);
       color: white; 
-      font-weight: bold; 
-      font-size: 15px; 
-      letter-spacing: 0.5px;
+      font-weight: 600; 
+      font-size: 14px; 
+      text-transform: uppercase;
+      letter-spacing: 1px;
       cursor: pointer; 
       z-index: 10;
-      transition: background 0.2s;
-    " onmouseover="this.style.background='rgba(255,255,255,0.2)'" onmouseout="this.style.background='rgba(0,0,0,0.7)'">
-      ⏭️ Neste episode
+      transition: all 0.2s ease;
+    " onmouseover="this.style.background='rgba(255,255,255,1)'; this.style.color='black';" onmouseout="this.style.background='rgba(0,0,0,0.75)'; this.style.color='white';">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M4 18l8.5-6L4 6v12zm9-12v12l8.5-6L13 6z"/></svg>
+      Neste episode
     </button>
 
+    <!-- HØYKVALITETS AUTOPLAY OVERLAY (NETFLIX DESIGN) -->
     <div id="autoplayOverlay" style="
       display: none; 
       position: absolute; 
@@ -834,24 +873,30 @@ video::cue {
       left: 0; 
       width: 100%; 
       height: 100%; 
-      background: linear-gradient(to right, rgba(0,0,0,0.95) 40%, rgba(0,0,0,0.6) 100%); 
       z-index: 5; 
       flex-direction: column; 
       justify-content: center; 
       align-items: flex-start; 
-      padding-left: 8%;
+      padding-left: 6%;
       color: white; 
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     ">
-      <span style="text-transform: uppercase; color: #aaa; font-size: 14px; font-weight: bold; letter-spacing: 2px;">Neste episode starter om</span>
-      <div id="autoplayCountdown" style="font-size: 96px; font-weight: 900; color: #fff; margin: 5px 0; line-height: 1;">8</div>
-      
-      <div style="margin-top: 15px; display: flex; gap: 15px;">
-        <button id="autoplayPlayNextBtn" style="padding: 14px 35px; background: #fff; color: #000; border: none; cursor: pointer; border-radius: 4px; font-size: 16px; font-weight: bold; transition: opacity 0.2s;" onmouseover="this.style.opacity='0.8'" onmouseout="this.style.opacity='1'">Spill nå</button>
-        <button id="autoplayCancelBtn" style="padding: 14px 35px; background: rgba(255,255,255,0.1); color: white; border: 1px solid rgba(255,255,255,0.4); cursor: pointer; border-radius: 4px; font-size: 16px; font-weight: bold; transition: background 0.2s;" onmouseover="this.style.background='rgba(255,255,255,0.2)'" onmouseout="this.style.background='rgba(255,255,255,0.1)'">Avbryt</button>
+      <div style="max-width: 500px;">
+        <span style="text-transform: uppercase; color: rgba(255,255,255,0.6); font-size: 13px; font-weight: 700; letter-spacing: 2px; display: block; margin-bottom: 5px;">Neste episode starter om</span>
+        <div id="autoplayCountdown" style="font-size: 84px; font-weight: 900; color: #fff; margin-bottom: 10px; line-height: 1;">8</div>
+        
+        <h2 id="nextEpisodeTitle" style="font-size: 28px; margin: 0 0 20px 0; font-weight: 700; text-shadow: 0 2px 4px rgba(0,0,0,0.4);">Episode Tittel</h2>
+        
+        <div style="display: flex; gap: 12px;">
+          <button id="autoplayPlayNextBtn" style="display: flex; align-items: center; gap: 8px; padding: 14px 30px; background: #fff; color: #000; border: none; cursor: pointer; border-radius: 4px; font-size: 15px; font-weight: bold; transition: background 0.2s;" onmouseover="this.style.background='rgba(255,255,255,0.85)'" onmouseout="this.style.background='#fff'">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg> Spill nå
+          </button>
+          <button id="autoplayCancelBtn" style="padding: 14px 26px; background: rgba(0,0,0,0.5); color: white; border: 1px solid rgba(255,255,255,0.3); cursor: pointer; border-radius: 4px; font-size: 15px; font-weight: 600; transition: all 0.2s;" onmouseover="this.style.background='rgba(255,255,255,0.15)'" onmouseout="this.style.background='rgba(0,0,0,0.5)'">Avbryt</button>
+        </div>
       </div>
     </div>
 
+    <!-- RESUME/FORTSETT OVERLAY -->
     <div id="resumeOverlay" class="resume-overlay" style="z-index: 15;">
       <div class="resume-box">
         <p>Vil du fortsette der du slapp?</p>
@@ -862,8 +907,8 @@ video::cue {
       </div>
     </div>
 
+    <!-- INTERFACE / CONTROLS -->
     <div class="ui" id="ui" style="z-index: 20;">
-      
       <div class="top-bar">
         <a href="#" class="back-button" id="backButton">
           <img src="https://static.wixstatic.com/media/fd2fb2_59ea5a2a1ff34303a71a369537dd62c3~mv2.png" alt="Back">
@@ -887,7 +932,6 @@ video::cue {
 
       <div class="controls">
         <div class="left-controls"></div>
-
         <div class="center-controls">
           <button class="btn" id="rewindBtn">
             <img src="https://static.wixstatic.com/media/fd2fb2_a6f7229c8e994a75a12d5849e71156a9~mv2.png" alt="Rewind">
@@ -922,7 +966,6 @@ video::cue {
         <strong>Undertekster</strong>
         <div id="subtitleTracks"></div>
       </div>
-
     </div>
   </div>
   
@@ -930,7 +973,7 @@ video::cue {
 <script src="Seriedata.js"></script>
 <script>
 /* ===========================================================
-   UNIVERSELL PLAYER – FILM + SERIE (OPTIMALISERT STRØMMING)
+   UNIVERSELL PLAYER – PREMIUM STRØMMETJENESTE UTGAVE
    =========================================================== */
 
 const urlParams = new URLSearchParams(window.location.search);
@@ -942,6 +985,7 @@ let film;
 let filmId = "";
 let tilbakeUrl = "";
 let isSerie = false;
+let nesteEpisodeData = null;
 
 /* ================= RESOLVE MEDIA ================= */
 if (navn && filmer?.[navn] && !sesong && !episode) {
@@ -1011,30 +1055,38 @@ const restartBtn = document.getElementById("restartBtn");
 
 const nextEpisodeBtn = document.getElementById("nextEpisodeBtn");
 const autoplayOverlay = document.getElementById("autoplayOverlay");
+const autoplayBackground = document.getElementById("autoplayBackground");
 const autoplayCountdown = document.getElementById("autoplayCountdown");
 const autoplayCancelBtn = document.getElementById("autoplayCancelBtn");
 const autoplayPlayNextBtn = document.getElementById("autoplayPlayNextBtn");
+const nextEpisodeTitle = document.getElementById("nextEpisodeTitle");
 
 let isDragging = false;
 let hideTimeout;
 let subtitlesEnabled = true;
 let autoplayTriggered = false;
 
-function hentNesteEpisodeUrl() {
+// Henter URL og detaljer til neste episode for merkevarebygging i UI
+function hentNesteEpisodeInfo() {
   if (navn && sesong && episode && serier?.[navn]) {
     const s = parseInt(sesong);
     const e = parseInt(episode);
     const serie = serier[navn];
-    if (serie.sesonger[s]?.episoder?.[e + 1]) {
-      return `film-mal.html?navn=${navn}&sesong=${s}&episode=${e + 1}`;
+    
+    let nesteNokkel = { s: s, e: e + 1 };
+    if (!serie.sesonger[s]?.episoder?.[e + 1] && serie.sesonger[s + 1]?.episoder?.[1]) {
+      nesteNokkel = { s: s + 1, e: 1 };
     }
-    if (serie.sesonger[s + 1]?.episoder?.[1]) {
-      return `film-mal.html?navn=${navn}&sesong=${s + 1}&episode=1`;
+    
+    const nesteEp = serie.sesonger[nesteNokkel.s]?.episoder?.[nesteNokkel.e];
+    if (nesteEp) {
+      nesteEpisodeData = nesteEp;
+      return `film-mal.html?navn=${navn}&sesong=${nesteNokkel.s}&episode=${nesteNokkel.e}`;
     }
   }
   return null;
 }
-const nesteEpisodeUrl = hentNesteEpisodeUrl();
+const nesteEpisodeUrl = hentNesteEpisodeInfo();
 
 if (nextEpisodeBtn) {
   if (isSerie && nesteEpisodeUrl) {
@@ -1098,7 +1150,6 @@ rewindBtn.addEventListener('click', () => video.currentTime = Math.max(0, video.
 forwardBtn.addEventListener('click', () => video.currentTime = Math.min(video.duration, video.currentTime + 10));
 captionsBtn.addEventListener('click', () => { captionMenu.style.display = captionMenu.style.display === 'block' ? 'none' : 'block'; });
 
-// Audio Tracks og Subtitle-knapper beholdt uendret
 const audioTracksDiv = document.getElementById("audioTracks");
 audioTracksDiv.innerHTML = "";
 if (film.audioLanguages && film.audioLanguages.length > 0) {
@@ -1152,7 +1203,6 @@ document.addEventListener('mouseup', e => { if (isDragging) { const percent = sc
 document.addEventListener('mousemove', e => { if (isDragging) { scrubTo(e); showPreview(e); } });
 thumb.addEventListener('mousedown', e => { e.preventDefault(); isDragging = true; });
 
-// Preview Generator
 const hiddenVideo = document.createElement("video");
 hiddenVideo.src = film.videoUrl || film.video || film.src; hiddenVideo.muted = true; hiddenVideo.crossOrigin = "anonymous";
 const canvas = document.createElement("canvas"); const ctx = canvas.getContext("2d");
@@ -1251,25 +1301,22 @@ video.addEventListener("loadedmetadata", () => {
 video.addEventListener("contextmenu", e => e.preventDefault());
 document.addEventListener("contextmenu", e => e.preventDefault());
 
-/* ================= SMART INTRO & ADVANCED NETFLIX OUTRO AUTOPLAY ================= */
+/* ================= SMART INTRO & PREMIUM AUTOPLAY (ØVERST TIL HØYRE MED RAMME OG BAKGRUNN) ================= */
 const skipIntroBtn = document.getElementById("skipIntroBtn");
 const skipOutroBtn = document.getElementById("skipOutroBtn");
 
 video.addEventListener("timeupdate", () => {
   if (!isSerie) return;
   const tid = video.currentTime;
-  const gjenstaendeTid = video.duration - tid;
 
-  // Intro logikk
   if (film.introStart != null && film.introEnd != null) {
     if (tid >= film.introStart && tid <= film.introEnd) {
-      if (skipIntroBtn) skipIntroBtn.style.display = "block";
+      if (skipIntroBtn) skipIntroBtn.style.style.display = "flex";
     } else {
       if (skipIntroBtn) skipIntroBtn.style.display = "none";
     }
   }
 
-  // Rulleteksthåndtering via outroStart eller automatisk siste 15 sek
   const triggerTid = film.outroStart != null ? film.outroStart : (video.duration - 15);
 
   if (tid >= triggerTid && !autoplayTriggered && !video.paused && nesteEpisodeUrl) {
@@ -1286,18 +1333,32 @@ let autoplayTimer;
 function startPremiumAutoplay() {
   if (!autoplayOverlay) return;
   
-  // NETFLIX-EFFEKTEN: Krymper videoen og flytter den til nedre høyre hjørne
-  videoWrapper.style.transform = "scale(0.35)";
-  videoWrapper.style.transformOrigin = "bottom right";
-  videoWrapper.style.right = "30px";
-  videoWrapper.style.bottom = "90px";
-  videoWrapper.style.borderRadius = "8px";
-  videoWrapper.style.boxShadow = "0 10px 30px rgba(0,0,0,0.8)";
+  // 1. SETT TITTELL OG BAKGRUNN PÅ NESTE EPISODE HVIS DET FINNES DATA
+  if (nesteEpisodeData) {
+    nextEpisodeTitle.textContent = nesteEpisodeData.tittel || "Neste episode";
+    if (nesteEpisodeData.bildeUrl || nesteEpisodeData.poster) {
+      autoplayBackground.style.backgroundImage = `url('${nesteEpisodeData.bildeUrl || nesteEpisodeData.poster}')`;
+    }
+  } else {
+    nextEpisodeTitle.textContent = "Neste Episode";
+  }
   
-  // Vis strømmetjeneste-vinduet ved siden av den krympede videoen
+  // Vis bakgrunnsbilde sømløst
+  autoplayBackground.style.opacity = "1";
+
+  // 2. KRYMP GJELDENDE VIDEO OG SQUEEZE DEN OPP TIL ØVERST TIL HØYRE (Smart TV/Netflix stil)
+  videoWrapper.style.transform = "scale(0.32)";
+  videoWrapper.style.transformOrigin = "top right";
+  videoWrapper.style.right = "40px";
+  videoWrapper.style.top = "40px";
+  videoWrapper.style.borderRadius = "8px";
+  videoWrapper.style.border = "4px solid rgba(255, 255, 255, 0.9)";
+  videoWrapper.style.boxShadow = "0 20px 40px rgba(0,0,0,0.9)";
+  
+  // Vis kontrollene over bakgrunnen
   autoplayOverlay.style.display = "flex";
   
-  let teller = 8; // Gir brukeren 8 sekunder
+  let teller = 9;
   autoplayCountdown.textContent = teller;
 
   autoplayTimer = setInterval(() => {
@@ -1314,15 +1375,17 @@ if (autoplayCancelBtn) {
   autoplayCancelBtn.addEventListener("click", () => {
     clearInterval(autoplayTimer);
     autoplayOverlay.style.display = "none";
+    autoplayBackground.style.opacity = "0";
     
-    // Gjenopprett videoen til fullskjerm igjen dersom brukeren trykker avbryt
+    // Gjenopprett video til vanlig fullskjerm
     videoWrapper.style.transform = "scale(1)";
     videoWrapper.style.right = "0px";
-    videoWrapper.style.bottom = "0px";
+    videoWrapper.style.top = "0px";
     videoWrapper.style.borderRadius = "0px";
+    videoWrapper.style.border = "0px solid rgba(255,255,255,0)";
+    videoWrapper.style.boxShadow = "none";
     
-    // Vis den vanlige manuelle knappen isteden helt til filmen slutter helt naturlig
-    if (skipOutroBtn) skipOutroBtn.style.display = "block";
+    if (skipOutroBtn) skipOutroBtn.style.display = "flex";
   });
 }
 </script>
