@@ -691,31 +691,29 @@
     progress.addEventListener("mousemove", showPreview);
     progress.addEventListener("mouseleave", hidePreview);
 
- /* ================= UI AUTO-HIDE ================= */
+    /* ================= UI AUTO-HIDE ================= */
     function showUI() {
-      // Vis grensesnitt og gjør musepekeren synlig
       ui.classList.remove('hidden');
       subtitleOverlay.classList.add("subtitle-up");
-      container.style.cursor = "default"; 
-      
       clearTimeout(hideTimeout);
-      
       hideTimeout = setTimeout(() => { 
-        // Skjul kun hvis videoen spiller og vi ikke er i autoplay-modus
         if (!video.paused && !autoplayTriggered) { 
           ui.classList.add('hidden'); 
           subtitleOverlay.classList.remove("subtitle-up"); 
-          
-          // Gjør musepekeren usynlig
-          container.style.cursor = "none"; 
         } 
       }, 3500);
     }
-    
-    // Sørg for at musen starter som synlig
     document.addEventListener('mousemove', showUI);
     document.addEventListener('keydown', showUI);
-    
+
+    fullscreenBtn.addEventListener('click', () => { if (!document.fullscreenElement) { container.requestFullscreen(); } else { document.exitFullscreen(); } });
+    document.addEventListener('fullscreenchange', () => {
+      fullscreenBtn.querySelector('img').src = document.fullscreenElement ? "https://static.wixstatic.com/media/fd2fb2_c9b139f2774c4bf7b32c7271fd6c1c1a~mv2.png" : "https://static.wixstatic.com/media/fd2fb2_3fa37682b3b34c04a2cd08ffcde2763a~mv2.png";
+    });
+
+    video.addEventListener('waiting', () => loadingSpinner.style.display = 'block');
+    video.addEventListener('playing', () => loadingSpinner.style.display = 'none');
+
     /* ================= RESUME METODE ================= */
     const savedTime = parseFloat(localStorage.getItem(`${filmId}-lastPosition`));
     video.addEventListener('loadedmetadata', () => {
