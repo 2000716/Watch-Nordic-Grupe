@@ -186,6 +186,35 @@ const filmer = {
     publishDate: "2026-06-25T00:00:00",
     expireDate: "2030-01-01T23:59:59",
   },
+
+    "dracula": {
+    tittel: "Dracula",
+    rating: "7.5",
+    bakgrunn: "https://image.tmdb.org/t/p/original/77quD8MrUDcCNjmDsbXyyaZzGiS.jpg",
+    banner: "https://static.wixstatic.com/media/d9ace9_6f7fb88112c44d9dbc39c6a298162dc5~mv2.jpg", 
+    bannerMobil: "https://static.wixstatic.com/media/d9ace9_eeade65664b14673bbfe43bef0123340~mv2.jpg",  
+    logo: "https://static.wixstatic.com/media/d9ace9_3fd86fe119f747b19144b0a4977aa087~mv2.png",
+    trailer: "", 
+    poster: "https://static.wixstatic.com/media/d9ace9_6399ef4220fd483e849f40d2b49d294e~mv2.jpg",
+    posterVertikal: "https://static.wixstatic.com/media/d9ace9_eeade65664b14673bbfe43bef0123340~mv2.jpg", // portrett
+    beskrivelse: "Den transylvanske vampyren grev Dracula underlegger seg en naiv eiendomsmegler før han flytter inn på et gods i London. Her sover han i kisten sin om dagen og jakter på levende ofre om natten.",
+    metadata: ["1931", "15", "Skrekk", "1 t 15 min"],
+    skuespillere: "Bela Lugosi, Helen Chandler, David Manners, Dwight Frye",
+    regissor: "Tod Browning",
+    watchUrl: "film-mal.html?id=dracula",
+    videoUrl: "https://dn721809.ca.archive.org/0/items/dra-cula.-eng.-mp-4./DR%C3%81CULA.%20ENG.%20MP4..ia.mp4",
+    subtitleUrl: "",
+    tilbakeUrl: "film.html?navn=dracula",
+    audioLanguages: [
+      { code: "en", label: "Engelsk" } 
+    ],
+    subtitleLanguages: [
+      { code: "no", label: "Norsk" },
+      { code: "off", label: "Av" }
+    ],
+    publishDate: "2027-01-01T00:00:00", // Går inn i public domain her
+    expireDate: "2035-12-31T23:59:59",
+  },
   };
 
 
