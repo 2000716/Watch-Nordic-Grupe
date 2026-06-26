@@ -1001,11 +1001,10 @@ font-size:clamp(22px,4vw,36px);
 </style>
 
 <header class="top-nav">
-
   <div class="nav-left">
-    <div class="watch-logo-text" onclick="window.location.href='Hovedside.html'">
-      WATCH
-    </div>
+    <a href="Hovedside.html" class="watch-logo-svg">
+      <img src="https://static.wixstatic.com/media/d9ace9_081ea242211b45a2801873c3067e1205~mv2.png" alt="Watch Nordic" style="height: 100%; width: auto;">
+    </a>
   </div>
 
   <nav class="nav-links">
@@ -1017,16 +1016,15 @@ font-size:clamp(22px,4vw,36px);
   </nav>
 
   <div class="nav-right">
-    <a href="Søk.html" class="nav-search">
+    <a href="Søk.html" class="nav-search" aria-label="Søk">
       <i class="fas fa-search"></i>
     </a>
 
     <a href="hvem-ser-på.html" class="profilmeny">
-      <img id="menyProfilbilde" src="https://via.placeholder.com/100" />
+      <img id="menyProfilbilde" src="https://via.placeholder.com/100" alt="Profilbilde" />
       <span id="profilNavn"></span>
     </a>
   </div>
-
 </header>
 
 
