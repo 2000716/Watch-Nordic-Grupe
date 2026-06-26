@@ -198,7 +198,7 @@ const filmer = {
     poster: "https://static.wixstatic.com/media/d9ace9_6399ef4220fd483e849f40d2b49d294e~mv2.jpg",
     posterVertikal: "https://static.wixstatic.com/media/d9ace9_eeade65664b14673bbfe43bef0123340~mv2.jpg", // portrett
     beskrivelse: "Den transylvanske vampyren grev Dracula underlegger seg en naiv eiendomsmegler før han flytter inn på et gods i London. Her sover han i kisten sin om dagen og jakter på levende ofre om natten.",
-    metadata: ["1931", "15", "Skrekk", "1 t 15 min"],
+    metadata: ["1931", "15 år", "Skrekk", "1 t 15 min"],
     skuespillere: "Bela Lugosi, Helen Chandler, David Manners, Dwight Frye",
     regissor: "Tod Browning",
     watchUrl: "film-mal.html?id=dracula",
@@ -227,7 +227,7 @@ const filmer = {
     poster: "https://static.wixstatic.com/media/d9ace9_920b761a661c41d9b6249b543d1085a1~mv2.jpg",
     posterVertikal: "https://static.wixstatic.com/media/d9ace9_91fdbf5b3d8f4b7588b3165262511412~mv2.webp", // portrett
     beskrivelse: "Den besatte vitenskapsmannen Henry Frankenstein pusler sammen kroppsdeler fra likhus i håp om å skape nytt liv. Men hans triumf forvandles raskt til terror når skapningen våkner med et barnslig, men livsfarlig raseri.",
-    metadata: ["1931", "15", "Skrekk", "1 t 10 min"],
+    metadata: ["1931", "15 år", "Skrekk", "1 t 10 min"],
     skuespillere: "Colin Clive, Boris Karloff, Mae Clarke, John Boles",
     regissor: "James Whale",
     watchUrl: "film-mal.html?id=frankenstein",
