@@ -222,7 +222,7 @@ const filmer = {
     bakgrunn: "https://static.wixstatic.com/media/d9ace9_e8dce991875c47999a868d02a0ad1b62~mv2.webp",
     banner: "https://static.wixstatic.com/media/d9ace9_d415eb4d49f14c459067c68506f6077a~mv2.jpg", 
     bannerMobil: "https://static.wixstatic.com/media/d9ace9_b8623f58e61a4fa39e41060f67d35220~mv2.webp",  
-    logo: "https://static.wixstatic.com/media/d9ace9_f1845ead5e3f4a92ad6aea8a9f85ed97~mv2.png",
+    logo: "https://static.wixstatic.com/media/d9ace9_2ba25640640646d29636a23577cfaa22~mv2.png",
     trailer: "", 
     poster: "https://static.wixstatic.com/media/d9ace9_920b761a661c41d9b6249b543d1085a1~mv2.jpg",
     posterVertikal: "https://static.wixstatic.com/media/d9ace9_91fdbf5b3d8f4b7588b3165262511412~mv2.webp", // portrett
