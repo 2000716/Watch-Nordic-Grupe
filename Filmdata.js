@@ -215,6 +215,34 @@ const filmer = {
     publishDate: "2027-01-01T00:00:00", // Går inn i public domain her
     expireDate: "2035-12-31T23:59:59",
   },
+
+    "frankenstein": {
+    tittel: "Frankenstein",
+    rating: "7.8",
+    bakgrunn: "https://static.wixstatic.com/media/d9ace9_e8dce991875c47999a868d02a0ad1b62~mv2.webp",
+    banner: "https://static.wixstatic.com/media/d9ace9_d415eb4d49f14c459067c68506f6077a~mv2.jpg", 
+    logo: "https://static.wixstatic.com/media/d9ace9_f1845ead5e3f4a92ad6aea8a9f85ed97~mv2.png",
+    trailer: "", 
+    poster: "https://static.wixstatic.com/media/d9ace9_920b761a661c41d9b6249b543d1085a1~mv2.jpg",
+    posterVertikal: "https://static.wixstatic.com/media/d9ace9_91fdbf5b3d8f4b7588b3165262511412~mv2.webp", // portrett
+    beskrivelse: "Den besatte vitenskapsmannen Henry Frankenstein pusler sammen kroppsdeler fra likhus i håp om å skape nytt liv. Men hans triumf forvandles raskt til terror når skapningen våkner med et barnslig, men livsfarlig raseri.",
+    metadata: ["1931", "15", "Skrekk", "1 t 10 min"],
+    skuespillere: "Colin Clive, Boris Karloff, Mae Clarke, John Boles",
+    regissor: "James Whale",
+    watchUrl: "film-mal.html?id=frankenstein",
+    videoUrl: "https://dn721902.ca.archive.org/0/items/frankenstein-1931-english/Frankenstein%20%281931%29%20English.mp4",
+    subtitleUrl: "",
+    tilbakeUrl: "film.html?navn=frankenstein",
+    audioLanguages: [
+      { code: "en", label: "Engelsk" } 
+    ],
+    subtitleLanguages: [
+      { code: "no", label: "Norsk" },
+      { code: "off", label: "Av" }
+    ],
+    publishDate: "2027-01-01T00:00:00", // Går inn i public domain her sammen med Dracula
+    expireDate: "2035-12-31T23:59:59",
+  },
   };
 
 
