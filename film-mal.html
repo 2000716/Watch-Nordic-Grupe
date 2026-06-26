@@ -773,31 +773,73 @@ video::cue {
 </head>
 <body>
   <div class="container" id="container">
+    
     <video id="video" preload="metadata">
       <source src="" type="video/mp4">
       <track label="Norsk" kind="subtitles" srclang="no" src="" default>
       Din nettleser støtter ikke videoavspilling.
     </video>
 
-<button id="skipIntroBtn" style="
-  position: absolute;
-  right: 20px;             /* flyttet til høyre */
-  bottom: 150px;           /* litt høyere opp */
-  display: none;
-  padding: 14px 22px;      /* større knapp */
-  border: none;
-  border-radius: 12px;     /* rundere hjørner */
-  background: #0fddcb;
-  color: black;
-  font-weight: bold;
-  font-size: 16px;         /* større tekst */
-  cursor: pointer;
-  z-index: 10000;
-">
-  Hopp over intro
-</button>
-
     <div class="subtitle-overlay" id="subtitleOverlay"></div>
+    <div class="loading-spinner" id="loadingSpinner"></div>
+
+    <button id="skipIntroBtn" style="
+      position: absolute;
+      right: 20px;
+      bottom: 150px;
+      display: none;
+      padding: 14px 22px;
+      border: none;
+      border-radius: 12px;
+      background: #0fddcb;
+      color: black;
+      font-weight: bold;
+      font-size: 16px;
+      cursor: pointer;
+      z-index: 10000;
+    ">
+      Hopp over intro
+    </button>
+
+    <button id="skipOutroBtn" style="
+      position: absolute; 
+      right: 20px; 
+      bottom: 150px; 
+      display: none; 
+      padding: 14px 22px; 
+      border: none; 
+      border-radius: 12px; 
+      background: #e50914; 
+      color: white; 
+      font-weight: bold; 
+      font-size: 16px; 
+      cursor: pointer; 
+      z-index: 10000;
+    ">
+      Hopp over rulletekst
+    </button>
+
+    <div id="autoplayOverlay" style="
+      display: none; 
+      position: absolute; 
+      top: 0; 
+      left: 0; 
+      width: 100%; 
+      height: 100%; 
+      background: rgba(0,0,0,0.9); 
+      z-index: 20000; 
+      flex-direction: column; 
+      justify-content: center; 
+      align-items: center; 
+      color: white; 
+      font-family: sans-serif;
+    ">
+      <h2>Neste episode starter om...</h2>
+      <div id="autoplayCountdown" style="font-size: 80px; font-weight: bold; color: #e50914; margin: 20px 0;">5</div>
+      <div>
+        <button id="autoplayCancelBtn" style="padding: 12px 30px; background: #333; color: white; border: none; cursor: pointer; border-radius: 4px; font-size: 16px;">Avbryt</button>
+      </div>
+    </div>
 
     <div id="resumeOverlay" class="resume-overlay">
       <div class="resume-box">
@@ -809,19 +851,12 @@ video::cue {
       </div>
     </div>
 
-    <div class="loading-spinner" id="loadingSpinner"></div>
-
-    <div class="preview-box" id="previewBox">
-      <img id="previewImage" src="" alt="Preview">
-    </div>
-
     <div class="ui" id="ui">
+      
       <div class="top-bar">
         <a href="#" class="back-button" id="backButton">
           <img src="https://static.wixstatic.com/media/fd2fb2_59ea5a2a1ff34303a71a369537dd62c3~mv2.png" alt="Back">
         </a>
-
-        <!-- TITTEL FLYTTET HIT -->
         <div class="movie-title">The Curse of the Were-Rabbit</div>
       </div>
 
@@ -831,9 +866,7 @@ video::cue {
           <div class="thumb" id="thumb"></div>
         </div>
       </div>
-      
 
-      <!-- Preview-boksen med bilde + teller -->
       <div class="preview-box" id="previewBox">
         <img id="previewImage" src="" alt="Preview">
         <div class="preview-time" id="previewTime">00:00</div>
@@ -843,9 +876,7 @@ video::cue {
 
       <div class="controls">
         <div class="left-controls">
-        </div>
-
-        <div class="left-controls"></div>
+          </div>
 
         <div class="center-controls">
           <button class="btn" id="rewindBtn">
@@ -860,6 +891,9 @@ video::cue {
         </div>
 
         <div class="right-controls">
+          <button id="nextEpisodeBtn" class="btn" style="display: none; color: white; font-weight: bold; background: none; border: none; cursor: pointer;">
+            Neste ⏭️
+          </button>
           <button class="btn" id="muteBtn">
             <img id="muteIcon" src="https://static.wixstatic.com/media/fd2fb2_5c4fab8430e94d2381fc487b1654191d~mv2.png" alt="Mute">
           </button>
@@ -871,17 +905,6 @@ video::cue {
           </button>
         </div>
       </div>
-      <button id="skipOutroBtn" style="display:none; position:absolute; bottom:80px; right:20px; z-index:10; padding:10px 20px; background:#e50914; color:#fff; border:none; cursor:pointer; font-weight:bold; border-radius:4px;">Hopp over rulletekst</button>
-
-<button id="nextEpisodeBtn" style="display:none; background:none; border:none; cursor:pointer; color:white; font-weight:bold; margin: 0 10px;">Neste ⏭️</button>
-
-<div id="autoplayOverlay" style="display:none; position:absolute; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.85); z-index:100; flex-direction:column; justify-content:center; align-items:center; color:white; font-family:sans-serif;">
-  <h2>Neste episode starter om...</h2>
-  <div id="autoplayCountdown" style="font-size:80px; font-weight:bold; color:#e50914; margin:20px 0;">5</div>
-  <div>
-    <button id="autoplayCancelBtn" style="padding:12px 30px; background:#333; color:white; border:none; cursor:pointer; border-radius:4px; font-size:16px;">Avbryt</button>
-  </div>
-</div>
 
       <div class="caption-menu" id="captionMenu">
         <strong>Lydspråk</strong>
@@ -889,10 +912,10 @@ video::cue {
         <strong>Undertekster</strong>
         <div id="subtitleTracks"></div>
       </div>
+
     </div>
   </div>
-
-
+  
 <script src="Filmdata.js"></script>
 <script src="Seriedata.js"></script>
 <script>
