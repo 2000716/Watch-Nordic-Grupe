@@ -1262,11 +1262,10 @@ if (navn) {
 // ==================== HERO-BANNER ==================== //
 function hentBannerInnhold() {
   let bannerInnhold = [];
-  const erMobil = window.innerWidth <= 768;
-
+  
+  // Henter filmer som har enten vanlig banner eller mobilbanner
   Object.keys(filmer).forEach(key => {
-    // Endret: Godtar filmen hvis den enten har vanlig banner ELLER mobilbanner
-    if (filmer[key].banner || filmer[key].bannerMobil || filmer[key].bannermobil) {
+    if (filmer[key].banner || filmer[key].bannerMobil) {
       if (erInnloggetSomBarn) {
         if (!erEgnetForBarn(filmer[key]) || !sjekkAldersgrense(filmer[key])) return;
       }
@@ -1274,10 +1273,10 @@ function hentBannerInnhold() {
     }
   });
 
+  // Henter serier som har enten vanlig banner eller mobilbanner
   if (typeof serier !== "undefined") {
     Object.keys(serier).forEach(key => {
-      // Endret: Samme sjekk for serier
-      if (serier[key].banner || serier[key].bannerMobil || serier[key].bannermobil) {
+      if (serier[key].banner || serier[key].bannerMobil) {
         if (erInnloggetSomBarn) {
           if (!erEgnetForBarn(serier[key]) || !sjekkAldersgrense(serier[key])) return;
         }
@@ -1318,9 +1317,8 @@ function oppdaterBanner() {
   const seNa = document.getElementById("banner-se-na");
   const addBtn = document.getElementById("banner-add");
 
-  // Endret: Sjekker både 'bannerMobil' og 'bannermobil' (i tilfelle små/store bokstaver i datafilene dine)
-  const mobilBildeSti = film.bannerMobil || film.bannermobil || film.banner;
-  bilde.src = erMobil ? mobilBildeSti : film.banner;
+  // Henter bannerMobil på telefon, og faller tilbake til vanlige banner hvis mobilversjon mangler
+  bilde.src = erMobil ? (film.bannerMobil || film.banner) : film.banner;
   bilde.style.display = "block";
 
   if (film.trailer) {
@@ -1383,6 +1381,17 @@ function oppdaterBanner() {
   }, 5000);
 }
 
+window.addEventListener("resize", oppdaterBanner);
+
+function adjustBannerVideo(videoElement, container) {
+  if (!videoElement || !container) return;
+  videoElement.addEventListener('loadedmetadata', () => {
+    videoElement.style.width = '100%';
+    videoElement.style.height = '100%';
+    videoElement.style.objectFit = 'cover';
+  });
+}
+adjustBannerVideo(document.getElementById("banner-video"), document.querySelector(".hero-banner"));
 // ==================== VIAPLAY STYLE: ABSOLUTT LÅST NAVIGASJON ==================== //
 function oppdaterAlleGalleripiler() {
   // Hvis enheten har en touchskjerm (mobil/iPad), avbryter vi funksjonen helt
