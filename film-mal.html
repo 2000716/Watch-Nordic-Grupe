@@ -440,7 +440,7 @@
   </div>
 
   <!-- Eksterne datafiler -->
-  <script src="Filmdata.js"></script>
+<script src="Filmdata.js"></script>
   <script src="Seriedata.js"></script>
 
   <script>
@@ -530,6 +530,7 @@
 
     const skipIntroBtn = document.getElementById("skipIntroBtn");
     const skipOutroBtn = document.getElementById("skipOutroBtn");
+    const nextEpisodeBtn = document.getElementById("nextEpisodeBtn");
     const autoplayOverlay = document.getElementById("autoplayOverlay");
     const autoplayBackground = document.getElementById("autoplayBackground");
     const autoplayCountdown = document.getElementById("autoplayCountdown");
@@ -557,7 +558,7 @@
             nesteS = s + 1;
             nesteE = 1;
           } else {
-            return null;
+            return null; // Siste episode i serien
           }
         }
         
@@ -571,6 +572,15 @@
       return null;
     }
     const nesteEpisodeUrl = hentNesteEpisodeInfo();
+
+    if (nextEpisodeBtn) {
+      if (isSerie && nesteEpisodeUrl) {
+        nextEpisodeBtn.style.display = "inline-flex";
+        nextEpisodeBtn.onclick = () => { ryddeOgNeste(); };
+      } else {
+        nextEpisodeBtn.style.display = "none";
+      }
+    }
 
     function formatTime(time) {
       const m = Math.floor(time / 60);
@@ -762,8 +772,11 @@
       
       if (nesteEpisodeData) {
         nextEpisodeTitle.textContent = nesteEpisodeData.fullTittel;
-        if (nesteEpisodeData.bildeUrl || nesteEpisodeData.bilde || nesteEpisodeData.poster) {
-          autoplayBackground.style.backgroundImage = `url('${nesteEpisodeData.bildeUrl || nesteEpisodeData.bilde || nesteEpisodeData.poster}')`;
+        
+        // Robust sjekk etter bildet direkte fra neste-episode objektet i Seriedata.js
+        const nesteBilde = nesteEpisodeData.bildeUrl || nesteEpisodeData.bilde || nesteEpisodeData.poster || nesteEpisodeData.thumbnail || nesteEpisodeData.image;
+        if (nesteBilde) {
+          autoplayBackground.style.backgroundImage = `url('${nesteBilde}')`;
         }
       } else {
         nextEpisodeTitle.textContent = "Neste Episode";
@@ -810,6 +823,21 @@
 
         if (skipOutroBtn) skipOutroBtn.style.display = "inline-flex";
         showUI();
+      });
+    }
+
+    // Sikker håndtering av likBtn i tilfelle knappen er fjernet fra HTML-en
+    const likeBtn = document.getElementById("likeBtn");
+    if (likeBtn) {
+      likeBtn.addEventListener("click", () => {
+        const icon = likeBtn.querySelector("i");
+        if (icon && icon.classList.contains("far")) {
+          icon.className = "fas fa-thumbs-up";
+          likeBtn.style.color = "#0fddcb";
+        } else if (icon) {
+          icon.className = "far fa-thumbs-up";
+          likeBtn.style.color = "#ffffff";
+        }
       });
     }
   </script>
