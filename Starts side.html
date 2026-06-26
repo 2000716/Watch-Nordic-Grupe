@@ -429,12 +429,25 @@
       object-fit:cover;
       border-radius:10px;
       box-shadow:0 12px 30px rgba(0,0,0,.45);
+      transition: transform 0.3s ease;
     }
 
-    .row1{margin-left:420px;}
-    .row2{margin-left:180px;}
-    .row3{margin-left:350px;}
-    .row4{margin-left:120px;}
+    /* Innbyrdes asymmetriske start-marginer på radene */
+    .row1{margin-left:220px;}
+    .row2{margin-left:50px;}
+    .row3{margin-left:310px;}
+    .row4{margin-left:140px;}
+
+    /* Forskyver og bryter opp rette linjer automatisk i CSS */
+    .wall-row img:nth-child(2n) {
+      transform: translateY(15px);
+    }
+    .wall-row img:nth-child(3n) {
+      transform: translateY(-25px);
+    }
+    .wall-row img:nth-child(5n) {
+      transform: translateY(10px);
+    }
 
     /* ================= MODERN COOKIE BANNER STYLE ================= */
     .cookie-banner {
@@ -884,7 +897,7 @@
       });
     }
 
-    /* ================= HERO WALL (3D VEGG ØVERST) ================= */
+    /* ================= HERO WALL (3D VEGG ØVERST - OPPDATERT TILFELDIGHET) ================= */
     const rows = [
       document.querySelector(".row1"),
       document.querySelector(".row2"),
@@ -892,13 +905,13 @@
       document.querySelector(".row4")
     ];
 
-    let posters = [];
+    let basePosters = [];
 
     /* Hent filmer */
     if(typeof filmer !== "undefined"){
       Object.values(filmer).forEach(film => {
         if(film.poster){
-          posters.push(film.poster);
+          basePosters.push(film.poster);
         }
       });
     }
@@ -907,23 +920,34 @@
     if(typeof serier !== "undefined"){
       Object.values(serier).forEach(serie => {
         if(serie.poster){
-          posters.push(serie.poster);
+          basePosters.push(serie.poster);
         }
       });
     }
 
-    /* Bland posterne for en tilfeldig kul effekt */
-    posters.sort(() => Math.random() - 0.5);
-
-    /* Fyll radene i 3D-veggen (kun i Hero-seksjonen) */
-    if(posters.length > 0) {
+    /* Fyll radene i 3D-veggen med unike plasseringer og rekkefølger */
+    if(basePosters.length > 0) {
       rows.forEach(row => {
         if(row) {
+          // Oppretter en egen liste for denne spesifikke raden
+          let rowPosters = [...basePosters];
+          
           for(let i = 0; i < 4; i++){
-            posters.forEach(src => {
+            // Stokker om rekkefølgen for HVER gjennomgang i raden
+            rowPosters.sort(() => Math.random() - 0.5);
+            
+            rowPosters.forEach(src => {
               const img = document.createElement("img");
               img.src = src;
               img.loading = "lazy";
+              
+              // Legger til en subtil, tilfeldig rotasjon og skalering på hvert bilde via CSS inline styles
+              const randomRotation = (Math.random() * 4 - 2).toFixed(1); // Mellom -2deg og 2deg
+              const randomScale = (0.96 + Math.random() * 0.08).toFixed(2); // Mellom 0.96 og 1.04
+              
+              // Kombinerer den eksisterende CSS-translateY (fra nth-child i stilarket) med dynamisk rotasjon/skala
+              img.style.transform = `scale(${randomScale}) rotate(${randomRotation}deg)`;
+              
               row.appendChild(img);
             });
           }
