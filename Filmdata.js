@@ -186,64 +186,6 @@ const filmer = {
     publishDate: "2026-06-25T00:00:00",
     expireDate: "2030-01-01T23:59:59",
   },
-
-    "dracula": {
-    tittel: "Dracula",
-    rating: "7.5",
-    bakgrunn: "https://image.tmdb.org/t/p/original/77quD8MrUDcCNjmDsbXyyaZzGiS.jpg",
-    banner: "https://static.wixstatic.com/media/d9ace9_6f7fb88112c44d9dbc39c6a298162dc5~mv2.jpg", 
-    bannerMobil: "https://static.wixstatic.com/media/d9ace9_5c24ba98d6fb41aca04aaaaba5e2e75b~mv2.jpg",  
-    logo: "https://static.wixstatic.com/media/d9ace9_3fd86fe119f747b19144b0a4977aa087~mv2.png",
-    trailer: "", 
-    poster: "https://static.wixstatic.com/media/d9ace9_6399ef4220fd483e849f40d2b49d294e~mv2.jpg",
-    posterVertikal: "https://static.wixstatic.com/media/d9ace9_eeade65664b14673bbfe43bef0123340~mv2.jpg", // portrett
-    beskrivelse: "Den transylvanske vampyren grev Dracula underlegger seg en naiv eiendomsmegler før han flytter inn på et gods i London. Her sover han i kisten sin om dagen og jakter på levende ofre om natten.",
-    metadata: ["1931", "15 år", "Skrekk", "1 t 15 min"],
-    skuespillere: "Bela Lugosi, Helen Chandler, David Manners, Dwight Frye",
-    regissor: "Tod Browning",
-    watchUrl: "film-mal.html?id=dracula",
-    videoUrl: "https://dn721809.ca.archive.org/0/items/dra-cula.-eng.-mp-4./DR%C3%81CULA.%20ENG.%20MP4..ia.mp4",
-    subtitleUrl: "",
-    tilbakeUrl: "film.html?navn=dracula",
-    audioLanguages: [
-      { code: "en", label: "Engelsk" } 
-    ],
-    subtitleLanguages: [
-      { code: "no", label: "Norsk" },
-      { code: "off", label: "Av" }
-    ],
-    publishDate: "2027-01-01T00:00:00", // Går inn i public domain her
-    expireDate: "2035-12-31T23:59:59",
-  },
-
-    "frankenstein": {
-    tittel: "Frankenstein",
-    rating: "7.8",
-    bakgrunn: "https://static.wixstatic.com/media/d9ace9_e8dce991875c47999a868d02a0ad1b62~mv2.webp",
-    banner: "https://static.wixstatic.com/media/d9ace9_d415eb4d49f14c459067c68506f6077a~mv2.jpg", 
-    bannerMobil: "https://static.wixstatic.com/media/d9ace9_b8623f58e61a4fa39e41060f67d35220~mv2.webp",  
-    logo: "https://static.wixstatic.com/media/d9ace9_2ba25640640646d29636a23577cfaa22~mv2.png",
-    trailer: "", 
-    poster: "https://static.wixstatic.com/media/d9ace9_920b761a661c41d9b6249b543d1085a1~mv2.jpg",
-    posterVertikal: "https://static.wixstatic.com/media/d9ace9_91fdbf5b3d8f4b7588b3165262511412~mv2.webp", // portrett
-    beskrivelse: "Den besatte vitenskapsmannen Henry Frankenstein pusler sammen kroppsdeler fra likhus i håp om å skape nytt liv. Men hans triumf forvandles raskt til terror når skapningen våkner med et barnslig, men livsfarlig raseri.",
-    metadata: ["1931", "15 år", "Skrekk", "1 t 10 min"],
-    skuespillere: "Colin Clive, Boris Karloff, Mae Clarke, John Boles",
-    regissor: "James Whale",
-    watchUrl: "film-mal.html?id=frankenstein",
-    videoUrl: "https://dn721902.ca.archive.org/0/items/frankenstein-1931-english/Frankenstein%20%281931%29%20English.mp4",
-    subtitleUrl: "",
-    tilbakeUrl: "film.html?navn=frankenstein",
-    audioLanguages: [
-      { code: "en", label: "Engelsk" } 
-    ],
-    subtitleLanguages: [
-      { code: "no", label: "Norsk" },
-      { code: "off", label: "Av" }
-    ],
-    publishDate: "2027-01-01T00:00:00", // Går inn i public domain her sammen med Dracula
-    expireDate: "2035-12-31T23:59:59",
-  },
   };
 
 
