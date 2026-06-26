@@ -831,6 +831,7 @@ video::cue {
           <div class="thumb" id="thumb"></div>
         </div>
       </div>
+      
 
       <!-- Preview-boksen med bilde + teller -->
       <div class="preview-box" id="previewBox">
@@ -870,6 +871,17 @@ video::cue {
           </button>
         </div>
       </div>
+      <button id="skipOutroBtn" style="display:none; position:absolute; bottom:80px; right:20px; z-index:10; padding:10px 20px; background:#e50914; color:#fff; border:none; cursor:pointer; font-weight:bold; border-radius:4px;">Hopp over rulletekst</button>
+
+<button id="nextEpisodeBtn" style="display:none; background:none; border:none; cursor:pointer; color:white; font-weight:bold; margin: 0 10px;">Neste ⏭️</button>
+
+<div id="autoplayOverlay" style="display:none; position:absolute; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.85); z-index:100; flex-direction:column; justify-content:center; align-items:center; color:white; font-family:sans-serif;">
+  <h2>Neste episode starter om...</h2>
+  <div id="autoplayCountdown" style="font-size:80px; font-weight:bold; color:#e50914; margin:20px 0;">5</div>
+  <div>
+    <button id="autoplayCancelBtn" style="padding:12px 30px; background:#333; color:white; border:none; cursor:pointer; border-radius:4px; font-size:16px;">Avbryt</button>
+  </div>
+</div>
 
       <div class="caption-menu" id="captionMenu">
         <strong>Lydspråk</strong>
@@ -885,7 +897,7 @@ video::cue {
 <script src="Seriedata.js"></script>
 <script>
 /* ===========================================================
-   UNIVERSELL PLAYER – FILM + SERIE (ALLE FUNKSJONER BEHOLDT)
+   UNIVERSELL PLAYER – FILM + SERIE (ALLE FUNKSJONER BEHOLDT + NYE)
    =========================================================== */
 
 /* ================= URL PARAMS ================= */
@@ -991,10 +1003,47 @@ const resumeOverlay = document.getElementById("resumeOverlay");
 const continueBtn = document.getElementById("continueBtn");
 const restartBtn = document.getElementById("restartBtn");
 
+// --- NYE DOM-ELEMENTER FOR AUTO-PLAY / NESTE EPISODE ---
+const nextEpisodeBtn = document.getElementById("nextEpisodeBtn");
+const autoplayOverlay = document.getElementById("autoplayOverlay");
+const autoplayCountdown = document.getElementById("autoplayCountdown");
+const autoplayCancelBtn = document.getElementById("autoplayCancelBtn");
+
 /* ================= VARIABLER ================= */
 let isDragging = false;
 let hideTimeout;
 let subtitlesEnabled = true;
+let autoplayTriggered = false; // Hindrer dobbel kjøring av neste episode
+
+// Sjekk om det finnes en neste episode tilgjengelig
+function hentNesteEpisodeUrl() {
+  if (navn && sesong && episode && serier?.[navn]) {
+    const s = parseInt(sesong);
+    const e = parseInt(episode);
+    const serie = serier[navn];
+    const currentSeason = serie.sesonger[s];
+
+    if (currentSeason?.episoder?.[e + 1]) {
+      return `film-mal.html?navn=${navn}&sesong=${s}&episode=${e + 1}`;
+    }
+    if (serie.sesonger[s + 1]?.episoder?.[1]) {
+      return `film-mal.html?navn=${navn}&sesong=${s + 1}&episode=1`;
+    }
+  }
+  return null;
+}
+
+const nesteEpisodeUrl = hentNesteEpisodeUrl();
+
+// Vis eller skjul den manuelle "Neste episode"-knappen i UI basert på om den finnes
+if (nextEpisodeBtn) {
+  if (isSerie && nesteEpisodeUrl) {
+    nextEpisodeBtn.style.display = "inline-block";
+    nextEpisodeBtn.onclick = () => { window.location.href = nesteEpisodeUrl; };
+  } else {
+    nextEpisodeBtn.style.display = "none";
+  }
+}
 
 // ==================== FUNKSJONER ==================== //
 // Format tid til mm:ss
@@ -1144,7 +1193,7 @@ thumb.addEventListener('mousedown', e => { e.preventDefault(); isDragging = true
 
 // Preview-bilde
 const hiddenVideo = document.createElement("video");
-hiddenVideo.src = film.videoUrl;
+hiddenVideo.src = film.videoUrl || film.video || film.src;
 hiddenVideo.muted = true;
 hiddenVideo.crossOrigin = "anonymous";
 const canvas = document.createElement("canvas");
@@ -1197,7 +1246,7 @@ fullscreenBtn.addEventListener('click', () => {
 document.addEventListener('fullscreenchange', () => {
   fullscreenBtn.querySelector('img').src = document.fullscreenElement
     ? "https://static.wixstatic.com/media/fd2fb2_c9b139f2774c4bf7b32c7271fd6c1c1a~mv2.png"
-    : "https://static.wixstatic.com/media/fd2fb2_3fa37682b3b34c04a2cd08ffcde2763a~mv2.png";
+    : "https://static.wixstatic.com/media/3fa37682b3b34c04a2cd08ffcde2763a~mv2.png";
 });
 
 // Loading spinner
@@ -1238,36 +1287,20 @@ video.addEventListener('timeupdate', lagreSistePosisjon);
 window.addEventListener('beforeunload', lagreSistePosisjon);
 
 // Ferdig med avspilling
-video.addEventListener('ended', () => {
+video.addEventListener('ended', ryddeOgNeste);
+
+function ryddeOgNeste() {
   localStorage.removeItem(`${filmId}-lastPosition`);
   localStorage.removeItem("progress_" + filmId);
-  localStorage.removeItem("progress_" + navn); // Fjerner fra hovedsiden også når ferdig
+  localStorage.removeItem("progress_" + navn); 
   localStorage.setItem(`${filmId}-status`, "ferdig");
 
-  // ==== AUTO NESTE EPISODE ====
-  if (navn && sesong && episode && serier?.[navn]) {
-    const s = parseInt(sesong);
-    const e = parseInt(episode);
-
-    const serie = serier[navn];
-    const currentSeason = serie.sesonger[s];
-
-    // Neste episode i samme sesong
-    if (currentSeason?.episoder?.[e + 1]) {
-      window.location.href = `film-mal.html?navn=${navn}&sesong=${s}&episode=${e + 1}`;
-      return;
-    }
-
-    // Første episode i neste sesong
-    if (serie.sesonger[s + 1]?.episoder?.[1]) {
-      window.location.href = `film-mal.html?navn=${navn}&sesong=${s + 1}&episode=1`;
-      return;
-    }
+  if (isSerie && nesteEpisodeUrl) {
+    window.location.href = nesteEpisodeUrl;
+  } else {
+    window.location.href = `film.html?navn=${navn}`;
   }
-
-  // ==== FALLBACK (tilbake til serie/film-side) ====
-  window.location.href = `film.html?navn=${navn}`;
-});
+}
 
 // Skjul mus etter delay
 let mouseTimer;
@@ -1328,29 +1361,81 @@ video.addEventListener("loadedmetadata", () => {
 video.addEventListener("contextmenu", e => e.preventDefault());
 document.addEventListener("contextmenu", e => e.preventDefault());
 
-// Skip Intro Logikk
-const skipIntroBtn = document.getElementById("skipIntroBtn");
-const hasIntro = isSerie && film.introStart != null && film.introEnd != null;
 
-const introStart = film.introStart;
-const introEnd = film.introEnd;
+// ==================== SMART INTRO & OUTRO & AUTOPLAY LOGIKK ==================== //
+const skipIntroBtn = document.getElementById("skipIntroBtn");
+const skipOutroBtn = document.getElementById("skipOutroBtn");
 
 video.addEventListener("timeupdate", () => {
-  if (!isSerie || !hasIntro) {
-    if(skipIntroBtn) skipIntroBtn.style.display = "none";
-    return;
+  if (!isSerie) return;
+
+  const tid = video.currentTime;
+  const gjenstaendeTid = video.duration - tid;
+
+  // 1. SKIP INTRO LOGIKK
+  if (film.introStart != null && film.introEnd != null) {
+    if (tid >= film.introStart && tid <= film.introEnd) {
+      if (skipIntroBtn) skipIntroBtn.style.display = "block";
+    } else {
+      if (skipIntroBtn) skipIntroBtn.style.display = "none";
+    }
   }
 
-  if (video.currentTime >= introStart && video.currentTime <= introEnd) {
-    if(skipIntroBtn) skipIntroBtn.style.display = "block";
-  } else {
-    if(skipIntroBtn) skipIntroBtn.style.display = "none";
+  // 2. SKIP OUTRO (RULLETEKST) LOGIKK
+  if (film.outroStart != null) {
+    if (tid >= film.outroStart) {
+      if (skipOutroBtn) skipOutroBtn.style.display = "block";
+    } else {
+      if (skipOutroBtn) skipOutroBtn.style.display = "none";
+    }
+  }
+
+  // 3. NETFLIX-STYLE AUTOPLAY OVERLAY (Siste 15 sekunder av episoden)
+  if (nesteEpisodeUrl && gjenstaendeTid <= 15 && !autoplayTriggered && !video.paused) {
+    autoplayTriggered = true;
+    startAutoplayNedtelling();
   }
 });
 
-if(skipIntroBtn) {
+// Intro-knapp klikk
+if (skipIntroBtn) {
   skipIntroBtn.addEventListener("click", () => {
-    video.currentTime = introEnd;
+    video.currentTime = film.introEnd;
+  });
+}
+
+// Outro-knapp klikk (Hopper rett til neste episode)
+if (skipOutroBtn) {
+  skipOutroBtn.addEventListener("click", () => {
+    ryddeOgNeste();
+  });
+}
+
+// Nedtellings-funksjon for Autoplay-overlay
+let autoplayTimer;
+function startAutoplayNedtelling() {
+  if (!autoplayOverlay) return;
+  
+  autoplayOverlay.style.display = "flex";
+  let teller = 5;
+  autoplayCountdown.textContent = teller;
+
+  autoplayTimer = setInterval(() => {
+    teller--;
+    autoplayCountdown.textContent = teller;
+    if (teller <= 0) {
+      clearInterval(autoplayTimer);
+      ryddeOgNeste();
+    }
+  }, 1000);
+}
+
+// Avbryt autoplay om seeren trykker "Avbryt"
+if (autoplayCancelBtn) {
+  autoplayCancelBtn.addEventListener("click", () => {
+    clearInterval(autoplayTimer);
+    if (autoplayOverlay) autoplayOverlay.style.display = "none";
+    // Lar seeren se ferdig rulleteksten i fred, vanlig "ended"-event vil uansett trigge neste etterpå.
   });
 }
 </script>
