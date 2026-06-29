@@ -808,7 +808,7 @@ main {
     background: linear-gradient(to bottom, 
       rgba(9, 27, 30, 0.98) 0%, 
       rgba(9, 27, 30, 0.7) 50%, 
-      rgba(9, 27, 30, 0) 100
+      rgba(9, 27, 30, 0) 100%
     ) !important; 
     backdrop-filter: none !important;    
     box-shadow: none !important;
@@ -827,28 +827,42 @@ main {
     left: 50% !important;
     transform: translateX(-50%) !important;
     width: calc(100% - 40px);
-    max-width: 450px;
+    max-width: 380px; /* Gjort litt smalere siden det kun er ikoner nå */
     height: 60px;
     background: rgba(255, 255, 255, 0.06) !important;
     backdrop-filter: blur(20px) saturate(160%) !important;
     -webkit-backdrop-filter: blur(20px) saturate(160%) !important;
     border: 1px solid rgba(255, 255, 255, 0.15) !important;
-    border-radius: 40px !important; /* Gjør menyen rund og avlang */
+    border-radius: 40px !important; 
     box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37) !important;
     z-index: 99999;
     align-items: center !important;
     justify-content: space-around !important;
-    padding: 0 20px !important;
+    padding: 0 10px !important;
     gap: 0 !important;
   }
 
+  /* STYLING AV LENKER (KUN IKONER) */
   .nav-links a {
-    font-size: 14px !important;
-    text-shadow: none !important;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 4px;
+    font-size: 0px !important; /* Gjemmer selve tekst-noden i lenken */
+    color: #e0e0e0 !important;
+    text-decoration: none;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 50px;
+    height: 50px;
+  }
+
+  /* Gjør ikonene større og fjerner marginer fra PC-versjonen */
+  .nav-links a i {
+    font-size: 22px !important; 
+    margin-right: 0px !important; 
+    display: block !important;
+  }
+
+  .nav-links a.active i {
+    color: #00FFCC !important;
   }
 
   .top-nav > div:last-child {
