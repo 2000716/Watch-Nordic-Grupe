@@ -288,11 +288,11 @@
         if (registreringsmodus) {
           // Firebase Registrering -> Sender til Hovedsiden.html
           await window.createUserWithEmail(window.firebaseAuth, epost, passord);
-          window.location.href = "Hovedsiden.html";
+          window.location.href = "Hovedside.html";
         } else {
           // Firebase Innlogging -> Sender til Hovedsiden.html
           await window.signInWithEmail(window.firebaseAuth, epost, passord);
-          window.location.href = "Hovedsiden.html";
+          window.location.href = "Hovedside.html";
         }
       } catch (error) {
         if (error.code === 'auth/email-already-in-use') {
