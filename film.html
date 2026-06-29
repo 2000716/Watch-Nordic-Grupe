@@ -493,34 +493,21 @@ margin-bottom:20px;
 
 .gallery{
 display:grid;
-grid-template-columns:repeat(auto-fill,minmax(260px,1fr));
+grid-template-columns:repeat(3, 1fr); /* Tvinger frem nøyaktig 3 kolonner */
 gap:22px;
 width:100%;
-}
-
-.gallery{
-display:flex;
-gap:18px;
-overflow-x:auto;
-scroll-behavior:smooth;
-padding-bottom:10px;
-
 max-width:1400px;
 margin:0 auto;
-}
-
-.gallery::-webkit-scrollbar{
-display:none;
+padding-bottom:10px;
 }
 
 .movie-card{
-min-width:280px;
+width:100%; /* Lar grid-systemet styre bredden automatisk */
 height:160px;
 border-radius:14px;
 overflow:hidden;
 position:relative;
 cursor:pointer;
-flex-shrink:0;
 transition:transform .35s ease, box-shadow .35s ease;
 }
 
