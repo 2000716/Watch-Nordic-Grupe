@@ -83,7 +83,7 @@ const filmer = {
     banner: "", 
     logo: "",
     trailer: "", // 🎥 NY 
-    poster: "https://blenderartists.org/uploads/default/original/4X/2/6/2/2622f8717947903fdbe61ffd98e2c6622b052021.jpeg",
+    poster: "https://static.wixstatic.com/media/d9ace9_af1093b9b682484987fc8f30d24dd3f5~mv2.jpg",
     posterVertikal: "https://pics.filmaffinity.com/sprite_fright-557419042-large.jpg", // portrett
     beskrivelse: "Når en gruppe bråkete tenåringer drar inn i en isolert skog, oppdager de fredelige soppvesener som viser seg å være en uventet naturkraft.",
     metadata: ["2021", "15 år", "Animasjon", "10 min"],
