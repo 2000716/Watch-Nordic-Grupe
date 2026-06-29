@@ -4,12 +4,15 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
+  <!-- NY APP-KODE START -->
   <link rel="manifest" href="manifest.json">
   <script>
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.register('sw.js');
     }
   </script>
+  <!-- NY APP-KODE SLUTT -->
+
   <title>Velkommen | Watch Nordic™</title>
 
   <link rel="icon" type="image/png" href="https://static.wixstatic.com/media/d9ace9_95bbe3f5ff4b4aab9314a8d08804344e~mv2.png" />
@@ -121,7 +124,6 @@
       background:#091B1E;
     }
 
-    /* Gradient som fader 3D-veggen mørkere mot venstre på PC (bak teksten) */
     .hero::before{
       content:"";
       position:absolute;
@@ -136,7 +138,6 @@
       z-index:1;
     }
 
-    /* Gradient som fader 3D-veggen mot bunnen av hero-seksjonen */
     .hero::after{
       content:"";
       position:absolute;
@@ -439,7 +440,6 @@
       transform: scale(var(--scale, 1)) rotate(var(--rot, 0deg));
     }
 
-    /* Innbyrdes asymmetriske start-marginer på radene */
     .row1{margin-left:220px;}
     .row2{margin-left:50px;}
     .row3{margin-left:310px;}
@@ -506,7 +506,6 @@
       text-decoration: underline;
     }
 
-    /* Innstillinger / Preferanser paneler (Skjult som standard) */
     .cookie-options {
       display: none;
       grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -712,7 +711,6 @@
         text-align: left;
       }
 
-      /* Kapsel-banner mobil */
       .cookie-banner {
         width: calc(100% - 20px);
         padding: 20px;
@@ -755,8 +753,9 @@
   <nav class="navbar">
     <div class="logo">WATCH</div>
     <div class="nav-buttons">
-      <a href="innlogging.html" class="login">Logg inn</a>
-      <a href="innlogging.html" class="signup">Registrer</a>
+      <!-- Satt inn filnavnet med URL-koding (%20 i stedet for mellomrom) -->
+      <a href="Innloggings%20side.html" class="login">Logg inn</a>
+      <a href="Innloggings%20side.html" class="signup">Registrer</a>
     </div>
   </nav>
 
@@ -777,7 +776,8 @@
       </p>
 
       <div class="hero-buttons">
-        <a href="innlogging.html" class="primary-btn">Begynn å se</a>
+        <!-- Satt inn filnavnet med URL-koding her også -->
+        <a href="Innloggings%20side.html" class="primary-btn">Begynn å se</a>
       </div>
     </div>
   </section>
@@ -888,7 +888,6 @@
   <script>
     const gallery = document.getElementById("film-galleri");
 
-    // Ytelsesforbedring: Bruker DocumentFragment for å oppdatere DOM kun én gang
     if(typeof filmer !== "undefined"){
       const fragment = document.createDocumentFragment();
       Object.keys(filmer).forEach(key => {
@@ -917,7 +916,6 @@
 
     let basePosters = [];
 
-    /* Hent filmer */
     if(typeof filmer !== "undefined"){
       Object.values(filmer).forEach(film => {
         if(film.poster){
@@ -926,7 +924,6 @@
       });
     }
 
-    /* Hent serier */
     if(typeof serier !== "undefined"){
       Object.values(serier).forEach(serie => {
         if(serie.poster){
@@ -935,7 +932,6 @@
       });
     }
 
-    /* Fyll radene i 3D-veggen med unike plasseringer og rekkefølger */
     if(basePosters.length > 0) {
       rows.forEach(row => {
         if(row) {
@@ -943,7 +939,6 @@
           const rowFragment = document.createDocumentFragment();
           
           for(let i = 0; i < 4; i++){
-            // Stokker om rekkefølgen for HVER gjennomgang i raden
             rowPosters.sort(() => Math.random() - 0.5);
             
             rowPosters.forEach(src => {
@@ -951,7 +946,6 @@
               img.src = src;
               img.loading = "lazy";
               
-              // Legger til CSS-variabler i stedet for transform-override
               const randomRotation = (Math.random() * 4 - 2).toFixed(1);
               const randomScale = (0.96 + Math.random() * 0.08).toFixed(2);
               
@@ -973,43 +967,35 @@
     const btnReject = document.getElementById("btnReject");
     const btnCustomize = document.getElementById("btnCustomize");
 
-    // Sjekk om brukeren allerede har gjort et valg før
     window.addEventListener("DOMContentLoaded", () => {
       const cookieConsent = localStorage.getItem("watch_nordic_cookie_consent");
       if (!cookieConsent) {
-        // Viser banneret med en liten forsinkelse for en smooth følelse
         setTimeout(() => {
           cookieBanner.classList.add("show");
         }, 1000);
       }
     });
 
-    // Funksjon for å lagre valget og lukke banneret
     function saveConsent(consentType, details) {
       localStorage.setItem("watch_nordic_cookie_consent", consentType);
       localStorage.setItem("watch_nordic_cookie_details", JSON.stringify(details));
       cookieBanner.classList.remove("show");
     }
 
-    // "Godta alle" klikk
     btnAccept.addEventListener("click", () => {
       saveConsent("all", { analytics: true, marketing: true });
     });
 
-    // "Avvis alle" klikk (kun nødvendige blir stående igjen)
     btnReject.addEventListener("click", () => {
       saveConsent("essential", { analytics: false, marketing: false });
     });
 
-    // "Tilpass" klikk (åpner/lukker sjekkboksene)
     btnCustomize.addEventListener("click", () => {
       if (cookieOptions.style.display === "grid") {
-        // Hvis åpen, lagrer vi det brukeren har krysset av på
         const analytics = document.getElementById("cookieAnalytics").checked;
         const marketing = document.getElementById("cookieMarketing").checked;
         saveConsent("custom", { analytics, marketing });
       } else {
-        // Hvis lukket, vis boksene og endre teksten på knappen til "Lagre valg"
         cookieOptions.style.display = "grid";
         btnCustomize.innerText = "Lagre mine valg";
       }
