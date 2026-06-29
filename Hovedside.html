@@ -787,7 +787,7 @@ main {
 @media (max-width: 768px) {
   body { 
     padding-top: 0px; 
-    padding-bottom: 90px; /* Sikrer at innholdet ikke blir gjemt bak bunnmenyen */
+    padding-bottom: 75px; /* Plass slik at innholdet ikke skjules bak bunnstripen */
   }
 
   main {
@@ -797,7 +797,7 @@ main {
     margin-right: 0px !important;
   }
 
-  /* TOPPMENY MOBIL (Logo, søk og profil blir igjen på topp) */
+  /* TOPPMENY MOBIL (Logo, søk og profil på topp) */
   .top-nav {
     position: fixed !important;
     top: 0;
@@ -819,22 +819,21 @@ main {
     align-items: center !important;
   }
 
-  /* FLYTENDE BUNNMENY MED GLASS-EFFEKT */
+  /* MINIMALISTISK MENYSTRIPE I BUNN */
   .nav-links { 
     display: flex !important; 
     position: fixed !important;
-    bottom: 20px;
-    left: 50% !important;
-    transform: translateX(-50%) !important;
-    width: calc(100% - 40px);
-    max-width: 380px; /* Gjort litt smalere siden det kun er ikoner nå */
+    bottom: 0;
+    left: 0 !important;
+    transform: none !important;
+    width: 100% !important;
     height: 60px;
-    background: rgba(255, 255, 255, 0.06) !important;
-    backdrop-filter: blur(20px) saturate(160%) !important;
-    -webkit-backdrop-filter: blur(20px) saturate(160%) !important;
-    border: 1px solid rgba(255, 255, 255, 0.15) !important;
-    border-radius: 40px !important; 
-    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37) !important;
+    background: rgba(9, 27, 30, 0.9) !important; /* Mørk solid/transparent base */
+    backdrop-filter: blur(15px) !important; /* Gjør at innholdet bak blir uskarpt */
+    -webkit-backdrop-filter: blur(15px) !important;
+    border-top: 1px solid rgba(255, 255, 255, 0.1) !important; /* Elegant linje på toppen */
+    border-radius: 0px !important; /* Fjerner pilleformen */
+    box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.4) !important;
     z-index: 99999;
     align-items: center !important;
     justify-content: space-around !important;
@@ -844,23 +843,25 @@ main {
 
   /* STYLING AV LENKER (KUN IKONER) */
   .nav-links a {
-    font-size: 0px !important; /* Gjemmer selve tekst-noden i lenken */
-    color: #e0e0e0 !important;
+    font-size: 0px !important; 
+    color: #a0a0a0 !important;
     text-decoration: none;
     display: flex !important;
     align-items: center !important;
     justify-content: center !important;
-    width: 50px;
-    height: 50px;
+    width: 60px;
+    height: 100%;
   }
 
-  /* Gjør ikonene større og fjerner marginer fra PC-versjonen */
+  /* Ikon-størrelse og fjerning av PC-marginer */
   .nav-links a i {
     font-size: 22px !important; 
     margin-right: 0px !important; 
     display: block !important;
+    transition: color 0.2s ease;
   }
 
+  /* Aktivt ikon markeres med din cyan-farge */
   .nav-links a.active i {
     color: #00FFCC !important;
   }
