@@ -2,166 +2,107 @@
 <html lang="no">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
-  <link rel="manifest" href="manifest.json">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="Watch Nordic">
-  
-  <script>
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('sw.js');
-    }
-  </script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
 
   <title>Velkommen | Watch Nordic™</title>
 
+  <link rel="manifest" href="manifest.json">
+  <script>
+    // 1. Registrer Service Worker for PWA
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('sw.js');
+    }
+
+    // 2. Disney-Intro logikk: Vises kun hvis i "standalone" modus (appen)
+    // Bruker sessionStorage for at introen skal vises hver gang appen startes på nytt
+    const erIAppModus = window.matchMedia('(display-mode: standalone)').matches;
+    if (erIAppModus && !sessionStorage.getItem("harSettIntro")) {
+      sessionStorage.setItem("harSettIntro", "true");
+      window.location.href = "intro.html";
+    }
+  </script>
+
   <link rel="icon" type="image/png" href="https://static.wixstatic.com/media/d9ace9_95bbe3f5ff4b4aab9314a8d08804344e~mv2.png" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+
   <style>
-    /* RESET */
-    * { margin:0; padding:0; box-sizing:border-box; }
-    html { scroll-behavior:smooth; }
-    body { background:#091B1E; color:white; font-family: Inter, Arial, sans-serif; overflow-x:hidden; }
+    /* ================= RESET ================= */
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body { background: #091B1E; color: white; font-family: Inter, Arial, sans-serif; overflow-x: hidden; }
 
-    /* Fjernet glow fra body */
-    body::before { display: none; }
+    /* ================= BAKGRUNN GLOW ================= */
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background:
+        radial-gradient(circle at top left, rgba(0,255,204,0.12), transparent 30%),
+        radial-gradient(circle at bottom right, rgba(0,255,204,0.08), transparent 30%);
+      z-index: -1;
+    }
 
-    /* NAVBAR */
+    /* ================= NAVBAR ================= */
     .navbar {
-      position:fixed; top:0; width:100%; height:80px;
-      display:flex; justify-content:space-between; align-items:center;
-      padding:0 60px; z-index:999;
-      background:rgba(9,27,30,0.95);
-      border-bottom:1px solid rgba(255,255,255,0.1);
+      position: fixed; top: 0; width: 100%; height: 80px;
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 0 60px; z-index: 999;
+      backdrop-filter: blur(14px);
+      background: rgba(9,27,30,0.65);
+      border-bottom: 1px solid rgba(255,255,255,0.06);
     }
+    .logo { font-size: 30px; font-weight: 900; letter-spacing: 4px; color: #00FFCC; text-shadow: 0 0 8px rgba(0,255,204,0.7), 0 0 20px rgba(0,255,204,0.3); }
+    .nav-buttons { display: flex; align-items: center; gap: 15px; }
+    .nav-buttons a { text-decoration: none; padding: 12px 22px; border-radius: 999px; font-weight: 700; transition: 0.3s ease; font-size: 14px; }
+    .login { color: white; border: 1px solid rgba(255,255,255,0.2); background: rgba(255,255,255,0.04); }
+    .login:hover { background: rgba(255,255,255,0.1); transform: translateY(-2px); }
+    .signup { background: #00FFCC; color: #071214; box-shadow: 0 0 25px rgba(0,255,204,0.35); }
+    .signup:hover { transform: translateY(-2px) scale(1.03); box-shadow: 0 0 35px rgba(0,255,204,0.5); }
 
-    /* BILDELOGO */
-    .logo img { height: 40px; width: auto; display: block; }
+    /* ================= HERO ================= */
+    .hero { position: relative; height: 100vh; display: flex; align-items: center; overflow: hidden; background: #091B1E; }
+    .hero::before { content: ""; position: absolute; inset: 0; background: linear-gradient(to right, rgba(9,27,30,1) 25%, rgba(9,27,30,0.7) 55%, rgba(9,27,30,0.2) 100%); z-index: 1; }
+    .hero::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 250px; background: linear-gradient(to top, #091B1E, transparent); z-index: 1; }
+    .hero-content { position: relative; z-index: 2; max-width: 650px; margin-left: 70px; }
+    .hero-content h1 { font-size: 72px; line-height: 1; margin-bottom: 20px; font-weight: 900; }
+    .hero-content p { color: #c9d1d1; font-size: 19px; line-height: 1.6; margin-bottom: 35px; max-width: 550px; }
+    .hero-buttons { display: flex; gap: 16px; flex-wrap: wrap; }
+    .hero-buttons a { text-decoration: none; font-weight: 800; transition: 0.3s ease; }
+    .primary-btn { background: #00FFCC; color: #071214; padding: 16px 34px; border-radius: 999px; box-shadow: 0 0 30px rgba(0,255,204,0.35); }
+    .primary-btn:hover { transform: scale(1.04); }
 
-    .nav-buttons { display:flex; align-items:center; gap:15px; }
-    .nav-buttons a {
-      text-decoration:none; padding:12px 22px; border-radius:6px;
-      font-weight:700; font-size:14px; transition:0.3s ease;
-    }
-
-    .login { color:white; border:1px solid rgba(255,255,255,0.2); background:rgba(255,255,255,0.05); }
-    .login:hover { background:rgba(255,255,255,0.1); }
-
-    .signup { background:#00FFCC; color:#071214; }
-    .signup:hover { background:#00d4aa; }
-
-    /* HERO */
-    .hero { position:relative; height:100vh; display:flex; align-items:center; overflow:hidden; background:#091B1E; }
-    .hero::before { content:""; position:absolute; inset:0; background:linear-gradient(to right, #091B1E 25%, rgba(9,27,30,0.5) 100%); z-index:1; }
-    .hero::after { content:""; position:absolute; left:0; right:0; bottom:0; height:200px; background:linear-gradient(to top, #091B1E, transparent); z-index:1; }
+    /* ================= SEKSJONER & FILMROW ================= */
+    .section { padding: 70px 60px; }
+    .movie-row { display: flex; gap: 20px; overflow-x: auto; padding-bottom: 10px; scroll-behavior: smooth; }
+    .movie-card { position: relative; min-width: 230px; transition: 0.35s ease; cursor: pointer; flex-shrink: 0; }
+    .movie-card img { width: 100%; height: 340px; object-fit: cover; border-radius: 18px; border: 1px solid rgba(255,255,255,0.08); box-shadow: 0 10px 30px rgba(0,0,0,0.4); }
     
-    .hero-content { position:relative; z-index:2; max-width:650px; margin-left:70px; }
-    .hero-content h1 { font-size:72px; line-height:1; margin-bottom:20px; font-weight:900; }
-    .hero-content p { color:#c9d1d1; font-size:19px; margin-bottom:35px; }
+    /* ================= HERO WALL (3D PC) ================= */
+    .hero-wall { position: absolute; inset: 0; overflow: hidden; z-index: 0; transform: perspective(2000px) rotateY(-22deg) rotateX(4deg) scale(1.25); transform-origin: right center; opacity: .32; }
 
-    .primary-btn {
-      background:#00FFCC; color:#071214; padding:16px 34px;
-      border-radius:6px; font-weight:800; text-decoration:none; display:inline-block;
+    /* ================= RESPONSIVE / MEDIA QUERIES ================= */
+    @media (max-width: 768px) {
+      .hero { height: auto; min-height: 95vh; padding-top: 100px; text-align: center; }
+      .hero-content { margin: 0 auto; padding: 0 20px; }
+      .navbar { padding: 12px 20px; }
+      .movie-card { min-width: 150px; }
+      .movie-card img { height: 220px; }
     }
 
-    /* FILM ROW */
-    .section { padding:70px 60px; }
-    .movie-row { display:flex; gap:20px; overflow-x:auto; padding-bottom:10px; }
-    .movie-card { position:relative; min-width:230px; cursor:pointer; }
-    .movie-card img { width:100%; height:340px; object-fit:cover; border-radius:8px; }
-
-    /* DEVICES */
-    .devices { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:25px; }
-    .device { padding:35px 25px; text-align:center; border-radius:8px; background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08); }
-
-    /* FOOTER & COOKIE (Stil beholdt, fjernet shadows) */
-    .cookie-banner { position: fixed; bottom: -100%; left: 50%; transform: translateX(-50%); width: 90%; max-width: 850px; background: #091B1E; border: 1px solid #333; border-radius: 8px; padding: 30px; z-index: 99999; }
-    .cookie-banner.show { bottom: 30px; }
-
-    /* MOBIL RESPONSIV */
-    @media (max-width: 768px) {
-      .navbar { padding:0 20px; height:70px; }
-      .logo img { height: 25px; }
-      .hero-content { margin-left:20px; padding-right:20px; }
-      .hero-content h1 { font-size:40px; }
-      .section { padding:40px 20px; }
+    /* ================= NØDBREMS (ROTASJONSLÅS) ================= */
+    @media screen and (orientation: landscape) and (max-width: 900px) {
+      body { position: fixed !important; overflow: hidden !important; width: 100vw !important; height: 100vh !important; }
+      body::after {
+        content: "Vennligst snu telefonen til portrett-modus.";
+        position: fixed; top: 0; left: 0;
+        width: 100vw; height: 100vh;
+        background: #091B1E; color: white;
+        display: flex; align-items: center; justify-content: center;
+        z-index: 99999999; font-family: Inter, sans-serif; font-size: 18px; text-align: center; padding: 20px;
+      }
     }
   </style>
 </head>
-
 <body>
-
-  <nav class="navbar">
-    <div class="logo"><a href="#"><img src="logo.png" alt="Watch Nordic"></a></div>
-    <div class="nav-buttons">
-      <a href="Innloggings side.html" class="login">Logg inn</a>
-      <a href="Innloggings side.html" class="signup">Registrer</a>
-    </div>
-  </nav>
-
-  <section class="hero">
-    <div class="hero-wall"></div>
-    <div class="hero-content">
-      <h1>Filmer og serier.<br>På neste nivå.</h1>
-      <p>Stream tusenvis av filmer, serier og eksklusive titler med en moderne kino-opplevelse hjemme.</p>
-      <div class="hero-buttons">
-        <a href="Innloggings side.html" class="primary-btn">Begynn å se</a>
-      </div>
-    </div>
-  </section>
-
-  <section class="section" id="filmer">
-    <h2>Populært på <span>Watch</span></h2>
-    <div class="movie-row" id="film-galleri"></div>
-  </section>
-
-  <section class="section">
-    <h2>Se hvor som helst</h2>
-    <div class="devices">
-      <div class="device"><i class="fas fa-tv"></i><h3>Smart-TV</h3></div>
-      <div class="device"><i class="fas fa-laptop"></i><h3>PC / Mac</h3></div>
-      <div class="device"><i class="fas fa-mobile-alt"></i><h3>Mobil</h3></div>
-      <div class="device"><i class="fas fa-tablet-alt"></i><h3>Nettbrett</h3></div>
-    </div>
-  </section>
-
-  <div class="cookie-banner" id="cookieBanner">
-    <div class="cookie-container">
-      <h3>Vi bryr oss om ditt personvern</h3>
-      <p>Watch Nordic™ bruker informasjonskapsler for å forbedre din opplevelse.</p>
-      <div class="cookie-buttons">
-        <button class="cookie-btn" id="btnAccept">Godta alle</button>
-      </div>
-    </div>
-  </div>
-
-  <script src="Filmdata.js"></script>
-  <script src="Seriedata.js"></script>
-  <script>
-    // Beholdt original logikk for filmgalleri og cookies
-    const gallery = document.getElementById("film-galleri");
-    if(typeof filmer !== "undefined"){
-      Object.keys(filmer).forEach(key => {
-        const film = filmer[key];
-        const card = document.createElement("div");
-        card.className = "movie-card";
-        card.innerHTML = `<img src="${film.poster}" alt="">`;
-        gallery.appendChild(card);
-      });
-    }
-
-    const cookieBanner = document.getElementById("cookieBanner");
-    window.addEventListener("DOMContentLoaded", () => {
-      if (!localStorage.getItem("watch_nordic_cookie_consent")) {
-        setTimeout(() => cookieBanner.classList.add("show"), 1000);
-      }
-    });
-    document.getElementById("btnAccept").addEventListener("click", () => {
-      localStorage.setItem("watch_nordic_cookie_consent", "all");
-      cookieBanner.classList.remove("show");
-    });
-  </script>
-</body>
+    </body>
 </html>
