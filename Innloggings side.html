@@ -50,6 +50,7 @@
       position: relative;
     }
 
+    /* Fallback bakgrunn hvis JS-postere ikke laster inn */
     .bg-fallback {
       position: absolute;
       inset: 0;
@@ -59,6 +60,7 @@
       z-index: 1;
     }
 
+    /* Overleggsgradient for å gi dybde og sikre at teksten er lesbar */
     .overlay {
       position: absolute;
       inset: 0;
@@ -264,8 +266,7 @@
     <div class="toggle-text" id="toggleText">
       Er du ikke medlem? <a onclick="visRegistrering()">Registrer deg</a>
     </div>
-
-    </div>
+  </div>
 
   <script src="Filmdata.js"></script>
   <script src="Seriedata.js"></script>
@@ -275,26 +276,25 @@
 
     // ================= SKJEMABEHANDLING MED FIREBASE =================
     document.getElementById("authForm").addEventListener("submit", async function(event) {
-      event.preventDefault(); // Hindrer siden i å laste inn på nytt
+      event.preventDefault(); 
       
       const epost = document.getElementById("epost").value.trim().toLowerCase();
       const passord = document.getElementById("passord").value.trim();
       const feilmelding = document.getElementById("feilmelding");
       
-      feilmelding.textContent = "Laster..."; // Enkel feedback til brukeren
+      feilmelding.textContent = "Laster..."; 
 
       try {
         if (registreringsmodus) {
-          // Firebase Registrering
+          // Firebase Registrering -> Sender til Hovedsiden.html
           await window.createUserWithEmail(window.firebaseAuth, epost, passord);
-          window.location.href = "hvem-ser-på.html";
+          window.location.href = "Hovedsiden.html";
         } else {
-          // Firebase Innlogging
+          // Firebase Innlogging -> Sender til Hovedsiden.html
           await window.signInWithEmail(window.firebaseAuth, epost, passord);
-          window.location.href = "hvem-ser-på.html";
+          window.location.href = "Hovedsiden.html";
         }
       } catch (error) {
-        // Håndter vanlige Firebase-feilmeldinger for å gi pene beskjed til brukeren
         if (error.code === 'auth/email-already-in-use') {
           feilmelding.textContent = "E-posten er allerede registrert.";
         } else if (error.code === 'auth/wrong-password' || error.code === 'auth/user-not-found' || error.code === 'auth/invalid-credential') {
@@ -303,7 +303,7 @@
           feilmelding.textContent = "Passordet er for svakt (minst 6 tegn).";
         } else {
           feilmelding.textContent = "En feil oppstod. Prøv igjen.";
-          console.error(error); // Logger feilen for deg i konsollen
+          console.error(error); 
         }
       }
     });
