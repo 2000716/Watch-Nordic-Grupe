@@ -437,7 +437,7 @@
 
   <script>
     if (!localStorage.getItem("epost")) {
-      window.location.href = "Starts side.html";
+      window.location.href = "index.html";
     }
 
     const FORELDRE_PIN = "1234"; // Standard PIN for foreldrekontroll
@@ -477,7 +477,7 @@
     // Funksjoner deklarert tidlig så de er tilgjengelige ved oppstart
     function oppdaterMaksGrenseTekst() {
       const grense = localStorage.getItem("maksAldersgrense") || "12";
-      if (grense === "A") {
+      if (grense === "Alle") {
         currentLimitView.innerText = "Tillater kun innhold for Alle (A)";
       } else {
         currentLimitView.innerText = `Maks ${grense} år`;
