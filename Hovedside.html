@@ -1232,535 +1232,520 @@ main {
 
 <script src="Filmdata.js"></script>
 <script src="Seriedata.js"></script>
-
-<script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-  import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-
-  const firebaseConfig = {
-    apiKey: "AIzaSyALRvms-rsDgQPtZW7fbh5KyAqldglrh1Q",
-    authDomain: "watch-nordic-8edf3.firebaseapp.com",
-    projectId: "watch-nordic-8edf3",
-    storageBucket: "watch-nordic-8edf3.firebasestorage.app",
-    messagingSenderId: "308473429567",
-    appId: "1:308473429567:web:8e434e66892e2c3243428a"
-  };
-
-  const app = initializeApp(firebaseConfig);
-  const auth = getAuth(app);
-
-  // Gjør sjekken tilgjengelig for hovedskriptet under
-  window.firebaseAuth = auth;
-  window.onAuthStateChanged = onAuthStateChanged;
-</script>
-
 <script>
 // ==================== CSS INJEKSJON FOR VIAPLAY-LÅSING ==================== //
 // Dette tvinger galleriene til å skjule scrollbars og deaktivere manuell scrolling på PC (hover),
 // men tillater touch-scrolling på mobil og iPad.
 const style = document.createElement('style');
 if (window.matchMedia("(pointer: coarse)").matches) {
-  // iPad, mobil og andre touch-enheter
-  style.textContent = `
-    .image-gallery, .coming-movies-gallery, .top10-gallery, .continue-image-gallery {
-      overflow-x: auto !important; 
-      scroll-behavior: smooth !important;
-      display: flex !important;
-      -webkit-overflow-scrolling: touch !important;
-    }
-  `;
+  // iPad, mobil og andre touch-enheter
+  style.textContent = `
+    .image-gallery, .coming-movies-gallery, .top10-gallery, .continue-image-gallery {
+      overflow-x: auto !important; 
+      scroll-behavior: smooth !important;
+      display: flex !important;
+      -webkit-overflow-scrolling: touch !important;
+    }
+  `;
 } else {
-  // Kun PC med mus
-  style.textContent = `
-    .image-gallery, .coming-movies-gallery, .top10-gallery, .continue-image-gallery {
-      overflow-x: hidden !important; 
-      scroll-behavior: smooth !important;
-      display: flex !important;
-    }
-  `;
+  // Kun PC med mus
+  style.textContent = `
+    .image-gallery, .coming-movies-gallery, .top10-gallery, .continue-image-gallery {
+      overflow-x: hidden !important; 
+      scroll-behavior: smooth !important;
+      display: flex !important;
+    }
+  `;
 }
 document.head.appendChild(style);
 
-// ==================== AUTENTISERING MED FIREBASE ==================== //
-// Sjekker i skyen om enheten har en godkjent innlogging eller ikke
-window.onAuthStateChanged(window.firebaseAuth, (user) => {
-  if (!user) {
-    // Hvis brukeren IKKE er logget inn i Firebase, send dem til Starts side.html
-    window.location.href = "Starts side.html";
-  }
+// ==================== AUTENTISERING ==================== //
+const epost = localStorage.getItem("epost");
+const passord = localStorage.getItem("passord");
+
+if (!epost || !passord) {
+  window.location.href = "Starts side.html";
+}
+
+window.addEventListener("storage", () => {
+  if (!localStorage.getItem("epost") || !localStorage.getItem("passord")) {
+    window.location.href = "Starts side.html";
+  }
 });
 
-// Profil- og barneinnstillinger beholdes i localStorage per enhet
 const erInnloggetSomBarn = localStorage.getItem("isKids") === "true";
 const maksAldersgrense = localStorage.getItem("maksAldersgrense") || "12";
 
 function sjekkAldersgrense(item) {
-  if (!item || !item.metadata) return false;
-  const maksTall = (maksAldersgrense === "A" || maksAldersgrense === "Alle") ? 0 : parseInt(maksAldersgrense, 10);
-  let varensAlder = 0;
-  item.metadata.forEach(meta => {
-    const renTekst = meta.toLowerCase();
-    if (renTekst.includes("6")) varensAlder = 6;
-    if (renTekst.includes("9")) varensAlder = 9;
-    if (renTekst.includes("12")) varensAlder = 12;
-    if (renTekst.includes("15")) varensAlder = 15;
-    if (renTekst.includes("16")) varensAlder = 16;
-    if (renTekst.includes("18")) varensAlder = 18;
-  });
-  return varensAlder <= maksTall;
+  if (!item || !item.metadata) return false;
+  const maksTall = (maksAldersgrense === "A" || maksAldersgrense === "Alle") ? 0 : parseInt(maksAldersgrense, 10);
+  let varensAlder = 0;
+  item.metadata.forEach(meta => {
+    const renTekst = meta.toLowerCase();
+    if (renTekst.includes("6")) varensAlder = 6;
+    if (renTekst.includes("9")) varensAlder = 9;
+    if (renTekst.includes("12")) varensAlder = 12;
+    if (renTekst.includes("15")) varensAlder = 15;
+    if (renTekst.includes("16")) varensAlder = 16;
+    if (renTekst.includes("18")) varensAlder = 18;
+  });
+  return varensAlder <= maksTall;
 }
 
 function erEgnetForBarn(item) {
-  if (!item || !item.metadata) return false;
-  return item.metadata.some(meta => {
-    const m = meta.toLowerCase();
-    return m.includes("barn") || m.includes("familie") || m.includes("animasjon") || m === "alle";
-  });
+  if (!item || !item.metadata) return false;
+  return item.metadata.some(meta => {
+    const m = meta.toLowerCase();
+    return m.includes("barn") || m.includes("familie") || m.includes("animasjon") || m === "alle";
+  });
 }
 
 // ==================== NAVIGASJON ==================== //
 function gåTilKonto() {
-  window.location.href = "konto.html";
+  window.location.href = "konto.html";
 }
 
 // ==================== PROFILBILDE ==================== //
 const lagretBilde = localStorage.getItem("profilbilde");
 if (lagretBilde) {
-  const menyProfil = document.getElementById("menyProfilbilde");
-  if (menyProfil) menyProfil.src = lagretBilde;
+  const menyProfil = document.getElementById("menyProfilbilde");
+  if (menyProfil) menyProfil.src = lagretBilde;
 
-  const headerProfil = document.getElementById("headerProfilbilde");
-  if (headerProfil) headerProfil.src = lagretBilde;
+  const headerProfil = document.getElementById("headerProfilbilde");
+  if (headerProfil) headerProfil.src = lagretBilde;
 }
 const navn = localStorage.getItem("profilnavn");
 if (navn) {
-  const navnElement = document.getElementById("profilNavn");
-  if (navnElement) navnElement.textContent = navn;
+  const navnElement = document.getElementById("profilNavn");
+  if (navnElement) navnElement.textContent = navn;
 }
 
 // ==================== HERO-BANNER ==================== //
 function hentBannerInnhold() {
-  let bannerInnhold = [];
-  
-  // Henter filmer som har enten vanlig banner eller mobilbanner
-  Object.keys(filmer).forEach(key => {
-    if (filmer[key].banner || filmer[key].bannerMobil) {
-      if (erInnloggetSomBarn) {
-        if (!erEgnetForBarn(filmer[key]) || !sjekkAldersgrense(filmer[key])) return;
-      }
-      bannerInnhold.push({ ...filmer[key], key, type: "film" });
-    }
-  });
+  let bannerInnhold = [];
+  
+  // Henter filmer som har enten vanlig banner eller mobilbanner
+  Object.keys(filmer).forEach(key => {
+    if (filmer[key].banner || filmer[key].bannerMobil) {
+      if (erInnloggetSomBarn) {
+        if (!erEgnetForBarn(filmer[key]) || !sjekkAldersgrense(filmer[key])) return;
+      }
+      bannerInnhold.push({ ...filmer[key], key, type: "film" });
+    }
+  });
 
-  // Henter serier som har enten vanlig banner eller mobilbanner
-  if (typeof serier !== "undefined") {
-    Object.keys(serier).forEach(key => {
-      if (serier[key].banner || serier[key].bannerMobil) {
-        if (erInnloggetSomBarn) {
-          if (!erEgnetForBarn(serier[key]) || !sjekkAldersgrense(serier[key])) return;
-        }
-        bannerInnhold.push({ ...serier[key], key, type: "serie" });
-      }
-    });
-  }
-  return bannerInnhold;
+  // Henter serier som har enten vanlig banner eller mobilbanner
+  if (typeof serier !== "undefined") {
+    Object.keys(serier).forEach(key => {
+      if (serier[key].banner || serier[key].bannerMobil) {
+        if (erInnloggetSomBarn) {
+          if (!erEgnetForBarn(serier[key]) || !sjekkAldersgrense(serier[key])) return;
+        }
+        bannerInnhold.push({ ...serier[key], key, type: "serie" });
+      }
+    });
+  }
+  return bannerInnhold;
 }
 
 function hentDesktopBanner() {
-  const innhold = hentBannerInnhold();
-  if (innhold.length === 0) return null;
-  return innhold[new Date().getHours() % innhold.length];
+  const innhold = hentBannerInnhold();
+  if (innhold.length === 0) return null;
+  return innhold[new Date().getHours() % innhold.length];
 }
 
 function hentMobilBanner() {
-  const innhold = hentBannerInnhold();
-  if (innhold.length === 0) return null;
-  return innhold[(new Date().getHours() + 1) % innhold.length];
+  const innhold = hentBannerInnhold();
+  if (innhold.length === 0) return null;
+  return innhold[(new Date().getHours() + 1) % innhold.length];
 }
 
 function oppdaterBanner() {
-  const erMobil = window.innerWidth <= 768;
-  const film = erMobil ? hentMobilBanner() : hentDesktopBanner();
+  const erMobil = window.innerWidth <= 768;
+  const film = erMobil ? hentMobilBanner() : hentDesktopBanner();
 
-  if (!film) {
-    const heroSection = document.querySelector(".hero-banner");
-    if (heroSection) heroSection.style.display = "none";
-    return;
-  }
+  if (!film) {
+    const heroSection = document.querySelector(".hero-banner");
+    if (heroSection) heroSection.style.display = "none";
+    return;
+  }
 
-  const bilde = document.getElementById("banner-bilde");
-  const video = document.getElementById("banner-video");
-  const logo = document.getElementById("banner-logo");
-  const beskrivelse = document.getElementById("banner-beskrivelse");
-  const metadata = document.getElementById("banner-metadata");
-  const seNa = document.getElementById("banner-se-na");
-  const addBtn = document.getElementById("banner-add");
+  const bilde = document.getElementById("banner-bilde");
+  const video = document.getElementById("banner-video");
+  const logo = document.getElementById("banner-logo");
+  const beskrivelse = document.getElementById("banner-beskrivelse");
+  const metadata = document.getElementById("banner-metadata");
+  const seNa = document.getElementById("banner-se-na");
+  const addBtn = document.getElementById("banner-add");
 
-  bilde.src = erMobil ? (film.bannerMobil || film.banner) : film.banner;
-  bilde.style.display = "block";
+  // Henter bannerMobil på telefon, og faller tilbake til vanlige banner hvis mobilversjon mangler
+  bilde.src = erMobil ? (film.bannerMobil || film.banner) : film.banner;
+  bilde.style.display = "block";
 
-  if (film.trailer) {
-    video.src = film.trailer;
-    video.load();
-    video.muted = true;
-  } else {
-    video.removeAttribute("src");
-  }
-  video.style.display = "none";
+  if (film.trailer) {
+    video.src = film.trailer;
+    video.load();
+    video.muted = true;
+  } else {
+    video.removeAttribute("src");
+  }
+  video.style.display = "none";
 
-  let titleElement = document.getElementById("banner-title");
-  if (!titleElement) {
-    titleElement = document.createElement("h1");
-    titleElement.id = "banner-title";
-    titleElement.className = "banner-title";
-    logo.parentNode.insertBefore(titleElement, logo.nextSibling);
-  }
+  let titleElement = document.getElementById("banner-title");
+  if (!titleElement) {
+    titleElement = document.createElement("h1");
+    titleElement.id = "banner-title";
+    titleElement.className = "banner-title";
+    logo.parentNode.insertBefore(titleElement, logo.nextSibling);
+  }
 
-  if (film.logo) {
-    logo.src = film.logo;
-    logo.style.display = "block";
-    titleElement.style.display = "none";
-  } else {
-    logo.style.display = "none";
-    titleElement.textContent = film.tittel || "";
-    titleElement.style.display = "block";
-  }
+  if (film.logo) {
+    logo.src = film.logo;
+    logo.style.display = "block";
+    titleElement.style.display = "none";
+  } else {
+    logo.style.display = "none";
+    titleElement.textContent = film.tittel || "";
+    titleElement.style.display = "block";
+  }
 
-  beskrivelse.textContent = film.beskrivelse || "";
-  metadata.textContent = film.metadata ? film.metadata.join(" • ") : "";
+  beskrivelse.textContent = film.beskrivelse || "";
+  metadata.textContent = film.metadata ? film.metadata.join(" • ") : "";
 
-  seNa.onclick = () => { window.location.href = `film.html?navn=${film.key}`; };
+  seNa.onclick = () => { window.location.href = `film.html?navn=${film.key}`; };
 
-  const key = film.tittel.toLowerCase().replace(/\s+/g, '-');
-  let liste = JSON.parse(localStorage.getItem("minListe")) || [];
-  addBtn.innerHTML = liste.includes(key) ? '<i class="fas fa-check"></i>' : '<i class="fas fa-plus"></i>';
+  const key = film.tittel.toLowerCase().replace(/\s+/g, '-');
+  let liste = JSON.parse(localStorage.getItem("minListe")) || [];
+  addBtn.innerHTML = liste.includes(key) ? '<i class="fas fa-check"></i>' : '<i class="fas fa-plus"></i>';
 
-  addBtn.onclick = () => {
-    let currentListe = JSON.parse(localStorage.getItem("minListe")) || [];
-    if (currentListe.includes(key)) {
-      currentListe = currentListe.filter(item => item !== key);
-    } else {
-      currentListe.push(key);
-    }
-    localStorage.setItem("minListe", JSON.stringify(currentListe));
-    addBtn.innerHTML = currentListe.includes(key) ? '<i class="fas fa-check"></i>' : '<i class="fas fa-plus"></i>';
-  };
+  addBtn.onclick = () => {
+    let currentListe = JSON.parse(localStorage.getItem("minListe")) || [];
+    if (currentListe.includes(key)) {
+      currentListe = currentListe.filter(item => item !== key);
+    } else {
+      currentListe.push(key);
+    }
+    localStorage.setItem("minListe", JSON.stringify(currentListe));
+    addBtn.innerHTML = currentListe.includes(key) ? '<i class="fas fa-check"></i>' : '<i class="fas fa-plus"></i>';
+  };
 
-  setTimeout(() => {
-    if (!film.trailer) return;
-    bilde.style.display = "none";
-    video.style.display = "block";
-    video.currentTime = 0;
-    video.play().catch(() => {});
-    video.onended = () => {
-      video.style.display = "none";
-      bilde.style.display = "block";
-    };
-  }, 5000);
+  setTimeout(() => {
+    if (!film.trailer) return;
+    bilde.style.display = "none";
+    video.style.display = "block";
+    video.currentTime = 0;
+    video.play().catch(() => {});
+    video.onended = () => {
+      video.style.display = "none";
+      bilde.style.display = "block";
+    };
+  }, 5000);
 }
 
 window.addEventListener("resize", oppdaterBanner);
 
 function adjustBannerVideo(videoElement, container) {
-  if (!videoElement || !container) return;
-  videoElement.addEventListener('loadedmetadata', () => {
-    videoElement.style.width = '100%';
-    videoElement.style.height = '100%';
-    videoElement.style.objectFit = 'cover';
-  });
+  if (!videoElement || !container) return;
+  videoElement.addEventListener('loadedmetadata', () => {
+    videoElement.style.width = '100%';
+    videoElement.style.height = '100%';
+    videoElement.style.objectFit = 'cover';
+  });
 }
 adjustBannerVideo(document.getElementById("banner-video"), document.querySelector(".hero-banner"));
-
 // ==================== VIAPLAY STYLE: ABSOLUTT LÅST NAVIGASJON ==================== //
 function oppdaterAlleGalleripiler() {
-  if (window.matchMedia("(pointer: coarse)").matches) return;
+  // Hvis enheten har en touchskjerm (mobil/iPad), avbryter vi funksjonen helt
+  if (window.matchMedia("(pointer: coarse)").matches) return;
 
-  document.querySelectorAll(".gallery-wrapper, .continue-gallery-wrapper").forEach(wrapper => {
-    const gallery = wrapper.querySelector(".image-gallery, .coming-movies-gallery, .top10-gallery, .continue-image-gallery");
-    const left = wrapper.querySelector(".scroll-button.left");
-    const right = wrapper.querySelector(".scroll-button.right");
-    const fadeL = wrapper.querySelector(".fade-left");
-    const fadeR = wrapper.querySelector(".fade-right");
-    if (!gallery) return;
+  document.querySelectorAll(".gallery-wrapper, .continue-gallery-wrapper").forEach(wrapper => {
+    const gallery = wrapper.querySelector(".image-gallery, .coming-movies-gallery, .top10-gallery, .continue-image-gallery");
+    const left = wrapper.querySelector(".scroll-button.left");
+    const right = wrapper.querySelector(".scroll-button.right");
+    const fadeL = wrapper.querySelector(".fade-left");
+    const fadeR = wrapper.querySelector(".fade-right");
+    if (!gallery) return;
 
-    const max = gallery.scrollWidth - gallery.clientWidth;
-    const pos = gallery.scrollLeft;
-    
-    const kanScrolle = max > 5;
-    const erHeltTilVenstre = pos <= 2;
-    const erHeltTilHoyre = Math.ceil(pos) >= max - 2;
+    const max = gallery.scrollWidth - gallery.clientWidth;
+    const pos = gallery.scrollLeft;
+    
+    const kanScrolle = max > 5;
+    const erHeltTilVenstre = pos <= 2;
+    const erHeltTilHoyre = Math.ceil(pos) >= max - 2;
 
-    const skjulVenstre = !kanScrolle || erHeltTilVenstre;
-    if (left) {
-      left.classList.toggle("hidden", skjulVenstre);
-      left.disabled = skjulVenstre;
-    }
-    if (fadeL) fadeL.classList.toggle("fade-hidden", skjulVenstre);
+    const skjulVenstre = !kanScrolle || erHeltTilVenstre;
+    if (left) {
+      left.classList.toggle("hidden", skjulVenstre);
+      left.disabled = skjulVenstre;
+    }
+    if (fadeL) fadeL.classList.toggle("fade-hidden", skjulVenstre);
 
-    const skjulHoyre = !kanScrolle || erHeltTilHoyre;
-    if (right) {
-      right.classList.toggle("hidden", skjulHoyre);
-      right.disabled = skjulHoyre;
-    }
-    if (fadeR) fadeR.classList.toggle("fade-hidden", skjulHoyre);
-  });
+    const skjulHoyre = !kanScrolle || erHeltTilHoyre;
+    if (right) {
+      right.classList.toggle("hidden", skjulHoyre);
+      right.disabled = skjulHoyre;
+    }
+    if (fadeR) fadeR.classList.toggle("fade-hidden", skjulHoyre);
+  });
 }
 
+// Initialiser låste klikklyttere for PC
 document.querySelectorAll(".gallery-wrapper, .continue-gallery-wrapper").forEach(wrapper => {
-  const gallery = wrapper.querySelector(".image-gallery, .coming-movies-gallery, .top10-gallery, .continue-image-gallery");
-  const left = wrapper.querySelector(".scroll-button.left");
-  const right = wrapper.querySelector(".scroll-button.right");
-  if (!gallery) return;
+  const gallery = wrapper.querySelector(".image-gallery, .coming-movies-gallery, .top10-gallery, .continue-image-gallery");
+  const left = wrapper.querySelector(".scroll-button.left");
+  const right = wrapper.querySelector(".scroll-button.right");
+  if (!gallery) return;
 
-  left?.addEventListener("click", () => {
-    const steg = gallery.clientWidth > 0 ? gallery.clientWidth * 0.90 : 400;
-    gallery.scrollBy({ left: -steg, behavior: "smooth" });
-    setTimeout(oppdaterAlleGalleripiler, 400);
-  });
+  left?.addEventListener("click", () => {
+    const steg = gallery.clientWidth > 0 ? gallery.clientWidth * 0.90 : 400;
+    gallery.scrollBy({ left: -steg, behavior: "smooth" });
+    setTimeout(oppdaterAlleGalleripiler, 400);
+  });
 
-  right?.addEventListener("click", () => {
-    const steg = gallery.clientWidth > 0 ? gallery.clientWidth * 0.90 : 400;
-    gallery.scrollBy({ left: steg, behavior: "smooth" });
-    setTimeout(oppdaterAlleGalleripiler, 400);
-  });
+  right?.addEventListener("click", () => {
+    const steg = gallery.clientWidth > 0 ? gallery.clientWidth * 0.90 : 400;
+    gallery.scrollBy({ left: steg, behavior: "smooth" });
+    setTimeout(oppdaterAlleGalleripiler, 400);
+  });
 
-  gallery.addEventListener("scroll", oppdaterAlleGalleripiler, { passive: true });
+  gallery.addEventListener("scroll", oppdaterAlleGalleripiler, { passive: true });
 });
 
 window.addEventListener("resize", oppdaterAlleGalleripiler);
 
 // ==================== DYNAMISK GALLERI GENERATOR ==================== //
 function createGalleryItem(itemKey, item) {
-  const link = document.createElement("a");
-  link.href = `film.html?navn=${itemKey}`;
-  link.classList.add("gallery-item");
-  link.innerHTML = `
-    <img src="${item.poster}" alt="${item.tittel}">
-    <div class="image-overlay">
-      <div class="overlay-content">
-        <div class="overlay-title">${item.tittel}</div>
-        <div class="overlay-meta">${(item.metadata || []).join(" • ")}</div>
-      </div>
-    </div>
-  `;
-  return link;
+  const link = document.createElement("a");
+  link.href = `film.html?navn=${itemKey}`;
+  link.classList.add("gallery-item");
+  link.innerHTML = `
+    <img src="${item.poster}" alt="${item.tittel}">
+    <div class="image-overlay">
+      <div class="overlay-content">
+        <div class="overlay-title">${item.tittel}</div>
+        <div class="overlay-meta">${(item.metadata || []).join(" • ")}</div>
+      </div>
+    </div>
+  `;
+  return link;
 }
 
 // ==================== RENDERING FUNKSJONER ==================== //
 function renderNyligLagtTil(galleryId, limit = 5) {
-  const gallery = document.getElementById(galleryId);
-  if (!gallery) return;
-  gallery.innerHTML = "";
-  const currentDate = new Date();
-  let altInnhold = [];
+  const gallery = document.getElementById(galleryId);
+  if (!gallery) return;
+  gallery.innerHTML = "";
+  const currentDate = new Date();
+  let altInnhold = [];
 
-  Object.keys(filmer).forEach(key => {
-    const film = filmer[key];
-    if (erInnloggetSomBarn && (!erEgnetForBarn(film) || !sjekkAldersgrense(film))) return;
-    if (!film.publishDate || new Date(film.publishDate) <= currentDate) {
-      altInnhold.push({ key, data: film });
-    }
-  });
+  Object.keys(filmer).forEach(key => {
+    const film = filmer[key];
+    if (erInnloggetSomBarn && (!erEgnetForBarn(film) || !sjekkAldersgrense(film))) return;
+    if (!film.publishDate || new Date(film.publishDate) <= currentDate) {
+      altInnhold.push({ key, data: film });
+    }
+  });
 
-  if (typeof serier !== "undefined") {
-    Object.keys(serier).forEach(key => {
-      const serie = serier[key];
-      if (erInnloggetSomBarn && (!erEgnetForBarn(serie) || !sjekkAldersgrense(serie))) return;
-      if (!serie.publishDate || new Date(serie.publishDate) <= currentDate) {
-        altInnhold.push({ key, data: serie });
-      }
-    });
-  }
+  if (typeof serier !== "undefined") {
+    Object.keys(serier).forEach(key => {
+      const serie = serier[key];
+      if (erInnloggetSomBarn && (!erEgnetForBarn(serie) || !sjekkAldersgrense(serie))) return;
+      if (!serie.publishDate || new Date(serie.publishDate) <= currentDate) {
+        altInnhold.push({ key, data: serie });
+      }
+    });
+  }
 
-  altInnhold.sort((a, b) => new Date(b.data.publishDate || 0) - new Date(a.data.publishDate || 0));
-  altInnhold.slice(0, limit).forEach(item => {
-    gallery.appendChild(createGalleryItem(item.key, item.data));
-  });
+  altInnhold.sort((a, b) => new Date(b.data.publishDate || 0) - new Date(a.data.publishDate || 0));
+  altInnhold.slice(0, limit).forEach(item => {
+    gallery.appendChild(createGalleryItem(item.key, item.data));
+  });
 }
 
 function renderFilmGallery(galleryId, filterFunction, sortByPublishDate = false, limit = null) {
-  const gallery = document.getElementById(galleryId);
-  if (!gallery) return;
-  gallery.innerHTML = "";
-  const currentDate = new Date();
-  let filmKeys = Object.keys(filmer).filter(key => {
-    const film = filmer[key];
-    if (!film.publishDate) return true;
-    return new Date(film.publishDate) <= currentDate;
-  });
+  const gallery = document.getElementById(galleryId);
+  if (!gallery) return;
+  gallery.innerHTML = "";
+  const currentDate = new Date();
+  let filmKeys = Object.keys(filmer).filter(key => {
+    const film = filmer[key];
+    if (!film.publishDate) return true;
+    return new Date(film.publishDate) <= currentDate;
+  });
 
-  if (filterFunction) filmKeys = filmKeys.filter(filterFunction);
-  if (sortByPublishDate) {
-    filmKeys.sort((a, b) => new Date(filmer[b].publishDate || 0) - new Date(filmer[a].publishDate || 0));
-  }
-  if (limit) filmKeys = filmKeys.slice(0, limit);
+  if (filterFunction) filmKeys = filmKeys.filter(filterFunction);
+  if (sortByPublishDate) {
+    filmKeys.sort((a, b) => new Date(filmer[b].publishDate || 0) - new Date(filmer[a].publishDate || 0));
+  }
+  if (limit) filmKeys = filmKeys.slice(0, limit);
 
-  filmKeys.forEach(key => {
-    gallery.appendChild(createGalleryItem(key, filmer[key]));
-  });
+  filmKeys.forEach(key => {
+    gallery.appendChild(createGalleryItem(key, filmer[key]));
+  });
 }
 
 function renderTop10(galleryId) {
-  const gallery = document.getElementById(galleryId);
-  if (!gallery) return;
-  gallery.innerHTML = "";
-  let filmKeys = Object.keys(filmer).filter(key => {
-    const film = filmer[key];
-    if (!film.publishDate) return true;
-    return new Date(film.publishDate) <= new Date();
-  });
+  const gallery = document.getElementById(galleryId);
+  if (!gallery) return;
+  gallery.innerHTML = "";
+  let filmKeys = Object.keys(filmer).filter(key => {
+    const film = filmer[key];
+    if (!film.publishDate) return true;
+    return new Date(film.publishDate) <= new Date();
+  });
 
-  const today = new Date();
-  const seed = today.getFullYear() * 1000 + today.getMonth() * 50 + today.getDate();
-  function seededRandom(s) {
-    const x = Math.sin(s++) * 10000;
-    return x - Math.floor(x);
-  }
+  const today = new Date();
+  const seed = today.getFullYear() * 1000 + today.getMonth() * 50 + today.getDate();
+  function seededRandom(s) {
+    const x = Math.sin(s++) * 10000;
+    return x - Math.floor(x);
+  }
 
-  filmKeys.sort((a, b) => seededRandom(seed + a.length) - seededRandom(seed + b.length));
-  filmKeys.slice(0, 10).forEach((key, index) => {
-    const film = filmer[key];
-    const wrapper = document.createElement("a");
-    wrapper.href = `film.html?navn=${key}`;
-    wrapper.classList.add("top10-item");
+  filmKeys.sort((a, b) => seededRandom(seed + a.length) - seededRandom(seed + b.length));
+  filmKeys.slice(0, 10).forEach((key, index) => {
+    const film = filmer[key];
+    const wrapper = document.createElement("a");
+    wrapper.href = `film.html?navn=${key}`;
+    wrapper.classList.add("top10-item");
 
-    const img = document.createElement("img");
-    img.src = film.posterVertikal || film.poster;
-    img.alt = film.tittel;
+    const img = document.createElement("img");
+    img.src = film.posterVertikal || film.poster;
+    img.alt = film.tittel;
 
-    const number = document.createElement("div");
-    number.classList.add("top10-number");
-    number.textContent = index + 1;
+    const number = document.createElement("div");
+    number.classList.add("top10-number");
+    number.textContent = index + 1;
 
-    wrapper.appendChild(img);
-    wrapper.appendChild(number);
-    gallery.appendChild(wrapper);
-  });
+    wrapper.appendChild(img);
+    wrapper.appendChild(number);
+    gallery.appendChild(wrapper);
+  });
 }
 
 function renderSeries(galleryId) {
-  const gallery = document.getElementById(galleryId);
-  if (!gallery || typeof serier === "undefined") return;
-  gallery.innerHTML = "";
-  Object.keys(serier).forEach((key) => {
-    const serie = serier[key];
-    if (erInnloggetSomBarn && (!erEgnetForBarn(serie) || !sjekkAldersgrense(serie))) return;
-    gallery.appendChild(createGalleryItem(key, serie));
-  });
+  const gallery = document.getElementById(galleryId);
+  if (!gallery || typeof serier === "undefined") return;
+  gallery.innerHTML = "";
+  Object.keys(serier).forEach((key) => {
+    const serie = serier[key];
+    if (erInnloggetSomBarn && (!erEgnetForBarn(serie) || !sjekkAldersgrense(serie))) return;
+    gallery.appendChild(createGalleryItem(key, serie));
+  });
 }
 
 function renderDokumentarSerier(galleryId) {
-  const gallery = document.getElementById(galleryId);
-  if (!gallery || typeof serier === "undefined") return;
-  gallery.innerHTML = "";
-  Object.keys(serier).forEach((key) => {
-    const serie = serier[key];
-    if (erInnloggetSomBarn && (!erEgnetForBarn(serie) || !sjekkAldersgrense(serie))) return;
-    const erDokumentar = serie.metadata?.some(meta => meta.toLowerCase().includes("dokumentar"));
-    if (erDokumentar) {
-      gallery.appendChild(createGalleryItem(key, serie));
-    }
-  });
+  const gallery = document.getElementById(galleryId);
+  if (!gallery || typeof serier === "undefined") return;
+  gallery.innerHTML = "";
+  Object.keys(serier).forEach((key) => {
+    const serie = serier[key];
+    if (erInnloggetSomBarn && (!erEgnetForBarn(serie) || !sjekkAldersgrense(serie))) return;
+    const erDokumentar = serie.metadata?.some(meta => meta.toLowerCase().includes("dokumentar"));
+    if (erDokumentar) {
+      gallery.appendChild(createGalleryItem(key, serie));
+    }
+  });
 }
 
 function renderContinueWatching() {
-  const section = document.getElementById("fortsett-section");
-  const gallery = document.getElementById("fortsett-galleri");
-  if (!section || !gallery) return;
-  gallery.innerHTML = "";
-  let items = [];
+  const section = document.getElementById("fortsett-section");
+  const gallery = document.getElementById("fortsett-galleri");
+  if (!section || !gallery) return;
+  gallery.innerHTML = "";
+  let items = [];
 
-  Object.keys(filmer).forEach((key) => {
-    const progress = localStorage.getItem("progress_" + key);
-    if (progress && parseFloat(progress) > 0 && parseFloat(progress) < 100) {
-      if (erInnloggetSomBarn && (!erEgnetForBarn(filmer[key]) || !sjekkAldersgrense(filmer[key]))) return;
-      items.push({ key, data: filmer[key], type: "film", progress });
-    }
-  });
+  Object.keys(filmer).forEach((key) => {
+    const progress = localStorage.getItem("progress_" + key);
+    if (progress && parseFloat(progress) > 0 && parseFloat(progress) < 100) {
+      if (erInnloggetSomBarn && (!erEgnetForBarn(filmer[key]) || !sjekkAldersgrense(filmer[key]))) return;
+      items.push({ key, data: filmer[key], type: "film", progress });
+    }
+  });
 
-  if (typeof serier !== "undefined") {
-    Object.keys(serier).forEach((key) => {
-      const progress = localStorage.getItem("progress_" + key);
-      if (progress && parseFloat(progress) > 0 && parseFloat(progress) < 100) {
-        if (erInnloggetSomBarn && (!erEgnetForBarn(serier[key]) || !sjekkAldersgrense(serier[key]))) return;
-        items.push({ key, data: serier[key], type: "serie", progress });
-      }
-    });
-  }
+  if (typeof serier !== "undefined") {
+    Object.keys(serier).forEach((key) => {
+      const progress = localStorage.getItem("progress_" + key);
+      if (progress && parseFloat(progress) > 0 && parseFloat(progress) < 100) {
+        if (erInnloggetSomBarn && (!erEgnetForBarn(serier[key]) || !sjekkAldersgrense(serier[key]))) return;
+        items.push({ key, data: serier[key], type: "serie", progress });
+      }
+    });
+  }
 
-  if (items.length === 0) {
-    section.style.display = "none";
-    return;
-  }
-  section.style.display = "block";
+  if (items.length === 0) {
+    section.style.display = "none";
+    return;
+  }
+  section.style.display = "block";
 
-  items.forEach((item) => {
-    const link = document.createElement("a");
-    link.href = `film.html?navn=${item.key}`;
-    link.classList.add("gallery-item", "image-with-progress");
-    link.innerHTML = `
-      <img src="${item.data.poster}" alt="${item.data.tittel}">
-      <div class="progress-container" style="background: rgba(255,255,255,0.2); width: 100%; height: 6px; position: absolute; bottom: 0; left: 0; z-index: 2;">
-        <div class="progress-bar" style="width: ${item.progress}%; height: 100%; background: #00FFCC;"></div>
-      </div>
-      <div class="image-overlay">
-        <div class="overlay-content">
-          <div class="overlay-title">${item.data.tittel}</div>
-          <div class="overlay-meta">Fortsett å se (${Math.round(item.progress)}%)</div>
-        </div>
-      </div>
-    `;
-    gallery.appendChild(link);
-  });
+  items.forEach((item) => {
+    const link = document.createElement("a");
+    link.href = `film.html?navn=${item.key}`;
+    link.classList.add("gallery-item", "image-with-progress");
+    link.innerHTML = `
+      <img src="${item.data.poster}" alt="${item.data.tittel}">
+      <div class="progress-container" style="background: rgba(255,255,255,0.2); width: 100%; height: 6px; position: absolute; bottom: 0; left: 0; z-index: 2;">
+        <div class="progress-bar" style="width: ${item.progress}%; height: 100%; background: #00FFCC;"></div>
+      </div>
+      <div class="image-overlay">
+        <div class="overlay-content">
+          <div class="overlay-title">${item.data.tittel}</div>
+          <div class="overlay-meta">Fortsett å se (${Math.round(item.progress)}%)</div>
+        </div>
+      </div>
+    `;
+    gallery.appendChild(link);
+  });
 }
 
 // ==================== INIT ==================== //
 document.addEventListener("DOMContentLoaded", () => {
-  if (erInnloggetSomBarn) {
-    const skjulSeksjoner = ["nye-filmer-seksjon", "topp10-seksjon", "alle-filmer-seksjon", "serier-seksjon", "dokumentar-seksjon"];
-    skjulSeksjoner.forEach(id => {
-      const el = document.getElementById(id);
-      if (el) el.style.display = "none";
-    });
-    const barnSeksjon = document.getElementById("barn-seksjon");
-    if (barnSeksjon) barnSeksjon.style.display = "block";
-    renderFilmGallery("barn-galleri", (key) => erEgnetForBarn(filmer[key]) && sjekkAldersgrense(filmer[key]));
-  } else {
-    const seksjoner = ["nye-filmer-seksjon", "alle-filmer-seksjon", "serier-seksjon", "topp10-seksjon", "dokumentar-seksjon"];
-    seksjoner.forEach(id => {
-      const el = document.getElementById(id);
-      if (el) el.style.display = "block";
-    });
+  if (erInnloggetSomBarn) {
+    const skjulSeksjoner = ["nye-filmer-seksjon", "topp10-seksjon", "alle-filmer-seksjon", "serier-seksjon", "dokumentar-seksjon"];
+    skjulSeksjoner.forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.style.display = "none";
+    });
+    const barnSeksjon = document.getElementById("barn-seksjon");
+    if (barnSeksjon) barnSeksjon.style.display = "block";
+    renderFilmGallery("barn-galleri", (key) => erEgnetForBarn(filmer[key]) && sjekkAldersgrense(filmer[key]));
+  } else {
+    const seksjoner = ["nye-filmer-seksjon", "alle-filmer-seksjon", "serier-seksjon", "topp10-seksjon", "dokumentar-seksjon"];
+    seksjoner.forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.style.display = "block";
+    });
 
-    renderNyligLagtTil("nye-filmer-galleri", 5); 
-    renderTop10("topp10-filmer-galleri");
-    renderFilmGallery("filmer-galleri", null, true, 20);
-    renderSeries("serier-galleri");
-    renderDokumentarSerier("dokumentarserier-galleri"); 
-    
-    const barnSeksjon = document.getElementById("barn-seksjon");
-    if (barnSeksjon) barnSeksjon.style.display = "block";
-    renderFilmGallery("barn-galleri", (key) => erEgnetForBarn(filmer[key]));
-  }
+    renderNyligLagtTil("nye-filmer-galleri", 5); 
+    renderTop10("topp10-filmer-galleri");
+    renderFilmGallery("filmer-galleri", null, true, 20);
+    renderSeries("serier-galleri");
+    renderDokumentarSerier("dokumentarserier-galleri"); 
+    
+    const barnSeksjon = document.getElementById("barn-seksjon");
+    if (barnSeksjon) barnSeksjon.style.display = "block";
+    renderFilmGallery("barn-galleri", (key) => erEgnetForBarn(filmer[key]));
+  }
 
-  oppdaterBanner();
-  renderContinueWatching();
-  oppdaterAlleGalleripiler();
+  oppdaterBanner();
+  renderContinueWatching();
 
-  setTimeout(oppdaterAlleGalleripiler, 50);
-  setTimeout(oppdaterAlleGalleripiler, 200);
-  setTimeout(oppdaterAlleGalleripiler, 600);
+  oppdaterAlleGalleripiler();
+
+  setTimeout(oppdaterAlleGalleripiler, 50);
+  setTimeout(oppdaterAlleGalleripiler, 200);
+  setTimeout(oppdaterAlleGalleripiler, 600);
 });
 
 // ==================== NAV SCROLL ==================== //
 window.addEventListener("scroll", () => {
-  const nav = document.querySelector(".top-nav");
-  if (!nav) return;
-  if (window.scrollY > 50) {
-    nav.classList.add("scrolled");
-  } else {
-    nav.classList.remove("scrolled");
-  }
+  const nav = document.querySelector(".top-nav");
+  if (!nav) return;
+  if (window.scrollY > 50) {
+    nav.classList.add("scrolled");
+  } else {
+    nav.classList.remove("scrolled");
+  }
 });
 </script>
 </body>
