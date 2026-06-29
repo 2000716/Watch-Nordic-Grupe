@@ -10,32 +10,58 @@
     :root { --bg: #091B1E; --card: rgba(255, 255, 255, 0.04); --muted: #bfc9c9; --accent: #00FFCC; --border: rgba(255, 255, 255, 0.08); --delete: #ff4d4d; --kids-accent: #33b5ff; }
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body { background: var(--bg); color: white; font-family: 'Inter', Arial, sans-serif; display: flex; align-items: center; justify-content: center; min-height: 100vh; overflow-x: hidden; transition: opacity 0.4s ease; }
+    body::before { content: ""; position: fixed; inset: 0; background: radial-gradient(circle at center, rgba(0,255,204,0.05), transparent 50%); z-index: -1; }
     .container { text-align: center; width: 100%; max-width: 1200px; padding: 40px 20px; }
-    h1 { font-size: 40px; font-weight: 900; margin-bottom: 60px; }
-    .profiles { display: flex; gap: 50px; flex-wrap: wrap; justify-content: center; }
-    .profile { cursor: pointer; transition: transform 0.3s ease; width: 160px; position: relative; }
+    h1 { font-size: 40px; font-weight: 900; letter-spacing: 1px; margin-bottom: 60px; text-shadow: 0 0 15px rgba(0,255,204,0.15); }
+    .profiles { display: flex; gap: 50px; flex-wrap: wrap; justify-content: center; align-items: flex-start; }
+    .profile { cursor: pointer; transition: transform 0.3s ease; text-align: center; position: relative; width: 160px; }
     .profile:hover { transform: scale(1.08); }
-    .avatar { width: 150px; height: 150px; border-radius: 50%; overflow: hidden; background: rgba(0,0,0,0.3); border: 3px solid rgba(255,255,255,0.1); margin: 0 auto; }
+    .avatar { width: 150px; height: 150px; border-radius: 50%; overflow: hidden; background: rgba(0, 0, 0, 0.3); border: 3px solid rgba(255,255,255,0.1); transition: all 0.3s ease; margin: 0 auto; }
+    .profile:hover .avatar { border-color: var(--accent); box-shadow: 0 0 25px rgba(0, 255, 204, 0.5); }
+    .profile.kids-profile:hover .avatar { border-color: var(--kids-accent); box-shadow: 0 0 25px rgba(51, 181, 255, 0.5); }
     .avatar img { width: 100%; height: 100%; object-fit: cover; }
-    .name { margin-top: 16px; font-size: 18px; font-weight: 600; color: var(--muted); }
-    .modal { position: fixed; inset: 0; background: rgba(5,14,16,0.8); backdrop-filter: blur(8px); display: none; align-items: center; justify-content: center; z-index: 1000; }
-    .modal.active { display: flex; }
-    .modal-content { background: #0d2529; padding: 35px; border-radius: 24px; width: 400px; text-align: center; border: 1px solid var(--border); }
+    .name { margin-top: 16px; font-size: 18px; font-weight: 600; color: var(--muted); transition: color 0.25s; word-break: break-word; }
+    .profile:hover .name { color: white; }
+    .kids-badge { display: inline-block; background: var(--kids-accent); color: #071214; font-size: 11px; font-weight: 800; text-transform: uppercase; padding: 2px 8px; border-radius: 20px; margin-top: 6px; letter-spacing: 0.5px; }
+    .action-btn { position: absolute; background: rgba(9, 27, 30, 0.9); border: 1px solid var(--border); padding: 10px; border-radius: 50%; font-size: 13px; opacity: 0; transform: scale(0.8); transition: all 0.25s ease; box-shadow: 0 4px 10px rgba(0,0,0,0.4); width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; z-index: 10; }
+    .profile:hover .action-btn { opacity: 1; transform: scale(1); }
+    .edit-btn { top: 0; right: 15px; color: var(--accent); }
+    .edit-btn:hover { background: var(--accent); color: #071214; }
+    .delete-btn { top: 0; left: 15px; color: var(--delete); border-color: rgba(255, 77, 77, 0.3); }
+    .delete-btn:hover { background: var(--delete); color: white; border-color: var(--delete); }
+    .add-profile .avatar { display: flex; align-items: center; justify-content: center; font-size: 46px; color: rgba(255,255,255,0.4); background: var(--card); border: 2px dashed rgba(255,255,255,0.2); }
+    .add-profile:hover .avatar { border-color: var(--accent); border-style: solid; color: var(--accent); background: rgba(0, 255, 204, 0.03); }
+    .modal { position: fixed; inset: 0; background: rgba(5, 14, 16, 0.8); backdrop-filter: blur(8px); display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: opacity 0.3s ease; z-index: 1000; }
+    .modal.active { opacity: 1; pointer-events: all; }
+    .modal-content { background: #0d2529; border: 1px solid var(--border); padding: 35px; border-radius: 24px; width: 100%; max-width: 420px; text-align: center; box-shadow: 0 15px 40px rgba(0,0,0,0.5); transform: translateY(20px); transition: transform 0.3s ease; }
+    .modal.active .modal-content { transform: translateY(0); }
+    .modal input[type="text"] { width: 100%; padding: 14px; background: rgba(0,0,0,0.2); border: 1px solid rgba(255,255,255,0.15); border-radius: 12px; color: white; font-size: 16px; margin-bottom: 20px; outline: none; text-align: center; }
+    .modal input[type="text"]:focus { border-color: var(--accent); }
+    .checkbox-container { display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 25px; cursor: pointer; color: var(--muted); }
+    .modal-actions { display: flex; gap: 12px; }
+    .modal-actions button { flex: 1; padding: 12px; border-radius: 10px; font-size: 14px; font-weight: 700; cursor: pointer; border: none; }
+    .btn-create { background: var(--accent); color: #071214; }
+    .btn-close { background: transparent; border: 1px solid rgba(255,255,255,0.15); color: var(--muted); }
   </style>
 </head>
 <body>
 
   <div class="container">
     <h1>Hvem ser på nå?</h1>
-    <div class="profiles" id="profiles">Laster profiler...</div>
+    <div class="profiles" id="profiles"></div>
   </div>
 
   <div class="modal" id="addProfileModal">
     <div class="modal-content">
       <h2>Opprett ny profil</h2>
-      <input type="text" id="newProfileName" placeholder="Navn..." maxlength="15">
-      <button onclick="lagreNyProfil()" class="btn-create">Opprett</button>
-      <button onclick="lukkModal()" class="btn-close">Avbryt</button>
+      <input type="text" id="newProfileName" placeholder="Skriv profilnavn..." maxlength="15">
+      <label class="checkbox-container">
+        <input type="checkbox" id="isKidsProfile"> Dette er en barneprofil
+      </label>
+      <div class="modal-actions">
+        <button class="btn-create" onclick="lagreNyProfil()">Opprett profil</button>
+        <button class="btn-close" onclick="lukkModal()">Avbryt</button>
+      </div>
     </div>
   </div>
 
@@ -55,35 +81,61 @@
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
 
-    // SIKKERHETSSJEKK: Venter på at Firebase verifiserer innlogging
     onAuthStateChanged(auth, (user) => {
       if (!user) {
         window.location.href = "index.html";
       } else {
-        initApp();
+        startApp();
       }
     });
 
-    function initApp() {
+    function startApp() {
+      // Din eksisterende logikk her...
       const container = document.getElementById("profiles");
-      let profiler = JSON.parse(localStorage.getItem("profiler")) || [
-        { navn: "Hovedprofil", bilde: "https://static.wixstatic.com/media/fd2fb2_39376e4ee55b460ab7a3ebbfcf35fef7~mv2.png" }
-      ];
+      const modal = document.getElementById("addProfileModal");
+      const standardBilde = "https://static.wixstatic.com/media/fd2fb2_39376e4ee55b460ab7a3ebbfcf35fef7~mv2.png";
+      const barnBilde = "https://static.wixstatic.com/media/fd2fb2_3df40a7e62c545afa3918fc10393284d~mv2.png";
+      
+      let profiler = JSON.parse(localStorage.getItem("profiler")) || [{ navn: "Hovedprofil", bilde: standardBilde, pin: null, isKids: false }];
 
-      function render() {
+      window.renderProfiler = function() {
         container.innerHTML = "";
-        profiler.forEach((p, i) => {
+        profiler.forEach((p, index) => {
           const div = document.createElement("div");
-          div.className = "profile";
-          div.innerHTML = `<div class="avatar"><img src="${p.bilde}"></div><div class="name">${p.navn}</div>`;
+          div.className = "profile" + (p.isKids ? " kids-profile" : "");
+          div.innerHTML = `
+            <div class="avatar"><img src="${p.bilde}"></div>
+            <div class="name">${p.navn}${p.isKids ? '<br><span class="kids-badge">Kids</span>' : ''}</div>
+            <div class="action-btn edit-btn"><i class="fa-solid fa-pen"></i></div>
+            ${index > 0 ? `<div class="action-btn delete-btn"><i class="fa-solid fa-trash"></i></div>` : ''}
+          `;
           div.onclick = () => {
-            localStorage.setItem("aktivProfil", i);
+            localStorage.setItem("aktivProfil", index);
             window.location.href = "Hovedside.html";
           };
           container.appendChild(div);
         });
-      }
-      render();
+        
+        if (profiler.length < 5) {
+          const add = document.createElement("div");
+          add.className = "profile add-profile";
+          add.innerHTML = `<div class="avatar"><i class="fa-solid fa-plus"></i></div><div class="name">Legg til</div>`;
+          add.onclick = () => modal.classList.add("active");
+          container.appendChild(add);
+        }
+      };
+
+      window.lagreNyProfil = () => {
+        const navn = document.getElementById("newProfileName").value.trim();
+        if(!navn) return;
+        profiler.push({ navn, bilde: document.getElementById("isKidsProfile").checked ? barnBilde : standardBilde, isKids: document.getElementById("isKidsProfile").checked });
+        localStorage.setItem("profiler", JSON.stringify(profiler));
+        modal.classList.remove("active");
+        renderProfiler();
+      };
+      
+      window.lukkModal = () => modal.classList.remove("active");
+      renderProfiler();
     }
   </script>
 </body>
