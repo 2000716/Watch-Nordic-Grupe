@@ -1,108 +1,1015 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="no">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <title>Velkommen | Watch Nordic™</title>
+  <!-- NY APP-KODE START -->
+  <link rel="manifest" href="manifest.json">
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('sw.js');
+    }
+  </script>
+  <!-- NY APP-KODE SLUTT -->
 
-  <link rel="manifest" href="manifest.json">
-  <script>
-    // 1. Registrer Service Worker for PWA
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('sw.js');
-    }
+  <title>Velkommen | Watch Nordic™</title>
 
-    // 2. Disney-Intro logikk: Vises kun hvis i "standalone" modus (appen)
-    // Bruker sessionStorage for at introen skal vises hver gang appen startes på nytt
-    const erIAppModus = window.matchMedia('(display-mode: standalone)').matches;
-    if (erIAppModus && !sessionStorage.getItem("harSettIntro")) {
-      sessionStorage.setItem("harSettIntro", "true");
-      window.location.href = "intro.html";
-    }
-  </script>
+  <link rel="icon" type="image/png" href="https://static.wixstatic.com/media/d9ace9_95bbe3f5ff4b4aab9314a8d08804344e~mv2.png" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <style>
+    /* ================= RESET ================= */
+    *{
+      margin:0;
+      padding:0;
+      box-sizing:border-box;
+    }
 
-  <link rel="icon" type="image/png" href="https://static.wixstatic.com/media/d9ace9_95bbe3f5ff4b4aab9314a8d08804344e~mv2.png" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    html{
+      scroll-behavior:smooth;
+    }
 
-  <style>
-    /* ================= RESET ================= */
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    html { scroll-behavior: smooth; }
-    body { background: #091B1E; color: white; font-family: Inter, Arial, sans-serif; overflow-x: hidden; }
+    body{
+      background:#091B1E;
+      color:white;
+      font-family: Inter, Arial, sans-serif;
+      overflow-x:hidden;
+    }
 
-    /* ================= BAKGRUNN GLOW ================= */
-    body::before {
-      content: "";
-      position: fixed;
-      inset: 0;
-      background:
-        radial-gradient(circle at top left, rgba(0,255,204,0.12), transparent 30%),
-        radial-gradient(circle at bottom right, rgba(0,255,204,0.08), transparent 30%);
-      z-index: -1;
-    }
+    /* ================= BAKGRUNN GLOW ================= */
+    body::before{
+      content:"";
+      position:fixed;
+      inset:0;
+      background:
+        radial-gradient(circle at top left, rgba(0,255,204,0.12), transparent 30%),
+        radial-gradient(circle at bottom right, rgba(0,255,204,0.08), transparent 30%);
+      z-index:-1;
+    }
 
-    /* ================= NAVBAR ================= */
-    .navbar {
-      position: fixed; top: 0; width: 100%; height: 80px;
-      display: flex; justify-content: space-between; align-items: center;
-      padding: 0 60px; z-index: 999;
-      backdrop-filter: blur(14px);
-      background: rgba(9,27,30,0.65);
-      border-bottom: 1px solid rgba(255,255,255,0.06);
-    }
-    .logo { font-size: 30px; font-weight: 900; letter-spacing: 4px; color: #00FFCC; text-shadow: 0 0 8px rgba(0,255,204,0.7), 0 0 20px rgba(0,255,204,0.3); }
-    .nav-buttons { display: flex; align-items: center; gap: 15px; }
-    .nav-buttons a { text-decoration: none; padding: 12px 22px; border-radius: 999px; font-weight: 700; transition: 0.3s ease; font-size: 14px; }
-    .login { color: white; border: 1px solid rgba(255,255,255,0.2); background: rgba(255,255,255,0.04); }
-    .login:hover { background: rgba(255,255,255,0.1); transform: translateY(-2px); }
-    .signup { background: #00FFCC; color: #071214; box-shadow: 0 0 25px rgba(0,255,204,0.35); }
-    .signup:hover { transform: translateY(-2px) scale(1.03); box-shadow: 0 0 35px rgba(0,255,204,0.5); }
+    /* ================= NAVBAR ================= */
+    .navbar{
+      position:fixed;
+      top:0;
+      width:100%;
+      height:80px;
 
-    /* ================= HERO ================= */
-    .hero { position: relative; height: 100vh; display: flex; align-items: center; overflow: hidden; background: #091B1E; }
-    .hero::before { content: ""; position: absolute; inset: 0; background: linear-gradient(to right, rgba(9,27,30,1) 25%, rgba(9,27,30,0.7) 55%, rgba(9,27,30,0.2) 100%); z-index: 1; }
-    .hero::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 250px; background: linear-gradient(to top, #091B1E, transparent); z-index: 1; }
-    .hero-content { position: relative; z-index: 2; max-width: 650px; margin-left: 70px; }
-    .hero-content h1 { font-size: 72px; line-height: 1; margin-bottom: 20px; font-weight: 900; }
-    .hero-content p { color: #c9d1d1; font-size: 19px; line-height: 1.6; margin-bottom: 35px; max-width: 550px; }
-    .hero-buttons { display: flex; gap: 16px; flex-wrap: wrap; }
-    .hero-buttons a { text-decoration: none; font-weight: 800; transition: 0.3s ease; }
-    .primary-btn { background: #00FFCC; color: #071214; padding: 16px 34px; border-radius: 999px; box-shadow: 0 0 30px rgba(0,255,204,0.35); }
-    .primary-btn:hover { transform: scale(1.04); }
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
 
-    /* ================= SEKSJONER & FILMROW ================= */
-    .section { padding: 70px 60px; }
-    .movie-row { display: flex; gap: 20px; overflow-x: auto; padding-bottom: 10px; scroll-behavior: smooth; }
-    .movie-card { position: relative; min-width: 230px; transition: 0.35s ease; cursor: pointer; flex-shrink: 0; }
-    .movie-card img { width: 100%; height: 340px; object-fit: cover; border-radius: 18px; border: 1px solid rgba(255,255,255,0.08); box-shadow: 0 10px 30px rgba(0,0,0,0.4); }
-    
-    /* ================= HERO WALL (3D PC) ================= */
-    .hero-wall { position: absolute; inset: 0; overflow: hidden; z-index: 0; transform: perspective(2000px) rotateY(-22deg) rotateX(4deg) scale(1.25); transform-origin: right center; opacity: .32; }
+      padding:0 60px;
+      z-index:999;
 
-    /* ================= RESPONSIVE / MEDIA QUERIES ================= */
-    @media (max-width: 768px) {
-      .hero { height: auto; min-height: 95vh; padding-top: 100px; text-align: center; }
-      .hero-content { margin: 0 auto; padding: 0 20px; }
-      .navbar { padding: 12px 20px; }
-      .movie-card { min-width: 150px; }
-      .movie-card img { height: 220px; }
-    }
+      backdrop-filter:blur(14px);
+      background:rgba(9,27,30,0.65);
+      border-bottom:1px solid rgba(255,255,255,0.06);
+    }
 
-    /* ================= NØDBREMS (ROTASJONSLÅS) ================= */
-    @media screen and (orientation: landscape) and (max-width: 900px) {
-      body { position: fixed !important; overflow: hidden !important; width: 100vw !important; height: 100vh !important; }
-      body::after {
-        content: "Vennligst snu telefonen til portrett-modus.";
-        position: fixed; top: 0; left: 0;
-        width: 100vw; height: 100vh;
-        background: #091B1E; color: white;
-        display: flex; align-items: center; justify-content: center;
-        z-index: 99999999; font-family: Inter, sans-serif; font-size: 18px; text-align: center; padding: 20px;
-      }
-    }
-  </style>
+    .logo{
+      font-size:30px;
+      font-weight:900;
+      letter-spacing:4px;
+      color:#00FFCC;
+
+      text-shadow:
+        0 0 8px rgba(0,255,204,0.7),
+        0 0 20px rgba(0,255,204,0.3);
+    }
+
+    .nav-buttons{
+      display:flex;
+      align-items:center;
+      gap:15px;
+    }
+
+    .nav-buttons a{
+      text-decoration:none;
+      padding:12px 22px;
+      border-radius:999px;
+      font-weight:700;
+      transition:0.3s ease;
+      font-size:14px;
+    }
+
+    .login{
+      color:white;
+      border:1px solid rgba(255,255,255,0.2);
+      background:rgba(255,255,255,0.04);
+    }
+
+    .login:hover{
+      background:rgba(255,255,255,0.1);
+      transform:translateY(-2px);
+    }
+
+    .signup{
+      background:#00FFCC;
+      color:#071214;
+      box-shadow:0 0 25px rgba(0,255,204,0.35);
+    }
+
+    .signup:hover{
+      transform:translateY(-2px) scale(1.03);
+      box-shadow:0 0 35px rgba(0,255,204,0.5);
+    }
+
+    /* ================= HERO ================= */
+    .hero{
+      position:relative;
+      height:100vh;
+      display:flex;
+      align-items:center;
+      overflow:hidden; 
+      background:#091B1E;
+    }
+
+    /* Gradient som fader 3D-veggen mørkere mot venstre på PC (bak teksten) */
+    .hero::before{
+      content:"";
+      position:absolute;
+      inset:0;
+      background:
+        linear-gradient(
+          to right,
+          rgba(9,27,30,1) 25%,
+          rgba(9,27,30,0.7) 55%,
+          rgba(9,27,30,0.2) 100%
+        );
+      z-index:1;
+    }
+
+    /* Gradient som fader 3D-veggen mot bunnen av hero-seksjonen */
+    .hero::after{
+      content:"";
+      position:absolute;
+      left:0;
+      right:0;
+      bottom:0;
+      height:250px;
+      background:linear-gradient(
+        to top,
+        #091B1E,
+        transparent
+      );
+      z-index:1;
+    }
+
+    .hero-content{
+      position:relative;
+      z-index:2;
+      max-width:650px;
+      margin-left:70px;
+    }
+
+    .hero-content h1{
+      font-size:72px;
+      line-height:1;
+      margin-bottom:20px;
+      font-weight:900;
+    }
+
+    .hero-content p{
+      color:#c9d1d1;
+      font-size:19px;
+      line-height:1.6;
+      margin-bottom:35px;
+      max-width:550px;
+    }
+
+    .hero-buttons{
+      display:flex;
+      gap:16px;
+      flex-wrap:wrap;
+    }
+
+    .hero-buttons a{
+      text-decoration:none;
+      font-weight:800;
+      transition:0.3s ease;
+    }
+
+    .primary-btn{
+      background:#00FFCC;
+      color:#071214;
+
+      padding:16px 34px;
+      border-radius:999px;
+
+      box-shadow:0 0 30px rgba(0,255,204,0.35);
+    }
+
+    .primary-btn:hover{
+      transform:scale(1.04);
+    }
+
+    /* ================= SECTION ================= */
+    .section{
+      padding:70px 60px;
+    }
+
+    .section-header{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      margin-bottom:25px;
+    }
+
+    .section h2{
+      font-size:32px;
+      color:white;
+    }
+
+    .section span{
+      color:#00FFCC;
+    }
+
+    /* ================= FILM ROW ================= */
+    .movie-row{
+      display:flex;
+      gap:20px;
+      overflow-x:auto;
+      padding-bottom:10px;
+      scroll-behavior:smooth;
+    }
+
+    .movie-row::-webkit-scrollbar{
+      height:6px;
+    }
+
+    .movie-row::-webkit-scrollbar-thumb{
+      background:#00FFCC55;
+      border-radius:999px;
+    }
+
+    .movie-card{
+      position:relative;
+      min-width:230px;
+      transition:0.35s ease;
+      cursor:pointer;
+      flex-shrink:0;
+    }
+
+    .movie-card:hover{
+      transform:scale(1.06);
+      z-index:5;
+    }
+
+    .movie-card img{
+      width:100%;
+      height:340px;
+      object-fit:cover;
+      border-radius:18px;
+
+      border:1px solid rgba(255,255,255,0.08);
+
+      box-shadow:
+        0 10px 30px rgba(0,0,0,0.4);
+    }
+
+    .movie-overlay{
+      position:absolute;
+      inset:0;
+      border-radius:18px;
+
+      display:flex;
+      flex-direction:column;
+      justify-content:flex-end;
+
+      padding:18px;
+
+      background:linear-gradient(
+        to top,
+        rgba(0,0,0,0.9),
+        rgba(0,0,0,0)
+      );
+
+      opacity:0;
+      transition:0.3s;
+    }
+
+    .movie-card:hover .movie-overlay{
+      opacity:1;
+    }
+
+    .movie-overlay h3{
+      margin-bottom:8px;
+      font-size:18px;
+    }
+
+    .movie-overlay p{
+      color:#cfcfcf;
+      font-size:14px;
+    }
+
+    /* ================= DEVICES ================= */
+    .devices{
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+      gap:25px;
+    }
+
+    .device{
+      padding:35px 25px;
+      text-align:center;
+
+      border-radius:24px;
+
+      background:rgba(255,255,255,0.04);
+      border:1px solid rgba(255,255,255,0.08);
+
+      transition:0.3s ease;
+    }
+
+    .device:hover{
+      transform:translateY(-6px);
+      border-color:rgba(0,255,204,0.3);
+
+      box-shadow:
+        0 0 25px rgba(0,255,204,0.12);
+    }
+
+    .device i{
+      font-size:45px;
+      margin-bottom:18px;
+      color:#00FFCC;
+    }
+
+    .device h3{
+      margin-bottom:10px;
+    }
+
+    .device p{
+      color:#bfc9c9;
+      font-size:14px;
+      line-height:1.5;
+    }
+
+    /* ================= FOOTER ================= */
+    .footer {
+      width: 100%;
+      padding: 70px 80px 35px;
+      margin-top: 100px;
+      background: none;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      color: #7d7d7d;
+    }
+
+    .footer-socials {
+      display: flex;
+      gap: 22px;
+      margin-bottom: 35px;
+    }
+
+    .footer-socials a {
+      color: #9b9b9b;
+      font-size: 20px;
+      transition: color 0.25s ease, transform 0.25s ease;
+    }
+
+    .footer-socials a:hover {
+      color: #ffffff;
+      transform: scale(1.08);
+    }
+
+    .footer-links {
+      width: 100%;
+      display: grid;
+      grid-template-columns: repeat(4, minmax(140px, 1fr));
+      gap: 18px 50px;
+      margin-bottom: 35px;
+    }
+
+    .footer-links a {
+      color: #8a8a8a;
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 400;
+      line-height: 1.5;
+      transition: color 0.2s ease;
+    }
+
+    .footer-links a:hover {
+      color: #ffffff;
+    }
+
+    .footer-copy {
+      font-size: 13px;
+      color: #666;
+      margin-bottom: 8px;
+    }
+
+    .footer-bottom {
+      max-width: 700px;
+      font-size: 12px;
+      line-height: 1.6;
+      color: #555;
+    }
+
+    /* ================= HERO POSTER WALL (3D EFFEKT PC) ================= */
+    .hero-wall{
+      position:absolute;
+      inset:0;
+      overflow:hidden;
+      z-index:0;
+      transform:
+        perspective(2000px)
+        rotateY(-22deg)
+        rotateX(4deg)
+        scale(1.25);
+      transform-origin:right center;
+      opacity:.32;
+    }
+
+    .wall-row{
+      display:flex;
+      gap:18px;
+      width:max-content;
+      margin-bottom:18px;
+    }
+
+    .wall-row img{
+      width:260px;
+      height:146px;
+      object-fit:cover;
+      border-radius:10px;
+      box-shadow:0 12px 30px rgba(0,0,0,.45);
+      transition: transform 0.3s ease;
+    }
+
+    /* Innbyrdes asymmetriske start-marginer på radene */
+    .row1{margin-left:220px;}
+    .row2{margin-left:50px;}
+    .row3{margin-left:310px;}
+    .row4{margin-left:140px;}
+
+    /* Forskyver og bryter opp rette linjer automatisk i CSS */
+    .wall-row img:nth-child(2n) {
+      transform: translateY(15px);
+    }
+    .wall-row img:nth-child(3n) {
+      transform: translateY(-25px);
+    }
+    .wall-row img:nth-child(5n) {
+      transform: translateY(10px);
+    }
+
+    /* ================= MODERN COOKIE BANNER STYLE ================= */
+    .cookie-banner {
+      position: fixed;
+      bottom: -100%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 90%;
+      max-width: 850px;
+      background: rgba(9, 27, 30, 0.95);
+      border: 1px solid rgba(0, 255, 204, 0.2);
+      backdrop-filter: blur(20px);
+      border-radius: 24px;
+      padding: 30px;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7), 0 0 40px rgba(0, 255, 204, 0.05);
+      z-index: 99999;
+      transition: bottom 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .cookie-banner.show {
+      bottom: 30px;
+    }
+
+    .cookie-container {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .cookie-text h3 {
+      font-size: 20px;
+      color: #00FFCC;
+      margin-bottom: 10px;
+      font-weight: 800;
+    }
+
+    .cookie-text p {
+      color: #c9d1d1;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    .cookie-text p a {
+      color: #00FFCC;
+      text-decoration: none;
+    }
+
+    .cookie-text p a:hover {
+      text-decoration: underline;
+    }
+
+    /* Innstillinger / Preferanser paneler (Skjult som standard) */
+    .cookie-options {
+      display: none;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 15px;
+      background: rgba(255, 255, 255, 0.03);
+      padding: 15px;
+      border-radius: 14px;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .cookie-option-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 14px;
+      color: white;
+    }
+
+    .cookie-option-item input {
+      accent-color: #00FFCC;
+      width: 18px;
+      height: 18px;
+      cursor: pointer;
+    }
+
+    .cookie-buttons {
+      display: flex;
+      justify-content: flex-end;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .cookie-btn {
+      padding: 12px 24px;
+      border-radius: 999px;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      border: none;
+      transition: 0.25s ease;
+    }
+
+    .cookie-btn.accept {
+      background: #00FFCC;
+      color: #071214;
+      box-shadow: 0 0 20px rgba(0, 255, 204, 0.25);
+    }
+
+    .cookie-btn.accept:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 0 30px rgba(0, 255, 204, 0.4);
+    }
+
+    .cookie-btn.reject {
+      background: rgba(255, 255, 255, 0.06);
+      color: white;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .cookie-btn.reject:hover {
+      background: rgba(255, 255, 255, 0.12);
+    }
+
+    .cookie-btn.customize {
+      background: transparent;
+      color: #bfc9c9;
+      text-decoration: underline;
+    }
+
+    .cookie-btn.customize:hover {
+      color: white;
+    }
+
+    /* ================= RESPONSIVE / MEDIA QUERIES (VAKKER MOBIL) ================= */
+    @media (max-width: 768px) {
+      
+      .hero {
+        height: auto;
+        min-height: 95vh;
+        padding-top: 100px;
+        padding-bottom: 60px;
+        text-align: center;
+        justify-content: center;
+      }
+
+      .hero::before {
+        background: radial-gradient(circle, rgba(9,27,30,0.7) 0%, rgba(9,27,30,0.98) 90%);
+      }
+
+      .hero-content {
+        margin: 0 auto;
+        padding: 0 20px;
+        max-width: 100%;
+      }
+
+      .hero-content h1 {
+        font-size: 38px;
+        line-height: 1.2;
+      }
+
+      .hero-content p {
+        font-size: 16px;
+        margin: 0 auto 30px;
+      }
+
+      .hero-wall {
+        opacity: .20;
+        transform: perspective(1000px) rotateY(-15deg) rotateX(5deg) scale(1.3);
+        transform-origin: center center;
+      }
+
+      .wall-row {
+        gap: 12px;
+        margin-bottom: 12px;
+      }
+
+      .wall-row img {
+        width: 140px;
+        height: 85px;
+      }
+
+      .row1, .row2, .row3, .row4 {
+        margin-left: 0 !important;
+      }
+
+      .hero-buttons {
+        justify-content: center;
+        flex-direction: column;
+        align-items: center;
+        gap: 12px;
+      }
+
+      .primary-btn {
+        width: 100%;
+        max-width: 290px;
+        text-align: center;
+      }
+
+      .navbar {
+        padding: 12px 20px;
+        height: 70px;
+      }
+
+      .logo {
+        font-size: 22px;
+        letter-spacing: 2px;
+      }
+
+      .nav-buttons {
+        gap: 8px;
+      }
+
+      .nav-buttons a {
+        padding: 9px 16px;
+        font-size: 12px;
+      }
+
+      .section {
+        padding: 50px 20px;
+      }
+
+      .section-header h2 {
+        font-size: 26px;
+      }
+
+      .movie-row {
+        gap: 14px;
+      }
+
+      .movie-card {
+        min-width: 150px;
+      }
+
+      .movie-card img {
+        height: 220px;
+      }
+
+      .devices {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 14px;
+      }
+
+      .device {
+        padding: 22px 14px;
+      }
+
+      .device i {
+        font-size: 32px;
+      }
+
+      .footer {
+        padding: 50px 20px 30px;
+        align-items: flex-start;
+      }
+
+      .footer-links {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 16px 20px;
+      }
+
+      .footer-bottom {
+        font-size: 11px;
+        text-align: left;
+      }
+
+      /* Kapsel-banner mobil */
+      .cookie-banner {
+        width: calc(100% - 20px);
+        padding: 20px;
+      }
+      .cookie-banner.show {
+        bottom: 10px;
+      }
+      .cookie-buttons {
+        flex-direction: column-reverse;
+        width: 100%;
+      }
+      .cookie-btn {
+        width: 100%;
+        text-align: center;
+      }
+    }
+
+    @media (max-width: 420px) {
+      .hero-content h1 {
+        font-size: 30px;
+      }
+
+      .movie-card {
+        min-width: 125px;
+      }
+
+      .movie-card img {
+        height: 195px;
+      }
+
+      .devices {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
 </head>
+
 <body>
-    </body>
+
+  <nav class="navbar">
+    <div class="logo">WATCH</div>
+    <div class="nav-buttons">
+      <a href="Innloggings side.html" class="login">Logg inn</a>
+      <a href="Innloggings side.html" class="signup">Registrer</a>
+    </div>
+  </nav>
+
+  <section class="hero">
+    <div class="hero-wall">
+      <div class="wall-row row1"></div>
+      <div class="wall-row row2"></div>
+      <div class="wall-row row3"></div>
+      <div class="wall-row row4"></div>
+    </div>
+    
+    <div class="hero-content">
+      <h1>Filmer og serier.<br>På neste nivå.</h1>
+
+      <p>
+        Stream tusenvis av filmer, serier og eksklusive titler
+        med en moderne kino-opplevelse hjemme.
+      </p>
+
+      <div class="hero-buttons">
+        <a href="Innloggings side.html" class="primary-btn">Begynn å se</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="filmer">
+    <div class="section-header">
+      <h2>Populært på <span>Watch</span></h2>
+    </div>
+    <div class="movie-row" id="film-galleri"></div>
+  </section>
+
+  <section class="section">
+    <div class="section-header">
+      <h2>Se hvor som helst</h2>
+    </div>
+
+    <div class="devices">
+      <div class="device">
+        <i class="fas fa-tv"></i>
+        <h3>Smart-TV</h3>
+        <p>Stream direkte på din TV med bruk av AIR Dropp</p>
+      </div>
+      <div class="device">
+        <i class="fas fa-laptop"></i>
+        <h3>PC / Mac</h3>
+        <p>Perfekt opplevelse på desktop og laptop.</p>
+      </div>
+      <div class="device">
+        <i class="fas fa-mobile-alt"></i>
+        <h3>Mobil</h3>
+        <p>Ta med underholdningen hvor som helst.</p>
+      </div>
+      <div class="device">
+        <i class="fas fa-tablet-alt"></i>
+        <h3>Nettbrett</h3>
+        <p>Optimalisert for alle skjermstørrelser.</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="cookie-banner" id="cookieBanner">
+    <div class="cookie-container">
+      <div class="cookie-text">
+        <h3>Vi bryr oss om ditt personvern</h3>
+        <p>
+          Watch Nordic™ bruker informasjonskapsler (cookies) for å forbedre din strømmeopplevelse, 
+          analysere nettstedstrafikk og levere personlig tilpasset innhold og reklame. 
+          Du kan velge å godta alle, avvise valgfrie, eller tilpasse innstillingene dine. 
+          Les mer i våre <a href="personvern.html">retningslinjer for personvern</a>.
+        </p>
+      </div>
+
+      <div class="cookie-options" id="cookieOptions">
+        <div class="cookie-option-item">
+          <label><strong>Nødvendige</strong> (Alltid aktiv)</label>
+          <input type="checkbox" checked disabled>
+        </div>
+        <div class="cookie-option-item">
+          <label><strong>Analyse og ytelse</strong></label>
+          <input type="checkbox" id="cookieAnalytics" checked>
+        </div>
+        <div class="cookie-option-item">
+          <label><strong>Målrettet markedsføring</strong></label>
+          <input type="checkbox" id="cookieMarketing" checked>
+        </div>
+      </div>
+
+      <div class="cookie-buttons">
+        <button class="cookie-btn customize" id="btnCustomize">Tilpass innstillinger</button>
+        <button class="cookie-btn reject" id="btnReject">Avvis alle</button>
+        <button class="cookie-btn accept" id="btnAccept">Godta alle</button>
+      </div>
+    </div>
+  </div>
+
+  <footer class="footer">
+    <div class="footer-socials">
+      <a href="#"><i class="fab fa-instagram"></i></a>
+      <a href="#"><i class="fab fa-facebook-f"></i></a>
+      <a href="#"><i class="fab fa-youtube"></i></a>
+      <a href="#"><i class="fab fa-x-twitter"></i></a>
+    </div>
+
+    <div class="footer-links">
+      <a href="om.html">Om Watch Nordic</a>
+      <a href="kontakt.html">Kontakt oss</a>
+      <a href="personvern.html">Personvern</a>
+      <a href="hjelp.html">Hjelpesenter</a>
+      <a href="#">Jobber</a>
+      <a href="#">Investorinformasjon</a>
+      <a href="#">Vilkår</a>
+      <a href="#">Informasjonskapsler</a>
+      <a href="#">Juridisk informasjon</a>
+      <a href="#">Bedriftskonto</a>
+      <a href="#">Gavekort</a>
+      <a href="#">Enheter</a>
+    </div>
+
+    <div class="footer-copy">© 2026 Watch Nordic™</div>
+    <div class="footer-bottom">
+       Alle varemerker fra WATCH NORDIC™, WATCH NORDIC ORIGINALS™ og alle øvrige tilknyttede immaterielle rettigheter tilhører Watch Nordic Group og brukes under lisens av Watch Nordic™. Alle varemerker, logoer, filmer, serier, bilder, design og øvrige tilknyttede immaterielle rettigheter tilhører sine respektive eiere. Alt innhold er beskyttet av opphavsrett og internasjonale varemerkelover. Alle rettigheter forbeholdt.
+    </div>
+  </footer>
+
+  <script src="Filmdata.js"></script>
+  <script src="Seriedata.js"></script>
+
+  <script>
+    const gallery = document.getElementById("film-galleri");
+
+    if(typeof filmer !== "undefined"){
+      Object.keys(filmer).forEach(key => {
+        const film = filmer[key];
+        const card = document.createElement("div");
+        card.className = "movie-card";
+        card.innerHTML = `
+          <img src="${film.poster}" alt="">
+          <div class="movie-overlay">
+            <h3>${film.tittel || "Watch Original"}</h3>
+            <p>Stream nå i premium kvalitet</p>
+          </div>
+        `;
+        gallery.appendChild(card);
+      });
+    }
+
+    /* ================= HERO WALL (3D VEGG ØVERST - OPPDATERT TILFELDIGHET) ================= */
+    const rows = [
+      document.querySelector(".row1"),
+      document.querySelector(".row2"),
+      document.querySelector(".row3"),
+      document.querySelector(".row4")
+    ];
+
+    let basePosters = [];
+
+    /* Hent filmer */
+    if(typeof filmer !== "undefined"){
+      Object.values(filmer).forEach(film => {
+        if(film.poster){
+          basePosters.push(film.poster);
+        }
+      });
+    }
+
+    /* Hent serier */
+    if(typeof serier !== "undefined"){
+      Object.values(serier).forEach(serie => {
+        if(serie.poster){
+          basePosters.push(serie.poster);
+        }
+      });
+    }
+
+    /* Fyll radene i 3D-veggen med unike plasseringer og rekkefølger */
+    if(basePosters.length > 0) {
+      rows.forEach(row => {
+        if(row) {
+          // Oppretter en egen liste for denne spesifikke raden
+          let rowPosters = [...basePosters];
+          
+          for(let i = 0; i < 4; i++){
+            // Stokker om rekkefølgen for HVER gjennomgang i raden
+            rowPosters.sort(() => Math.random() - 0.5);
+            
+            rowPosters.forEach(src => {
+              const img = document.createElement("img");
+              img.src = src;
+              img.loading = "lazy";
+              
+              // Legger til en subtil, tilfeldig rotasjon og skalering på hvert bilde via CSS inline styles
+              const randomRotation = (Math.random() * 4 - 2).toFixed(1); // Mellom -2deg og 2deg
+              const randomScale = (0.96 + Math.random() * 0.08).toFixed(2); // Mellom 0.96 og 1.04
+              
+              // Kombinerer den eksisterende CSS-translateY (fra nth-child i stilarket) med dynamisk rotasjon/skala
+              img.style.transform = `scale(${randomScale}) rotate(${randomRotation}deg)`;
+              
+              row.appendChild(img);
+            });
+          }
+        }
+      });
+    }
+
+    /* ================= COOKIE BANNER JAVASCRIPT LOGIKK ================= */
+    const cookieBanner = document.getElementById("cookieBanner");
+    const cookieOptions = document.getElementById("cookieOptions");
+    const btnAccept = document.getElementById("btnAccept");
+    const btnReject = document.getElementById("btnReject");
+    const btnCustomize = document.getElementById("btnCustomize");
+
+    // Sjekk om brukeren allerede har gjort et valg før
+    window.addEventListener("DOMContentLoaded", () => {
+      const cookieConsent = localStorage.getItem("watch_nordic_cookie_consent");
+      if (!cookieConsent) {
+        // Viser banneret med en liten forsinkelse for en smooth følelse
+        setTimeout(() => {
+          cookieBanner.classList.add("show");
+        }, 1000);
+      }
+    });
+
+    // Funksjon for å lagre valget og lukke banneret
+    function saveConsent(consentType, details) {
+      localStorage.setItem("watch_nordic_cookie_consent", consentType);
+      localStorage.setItem("watch_nordic_cookie_details", JSON.stringify(details));
+      cookieBanner.classList.remove("show");
+    }
+
+    // "Godta alle" klikk
+    btnAccept.addEventListener("click", () => {
+      saveConsent("all", { analytics: true, marketing: true });
+    });
+
+    // "Avvis alle" klikk (kun nødvendige blir stående igjen)
+    btnReject.addEventListener("click", () => {
+      saveConsent("essential", { analytics: false, marketing: false });
+    });
+
+    // "Tilpass" klikk (åpner/lukker sjekkboksene)
+    btnCustomize.addEventListener("click", () => {
+      if (cookieOptions.style.display === "grid") {
+        // Hvis åpen, lagrer vi det brukeren har krysset av på
+        const analytics = document.getElementById("cookieAnalytics").checked;
+        const marketing = document.getElementById("cookieMarketing").checked;
+        saveConsent("custom", { analytics, marketing });
+      } else {
+        // Hvis lukket, vis boksene og endre teksten på knappen til "Lagre valg"
+        cookieOptions.style.display = "grid";
+        btnCustomize.innerText = "Lagre mine valg";
+      }
+    });
+  </script>
+</body>
 </html>
