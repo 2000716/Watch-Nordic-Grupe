@@ -1020,6 +1020,30 @@ main {
   .footer {
     display: none !important;
   }
+/* Nødbrems: Hvis enheten er i landskap, tving innholdet til å se ut som portrett */
+@media screen and (orientation: landscape) and (max-width: 900px) {
+  body {
+    transform: none !important;
+    overflow: hidden !important;
+  }
+
+  /* Dette er et triks for å vise en melding eller bare tvinge størrelsen */
+  body::after {
+    content: "Vennligst roter telefonen til portrett-modus for å bruke appen.";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: #091B1E;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    z-index: 999999;
+    padding: 20px;
+  }
 }
   </style>
 </head>
