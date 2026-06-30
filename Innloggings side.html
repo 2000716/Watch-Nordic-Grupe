@@ -7,29 +7,6 @@
   
   <link rel="icon" type="image/png" href="https://static.wixstatic.com/media/d9ace9_95bbe3f5ff4b4aab9314a8d08804344e~mv2.png" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
-  
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-    import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-
-    // NY OPPDATERT FIREBASE KONFIGURASJON
-    const firebaseConfig = {
-      apiKey: "AIzaSyBlfCbB1AuiKVHMBEhYd0cvkJ0jxHVZfUg",
-      authDomain: "watch-nordic-78b99.firebaseapp.com",
-      projectId: "watch-nordic-78b99",
-      storageBucket: "watch-nordic-78b99.firebasestorage.app",
-      messagingSenderId: "541804766412",
-      appId: "1:541804766412:web:83fc77721e384131a1ce69"
-    };
-
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-
-    // Gjør auth-funksjonene tilgjengelige for resten av HTML-filen
-    window.firebaseAuth = auth;
-    window.signInWithEmail = signInWithEmailAndPassword;
-    window.createUserWithEmail = createUserWithEmailAndPassword;
-  </script>
 
   <style>
     /* ================= RESET & BASE ================= */
@@ -272,7 +249,24 @@
   <script src="Filmdata.js"></script>
   <script src="Seriedata.js"></script>
 
-  <script>
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+    import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+    import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js"; // NY: Importert Firestore
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyBlfCbB1AuiKVHMBEhYd0cvkJ0jxHVZfUg",
+      authDomain: "watch-nordic-78b99.firebaseapp.com",
+      projectId: "watch-nordic-78b99",
+      storageBucket: "watch-nordic-78b99.firebasestorage.app",
+      messagingSenderId: "541804766412",
+      appId: "1:541804766412:web:83fc77721e384131a1ce69"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app); // NY: Initialisert databasen
+
     let registreringsmodus = false;
 
     // ================= SKJEMABEHANDLING MED FIREBASE =================
@@ -281,19 +275,35 @@
       
       const epost = document.getElementById("epost").value.trim().toLowerCase();
       const passord = document.getElementById("passord").value.trim();
+      const navn = document.getElementById("navn").value.trim() || "Hovedprofil";
       const feilmelding = document.getElementById("feilmelding");
       
       feilmelding.textContent = "Laster..."; 
 
       try {
         if (registreringsmodus) {
-          // Firebase Registrering -> Sender til Hovedsiden.html
-          await window.createUserWithEmail(window.firebaseAuth, epost, passord);
-          window.location.href = "Hovedside.html";
+          // 1. Opprett bruker i Firebase Auth
+          const userCredential = await createUserWithEmailAndPassword(auth, epost, passord);
+          const user = userCredential.user;
+
+          // 2. NYTT: Opprett brukerdokumentet i Firestore med navn med en gang!
+          await setDoc(doc(db, "users", user.uid), {
+            epost: epost,
+            profiler: [
+              {
+                navn: navn,
+                bilde: "https://static.wixstatic.com/media/fd2fb2_39376e4ee55b460ab7a3ebbfcf35fef7~mv2.png",
+                isKids: false
+              }
+            ]
+          });
+
+          // Send videre til Hovedside med profilindeks 0
+          window.location.href = "Hovedside.html?index=0";
         } else {
-          // Firebase Innlogging -> Sender til Hovedsiden.html
-          await window.signInWithEmail(window.firebaseAuth, epost, passord);
-          window.location.href = "Hovedside.html";
+          // Firebase Innlogging
+          await signInWithEmailAndPassword(auth, epost, passord);
+          window.location.href = "Hovedside.html?index=0";
         }
       } catch (error) {
         if (error.code === 'auth/email-already-in-use') {
@@ -335,6 +345,10 @@
       document.getElementById("feilmelding").textContent = "";
       document.getElementById("passord").setAttribute("autocomplete", "current-password");
     }
+
+    // Gjør disse tilgjengelige globalt for onclick i HTML-en siden vi kjører i en modul
+    window.visRegistrering = visRegistrering;
+    window.visInnlogging = visInnlogging;
 
     /* ================= 3D GENERATOR FOR PLAKATER ================= */
     const rows = [
