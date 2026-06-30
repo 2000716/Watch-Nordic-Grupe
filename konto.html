@@ -437,9 +437,9 @@
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js"; // FIKSET: Henter utlogging og Auth-status
     import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-    // Firebase-konfigurasjon
     const firebaseConfig = {
       apiKey: "AIzaSyBlfCbB1AuiKVHMBEhYd0cvkJ0jxHVZfUg",
       authDomain: "watch-nordic-78b99.firebaseapp.com",
@@ -451,9 +451,8 @@
 
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
-    const docRef = doc(db, "watch_nordic", "user_profiles");
+    const auth = getAuth(app); // FIKSET: Initialiserer Auth
 
-    // Hent profilindeks direkte fra URL parametere (?index=0)
     const urlParams = new URLSearchParams(window.location.search);
     const aktivProfilIndex = parseInt(urlParams.get('index')) || 0;
 
@@ -475,7 +474,19 @@
     const currentLimitView = document.getElementById("currentLimitView");
 
     let profiler = [];
-    let globalEpost = "kontakt@watchnordic.no"; // Standard e-post hvis skyen mangler verdi
+    let globalEpost = ""; 
+    let docRef = null; // FIKSET: Gjøres dynamisk basert på innlogget bruker
+
+    // FIKSET: Sikkerhetssjekk som sjekker hvem som er logget inn før data lastes
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        docRef = doc(db, "users", user.uid); // Setter riktig sti
+        globalEpost = user.email; // Setter standard e-post fra Firebase-brukeren om skyen er tom
+        hentKontodata();
+      } else {
+        window.location.href = "Innlogging.html"; // Sendes til pålogging hvis brukeren ikke er logget inn
+      }
+    });
 
     /* DYNAMISK SETTING AV TOPPMENYEN */
     document.getElementById("navHovedsideBtn").addEventListener("click", () => {
@@ -490,10 +501,9 @@
         if (docSnap.exists()) {
           const data = docSnap.data();
           profiler = data.profiler || [];
-          globalEpost = data.epost || "kontakt@watchnordic.no";
+          if (data.epost) globalEpost = data.epost;
         }
 
-        // Sikkerhetsmekanisme hvis profilen ikke finnes
         if (!profiler[aktivProfilIndex]) {
           alert("Profilen ble ikke funnet. Sender deg til profilvalg.");
           window.location.href = "index.html";
@@ -562,7 +572,6 @@
 
       profiler[aktivProfilIndex].navn = nyttNavn;
       
-      // Send oppdatering direkte til skyen
       await setDoc(docRef, { profiler: profiler, epost: globalEpost }, { merge: true });
 
       navnView.innerText = nyttNavn;
@@ -589,7 +598,6 @@
       if (!nyEpost || nyEpost === globalEpost) { avbrytEpost(); return; }
 
       globalEpost = nyEpost;
-      // Lagrer ny e-post i Firebase skyen
       await setDoc(docRef, { profiler: profiler, epost: globalEpost }, { merge: true });
 
       epostView.innerText = nyEpost;
@@ -602,8 +610,14 @@
       epostRow.querySelector(".edit-trigger").classList.remove("hidden");
     }
 
-    function loggUt() {
-      window.location.href = "Starts side.html";
+    // FIKSET: Logger ut av Firebase på ordentlig
+    async function loggUt() {
+      try {
+        await signOut(auth);
+        window.location.href = "Starts side.html";
+      } catch (error) {
+        console.error("Feil under utlogging:", error);
+      }
     }
 
     async function haandterSletting() {
@@ -616,17 +630,16 @@
         await setDoc(docRef, { profiler: profiler, epost: globalEpost }, { merge: true });
 
         alert("Profilen ble slettet. Du sendes nå tilbake til start.");
-        window.location.href = "Starts side.html";
+        window.location.href = "index.html";
       } else {
         if (!confirm("Vil du slette hele kontoen og alle tilhørende underprofiler permanent fra skyen?")) return;
         
-        // Tømmer databasen for å simulere fullstendig sletting av sky-brukeren
         await setDoc(docRef, { profiler: [], epost: "" });
         loggUt(); 
       }
     }
 
-    /* FORELDREKONTROLL (LÆRER AV FIRESTORE) */
+    /* FORELDREKONTROLL */
     function laasOppForeldreKontroll() {
       const pinInput = prompt("Skriv inn PIN-kode for foreldrekontroll (Standard: 1234):");
       if (pinInput === FORELDRE_PIN) {
@@ -648,7 +661,7 @@
       oppdaterMaksGrenseTekst();
     }
 
-    // Gjøre modulfunksjoner globalt tilgjengelige for HTML inline onclick-events
+    // Globale bindinger til vinduet
     window.velgProfilbildeSide = velgProfilbildeSide;
     window.haandterSletting = haandterSletting;
     window.endreNavn = endreNavn;
@@ -659,9 +672,6 @@
     window.avbrytEpost = avbrytEpost;
     window.laasOppForeldreKontroll = laasOppForeldreKontroll;
     window.lagreAldersgrense = lagreAldersgrense;
-
-    // Start opp siden
-    hentKontodata();
   </script>
 </body>
 </html>
