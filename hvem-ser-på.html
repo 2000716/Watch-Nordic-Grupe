@@ -1,541 +1,525 @@
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="no">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Hvem ser på? | Watch Nordic™</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Hvem ser på? | Watch Nordic™</title>
 
- <link rel="icon" type="image/png" href="https://static.wixstatic.com/media/d9ace9_95bbe3f5ff4b4aab9314a8d08804344e~mv2.png" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
-  <style>
-    :root {
-      --bg: #091B1E;
-      --card: rgba(255, 255, 255, 0.04);
-      --muted: #bfc9c9;
-      --accent: #00FFCC;
-      --border: rgba(255, 255, 255, 0.08);
-      --delete: #ff4d4d;
-      --kids-accent: #33b5ff; /* Farge for barneprofil-elementer */
-    }
+  <link rel="icon" type="image/png" href="https://static.wixstatic.com/media/d9ace9_95bbe3f5ff4b4aab9314a8d08804344e~mv2.png" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <style>
+    :root {
+      --bg: #091B1E;
+      --card: rgba(255, 255, 255, 0.04);
+      --muted: #bfc9c9;
+      --accent: #00FFCC;
+      --border: rgba(255, 255, 255, 0.08);
+      --delete: #ff4d4d;
+      --kids-accent: #33b5ff;
+    }
 
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
-    body {
-      background: var(--bg);
-      color: white;
-      font-family: 'Inter', Arial, sans-serif;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      min-height: 100vh;
-      overflow-x: hidden;
-      transition: opacity 0.4s ease;
-    }
+    body {
+      background: var(--bg);
+      color: white;
+      font-family: 'Inter', Arial, sans-serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      overflow-x: hidden;
+      transition: opacity 0.4s ease;
+    }
 
-    body::before {
-      content: "";
-      position: fixed;
-      inset: 0;
-      background: radial-gradient(circle at center, rgba(0,255,204,0.05), transparent 50%);
-      z-index: -1;
-    }
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background: radial-gradient(circle at center, rgba(0,255,204,0.05), transparent 50%);
+      z-index: -1;
+    }
 
-    .container {
-      text-align: center;
-      width: 100%;
-      max-width: 1200px;
-      padding: 40px 20px;
-    }
+    .container {
+      text-align: center;
+      width: 100%;
+      max-width: 1200px;
+      padding: 40px 20px;
+    }
 
-    h1 {
-      font-size: 40px;
-      font-weight: 900;
-      letter-spacing: 1px;
-      margin-bottom: 60px;
-      text-shadow: 0 0 15px rgba(0,255,204,0.15);
-    }
+    h1 {
+      font-size: 40px;
+      font-weight: 900;
+      letter-spacing: 1px;
+      margin-bottom: 60px;
+      text-shadow: 0 0 15px rgba(0,255,204,0.15);
+    }
 
-    .profiles {
-      display: flex;
-      gap: 50px;
-      flex-wrap: wrap;
-      justify-content: center;
-      align-items: flex-start;
-    }
+    .profiles {
+      display: flex;
+      gap: 50px;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-items: flex-start;
+    }
 
-    .profile {
-      cursor: pointer;
-      transition: transform 0.3s ease;
-      text-align: center;
-      position: relative;
-      width: 160px;
-    }
+    .profile {
+      cursor: pointer;
+      transition: transform 0.3s ease;
+      text-align: center;
+      position: relative;
+      width: 160px;
+    }
 
-    .profile:hover {
-      transform: scale(1.08);
-    }
+    .profile:hover {
+      transform: scale(1.08);
+    }
 
-    .avatar {
-      width: 150px;
-      height: 150px;
-      border-radius: 50%;
-      overflow: hidden;
-      background: rgba(0, 0, 0, 0.3);
-      border: 3px solid rgba(255,255,255,0.1);
-      transition: all 0.3s ease;
-      margin: 0 auto;
-    }
+    .avatar {
+      width: 150px;
+      height: 150px;
+      border-radius: 50%;
+      overflow: hidden;
+      background: rgba(0, 0, 0, 0.3);
+      border: 3px solid rgba(255,255,255,0.1);
+      transition: all 0.3s ease;
+      margin: 0 auto;
+    }
 
-    .profile:hover .avatar {
-      border-color: var(--accent);
-      box-shadow: 0 0 25px rgba(0, 255, 204, 0.5);
-    }
+    .profile:hover .avatar {
+      border-color: var(--accent);
+      box-shadow: 0 0 25px rgba(0, 255, 204, 0.5);
+    }
 
-    /* Spesifikk styling for barneprofil ved hover */
-    .profile.kids-profile:hover .avatar {
-      border-color: var(--kids-accent);
-      box-shadow: 0 0 25px rgba(51, 181, 255, 0.5);
-    }
+    .profile.kids-profile:hover .avatar {
+      border-color: var(--kids-accent);
+      box-shadow: 0 0 25px rgba(51, 181, 255, 0.5);
+    }
 
-    .avatar img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
+    .avatar img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
 
-    .name {
-      margin-top: 16px;
-      font-size: 18px;
-      font-weight: 600;
-      color: var(--muted);
-      transition: color 0.25s;
-      word-break: break-word;
-    }
+    .name {
+      margin-top: 16px;
+      font-size: 18px;
+      font-weight: 600;
+      color: var(--muted);
+      transition: color 0.25s;
+      word-break: break-word;
+    }
 
-    .profile:hover .name {
-      color: white;
-    }
+    .profile:hover .name {
+      color: white;
+    }
 
-    /* Barnemerke (Kids tag) */
-    .kids-badge {
-      display: inline-block;
-      background: var(--kids-accent);
-      color: #071214;
-      font-size: 11px;
-      font-weight: 800;
-      text-transform: uppercase;
-      padding: 2px 8px;
-      border-radius: 20px;
-      margin-top: 6px;
-      letter-spacing: 0.5px;
-    }
+    .kids-badge {
+      display: inline-block;
+      background: var(--kids-accent);
+      color: #071214;
+      font-size: 11px;
+      font-weight: 800;
+      text-transform: uppercase;
+      padding: 2px 8px;
+      border-radius: 20px;
+      margin-top: 6px;
+      letter-spacing: 0.5px;
+    }
 
-    /* Handling-knapper som dukker opp ved hover */
-    .action-btn {
-      position: absolute;
-      background: rgba(9, 27, 30, 0.9);
-      border: 1px solid var(--border);
-      padding: 10px;
-      border-radius: 50%;
-      font-size: 13px;
-      opacity: 0;
-      transform: scale(0.8);
-      transition: all 0.25s ease;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.4);
-      width: 36px;
-      height: 36px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 10;
-    }
+    .action-btn {
+      position: absolute;
+      background: rgba(9, 27, 30, 0.9);
+      border: 1px solid var(--border);
+      padding: 10px;
+      border-radius: 50%;
+      font-size: 13px;
+      opacity: 0;
+      transform: scale(0.8);
+      transition: all 0.25s ease;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+      width: 36px;
+      height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 10;
+    }
 
-    .profile:hover .action-btn {
-      opacity: 1;
-      transform: scale(1);
-    }
+    .profile:hover .action-btn {
+      opacity: 1;
+      transform: scale(1);
+    }
 
-    /* Redigeringsblyant */
-    .edit-btn {
-      top: 0;
-      right: 15px;
-      color: var(--accent);
-    }
-    .edit-btn:hover {
-      background: var(--accent);
-      color: #071214;
-    }
+    .edit-btn {
+      top: 0;
+      right: 15px;
+      color: var(--accent);
+    }
+    .edit-btn:hover {
+      background: var(--accent);
+      color: #071214;
+    }
 
-    /* Sletteknapp */
-    .delete-btn {
-      top: 0;
-      left: 15px;
-      color: var(--delete);
-      border-color: rgba(255, 77, 77, 0.3);
-    }
-    .delete-btn:hover {
-      background: var(--delete);
-      color: white;
-      border-color: var(--delete);
-    }
+    .delete-btn {
+      top: 0;
+      left: 15px;
+      color: var(--delete);
+      border-color: rgba(255, 77, 77, 0.3);
+    }
+    .delete-btn:hover {
+      background: var(--delete);
+      color: white;
+      border-color: var(--delete);
+    }
 
-    /* Legg til profil knapp */
-    .add-profile .avatar {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 46px;
-      color: rgba(255,255,255,0.4);
-      background: var(--card);
-      border: 2px dashed rgba(255,255,255,0.2);
-    }
+    .add-profile .avatar {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 46px;
+      color: rgba(255,255,255,0.4);
+      background: var(--card);
+      border: 2px dashed rgba(255,255,255,0.2);
+    }
 
-    .add-profile:hover .avatar {
-      border-color: var(--accent);
-      border-style: solid;
-      color: var(--accent);
-      background: rgba(0, 255, 204, 0.03);
-    }
+    .add-profile:hover .avatar {
+      border-color: var(--accent);
+      border-style: solid;
+      color: var(--accent);
+      background: rgba(0, 255, 204, 0.03);
+    }
 
-    /* POPUP MODAL FOR NY PROFIL */
-    .modal {
-      position: fixed;
-      inset: 0;
-      background: rgba(5, 14, 16, 0.8);
-      backdrop-filter: blur(8px);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.3s ease;
-      z-index: 1000;
-    }
+    .modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(5, 14, 16, 0.8);
+      backdrop-filter: blur(8px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+      z-index: 1000;
+    }
 
-    .modal.active {
-      opacity: 1;
-      pointer-events: all;
-    }
+    .modal.active {
+      opacity: 1;
+      pointer-events: all;
+    }
 
-    .modal-content {
-      background: #0d2529;
-      border: 1px solid var(--border);
-      padding: 35px;
-      border-radius: 24px;
-      width: 100%;
-      max-width: 420px;
-      text-align: center;
-      box-shadow: 0 15px 40px rgba(0,0,0,0.5);
-      transform: translateY(20px);
-      transition: transform 0.3s ease;
-    }
+    .modal-content {
+      background: #0d2529;
+      border: 1px solid var(--border);
+      padding: 35px;
+      border-radius: 24px;
+      width: 100%;
+      max-width: 420px;
+      text-align: center;
+      box-shadow: 0 15px 40px rgba(0,0,0,0.5);
+      transform: translateY(20px);
+      transition: transform 0.3s ease;
+    }
 
-    .modal.active .modal-content {
-      transform: translateY(0);
-    }
+    .modal.active .modal-content {
+      transform: translateY(0);
+    }
 
-    .modal h2 {
-      font-size: 22px;
-      margin-bottom: 20px;
-    }
+    .modal h2 {
+      font-size: 22px;
+      margin-bottom: 20px;
+    }
 
-    .modal input[type="text"] {
-      width: 100%;
-      padding: 14px;
-      background: rgba(0,0,0,0.2);
-      border: 1px solid rgba(255,255,255,0.15);
-      border-radius: 12px;
-      color: white;
-      font-size: 16px;
-      margin-bottom: 20px;
-      outline: none;
-      text-align: center;
-    }
+    .modal input[type="text"] {
+      width: 100%;
+      padding: 14px;
+      background: rgba(0,0,0,0.2);
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 12px;
+      color: white;
+      font-size: 16px;
+      margin-bottom: 20px;
+      outline: none;
+      text-align: center;
+    }
 
-    .modal input[type="text"]:focus {
-      border-color: var(--accent);
-    }
+    .modal input[type="text"]:focus {
+      border-color: var(--accent);
+    }
 
-    /* Barneprofil checkbox styling */
-    .checkbox-container {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-      margin-bottom: 25px;
-      cursor: pointer;
-      user-select: none;
-      font-size: 15px;
-      color: var(--muted);
-    }
+    .checkbox-container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 25px;
+      cursor: pointer;
+      user-select: none;
+      font-size: 15px;
+      color: var(--muted);
+    }
 
-    .checkbox-container input {
-      cursor: pointer;
-      width: 18px;
-      height: 18px;
-      accent-color: var(--kids-accent);
-    }
+    .checkbox-container input {
+      cursor: pointer;
+      width: 18px;
+      height: 18px;
+      accent-color: var(--kids-accent);
+    }
 
-    .modal-actions {
-      display: flex;
-      gap: 12px;
-    }
+    .modal-actions {
+      display: flex;
+      gap: 12px;
+    }
 
-    .modal-actions button {
-      flex: 1;
-      padding: 12px;
-      border-radius: 10px;
-      font-size: 14px;
-      font-weight: 700;
-      cursor: pointer;
-      border: none;
-      transition: 0.2s;
-    }
+    .modal-actions button {
+      flex: 1;
+      padding: 12px;
+      border-radius: 10px;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      border: none;
+      transition: 0.2s;
+    }
 
-    .btn-create {
-      background: var(--accent);
-      color: #071214;
-    }
-    .btn-create:hover { background: #00e6b8; }
+    .btn-create {
+      background: var(--accent);
+      color: #071214;
+    }
+    .btn-create:hover { background: #00e6b8; }
 
-    .btn-close {
-      background: transparent;
-      border: 1px solid rgba(255,255,255,0.15);
-      color: var(--muted);
-    }
-    .btn-close:hover { color: white; border-color: rgba(255,255,255,0.3); }
+    .btn-close {
+      background: transparent;
+      border: 1px solid rgba(255,255,255,0.15);
+      color: var(--muted);
+    }
+    .btn-close:hover { color: white; border-color: rgba(255,255,255,0.3); }
 
-    @media (max-width: 768px) {
-      h1 { font-size: 30px; margin-bottom: 40px; }
-      .profiles { gap: 30px; }
-      .profile { width: 130px; }
-      .avatar { width: 120px; height: 120px; }
-      .action-btn { opacity: 1; transform: scale(1); } /* Alltid synlig på mobil */
-    }
-  </style>
+    @media (max-width: 768px) {
+      h1 { font-size: 30px; margin-bottom: 40px; }
+      .profiles { gap: 30px; }
+      .profile { width: 130px; }
+      .avatar { width: 120px; height: 120px; }
+      .action-btn { opacity: 1; transform: scale(1); }
+    }
+  </style>
 </head>
 <body>
 
-  <div class="container">
-    <h1>Hvem ser på nå?</h1>
-    <div class="profiles" id="profiles"></div>
-  </div>
+  <div class="container">
+    <h1>Hvem ser på nå?</h1>
+    <div class="profiles" id="profiles"></div>
+  </div>
 
-  <div class="modal" id="addProfileModal">
-    <div class="modal-content">
-      <h2>Opprett ny profil</h2>
-      <input type="text" id="newProfileName" placeholder="Skriv profilnavn..." maxlength="15">
-      
-      <label class="checkbox-container">
-        <input type="checkbox" id="isKidsProfile">
-        Dette er en barneprofil
-      </label>
+  <div class="modal" id="addProfileModal">
+    <div class="modal-content">
+      <h2>Opprett ny profil</h2>
+      <input type="text" id="newProfileName" placeholder="Skriv profilnavn..." maxlength="15">
+      
+      <label class="checkbox-container">
+        <input type="checkbox" id="isKidsProfile">
+        Dette er en barneprofil
+      </label>
 
-      <div class="modal-actions">
-        <button class="btn-create" onclick="lagreNyProfil()">Opprett profil</button>
-        <button class="btn-close" onclick="lukkModal()">Avbryt</button>
-      </div>
-    </div>
-  </div>
+      <div class="modal-actions">
+        <button class="btn-create" onclick="lagreNyProfil()">Opprett profil</button>
+        <button class="btn-close" onclick="lukkModal()">Avbryt</button>
+      </div>
+    </div>
+  </div>
 
-  <script>
-    const MAX_PROFILER = 5;
-    const container = document.getElementById("profiles");
-    const modal = document.getElementById("addProfileModal");
-    const newProfileNameInput = document.getElementById("newProfileName");
-    const isKidsProfileInput = document.getElementById("isKidsProfile");
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-    const standardBilde = "https://static.wixstatic.com/media/fd2fb2_39376e4ee55b460ab7a3ebbfcf35fef7~mv2.png";
-    const barnBilde = "https://static.wixstatic.com/media/fd2fb2_3df40a7e62c545afa3918fc10393284d~mv2.png";
+    // Firebase konfigurasjon
+    const firebaseConfig = {
+      apiKey: "AIzaSyBlfCbB1AuiKVHMBEhYd0cvkJ0jxHVZfUg",
+      authDomain: "watch-nordic-78b99.firebaseapp.com",
+      projectId: "watch-nordic-78b99",
+      storageBucket: "watch-nordic-78b99.firebasestorage.app",
+      messagingSenderId: "541804766412",
+      appId: "1:541804766412:web:83fc77721e384131a1ce69"
+    };
 
-    /* 1. LAST PROFILER */
-    let profiler = JSON.parse(localStorage.getItem("profiler"));
+    // Initialiser Firebase og Firestore
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    const docRef = doc(db, "watch_nordic", "user_profiles");
 
-    if (!profiler) {
-      const globaltNavn = localStorage.getItem("navn") || "Hovedprofil";
-      const globaltBilde = localStorage.getItem("profilbilde") || standardBilde;
-      
-      profiler = [
-        {
-          navn: globaltNavn,
-          bilde: globaltBilde,
-          pin: null,
-          isKids: false
-        }
-      ];
-      localStorage.setItem("profiler", JSON.stringify(profiler));
-    }
+    const MAX_PROFILER = 5;
+    const container = document.getElementById("profiles");
+    const modal = document.getElementById("addProfileModal");
+    const newProfileNameInput = document.getElementById("newProfileName");
+    const isKidsProfileInput = document.getElementById("isKidsProfile");
 
-    /* 2. SYNKRONISERING FRÅ KONTOSIDE */
-    let aktivProfilIndex = localStorage.getItem("aktivProfil");
-    if (aktivProfilIndex !== null && profiler[aktivProfilIndex]) {
-      const oppdatertBilde = localStorage.getItem("profilbilde");
-      const oppdatertNavn = localStorage.getItem("navn");
-      let endret = false;
+    const standardBilde = "https://static.wixstatic.com/media/fd2fb2_39376e4ee55b460ab7a3ebbfcf35fef7~mv2.png";
+    const barnBilde = "https://static.wixstatic.com/media/fd2fb2_3df40a7e62c545afa3918fc10393284d~mv2.png";
 
-      if (oppdatertBilde && profiler[aktivProfilIndex].bilde !== oppdatertBilde) {
-        profiler[aktivProfilIndex].bilde = oppdatertBilde;
-        endret = true;
-      }
-      if (oppdatertNavn && profiler[aktivProfilIndex].navn !== oppdatertNavn) {
-        profiler[aktivProfilIndex].navn = oppdatertNavn;
-        endret = true;
-      }
-      if (endret) {
-        localStorage.setItem("profiler", JSON.stringify(profiler));
-      }
-    }
+    let profiler = [];
 
-    /* 3. TEGN PROFILER (RENDER) */
-    function renderProfiler() {
-      container.innerHTML = "";
+    /* HENT DATA UTELUKKENDE FRA FIREBASE */
+    async function hentProfiler() {
+      try {
+        const docSnap = await getDoc(docRef);
+        
+        if (docSnap.exists()) {
+          profiler = docSnap.data().profiler || [];
+        } else {
+          // Hvis databasen er helt tom, oppretter vi den første standardprofilen i skyen
+          profiler = [
+            {
+              navn: "Hovedprofil",
+              bilde: standardBilde,
+              pin: null,
+              isKids: false
+            }
+          ];
+          await setDoc(docRef, { profiler: profiler });
+        }
+        
+        renderProfiler();
+      } catch (error) {
+        console.error("Feil ved henting av profiler:", error);
+      }
+    }
 
-      profiler.forEach((profil, index) => {
-        const div = document.createElement("div");
-        // Legger til en ekstra klasse dersom det er en barneprofil for styling
-        div.className = "profile" + (profil.isKids ? " kids-profile" : "");
+    /* TEGN PROFILER (RENDER) */
+    function renderProfiler() {
+      container.innerHTML = "";
 
-        // Lag sletteknapp-HTML bare hvis det IKKE er profil nr 1 (indeks 0), så man ikke tømmer alt
-        const deleteBtnHtml = index > 0 
-          ? `<div class="action-btn delete-btn" title="Slett denne profilen"><i class="fa-solid fa-trash"></i></div>` 
-          : '';
+      profiler.forEach((profil, index) => {
+        const div = document.createElement("div");
+        div.className = "profile" + (profil.isKids ? " kids-profile" : "");
 
-        // Legg til en "KIDS" merkelapp under navnet dersom det er en barneprofil
-        const kidsBadgeHtml = profil.isKids ? `<br><span class="kids-badge">Kids</span>` : '';
+        const deleteBtnHtml = index > 0 
+          ? `<div class="action-btn delete-btn" title="Slett denne profilen"><i class="fa-solid fa-trash"></i></div>` 
+          : '';
 
-        div.innerHTML = `
-          <div class="avatar">
-            <img src="${profil.bilde || (profil.isKids ? barnBilde : standardBilde)}">
-          </div>
-          <div class="name">${profil.navn}${kidsBadgeHtml}</div>
-          <div class="action-btn edit-btn" title="Endre navn og bilde">
-            <i class="fa-solid fa-pen"></i>
-          </div>
-          ${deleteBtnHtml}
-        `;
+        const kidsBadgeHtml = profil.isKids ? `<br><span class="kids-badge">Kids</span>` : '';
 
-        // Klikk på selve profilen for å velge den
-        div.addEventListener("click", () => {
-          velgProfil(index);
-        });
+        div.innerHTML = `
+          <div class="avatar">
+            <img src="${profil.bilde || (profil.isKids ? barnBilde : standardBilde)}">
+          </div>
+          <div class="name">${profil.navn}${kidsBadgeHtml}</div>
+          <div class="action-btn edit-btn" title="Endre navn og bilde">
+            <i class="fa-solid fa-pen"></i>
+          </div>
+          ${deleteBtnHtml}
+        `;
 
-        // Klikk på redigeringsblyanten
-        div.querySelector(".edit-btn").addEventListener("click", (e) => {
-          e.stopPropagation();
-          localStorage.setItem("aktivProfil", index);
-          localStorage.setItem("navn", profil.navn);
-          localStorage.setItem("profilbilde", profil.bilde || (profil.isKids ? barnBilde : standardBilde));
-          window.location.href = "konto.html";
-        });
+        div.addEventListener("click", () => {
+          velgProfil(index);
+        });
 
-        // Aktiver klikk på sletteknappen dersom den eksisterer
-        const dBtn = div.querySelector(".delete-btn");
-        if (dBtn) {
-          dBtn.addEventListener("click", (e) => {
-            e.stopPropagation(); // Unngå at profilen logges inn samtidig som den slettes
-            slettProfil(index, profil.navn);
-          });
-        }
+        div.querySelector(".edit-btn").addEventListener("click", (e) => {
+          e.stopPropagation();
+          // Sender med indeksen i URL-en istedenfor å lagre lokalt
+          window.location.href = `konto.html?index=${index}`;
+        });
 
-        container.appendChild(div);
-      });
+        const dBtn = div.querySelector(".delete-btn");
+        if (dBtn) {
+          dBtn.addEventListener("click", (e) => {
+            e.stopPropagation();
+            slettProfil(index, profil.navn);
+          });
+        }
 
-      /* LEGG TIL PROFIL-KNAPP */
-      if (profiler.length < MAX_PROFILER) {
-        const addDiv = document.createElement("div");
-        addDiv.className = "profile add-profile";
-        addDiv.innerHTML = `
-          <div class="avatar"><i class="fa-solid fa-plus"></i></div>
-          <div class="name">Legg til profil</div>
-        `;
-        addDiv.addEventListener("click", åpneModal);
-        container.appendChild(addDiv);
-      }
-    }
+        container.appendChild(div);
+      });
 
-    /* 4. SLETT PROFIL FUNKSJON */
-    function slettProfil(index, navn) {
-      if (!confirm(`Er du sikker på at du vil slette profilen "${navn}"? Alle innstillinger for denne profilen vil forsvinne.`)) return;
+      if (profiler.length < MAX_PROFILER) {
+        const addDiv = document.createElement("div");
+        addDiv.className = "profile add-profile";
+        addDiv.innerHTML = `
+          <div class="avatar"><i class="fa-solid fa-plus"></i></div>
+          <div class="name">Legg til profil</div>
+        `;
+        addDiv.addEventListener("click", åpneModal);
+        container.appendChild(addDiv);
+      }
+    }
 
-      // Slett profilen fra arrayen
-      profiler.splice(index, 1);
-      localStorage.setItem("profiler", JSON.stringify(profiler));
+    /* SLETT PROFIL FUNKSJON */
+    async function slettProfil(index, navn) {
+      if (!confirm(`Er du sikker på at du vil slette profilen "${navn}"? Alle innstillinger for denne profilen vil forsvinne.`)) return;
 
-      // Hvis profilen vi slettet var den vi var logget inn på, nullstill aktivProfil til hovedprofilen (0)
-      if (Number(aktivProfilIndex) === index) {
-        localStorage.setItem("aktivProfil", 0);
-        localStorage.setItem("navn", profiler[0].navn);
-        localStorage.setItem("profilbilde", profiler[0].bilde);
-      } else if (Number(aktivProfilIndex) > index) {
-        // Juster indeksen ned et hakk hvis vi slettet en profil som lå foran oss i køen
-        localStorage.setItem("aktivProfil", Number(aktivProfilIndex) - 1);
-      }
+      profiler.splice(index, 1);
+      
+      // Lagrer endringen direkte i Firebase
+      await setDoc(docRef, { profiler: profiler });
 
-      // Oppdater visningen med en gang
-      renderProfiler();
-    }
+      renderProfiler();
+    }
 
-    /* 5. VELG EN PROFIL */
-    function velgProfil(index) {
-      const profil = profiler[index];
+    /* VELG EN PROFIL */
+    function velgProfil(index) {
+      const profil = profiler[index];
 
-      if (profil.pin) {
-        const input = prompt(`Skriv PIN-kode for ${profil.navn}:`);
-        if (input !== profil.pin) {
-          alert("Feil PIN-kode!");
-          return;
-        }
-      }
+      if (profil.pin) {
+        const input = prompt(`Skriv PIN-kode for ${profil.navn}:`);
+        if (input !== profil.pin) {
+          alert("Feil PIN-kode!");
+          return;
+        }
+      }
 
-      localStorage.setItem("aktivProfil", index);
-      localStorage.setItem("navn", profil.navn);
-      localStorage.setItem("profilbilde", profil.bilde || (profil.isKids ? barnBilde : standardBilde));
-      // Lagrer også en global status for om den aktive profilen er en barneprofil eller ikke
-      localStorage.setItem("isKids", profil.isKids ? "true" : "false");
+      document.body.style.opacity = "0";
+      setTimeout(() => {
+        // Sender med valgt indeks i URL-en til Hovedside.html
+        window.location.href = `Hovedside.html?index=${index}`;
+      }, 400);
+    }
 
-      document.body.style.opacity = "0";
-      setTimeout(() => {
-        window.location.href = "Hovedside.html";
-      }, 400);
-    }
+    /* MODAL-FUNKSJONER */
+    function åpneModal() {
+      newProfileNameInput.value = "";
+      isKidsProfileInput.checked = false;
+      modal.classList.add("active");
+      newProfileNameInput.focus();
+    }
 
-    /* 6. MODAL-FUNKSJONER */
-    function åpneModal() {
-      newProfileNameInput.value = "";
-      isKidsProfileInput.checked = false; // Nullstill sjekkboksen hver gang modalen åpnes
-      modal.classList.add("active");
-      newProfileNameInput.focus();
-    }
+    function lukkModal() {
+      modal.classList.remove("active");
+    }
 
-    function lukkModal() {
-      modal.classList.remove("active");
-    }
+    async function lagreNyProfil() {
+      const navn = newProfileNameInput.value.trim();
+      const erBarn = isKidsProfileInput.checked;
 
-    function lagreNyProfil() {
-      const navn = newProfileNameInput.value.trim();
-      const erBarn = isKidsProfileInput.checked;
+      if (!navn) return alert("Profilen må ha et navn!");
+      if (profiler.length >= MAX_PROFILER) return lukkModal();
 
-      if (!navn) return alert("Profilen må ha et navn!");
-      if (profiler.length >= MAX_PROFILER) return lukkModal();
+      profiler.push({
+        navn: navn,
+        bilde: erBarn ? barnBilde : standardBilde, 
+        pin: null,
+        isKids: erBarn
+      });
 
-      profiler.push({
-        navn: navn,
-        bilde: erBarn ? barnBilde : "https://static.wixstatic.com/media/fd2fb2_3df40a7e62c545afa3918fc10393284d~mv2.png", 
-        pin: null,
-        isKids: erBarn // Lagrer om profilen er for barn
-      });
+      // Sender den nye profilen rett opp til Firebase skyen
+      await setDoc(docRef, { profiler: profiler });
+      
+      lukkModal();
+      renderProfiler();
+    }
 
-      localStorage.setItem("profiler", JSON.stringify(profiler));
-      lukkModal();
-      renderProfiler();
-    }
+    // Binder funksjoner til window-objektet slik at HTML inline-onclick fungerer
+    window.lagreNyProfil = lagreNyProfil;
+    window.lukkModal = lukkModal;
+    window.åpneModal = åpneModal;
 
-    renderProfiler();
-  </script>
+    // Kjører henting av data
+    hentProfiler();
+  </script>
 
 </body>
 </html>
