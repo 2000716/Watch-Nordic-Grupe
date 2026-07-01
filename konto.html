@@ -282,7 +282,6 @@
     .btn-save { background: var(--accent); color: #071214; border: none; }
     .btn-cancel { background: transparent; border: 1px solid rgba(255,255,255,0.15); color: var(--muted); }
 
-    /* Foreldrekontroll panel-styling */
     .parent-lock-screen {
       text-align: center;
       padding: 20px 0;
@@ -436,10 +435,9 @@
   <footer>© 2026 Watch Nordic Group AS. Alle rettigheter forbeholdt.</footer>
 
   <script type="module">
-import { auth, db } from "./firebase-oppsett.js";
-// Endre fra 10.8.0 til 12.15.0 her også:
-import { onAuthStateChanged, signOut, updateEmail } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-auth.js";
-import { doc, getDoc, setDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
+    import { auth, db } from "./firebase-oppsett.js";
+    import { onAuthStateChanged, signOut, updateEmail } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-auth.js";
+    import { doc, getDoc, setDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
 
     const urlParams = new URLSearchParams(window.location.search);
     const aktivProfilIndex = parseInt(urlParams.get('index')) || 0;
@@ -465,7 +463,6 @@ import { doc, getDoc, setDoc, deleteDoc } from "https://www.gstatic.com/firebase
     let globalEpost = ""; 
     let docRef = null;
 
-    // Lytt til innloggingsstatus
     onAuthStateChanged(auth, (user) => {
       if (user) {
         docRef = doc(db, "users", user.uid);
@@ -476,13 +473,11 @@ import { doc, getDoc, setDoc, deleteDoc } from "https://www.gstatic.com/firebase
       }
     });
 
-    /* DYNAMISK NAVIGASJON */
     document.getElementById("navHovedsideBtn").addEventListener("click", () => {
       window.location.href = `Hovedside.html?index=${aktivProfilIndex}`;
     });
     document.getElementById("navLoggUtBtn").addEventListener("click", loggUt);
 
-    /* HENT ALT FRA FIREBASE FIRESTORE */
     async function hentKontodata() {
       try {
         const docSnap = await getDoc(docRef);
@@ -492,7 +487,6 @@ import { doc, getDoc, setDoc, deleteDoc } from "https://www.gstatic.com/firebase
           profiler = data.profiler || [];
         }
 
-        // Hvis skyen er tom (sikkerhetssjekk)
         if (profiler.length === 0) {
           profiler = [
             {
@@ -518,7 +512,6 @@ import { doc, getDoc, setDoc, deleteDoc } from "https://www.gstatic.com/firebase
       }
     }
 
-    /* INTEGRER DATA PÅ SIDEN */
     function byggProfilgrensesnitt() {
       const gjeldendeProfil = profiler[aktivProfilIndex];
 
@@ -563,7 +556,6 @@ import { doc, getDoc, setDoc, deleteDoc } from "https://www.gstatic.com/firebase
       window.location.href = `VelgProfilbilde.html?index=${aktivProfilIndex}`;
     }
 
-    /* ENDRE PROFILNAVN */
     function endreNavn() {
       if (profiler[aktivProfilIndex]?.isKids) return;
       navnInput.value = navnView.innerText;
@@ -591,7 +583,6 @@ import { doc, getDoc, setDoc, deleteDoc } from "https://www.gstatic.com/firebase
       navnRow.querySelector(".edit-trigger").classList.remove("hidden");
     }
 
-    /* ENDRE E-POST (OPPDATERER OGSÅ FIREBASE AUTH) */
     function endreEpost() {
       if (profiler[aktivProfilIndex]?.isKids) return;
       epostInput.value = epostView.innerText;
@@ -607,7 +598,6 @@ import { doc, getDoc, setDoc, deleteDoc } from "https://www.gstatic.com/firebase
 
       try {
         if (auth.currentUser) {
-          // FIKSET: Oppdaterer den unike e-posten i selve innloggingssystemet til Firebase
           await updateEmail(auth.currentUser, nyEpost);
         }
         
@@ -633,7 +623,6 @@ import { doc, getDoc, setDoc, deleteDoc } from "https://www.gstatic.com/firebase
       epostRow.querySelector(".edit-trigger").classList.remove("hidden");
     }
 
-    /* UT- OG SLETTING */
     async function loggUt() {
       try {
         await signOut(auth);
@@ -663,7 +652,6 @@ import { doc, getDoc, setDoc, deleteDoc } from "https://www.gstatic.com/firebase
       }
     }
 
-    /* FORELDREKONTROLL */
     function laasOppForeldreKontroll() {
       const pinInput = prompt("Skriv inn PIN-kode for foreldrekontroll (Standard: 1234):");
       if (pinInput === FORELDRE_PIN) {
@@ -685,7 +673,6 @@ import { doc, getDoc, setDoc, deleteDoc } from "https://www.gstatic.com/firebase
       oppdaterMaksGrenseTekst();
     }
 
-    // Globale bindinger
     window.velgProfilbildeSide = velgProfilbildeSide;
     window.haandterSletting = haandterSletting;
     window.endreNavn = endreNavn;
