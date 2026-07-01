@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Velg Profilbilde | Watch Nordic™</title>
   
-<link rel="icon" type="image/png" href="https://static.wixstatic.com/media/d9ace9_95bbe3f5ff4b4aab9314a8d08804344e~mv2.png" />
+  <link rel="icon" type="image/png" href="https://static.wixstatic.com/media/d9ace9_95bbe3f5ff4b4aab9314a8d08804344e~mv2.png" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
   <style>
     :root {
@@ -162,7 +162,15 @@
 
 <button class="tilbake-knapp" onclick="tilbakeTilKonto()"><i class="fa-solid fa-floppy-disk"></i> Lagre og tilbake</button>
 
-<script>
+<script type="module">
+import { auth, db } from "./firebase-oppsett.js";
+import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-auth.js";
+import { doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
+
+// Henter aktiv profilindeks fra URL parameter (?index=X)
+const urlParams = new URLSearchParams(window.location.search);
+const aktivProfilIndex = parseInt(urlParams.get('index')) || 0;
+
 const rader = [
   {
     tittel: "Karakterer & Ikoner",
@@ -203,11 +211,38 @@ const rader = [
 ];
 
 const hovedContainer = document.getElementById('hoved-container');
-let valgtBilde = localStorage.getItem('profilbilde') || null;
+let valgtBilde = null;
+let profiler = [];
+let docRef = null;
+
+// Lytter etter om brukeren er logget inn
+onAuthStateChanged(auth, (user) => {
+  if (user) {
+    docRef = doc(db, "users", user.uid);
+    hentGjeldendeProfilbilde();
+  } else {
+    window.location.href = "Innlogging.html";
+  }
+});
+
+async function hentGjeldendeProfilbilde() {
+  try {
+    const docSnap = await getDoc(docRef);
+    if (docSnap.exists()) {
+      profiler = docSnap.data().profiler || [];
+      // Sjekker om profilen eksisterer, og henter dens eksisterende bilde
+      if (profiler[aktivProfilIndex]) {
+        valgtBilde = profiler[aktivProfilIndex].bilde || null;
+        oppdaterValg();
+      }
+    }
+  } catch (error) {
+    console.error("Feil ved henting av profilbilde:", error);
+  }
+}
 
 function oppdaterValg() {
   document.querySelectorAll('.profilbilde-valg').forEach(img => {
-    // Sjekker om bildets src ender med eller inneholder den lagrede URL-en
     img.classList.toggle('selected', img.src === valgtBilde || img.getAttribute('src') === valgtBilde);
   });
 }
@@ -255,15 +290,31 @@ function lagRader() {
   });
 }
 
-function tilbakeTilKonto() {
-  if (valgtBilde) {
-    localStorage.setItem('profilbilde', valgtBilde);
+async function tilbakeTilKonto() {
+  // Sjekker om vi har kobling til databasen og profiler er lastet inn
+  if (docRef && profiler[aktivProfilIndex]) {
+    if (valgtBilde) {
+      // Oppdaterer bildet til den spesifikke profilen i arrayet
+      profiler[aktivProfilIndex].bilde = valgtBilde;
+      
+      try {
+        await setDoc(docRef, { profiler: profiler }, { merge: true });
+      } catch (error) {
+        console.error("Feil ved lagring av profilbilde i Firestore:", error);
+        alert("Kunne ikke lagre profilbildet i databasen.");
+        return;
+      }
+    }
   }
-  window.location.href = 'konto.html';
+  // Går tilbake til konto-siden med riktig profilindeks i URL-en
+  window.location.href = `konto.html?index=${aktivProfilIndex}`;
 }
 
+// Kjører funksjonene ved oppstart
 lagRader();
-oppdaterValg();
+
+// Gjør funksjonen tilgjengelig for HTML-knappen (siden scriptet nå er en modul)
+window.tilbakeTilKonto = tilbakeTilKonto;
 </script>
 
 </body>
