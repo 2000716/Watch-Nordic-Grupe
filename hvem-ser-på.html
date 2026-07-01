@@ -336,9 +336,9 @@
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js"; // FIKSET: Importerer Auth
     import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-    // Firebase konfigurasjon
     const firebaseConfig = {
       apiKey: "AIzaSyBlfCbB1AuiKVHMBEhYd0cvkJ0jxHVZfUg",
       authDomain: "watch-nordic-78b99.firebaseapp.com",
@@ -348,10 +348,9 @@
       appId: "1:541804766412:web:83fc77721e384131a1ce69"
     };
 
-    // Initialiser Firebase og Firestore
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
-    const docRef = doc(db, "watch_nordic", "user_profiles");
+    const auth = getAuth(app); // FIKSET: Initialiserer Auth
 
     const MAX_PROFILER = 5;
     const container = document.getElementById("profiles");
@@ -363,8 +362,19 @@
     const barnBilde = "https://static.wixstatic.com/media/fd2fb2_3df40a7e62c545afa3918fc10393284d~mv2.png";
 
     let profiler = [];
+    let docRef = null; // FIKSET: Gjøres dynamisk per innlogget bruker
 
-    /* HENT DATA UTELUKKENDE FRA FIREBASE */
+    // FIKSET: Auth-lytter som sikrer at vi henter profiler fra riktig brukermappe i skyen
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        docRef = doc(db, "users", user.uid); // Mapper direkte til riktig UID
+        hentProfiler();
+      } else {
+        window.location.href = "Innlogging.html"; // Sendes til logg inn hvis økten mangler
+      }
+    });
+
+    /* HENT DATA FRA DITT SIKRE DOKUMENT */
     async function hentProfiler() {
       try {
         const docSnap = await getDoc(docRef);
@@ -372,7 +382,7 @@
         if (docSnap.exists()) {
           profiler = docSnap.data().profiler || [];
         } else {
-          // Hvis databasen er helt tom, oppretter vi den første standardprofilen i skyen
+          // Hvis det er en helt ny bruker, genererer vi den første standardprofilen automatisk
           profiler = [
             {
               navn: "Hovedprofil",
@@ -381,7 +391,7 @@
               isKids: false
             }
           ];
-          await setDoc(docRef, { profiler: profiler });
+          await setDoc(docRef, { profiler: profiler }, { merge: true });
         }
         
         renderProfiler();
@@ -404,6 +414,7 @@
 
         const kidsBadgeHtml = profil.isKids ? `<br><span class="kids-badge">Kids</span>` : '';
 
+        // FIKSET: Src sjekker nå om profil.bilde faktisk har en verdi, ellers faller den trygt tilbake
         div.innerHTML = `
           <div class="avatar">
             <img src="${profil.bilde || (profil.isKids ? barnBilde : standardBilde)}">
@@ -421,7 +432,6 @@
 
         div.querySelector(".edit-btn").addEventListener("click", (e) => {
           e.stopPropagation();
-          // Sender med indeksen i URL-en istedenfor å lagre lokalt
           window.location.href = `konto.html?index=${index}`;
         });
 
@@ -454,9 +464,7 @@
 
       profiler.splice(index, 1);
       
-      // Lagrer endringen direkte i Firebase
-      await setDoc(docRef, { profiler: profiler });
-
+      await setDoc(docRef, { profiler: profiler }, { merge: true });
       renderProfiler();
     }
 
@@ -474,7 +482,6 @@
 
       document.body.style.opacity = "0";
       setTimeout(() => {
-        // Sender med valgt indeks i URL-en til Hovedside.html
         window.location.href = `Hovedside.html?index=${index}`;
       }, 400);
     }
@@ -505,20 +512,16 @@
         isKids: erBarn
       });
 
-      // Sender den nye profilen rett opp til Firebase skyen
-      await setDoc(docRef, { profiler: profiler });
+      await setDoc(docRef, { profiler: profiler }, { merge: true });
       
       lukkModal();
       renderProfiler();
     }
 
-    // Binder funksjoner til window-objektet slik at HTML inline-onclick fungerer
+    // Binder funksjoner globalt til window slik at HTML inline onclick fungerer perfekt
     window.lagreNyProfil = lagreNyProfil;
     window.lukkModal = lukkModal;
     window.åpneModal = åpneModal;
-
-    // Kjører henting av data
-    hentProfiler();
   </script>
 
 </body>
