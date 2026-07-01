@@ -1,7 +1,8 @@
 // firebase-oppsett.js
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-import { getAuth } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-import { getFirestore } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+// ALT ER OPPDATERT TIL VERSJON 12.15.0 FOR Å MATCHE PERFEKT
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-app.js";
+import { getAuth } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-auth.js";
+import { getFirestore } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyBlfCbB1AuiKVHMBEhYd0cvkJ0jxHVZfUg",
@@ -12,7 +13,8 @@ const firebaseConfig = {
   appId: "1:541804766412:web:83fc77721e384131a1ce69"
 };
 
-// Initialiser og eksporter slik at de andre sidene kan låne dem
 const app = initializeApp(firebaseConfig);
+
+// Eksporterer auth og db til de andre sidene dine
 export const auth = getAuth(app);
 export const db = getFirestore(app);
