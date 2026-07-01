@@ -364,7 +364,7 @@
         <div class="row" id="navnRow">
           <div class="info-block">
             <div class="label">Navn</div>
-            <div class="value" id="navnView"></div>
+            <div class="value" id="navnView">Laster...</div>
             <div class="edit-field hidden">
               <input type="text" id="navnInput">
               <div class="edit-actions">
@@ -379,7 +379,7 @@
         <div class="row" id="epostRow">
           <div class="info-block">
             <div class="label">E-postadresse</div>
-            <div class="value" id="epostView"></div>
+            <div class="value" id="epostView">Laster...</div>
             <div class="edit-field hidden">
               <input type="email" id="epostInput">
               <div class="edit-actions">
@@ -437,7 +437,7 @@
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-    import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js"; // FIKSET: Henter utlogging og Auth-status
+    import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
     import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
     const firebaseConfig = {
@@ -451,7 +451,7 @@
 
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
-    const auth = getAuth(app); // FIKSET: Initialiserer Auth
+    const auth = getAuth(app);
 
     const urlParams = new URLSearchParams(window.location.search);
     const aktivProfilIndex = parseInt(urlParams.get('index')) || 0;
@@ -475,20 +475,20 @@
 
     let profiler = [];
     let globalEpost = ""; 
-    let docRef = null; // FIKSET: Gjøres dynamisk basert på innlogget bruker
+    let docRef = null;
 
-    // FIKSET: Sikkerhetssjekk som sjekker hvem som er logget inn før data lastes
+    // Sjekker hvem som er logget inn
     onAuthStateChanged(auth, (user) => {
       if (user) {
-        docRef = doc(db, "users", user.uid); // Setter riktig sti
-        globalEpost = user.email; // Setter standard e-post fra Firebase-brukeren om skyen er tom
+        docRef = doc(db, "users", user.uid);
+        globalEpost = user.email || ""; 
         hentKontodata();
       } else {
-        window.location.href = "Innlogging.html"; // Sendes til pålogging hvis brukeren ikke er logget inn
+        window.location.href = "Innlogging.html";
       }
     });
 
-    /* DYNAMISK SETTING AV TOPPMENYEN */
+    /* DYNAMISK NAVIGASJON */
     document.getElementById("navHovedsideBtn").addEventListener("click", () => {
       window.location.href = `Hovedside.html?index=${aktivProfilIndex}`;
     });
@@ -498,21 +498,39 @@
     async function hentKontodata() {
       try {
         const docSnap = await getDoc(docRef);
+        
         if (docSnap.exists()) {
           const data = docSnap.data();
           profiler = data.profiler || [];
           if (data.epost) globalEpost = data.epost;
         }
 
+        // FIKSET: Robust fallback hvis skyen er tom eller profiler mangler
+        if (profiler.length === 0) {
+          profiler = [
+            {
+              navn: "Hovedprofil",
+              bilde: "https://static.wixstatic.com/media/fd2fb2_39376e4ee55b460ab7a3ebbfcf35fef7~mv2.png",
+              pin: null,
+              isKids: false
+            }
+          ];
+          await setDoc(docRef, { profiler: profiler, epost: globalEpost }, { merge: true });
+        }
+
+        // FIKSET: Sjekker om valgt indeks faktisk eksisterer, hvis ikke tvinges den til 0
         if (!profiler[aktivProfilIndex]) {
-          alert("Profilen ble ikke funnet. Sender deg til profilvalg.");
-          window.location.href = "index.html";
+          console.warn(`Profil-indeks ${aktivProfilIndex} mangler. Faller tilbake til 0.`);
+          window.location.href = "konto.html?index=0";
           return;
         }
 
         byggProfilgrensesnitt();
       } catch (error) {
         console.error("Feil under lasting av kontodata:", error);
+        navnDisplay.innerText = "Tilkoblingsfeil";
+        navnView.innerText = "Kunne ikke hente data. Vennligst sjekk internett eller Firebase-reglene.";
+        epostView.innerText = "Kunne ikke hente e-post.";
       }
     }
 
@@ -522,7 +540,7 @@
 
       navnDisplay.innerText = gjeldendeProfil.navn;
       navnView.innerText = gjeldendeProfil.navn;
-      epostView.innerText = globalEpost;
+      epostView.innerText = globalEpost || "Ingen registrert";
       document.getElementById("profilbilde").src = gjeldendeProfil.bilde || "https://static.wixstatic.com/media/fd2fb2_39376e4ee55b460ab7a3ebbfcf35fef7~mv2.png";
 
       const erInnloggetSomBarn = gjeldendeProfil.isKids === true;
@@ -535,6 +553,13 @@
         foreldreKontrollSeksjon.classList.remove("hidden");
         oppdaterMaksGrenseTekst();
       } else {
+        // FIKSET: Nullstiller skjulte elementer hvis man bytter fra barnekonto til voksenkonto
+        document.getElementById("sidebarActions").classList.remove("hidden");
+        document.getElementById("avatarContainer").style.pointerEvents = "auto";
+        document.getElementById("endreNavnKnapp").classList.remove("hidden");
+        document.getElementById("endreEpostKnapp").classList.remove("hidden");
+        foreldreKontrollSeksjon.classList.add("hidden");
+
         if (aktivProfilIndex !== 0) {
           sletteKnapp.innerHTML = `<i class="fa-solid fa-user-xmark"></i> Slett profil`;
         } else {
@@ -545,6 +570,7 @@
 
     function oppdaterMaksGrenseTekst() {
       const gjeldendeProfil = profiler[aktivProfilIndex];
+      if (!gjeldendeProfil) return;
       const grense = gjeldendeProfil.maksAldersgrense || "12";
       if (grense === "A") {
         currentLimitView.innerText = "Tillater kun innhold for Alle (A)";
@@ -610,7 +636,6 @@
       epostRow.querySelector(".edit-trigger").classList.remove("hidden");
     }
 
-    // FIKSET: Logger ut av Firebase på ordentlig
     async function loggUt() {
       try {
         await signOut(auth);
@@ -661,7 +686,7 @@
       oppdaterMaksGrenseTekst();
     }
 
-    // Globale bindinger til vinduet
+    // Globale vindusbindinger
     window.velgProfilbildeSide = velgProfilbildeSide;
     window.haandterSletting = haandterSletting;
     window.endreNavn = endreNavn;
