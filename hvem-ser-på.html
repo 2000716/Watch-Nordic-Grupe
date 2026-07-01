@@ -313,7 +313,7 @@
 <body>
 
   <div class="container">
-    <h1>Hvem ser på nå?</h1>
+    <h1>Hvem er det som ser på?</h1>
     <div class="profiles" id="profiles"></div>
   </div>
 
@@ -351,6 +351,19 @@
     let profiler = [];
     let docRef = null;
 
+    // ================= LYNRAST OPPSTART (Mellomlagring) =================
+    // Sjekker om vi har lagrede profiler fra forrige besøk og tegner dem ut umiddelbart (0 millisekunder forsinkelse)
+    const cachedProfiles = localStorage.getItem("watch_nordic_profiles_cache");
+    if (cachedProfiles) {
+      try {
+        profiler = JSON.parse(cachedProfiles);
+        renderProfiler(); 
+      } catch (e) {
+        console.error("Kunne ikke lese profil-cache:", e);
+      }
+    }
+
+    // Sjekker autentisering i bakgrunnen
     onAuthStateChanged(auth, (user) => {
       if (user) {
         docRef = doc(db, "users", user.uid);
@@ -366,6 +379,8 @@
         
         if (docSnap.exists()) {
           profiler = docSnap.data().profiler || [];
+          // Oppdaterer den lokale cachen til neste gang siden åpnes
+          localStorage.setItem("watch_nordic_profiles_cache", JSON.stringify(profiler));
         } else {
           profiler = [
             {
@@ -377,8 +392,10 @@
             }
           ];
           await setDoc(docRef, { profiler: profiler }, { merge: true });
+          localStorage.setItem("watch_nordic_profiles_cache", JSON.stringify(profiler));
         }
         
+        // Gjen-tegner skjermen lydløst i bakgrunnen for å sikre 100% ferske data
         renderProfiler();
       } catch (error) {
         console.error("Feil ved henting av profiler:", error);
@@ -447,6 +464,7 @@
       profiler.splice(index, 1);
       
       await setDoc(docRef, { profiler: profiler }, { merge: true });
+      localStorage.setItem("watch_nordic_profiles_cache", JSON.stringify(profiler)); // Oppdaterer cache ved sletting
       renderProfiler();
     }
 
@@ -461,7 +479,6 @@
         }
       }
 
-      // FIKSET: Lagrer alt til localStorage her slik at Hovedside.html fanger det opp uten forsinkelse
       localStorage.setItem("aktivProfilIndex", index);
       localStorage.setItem("profilnavn", profil.navn || "");
       localStorage.setItem("profilbilde", profil.bilde || (profil.isKids ? barnBilde : standardBilde));
@@ -497,10 +514,11 @@
         bilde: erBarn ? barnBilde : standardBilde, 
         pin: null,
         isKids: erBarn,
-        maksAldersgrense: "12" // Legger til standard aldersgrense for nye profiler
+        maksAldersgrense: "12"
       });
 
       await setDoc(docRef, { profiler: profiler }, { merge: true });
+      localStorage.setItem("watch_nordic_profiles_cache", JSON.stringify(profiler)); // Oppdaterer cache ved ny profil
       
       lukkModal();
       renderProfiler();
