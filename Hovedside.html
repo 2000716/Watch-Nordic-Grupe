@@ -1259,7 +1259,6 @@ main {
   // ==================== REIDREKTERINGSVAKT (FIREBASE SIKKERHET) ==================== //
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
   import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-  // Henter inn Firestore for å kunne lese profilbilde live fra skyen
   import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
   const firebaseConfig = {
@@ -1273,7 +1272,7 @@ main {
 
   const app = initializeApp(firebaseConfig);
   const auth = getAuth(app);
-  const db = getFirestore(app); // Initialiserer databasen
+  const db = getFirestore(app);
 
   onAuthStateChanged(auth, async (user) => {
     if (!user) {
@@ -1282,7 +1281,6 @@ main {
         window.location.href = "index.html";
       }
     } else {
-      // Bruker er logget inn -> Hent aktiv profil indeks (standard 0 hvis ikke satt)
       const aktivProfilIndex = parseInt(localStorage.getItem("aktivProfilIndex")) || 0;
       
       try {
@@ -1299,7 +1297,7 @@ main {
             const nyIsKids = gjeldendeProfil.isKids === true;
             const nyMaks = gjeldendeProfil.maksAldersgrense || "12";
 
-            // 1. Oppdater profilbilder i UI umiddelbart fra databasen
+            // 1. Oppdater kun profilbilder i UI
             if (bildeUrl) {
               const menyProfil = document.getElementById("menyProfilbilde");
               if (menyProfil) menyProfil.src = bildeUrl;
@@ -1308,15 +1306,12 @@ main {
               localStorage.setItem("profilbilde", bildeUrl);
             }
 
-            // 2. Oppdater profilnavn i UI umiddelbart fra databasen
+            // Lagrer navnet i bakgrunnen (localStorage) i tilfelle andre systemer trenger det
             if (profilNavn) {
-              const navnElement = document.getElementById("profilNavn");
-              if (navnElement) navnElement.textContent = profilNavn;
               localStorage.setItem("profilnavn", profilNavn);
             }
 
-            // 3. Sikkerhetssjekk: Hvis barneinnstillinger/aldersgrenser ble endret, 
-            // oppdaterer vi lokalt minne og reloader siden slik at filmgalleriene filtreres på nytt.
+            // 2. Sikkerhetssjekk for aldersgrenser
             const gammelIsKids = localStorage.getItem("isKids") === "true";
             const gammelMaks = localStorage.getItem("maksAldersgrense") || "12";
 
@@ -1328,7 +1323,7 @@ main {
           }
         }
       } catch (error) {
-        console.error("Feil ved synkronisering av aktiv profil fra Firestore:", error);
+        console.error("Feil beim synkronisering:", error);
       }
     }
   });
@@ -1366,7 +1361,7 @@ main {
     window.location.href = "konto.html";
   }
 
-  // ==================== PROFILBILDE & NAVN (Rask lokal fallback under lasting) ==================== //
+  // ==================== PROFILBILDE (Rask lokal fallback under lasting) ==================== //
   const lagretBilde = localStorage.getItem("profilbilde");
   if (lagretBilde) {
     const menyProfil = document.getElementById("menyProfilbilde");
@@ -1374,11 +1369,6 @@ main {
 
     const headerProfil = document.getElementById("headerProfilbilde");
     if (headerProfil) headerProfil.src = lagretBilde;
-  }
-  const navn = localStorage.getItem("profilnavn");
-  if (navn) {
-    const navnElement = document.getElementById("profilNavn");
-    if (navnElement) navnElement.textContent = navn;
   }
 
   // ==================== HERO-BANNER ==================== //
@@ -1653,6 +1643,18 @@ main {
     });
   }
 
+  // Sørget for at serier også sjekker og respekterer aldersgrenser her
+  function renderSeries(galleryId) {
+    const gallery = document.getElementById(galleryId);
+    if (!gallery || typeof serier === "undefined") return;
+    gallery.innerHTML = "";
+    Object.keys(serier).forEach((key) => {
+      const serie = serier[key];
+      if (erInnloggetSomBarn && (!erEgnetForBarn(serie) || !sjekkAldersgrense(serie))) return;
+      gallery.appendChild(createGalleryItem(key, serie));
+    });
+  }
+
   function renderTop10(galleryId) {
     const gallery = document.getElementById(galleryId);
     if (!gallery || typeof filmer === "undefined") return;
@@ -1688,18 +1690,6 @@ main {
       wrapper.appendChild(img);
       wrapper.appendChild(number);
       gallery.appendChild(wrapper);
-    });
-  }
-
-  // Sørget for at serier også sjekker og respekterer aldersgrenser her
-  function renderSeries(galleryId) {
-    const gallery = document.getElementById(galleryId);
-    if (!gallery || typeof serier === "undefined") return;
-    gallery.innerHTML = "";
-    Object.keys(serier).forEach((key) => {
-      const serie = serier[key];
-      if (erInnloggetSomBarn && (!erEgnetForBarn(serie) || !sjekkAldersgrense(serie))) return;
-      gallery.appendChild(createGalleryItem(key, serie));
     });
   }
 
