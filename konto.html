@@ -463,6 +463,26 @@
     let globalEpost = ""; 
     let docRef = null;
 
+    // ================= LYNRAST OPPSTART (Mellomlagring) =================
+    // Leser de lagrede profilene og e-posten fra localStorage med en gang, slik at siden oppdateres øyeblikkelig
+    const cachedProfiles = localStorage.getItem("watch_nordic_profiles_cache");
+    const cachedEmail = localStorage.getItem("watch_nordic_email_cache");
+
+    if (cachedProfiles) {
+      try {
+        profiler = JSON.parse(cachedProfiles);
+        if (cachedEmail) globalEpost = cachedEmail;
+        
+        // Hvis profilen eksisterer i minnet, bygger vi grensesnittet umiddelbart (0ms ventetid!)
+        if (profiler[aktivProfilIndex]) {
+          byggProfilgrensesnitt();
+        }
+      } catch (e) {
+        console.error("Kunne ikke lese mellomlagret data:", e);
+      }
+    }
+
+    // Sjekker autentisering og henter ferske data i bakgrunnen
     onAuthStateChanged(auth, (user) => {
       if (user) {
         docRef = doc(db, "users", user.uid);
@@ -485,6 +505,11 @@
         if (docSnap.exists()) {
           const data = docSnap.data();
           profiler = data.profiler || [];
+          if (data.epost) globalEpost = data.epost;
+          
+          // Oppdaterer den lokale cachen til neste besøk
+          localStorage.setItem("watch_nordic_profiles_cache", JSON.stringify(profiler));
+          localStorage.setItem("watch_nordic_email_cache", globalEpost);
         }
 
         if (profiler.length === 0) {
@@ -497,6 +522,8 @@
             }
           ];
           await setDoc(docRef, { profiler: profiler, epost: globalEpost }, { merge: true });
+          localStorage.setItem("watch_nordic_profiles_cache", JSON.stringify(profiler));
+          localStorage.setItem("watch_nordic_email_cache", globalEpost);
         }
 
         if (!profiler[aktivProfilIndex]) {
@@ -504,11 +531,14 @@
           return;
         }
 
+        // Tegner på nytt med helt ferske data fra Firebase
         byggProfilgrensesnitt();
       } catch (error) {
         console.error("Feil under lasting av kontodata:", error);
-        navnDisplay.innerText = "Tilkoblingsfeil";
-        navnView.innerText = "Kunne ikke hente data.";
+        if (!cachedProfiles) {
+          navnDisplay.innerText = "Tilkoblingsfeil";
+          navnView.innerText = "Kunne ikke hente data.";
+        }
       }
     }
 
@@ -571,6 +601,7 @@
       profiler[aktivProfilIndex].navn = nyttNavn;
       
       await setDoc(docRef, { profiler: profiler }, { merge: true });
+      localStorage.setItem("watch_nordic_profiles_cache", JSON.stringify(profiler)); // Oppdaterer cache
 
       navnView.innerText = nyttNavn;
       navnDisplay.innerText = nyttNavn;
@@ -603,6 +634,7 @@
         
         globalEpost = nyEpost;
         await setDoc(docRef, { epost: globalEpost }, { merge: true });
+        localStorage.setItem("watch_nordic_email_cache", globalEpost); // Oppdaterer cache
 
         epostView.innerText = nyEpost;
         alert("E-postadresse ble oppdatert!");
@@ -625,6 +657,9 @@
 
     async function loggUt() {
       try {
+        // Tømmer cachen ved utlogging for sikkerhet skyld, så neste bruker ikke ser gamle profiler
+        localStorage.removeItem("watch_nordic_profiles_cache");
+        localStorage.removeItem("watch_nordic_email_cache");
         await signOut(auth);
         window.location.href = "Starts side.html";
       } catch (error) {
@@ -640,6 +675,7 @@
         
         profiler.splice(aktivProfilIndex, 1);
         await setDoc(docRef, { profiler: profiler }, { merge: true });
+        localStorage.setItem("watch_nordic_profiles_cache", JSON.stringify(profiler)); // Oppdaterer cache
 
         alert("Profilen ble slettet. Du sendes til hovedprofilen.");
         window.location.href = "konto.html?index=0";
@@ -647,6 +683,8 @@
         if (!confirm("Vennligst bekreft: Vil du slette hele kontoen og alle underprofiler permanent?")) return;
         
         await deleteDoc(docRef);
+        localStorage.removeItem("watch_nordic_profiles_cache");
+        localStorage.removeItem("watch_nordic_email_cache");
         alert("Kontoen din er fjernet fra databasen. Du logges nå ut.");
         loggUt(); 
       }
@@ -670,6 +708,7 @@
       profiler[aktivProfilIndex].maksAldersgrense = valgtGrense;
 
       await setDoc(docRef, { profiler: profiler }, { merge: true });
+      localStorage.setItem("watch_nordic_profiles_cache", JSON.stringify(profiler)); // Oppdaterer cache
       oppdaterMaksGrenseTekst();
     }
 
