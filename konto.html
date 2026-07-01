@@ -436,22 +436,12 @@
   <footer>© 2026 Watch Nordic Group AS. Alle rettigheter forbeholdt.</footer>
 
   <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-    import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-    import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+    // 1. Vi henter den felles konfigurerte databasen og innloggingstjenesten din herfra
+    import { auth, db } from "./firebase-oppsett.js";
 
-    const firebaseConfig = {
-      apiKey: "AIzaSyBlfCbB1AuiKVHMBEhYd0cvkJ0jxHVZfUg",
-      authDomain: "watch-nordic-78b99.firebaseapp.com",
-      projectId: "watch-nordic-78b99",
-      storageBucket: "watch-nordic-78b99.firebasestorage.app",
-      messagingSenderId: "541804766412",
-      appId: "1:541804766412:web:83fc77721e384131a1ce69"
-    };
-
-    const app = initializeApp(firebaseConfig);
-    const db = getFirestore(app);
-    const auth = getAuth(app);
+    // 2. Vi henter kun de spesifikke verktøyene som trengs for kontosiden
+    import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+    import { doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
     const urlParams = new URLSearchParams(window.location.search);
     const aktivProfilIndex = parseInt(urlParams.get('index')) || 0;
@@ -505,7 +495,7 @@
           if (data.epost) globalEpost = data.epost;
         }
 
-        // FIKSET: Robust fallback hvis skyen er tom eller profiler mangler
+        // Robust fallback hvis skyen er tom eller profiler mangler
         if (profiler.length === 0) {
           profiler = [
             {
@@ -518,7 +508,7 @@
           await setDoc(docRef, { profiler: profiler, epost: globalEpost }, { merge: true });
         }
 
-        // FIKSET: Sjekker om valgt indeks faktisk eksisterer, hvis ikke tvinges den til 0
+        // Sjekker om valgt indeks faktisk eksisterer, hvis ikke tvinges den til 0
         if (!profiler[aktivProfilIndex]) {
           console.warn(`Profil-indeks ${aktivProfilIndex} mangler. Faller tilbake til 0.`);
           window.location.href = "konto.html?index=0";
@@ -553,7 +543,7 @@
         foreldreKontrollSeksjon.classList.remove("hidden");
         oppdaterMaksGrenseTekst();
       } else {
-        // FIKSET: Nullstiller skjulte elementer hvis man bytter fra barnekonto til voksenkonto
+        // Nullstiller skjulte elementer hvis man bytter fra barnekonto til voksenkonto
         document.getElementById("sidebarActions").classList.remove("hidden");
         document.getElementById("avatarContainer").style.pointerEvents = "auto";
         document.getElementById("endreNavnKnapp").classList.remove("hidden");
