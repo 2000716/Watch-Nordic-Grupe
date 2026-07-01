@@ -436,9 +436,10 @@
   <footer>© 2026 Watch Nordic Group AS. Alle rettigheter forbeholdt.</footer>
 
   <script type="module">
-    import { auth, db } from "./firebase-oppsett.js";
-    import { onAuthStateChanged, signOut, updateEmail } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-    import { doc, getDoc, setDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+import { auth, db } from "./firebase-oppsett.js";
+// Endre fra 10.8.0 til 12.15.0 her også:
+import { onAuthStateChanged, signOut, updateEmail } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-auth.js";
+import { doc, getDoc, setDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
 
     const urlParams = new URLSearchParams(window.location.search);
     const aktivProfilIndex = parseInt(urlParams.get('index')) || 0;
