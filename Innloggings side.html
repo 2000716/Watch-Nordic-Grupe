@@ -250,23 +250,12 @@
   <script src="Seriedata.js"></script>
 
   <script type="module">
-import { auth, db } from "./firebase-oppsett.js";
-// Endre fra 10.8.0 til 12.15.0 her også:
-import { signInWithEmailAndPassword, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-auth.js";
-import { doc, setDoc } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
+    // 1. Hent den ferdig oppsatte databasen og autentiseringen fra fellesfilen din
+    import { auth, db } from "./firebase-oppsett.js";
 
-    const firebaseConfig = {
-      apiKey: "AIzaSyBlfCbB1AuiKVHMBEhYd0cvkJ0jxHVZfUg",
-      authDomain: "watch-nordic-78b99.firebaseapp.com",
-      projectId: "watch-nordic-78b99",
-      storageBucket: "watch-nordic-78b99.firebasestorage.app",
-      messagingSenderId: "541804766412",
-      appId: "1:541804766412:web:83fc77721e384131a1ce69"
-    };
-
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-    const db = getFirestore(app); // NY: Initialisert databasen
+    // 2. Hent kun funksjonene denne siden trenger fra de offisielle CDN-lenkene (v12.15.0)
+    import { signInWithEmailAndPassword, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-auth.js";
+    import { doc, setDoc } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
 
     let registreringsmodus = false;
 
@@ -287,14 +276,15 @@ import { doc, setDoc } from "https://www.gstatic.com/firebasejs/12.15.0/firebase
           const userCredential = await createUserWithEmailAndPassword(auth, epost, passord);
           const user = userCredential.user;
 
-          // 2. NYTT: Opprett brukerdokumentet i Firestore med navn med en gang!
+          // 2. Opprett brukerdokumentet i Firestore med navn med en gang!
           await setDoc(doc(db, "users", user.uid), {
             epost: epost,
             profiler: [
               {
                 navn: navn,
                 bilde: "https://static.wixstatic.com/media/fd2fb2_39376e4ee55b460ab7a3ebbfcf35fef7~mv2.png",
-                isKids: false
+                isKids: false,
+                maksAldersgrense: "12"
               }
             ]
           });
