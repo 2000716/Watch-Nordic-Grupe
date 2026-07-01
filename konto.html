@@ -259,7 +259,7 @@
       width: 100%;
       padding: 12px;
       background: rgba(9, 27, 30, 0.8);
-      border: 1px solid rgba(255,255,255,0.15);
+      border: 1px solid rgba(255, 255, 255, 0.15);
       border-radius: 10px;
       color: white;
       font-size: 15px;
@@ -363,10 +363,10 @@
       <div class="card">
         <div class="row" id="navnRow">
           <div class="info-block">
-            <div class="label">Navn</div>
+            <div class="label">Profilnavn</div>
             <div class="value" id="navnView">Laster...</div>
             <div class="edit-field hidden">
-              <input type="text" id="navnInput">
+              <input type="text" id="navnInput" maxlength="15">
               <div class="edit-actions">
                 <button class="btn-save" onclick="lagreNavn()">Lagre</button>
                 <button class="btn-cancel" onclick="avbrytNavn()">Avbryt</button>
@@ -378,7 +378,7 @@
 
         <div class="row" id="epostRow">
           <div class="info-block">
-            <div class="label">E-postadresse</div>
+            <div class="label">E-postadresse (Konto)</div>
             <div class="value" id="epostView">Laster...</div>
             <div class="edit-field hidden">
               <input type="email" id="epostInput">
@@ -436,12 +436,9 @@
   <footer>© 2026 Watch Nordic Group AS. Alle rettigheter forbeholdt.</footer>
 
   <script type="module">
-    // 1. Vi henter den felles konfigurerte databasen og innloggingstjenesten din herfra
     import { auth, db } from "./firebase-oppsett.js";
-
-    // 2. Vi henter kun de spesifikke verktøyene som trengs for kontosiden
-    import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-    import { doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+    import { onAuthStateChanged, signOut, updateEmail } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+    import { doc, getDoc, setDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
     const urlParams = new URLSearchParams(window.location.search);
     const aktivProfilIndex = parseInt(urlParams.get('index')) || 0;
@@ -467,7 +464,7 @@
     let globalEpost = ""; 
     let docRef = null;
 
-    // Sjekker hvem som er logget inn
+    // Lytt til innloggingsstatus
     onAuthStateChanged(auth, (user) => {
       if (user) {
         docRef = doc(db, "users", user.uid);
@@ -492,10 +489,9 @@
         if (docSnap.exists()) {
           const data = docSnap.data();
           profiler = data.profiler || [];
-          if (data.epost) globalEpost = data.epost;
         }
 
-        // Robust fallback hvis skyen er tom eller profiler mangler
+        // Hvis skyen er tom (sikkerhetssjekk)
         if (profiler.length === 0) {
           profiler = [
             {
@@ -508,9 +504,7 @@
           await setDoc(docRef, { profiler: profiler, epost: globalEpost }, { merge: true });
         }
 
-        // Sjekker om valgt indeks faktisk eksisterer, hvis ikke tvinges den til 0
         if (!profiler[aktivProfilIndex]) {
-          console.warn(`Profil-indeks ${aktivProfilIndex} mangler. Faller tilbake til 0.`);
           window.location.href = "konto.html?index=0";
           return;
         }
@@ -519,8 +513,7 @@
       } catch (error) {
         console.error("Feil under lasting av kontodata:", error);
         navnDisplay.innerText = "Tilkoblingsfeil";
-        navnView.innerText = "Kunne ikke hente data. Vennligst sjekk internett eller Firebase-reglene.";
-        epostView.innerText = "Kunne ikke hente e-post.";
+        navnView.innerText = "Kunne ikke hente data.";
       }
     }
 
@@ -543,7 +536,6 @@
         foreldreKontrollSeksjon.classList.remove("hidden");
         oppdaterMaksGrenseTekst();
       } else {
-        // Nullstiller skjulte elementer hvis man bytter fra barnekonto til voksenkonto
         document.getElementById("sidebarActions").classList.remove("hidden");
         document.getElementById("avatarContainer").style.pointerEvents = "auto";
         document.getElementById("endreNavnKnapp").classList.remove("hidden");
@@ -553,7 +545,7 @@
         if (aktivProfilIndex !== 0) {
           sletteKnapp.innerHTML = `<i class="fa-solid fa-user-xmark"></i> Slett profil`;
         } else {
-          sletteKnapp.innerHTML = `<i class="fa-solid fa-trash-can"></i> Slett konto`;
+          sletteKnapp.innerHTML = `<i class="fa-solid fa-trash-can"></i> Slett hele kontoen`;
         }
       }
     }
@@ -562,11 +554,7 @@
       const gjeldendeProfil = profiler[aktivProfilIndex];
       if (!gjeldendeProfil) return;
       const grense = gjeldendeProfil.maksAldersgrense || "12";
-      if (grense === "A") {
-        currentLimitView.innerText = "Tillater kun innhold for Alle (A)";
-      } else {
-        currentLimitView.innerText = `Maks ${grense} år`;
-      }
+      currentLimitView.innerText = grense === "A" ? "Tillater kun innhold for Alle (A)" : `Maks ${grense} år`;
     }
 
     function velgProfilbildeSide() {
@@ -574,6 +562,7 @@
       window.location.href = `VelgProfilbilde.html?index=${aktivProfilIndex}`;
     }
 
+    /* ENDRE PROFILNAVN */
     function endreNavn() {
       if (profiler[aktivProfilIndex]?.isKids) return;
       navnInput.value = navnView.innerText;
@@ -584,11 +573,11 @@
 
     async function lagreNavn() {
       const nyttNavn = navnInput.value.trim();
-      if (!nyttNavn) return;
+      if (!nyttNavn) return alert("Navnet kan ikke være tomt!");
 
       profiler[aktivProfilIndex].navn = nyttNavn;
       
-      await setDoc(docRef, { profiler: profiler, epost: globalEpost }, { merge: true });
+      await setDoc(docRef, { profiler: profiler }, { merge: true });
 
       navnView.innerText = nyttNavn;
       navnDisplay.innerText = nyttNavn;
@@ -601,6 +590,7 @@
       navnRow.querySelector(".edit-trigger").classList.remove("hidden");
     }
 
+    /* ENDRE E-POST (OPPDATERER OGSÅ FIREBASE AUTH) */
     function endreEpost() {
       if (profiler[aktivProfilIndex]?.isKids) return;
       epostInput.value = epostView.innerText;
@@ -611,13 +601,29 @@
 
     async function lagreEpost() {
       const nyEpost = epostInput.value.trim().toLowerCase();
-      if (!nyEpost || nyEpost === globalEpost) { avbrytEpost(); return; }
+      if (!nyEpost) return alert("E-posten kan ikke være tom!");
+      if (nyEpost === globalEpost) { avbrytEpost(); return; }
 
-      globalEpost = nyEpost;
-      await setDoc(docRef, { profiler: profiler, epost: globalEpost }, { merge: true });
+      try {
+        if (auth.currentUser) {
+          // FIKSET: Oppdaterer den unike e-posten i selve innloggingssystemet til Firebase
+          await updateEmail(auth.currentUser, nyEpost);
+        }
+        
+        globalEpost = nyEpost;
+        await setDoc(docRef, { epost: globalEpost }, { merge: true });
 
-      epostView.innerText = nyEpost;
-      avbrytEpost();
+        epostView.innerText = nyEpost;
+        alert("E-postadresse ble oppdatert!");
+        avbrytEpost();
+      } catch (error) {
+        console.error(error);
+        if (error.code === "auth/requires-recent-login") {
+          alert("Av sikkerhetsmessige årsaker må du logge ut og inn igjen for å bekrefte identiteten din før du endrer e-post.");
+        } else {
+          alert("Kunne ikke endre e-post: " + error.message);
+        }
+      }
     }
 
     function avbrytEpost() {
@@ -626,6 +632,7 @@
       epostRow.querySelector(".edit-trigger").classList.remove("hidden");
     }
 
+    /* UT- OG SLETTING */
     async function loggUt() {
       try {
         await signOut(auth);
@@ -642,14 +649,15 @@
         if (!confirm(`Er du sikker på at du vil slette profilen "${profiler[aktivProfilIndex].navn}"?`)) return;
         
         profiler.splice(aktivProfilIndex, 1);
-        await setDoc(docRef, { profiler: profiler, epost: globalEpost }, { merge: true });
+        await setDoc(docRef, { profiler: profiler }, { merge: true });
 
-        alert("Profilen ble slettet. Du sendes nå tilbake til start.");
-        window.location.href = "index.html";
+        alert("Profilen ble slettet. Du sendes til hovedprofilen.");
+        window.location.href = "konto.html?index=0";
       } else {
-        if (!confirm("Vil du slette hele kontoen og alle tilhørende underprofiler permanent fra skyen?")) return;
+        if (!confirm("Vennligst bekreft: Vil du slette hele kontoen og alle underprofiler permanent?")) return;
         
-        await setDoc(docRef, { profiler: [], epost: "" });
+        await deleteDoc(docRef);
+        alert("Kontoen din er fjernet fra databasen. Du logges nå ut.");
         loggUt(); 
       }
     }
@@ -672,11 +680,11 @@
       const valgtGrense = ageRestrictionSelect.value;
       profiler[aktivProfilIndex].maksAldersgrense = valgtGrense;
 
-      await setDoc(docRef, { profiler: profiler, epost: globalEpost }, { merge: true });
+      await setDoc(docRef, { profiler: profiler }, { merge: true });
       oppdaterMaksGrenseTekst();
     }
 
-    // Globale vindusbindinger
+    // Globale bindinger
     window.velgProfilbildeSide = velgProfilbildeSide;
     window.haandterSletting = haandterSletting;
     window.endreNavn = endreNavn;
