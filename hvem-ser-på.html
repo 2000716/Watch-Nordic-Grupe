@@ -335,22 +335,12 @@
   </div>
 
   <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js"; // FIKSET: Importerer Auth
-    import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+    // 1. Importer de felles konfigurerte instansene fra oppsettet ditt
+    import { auth, db } from "./firebase-oppsett.js";
 
-    const firebaseConfig = {
-      apiKey: "AIzaSyBlfCbB1AuiKVHMBEhYd0cvkJ0jxHVZfUg",
-      authDomain: "watch-nordic-78b99.firebaseapp.com",
-      projectId: "watch-nordic-78b99",
-      storageBucket: "watch-nordic-78b99.firebasestorage.app",
-      messagingSenderId: "541804766412",
-      appId: "1:541804766412:web:83fc77721e384131a1ce69"
-    };
-
-    const app = initializeApp(firebaseConfig);
-    const db = getFirestore(app);
-    const auth = getAuth(app); // FIKSET: Initialiserer Auth
+    // 2. Importer de nødvendige funksjonene for profilhåndteringen
+    import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+    import { doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
     const MAX_PROFILER = 5;
     const container = document.getElementById("profiles");
@@ -362,15 +352,15 @@
     const barnBilde = "https://static.wixstatic.com/media/fd2fb2_3df40a7e62c545afa3918fc10393284d~mv2.png";
 
     let profiler = [];
-    let docRef = null; // FIKSET: Gjøres dynamisk per innlogget bruker
+    let docRef = null;
 
-    // FIKSET: Auth-lytter som sikrer at vi henter profiler fra riktig brukermappe i skyen
+    // Sjekker at brukeren faktisk har en aktiv økt
     onAuthStateChanged(auth, (user) => {
       if (user) {
-        docRef = doc(db, "users", user.uid); // Mapper direkte til riktig UID
+        docRef = doc(db, "users", user.uid);
         hentProfiler();
       } else {
-        window.location.href = "Innlogging.html"; // Sendes til logg inn hvis økten mangler
+        window.location.href = "Innlogging.html";
       }
     });
 
@@ -414,7 +404,6 @@
 
         const kidsBadgeHtml = profil.isKids ? `<br><span class="kids-badge">Kids</span>` : '';
 
-        // FIKSET: Src sjekker nå om profil.bilde faktisk har en verdi, ellers faller den trygt tilbake
         div.innerHTML = `
           <div class="avatar">
             <img src="${profil.bilde || (profil.isKids ? barnBilde : standardBilde)}">
@@ -518,7 +507,7 @@
       renderProfiler();
     }
 
-    // Binder funksjoner globalt til window slik at HTML inline onclick fungerer perfekt
+    // Binder funksjoner globalt slik at HTML inline-onclick fungerer
     window.lagreNyProfil = lagreNyProfil;
     window.lukkModal = lukkModal;
     window.åpneModal = åpneModal;
