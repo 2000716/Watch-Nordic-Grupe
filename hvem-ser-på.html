@@ -335,12 +335,9 @@
   </div>
 
   <script type="module">
-    // 1. Importer de felles konfigurerte instansene fra oppsettet ditt
     import { auth, db } from "./firebase-oppsett.js";
-
-    // 2. Importer de nødvendige funksjonene for profilhåndteringen
-    import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-    import { doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+    import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-auth.js";
+    import { doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
 
     const MAX_PROFILER = 5;
     const container = document.getElementById("profiles");
@@ -354,7 +351,6 @@
     let profiler = [];
     let docRef = null;
 
-    // Sjekker at brukeren faktisk har en aktiv økt
     onAuthStateChanged(auth, (user) => {
       if (user) {
         docRef = doc(db, "users", user.uid);
@@ -364,7 +360,6 @@
       }
     });
 
-    /* HENT DATA FRA DITT SIKRE DOKUMENT */
     async function hentProfiler() {
       try {
         const docSnap = await getDoc(docRef);
@@ -372,13 +367,13 @@
         if (docSnap.exists()) {
           profiler = docSnap.data().profiler || [];
         } else {
-          // Hvis det er en helt ny bruker, genererer vi den første standardprofilen automatisk
           profiler = [
             {
               navn: "Hovedprofil",
               bilde: standardBilde,
               pin: null,
-              isKids: false
+              isKids: false,
+              maksAldersgrense: "12"
             }
           ];
           await setDoc(docRef, { profiler: profiler }, { merge: true });
@@ -390,7 +385,6 @@
       }
     }
 
-    /* TEGN PROFILER (RENDER) */
     function renderProfiler() {
       container.innerHTML = "";
 
@@ -447,7 +441,6 @@
       }
     }
 
-    /* SLETT PROFIL FUNKSJON */
     async function slettProfil(index, navn) {
       if (!confirm(`Er du sikker på at du vil slette profilen "${navn}"? Alle innstillinger for denne profilen vil forsvinne.`)) return;
 
@@ -457,7 +450,6 @@
       renderProfiler();
     }
 
-    /* VELG EN PROFIL */
     function velgProfil(index) {
       const profil = profiler[index];
 
@@ -469,13 +461,19 @@
         }
       }
 
+      // FIKSET: Lagrer alt til localStorage her slik at Hovedside.html fanger det opp uten forsinkelse
+      localStorage.setItem("aktivProfilIndex", index);
+      localStorage.setItem("profilnavn", profil.navn || "");
+      localStorage.setItem("profilbilde", profil.bilde || (profil.isKids ? barnBilde : standardBilde));
+      localStorage.setItem("isKids", profil.isKids ? "true" : "false");
+      localStorage.setItem("maksAldersgrense", profil.maksAldersgrense || "12");
+
       document.body.style.opacity = "0";
       setTimeout(() => {
         window.location.href = `Hovedside.html?index=${index}`;
       }, 400);
     }
 
-    /* MODAL-FUNKSJONER */
     function åpneModal() {
       newProfileNameInput.value = "";
       isKidsProfileInput.checked = false;
@@ -498,7 +496,8 @@
         navn: navn,
         bilde: erBarn ? barnBilde : standardBilde, 
         pin: null,
-        isKids: erBarn
+        isKids: erBarn,
+        maksAldersgrense: "12" // Legger til standard aldersgrense for nye profiler
       });
 
       await setDoc(docRef, { profiler: profiler }, { merge: true });
@@ -507,7 +506,6 @@
       renderProfiler();
     }
 
-    // Binder funksjoner globalt slik at HTML inline-onclick fungerer
     window.lagreNyProfil = lagreNyProfil;
     window.lukkModal = lukkModal;
     window.åpneModal = åpneModal;
