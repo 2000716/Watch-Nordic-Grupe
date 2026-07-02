@@ -559,6 +559,7 @@
   let hideTimeout;
   let subtitlesEnabled = true;
   let autoplayTriggered = false;
+  let harSjekketLagretTid = false; // Sperre som forhindrer evig loop
 
   const nesteEpisodeUrl = hentNesteEpisodeInfo();
 
@@ -578,6 +579,10 @@
     if (user) {
       currentUser = user;
       
+      // Hvis vi allerede har sjekket tiden i denne økten, skal vi ikke gjøre det igjen
+      if (harSjekketLagretTid) return;
+      harSjekketLagretTid = true;
+      
       try {
         const profilDocRef = doc(db, "users", user.uid, "profiler", aktivProfil);
         const docSnap = await getDoc(profilDocRef);
@@ -591,9 +596,10 @@
           if (!isNaN(savedTime) && savedTime > 10 && video.duration > savedTime + 10) {
             if (resumeOverlay) {
               resumeOverlay.style.display = "flex";
-              continueBtn.onclick = () => { video.currentTime = savedTime; resumeOverlay.style.display = "none"; video.play(); };
-              restartBtn.onclick = () => { video.currentTime = 0; resumeOverlay.style.display = "none"; video.play(); };
+              continueBtn.onclick = () => { video.currentTime = savedTime; resumeOverlay.style.display = "none"; video.play().catch(() => {}); };
+              restartBtn.onclick = () => { video.currentTime = 0; resumeOverlay.style.display = "none"; video.play().catch(() => {}); };
             } else {
+              video.currentTime = savedTime;
               video.play().catch(() => {});
             }
           } else {
@@ -629,7 +635,7 @@
   }
 
   async function lagrePosisjonTilFirebase() {
-    if (!currentUser || autoplayTriggered || isNaN(video.currentTime) || video.currentTime <= 0) return;
+    if (!currentUser || autoplayTriggered || isNaN(video.currentTime) || video.currentTime <= 0 || !video.duration) return;
 
     const nåværendeTid = video.currentTime;
     
@@ -640,13 +646,10 @@
       const profilDocRef = doc(db, "users", currentUser.uid, "profiler", aktivProfil);
       
       try {
+        // Rettet dyp-fletting ved hjelp av dot-notation (historikk.${navn})
         await setDoc(profilDocRef, {
-          avspillingsTid: {
-            [filmId]: nåværendeTid
-          },
-          historikk: {
-            [navn]: "påbegynt"
-          }
+          [`avspillingsTid.${filmId}`]: nåværendeTid,
+          [`historikk.${navn}`]: "påbegynt"
         }, { merge: true });
       } catch (err) {
         console.error("Kunne ikke lagre tid til Firestore:", err);
@@ -669,13 +672,10 @@
       const profilDocRef = doc(db, "users", currentUser.uid, "profiler", aktivProfil);
       
       try {
+        // Rettet opprydding ved fjerning av tidsstempel og oppdatering av status til ferdig
         await setDoc(profilDocRef, {
-          avspillingsTid: {
-            [filmId]: deleteField()
-          },
-          historikk: {
-            [navn]: "ferdig"
-          }
+          [`avspillingsTid.${filmId}`]: deleteField(),
+          [`historikk.${navn}`]: "ferdig"
         }, { merge: true });
       } catch (err) {
         console.error("Feil under rydde-prosess i Firestore:", err);
@@ -724,11 +724,11 @@
     return null;
   }
 
-  playBtn.addEventListener('click', () => video.paused ? video.play() : video.pause());
-  video.addEventListener('click', () => video.paused ? video.play() : video.pause());
+  playBtn.addEventListener('click', () => video.paused ? video.play().catch(() => {}) : video.pause());
+  video.addEventListener('click', () => video.paused ? video.play().catch(() => {}) : video.pause());
 
   document.addEventListener('keydown', e => {
-    if (e.code === 'Space') { e.preventDefault(); video.paused ? video.play() : video.pause(); }
+    if (e.code === 'Space') { e.preventDefault(); video.paused ? video.play().catch(() => {}) : video.pause(); }
     if (e.key === 'ArrowRight') video.currentTime += 10;
     if (e.key === 'ArrowLeft') video.currentTime -= 10;
   });
@@ -805,7 +805,7 @@
     return percent;
   }
   progress.addEventListener('mousedown', e => { isDragging = true; scrubTo(e); });
-  document.addEventListener('mouseup', e => { if (isDragging) { const percent = scrubTo(e); video.currentTime = percent * video.duration; isDragging = false; hidePreview(); } });
+  document.addEventListener('mouseup', e => { if (isDragging) { const percent = scrubTo(e); video.currentTime = percent * video.duration; isDragging = false; hidePreview(); lagrePosisjonTilFirebase(); } });
   document.addEventListener('mousemove', e => { if (isDragging) { scrubTo(e); showPreview(e); } });
 
   function showPreview(e) {
