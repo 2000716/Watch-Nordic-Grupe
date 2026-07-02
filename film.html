@@ -1116,7 +1116,7 @@ font-size:clamp(22px,4vw,36px);
    =========================================================== */
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
 import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import { getFirestore, doc, onSnapshot, setDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyBlfCbB1AuiKVHMBEhYd0cvkJ0jxHVZfUg",
@@ -1132,6 +1132,11 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
+// Deklarasjon av globale variabler for modulen
+let currentUser = null;
+let aktivProfil = localStorage.getItem("aktivProfil") || "Hovedprofil";
+let status = "ikke_startet";
+let minListe = [];
 
 // ===========================================================
 // 2. DYNAMISK DATAHENTING (FILM / SERIE)
@@ -1204,7 +1209,8 @@ const addToListBtn = document.getElementById("addToListBtn");
 
 if (erUtgått) {
   document.body.style.overflow = "hidden";
-  document.getElementById("expiredOverlay").classList.add("active");
+  const expiredOverlay = document.getElementById("expiredOverlay");
+  if (expiredOverlay) expiredOverlay.classList.add("active");
   [watchBtn, addToListBtn].forEach(btn => {
     if(btn) {
       btn.disabled = true;
@@ -1217,7 +1223,7 @@ if (erUtgått) {
 // ===========================================================
 // 4. SYNKRONISERING MED FIREBASE (BRUKERSTATUS)
 // ===========================================================
-auth.onAuthStateChanged(user => {
+onAuthStateChanged(auth, user => {
   if (user) {
     currentUser = user;
     
@@ -1225,12 +1231,12 @@ auth.onAuthStateChanged(user => {
     const lagretBilde = localStorage.getItem("profilbilde");
     if (lagretBilde) document.getElementById("menyProfilbilde").src = lagretBilde;
 
-    // Hent lagret historikk for denne spesifikke profilen fra Firestore
-    const profilRef = db.collection("users").doc(user.uid).collection("profiler").doc(aktivProfil);
+    // Hent lagret historikk for denne spesifikke profilen fra Firestore (v10 syntaks)
+    const profilRef = doc(db, "users", user.uid, "profiler", aktivProfil);
     
-    profilRef.onSnapshot(doc => {
-      if (doc.exists) {
-        const userData = doc.data();
+    onSnapshot(profilRef, snapshot => {
+      if (snapshot.exists()) {
+        const userData = snapshot.data();
         
         // Hent Min Liste
         minListe = userData.minListe || [];
@@ -1286,9 +1292,9 @@ function oppdaterWatchKnapp() {
 watchBtn.addEventListener("click", async () => {
   if (erUpublisert || erUtgått || !currentUser) return;
 
-  // Sett status til påbegynt i Firebase
-  const profilRef = db.collection("users").doc(currentUser.uid).collection("profiler").doc(aktivProfil);
-  await profilRef.set({
+  // Sett status til påbegynt i Firebase (v10 syntaks)
+  const profilRef = doc(db, "users", currentUser.uid, "profiler", aktivProfil);
+  await setDoc(profilRef, {
     historikk: {
       [navn]: "påbegynt"
     }
@@ -1297,7 +1303,6 @@ watchBtn.addEventListener("click", async () => {
   if (type === "film") {
     window.location.href = data.watchUrl;
   } else if (type === "serie") {
-    // Hent siste episode fra localStorage midlertidig (eller sett standard)
     const sisteEpKey = `${navn}-siste-episode`;
     let sisteEp = JSON.parse(localStorage.getItem(sisteEpKey));
     let sesongNr, epNr;
@@ -1340,9 +1345,9 @@ addToListBtn.addEventListener("click", async () => {
     minListe = minListe.filter(f => f !== itemKey);
   }
 
-  // Lagre oppdatert liste til Firebase
-  const profilRef = db.collection("users").doc(currentUser.uid).collection("profiler").doc(aktivProfil);
-  await profilRef.set({ minListe: minListe }, { merge: true });
+  // Lagre oppdatert liste til Firebase (v10 syntaks)
+  const profilRef = doc(db, "users", currentUser.uid, "profiler", aktivProfil);
+  await setDoc(profilRef, { minListe: minListe }, { merge: true });
 });
 
 // ===========================================================
