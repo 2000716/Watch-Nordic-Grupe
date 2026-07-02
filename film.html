@@ -1111,26 +1111,16 @@ font-size:clamp(22px,4vw,36px);
 
 <script type="module">
 /* ===========================================================
-   1. MODERNE FIREBASE IMPORT (v10) & KONFIGURASJON
+   1. MODERNE FIREBASE IMPORT FRA SEPARAT OPPSETTSFIL (v12.15.0)
    =========================================================== */
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+// Importer initialiserte instanser fra din egen sentrale fil
+import { auth, db } from "./firebase-oppsett.js";
 
-const firebaseConfig = {
-  apiKey: "AIzaSyBlfCbB1AuiKVHMBEhYd0cvkJ0jxHVZfUg",
-  authDomain: "watch-nordic-78b99.firebaseapp.com",
-  projectId: "watch-nordic-78b99",
-  storageBucket: "watch-nordic-78b99.firebasestorage.app",
-  messagingSenderId: "541804766412",
-  appId: "1:541804766412:web:83fc77721e384131a1ce69"
-};
+// Importer funksjonene du trenger fra de offisielle CDN-lenkene (versjon 12.15.0)
+import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-auth.js";
+import { doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
 
-// Initialisering
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const db = getFirestore(app);
-
+// Profil- og brukerstyring
 let currentUser = null;
 let aktivProfil = localStorage.getItem("aktivProfil") || "Hovedprofil";
 
