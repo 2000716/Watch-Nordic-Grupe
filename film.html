@@ -1109,366 +1109,502 @@ font-size:clamp(22px,4vw,36px);
 
 <script src="Filmdata.js"></script>
 <script src="Seriedata.js"></script>
-
-<script type="module">
+<script>
 /* ===========================================================
-   1. MODERNE FIREBASE IMPORT (v10) & KONFIGURASJON
-   =========================================================== */
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-import { getFirestore, doc, onSnapshot, setDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-
-const firebaseConfig = {
-  apiKey: "AIzaSyBlfCbB1AuiKVHMBEhYd0cvkJ0jxHVZfUg",
-  authDomain: "watch-nordic-78b99.firebaseapp.com",
-  projectId: "watch-nordic-78b99",
-  storageBucket: "watch-nordic-78b99.firebasestorage.app",
-  messagingSenderId: "541804766412",
-  appId: "1:541804766412:web:83fc77721e384131a1ce69"
-};
-
-// Initialisering
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const db = getFirestore(app);
-
-// Deklarasjon av globale variabler for modulen
-let currentUser = null;
-let aktivProfil = localStorage.getItem("aktivProfil") || "Hovedprofil";
-let status = "ikke_startet";
-let minListe = [];
-
-// ===========================================================
-// 2. DYNAMISK DATAHENTING (FILM / SERIE)
-// ===========================================================
+   Dynamisk støtte for FILMER og SERIER – full funksjonalitet
+   =========================================================== */
 const params = new URLSearchParams(window.location.search);
 const navn = params.get("navn");
 
+/* === Finn riktig datasett === */
 let type = "film";
 let data = filmer[navn];
 
 if (!data && typeof serier !== "undefined" && serier[navn]) {
-  type = "serie";
-  data = serier[navn];
+  type = "serie";
+  data = serier[navn];
 }
 
 if (!data) {
-  alert("Fant ikke filmen eller serien.");
-  window.location.href = "Hovedside.html";
+  alert("Fant ikke filmen eller serien.");
+  window.location.href = "Hovedside.html";
 }
 
-/* Sjekk om utgått eller upublisert */
-let erUpublisert = data.publishDate && new Date(data.publishDate) > new Date();
-let erUtgått = data.expireDate && new Date() > new Date(data.expireDate);
+/* === Publiseringsdato-sjekk === */
+let erUpublisert = false;
+if (data.publishDate && new Date(data.publishDate) > new Date()) {
+  erUpublisert = true;
+}
 
-// ===========================================================
-// 3. POPULER SKJERMEN MED DATA
-// ===========================================================
+/* === Sett inn hovedinformasjon === */
 document.title = data.tittel;
 document.getElementById("backgroundImage").src = data.bakgrunn;
-
-const logoContainer = document.querySelector(".logo-container");
-const filmLogo = document.querySelector(".film-logo");
-
-if (data.logo && data.logo.trim() !== "") {
-  filmLogo.src = data.logo;
-  filmLogo.style.display = "block";
-} else {
-  filmLogo.style.display = "none";
-  const titleEl = document.createElement("div");
-  titleEl.className = "text-logo";
-  titleEl.textContent = data.tittel;
-  logoContainer.appendChild(titleEl);
-}
-
+document.querySelector(".film-logo").src = data.logo;
 document.querySelector(".description").textContent = data.beskrivelse;
 
-// Metadata
-const metadataEl = document.querySelector(".metadata");
-metadataEl.innerHTML = `
-  <span>⭐ ${data.rating || "-"}</span>
-  <span>•</span>
-  ${data.metadata.map(m => `<span>${m}</span>`).join('<span>•</span>')}
-`;
+/* === Metadata === */
 
-// Medvirkende / Lisens
+const metadataEl = document.querySelector(".metadata");
+
+metadataEl.innerHTML = `
+  <span>⭐ ${data.rating || "-"}</span>
+  <span>•</span>
+  ${data.metadata.map(m => `<span>${m}</span>`).join('<span>•</span>')}
+`;
+  
+/* === Cast-info === */
 const castLabel = type === "film" ? "Regissør" : "Skaper";
 let lisensHTML = "";
+
 if (data.lisens && data.kilde) {
-  lisensHTML = `<p><strong>Lisens:</strong> <a href="${data.kilde}" target="_blank" style="color:#aaa; text-decoration:none;">${data.lisens}</a></p>`;
+  lisensHTML = `
+    <p>
+      <strong>Lisens:</strong>
+     <a href="${data.kilde}" target="_blank" style="color:#aaa; text-decoration:none;">
+        ${data.lisens}
+      </a>
+    </p>
+  `;
 }
+
 document.querySelector(".cast-info").innerHTML = `
-  <p><strong>Medvirkende:</strong> ${data.skuespillere}</p>
-  <p><strong>${castLabel}:</strong> ${data.skapere || data.regissor || "Ukjent"}</p>
-  ${lisensHTML}
+  <p><strong>Medvirkende:</strong> ${data.skuespillere}</p>
+
+  <p><strong>${castLabel}:</strong>
+    ${data.skapere || data.regissor || "Ukjent"}
+  </p>
+
+  ${lisensHTML}
 `;
 
-// Elementer på knapper
+/* === Se nå-knapp === */
+/* === Se nå-knapp – fungerer for filmer og serier === */
 const watchBtn = document.getElementById("watchBtn");
-const addToListBtn = document.getElementById("addToListBtn");
+let statusKey = `${type}-${navn}-status`;
+let status = localStorage.getItem(statusKey);
 
+  /* =========================================================
+   EXPIRE SYSTEM – FUNKER FOR BÅDE FILM OG SERIE
+   ========================================================= */
+
+// Sjekk om innhold er utgått
+let erUtgått = false;
+
+if (data.expireDate) {
+  const nå = new Date();
+  const expire = new Date(data.expireDate);
+
+  if (nå > expire) {
+    erUtgått = true;
+  }
+}
+
+/* === Deaktiver knapper hvis utgått === */
 if (erUtgått) {
-  document.body.style.overflow = "hidden";
-  const expiredOverlay = document.getElementById("expiredOverlay");
-  if (expiredOverlay) expiredOverlay.classList.add("active");
-  [watchBtn, addToListBtn].forEach(btn => {
-    if(btn) {
-      btn.disabled = true;
-      btn.style.opacity = "0.5";
-      btn.style.cursor = "not-allowed";
-    }
-  });
+  [watchBtn, addToListBtn].forEach(btn => {
+    btn.disabled = true;
+    btn.style.opacity = "0.5";
+    btn.style.cursor = "not-allowed";
+  });
 }
 
-// ===========================================================
-// 4. SYNKRONISERING MED FIREBASE (BRUKERSTATUS)
-// ===========================================================
-onAuthStateChanged(auth, user => {
-  if (user) {
-    currentUser = user;
-    
-    // Hent profilbilde fra Firebase/LocalStorage
-    const lagretBilde = localStorage.getItem("profilbilde");
-    if (lagretBilde) document.getElementById("menyProfilbilde").src = lagretBilde;
-
-    // Hent lagret historikk for denne spesifikke profilen fra Firestore (v10 syntaks)
-    const profilRef = doc(db, "users", user.uid, "profiler", aktivProfil);
-    
-    onSnapshot(profilRef, snapshot => {
-      if (snapshot.exists()) {
-        const userData = snapshot.data();
-        
-        // Hent Min Liste
-        minListe = userData.minListe || [];
-        oppdaterListeKnapp();
-        
-        // Hent Se-status for denne filmen/serien
-        const historikk = userData.historikk || {};
-        status = historikk[navn] || "ikke_startet";
-        oppdaterWatchKnapp();
-      } else {
-        oppdaterListeKnapp();
-        oppdaterWatchKnapp();
-      }
-    });
-
-    // Start galleri/episoder
-    lastInnGalleriEllerEpisoder();
-
-  } else {
-    // Hvis ikke innlogget, send til logginn-siden
-    window.location.href = "index.html";
-  }
-});
-
-// ===========================================================
-// 5. KNAPPEFUNKSJONALITET (FIREBASE-OPPDATERINGER)
-// ===========================================================
-
+/* === Oppdater watch-knapp (viser riktig status selv om utgått) === */
 function oppdaterWatchKnapp() {
-  if (!watchBtn) return;
-  const icon = watchBtn.querySelector("i");
-  const text = watchBtn.querySelector("span");
+  const icon = watchBtn.querySelector("i");
+  const text = watchBtn.querySelector("span");
 
-  if (erUtgått) {
-    icon.className = "fas fa-ban";
-    text.textContent = " Ikke tilgjengelig";
-    return;
-  }
+  if (erUtgått) {
+    icon.className = "fas fa-ban";
+    text.textContent = " Ikke tilgjengelig";
+    return;
+  }
 
-  if (status === "påbegynt") {
-    icon.className = "fas fa-play";
-    text.textContent = " Gjenoppta";
-  } else if (status === "ferdig") {
-    icon.className = "fas fa-check";
-    text.textContent = type === "film" ? " Sett ferdig" : " Ferdig";
-  } else {
-    icon.className = "fas fa-play";
-    text.textContent = type === "film" ? " Se nå" : " Se episode";
-  }
+  if (status === "påbegynt") {
+    icon.className = "fas fa-play";
+    text.textContent = " Gjenoppta";
+  } else if (status === "ferdig") {
+    icon.className = "fas fa-check";
+    text.textContent = type === "film" ? " Sett ferdig" : " Ferdig";
+  } else {
+    icon.className = "fas fa-play";
+    text.textContent = type === "film" ? " Se nå" : " Se episode";
+  }
 }
 
-// Klikk på SE NÅ
-watchBtn.addEventListener("click", async () => {
-  if (erUpublisert || erUtgått || !currentUser) return;
+/* === Watch-knapp (oppdatert med expire) === */
+watchBtn.addEventListener("click", () => {
+  if (erUpublisert || erUtgått) return;
 
-  // Sett status til påbegynt i Firebase (v10 syntaks)
-  const profilRef = doc(db, "users", currentUser.uid, "profiler", aktivProfil);
-  await setDoc(profilRef, {
-    historikk: {
-      [navn]: "påbegynt"
-    }
-  }, { merge: true });
+  if (type === "film") {
+    localStorage.setItem(statusKey, "påbegynt");
+    status = "påbegynt";
+    oppdaterWatchKnapp();
+    window.location.href = data.watchUrl;
+  } else if (type === "serie") {
+    const sisteEpKey = `${navn}-siste-episode`;
+    let sisteEp = JSON.parse(localStorage.getItem(sisteEpKey));
 
-  if (type === "film") {
-    window.location.href = data.watchUrl;
-  } else if (type === "serie") {
-    const sisteEpKey = `${navn}-siste-episode`;
-    let sisteEp = JSON.parse(localStorage.getItem(sisteEpKey));
-    let sesongNr, epNr;
+    let sesongNr, epNr;
 
-    if (sisteEp) {
-      sesongNr = sisteEp.sesong;
-      epNr = sisteEp.episode;
-    } else {
-      sesongNr = Object.keys(data.sesonger)[0];
-      epNr = Object.keys(data.sesonger[sesongNr].episoder)[0];
-    }
+    if (sisteEp) {
+      sesongNr = sisteEp.sesong;
+      epNr = sisteEp.episode;
+    } else {
+      sesongNr = Object.keys(data.sesonger)[0];
+      epNr = Object.keys(data.sesonger[sesongNr].episoder)[0];
+    }
 
-    window.location.href = `film-mal.html?navn=${encodeURIComponent(navn)}&sesong=${sesongNr}&episode=${epNr}`;
-  }
+    localStorage.setItem(statusKey, "påbegynt");
+    status = "påbegynt";
+    oppdaterWatchKnapp();
+
+    window.location.href =
+      `film-mal.html?navn=${encodeURIComponent(navn)}&sesong=${sesongNr}&episode=${epNr}`;
+  }
 });
 
-// MIN LISTE - KNAPP
+/* === Episode-klikk (STOPPER hvis utgått) === */
+function leggTilEpisodeKlikk(epCard, sesongNr, epNr) {
+  epCard.addEventListener("click", () => {
+    if (erUtgått) return;
+
+    const sisteEpKey = `${navn}-siste-episode`;
+    localStorage.setItem(
+      sisteEpKey,
+      JSON.stringify({ sesong: sesongNr, episode: epNr })
+    );
+
+    window.location.href =
+      `film-mal.html?navn=${encodeURIComponent(navn)}&sesong=${sesongNr}&episode=${epNr}`;
+  });
+}
+
+/* === Overlay visning === */
+if (erUtgått) {
+  document.body.style.overflow = "hidden";
+  document.getElementById("expiredOverlay").classList.add("active");
+}
+
+// Oppdater knappens tekst og ikon basert på status
+function oppdaterWatchKnapp() {
+  const icon = watchBtn.querySelector("i");
+  const text = watchBtn.querySelector("span");
+
+  if (status === "påbegynt") {
+    icon.className = "fas fa-play";
+    text.textContent = " Gjenoppta";
+  } else if (status === "ferdig") {
+    icon.className = "fas fa-check";
+    text.textContent = type === "film" ? " Sett ferdig" : " Ferdig";
+  } else {
+    icon.className = "fas fa-play";
+    text.textContent = type === "film" ? " Se nå" : " Se episode";
+  }
+}
+oppdaterWatchKnapp();
+
+// Klikk-handling
+watchBtn.addEventListener("click", () => {
+  if (erUpublisert) return;
+
+  if (type === "film") {
+    // Film: marker påbegynt og gå til watchUrl
+    localStorage.setItem(statusKey, "påbegynt");
+    status = "påbegynt";
+    oppdaterWatchKnapp();
+    window.location.href = data.watchUrl;
+  } else if (type === "serie") {
+    // Serie: hent siste sette episode
+    const sisteEpKey = `${navn}-siste-episode`;
+    let sisteEp = JSON.parse(localStorage.getItem(sisteEpKey));
+
+    let sesongNr, epNr;
+
+    if (sisteEp) {
+      sesongNr = sisteEp.sesong;
+      epNr = sisteEp.episode;
+    } else {
+      // Default: første sesong, første episode
+      sesongNr = Object.keys(data.sesonger)[0];
+      epNr = Object.keys(data.sesonger[sesongNr].episoder)[0];
+    }
+
+    // Marker påbegynt
+    localStorage.setItem(statusKey, "påbegynt");
+    status = "påbegynt";
+    oppdaterWatchKnapp();
+
+    // Gå til episode
+    window.location.href = `film-mal.html?navn=${encodeURIComponent(navn)}&sesong=${sesongNr}&episode=${epNr}`;
+  }
+});
+
+/* === Ferdig markering etter video === */
+const videoEl = document.querySelector("video");
+if (videoEl) {
+  videoEl.addEventListener("ended", () => {
+    localStorage.setItem(statusKey, "ferdig");
+    status = "ferdig";
+    oppdaterWatchKnapp();
+  });
+}
+
+/* === Legg til i min liste === */
+const addToListBtn = document.getElementById("addToListBtn");
+let minListe = JSON.parse(localStorage.getItem("minListe")) || [];
+
 function oppdaterListeKnapp() {
-  if (!addToListBtn) return;
-  const icon = addToListBtn.querySelector("i");
-  const text = addToListBtn.querySelector("span");
-  const itemKey = `${type}:${navn}`;
-
-  if (minListe.includes(itemKey)) {
-    icon.className = "fas fa-check";
-    text.textContent = " Lagt til i Min liste";
-  } else {
-    icon.className = "fas fa-plus";
-    text.textContent = " Legg til i Min liste";
-  }
+  const icon = addToListBtn.querySelector("i");
+  const text = addToListBtn.querySelector("span");
+  if (minListe.includes(`${type}:${navn}`)) {
+    icon.className = "fas fa-check";
+    text.textContent = " Lagt til i Min liste";
+  } else {
+    icon.className = "fas fa-plus";
+    text.textContent = " Legg til i Min liste";
+  }
+  icon.classList.remove("icon-animate");
+  void icon.offsetWidth;
+  icon.classList.add("icon-animate");
 }
+oppdaterListeKnapp();
 
-addToListBtn.addEventListener("click", async () => {
-  if (erUpublisert || !currentUser) return;
-  const itemKey = `${type}:${navn}`;
-  
-  if (!minListe.includes(itemKey)) {
-    minListe.push(itemKey);
-  } else {
-    minListe = minListe.filter(f => f !== itemKey);
-  }
-
-  // Lagre oppdatert liste til Firebase (v10 syntaks)
-  const profilRef = doc(db, "users", currentUser.uid, "profiler", aktivProfil);
-  await setDoc(profilRef, { minListe: minListe }, { merge: true });
+addToListBtn.addEventListener("click", () => {
+  if (erUpublisert) return;
+  const key = `${type}:${navn}`;
+  if (!minListe.includes(key)) {
+    minListe.push(key);
+  } else {
+    minListe = minListe.filter(f => f !== key);
+  }
+  localStorage.setItem("minListe", JSON.stringify(minListe));
+  oppdaterListeKnapp();
 });
 
-// ===========================================================
-// 6. EPISODER OG GALLERI
-// ===========================================================
-function lastInnGalleriEllerEpisoder() {
-  const gallery = document.getElementById("recommendationGallery");
-  const tittelEl = document.querySelector(".recommendations h2");
+/* === Hvis upublisert === */
+if (erUpublisert) {
+  [watchBtn, addToListBtn].forEach(btn => {
+    btn.disabled = true;
+    btn.style.opacity = "0.5";
+    btn.style.cursor = "not-allowed";
+  });
+  const desc = document.querySelector(".description");
+  const publiseringsDato = new Date(data.publishDate);
+  const datoFormatert = publiseringsDato.toLocaleDateString("no-NO", {
+    year: "numeric",
+    month: "long",
+    day: "numeric"
+  });
+    /* === Deaktiver "Se episode" hvis ingen episoder er ute === */
+if (type === "serie") {
 
-  if (type === "serie" && data.sesonger) {
-    const recommendationsDiv = document.querySelector(".recommendations");
-    recommendationsDiv.innerHTML = `
-      <div class="season-buttons" id="seasonButtons"></div>
-      <div class="episode-gallery" id="episodeGallery"></div>
-    `;
+  let harPublisertEpisode = false;
+  const nå = new Date();
 
-    const seasonButtons = document.getElementById("seasonButtons");
-    const episodeGallery = document.getElementById("episodeGallery");
-    const sesongNumre = Object.keys(data.sesonger);
+  Object.values(data.sesonger).forEach(sesong => {
+    Object.values(sesong.episoder).forEach(ep => {
 
-    sesongNumre.forEach((s, index) => {
-      const btn = document.createElement("button");
-      btn.textContent = `Sesong ${s}`;
-      btn.className = "season-btn";
-      if (index === 0) btn.classList.add("active");
-      btn.addEventListener("click", () => visSesong(s, seasonButtons, episodeGallery));
-      seasonButtons.appendChild(btn);
-    });
+      // Hvis episode ikke har publishDate → regnes som publisert
+      if (!ep.publishDate || new Date(ep.publishDate) <= nå) {
+        harPublisertEpisode = true;
+      }
 
-    visSesong(sesongNumre[0], seasonButtons, episodeGallery);
+    });
+  });
 
-  } else {
-    /* Anbefalinger for film */
-    const anbefalte = hentTilfeldige(8);
-    if(tittelEl) tittelEl.textContent = "Filmer du kanskje vil like";
+  // Ingen episoder tilgjengelig
+  if (!harPublisertEpisode) {
+    watchBtn.disabled = true;
+    watchBtn.style.opacity = "0.5";
+    watchBtn.style.cursor = "not-allowed";
 
-    if(gallery) {
-      gallery.innerHTML = "";
-      anbefalte.forEach(n => {
-        const kilde = filmer;
-        const item = kilde[n];
-        const card = document.createElement("div");
-        card.className = "movie-card";
-        card.innerHTML = `
-          <img src="${item.posterHorisontal || item.poster || item.bakgrunn}" alt="${item.tittel}">
-          <div class="movie-overlay"><div class="movie-title">${item.tittel}</div></div>
-        `;
-        card.addEventListener("click", () => {
-          window.location.href = `film.html?navn=${n}`;
-        });
-        gallery.appendChild(card);
-      });
-    }
-  }
+    const icon = watchBtn.querySelector("i");
+    const text = watchBtn.querySelector("span");
+
+    icon.className = "fas fa-clock";
+    text.textContent = " Kommer snart";
+  }
+}
+  const info = document.createElement("p");
+  info.style.color = "#ff6666";
+  info.style.fontWeight = "bold";
+  info.style.marginTop = "12px";
+  info.textContent = `Tilgjengelig fra: ${datoFormatert}`;
+  desc.insertAdjacentElement("afterend", info);
 }
 
-function visSesong(sesongNr, seasonButtons, episodeGallery) {
-  document.querySelectorAll(".season-btn").forEach(b => b.classList.remove("active"));
-  [...seasonButtons.children].find(b => b.textContent === `Sesong ${sesongNr}`)?.classList.add("active");
+/* === Profilbilde === */
+const lagretBilde = localStorage.getItem("profilbilde");
+if (lagretBilde) document.getElementById("menyProfilbilde").src = lagretBilde;
 
-  episodeGallery.innerHTML = "";
-  const episoder = data.sesonger[sesongNr].episoder;
+/* === Fade-in === */
+window.addEventListener("DOMContentLoaded", () => {
+  document.body.classList.add("loaded");
+});
 
-  Object.keys(episoder).forEach(epNr => {
-    const ep = episoder[epNr];
-    const nå = new Date();
-    let erLåst = ep.publishDate && new Date(ep.publishDate) > nå;
-
-    const epCard = document.createElement("div");
-    epCard.className = "episode-card";
-    if (erLåst) epCard.classList.add("locked");
-
-    let overlayHTML = `<div class="play-overlay"><i class="fas fa-play"></i></div>`;
-    if (erLåst) {
-      const dato = new Date(ep.publishDate).toLocaleDateString("no-NO", { day: "numeric", month: "short" });
-      overlayHTML = `<div class="lock-overlay"><i class="fas fa-clock"></i><span>${dato}</span></div>`;
-    }
-
-    epCard.innerHTML = `
-      <div class="episode-thumb">
-        <img src="${ep.thumbnail}" alt="${ep.tittel}">
-        ${overlayHTML}
-      </div>
-      <div class="episode-info">
-        <div class="episode-title">Episode ${epNr}: ${ep.tittel}</div>
-        <div class="episode-meta">${ep.varighet}</div>
-        <div class="episode-desc">${ep.beskrivelse || ""}</div>
-      </div>
-    `;
-
-    if (!erLåst) {
-      epCard.addEventListener("click", () => {
-        const SisteEpKey = `${navn}-siste-episode`;
-        localStorage.setItem(SisteEpKey, JSON.stringify({ sesong: sesongNr, episode: epNr }));
-        window.location.href = `film-mal.html?navn=${encodeURIComponent(navn)}&sesong=${sesongNr}&episode=${epNr}`;
-      });
-    }
-    episodeGallery.appendChild(epCard);
-  });
-}
-
+/* === Anbefalinger / episoder === */
 function hentTilfeldige(antall) {
-  const kilde = type === "film" ? filmer : serier;
-  const nå = new Date();
-  const alle = Object.keys(kilde).filter(k => {
-    if (k === navn) return false;
-    const el = kilde[k];
-    if (el.publishDate && new Date(el.publishDate) > nå) return false;
-    return true;
-  });
-  const valgt = [];
-  while (valgt.length < antall && alle.length > 0) {
-    const i = Math.floor(Math.random() * alle.length);
-    valgt.push(alle.splice(i, 1)[0]);
-  }
-  return valgt;
+  const kilde = type === "film" ? filmer : serier;
+  const nå = new Date();
+  const alle = Object.keys(kilde).filter(k => {
+    if (k === navn) return false;
+    const el = kilde[k];
+    if (el.publishDate && new Date(el.publishDate) > nå) return false;
+    return true;
+  });
+  const valgt = [];
+  while (valgt.length < antall && alle.length > 0) {
+    const i = Math.floor(Math.random() * alle.length);
+    valgt.push(alle.splice(i, 1)[0]);
+  }
+  return valgt;
 }
 
-// ===========================================================
-// 7. TRAILER & UI EFFEKTER
-// ===========================================================
+const gallery = document.getElementById("recommendationGallery");
+const tittelEl = document.querySelector(".recommendations h2");
+
+/* === Episode galleri for serier === */
+if (type === "serie" && data.sesonger) {
+  const recommendationsDiv = document.querySelector(".recommendations");
+  recommendationsDiv.innerHTML = `
+    <div class="season-buttons" id="seasonButtons"></div>
+    <div class="episode-gallery" id="episodeGallery"></div>
+  `;
+
+  const seasonButtons = document.getElementById("seasonButtons");
+  const episodeGallery = document.getElementById("episodeGallery");
+
+  const sesongNumre = Object.keys(data.sesonger);
+
+ // === Lag sesongknapper ===
+sesongNumre.forEach((s, index) => {
+  const btn = document.createElement("button");
+  btn.textContent = `Sesong ${s}`;
+  btn.className = "season-btn";
+  if (index === 0) btn.classList.add("active");
+
+  btn.addEventListener("click", () => visSesong(s));
+  seasonButtons.appendChild(btn);
+});
+
+// ✅ Vis første sesong automatisk
+visSesong(sesongNumre[0]);
+
+
+  // === Vis episoder ===
+  function visSesong(sesongNr) {
+    document.querySelectorAll(".season-btn")
+      .forEach(b => b.classList.remove("active"));
+
+    [...seasonButtons.children]
+      .find(b => b.textContent === `Sesong ${sesongNr}`)
+      ?.classList.add("active");
+
+    episodeGallery.innerHTML = "";
+
+    const episoder = data.sesonger[sesongNr].episoder;
+
+Object.keys(episoder).forEach(epNr => {
+  const ep = episoder[epNr];
+
+  const nå = new Date();
+  let erLåst = false;
+
+  if (ep.publishDate && new Date(ep.publishDate) > nå) {
+    erLåst = true;
+  }
+
+  const epCard = document.createElement("div");
+  epCard.className = "episode-card";
+
+  if (erLåst) {
+    epCard.classList.add("locked");
+  }
+
+  let overlayHTML = `
+    <div class="play-overlay">
+      <i class="fas fa-play"></i>
+    </div>
+  `;
+
+  // 🔒 Hvis episode ikke er ute
+  if (erLåst) {
+    const dato = new Date(ep.publishDate).toLocaleDateString("no-NO", {
+      day: "numeric",
+      month: "short"
+    });
+
+    overlayHTML = `
+      <div class="lock-overlay">
+        <i class="fas fa-clock"></i>
+        <span>${dato}</span>
+      </div>
+    `;
+  }
+
+  epCard.innerHTML = `
+    <div class="episode-thumb">
+      <img src="${ep.thumbnail}" alt="${ep.tittel}">
+      ${overlayHTML}
+    </div>
+
+    <div class="episode-info">
+      <div class="episode-title">Episode ${epNr}: ${ep.tittel}</div>
+      <div class="episode-meta">${ep.varighet}</div>
+      <div class="episode-desc">${ep.beskrivelse || ""}</div>
+    </div>
+  `;
+
+  // ❌ Ikke klikkbar hvis låst
+  if (!erLåst) {
+    epCard.addEventListener("click", () => {
+      const sisteEpKey = `${navn}-siste-episode`;
+      localStorage.setItem(
+        sisteEpKey,
+        JSON.stringify({ sesong: sesongNr, episode: epNr })
+      );
+
+      window.location.href =
+        `film-mal.html?navn=${encodeURIComponent(navn)}&sesong=${sesongNr}&episode=${epNr}`;
+    });
+  }
+
+  episodeGallery.appendChild(epCard);
+});
+  }
+
+  // Vis første sesong som standard
+  visSesong(sesonger[0]);
+} else {
+  /* === Anbefalinger for film === */
+  const anbefalte = hentTilfeldige(8);
+  tittelEl.textContent = type === "film" ? "Filmer du kanskje vil like" : "Serier du kanskje vil like";
+
+anbefalte.forEach(n => {
+    const kilde = type === "film" ? filmer : serier;
+    const item = kilde[n];
+    
+const card = document.createElement("div");
+card.className = "movie-card";
+
+card.innerHTML = `
+  <img src="${item.posterHorisontal || item.poster || item.bakgrunn}" alt="${item.tittel}">
+  <div class="movie-overlay">
+    <div class="movie-title">${item.tittel}</div>
+  </div>
+`;
+
+card.addEventListener("click", () => {
+  const side = type === "film" ? "film.html" : "serie.html";
+  window.location.href = `${side}?navn=${n}`;
+});
+
+gallery.appendChild(card);
+});
+
+}
+
+/* === Trailer-logikk === */
 const trailerVideo = document.getElementById("trailerVideo");
 const backgroundImage = document.getElementById("backgroundImage");
 const videoControls = document.getElementById("videoControls");
@@ -1476,94 +1612,129 @@ const pauseBtn = document.getElementById("pauseBtn");
 const soundBtn = document.getElementById("soundBtn");
 
 if (data.trailer && data.trailer.trim() !== "") {
-  trailerVideo.src = data.trailer;
-  trailerVideo.preload = "auto";
-  setTimeout(() => {
-    if(backgroundImage && trailerVideo) {
-      backgroundImage.style.opacity = "0";
-      trailerVideo.style.opacity = "1";
-      trailerVideo.play().catch(e => console.log("Auto-play blokkert av nettleser"));
-      if(videoControls) videoControls.style.opacity = "1";
-    }
-  }, 10000);
-
-  trailerVideo.addEventListener("ended", () => {
-    trailerVideo.style.opacity = "0";
-    backgroundImage.style.opacity = "1";
-    if(videoControls) videoControls.style.opacity = "0";
-  });
-
-  pauseBtn.addEventListener("click", () => {
-    if (trailerVideo.paused) {
-      trailerVideo.play();
-      pauseBtn.innerHTML = '<i class="fas fa-pause"></i>';
-    } else {
-      trailerVideo.pause();
-      pauseBtn.innerHTML = '<i class="fas fa-play"></i>';
-    }
-  });
-
-  soundBtn.addEventListener("click", () => {
-    trailerVideo.muted = !trailerVideo.muted;
-    soundBtn.innerHTML = trailerVideo.muted ? '<i class="fas fa-volume-mute"></i>' : '<i class="fas fa-volume-up"></i>';
-  });
+  trailerVideo.src = data.trailer;
+  trailerVideo.preload = "auto";
+  setTimeout(() => {
+    backgroundImage.style.opacity = "0";
+    trailerVideo.style.opacity = "1";
+    trailerVideo.play();
+    videoControls.style.opacity = "1";
+  }, 10000);
+  trailerVideo.addEventListener("ended", () => {
+    trailerVideo.style.opacity = "0";
+    backgroundImage.style.opacity = "1";
+    videoControls.style.opacity = "0";
+  });
+  pauseBtn.addEventListener("click", () => {
+    if (trailerVideo.paused) {
+      trailerVideo.play();
+      pauseBtn.innerHTML = '<i class="fas fa-pause"></i>';
+    } else {
+      trailerVideo.pause();
+      pauseBtn.innerHTML = '<i class="fas fa-play"></i>';
+    }
+  });
+  soundBtn.addEventListener("click", () => {
+    trailerVideo.muted = !trailerVideo.muted;
+    soundBtn.innerHTML = trailerVideo.muted
+      ? '<i class="fas fa-volume-mute"></i>'
+      : '<i class="fas fa-volume-up"></i>';
+  });
 } else {
-  if(trailerVideo) trailerVideo.style.display = "none";
-  if(videoControls) videoControls.style.display = "none";
+  trailerVideo.style.display = "none";
+  videoControls.style.display = "none";
 }
 
-// Tilgjengelighetsinfo tekst
+/* === Tilgjengelighetsinfo === */
 const availabilityEl = document.getElementById("availabilityInfo");
-if (availabilityEl && data.expireDate) {
-  const nå = new Date();
-  const expire = new Date(data.expireDate);
-  const diff = expire - nå;
-  const ettÅr = 365 * 24 * 60 * 60 * 1000;
-  if (diff > ettÅr) {
-    availabilityEl.innerHTML = `<i class="far fa-clock"></i><span>Tilgjengelig lenger enn ett år</span>`;
-  } else if (diff > 0) {
-    const dato = expire.toLocaleDateString("no-NO", { year: "numeric", month: "short", day: "numeric" });
-    availabilityEl.innerHTML = `<i class="far fa-clock"></i><span>Tilgjengelig til: ${dato}</span>`;
-  }
+if (data.expireDate) {
+  const nå = new Date();
+  const expire = new Date(data.expireDate);
+  const diff = expire - nå;
+  const ettÅr = 365 * 24 * 60 * 60 * 1000;
+  if (diff > ettÅr) {
+    availabilityEl.innerHTML = `<i class="far fa-clock"></i><span>Tilgjengelig lenger enn ett år</span>`;
+  } else if (diff > 0) {
+    const dato = expire.toLocaleDateString("no-NO", {
+      year: "numeric",
+      month: "short",
+      day: "numeric"
+    });
+    availabilityEl.innerHTML = `<i class="far fa-clock"></i><span>Tilgjengelig til: ${dato}</span>`;
+  }
 }
 
-// Mer/mindre popup for beskrivelse
+/* === Kort beskrivelse + popup === */
 const descEl = document.querySelector(".description");
-const fullText = descEl ? descEl.textContent.trim() : "";
+const fullText = descEl.textContent.trim();
 const MAX_ORD = 20;
 const words = fullText.split(/\s+/);
-if (descEl && words.length > MAX_ORD) {
-  const kortText = words.slice(0, MAX_ORD).join(" ") + "... ";
-  descEl.textContent = kortText;
-  const moreBtn = document.createElement("button");
-  moreBtn.className = "more-btn";
-  moreBtn.textContent = "Mer";
-  descEl.appendChild(moreBtn);
-  moreBtn.addEventListener("click", () => {
-    const overlay = document.createElement("div");
-    overlay.className = "popup-overlay";
-    const box = document.createElement("div");
-    box.className = "popup-box";
-    box.innerHTML = `<button class="close-btn">&times;</button><p>${fullText}</p>`;
-    overlay.appendChild(box);
-    document.body.appendChild(overlay);
-    box.querySelector(".close-btn").addEventListener("click", () => overlay.remove());
-  });
+if (words.length > MAX_ORD) {
+  const kortText = words.slice(0, MAX_ORD).join(" ") + "... ";
+  descEl.textContent = kortText;
+  const moreBtn = document.createElement("button");
+  moreBtn.className = "more-btn";
+  moreBtn.textContent = "Mer";
+  descEl.appendChild(moreBtn);
+  moreBtn.addEventListener("click", () => {
+    const overlay = document.createElement("div");
+    overlay.className = "popup-overlay";
+    const box = document.createElement("div");
+    box.className = "popup-box";
+    box.innerHTML = `
+      <button class="close-btn">&times;</button>
+      <p>${fullText}</p>
+    `;
+    overlay.appendChild(box);
+    document.body.appendChild(overlay);
+    box.querySelector(".close-btn").addEventListener("click", () => {
+      overlay.remove();
+    });
+  });
+}
+   // === Endre menybakgrunn ved scroll ===
+window.addEventListener("scroll", () => {
+  const nav = document.querySelector(".top-nav");
+  if (window.scrollY > 50) {
+    nav.classList.add("scrolled");
+  } else {
+    nav.classList.remove("scrolled");
+  }
+});
+
+const logoContainer = document.querySelector(".logo-container");
+const filmLogo = document.querySelector(".film-logo");
+
+if (data.logo && data.logo.trim() !== "") {
+  // Logo finnes → vis bildet
+  filmLogo.src = data.logo;
+  filmLogo.style.display = "block";
+} else {
+  filmLogo.style.display = "none";
+
+  const titleEl = document.createElement("div");
+  titleEl.className = "text-logo";   // 👈 bruker samme stil som logo
+  titleEl.textContent = data.tittel;
+
+  logoContainer.appendChild(titleEl);
 }
 
-// Nav-bar scroll effekt
-window.addEventListener("scroll", () => {
-  const nav = document.querySelector(".top-nav");
-  if (nav) {
-    if (window.scrollY > 50) nav.classList.add("scrolled");
-    else nav.classList.remove("scrolled");
-  }
-});
+  /* === FILM HAR GÅTT UT === */
+if (data.expireDate) {
+  const nå = new Date();
+  const expire = new Date(data.expireDate);
 
-// Fade-in på siden
-window.addEventListener("DOMContentLoaded", () => {
-  document.body.classList.add("loaded");
-});
+  if (nå > expire) {
+    // Skjul alt innhold
+    document.body.style.overflow = "hidden";
+
+    // Vis overlay
+    document.getElementById("expiredOverlay").classList.add("active");
+  }
+}
+
+
+
 </script>
 
 </body>
