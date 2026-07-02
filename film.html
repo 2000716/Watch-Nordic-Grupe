@@ -1199,7 +1199,6 @@ document.querySelector(".cast-info").innerHTML = `
 /* === Elementer og variable for knapper og status === */
 const watchBtn = document.getElementById("watchBtn");
 const addToListBtn = document.getElementById("addToListBtn");
-let statusKey = `${type}-${navn}-status`;
 let status = "ikke-påbegynt";
 let minListe = [];
 
@@ -1292,8 +1291,7 @@ onAuthStateChanged(auth, async (user) => {
       console.error("Feil ved henting av profil-data fra Firebase:", err);
     }
   } else {
-    // Valgfritt: send til innlogging hvis ikke logget inn
-    // window.location.href = "index.html";
+    window.location.href = "index.html";
   }
   
   // Oppdater UI etter at Firebase har svart
@@ -1309,10 +1307,9 @@ async function lagreStatusTilFirebase(nyStatus) {
   if (!currentUser) return;
   const profilDocRef = doc(db, "users", currentUser.uid, "profiler", aktivProfil);
   try {
+    // Korrigert dyp-fletting (deep merge) ved hjelp av dot-notation slik at kun denne filmen endres
     await setDoc(profilDocRef, {
-      historikk: {
-        [navn]: nyStatus
-      }
+      [`historikk.${navn}`]: nyStatus
     }, { merge: true });
   } catch (err) {
     console.error("Kunne ikke lagre status til Firebase:", err);
@@ -1324,7 +1321,7 @@ if (watchBtn) {
     if (erUpublisert || erUtgått) return;
 
     status = "påbegynt";
-    oppdaterWatchKnapp();
+    oppdaterWatchKnapp(); // Oppdaterer knappen visuelt umiddelbart
     await lagreStatusTilFirebase("påbegynt");
 
     if (type === "film") {
@@ -1525,7 +1522,6 @@ function byggAnbefalingerEllerEpisoder() {
       });
     }
 
-    // Aktiver første sesong automatisk (rettet feil her fra koden din)
     if (sesongNumre.length > 0) {
       visSesong(sesongNumre[0]);
     }
