@@ -428,29 +428,30 @@
     </div>
   </div>
 
-<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
-
 <script src="Filmdata.js"></script>
 <script src="Seriedata.js"></script>
 
-<script>
+<script type="module">
   /* ===========================================================
-     1. FIREBASE KONFIGURASJON & INITIALISERING
+     1. MODERNE FIREBASE IMPORT (v10) & KONFIGURASJON
      =========================================================== */
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+  import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+  import { getFirestore, doc, getDoc, setDoc, deleteField } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
   const firebaseConfig = {
-    apiKey: "DIN_API_KEY",
-    authDomain: "DITT_PROSJEKT.firebaseapp.com",
-    projectId: "DITT_PROSJEKT",
-    storageBucket: "DITT_PROSJEKT.appspot.com",
-    messagingSenderId: "DITT_MELDINGS_ID",
-    appId: "DIN_APP_ID"
+    apiKey: "AIzaSyBlfCbB1AuiKVHMBEhYd0cvkJ0jxHVZfUg",
+    authDomain: "watch-nordic-78b99.firebaseapp.com",
+    projectId: "watch-nordic-78b99",
+    storageBucket: "watch-nordic-78b99.firebasestorage.app",
+    messagingSenderId: "541804766412",
+    appId: "1:541804766412:web:83fc77721e384131a1ce69"
   };
 
-  firebase.initializeApp(firebaseConfig);
-  const auth = firebase.auth();
-  const db = firebase.firestore();
+  // Initialisering
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const db = getFirestore(app);
 
   let currentUser = null;
   let aktivProfil = localStorage.getItem("aktivProfil") || "Hovedprofil";
@@ -570,24 +571,25 @@
   }
 
   /* ===========================================================
-     4. AUTH STATE CHANGED (Hent lagret tid fra Firebase)
+     4. ON AUTH STATE CHANGED (Moderne måte å hente tid fra Firestore)
      =========================================================== */
-  auth.onAuthStateChanged(user => {
+  onAuthStateChanged(auth, async (user) => {
     if (user) {
       currentUser = user;
       
-      // Sjekk om brukeren har sett på denne filmen/episoden før
-      const profilRef = db.collection("users").doc(user.uid).collection("profiler").doc(aktivProfil);
-      
-      profilRef.get().then(doc => {
-        if (doc.exists) {
-          const userData = doc.data();
+      try {
+        // Lag en moderne referanse til profil-dokumentet
+        const profilDocRef = doc(db, "users", user.uid, "profiler", aktivProfil);
+        const docSnap = await getDoc(profilDocRef);
+        
+        if (docSnap.exists()) {
+          const userData = docSnap.data();
           const avspillingsTid = userData.avspillingsTid || {};
           const savedTime = parseFloat(avspillingsTid[filmId]);
 
-          // Hvis det finnes en lagret posisjon over 10 sekunder, og videoen ikke er ferdigspilt
+          // Sjekk om det finnes lagret tid og om filmen ikke er helt ferdig
           if (!isNaN(savedTime) && savedTime > 10 && video.duration > savedTime + 10) {
-            if(resumeOverlay) {
+            if (resumeOverlay) {
               resumeOverlay.style.display = "flex";
               continueBtn.onclick = () => { video.currentTime = savedTime; resumeOverlay.style.display = "none"; video.play(); };
               restartBtn.onclick = () => { video.currentTime = 0; resumeOverlay.style.display = "none"; video.play(); };
@@ -600,29 +602,29 @@
         } else {
           video.play().catch(() => {});
         }
-      }).catch(err => {
+      } catch (err) {
         console.error("Feil ved henting av tidsstempel:", err);
         video.play().catch(() => {});
-      });
+      }
 
     } else {
-      // Send ut hvis ikke innlogget
+      // Send til index hvis ikke logget inn
       window.location.href = "index.html";
     }
   });
 
   /* ===========================================================
-     5. TIDS-OPPDATERINGER & FIREBASE LAGRING (Throttle 5 sek)
+     5. TIDS-OPPDATERINGER & REGLER FOR COOLDOWN (Firestore lagring)
      =========================================================== */
   let forrigeLagretTid = 0;
 
   function updateProgress() {
     if (!isDragging) {
       const percent = (video.currentTime / video.duration) * 100;
-      if(progressFilled) progressFilled.style.width = percent + '%';
-      if(thumb) thumb.style.left = percent + '%';
+      if (progressFilled) progressFilled.style.width = percent + '%';
+      if (thumb) thumb.style.left = percent + '%';
     }
-    if(timeDisplay) {
+    if (timeDisplay) {
       timeDisplay.textContent = `${formatTime(video.currentTime)} / ${formatTime(video.duration)}`;
     }
   }
@@ -632,21 +634,24 @@
 
     const nåværendeTid = video.currentTime;
     
-    // Spar på databasen: Bare lagre hvert 5. sekund (eller om videoen pauses/stoppes)
+    // Sparer på databasen: Skriver bare hvert 5. sekund, eller hvis video settes på pause
     if (Math.abs(nåværendeTid - forrigeLagretTid) > 5 || video.paused) {
       forrigeLagretTid = nåværendeTid;
       
-      const profilRef = db.collection("users").doc(currentUser.uid).collection("profiler").doc(aktivProfil);
+      const profilDocRef = doc(db, "users", currentUser.uid, "profiler", aktivProfil);
       
-      // Lagre sekundet brukeren er på, og sett historikk-status til "påbegynt"
-      await profilRef.set({
-        avspillingsTid: {
-          [filmId]: nåværendeTid
-        },
-        historikk: {
-          [navn]: "påbegynt"
-        }
-      }, { merge: true });
+      try {
+        await setDoc(profilDocRef, {
+          avspillingsTid: {
+            [filmId]: nåværendeTid
+          },
+          historikk: {
+            [navn]: "påbegynt"
+          }
+        }, { merge: true });
+      } catch (err) {
+        console.error("Kunne ikke lagre tid til Firestore:", err);
+      }
     }
   }
 
@@ -657,22 +662,25 @@
   video.addEventListener('loadedmetadata', updateProgress);
   video.addEventListener('pause', lagrePosisjonTilFirebase);
 
-  // Når videoen er ferdig, slett tidsstempel og marker som "ferdig" i databasen
+  // Video ferdig: marker som ferdig og slett tidsstempel med deleteField()
   video.addEventListener('ended', ryddeOgNeste);
 
   async function ryddeOgNeste() {
     if (currentUser) {
-      const profilRef = db.collection("users").doc(currentUser.uid).collection("profiler").doc(aktivProfil);
+      const profilDocRef = doc(db, "users", currentUser.uid, "profiler", aktivProfil);
       
-      // Slett tidsstempelet (så de slipper resume neste gang), og marker som ferdig
-      await profilRef.set({
-        avspillingsTid: {
-          [filmId]: firebase.firestore.FieldValue.delete()
-        },
-        historikk: {
-          [navn]: "ferdig"
-        }
-      }, { merge: true });
+      try {
+        await setDoc(profilDocRef, {
+          avspillingsTid: {
+            [filmId]: deleteField() // Fjerner tidsstempelet helt fra skyen så de starter fra start neste gang
+          },
+          historikk: {
+            [navn]: "ferdig"
+          }
+        }, { merge: true });
+      } catch (err) {
+        console.error("Feil under rydde-prosess i Firestore:", err);
+      }
     }
 
     clearInterval(autoplayTimer);
@@ -680,7 +688,7 @@
   }
 
   /* ===========================================================
-     6. MEDIERECORDINGS, UI-HÅNDTERING & NETFLIX SQUEEZE
+     6. UI-LOGIKK, SØKING & CONTROLS
      =========================================================== */
   function formatTime(time) {
     const m = Math.floor(time / 60);
@@ -716,7 +724,6 @@
     return null;
   }
 
-  // Play/Pause klikk
   playBtn.addEventListener('click', () => video.paused ? video.play() : video.pause());
   video.addEventListener('click', () => video.paused ? video.play() : video.pause());
 
@@ -746,7 +753,7 @@
   forwardBtn.addEventListener('click', () => video.currentTime = Math.min(video.duration, video.currentTime + 10));
   captionsBtn.addEventListener('click', () => { captionMenu.style.display = captionMenu.style.display === 'block' ? 'none' : 'block'; });
 
-  // Språkgenerering
+  // Lyd- og tekstsidelister
   const audioTracksDiv = document.getElementById("audioTracks");
   audioTracksDiv.innerHTML = "";
   if (film.audioLanguages && film.audioLanguages.length > 0) {
@@ -774,7 +781,7 @@
 
   function handleSubtitleChange(langCode) {
     if (langCode === "off") {
-      subtitlesEnabled = false; if(subtitleOverlay) subtitleOverlay.textContent = "";
+      subtitlesEnabled = false; if (subtitleOverlay) subtitleOverlay.textContent = "";
     } else {
       subtitlesEnabled = true;
     }
@@ -783,7 +790,7 @@
     });
   }
 
-  // Scrubbing (Søking i tidslinjen)
+  // Søking og tidslinje-skrubbing
   function scrubTo(e) {
     const rect = progress.getBoundingClientRect();
     const x = e.clientX - rect.left;
@@ -809,15 +816,14 @@
   progress.addEventListener("mousemove", showPreview);
   progress.addEventListener("mouseleave", hidePreview);
 
-  // Auto-skjul UI kontroller
   function showUI() {
     ui.classList.remove('hidden');
-    if(subtitleOverlay) subtitleOverlay.classList.add("subtitle-up");
+    if (subtitleOverlay) subtitleOverlay.classList.add("subtitle-up");
     clearTimeout(hideTimeout);
     hideTimeout = setTimeout(() => { 
       if (!video.paused && !autoplayTriggered) { 
         ui.classList.add('hidden'); 
-        if(subtitleOverlay) subtitleOverlay.classList.remove("subtitle-up"); 
+        if (subtitleOverlay) subtitleOverlay.classList.remove("subtitle-up"); 
       } 
     }, 3500);
   }
@@ -833,7 +839,7 @@
   video.addEventListener('playing', () => loadingSpinner.style.display = 'none');
 
   /* ===========================================================
-     7. INTRO SKIP & NETFLIX AUTOPLAY SQUEEZE HANDLERS
+     7. INTRO & NETFLIX AUTOPLAY SKVIS-SYSTEM
      =========================================================== */
   video.addEventListener("timeupdate", () => {
     const tid = video.currentTime;
@@ -865,7 +871,7 @@
     if (nesteEpisodeData) {
       nextEpisodeTitle.textContent = nesteEpisodeData.fullTittel;
       if (nextEpisodeDesc) {
-        nextEpisodeDesc.textContent = nesteEpisodeData.beskrivelse || nesteEpisodeData.description || "Ingen beskrivelse tilgjengelig for denne episoden.";
+        nextEpisodeDesc.textContent = nesteEpisodeData.beskrivelse || "Ingen beskrivelse tilgjengelig for denne episoden.";
       }
       const nesteBilde = nesteEpisodeData.bildeUrl || nesteEpisodeData.bilde || nesteEpisodeData.poster || nesteEpisodeData.thumbnail;
       if (nesteBilde) {
@@ -877,7 +883,7 @@
 
     autoplayBackground.style.opacity = "1";
 
-    // NETFLIX-SQUEEZE EFFEKT
+    // Skvis videoen i hjørnet (Netflix-stil)
     videoWrapper.style.transform = "scale(0.32)";
     videoWrapper.style.transformOrigin = "top right";
     videoWrapper.style.right = "40px";
@@ -919,7 +925,6 @@
     });
   }
 
-  // Like-knapp handler
   const likeBtn = document.getElementById("likeBtn");
   if (likeBtn) {
     likeBtn.addEventListener("click", () => {
