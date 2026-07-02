@@ -445,6 +445,7 @@
   // Profil- og brukerstyring
   let currentUser = null;
   let aktivProfil = localStorage.getItem("aktivProfil") || "Hovedprofil";
+
   /* ===========================================================
      2. UNIVERSELL PLAYER LOGIKK & RESOLVE MEDIA
      =========================================================== */
@@ -548,7 +549,7 @@
   let hideTimeout;
   let subtitlesEnabled = true;
   let autoplayTriggered = false;
-  let harSjekketLagretTid = false; // Sperre som forhindrer evig loop
+  let harSjekketLagretTid = false; 
 
   const nesteEpisodeUrl = hentNesteEpisodeInfo();
 
@@ -562,45 +563,57 @@
   }
 
   /* ===========================================================
-     4. ON AUTH STATE CHANGED (Hent lagret historikk og posisjon)
+     4. ON AUTH STATE CHANGED & RESUME LOGIKK
      =========================================================== */
-  onAuthStateChanged(auth, async (user) => {
+  onAuthStateChanged(auth, (user) => {
     if (user) {
       currentUser = user;
       
-      // Hvis vi allerede har sjekket tiden i denne økten, skal vi ikke gjøre det igjen
       if (harSjekketLagretTid) return;
       harSjekketLagretTid = true;
-      
-      try {
-        const profilDocRef = doc(db, "users", user.uid, "profiler", aktivProfil);
-        const docSnap = await getDoc(profilDocRef);
-        
-        if (docSnap.exists()) {
-          const userData = docSnap.data();
-          const avspillingsTid = userData.avspillingsTid || {};
-          const savedTime = parseFloat(avspillingsTid[filmId]);
 
-          // Sjekk om det finnes lagret tid og om filmen ikke er helt ferdig
-          if (!isNaN(savedTime) && savedTime > 10 && video.duration > savedTime + 10) {
-            if (resumeOverlay) {
-              resumeOverlay.style.display = "flex";
-              continueBtn.onclick = () => { video.currentTime = savedTime; resumeOverlay.style.display = "none"; video.play().catch(() => {}); };
-              restartBtn.onclick = () => { video.currentTime = 0; resumeOverlay.style.display = "none"; video.play().catch(() => {}); };
+      // REPARASJON: Vi venter til videoen har lastet metadata (duration) før vi sjekker databasen
+      video.addEventListener('loadedmetadata', async () => {
+        try {
+          const profilDocRef = doc(db, "users", user.uid, "profiler", aktivProfil);
+          const docSnap = await getDoc(profilDocRef);
+          
+          if (docSnap.exists()) {
+            const userData = docSnap.data();
+            const avspillingsTid = userData.avspillingsTid || {};
+            const savedTime = parseFloat(avspillingsTid[filmId]);
+
+            // Sjekk om det finnes lagret tid og om filmen ikke er helt ferdig
+            if (!isNaN(savedTime) && savedTime > 10 && video.duration > (savedTime + 15)) {
+              if (resumeOverlay) {
+                resumeOverlay.style.display = "flex";
+                
+                continueBtn.onclick = () => { 
+                  video.currentTime = savedTime; 
+                  resumeOverlay.style.display = "none"; 
+                  video.play().catch(() => {}); 
+                };
+                
+                restartBtn.onclick = () => { 
+                  video.currentTime = 0; 
+                  resumeOverlay.style.display = "none"; 
+                  video.play().catch(() => {}); 
+                };
+              } else {
+                video.currentTime = savedTime;
+                video.play().catch(() => {});
+              }
             } else {
-              video.currentTime = savedTime;
               video.play().catch(() => {});
             }
           } else {
             video.play().catch(() => {});
           }
-        } else {
+        } catch (err) {
+          console.error("Feil ved henting av tidsstempel:", err);
           video.play().catch(() => {});
         }
-      } catch (err) {
-        console.error("Feil ved henting av tidsstempel:", err);
-        video.play().catch(() => {});
-      }
+      });
 
     } else {
       window.location.href = "index.html";
@@ -608,7 +621,7 @@
   });
 
   /* ===========================================================
-     5. TIDS-OPPDATERINGER & COOLDOWN FOR DATABASE-SKRIVING
+     5. TIDS-OPPDATERINGER & FORBEDRET DATABASE-LAGRING
      =========================================================== */
   let forrigeLagretTid = 0;
 
@@ -628,14 +641,13 @@
 
     const nåværendeTid = video.currentTime;
     
-    // Sparer på databasen: Skriver bare hvert 5. sekund, eller hvis video settes på pause
+    // Sparer på databasen: Skriver kun hvert 5. sekund, ELLER hvis video settes på pause
     if (Math.abs(nåværendeTid - forrigeLagretTid) > 5 || video.paused) {
       forrigeLagretTid = nåværendeTid;
       
       const profilDocRef = doc(db, "users", currentUser.uid, "profiler", aktivProfil);
       
       try {
-        // Rettet dyp-fletting ved hjelp av dot-notation (historikk.${navn})
         await setDoc(profilDocRef, {
           [`avspillingsTid.${filmId}`]: nåværendeTid,
           [`historikk.${navn}`]: "påbegynt"
@@ -661,7 +673,6 @@
       const profilDocRef = doc(db, "users", currentUser.uid, "profiler", aktivProfil);
       
       try {
-        // Rettet opprydding ved fjerning av tidsstempel og oppdatering av status til ferdig
         await setDoc(profilDocRef, {
           [`avspillingsTid.${filmId}`]: deleteField(),
           [`historikk.${navn}`]: "ferdig"
