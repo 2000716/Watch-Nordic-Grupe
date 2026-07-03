@@ -18,7 +18,7 @@ const filmer = {
     tilbakeUrl: "film.html?navn=the-kid",
     audioLanguages: [{ code: "en", label: "Engelsk" }],
     subtitleLanguages: [
-      { code: "nb", label: "Norsk" },
+      { code: "no", label: "Norsk" },
       { code: "off", label: "Av" }
     ],
     publishDate: "2025-10-02T00:00:00",
@@ -70,7 +70,7 @@ const filmer = {
     tilbakeUrl: "film.html?navn=haxan",
     audioLanguages: [{ code: "sv", label: "Svensk" }],
     subtitleLanguages: [
-      { code: "nb", label: "Norsk" },
+      { code: "no", label: "Norsk" },
       { code: "off", label: "Av" }
     ],
     publishDate: "2025-10-02T00:00:00",
@@ -98,7 +98,7 @@ const filmer = {
     tilbakeUrl: "film.html?navn=sprite-fright",
     audioLanguages: [{ code: "en", label: "Engelsk" }],
     subtitleLanguages: [
-      { code: "nb", label: "Norsk" },
+      { code: "no", label: "Norsk" },
       { code: "off", label: "Av" }
     ],
     publishDate: "2026-01-01T00:00:00",
@@ -125,7 +125,7 @@ const filmer = {
     tilbakeUrl: "film.html?navn=wing-it",
     audioLanguages: [{ code: "en", label: "Engelsk" }],
     subtitleLanguages: [
-      { code: "nb", label: "Norsk" },
+      { code: "no", label: "Norsk" },
       { code: "off", label: "Av" }
     ],
     publishDate: "2026-04-30T00:00:00",
@@ -178,7 +178,7 @@ const filmer = {
     tilbakeUrl: "film.html?navn=tears-of-steel",
     audioLanguages: [{ code: "en", label: "Engelsk" }],
     subtitleLanguages: [
-      { code: "nb", label: "Norsk" },
+      { code: "no", label: "Norsk" },
       { code: "off", label: "Av" }
     ],
     publishDate: "2026-06-25T00:00:00",
