@@ -4,15 +4,12 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <!-- NY APP-KODE START -->
   <link rel="manifest" href="manifest.json">
   <script>
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.register('sw.js');
     }
   </script>
-  <!-- NY APP-KODE SLUTT -->
-
   <title>Velkommen | Watch Nordic™</title>
 
   <link rel="icon" type="image/png" href="https://static.wixstatic.com/media/d9ace9_95bbe3f5ff4b4aab9314a8d08804344e~mv2.png" />
@@ -30,21 +27,10 @@
     }
 
     body{
-      background:#091B1E;
+      background:#000000; /* Endret til ren sort for ekte Netflix-kontrast */
       color:white;
       font-family: Inter, Arial, sans-serif;
       overflow-x:hidden;
-    }
-
-    /* ================= BAKGRUNN GLOW ================= */
-    body::before{
-      content:"";
-      position:fixed;
-      inset:0;
-      background:
-        radial-gradient(circle at top left, rgba(0,255,204,0.12), transparent 30%),
-        radial-gradient(circle at bottom right, rgba(0,255,204,0.08), transparent 30%);
-      z-index:-1;
     }
 
     /* ================= NAVBAR ================= */
@@ -62,19 +48,14 @@
       z-index:999;
 
       backdrop-filter:blur(14px);
-      background:rgba(9,27,30,0.65);
+      background:rgba(0,0,0,0.75); /* Gjort mer transparent sort */
       border-bottom:1px solid rgba(255,255,255,0.06);
     }
 
-    .logo{
-      font-size:30px;
-      font-weight:900;
-      letter-spacing:4px;
-      color:#00FFCC;
-
-      text-shadow:
-        0 0 8px rgba(0,255,204,0.7),
-        0 0 20px rgba(0,255,204,0.3);
+    .logo img {
+      height: 42px; /* Perfekt høyde for bannerlogoen */
+      display: block;
+      object-fit: contain;
     }
 
     .nav-buttons{
@@ -121,7 +102,7 @@
       display:flex;
       align-items:center;
       overflow:hidden; 
-      background:#091B1E;
+      background:#000000;
     }
 
     .hero::before{
@@ -131,9 +112,9 @@
       background:
         linear-gradient(
           to right,
-          rgba(9,27,30,1) 25%,
-          rgba(9,27,30,0.7) 55%,
-          rgba(9,27,30,0.2) 100%
+          rgba(0,0,0,1) 30%,      /* Endret til sort toning */
+          rgba(0,0,0,0.7) 60%,
+          rgba(0,0,0,0.1) 100__
         );
       z-index:1;
     }
@@ -147,7 +128,7 @@
       height:250px;
       background:linear-gradient(
         to top,
-        #091B1E,
+        #000000, /* Slår seg perfekt sammen med den sorte bakgrunnen */
         transparent
       );
       z-index:1;
@@ -162,13 +143,14 @@
 
     .hero-content h1{
       font-size:72px;
-      line-height:1;
+      line-height:1.1;
       margin-bottom:20px;
       font-weight:900;
+      letter-spacing: -1px;
     }
 
     .hero-content p{
-      color:#c9d1d1;
+      color:#e2e8f0;
       font-size:19px;
       line-height:1.6;
       margin-bottom:35px;
@@ -204,6 +186,7 @@
     /* ================= SECTION ================= */
     .section{
       padding:70px 60px;
+      background: #000000;
     }
 
     .section-header{
@@ -214,7 +197,8 @@
     }
 
     .section h2{
-      font-size:32px;
+      font-size:26px; /* Litt mer elegant Netflix-størrelse */
+      font-weight: 700;
       color:white;
     }
 
@@ -225,9 +209,9 @@
     /* ================= FILM ROW ================= */
     .movie-row{
       display:flex;
-      gap:20px;
+      gap:14px;
       overflow-x:auto;
-      padding-bottom:10px;
+      padding: 15px 0;
       scroll-behavior:smooth;
     }
 
@@ -242,33 +226,31 @@
 
     .movie-card{
       position:relative;
-      min-width:230px;
-      transition:0.35s ease;
+      min-width:240px;
+      transition:0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
       cursor:pointer;
       flex-shrink:0;
     }
 
     .movie-card:hover{
-      transform:scale(1.06);
+      transform: scale(1.08); /* Kraftigere pop-out effekt i ekte Netflix-stil */
       z-index:5;
+      box-shadow: 0 15px 40px rgba(0,0,0,0.8);
     }
 
     .movie-card img{
       width:100%;
-      height:340px;
+      height:350px;
       object-fit:cover;
-      border-radius:18px;
-
+      border-radius:8px; /* Litt mer firkantede hjørner for en mer moderne look */
       border:1px solid rgba(255,255,255,0.08);
-
-      box-shadow:
-        0 10px 30px rgba(0,0,0,0.4);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.5);
     }
 
     .movie-overlay{
       position:absolute;
       inset:0;
-      border-radius:18px;
+      border-radius:8px;
 
       display:flex;
       flex-direction:column;
@@ -278,12 +260,13 @@
 
       background:linear-gradient(
         to top,
-        rgba(0,0,0,0.9),
-        rgba(0,0,0,0)
+        rgba(0,0,0,0.95) 0%,
+        rgba(0,0,0,0.4) 50%,
+        rgba(0,0,0,0) 100%
       );
 
       opacity:0;
-      transition:0.3s;
+      transition:0.3s ease;
     }
 
     .movie-card:hover .movie-overlay{
@@ -291,13 +274,15 @@
     }
 
     .movie-overlay h3{
-      margin-bottom:8px;
-      font-size:18px;
+      margin-bottom:6px;
+      font-size:16px;
+      font-weight: 700;
     }
 
     .movie-overlay p{
-      color:#cfcfcf;
-      font-size:14px;
+      color:#00FFCC; /* Fremhever kvalitetsteksten med din farge */
+      font-size:13px;
+      font-weight: 600;
     }
 
     /* ================= DEVICES ================= */
@@ -311,10 +296,10 @@
       padding:35px 25px;
       text-align:center;
 
-      border-radius:24px;
+      border-radius:16px;
 
-      background:rgba(255,255,255,0.04);
-      border:1px solid rgba(255,255,255,0.08);
+      background:rgba(255,255,255,0.02);
+      border:1px solid rgba(255,255,255,0.05);
 
       transition:0.3s ease;
     }
@@ -348,7 +333,7 @@
       width: 100%;
       padding: 70px 80px 35px;
       margin-top: 100px;
-      background: none;
+      background: #000000;
       display: flex;
       flex-direction: column;
       align-items: flex-start;
@@ -406,7 +391,7 @@
       color: #555;
     }
 
-    /* ================= HERO POSTER WALL (3D EFFEKT PC) ================= */
+    /* ================= HERO POSTER WALL (3D EFFEKT PC - NETFLIX INTEGRASJON) ================= */
     .hero-wall{
       position:absolute;
       inset:0;
@@ -414,11 +399,16 @@
       z-index:0;
       transform:
         perspective(2000px)
-        rotateY(-22deg)
-        rotateX(4deg)
-        scale(1.25);
+        rotateY(-20deg)
+        rotateX(2deg)
+        scale(1.2);
       transform-origin:right center;
-      opacity:.32;
+      opacity:.22; /* Litt mer subtilt for en renere kinofølelse */
+      filter: grayscale(15%) blur(0.5px); /* Gjør plakatveggen mer filmisk */
+      
+      /* Maskeringseffekt som gjør at den tones ut perfekt i bunnen */
+      -webkit-mask-image: linear-gradient(to bottom, rgba(0,0,0,1) 60%, rgba(0,0,0,0) 100%);
+      mask-image: linear-gradient(to bottom, rgba(0,0,0,1) 60%, rgba(0,0,0,0) 100%);
     }
 
     .wall-row{
@@ -432,8 +422,8 @@
       width:260px;
       height:146px;
       object-fit:cover;
-      border-radius:10px;
-      box-shadow:0 12px 30px rgba(0,0,0,.45);
+      border-radius:6px;
+      box-shadow:0 12px 30px rgba(0,0,0,.65);
       transition: transform 0.3s ease;
       
       /* Base transform bruker variabler satt fra JS */
@@ -464,12 +454,12 @@
       transform: translateX(-50%);
       width: 90%;
       max-width: 850px;
-      background: rgba(9, 27, 30, 0.95);
+      background: rgba(10, 10, 10, 0.98);
       border: 1px solid rgba(0, 255, 204, 0.2);
       backdrop-filter: blur(20px);
-      border-radius: 24px;
+      border-radius: 16px;
       padding: 30px;
-      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7), 0 0 40px rgba(0, 255, 204, 0.05);
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.9), 0 0 40px rgba(0, 255, 204, 0.05);
       z-index: 99999;
       transition: bottom 0.5s cubic-bezier(0.16, 1, 0.3, 1);
     }
@@ -592,7 +582,7 @@
       }
 
       .hero::before {
-        background: radial-gradient(circle, rgba(9,27,30,0.7) 0%, rgba(9,27,30,0.98) 90%);
+        background: radial-gradient(circle, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0.98) 90%);
       }
 
       .hero-content {
@@ -612,7 +602,7 @@
       }
 
       .hero-wall {
-        opacity: .20;
+        opacity: .15;
         transform: perspective(1000px) rotateY(-15deg) rotateX(5deg) scale(1.3);
         transform-origin: center center;
       }
@@ -649,9 +639,8 @@
         height: 70px;
       }
 
-      .logo {
-        font-size: 22px;
-        letter-spacing: 2px;
+      .logo img {
+        height: 32px;
       }
 
       .nav-buttons {
@@ -668,11 +657,11 @@
       }
 
       .section-header h2 {
-        font-size: 26px;
+        font-size: 22px;
       }
 
       .movie-row {
-        gap: 14px;
+        gap: 12px;
       }
 
       .movie-card {
@@ -751,9 +740,10 @@
 <body>
 
   <nav class="navbar">
-    <div class="logo">WATCH</div>
+    <div class="logo">
+      <img src="https://static.wixstatic.com/media/d9ace9_6189bb0756b8437ab689f6f65652f701~mv2.png" alt="Watch Nordic Logo">
+    </div>
     <div class="nav-buttons">
-      <!-- Satt inn filnavnet med URL-koding (%20 i stedet for mellomrom) -->
       <a href="Innlogging.html" class="login">Logg inn</a>
       <a href="Innlogging.html" class="signup">Registrer</a>
     </div>
@@ -776,7 +766,6 @@
       </p>
 
       <div class="hero-buttons">
-        <!-- Satt inn filnavnet med URL-koding her også -->
         <a href="Innloggings%20side.html" class="primary-btn">Begynn å se</a>
       </div>
     </div>
@@ -863,7 +852,7 @@
 
     <div class="footer-links">
       <a href="om.html">Om Watch Nordic</a>
-      <a href="kontakt.html">Kontakt oss</a>
+      <a href="kontakt.html">Contact oss</a>
       <a href="personvern.html">Personvern</a>
       <a href="hjelp.html">Hjelpesenter</a>
       <a href="#">Jobber</a>
@@ -906,7 +895,7 @@
       gallery.appendChild(fragment);
     }
 
-    /* ================= HERO WALL (3D VEGG ØVERST - OPPDATERT TILFELDIGHET) ================= */
+    /* ================= HERO WALL (3D VEGG ØVERST) ================= */
     const rows = [
       document.querySelector(".row1"),
       document.querySelector(".row2"),
