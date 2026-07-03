@@ -167,7 +167,6 @@ import { auth, db } from "./firebase-oppsett.js";
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-auth.js";
 import { doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
 
-// Henter aktiv profilindeks fra URL parameter (?index=X)
 const urlParams = new URLSearchParams(window.location.search);
 const aktivProfilIndex = parseInt(urlParams.get('index')) || 0;
 
@@ -215,7 +214,23 @@ let valgtBilde = null;
 let profiler = [];
 let docRef = null;
 
-// Lytter etter om brukeren er logget inn
+// ================= LYNRAST OPPSTART (Mellomlagring) =================
+const cachedProfiles = localStorage.getItem("watch_nordic_profiles_cache");
+if (cachedProfiles) {
+  try {
+    profiler = JSON.parse(cachedProfiles);
+    if (profiler[aktivProfilIndex]) {
+      valgtBilde = profiler[aktivProfilIndex].bilde || null;
+    }
+  } catch (e) {
+    console.error("Kunne ikke lese profil-cache:", e);
+  }
+}
+
+// Bygg opp rader og marker bildet fra cachen umiddelbart
+lagRader();
+oppdaterValg();
+
 onAuthStateChanged(auth, (user) => {
   if (user) {
     docRef = doc(db, "users", user.uid);
@@ -230,7 +245,9 @@ async function hentGjeldendeProfilbilde() {
     const docSnap = await getDoc(docRef);
     if (docSnap.exists()) {
       profiler = docSnap.data().profiler || [];
-      // Sjekker om profilen eksisterer, og henter dens eksisterende bilde
+      // Lagre oppdaterte data i cache til neste gang
+      localStorage.setItem("watch_nordic_profiles_cache", JSON.stringify(profiler));
+      
       if (profiler[aktivProfilIndex]) {
         valgtBilde = profiler[aktivProfilIndex].bilde || null;
         oppdaterValg();
@@ -243,11 +260,14 @@ async function hentGjeldendeProfilbilde() {
 
 function oppdaterValg() {
   document.querySelectorAll('.profilbilde-valg').forEach(img => {
-    img.classList.toggle('selected', img.src === valgtBilde || img.getAttribute('src') === valgtBilde);
+    const currentSrc = img.src;
+    const attrSrc = img.getAttribute('src');
+    img.classList.toggle('selected', currentSrc === valgtBilde || attrSrc === valgtBilde);
   });
 }
 
 function lagRader() {
+  hovedContainer.innerHTML = ""; // Tømmer hvis den kalles flere ganger
   rader.forEach(rad => {
     const radWrapper = document.createElement('div');
     radWrapper.className = 'rad-container';
@@ -291,29 +311,32 @@ function lagRader() {
 }
 
 async function tilbakeTilKonto() {
-  // Sjekker om vi har kobling til databasen og profiler er lastet inn
-  if (docRef && profiler[aktivProfilIndex]) {
-    if (valgtBilde) {
-      // Oppdaterer bildet til den spesifikke profilen i arrayet
-      profiler[aktivProfilIndex].bilde = valgtBilde;
-      
+  if (profiler[aktivProfilIndex] && valgtBilde) {
+    // Oppdaterer lokalt i arrayet
+    profiler[aktivProfilIndex].bilde = valgtBilde;
+    
+    // Oppdaterer lokal cache umiddelbart så endringen merkes på de andre sidene
+    localStorage.setItem("watch_nordic_profiles_cache", JSON.stringify(profiler));
+
+    // Hvis brukeren endrer bildet på profilen som akkurat NÅ er aktiv, oppdaterer vi aktivProfil-variablene også
+    const gjeldendeAktivIndex = localStorage.getItem("aktivProfilIndex");
+    if (gjeldendeAktivIndex !== null && parseInt(gjeldendeAktivIndex) === aktivProfilIndex) {
+      localStorage.setItem("profilbilde", valgtBilde);
+    }
+    
+    // Skriver til Firestore i bakgrunnen
+    if (docRef) {
       try {
         await setDoc(docRef, { profiler: profiler }, { merge: true });
       } catch (error) {
         console.error("Feil ved lagring av profilbilde i Firestore:", error);
-        alert("Kunne ikke lagre profilbildet i databasen.");
-        return;
       }
     }
   }
-  // Går tilbake til konto-siden med riktig profilindeks i URL-en
+  
   window.location.href = `konto.html?index=${aktivProfilIndex}`;
 }
 
-// Kjører funksjonene ved oppstart
-lagRader();
-
-// Gjør funksjonen tilgjengelig for HTML-knappen (siden scriptet nå er en modul)
 window.tilbakeTilKonto = tilbakeTilKonto;
 </script>
 
