@@ -263,6 +263,7 @@
       border-radius: 10px;
       color: white;
       font-size: 15px;
+      margin-bottom: 8px;
     }
     .edit-field select option { background: #091B1E; color: white; }
 
@@ -346,14 +347,14 @@
   <div class="container">
 
     <aside class="sidebar">
-      <div class="avatar" id="avatarContainer" onclick="velgProfilbildeSide()">
+      <div class="avatar" id="avatarContainer">
         <img id="profilbilde" src="https://static.wixstatic.com/media/fd2fb2_39376e4ee55b460ab7a3ebbfcf35fef7~mv2.png" alt="Profilbilde">
       </div>
       <div class="profile-name" id="navnDisplay">Laster...</div>
 
       <div class="profile-actions" id="sidebarActions">
-        <button onclick="velgProfilbildeSide()"><i class="fa-solid fa-user-gear"></i> Endre bilde</button>
-        <button class="delete-btn" id="sletteKnapp" onclick="haandterSletting()"><i class="fa-solid fa-trash-can"></i> Slett profil permanent</button>
+        <button id="endreBildeSideBtn"><i class="fa-solid fa-user-gear"></i> Endre bilde</button>
+        <button class="delete-btn" id="sletteKnapp"><i class="fa-solid fa-trash-can"></i> Slett profil permanent</button>
       </div>
     </aside>
 
@@ -364,37 +365,46 @@
           <div class="info-block">
             <div class="label">Profilnavn</div>
             <div class="value" id="navnView">Laster...</div>
-            <div class="edit-field hidden">
+            <div class="edit-field hidden" id="navnEditField">
               <input type="text" id="navnInput" maxlength="15">
               <div class="edit-actions">
-                <button class="btn-save" onclick="lagreNavn()">Lagre</button>
-                <button class="btn-cancel" onclick="avbrytNavn()">Avbryt</button>
+                <button class="btn-save" id="lagreNavnBtn">Lagre</button>
+                <button class="btn-cancel" id="avbrytNavnBtn">Avbryt</button>
               </div>
             </div>
           </div>
-          <button class="edit-trigger" id="endreNavnKnapp" onclick="endreNavn()">Endre</button>
+          <button class="edit-trigger" id="endreNavnKnapp">Endre</button>
         </div>
 
         <div class="row" id="epostRow">
           <div class="info-block">
             <div class="label">E-postadresse (Konto)</div>
             <div class="value" id="epostView">Laster...</div>
-            <div class="edit-field hidden">
+            <div class="edit-field hidden" id="epostEditField">
               <input type="email" id="epostInput">
               <div class="edit-actions">
-                <button class="btn-save" onclick="lagreEpost()">Lagre</button>
-                <button class="btn-cancel" onclick="avbrytEpost()">Avbryt</button>
+                <button class="btn-save" id="lagreEpostBtn">Lagre</button>
+                <button class="btn-cancel" id="avbrytEpostBtn">Avbryt</button>
               </div>
             </div>
           </div>
-          <button class="edit-trigger" id="endreEpostKnapp" onclick="endreEpost()">Endre</button>
+          <button class="edit-trigger" id="endreEpostKnapp">Endre</button>
         </div>
 
-        <div class="row">
+        <div class="row" id="passordRow">
           <div class="info-block">
             <div class="label">Passord</div>
-            <div class="value">••••••••</div>
+            <div class="value" id="passordView">••••••••</div>
+            <div class="edit-field hidden" id="passordEditField">
+              <input type="password" id="gammeltPassordInput" placeholder="Nåværende passord">
+              <input type="password" id="nyttPassordInput" placeholder="Nytt sikkert passord (min. 6 tegn)">
+              <div class="edit-actions">
+                <button class="btn-save" id="lagrePassordBtn">Oppdater passord</button>
+                <button class="btn-cancel" id="avbrytPassordBtn">Avbryt</button>
+              </div>
+            </div>
           </div>
+          <button class="edit-trigger" id="endrePassordKnapp">Endre</button>
         </div>
       </div>
 
@@ -409,7 +419,7 @@
         <div class="card">
           <div id="parentLockPanel" class="parent-lock-screen">
             <p style="margin-bottom: 15px; color: var(--muted);">Dette panelet er låst. Foreldre kan låse opp for å endre aldersgrenser.</p>
-            <button class="btn-parent-unlock" onclick="laasOppForeldreKontroll()"><i class="fa-solid fa-lock"></i> Lås opp med PIN</button>
+            <button class="btn-parent-unlock" id="laasOppForeldreKontrollBtn"><i class="fa-solid fa-lock"></i> Lås opp med PIN</button>
           </div>
 
           <div id="parentSettingsPanel" class="row hidden" style="border:none;">
@@ -417,7 +427,7 @@
               <div class="label">Maks tillatt aldersgrense på hovedsiden</div>
               <div class="value" id="currentLimitView">Laster...</div>
               <div class="edit-field" style="margin-top:15px;">
-                <select id="ageRestrictionSelect" onchange="lagreAldersgrense()">
+                <select id="ageRestrictionSelect">
                   <option value="A">Tillat kun innhold for alle (A)</option>
                   <option value="6">Maks 6 år</option>
                   <option value="9">Maks 9 år</option>
@@ -436,7 +446,7 @@
 
   <script type="module">
     import { auth, db } from "./firebase-oppsett.js";
-    import { onAuthStateChanged, signOut, updateEmail } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-auth.js";
+    import { onAuthStateChanged, signOut, updateEmail, updatePassword, EmailAuthProvider, reauthenticateWithCredential } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-auth.js";
     import { doc, getDoc, setDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
 
     const urlParams = new URLSearchParams(window.location.search);
@@ -463,7 +473,7 @@
     let globalEpost = ""; 
     let docRef = null;
 
-    // ================= LYNRAST OPPSTART (Mellomlagring) =================
+    // LYNRAST OPPSTART (Mellomlagring)
     const cachedProfiles = localStorage.getItem("watch_nordic_profiles_cache");
     const cachedEmail = localStorage.getItem("watch_nordic_email_cache");
 
@@ -471,7 +481,6 @@
       try {
         profiler = JSON.parse(cachedProfiles);
         if (cachedEmail) globalEpost = cachedEmail;
-        
         if (profiler[aktivProfilIndex]) {
           byggProfilgrensesnitt();
         }
@@ -480,27 +489,44 @@
       }
     }
 
-    // Sjekker autentisering og henter ferske data i bakgrunnen
+    // Sjekker autentisering
     onAuthStateChanged(auth, (user) => {
       if (user) {
         docRef = doc(db, "users", user.uid);
         globalEpost = user.email || ""; 
         hentKontodata();
       } else {
-        window.location.href = "index.html"; // Endret fra Innlogging.html til index.html
+        window.location.href = "index.html";
       }
     });
 
-    // Endret her for å føre knappen til hvem-ser-på.html med profilindexen som parameter
+    // Event listeners i stedet for inline-onclick (Sikrere mot manipulering)
     document.getElementById("navHovedsideBtn").addEventListener("click", () => {
       window.location.href = `hvem-ser-på.html?index=${aktivProfilIndex}`;
     });
     document.getElementById("navLoggUtBtn").addEventListener("click", loggUt);
+    document.getElementById("avatarContainer").addEventListener("click", velgProfilbildeSide);
+    document.getElementById("endreBildeSideBtn").addEventListener("click", velgProfilbildeSide);
+    document.getElementById("sletteKnapp").addEventListener("click", haandterSletting);
+    
+    document.getElementById("endreNavnKnapp").addEventListener("click", endreNavn);
+    document.getElementById("lagreNavnBtn").addEventListener("click", lagreNavn);
+    document.getElementById("avbrytNavnBtn").addEventListener("click", avbrytNavn);
+
+    document.getElementById("endreEpostKnapp").addEventListener("click", endreEpost);
+    document.getElementById("lagreEpostBtn").addEventListener("click", lagreEpost);
+    document.getElementById("avbrytEpostBtn").addEventListener("click", avbrytEpost);
+
+    document.getElementById("endrePassordKnapp").addEventListener("click", endrePassord);
+    document.getElementById("lagrePassordBtn").addEventListener("click", lagrePassord);
+    document.getElementById("avbrytPassordBtn").addEventListener("click", avbrytPassord);
+
+    document.getElementById("laasOppForeldreKontrollBtn").addEventListener("click", laasOppForeldreKontroll);
+    ageRestrictionSelect.addEventListener("change", lagreAldersgrense);
 
     async function hentKontodata() {
       try {
         const docSnap = await getDoc(docRef);
-        
         if (docSnap.exists()) {
           const data = docSnap.data();
           profiler = data.profiler || [];
@@ -511,14 +537,12 @@
         }
 
         if (profiler.length === 0) {
-          profiler = [
-            {
-              navn: "Hovedprofil",
-              bilde: "https://static.wixstatic.com/media/fd2fb2_39376e4ee55b460ab7a3ebbfcf35fef7~mv2.png",
-              pin: null,
-              isKids: false
-            }
-          ];
+          profiler = [{
+            navn: "Hovedprofil",
+            bilde: "https://static.wixstatic.com/media/fd2fb2_39376e4ee55b460ab7a3ebbfcf35fef7~mv2.png",
+            pin: null,
+            isKids: false
+          }];
           await setDoc(docRef, { profiler: profiler, epost: globalEpost }, { merge: true });
           localStorage.setItem("watch_nordic_profiles_cache", JSON.stringify(profiler));
           localStorage.setItem("watch_nordic_email_cache", globalEpost);
@@ -532,28 +556,22 @@
         byggProfilgrensesnitt();
       } catch (error) {
         console.error("Feil under lasting av kontodata:", error);
-        if (!cachedProfiles) {
-          navnDisplay.innerText = "Tilkoblingsfeil";
-          navnView.innerText = "Kunne ikke hente data.";
-        }
       }
     }
 
     function byggProfilgrensesnitt() {
       const gjeldendeProfil = profiler[aktivProfilIndex];
-
       navnDisplay.innerText = gjeldendeProfil.navn;
       navnView.innerText = gjeldendeProfil.navn;
       epostView.innerText = globalEpost || "Ingen registrert";
       document.getElementById("profilbilde").src = gjeldendeProfil.bilde || "https://static.wixstatic.com/media/fd2fb2_39376e4ee55b460ab7a3ebbfcf35fef7~mv2.png";
 
-      const erInnloggetSomBarn = gjeldendeProfil.isKids === true;
-
-      if (erInnloggetSomBarn) {
+      if (gjeldendeProfil.isKids) {
         document.getElementById("sidebarActions").classList.add("hidden");
         document.getElementById("avatarContainer").style.pointerEvents = "none";
         document.getElementById("endreNavnKnapp").classList.add("hidden");
         document.getElementById("endreEpostKnapp").classList.add("hidden");
+        document.getElementById("endrePassordKnapp").classList.add("hidden");
         foreldreKontrollSeksjon.classList.remove("hidden");
         oppdaterMaksGrenseTekst();
       } else {
@@ -561,6 +579,7 @@
         document.getElementById("avatarContainer").style.pointerEvents = "auto";
         document.getElementById("endreNavnKnapp").classList.remove("hidden");
         document.getElementById("endreEpostKnapp").classList.remove("hidden");
+        document.getElementById("endrePassordKnapp").classList.remove("hidden");
         foreldreKontrollSeksjon.classList.add("hidden");
 
         if (aktivProfilIndex !== 0) {
@@ -587,8 +606,8 @@
       if (profiler[aktivProfilIndex]?.isKids) return;
       navnInput.value = navnView.innerText;
       navnView.classList.add("hidden");
-      navnRow.querySelector(".edit-field").classList.remove("hidden");
-      navnRow.querySelector(".edit-trigger").classList.add("hidden");
+      document.getElementById("navnEditField").classList.remove("hidden");
+      document.getElementById("endreNavnKnapp").classList.add("hidden");
     }
 
     async function lagreNavn() {
@@ -596,7 +615,6 @@
       if (!nyttNavn) return alert("Navnet kan ikke være tomt!");
 
       profiler[aktivProfilIndex].navn = nyttNavn;
-      
       await setDoc(docRef, { profiler: profiler }, { merge: true });
       localStorage.setItem("watch_nordic_profiles_cache", JSON.stringify(profiler));
 
@@ -607,16 +625,16 @@
 
     function avbrytNavn() {
       navnView.classList.remove("hidden");
-      navnRow.querySelector(".edit-field").classList.add("hidden");
-      navnRow.querySelector(".edit-trigger").classList.remove("hidden");
+      document.getElementById("navnEditField").classList.add("hidden");
+      document.getElementById("endreNavnKnapp").classList.remove("hidden");
     }
 
     function endreEpost() {
       if (profiler[aktivProfilIndex]?.isKids) return;
       epostInput.value = epostView.innerText;
       epostView.classList.add("hidden");
-      epostRow.querySelector(".edit-field").classList.remove("hidden");
-      epostRow.querySelector(".edit-trigger").classList.add("hidden");
+      document.getElementById("epostEditField").classList.remove("hidden");
+      document.getElementById("endreEpostKnapp").classList.add("hidden");
     }
 
     async function lagreEpost() {
@@ -628,7 +646,6 @@
         if (auth.currentUser) {
           await updateEmail(auth.currentUser, nyEpost);
         }
-        
         globalEpost = nyEpost;
         await setDoc(docRef, { epost: globalEpost }, { merge: true });
         localStorage.setItem("watch_nordic_email_cache", globalEpost);
@@ -648,8 +665,46 @@
 
     function avbrytEpost() {
       epostView.classList.remove("hidden");
-      epostRow.querySelector(".edit-field").classList.add("hidden");
-      epostRow.querySelector(".edit-trigger").classList.remove("hidden");
+      document.getElementById("epostEditField").classList.add("hidden");
+      document.getElementById("endreEpostKnapp").classList.remove("hidden");
+    }
+
+    // ================= SIKKER PASSORDENDRING =================
+    function endrePassord() {
+      if (profiler[aktivProfilIndex]?.isKids) return;
+      document.getElementById("passordEditField").classList.remove("hidden");
+      document.getElementById("endrePassordKnapp").classList.add("hidden");
+    }
+
+    async function lagrePassord() {
+      const gammeltPassord = document.getElementById("gammeltPassordInput").value;
+      const nyttPassord = document.getElementById("nyttPassordInput").value;
+
+      if (!gammeltPassord || !nyttPassord) return alert("Begge feltene må fylles ut!");
+      if (nyttPassord.length < 6) return alert("Det nye passordet må være minst 6 tegn langt.");
+
+      const bruker = auth.currentUser;
+      if (!bruker) return;
+
+      try {
+        // Firebase krever re-autentisering før passordendring av sikkerhetsmessige årsaker
+        const credential = EmailAuthProvider.credential(bruker.email, gammeltPassord);
+        await reauthenticateWithCredential(bruker, credential);
+        
+        await updatePassword(bruker, nyttPassord);
+        alert("Passordet ditt ble trygt oppdatert!");
+        avbrytPassord();
+      } catch (error) {
+        console.error(error);
+        alert("Feil under oppdatering av passord. Sjekk at nåværende passord er riktig.");
+      }
+    }
+
+    function avbrytPassord() {
+      document.getElementById("gammeltPassordInput").value = "";
+      document.getElementById("nyttPassordInput").value = "";
+      document.getElementById("passordEditField").classList.add("hidden");
+      document.getElementById("endrePassordKnapp").classList.remove("hidden");
     }
 
     async function loggUt() {
@@ -657,7 +712,7 @@
         localStorage.removeItem("watch_nordic_profiles_cache");
         localStorage.removeItem("watch_nordic_email_cache");
         await signOut(auth);
-        window.location.href = "index.html"; // Endret fra Starts side.html til index.html
+        window.location.href = "index.html";
       } catch (error) {
         console.error("Feil under utlogging:", error);
       }
@@ -668,20 +723,13 @@
 
       if (aktivProfilIndex !== 0) {
         if (!confirm(`Er du sikker på at du vil slette profilen "${profiler[aktivProfilIndex].navn}"?`)) return;
-        
         profiler.splice(aktivProfilIndex, 1);
         await setDoc(docRef, { profiler: profiler }, { merge: true });
         localStorage.setItem("watch_nordic_profiles_cache", JSON.stringify(profiler));
-
-        alert("Profilen ble slettet. Du sendes til hovedprofilen.");
         window.location.href = "konto.html?index=0";
       } else {
         if (!confirm("Vennligst bekreft: Vil du slette hele kontoen og alle underprofiler permanent?")) return;
-        
         await deleteDoc(docRef);
-        localStorage.removeItem("watch_nordic_profiles_cache");
-        localStorage.removeItem("watch_nordic_email_cache");
-        alert("Kontoen din er fjernet fra databasen. Du logges nå ut.");
         loggUt(); 
       }
     }
@@ -691,9 +739,7 @@
       if (pinInput === FORELDRE_PIN) {
         parentLockPanel.classList.add("hidden");
         parentSettingsPanel.classList.remove("hidden");
-        
-        const gjeldendeGrense = profiler[aktivProfilIndex].maksAldersgrense || "12";
-        ageRestrictionSelect.value = gjeldendeGrense;
+        ageRestrictionSelect.value = profiler[aktivProfilIndex].maksAldersgrense || "12";
       } else {
         alert("Feil PIN-kode! Kun foreldre har tilgang.");
       }
@@ -707,17 +753,6 @@
       localStorage.setItem("watch_nordic_profiles_cache", JSON.stringify(profiler));
       oppdaterMaksGrenseTekst();
     }
-
-    window.velgProfilbildeSide = velgProfilbildeSide;
-    window.haandterSletting = haandterSletting;
-    window.endreNavn = endreNavn;
-    window.lagreNavn = lagreNavn;
-    window.avbrytNavn = avbrytNavn;
-    window.endreEpost = endreEpost;
-    window.lagreEpost = lagreEpost;
-    window.avbrytEpost = avbrytEpost;
-    window.laasOppForeldreKontroll = laasOppForeldreKontroll;
-    window.lagreAldersgrense = lagreAldersgrense;
   </script>
 </body>
 </html>
