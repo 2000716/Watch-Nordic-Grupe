@@ -435,124 +435,285 @@
 
   <footer>© 2026 Watch Nordic Group AS. Alle rettigheter forbeholdt.</footer>
 
-<script type="module">
-import { auth, db } from "./firebase-oppsett.js";
-import { onAuthStateChanged, signOut, updateEmail } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-auth.js";
-import { doc, getDoc, setDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
+  <script type="module">
+    import { auth, db } from "./firebase-oppsett.js";
+    import { onAuthStateChanged, signOut, updateEmail } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-auth.js";
+    import { doc, getDoc, setDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
 
-let profiler = [];
-let globalEpost = "";
-let brukerPin = "1234"; // Standardverdi
-let docRef = null;
+    const urlParams = new URLSearchParams(window.location.search);
+    const aktivProfilIndex = parseInt(urlParams.get('index')) || 0;
 
-const urlParams = new URLSearchParams(window.location.search);
-const aktivProfilIndex = parseInt(urlParams.get('index')) || 0;
+    const FORELDRE_PIN = "1234";
 
-// DOM-elementer (forutsetter at du har disse ID-ene i HTML)
-const navnDisplay = document.getElementById("navnDisplay");
-const navnView = document.getElementById("navnView");
-const navnInput = document.getElementById("navnInput");
-const epostView = document.getElementById("epostView");
-const epostInput = document.getElementById("epostInput");
-const sletteKnapp = document.getElementById("sletteKnapp");
-const parentLockPanel = document.getElementById("parentLockPanel");
-const parentSettingsPanel = document.getElementById("parentSettingsPanel");
-const ageRestrictionSelect = document.getElementById("ageRestrictionSelect");
-const currentLimitView = document.getElementById("currentLimitView");
-
-onAuthStateChanged(auth, (user) => {
-    if (user) {
-        docRef = doc(db, "users", user.uid);
-        hentKontodata();
-    } else {
-        window.location.href = "index.html";
-    }
-});
-
-async function hentKontodata() {
-    try {
-        const docSnap = await getDoc(docRef);
-        if (!docSnap.exists()) {
-            // Opprett standardoppsett for ny bruker
-            const defaultData = {
-                profiler: [{ navn: "Hovedprofil", bilde: "...", isKids: false }],
-                epost: auth.currentUser.email,
-                pin: "1234"
-            };
-            await setDoc(docRef, defaultData);
-            profiler = defaultData.profiler;
-            brukerPin = defaultData.pin;
-        } else {
-            const data = docSnap.data();
-            profiler = data.profiler || [];
-            globalEpost = data.epost || auth.currentUser.email;
-            brukerPin = data.pin || "1234";
-        }
-        byggProfilgrensesnitt();
-    } catch (e) {
-        console.error("Feil ved henting:", e);
-    }
-}
-
-function byggProfilgrensesnitt() {
-    const p = profiler[aktivProfilIndex];
-    if (!p) return;
-
-    navnDisplay.innerText = p.navn;
-    navnView.innerText = p.navn;
-    epostView.innerText = globalEpost;
+    const navnDisplay = document.getElementById("navnDisplay");
+    const navnView = document.getElementById("navnView");
+    const navnInput = document.getElementById("navnInput");
+    const epostView = document.getElementById("epostView");
+    const epostInput = document.getElementById("epostInput");
+    const sletteKnapp = document.getElementById("sletteKnapp");
     
-    // Foreldrekontroll logikk
-    if (p.isKids) {
-        document.getElementById("foreldreKontrollSeksjon").classList.remove("hidden");
-        currentLimitView.innerText = `Maks ${p.maksAldersgrense || "12"} år`;
-    }
-}
+    const foreldreKontrollSeksjon = document.getElementById("foreldreKontrollSeksjon");
+    const parentLockPanel = document.getElementById("parentLockPanel");
+    const parentSettingsPanel = document.getElementById("parentSettingsPanel");
+    const ageRestrictionSelect = document.getElementById("ageRestrictionSelect");
+    const currentLimitView = document.getElementById("currentLimitView");
 
-// === SIKKERHET: PIN-KONTROLL ===
-window.laasOppForeldreKontroll = () => {
-    const pinInput = prompt("Skriv inn din personlige PIN-kode:");
-    if (pinInput === brukerPin) {
+    let profiler = [];
+    let globalEpost = ""; 
+    let docRef = null;
+
+    // MELLOMLAGRING (Forhindrer hvit skjerm og unødvendig venting)
+    const cachedProfiles = localStorage.getItem("watch_nordic_profiles_cache");
+    const cachedEmail = localStorage.getItem("watch_nordic_email_cache");
+
+    if (cachedProfiles) {
+      try {
+        profiler = JSON.parse(cachedProfiles);
+        if (cachedEmail) globalEpost = cachedEmail;
+        if (profiler[aktivProfilIndex]) {
+          byggProfilgrensesnitt();
+        }
+      } catch (e) {
+        console.error("Kunne ikke lese mellomlagret data:", e);
+      }
+    }
+
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        docRef = doc(db, "users", user.uid);
+        // Bruk e-post direkte fra auth-sesjonen hvis tilgjengelig for å spare tid
+        if (!globalEpost && user.email) {
+          globalEpost = user.email;
+          epostView.innerText = globalEpost;
+        }
+        hentKontodata();
+      } else {
+        window.location.href = "index.html";
+      }
+    });
+
+    // Event listeners
+    document.getElementById("navHovedsideBtn").addEventListener("click", () => {
+      window.location.href = `hvem-ser-på.html?index=${aktivProfilIndex}`;
+    });
+    document.getElementById("navLoggUtBtn").addEventListener("click", loggUt);
+    document.getElementById("avatarContainer").addEventListener("click", velgProfilbildeSide);
+    document.getElementById("endreBildeSideBtn").addEventListener("click", velgProfilbildeSide);
+    sletteKnapp.addEventListener("click", haandterSletting);
+    
+    document.getElementById("endreNavnKnapp").addEventListener("click", endreNavn);
+    document.getElementById("lagreNavnBtn").addEventListener("click", lagreNavn);
+    document.getElementById("avbrytNavnBtn").addEventListener("click", avbrytNavn);
+
+    document.getElementById("endreEpostKnapp").addEventListener("click", endreEpost);
+    document.getElementById("lagreEpostBtn").addEventListener("click", lagreEpost);
+    document.getElementById("avbrytEpostBtn").addEventListener("click", avbrytEpost);
+
+    document.getElementById("laasOppForeldreKontrollBtn").addEventListener("click", laasOppForeldreKontroll);
+    ageRestrictionSelect.addEventListener("change", lagreAldersgrense);
+
+    async function hentKontodata() {
+      try {
+        const docSnap = await getDoc(docRef);
+        
+        // OPTIMALISERING: Hvis dokumentet ikke finnes i det hele tatt (Helt ny bruker)
+        if (!docSnap.exists()) {
+          profiler = [{
+            navn: "Hovedprofil",
+            bilde: "https://static.wixstatic.com/media/fd2fb2_39376e4ee55b460ab7a3ebbfcf35fef7~mv2.png",
+            pin: null,
+            isKids: false
+          }];
+          await setDoc(docRef, { profiler: profiler, epost: globalEpost }, { merge: true });
+          localStorage.setItem("watch_nordic_profiles_cache", JSON.stringify(profiler));
+          localStorage.setItem("watch_nordic_email_cache", globalEpost);
+        } else {
+          // Dokumentet finnes, hent data
+          const data = docSnap.data();
+          profiler = data.profiler || [];
+          if (data.epost) globalEpost = data.epost;
+          
+          localStorage.setItem("watch_nordic_profiles_cache", JSON.stringify(profiler));
+          localStorage.setItem("watch_nordic_email_cache", globalEpost);
+        }
+
+        if (!profiler[aktivProfilIndex]) {
+          window.location.href = "konto.html?index=0";
+          return;
+        }
+
+        byggProfilgrensesnitt();
+      } catch (error) {
+        console.error("Feil under lasting av kontodata:", error);
+      }
+    }
+
+    function byggProfilgrensesnitt() {
+      const gjeldendeProfil = profiler[aktivProfilIndex];
+      navnDisplay.innerText = gjeldendeProfil.navn;
+      navnView.innerText = gjeldendeProfil.navn;
+      epostView.innerText = globalEpost || "Ingen registrert";
+      document.getElementById("profilbilde").src = gjeldendeProfil.bilde || "https://static.wixstatic.com/media/fd2fb2_39376e4ee55b460ab7a3ebbfcf35fef7~mv2.png";
+
+      if (gjeldendeProfil.isKids) {
+        document.getElementById("sidebarActions").classList.add("hidden");
+        document.getElementById("avatarContainer").style.pointerEvents = "none";
+        document.getElementById("endreNavnKnapp").classList.add("hidden");
+        document.getElementById("endreEpostKnapp").classList.add("hidden");
+        foreldreKontrollSeksjon.classList.remove("hidden");
+        oppdaterMaksGrenseTekst();
+      } else {
+        document.getElementById("sidebarActions").classList.remove("hidden");
+        document.getElementById("avatarContainer").style.pointerEvents = "auto";
+        document.getElementById("endreNavnKnapp").classList.remove("hidden");
+        document.getElementById("endreEpostKnapp").classList.remove("hidden");
+        foreldreKontrollSeksjon.classList.add("hidden");
+
+        if (aktivProfilIndex !== 0) {
+          sletteKnapp.innerHTML = `<i class="fa-solid fa-user-xmark"></i> Slett profil`;
+        } else {
+          sletteKnapp.innerHTML = `<i class="fa-solid fa-trash-can"></i> Slett hele kontoen`;
+        }
+      }
+    }
+
+    function oppdaterMaksGrenseTekst() {
+      const gjeldendeProfil = profiler[aktivProfilIndex];
+      if (!gjeldendeProfil) return;
+      const grense = gjeldendeProfil.maksAldersgrense || "12";
+      currentLimitView.innerText = grense === "A" ? "Tillater kun innhold for Alle (A)" : `Maks ${grense} år`;
+    }
+
+    function velgProfilbildeSide() {
+      if (profiler[aktivProfilIndex]?.isKids) return;
+      window.location.href = `VelgProfilbilde.html?index=${aktivProfilIndex}`;
+    }
+
+    function endreNavn() {
+      if (profiler[aktivProfilIndex]?.isKids) return;
+      navnInput.value = navnView.innerText;
+      navnView.classList.add("hidden");
+      document.getElementById("navnEditField").classList.remove("hidden");
+      document.getElementById("endreNavnKnapp").classList.add("hidden");
+    }
+
+    async function lagreNavn() {
+      const nyttNavn = navnInput.value.trim();
+      if (!nyttNavn) return alert("Navnet kan ikke være tomt!");
+      
+      // OPTIMALISERING: Ikke skriv til databasen hvis navnet er uendret
+      if (nyttNavn === profiler[aktivProfilIndex].navn) {
+        avbrytNavn();
+        return;
+      }
+
+      profiler[aktivProfilIndex].navn = nyttNavn;
+      await setDoc(docRef, { profiler: profiler }, { merge: true });
+      localStorage.setItem("watch_nordic_profiles_cache", JSON.stringify(profiler));
+
+      navnView.innerText = nyttNavn;
+      navnDisplay.innerText = nyttNavn;
+      avbrytNavn();
+    }
+
+    function avbrytNavn() {
+      navnView.classList.remove("hidden");
+      document.getElementById("navnEditField").classList.add("hidden");
+      document.getElementById("endreNavnKnapp").classList.remove("hidden");
+    }
+
+    function endreEpost() {
+      if (profiler[aktivProfilIndex]?.isKids) return;
+      epostInput.value = epostView.innerText;
+      epostView.classList.add("hidden");
+      document.getElementById("epostEditField").classList.remove("hidden");
+      document.getElementById("endreEpostKnapp").classList.add("hidden");
+    }
+
+    async function lagreEpost() {
+      const nyEpost = epostInput.value.trim().toLowerCase();
+      if (!nyEpost) return alert("E-posten kan ikke være tom!");
+      if (nyEpost === globalEpost) { avbrytEpost(); return; }
+
+      try {
+        if (auth.currentUser) {
+          await updateEmail(auth.currentUser, nyEpost);
+        }
+        
+        // OPTIMALISERING: setDoc kjører KUN hvis updateEmail i Firebase Auth var vellykket!
+        globalEpost = nyEpost;
+        await setDoc(docRef, { epost: globalEpost }, { merge: true });
+        localStorage.setItem("watch_nordic_email_cache", globalEpost);
+
+        epostView.innerText = nyEpost;
+        alert("E-postadresse ble oppdatert!");
+        avbrytEpost();
+      } catch (error) {
+        console.error(error);
+        if (error.code === "auth/requires-recent-login") {
+          alert("Av sikkerhetsmessige årsaker må du logge ut og inn igjen for å bekrefte identiteten din før du endrer e-post.");
+        } else {
+          alert("Kunne ikke endre e-post: " + error.message);
+        }
+      }
+    }
+
+    function avbrytEpost() {
+      epostView.classList.remove("hidden");
+      document.getElementById("epostEditField").classList.add("hidden");
+      document.getElementById("endreEpostKnapp").classList.remove("hidden");
+    }
+
+    async function loggUt() {
+      try {
+        localStorage.removeItem("watch_nordic_profiles_cache");
+        localStorage.removeItem("watch_nordic_email_cache");
+        await signOut(auth);
+        window.location.href = "index.html";
+      } catch (error) {
+        console.error("Feil under utlogging:", error);
+      }
+    }
+
+    async function haandterSletting() {
+      if (profiler[aktivProfilIndex]?.isKids) return;
+
+      if (aktivProfilIndex !== 0) {
+        if (!confirm(`Er du sikker på at du vil slette profilen "${profiler[aktivProfilIndex].navn}"?`)) return;
+        profiler.splice(aktivProfilIndex, 1);
+        await setDoc(docRef, { profiler: profiler }, { merge: true });
+        localStorage.setItem("watch_nordic_profiles_cache", JSON.stringify(profiler));
+        window.location.href = "konto.html?index=0";
+      } else {
+        if (!confirm("Vennligst bekreft: Vil du slette hele kontoen og alle underprofiler permanent?")) return;
+        await deleteDoc(docRef);
+        loggUt(); 
+      }
+    }
+
+    function laasOppForeldreKontroll() {
+      const pinInput = prompt("Skriv inn PIN-kode for foreldrekontroll (Standard: 1234):");
+      if (pinInput === FORELDRE_PIN) {
         parentLockPanel.classList.add("hidden");
         parentSettingsPanel.classList.remove("hidden");
-    } else {
-        alert("Feil PIN-kode!");
+        ageRestrictionSelect.value = profiler[aktivProfilIndex].maksAldersgrense || "12";
+      } else {
+        alert("Feil PIN-kode! Kun foreldre har tilgang.");
+      }
     }
-};
 
-// === ØKONOMISK SIKKERHET: KUN SKRIV VED ENDRING ===
-async function lagreAldersgrense() {
-    const nyGrense = ageRestrictionSelect.value;
-    if (nyGrense === profiler[aktivProfilIndex].maksAldersgrense) return;
+    async function lagreAldersgrense() {
+      const valgtGrense = ageRestrictionSelect.value;
+      
+      // OPTIMALISERING: Avbryt hvis grensen ikke er endret
+      if (valgtGrense === profiler[aktivProfilIndex].maksAldersgrense) return;
 
-    profiler[aktivProfilIndex].maksAldersgrense = nyGrense;
-    
-    // Skriver kun til Firestore hvis verdien faktisk er endret
-    await setDoc(docRef, { profiler: profiler }, { merge: true });
-    localStorage.setItem("watch_nordic_profiles_cache", JSON.stringify(profiler));
-    alert("Aldersgrense oppdatert!");
-}
+      profiler[aktivProfilIndex].maksAldersgrense = valgtGrense;
 
-async function lagreNavn() {
-    const nyttNavn = navnInput.value.trim();
-    if (!nyttNavn || nyttNavn === profiler[aktivProfilIndex].navn) return avbrytNavn();
-
-    profiler[aktivProfilIndex].navn = nyttNavn;
-    await setDoc(docRef, { profiler: profiler }, { merge: true });
-    localStorage.setItem("watch_nordic_profiles_cache", JSON.stringify(profiler));
-    location.reload();
-}
-
-async function loggUt() {
-    localStorage.clear(); // Tømmer lokal cache ved utlogging
-    await signOut(auth);
-    window.location.href = "index.html";
-}
-
-// Eksport av funksjoner til HTML-knapper
-window.loggUt = loggUt;
-window.lagreAldersgrense = lagreAldersgrense;
-window.lagreNavn = lagreNavn;
-</script>
+      await setDoc(docRef, { profiler: profiler }, { merge: true });
+      localStorage.setItem("watch_nordic_profiles_cache", JSON.stringify(profiler));
+      oppdaterMaksGrenseTekst();
+    }
+  </script>
 </body>
 </html>
