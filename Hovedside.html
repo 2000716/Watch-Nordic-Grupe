@@ -1264,7 +1264,7 @@ main {
   let registrertBruker = null;
   const aktivProfil = localStorage.getItem("aktivProfil") || "Hovedprofil";
 
-  // ==================== REIDREKTERINGSVAKT (FIREBASE SIKKERHET) ==================== //
+  // ==================== REIDREKTERINGSVAKT & PROFIL-CACHE ==================== //
   onAuthStateChanged(auth, async (user) => {
     if (!user) {
       const gjeldendeSide = window.location.pathname.split("/").pop();
@@ -1279,44 +1279,62 @@ main {
 
       const aktivProfilIndex = parseInt(localStorage.getItem("aktivProfilIndex")) || 0;
       
-      try {
-        const docRef = doc(db, "users", user.uid);
-        const docSnap = await getDoc(docRef);
-        
-        if (docSnap.exists()) {
-          const profiler = docSnap.data().profiler || [];
-          const gjeldendeProfil = profiler[aktivProfilIndex];
-          
-          if (gjeldendeProfil) {
-            const bildeUrl = gjeldendeProfil.bilde || "";
-            const profilNavn = gjeldendeProfil.navn || "";
-            const nyIsKids = gjeldendeProfil.isKids === true;
-            const nyMaks = gjeldendeProfil.maksAldersgrense || "12";
+      // OPTIMALISERING: Prøv å bruke cachen fra innloggingen først!
+      const cachedeProfilerRaw = localStorage.getItem("watch_nordic_profiles_cache");
+      let profiler = [];
 
-            if (bildeUrl) {
-              const menyProfil = document.getElementById("menyProfilbilde");
-              if (menyProfil) menyProfil.src = bildeUrl;
-              const headerProfil = document.getElementById("headerProfilbilde");
-              if (headerProfil) headerProfil.src = bildeUrl;
-              localStorage.setItem("profilbilde", bildeUrl);
-            }
-
-            if (profilNavn) {
-              localStorage.setItem("profilnavn", profilNavn);
-            }
-
-            const gammelIsKids = localStorage.getItem("isKids") === "true";
-            const gammelMaks = localStorage.getItem("maksAldersgrense") || "12";
-
-            if (gammelIsKids !== nyIsKids || gammelMaks !== nyMaks) {
-              localStorage.setItem("isKids", nyIsKids ? "true" : "false");
-              localStorage.setItem("maksAldersgrense", nyMaks);
-              window.location.reload(); 
-            }
-          }
+      if (cachedeProfilerRaw) {
+        try {
+          profiler = JSON.parse(cachedeProfilerRaw);
+        } catch(e) {
+          console.error("Feil ved parsing av profil-cache");
         }
-      } catch (error) {
-        console.error("Feil ved synkronisering:", error);
+      }
+
+      // Hvis cachen er tom, henter vi fra Firestore som en fallback (sikkerhetsnett)
+      if (profiler.length === 0) {
+        try {
+          const docRef = doc(db, "users", user.uid);
+          const docSnap = await getDoc(docRef);
+          if (docSnap.exists()) {
+            profiler = docSnap.data().profiler || [];
+            localStorage.setItem("watch_nordic_profiles_cache", JSON.stringify(profiler));
+          }
+        } catch (error) {
+          console.error("Feil ved fallback-henting av profiler:", error);
+        }
+      }
+      
+      // Håndter profilbytte og synkronisering lokalt uten unødvendige databasekall
+      const gjeldendeProfil = profiler[aktivProfilIndex];
+      if (gjeldendeProfil) {
+        const bildeUrl = gjeldendeProfil.bilde || "";
+        const profilNavn = gjeldendeProfil.navn || "";
+        const nyIsKids = gjeldendeProfil.isKids === true;
+        const nyMaks = gjeldendeProfil.maksAldersgrense || "12";
+
+        if (bildeUrl) {
+          const menyProfil = document.getElementById("menyProfilbilde");
+          if (menyProfil) menyProfil.src = bildeUrl;
+          const headerProfil = document.getElementById("headerProfilbilde");
+          if (headerProfil) headerProfil.src = bildeUrl;
+          localStorage.setItem("profilbilde", bildeUrl);
+        }
+
+        if (profilNavn) {
+          localStorage.setItem("profilnavn", profilNavn);
+          localStorage.setItem("aktivProfil", profilNavn); // Holder 'aktivProfil'-variabelen din synkronisert
+        }
+
+        const gammelIsKids = localStorage.getItem("isKids") === "true";
+        const gammelMaks = localStorage.getItem("maksAldersgrense") || "12";
+
+        // Bare reload siden hvis profiltypen faktisk har endret seg (for å oppdatere aldersfilteret)
+        if (gammelIsKids !== nyIsKids || gammelMaks !== nyMaks) {
+          localStorage.setItem("isKids", nyIsKids ? "true" : "false");
+          localStorage.setItem("maksAldersgrense", nyMaks);
+          window.location.reload(); 
+        }
       }
     }
   });
@@ -1692,98 +1710,98 @@ main {
     });
   }
 
-// ==================== SKYLAGRET (FIREBASE) FORTSETT Å SE ==================== //
-async function renderContinueWatching() {
-  const section = document.getElementById("fortsett-section");
-  const gallery = document.getElementById("fortsett-galleri");
-  if (!section || !gallery || !registrertBruker) return;
-  
-  gallery.innerHTML = "";
+  // ==================== SKYLAGRET (FIREBASE) FORTSETT Å SE ==================== //
+  async function renderContinueWatching() {
+    const section = document.getElementById("fortsett-section");
+    const gallery = document.getElementById("fortsett-galleri");
+    if (!section || !gallery || !registrertBruker) return;
+    
+    gallery.innerHTML = "";
 
-  try {
-    const fremdriftRef = collection(db, "brukerdata", registrertBruker.uid, "profiler", aktivProfil, "fremdrift");
-    const q = query(fremdriftRef, where("status", "==", "paabegynt"));
-    const querySnapshot = await getDocs(q);
+    try {
+      const fremdriftRef = collection(db, "brukerdata", registrertBruker.uid, "profiler", aktivProfil, "fremdrift");
+      const q = query(fremdriftRef, where("status", "==", "paabegynt"));
+      const querySnapshot = await getDocs(q);
 
-    if (querySnapshot.empty) {
-      section.style.display = "none";
-      return;
-    }
-
-    let fantInnhold = false;
-
-    querySnapshot.forEach((docSnap) => {
-      const dbData = docSnap.data();
-      const filmId = docSnap.id; 
-      
-      // >>> NYTT: Hvis filmen har over 95% fremdrift, hopp over den (regnes som ferdig) <<<
-      const progressVerdi = dbData.percent || 0;
-      if (progressVerdi > 95) {
-        return; 
+      if (querySnapshot.empty) {
+        section.style.display = "none";
+        return;
       }
-      
-      let metadataMatch = null;
-      let urlParamNavn = "";
-      let spillType = "film";
 
-      if (filmId.startsWith("film-")) {
-        urlParamNavn = filmId.replace("film-", "");
-        if (typeof filmer !== "undefined" && filmer[urlParamNavn]) {
-          metadataMatch = filmer[urlParamNavn];
-          spillType = "film";
+      let fantInnhold = false;
+
+      querySnapshot.forEach((docSnap) => {
+        const dbData = docSnap.data();
+        const filmId = docSnap.id; 
+        
+        const progressVerdi = dbData.percent || 0;
+        if (progressVerdi > 95) {
+          return; 
         }
-      } else if (filmId.startsWith("serie-")) {
-        const deler = filmId.split("-"); 
-        urlParamNavn = deler[1];
-        if (typeof serier !== "undefined" && serier[urlParamNavn]) {
-          metadataMatch = serier[urlParamNavn];
-          spillType = "serie";
+        
+        let metadataMatch = null;
+        let urlParamNavn = "";
+        let spillType = "film";
+
+        if (filmId.startsWith("film-")) {
+          urlParamNavn = filmId.replace("film-", "");
+          if (typeof filmer !== "undefined" && filmer[urlParamNavn]) {
+            metadataMatch = filmer[urlParamNavn];
+            spillType = "film";
+          }
+        } else if (filmId.startsWith("serie-")) {
+          const deler = filmId.split("-"); 
+          urlParamNavn = deler[1];
+          if (typeof serier !== "undefined" && serier[urlParamNavn]) {
+            metadataMatch = serier[urlParamNavn];
+            spillType = "serie";
+          }
         }
-      }
 
-      if (!metadataMatch) return;
-      if (erInnloggetSomBarn && (!erEgnetForBarn(metadataMatch) || !sjekkAldersgrense(metadataMatch))) return;
+        if (!metadataMatch) return;
+        if (erInnloggetSomBarn && (!erEgnetForBarn(metadataMatch) || !sjekkAldersgrense(metadataMatch))) return;
 
-      fantInnhold = true;
+        fantInnhold = true;
 
-      let hrefUrl = `film.html?navn=${urlParamNavn}`;
-      if (spillType === "serie") {
-        const deler = filmId.split("-");
-        const s = deler[2].replace("s", "");
-        const e = deler[3].replace("e", "");
-        hrefUrl = `film-mal.html?navn=${urlParamNavn}&sesong=${s}&episode=${e}`;
-      }
+        let hrefUrl = `film.html?navn=${urlParamNavn}`;
+        if (spillType === "serie") {
+          const deler = filmId.split("-");
+          const s = deler[2].replace("s", "");
+          const e = deler[3].replace("e", "");
+          hrefUrl = `film-mal.html?navn=${urlParamNavn}&sesong=${s}&episode=${e}`;
+        }
 
-      const link = document.createElement("a");
-      link.href = hrefUrl;
-      link.classList.add("gallery-item", "image-with-progress");
-      link.innerHTML = `
-        <img src="${metadataMatch.poster || metadataMatch.bilde}" alt="${dbData.tittel || metadataMatch.tittel}">
-        <div class="progress-container" style="background: rgba(255,255,255,0.2); width: 100%; height: 6px; position: absolute; bottom: 0; left: 0; z-index: 2;">
-          <div class="progress-bar" style="width: ${progressVerdi}%; height: 100%; background: #00FFCC;"></div>
-        </div>
-        <div class="image-overlay">
-          <div class="overlay-content">
-            <div class="overlay-title">${metadataMatch.tittel}</div>
-            <div class="overlay-meta">${spillType === "serie" ? `S${filmId.split("-")[2].replace("s","")}E${filmId.split("-")[3].replace("e","")}` : ""}</div>
+        const link = document.createElement("a");
+        link.href = hrefUrl;
+        link.classList.add("gallery-item", "image-with-progress");
+        link.innerHTML = `
+          <img src="${metadataMatch.poster || metadataMatch.bilde}" alt="${dbData.tittel || metadataMatch.tittel}">
+          <div class="progress-container" style="background: rgba(255,255,255,0.2); width: 100%; height: 6px; position: absolute; bottom: 0; left: 0; z-index: 2;">
+            <div class="progress-bar" style="width: ${progressVerdi}%; height: 100%; background: #00FFCC;"></div>
           </div>
-        </div>
-      `;
-      gallery.appendChild(link);
-    });
+          <div class="image-overlay">
+            <div class="overlay-content">
+              <div class="overlay-title">${metadataMatch.tittel}</div>
+              <div class="overlay-meta">${spillType === "serie" ? `S${filmId.split("-")[2].replace("s","")}E${filmId.split("-")[3].replace("e","")}` : ""}</div>
+            </div>
+          </div>
+        `;
+        gallery.appendChild(link);
+      });
 
-    if (fantInnhold) {
-      section.style.display = "block";
-      if (typeof oppdaterAlleGalleripiler === "function") oppdaterAlleGalleripiler();
-    } else {
+      if (fantInnhold) {
+        section.style.display = "block";
+        if (typeof oppdaterAlleGalleripiler === "function") oppdaterAlleGalleripiler();
+      } else {
+        section.style.display = "none";
+      }
+
+    } catch (error) {
+      console.error("Feil ved innlasting av sky-fremdrift:", error);
       section.style.display = "none";
     }
-
-  } catch (error) {
-    console.error("Feil ved innlasting av sky-fremdrift:", error);
-    section.style.display = "none";
   }
-}
+
   // ==================== INIT ==================== //
   document.addEventListener("DOMContentLoaded", () => {
     if (typeof filmer === "undefined") {
