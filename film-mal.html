@@ -764,12 +764,12 @@ video::cue {
 }
 
 
-
 </style>
 </head>
 <body>
   <div class="container" id="container">
     
+    <!-- VIDEO CONTAINER (KRYMPER TIL ØVERST HØYRE VED AUTOPLAY) -->
     <div id="videoWrapper" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; transition: all 0.4s ease-in-out; z-index: 1;">
       <video id="video" preload="metadata" style="width: 100%; height: 100%; object-fit: contain;">
         <source src="" type="video/mp4">
@@ -781,6 +781,7 @@ video::cue {
     <div class="subtitle-overlay" id="subtitleOverlay" style="z-index: 2;"></div>
     <div class="loading-spinner" id="loadingSpinner" style="z-index: 3;"></div>
 
+    <!-- CUSTOMLAGDE KNAPPER -->
     <button id="skipIntroBtn" style="
       position: absolute;
       right: 30px;
@@ -823,6 +824,7 @@ video::cue {
       ⏭️ Neste episode
     </button>
 
+    <!-- NETFLIX AUTOPLAY BAKGRUNN -->
     <div id="autoplayBackground" style="
       position: absolute;
       top: 0; left: 0; width: 100%; height: 100%;
@@ -831,10 +833,12 @@ video::cue {
       z-index: 3; pointer-events: none;
     "></div>
 
+    <!-- MIDTSTILT PÅ VENSTRE SIDE: AUTOPLAY OVERLAY -->
     <div id="autoplayOverlay" style="
       display: none; 
       position: absolute; 
-      bottom: 12%; 
+      top: 50%;
+      transform: translateY(-50%);
       left: 6%; 
       width: 450px;
       background: rgba(0, 0, 0, 0.75);
@@ -846,19 +850,20 @@ video::cue {
       z-index: 5; 
       color: white; 
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-      padding: 25px;
+      padding: 30px;
       box-sizing: border-box;
     ">
-      <span style="text-transform: uppercase; color: #0fddcb; font-size: 11px; font-weight: bold; letter-spacing: 2px; display: block; margin-bottom: 6px;">Neste episode starter om <span id="autoplayCountdown">9</span>s</span>
-      <h3 id="nextEpisodeTitle" style="margin: 0 0 6px 0; font-size: 20px; font-weight: bold; color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Neste Episode</h3>
-      <p id="nextEpisodeDesc" style="margin: 0 0 20px 0; font-size: 13px; color: #ccc; line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">Laster beskrivelse...</p>
+      <span style="text-transform: uppercase; color: #0fddcb; font-size: 11px; font-weight: bold; letter-spacing: 2px; display: block; margin-bottom: 8px;">Neste episode starter om <span id="autoplayCountdown">9</span>s</span>
+      <h3 id="nextEpisodeTitle" style="margin: 0 0 10px 0; font-size: 24px; font-weight: bold; color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Neste Episode</h3>
+      <p id="nextEpisodeDesc" style="margin: 0 0 25px 0; font-size: 14px; color: #ccc; line-height: 1.5; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;">Laster beskrivelse...</p>
       
       <div style="display: flex; gap: 12px;">
-        <button id="autoplayPlayNextBtn" style="padding: 10px 24px; background: #fff; color: #000; border: none; cursor: pointer; border-radius: 4px; font-size: 14px; font-weight: bold; transition: opacity 0.2s;" onmouseover="this.style.opacity='0.8'" onmouseout="this.style.opacity='1'">Spill nå</button>
-        <button id="autoplayCancelBtn" style="padding: 10px 24px; background: rgba(255,255,255,0.1); color: white; border: 1px solid rgba(255,255,255,0.2); cursor: pointer; border-radius: 4px; font-size: 14px; font-weight: bold; transition: background 0.2s;" onmouseover="this.style.background='rgba(255,255,255,0.2)'" onmouseout="this.style.background='rgba(255,255,255,0.1)'">Avbryt</button>
+        <button id="autoplayPlayNextBtn" style="padding: 12px 28px; background: #fff; color: #000; border: none; cursor: pointer; border-radius: 4px; font-size: 14px; font-weight: bold; transition: opacity 0.2s;" onmouseover="this.style.opacity='0.8'" onmouseout="this.style.opacity='1'">Spill nå</button>
+        <button id="autoplayCancelBtn" style="padding: 12px 28px; background: rgba(255,255,255,0.1); color: white; border: 1px solid rgba(255,255,255,0.2); cursor: pointer; border-radius: 4px; font-size: 14px; font-weight: bold; transition: background 0.2s;" onmouseover="this.style.background='rgba(255,255,255,0.2)'" onmouseout="this.style.background='rgba(255,255,255,0.1)'">Avbryt</button>
       </div>
     </div>
 
+    <!-- RESUME OVERLAY -->
     <div id="resumeOverlay" class="resume-overlay" style="z-index: 15;">
       <div class="resume-box">
         <p>Vil du fortsette der du slapp?</p>
@@ -869,11 +874,13 @@ video::cue {
       </div>
     </div>
 
+    <!-- UI / KONTROLLER (MED HVITE SVG-IKONER) -->
     <div class="ui" id="ui" style="z-index: 20;">
       
       <div class="top-bar">
-        <a href="#" class="back-button" id="backButton">
-          <img src="https://static.wixstatic.com/media/fd2fb2_59ea5a2a1ff34303a71a369537dd62c3~mv2.png" alt="Back">
+        <a href="#" class="back-button" id="backButton" style="display: inline-flex; align-items: center; justify-content: center; width: 40px; height: 40px;">
+          <!-- Hvit Tilbake-Pil -->
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
         </a>
         <div class="movie-title">Laster tittel...</div>
       </div>
@@ -897,25 +904,37 @@ video::cue {
 
         <div class="center-controls">
           <button class="btn" id="rewindBtn">
-            <img src="https://static.wixstatic.com/media/fd2fb2_a6f7229c8e994a75a12d5849e71156a9~mv2.png" alt="Rewind">
+            <!-- Hvit Spol Tilbake Ikon -->
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 16.1A5 5 0 0 1 5.9 7l4.2 3.1"></path><path d="M11 20H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v13a2 2 0 0 1-2 2h-5"></path><polygon points="11 5 11 11 5 11"></polygon></svg>
           </button>
           <button class="btn" id="playPauseBtn">
-            <img id="playIcon" src="https://static.wixstatic.com/media/fd2fb2_f6f25f56b00e49eea8dc4f811b50bb5c~mv2.png" alt="Play/Pause">
+            <!-- Hvit Play/Pause Container -->
+            <span id="playIconContainer" style="display: inline-flex; align-items: center; justify-content: center;">
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="white"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+            </span>
           </button>
           <button class="btn" id="forwardBtn">
-            <img src="https://static.wixstatic.com/media/fd2fb2_08262621a72944c498e8124d461ce786~mv2.png" alt="Forward">
+            <!-- Hvit Spol Frem Ikon -->
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.1A5 5 0 0 0 18.1 7l-4.2 3.1"></path><path d="M13 20h7a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2h5"></path><polygon points="13 5 13 11 19 11"></polygon></svg>
           </button>
         </div>
 
         <div class="right-controls">
           <button class="btn" id="muteBtn">
-            <img id="muteIcon" src="https://static.wixstatic.com/media/fd2fb2_5c4fab8430e94d2381fc487b1654191d~mv2.png" alt="Mute">
+            <span id="muteIconContainer" style="display: inline-flex; align-items: center; justify-content: center;">
+              <!-- Hvit Lyd På Ikon -->
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg>
+            </span>
           </button>
           <button class="btn" id="captionsBtn">
-            <img src="https://static.wixstatic.com/media/fd2fb2_25072ee44a734507912f0b65f9fc9b0e~mv2.png" alt="Captions">
+            <!-- Hvit Undertekst Ikon -->
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="7" y1="15" x2="11" y2="15"></line><line x1="13" y1="15" x2="17" y2="15"></line><line x1="7" y1="11" x2="17" y2="11"></line></svg>
           </button>
           <button class="btn" id="fullscreenBtn" title="Fullskjerm">
-            <img src="https://static.wixstatic.com/media/fd2fb2_3fa37682b3b34c04a2cd08ffcde2763a~mv2.png" alt="Fullscreen">
+            <span id="fullscreenIconContainer" style="display: inline-flex; align-items: center; justify-content: center;">
+              <!-- Hvit Fullskjerm Ikon -->
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path></svg>
+            </span>
           </button>
         </div>
       </div>
@@ -956,7 +975,7 @@ video::cue {
   let filmId = "";
   let tilbakeUrl = "";
   let isSerie = false;
-  let nesteEpisodeData = null; // Lagrer metadata til autoplay
+  let nesteEpisodeData = null; 
 
   /* ================= RESOLVE MEDIA ================= */
   if (navn && typeof filmer !== 'undefined' && filmer[navn] && !sesong && !episode) {
@@ -988,7 +1007,8 @@ video::cue {
 
   const backButton = document.getElementById("backButton");
   if (backButton) {
-    backButton.addEventListener("click", () => {
+    backButton.addEventListener("click", (e) => {
+      e.preventDefault();
       window.location.href = tilbakeUrl;
     });
   }
@@ -1003,9 +1023,9 @@ video::cue {
   /* ================= DOM ELEMENTS ================= */
   const ui = document.getElementById("ui");
   const playBtn = document.getElementById("playPauseBtn");
-  const playIcon = document.getElementById("playIcon");
+  const playIconContainer = document.getElementById("playIconContainer");
   const muteBtn = document.getElementById("muteBtn");
-  const muteIcon = document.getElementById("muteIcon");
+  const muteIconContainer = document.getElementById("muteIconContainer");
   const rewindBtn = document.getElementById("rewindBtn");
   const forwardBtn = document.getElementById("forwardBtn");
   const progress = document.getElementById("progress");
@@ -1015,6 +1035,7 @@ video::cue {
   const captionsBtn = document.getElementById("captionsBtn");
   const captionMenu = document.getElementById("captionMenu");
   const fullscreenBtn = document.getElementById("fullscreenBtn");
+  const fullscreenIconContainer = document.getElementById("fullscreenIconContainer");
   const container = document.getElementById("container");
   const loadingSpinner = document.getElementById("loadingSpinner");
   const previewBox = document.getElementById("previewBox");
@@ -1069,14 +1090,7 @@ video::cue {
   }
   const nesteEpisodeUrl = hentNesteEpisodeUrl();
 
-  // Vis eller skjul den dedikerte "Neste episode"-knappen i UI basert på om det er en serie
-  if (skipOutroBtn) {
-    if (isSerie && nesteEpisodeUrl) {
-      skipOutroBtn.style.display = "none"; // Holdes skjult til outro treffes
-    } else {
-      skipOutroBtn.style.display = "none";
-    }
-  }
+  if (skipOutroBtn) skipOutroBtn.style.display = "none";
 
   function formatTime(time) {
     if (isNaN(time)) return "0:00";
@@ -1115,19 +1129,25 @@ video::cue {
   });
 
   video.addEventListener('play', () => { 
-    playIcon.src = "https://static.wixstatic.com/media/fd2fb2_f4658d43d3204506948e5c5ab65461d7~mv2.png"; 
+    // Sett hvit pause-knapp (to stolper)
+    playIconContainer.innerHTML = `<svg width="32" height="32" viewBox="0 0 24 24" fill="white"><rect x="6" y="4" width="4" height="16"></rect><rect x="14" y="4" width="4" height="16"></rect></svg>`;
     showUI(); 
   });
   video.addEventListener('pause', () => { 
-    playIcon.src = "https://static.wixstatic.com/media/fd2fb2_f6f25f56b00e49eea8dc4f811b50bb5c~mv2.png"; 
+    // Sett hvit play-knapp (trekant)
+    playIconContainer.innerHTML = `<svg width="32" height="32" viewBox="0 0 24 24" fill="white"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>`;
     showUI(); 
   });
 
   muteBtn.addEventListener('click', () => {
     video.muted = !video.muted;
-    muteIcon.src = video.muted
-      ? "https://static.wixstatic.com/media/fd2fb2_e7e7e77a59964f018d9e2d4605a047db~mv2.png"
-      : "https://static.wixstatic.com/media/fd2fb2_5c4fab8430e94d2381fc487b1654191d~mv2.png";
+    if (video.muted) {
+      // Hvit Mute / Lyd Av ikon
+      muteIconContainer.innerHTML = `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><line x1="23" y1="9" x2="17" y2="15"></line><line x1="17" y1="9" x2="23" y2="15"></line></svg>`;
+    } else {
+      // Hvit Lyd På ikon
+      muteIconContainer.innerHTML = `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg>`;
+    }
   });
 
   rewindBtn.addEventListener('click', () => video.currentTime = Math.max(0, video.currentTime - 10));
@@ -1219,7 +1239,13 @@ video::cue {
 
   fullscreenBtn.addEventListener('click', () => { if (!document.fullscreenElement) { container.requestFullscreen(); } else { document.exitFullscreen(); } });
   document.addEventListener('fullscreenchange', () => {
-    fullscreenBtn.querySelector('img').src = document.fullscreenElement ? "https://static.wixstatic.com/media/fd2fb2_c9b139f2774c4bf7b32c7271fd6c1c1a~mv2.png" : "https://static.wixstatic.com/media/fd2fb2_3fa37682b3b34c04a2cd08ffcde2763a~mv2.png";
+    if (document.fullscreenElement) {
+      // Hvit krymp/exit fullskjerm-ikon
+      fullscreenIconContainer.innerHTML = `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 14h6v6m10-6h-6v6M4 10h6V4m10 6h-6V4"></path></svg>`;
+    } else {
+      // Hvit åpne fullskjerm-ikon
+      fullscreenIconContainer.innerHTML = `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path></svg>`;
+    }
   });
 
   video.addEventListener('waiting', () => loadingSpinner.style.display = 'block');
@@ -1377,7 +1403,6 @@ video::cue {
     if (!isSerie) return;
     const tid = video.currentTime;
 
-    // Intro Skipping
     if (film.introStart != null && film.introEnd != null) {
       if (tid >= film.introStart && tid <= film.introEnd) {
         if (skipIntroBtn) skipIntroBtn.style.display = "inline-flex";
@@ -1386,7 +1411,6 @@ video::cue {
       }
     }
 
-    // Outro / Autoplay Trigger
     const triggerTid = film.outroStart != null ? film.outroStart : (video.duration - 15);
     if (nesteEpisodeUrl && tid >= triggerTid && !autoplayTriggered && !video.paused) {
       autoplayTriggered = true;
@@ -1403,7 +1427,6 @@ video::cue {
     ui.classList.add('hidden');
     if (skipIntroBtn) skipIntroBtn.style.display = "none";
     
-    // Sett tittel, tekst og bakgrunn dynamisk basert på nesteEpisodeData hentet fra Seriedata.js
     if (nesteEpisodeData) {
       if (nextEpisodeTitle) nextEpisodeTitle.textContent = nesteEpisodeData.fullTittel;
       if (nextEpisodeDesc) {
@@ -1419,7 +1442,7 @@ video::cue {
 
     if (autoplayBackground) autoplayBackground.style.opacity = "1";
 
-    // Skvis videoen i hjørnet (Netflix-stil)
+    // Krymper videoen opp til øverst til høyre (Netflix-stil)
     if (videoWrapper) {
       videoWrapper.style.transform = "scale(0.32)";
       videoWrapper.style.transformOrigin = "top right";
@@ -1451,7 +1474,6 @@ video::cue {
       if (autoplayOverlay) autoplayOverlay.style.display = "none";
       if (autoplayBackground) autoplayBackground.style.opacity = "0";
 
-      // Gjenopprett video-skjermen til fullstørrelse
       if (videoWrapper) {
         videoWrapper.style.transform = "scale(1)";
         videoWrapper.style.right = "0px";
