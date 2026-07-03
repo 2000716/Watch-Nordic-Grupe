@@ -87,12 +87,11 @@
     .signup{
       background:#00FFCC;
       color:#071214;
-      box-shadow:0 0 25px rgba(0,255,204,0.35);
+      box-shadow: none; /* Fjernet neon-glød */
     }
 
     .signup:hover{
-      transform:translateY(-2px) scale(1.03);
-      box-shadow:0 0 35px rgba(0,255,204,0.5);
+      transform:translateY(-2px scale(1.03);
     }
 
     /* ================= HERO ================= */
@@ -112,7 +111,7 @@
       background:
         linear-gradient(
           to right,
-          rgba(7,18,20,1) 25%,      /* Justert for å slippe mer av veggen igjennom sideveis */
+          rgba(7,18,20,1) 25%,      
           rgba(7,18,20,0.5) 60%,
           rgba(7,18,20,0.05) 100%
         );
@@ -125,7 +124,7 @@
       left:0;
       right:0;
       bottom:0;
-      height:120px; /* Redusert fra 250px slik at bunnfaiden ikke stjeler så mye av veggen */
+      height:120px; 
       background:linear-gradient(
         to top,
         #071214, 
@@ -174,7 +173,7 @@
       color:#071214;
       padding:16px 34px;
       border-radius:999px;
-      box-shadow:0 0 30px rgba(0,255,204,0.35);
+      box-shadow: none; /* Fjernet neon-glød */
     }
 
     .primary-btn:hover{
@@ -305,7 +304,7 @@
       color: #555;
     }
 
-    /* ================= HERO POSTER WALL (MER SYNLIG VEGG) ================= */
+    /* ================= HERO POSTER WALL ================= */
     .hero-wall{
       position:absolute;
       inset:0;
@@ -317,9 +316,9 @@
         rotateX(2deg)
         scale(1.2);
       transform-origin:right center;
-      opacity:.35; /* Økt fra .22 for å gjøre veggen mer fremtredende */
+      opacity:.35; 
       filter: grayscale(10%) blur(0px);
-      -webkit-mask-image: linear-gradient(to bottom, rgba(0,0,0,1) 80%, rgba(0,0,0,0) 100%); /* Flyttet maskeringen lenger ned */
+      -webkit-mask-image: linear-gradient(to bottom, rgba(0,0,0,1) 80%, rgba(0,0,0,0) 100%); 
       mask-image: linear-gradient(to bottom, rgba(0,0,0,1) 80%, rgba(0,0,0,0) 100%);
     }
 
@@ -439,12 +438,11 @@
     .cookie-btn.accept {
       background: #00FFCC;
       color: #071214;
-      box-shadow: 0 0 20px rgba(0, 255, 204, 0.25);
+      box-shadow: none; /* Fjernet neon-glød */
     }
 
     .cookie-btn.accept:hover {
       transform: translateY(-2px);
-      box-shadow: 0 0 30px rgba(0, 255, 204, 0.4);
     }
 
     .cookie-btn.reject {
@@ -643,7 +641,8 @@
       </p>
 
       <div class="hero-buttons">
-        <a href="Innloggings%20side.html" class="primary-btn">Begynn å se</a>
+        <!-- Endret fra Innloggings side.html til Innlogging.html -->
+        <a href="Innlogging.html" class="primary-btn">Begynn å se</a>
       </div>
     </div>
   </section>
