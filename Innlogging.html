@@ -253,9 +253,9 @@
     // 1. Hent den ferdig oppsatte databasen og autentiseringen fra fellesfilen din
     import { auth, db } from "./firebase-oppsett.js";
 
-    // 2. Hent kun funksjonene denne siden trenger fra de offisielle CDN-lenkene (v12.15.0)
+    // 2. Hent funksjonene denne siden trenger fra de offisielle CDN-lenkene (v12.15.0)
     import { signInWithEmailAndPassword, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-auth.js";
-    import { doc, setDoc } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
+    import { doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
 
     let registreringsmodus = false;
 
@@ -276,24 +276,42 @@
           const userCredential = await createUserWithEmailAndPassword(auth, epost, passord);
           const user = userCredential.user;
 
+          const standardProfil = [
+            {
+              navn: navn,
+              bilde: "https://static.wixstatic.com/media/fd2fb2_39376e4ee55b460ab7a3ebbfcf35fef7~mv2.png",
+              isKids: false,
+              maksAldersgrense: "12"
+            }
+          ];
+
           // 2. Opprett brukerdokumentet i Firestore med navn med en gang!
           await setDoc(doc(db, "users", user.uid), {
             epost: epost,
-            profiler: [
-              {
-                navn: navn,
-                bilde: "https://static.wixstatic.com/media/fd2fb2_39376e4ee55b460ab7a3ebbfcf35fef7~mv2.png",
-                isKids: false,
-                maksAldersgrense: "12"
-              }
-            ]
+            profiler: standardProfil
           });
+
+          // MELLOMLAGRING: Pre-lagre cachen lokalt slik at Hovedside slipper å hente fra Firestore!
+          localStorage.setItem("watch_nordic_profiles_cache", JSON.stringify(standardProfil));
+          localStorage.setItem("watch_nordic_email_cache", epost);
 
           // Send videre til Hovedside med profilindeks 0
           window.location.href = "Hovedside.html?index=0";
         } else {
           // Firebase Innlogging
-          await signInWithEmailAndPassword(auth, epost, passord);
+          const userCredential = await signInWithEmailAndPassword(auth, epost, passord);
+          const user = userCredential.user;
+
+          // MELLOMLAGRING: Last ned og cache profilene NÅ, så neste side slipper databasekall
+          const docRef = doc(db, "users", user.uid);
+          const docSnap = await getDoc(docRef);
+
+          if (docSnap.exists()) {
+            const data = docSnap.data();
+            if (data.profiler) localStorage.setItem("watch_nordic_profiles_cache", JSON.stringify(data.profiler));
+            localStorage.setItem("watch_nordic_email_cache", epost);
+          }
+
           window.location.href = "Hovedside.html?index=0";
         }
       } catch (error) {
