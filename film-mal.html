@@ -976,11 +976,10 @@ video::cue {
   let isSerie = false;
   let nesteEpisodeData = null; 
 
-  /* ================= RESOLVE MEDIA ================= */
+  /* ================= RESOLVE MEDIA (FIKSET) ================= */
   if (navn && typeof filmer !== 'undefined' && filmer[navn] && !sesong && !episode) {
     film = filmer[navn];
     filmId = `film-${navn}`;
-    backButton
     tilbakeUrl = film.tilbakeUrl || `film.html?navn=${navn}`;
     isSerie = false;
   } else if (navn && typeof serier !== 'undefined' && serier[navn] && sesong && episode && serier[navn].sesonger?.[sesong]?.episoder?.[episode]) {
@@ -1324,10 +1323,9 @@ video::cue {
   document.addEventListener('mousemove', showCursor);
 
   /* ===========================================================
-     UNDERTEKST INNSTILLINGER (FIKSET VERSJON)
+     UNDERTEKST INNSTILLINGER
      =========================================================== */
   const subtitleSettingKey = "global-subtitle-setting";
-  // Endrer default fallback til "nb" (norsk) i stedet for "off" for at tekst skal trigges automatisk
   let globalSubtitleSetting = localStorage.getItem(subtitleSettingKey) || "nb"; 
 
   function oppdaterUndertekstSpor(valgtSpraak) {
@@ -1342,11 +1340,9 @@ video::cue {
       for (let i = 0; i < video.textTracks.length; i++) {
         const track = video.textTracks[i];
         
-        // Sjekker om sporet matcher det valgte språket (både kode og merkelapp)
         if (track.language === valgtSpraak || track.label.toLowerCase() === valgtSpraak) {
-          track.mode = "hidden"; // Bevarer hidden for å unngå nettleserens standard rendring
+          track.mode = "hidden"; 
           
-          // Setter opp lytter for tekst-oppdatering
           track.oncuechange = () => {
             if (!subtitlesEnabled) { subtitleOverlay.textContent = ""; return; }
             const cues = track.activeCues; 
@@ -1370,7 +1366,6 @@ video::cue {
     });
   }
 
-  // Generer knapper basert på filens data
   const subtitleTracksDiv = document.getElementById("subtitleTracks");
   subtitleTracksDiv.innerHTML = "";
   if (film.subtitleLanguages && film.subtitleLanguages.length > 0) {
@@ -1391,7 +1386,6 @@ video::cue {
     subtitleTracksDiv.innerHTML = "<em style='color:gray;'>Ingen eksterne spor</em>"; 
   }
 
-  // Aktiverer undertekstene så snart videofilen og sporene er ordentlig parset
   video.addEventListener("loadeddata", () => {
     oppdaterUndertekstSpor(globalSubtitleSetting);
   });
