@@ -930,8 +930,11 @@ video::cue {
 <script src="Seriedata.js"></script>
 <script>
 /* ===========================================================
-   UNIVERSELL PLAYER – FILM + SERIE (OPTIMALISERT STRØMMING)
+   UNIVERSELL PLAYER – FILM + SERIE (OPTIMALISERT MED FIREBASE)
    =========================================================== */
+import { db, auth } from './firebase-oppsett.js';
+import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-auth.js";
+import { doc, getDoc, setDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
 
 const urlParams = new URLSearchParams(window.location.search);
 const navn = urlParams.get("navn") || urlParams.get("id");
@@ -942,6 +945,9 @@ let film;
 let filmId = "";
 let tilbakeUrl = "";
 let isSerie = false;
+let currentUser = null;
+let sisteLagredeTid = 0;
+let forrigeLagringstidspunkt = 0;
 
 /* ================= RESOLVE MEDIA ================= */
 if (navn && filmer?.[navn] && !sesong && !episode) {
@@ -1051,6 +1057,85 @@ function formatTime(time) {
   return `${m}:${s < 10 ? '0' + s : s}`;
 }
 
+/* ================= FIREBASE SYNC LOGIKK ================= */
+onAuthStateChanged(auth, async (user) => {
+  if (user) {
+    currentUser = user;
+    sjekkLagretFremdrift();
+  } else {
+    console.warn("Ingen bruker er logget inn. Fremdrift vil ikke bli lagret.");
+    video.currentTime = 0;
+    video.muted = false;
+    video.play().catch(err => console.warn(err));
+  }
+});
+
+async function sjekkLagretFremdrift() {
+  if (!currentUser) return;
+  try {
+    const docRef = doc(db, "brukerdata", currentUser.uid, "fremdrift", filmId);
+    const docSnap = await getDoc(docRef);
+
+    if (docSnap.exists()) {
+      const data = docSnap.data();
+      const savedTime = parseFloat(data.currentTime);
+      
+      if (!isNaN(savedTime) && savedTime > 10 && video.duration > savedTime) {
+        video.currentTime = savedTime;
+        resumeOverlay.style.display = "flex";
+        
+        continueBtn.onclick = () => { resumeOverlay.style.display = "none"; video.play().catch(err => console.warn(err)); };
+        restartBtn.onclick = () => { video.currentTime = 0; resumeOverlay.style.display = "none"; video.play().catch(err => console.warn(err)); };
+        return;
+      }
+    }
+  } catch (error) {
+    console.error("Feil ved henting av fremdrift fra Firebase:", error);
+  }
+  video.currentTime = 0;
+  video.muted = false;
+  video.play().catch(err => console.warn(err));
+}
+
+async function lagreSistePosisjon(tvingLagring = false) {
+  if (!currentUser || isNaN(video.currentTime) || video.currentTime <= 0) return;
+  
+  const nå = Date.now();
+  // Lagrer hvert 5. sekund (5000ms), eller tvinges (ved pause, avslutning osv)
+  if (tvingLagring || (nå - forrigeLagringstidspunkt > 5000)) {
+    forrigeLagringstidspunkt = nå;
+    try {
+      const percent = (video.currentTime / video.duration) * 100;
+      await setDoc(doc(db, "brukerdata", currentUser.uid, "fremdrift", filmId), {
+        currentTime: video.currentTime,
+        percent: percent.toFixed(1),
+        status: "påbegynt",
+        sistOppdatert: new Date()
+      }, { merge: true });
+    } catch (error) {
+      console.error("Kunne ikke lagre posisjon til Firebase:", error);
+    }
+  }
+}
+
+async function ryddeOgNeste() {
+  video.pause();
+  if (currentUser) {
+    try {
+      // Sletter midlertidig fremdrift siden videoen er ferdig, og setter status til ferdig
+      await deleteDoc(doc(db, "brukerdata", currentUser.uid, "fremdrift", filmId));
+      await setDoc(doc(db, "brukerdata", currentUser.uid, "historikk", filmId), {
+        status: "ferdig",
+        fullførtDato: new Date()
+      }, { merge: true });
+    } catch (error) {
+      console.error("Feil under ryddeOgNeste i Firebase:", error);
+    }
+  }
+  window.location.href = nesteEpisodeUrl ? nesteEpisodeUrl : `film.html?navn=${navn}`;
+}
+
+/* ================= INTERFACES OG KONTROLLER ================= */
 function updateProgress() {
   if (!isDragging) {
     const percent = (video.currentTime / video.duration) * 100;
@@ -1058,12 +1143,7 @@ function updateProgress() {
     thumb.style.left = percent + '%';
   }
   timeDisplay.textContent = `${formatTime(video.currentTime)} / ${formatTime(video.duration)}`;
-
-  if (!isNaN(video.duration) && video.duration > 0) {
-    const percent = (video.currentTime / video.duration) * 100;
-    localStorage.setItem("progress_" + filmId, percent.toFixed(1));
-    localStorage.setItem("progress_" + navn, percent.toFixed(1));
-  }
+  lagreSistePosisjon(false); 
 }
 
 video.addEventListener('timeupdate', updateProgress);
@@ -1085,6 +1165,7 @@ video.addEventListener('play', () => {
 video.addEventListener('pause', () => { 
   playIcon.src = "https://static.wixstatic.com/media/fd2fb2_f6f25f56b00e49eea8dc4f811b50bb5c~mv2.png"; 
   showUI(); 
+  lagreSistePosisjon(true);
 });
 
 muteBtn.addEventListener('click', () => {
@@ -1098,7 +1179,6 @@ rewindBtn.addEventListener('click', () => video.currentTime = Math.max(0, video.
 forwardBtn.addEventListener('click', () => video.currentTime = Math.min(video.duration, video.currentTime + 10));
 captionsBtn.addEventListener('click', () => { captionMenu.style.display = captionMenu.style.display === 'block' ? 'none' : 'block'; });
 
-// Audio Tracks og Subtitle-knapper beholdt uendret
 const audioTracksDiv = document.getElementById("audioTracks");
 audioTracksDiv.innerHTML = "";
 if (film.audioLanguages && film.audioLanguages.length > 0) {
@@ -1148,7 +1228,7 @@ function scrubTo(e) {
   return percent;
 }
 progress.addEventListener('mousedown', e => { isDragging = true; scrubTo(e); });
-document.addEventListener('mouseup', e => { if (isDragging) { const percent = scrubTo(e); video.currentTime = percent * video.duration; isDragging = false; hidePreview(); } });
+document.addEventListener('mouseup', e => { if (isDragging) { const percent = scrubTo(e); video.currentTime = percent * video.duration; isDragging = false; hidePreview(); lagreSistePosisjon(true); } });
 document.addEventListener('mousemove', e => { if (isDragging) { scrubTo(e); showPreview(e); } });
 thumb.addEventListener('mousedown', e => { e.preventDefault(); isDragging = true; });
 
@@ -1189,30 +1269,8 @@ video.addEventListener('waiting', () => loadingSpinner.style.display = 'block');
 video.addEventListener('playing', () => loadingSpinner.style.display = 'none');
 video.addEventListener('canplay', () => loadingSpinner.style.display = 'none');
 
-/* ================= RESUME LOGIKK ================= */
-const savedTime = parseFloat(localStorage.getItem(`${filmId}-lastPosition`));
-video.addEventListener('loadedmetadata', () => {
-  if (!isNaN(savedTime) && savedTime > 10 && video.duration > savedTime) {
-    video.currentTime = savedTime; resumeOverlay.style.display = "flex";
-    continueBtn.addEventListener("click", () => { resumeOverlay.style.display = "none"; video.play().catch(err => console.warn(err)); });
-    restartBtn.addEventListener("click", () => { video.currentTime = 0; resumeOverlay.style.display = "none"; video.play().catch(err => console.warn(err)); });
-  } else {
-    video.currentTime = 0; video.muted = false; video.play().catch(err => console.warn(err));
-  }
-});
-
-function lagreSistePosisjon() { localStorage.setItem(`${filmId}-lastPosition`, video.currentTime); }
-video.addEventListener('timeupdate', lagreSistePosisjon);
-window.addEventListener('beforeunload', lagreSistePosisjon);
+window.addEventListener('beforeunload', () => lagreSistePosisjon(true));
 video.addEventListener('ended', ryddeOgNeste);
-
-function ryddeOgNeste() {
-  localStorage.removeItem(`${filmId}-lastPosition`);
-  localStorage.removeItem("progress_" + filmId);
-  localStorage.removeItem("progress_" + navn); 
-  localStorage.setItem(`${filmId}-status`, "ferdig");
-  window.location.href = nesteEpisodeUrl ? nesteEpisodeUrl : `film.html?navn=${navn}`;
-}
 
 let mouseTimer;
 function showCursor() { document.body.style.cursor = 'default'; clearTimeout(mouseTimer); mouseTimer = setTimeout(() => { document.body.style.cursor = 'none'; }, 3000); }
@@ -1258,7 +1316,6 @@ const skipOutroBtn = document.getElementById("skipOutroBtn");
 video.addEventListener("timeupdate", () => {
   if (!isSerie) return;
   const tid = video.currentTime;
-  const gjenstaendeTid = video.duration - tid;
 
   // Intro logikk
   if (film.introStart != null && film.introEnd != null) {
@@ -1278,7 +1335,7 @@ video.addEventListener("timeupdate", () => {
   }
 });
 
-if (skipIntroBtn) { skipIntroBtn.addEventListener("click", () => { video.currentTime = film.introEnd; }); }
+if (skipIntroBtn) { skipIntroBtn.addEventListener("click", () => { video.currentTime = film.introEnd; lagreSistePosisjon(true); }); }
 if (skipOutroBtn) { skipOutroBtn.addEventListener("click", () => { ryddeOgNeste(); }); }
 if (autoplayPlayNextBtn) { autoplayPlayNextBtn.addEventListener("click", () => { ryddeOgNeste(); }); }
 
@@ -1286,7 +1343,6 @@ let autoplayTimer;
 function startPremiumAutoplay() {
   if (!autoplayOverlay) return;
   
-  // NETFLIX-EFFEKTEN: Krymper videoen og flytter den til nedre høyre hjørne
   videoWrapper.style.transform = "scale(0.35)";
   videoWrapper.style.transformOrigin = "bottom right";
   videoWrapper.style.right = "30px";
@@ -1294,10 +1350,9 @@ function startPremiumAutoplay() {
   videoWrapper.style.borderRadius = "8px";
   videoWrapper.style.boxShadow = "0 10px 30px rgba(0,0,0,0.8)";
   
-  // Vis strømmetjeneste-vinduet ved siden av den krympede videoen
   autoplayOverlay.style.display = "flex";
   
-  let teller = 8; // Gir brukeren 8 sekunder
+  let teller = 8; 
   autoplayCountdown.textContent = teller;
 
   autoplayTimer = setInterval(() => {
@@ -1315,13 +1370,11 @@ if (autoplayCancelBtn) {
     clearInterval(autoplayTimer);
     autoplayOverlay.style.display = "none";
     
-    // Gjenopprett videoen til fullskjerm igjen dersom brukeren trykker avbryt
     videoWrapper.style.transform = "scale(1)";
     videoWrapper.style.right = "0px";
     videoWrapper.style.bottom = "0px";
     videoWrapper.style.borderRadius = "0px";
     
-    // Vis den vanlige manuelle knappen isteden helt til filmen slutter helt naturlig
     if (skipOutroBtn) skipOutroBtn.style.display = "block";
   });
 }
