@@ -1199,10 +1199,10 @@ video::cue {
   video.addEventListener('playing', () => loadingSpinner.style.display = 'none');
   video.addEventListener('canplay', () => loadingSpinner.style.display = 'none');
 
-/* ===========================================================
+  /* ===========================================================
      3. FIREBASE SYNC & RESUME SYSTEM (OPTIMALISERT)
      =========================================================== */
-  let sisteSkyLagringTid = 0; // Holder styr på throttling (5 sekunder)
+  let sisteSkyLagringTid = 0; 
 
   onAuthStateChanged(auth, async (user) => {
     let savedTime = parseFloat(localStorage.getItem(`${filmId}-lastPosition`));
@@ -1221,7 +1221,6 @@ video::cue {
       }
     }
 
-    // Funksjon for å faktisk anvende tiden når videoen er klar
     const plasserSpillerPaaLagretTid = () => {
       if (!isNaN(savedTime) && savedTime > 10 && (isNaN(video.duration) || video.duration > savedTime)) {
         video.currentTime = savedTime; 
@@ -1244,7 +1243,6 @@ video::cue {
       }
     };
 
-    // Hvis metadata allerede er lastet, kjør med en gang. Hvis ikke, vent på 'loadedmetadata'
     if (video.readyState >= 1) {
       plasserSpillerPaaLagretTid();
     } else {
@@ -1252,15 +1250,12 @@ video::cue {
     }
   });
 
-  // Lagrer strømmeposisjon (Lokal fallback med en gang + Firestore hvert 5. sekund)
   async function lagreSistePosisjon() { 
     const nuvaerendeTid = video.currentTime;
     if (isNaN(nuvaerendeTid) || nuvaerendeTid <= 0) return;
 
-    // 1. Lagre til localStorage med en gang
     localStorage.setItem(`${filmId}-lastPosition`, nuvaerendeTid); 
 
-    // 2. Lagre til skyen (Firestore) maks én gang hvert 5. sekund
     const naa = Date.now();
     if (currentUser && (naa - sisteSkyLagringTid > 5000)) {
       sisteSkyLagringTid = naa; 
@@ -1284,7 +1279,6 @@ video::cue {
   video.addEventListener('ended', ryddeOgNeste);
 
   async function ryddeOgNeste() {
-    // VIKTIG: Fjern lytteren med en gang så den ikke overskriver slettingen vår
     video.removeEventListener('timeupdate', lagreSistePosisjon);
 
     localStorage.removeItem(`${filmId}-lastPosition`);
@@ -1307,6 +1301,47 @@ video::cue {
 
     window.location.href = nesteEpisodeUrl ? nesteEpisodeUrl : `film.html?navn=${navn}`;
   }
+
+  let mouseTimer;
+  function showCursor() { document.body.style.cursor = 'default'; clearTimeout(mouseTimer); mouseTimer = setTimeout(() => { document.body.style.cursor = 'none'; }, 3000); }
+  document.addEventListener('mousemove', showCursor);
+
+  /* ===========================================================
+     UNDERTEKST INNSTILLINGER (GJENOPPRETTET)
+     =========================================================== */
+  for (let i = 0; i < video.textTracks.length; i++) video.textTracks[i].mode = "hidden";
+
+  const subtitleSettingKey = "global-subtitle-setting";
+  let globalSubtitleSetting = localStorage.getItem(subtitleSettingKey) || "off";
+
+  function updateSubtitleButtons(activeLang) {
+    document.querySelectorAll("#subtitleTracks button").forEach(btn => {
+      if (btn.dataset.lang === activeLang) { btn.classList.add("active"); } else { btn.classList.remove("active"); }
+    });
+  }
+
+  video.addEventListener("loadedmetadata", () => {
+    if (globalSubtitleSetting === "off") {
+      subtitlesEnabled = false; subtitleOverlay.textContent = "";
+    } else {
+      subtitlesEnabled = true;
+      for (let i = 0; i < video.textTracks.length; i++) {
+        const track = video.textTracks[i];
+        if (track.language === globalSubtitleSetting || track.label.toLowerCase() === globalSubtitleSetting) {
+          track.mode = "hidden";
+          track.addEventListener("cuechange", () => {
+            if (!subtitlesEnabled) { subtitleOverlay.textContent = ""; return; }
+            const cues = track.activeCues; subtitleOverlay.textContent = cues && cues.length > 0 ? cues[0].text : "";
+          });
+        }
+      }
+    }
+    updateSubtitleButtons(globalSubtitleSetting);
+  });
+
+  video.addEventListener("contextmenu", e => e.preventDefault());
+  document.addEventListener("contextmenu", e => e.preventDefault());
+
   /* ===========================================================
      4. SMART INTRO & ADVANCED NETFLIX OUTRO AUTOPLAY
      =========================================================== */
@@ -1317,7 +1352,6 @@ video::cue {
     if (!isSerie) return;
     const tid = video.currentTime;
 
-    // Skip Intro knapp-trigger
     if (film.introStart != null && film.introEnd != null) {
       if (tid >= film.introStart && tid <= film.introEnd) {
         if (skipIntroBtn) skipIntroBtn.style.display = "block";
@@ -1326,7 +1360,6 @@ video::cue {
       }
     }
 
-    // Trigger autoplay under rulleteksten (outroStart eller siste 15 sekunder)
     const triggerTid = film.outroStart != null ? film.outroStart : (video.duration - 15);
 
     if (tid >= triggerTid && !autoplayTriggered && !video.paused && nesteEpisodeUrl) {
@@ -1343,7 +1376,6 @@ video::cue {
   function startPremiumAutoplay() {
     if (!autoplayOverlay) return;
     
-    // NETFLIX-EFFEKT: Krymper og flytter avspillingsvinduet ned i hjørnet
     videoWrapper.style.transform = "scale(0.35)";
     videoWrapper.style.transformOrigin = "bottom right";
     videoWrapper.style.right = "30px";
@@ -1351,7 +1383,6 @@ video::cue {
     videoWrapper.style.borderRadius = "8px";
     videoWrapper.style.boxShadow = "0 10px 30px rgba(0,0,0,0.8)";
     
-    // Aktiverer autoplay overlayet for neste episode
     autoplayOverlay.style.display = "flex";
     
     let teller = 8;
@@ -1372,7 +1403,6 @@ video::cue {
       clearInterval(autoplayTimer);
       autoplayOverlay.style.display = "none";
       
-      // Tilbakestiller spilleren til fullskjerm hvis brukeren avbryter autoplay
       videoWrapper.style.transform = "scale(1)";
       videoWrapper.style.right = "0px";
       videoWrapper.style.bottom = "0px";
