@@ -980,6 +980,7 @@ video::cue {
   if (navn && typeof filmer !== 'undefined' && filmer[navn] && !sesong && !episode) {
     film = filmer[navn];
     filmId = `film-${navn}`;
+    backButton
     tilbakeUrl = film.tilbakeUrl || `film.html?navn=${navn}`;
     isSerie = false;
   } else if (navn && typeof serier !== 'undefined' && serier[navn] && sesong && episode && serier[navn].sesonger?.[sesong]?.episoder?.[episode]) {
@@ -1151,6 +1152,7 @@ video::cue {
   forwardBtn.addEventListener('click', () => video.currentTime = Math.min(video.duration, video.currentTime + 10));
   captionsBtn.addEventListener('click', () => { captionMenu.style.display = captionMenu.style.display === 'block' ? 'none' : 'block'; });
 
+  /* ================= LYDINKLUDERING ================= */
   const audioTracksDiv = document.getElementById("audioTracks");
   audioTracksDiv.innerHTML = "";
   if (film.audioLanguages && film.audioLanguages.length > 0) {
@@ -1162,35 +1164,7 @@ video::cue {
     });
   } else { audioTracksDiv.innerHTML = "<em style='color:gray;'>Standard lydspor</em>"; }
 
-  const subtitleTracksDiv = document.getElementById("subtitleTracks");
-  subtitleTracksDiv.innerHTML = "";
-  if (film.subtitleLanguages && film.subtitleLanguages.length > 0) {
-    film.subtitleLanguages.forEach(sub => {
-      const btn = document.createElement("button");
-      btn.textContent = sub.label; btn.dataset.lang = sub.code;
-      btn.addEventListener("click", () => {
-        const selectedLang = sub.code; globalSubtitleSetting = selectedLang; localStorage.setItem(subtitleSettingKey, selectedLang);
-        if (selectedLang === "off") {
-          subtitlesEnabled = false; for (let i = 0; i < video.textTracks.length; i++) video.textTracks[i].mode = "hidden"; subtitleOverlay.textContent = "";
-        } else {
-          subtitlesEnabled = true;
-          for (let i = 0; i < video.textTracks.length; i++) {
-            const track = video.textTracks[i];
-            if (track.language === selectedLang || track.label.toLowerCase() === selectedLang) {
-              track.mode = "hidden";
-              track.addEventListener("cuechange", () => {
-                if (!subtitlesEnabled) { subtitleOverlay.textContent = ""; return; }
-                const cues = track.activeCues; subtitleOverlay.textContent = cues && cues.length > 0 ? cues[0].text : "";
-              });
-            }
-          }
-        }
-        updateSubtitleButtons(selectedLang); captionMenu.style.display = "none";
-      });
-      subtitleTracksDiv.appendChild(btn);
-    });
-  } else { subtitleTracksDiv.innerHTML = "<em style='color:gray;'>Ingen eksterne spor</em>"; }
-
+  /* ================= NAVIGERING & TIDSBAR ================= */
   function scrubTo(e) {
     const rect = progress.getBoundingClientRect();
     const x = e.clientX - rect.left;
@@ -1280,7 +1254,7 @@ video::cue {
         };
       } else {
         video.currentTime = 0; 
-        video.play().catch(err => console.warn(err));
+        video.play().catch(err => console.warn("Autoplay blokkert:", err));
       }
     };
 
@@ -1349,11 +1323,11 @@ video::cue {
   function showCursor() { document.body.style.cursor = 'default'; clearTimeout(mouseTimer); mouseTimer = setTimeout(() => { if(!video.paused) document.body.style.cursor = 'none'; }, 3000); }
   document.addEventListener('mousemove', showCursor);
 
-/* ===========================================================
-     UNDERTEKST INNSTILLINGER (FIKSET)
+  /* ===========================================================
+     UNDERTEKST INNSTILLINGER (FIKSET VERSJON)
      =========================================================== */
   const subtitleSettingKey = "global-subtitle-setting";
-  // Endre gjerne "nb" til standardkoden din (f.eks "no", "nb", "en") hvis du vil ha tekst på med en gang
+  // Endrer default fallback til "nb" (norsk) i stedet for "off" for at tekst skal trigges automatisk
   let globalSubtitleSetting = localStorage.getItem(subtitleSettingKey) || "nb"; 
 
   function oppdaterUndertekstSpor(valgtSpraak) {
@@ -1368,11 +1342,11 @@ video::cue {
       for (let i = 0; i < video.textTracks.length; i++) {
         const track = video.textTracks[i];
         
-        // Sjekker om sporet matcher det valgte språket
+        // Sjekker om sporet matcher det valgte språket (både kode og merkelapp)
         if (track.language === valgtSpraak || track.label.toLowerCase() === valgtSpraak) {
-          track.mode = "hidden"; // Bevar "hidden" siden du bruker eget overlay (subtitleOverlay)
+          track.mode = "hidden"; // Bevarer hidden for å unngå nettleserens standard rendring
           
-          // Sørg for at vi lytter på tekstendringer
+          // Setter opp lytter for tekst-oppdatering
           track.oncuechange = () => {
             if (!subtitlesEnabled) { subtitleOverlay.textContent = ""; return; }
             const cues = track.activeCues; 
@@ -1396,7 +1370,7 @@ video::cue {
     });
   }
 
-  // Generer knapper
+  // Generer knapper basert på filens data
   const subtitleTracksDiv = document.getElementById("subtitleTracks");
   subtitleTracksDiv.innerHTML = "";
   if (film.subtitleLanguages && film.subtitleLanguages.length > 0) {
@@ -1417,10 +1391,14 @@ video::cue {
     subtitleTracksDiv.innerHTML = "<em style='color:gray;'>Ingen eksterne spor</em>"; 
   }
 
-  // Kjør aktivering når videoen er klar
+  // Aktiverer undertekstene så snart videofilen og sporene er ordentlig parset
   video.addEventListener("loadeddata", () => {
     oppdaterUndertekstSpor(globalSubtitleSetting);
   });
+
+  video.addEventListener("contextmenu", e => e.preventDefault());
+  document.addEventListener("contextmenu", e => e.preventDefault());
+
   /* ===========================================================
      4. SMART INTRO & ADVANCED NETFLIX OUTRO AUTOPLAY (SERIE)
      =========================================================== */
