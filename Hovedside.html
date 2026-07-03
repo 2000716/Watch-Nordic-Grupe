@@ -1256,24 +1256,15 @@ main {
   }
   document.head.appendChild(style);
 
+  // ==================== FIREBASE IMPORT FRA FELLES OPPSETT ==================== //
+  import { auth, db } from "./firebase-oppsett.js";
+  import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-auth.js";
+  import { doc, getDoc, collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
+
+  let registrertBruker = null;
+  const aktivProfil = localStorage.getItem("aktivProfil") || "Hovedprofil";
+
   // ==================== REIDREKTERINGSVAKT (FIREBASE SIKKERHET) ==================== //
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-  import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-  import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-
-  const firebaseConfig = {
-    apiKey: "AIzaSyBlfCbB1AuiKVHMBEhYd0cvkJ0jxHVZfUg",
-    authDomain: "watch-nordic-78b99.firebaseapp.com",
-    projectId: "watch-nordic-78b99",
-    storageBucket: "watch-nordic-78b99.firebasestorage.app",
-    messagingSenderId: "541804766412",
-    appId: "1:541804766412:web:83fc77721e384131a1ce69"
-  };
-
-  const app = initializeApp(firebaseConfig);
-  const auth = getAuth(app);
-  const db = getFirestore(app);
-
   onAuthStateChanged(auth, async (user) => {
     if (!user) {
       const gjeldendeSide = window.location.pathname.split("/").pop();
@@ -1281,6 +1272,11 @@ main {
         window.location.href = "index.html";
       }
     } else {
+      registrertBruker = user;
+      
+      // Hent skytilpasset "Fortsett å se" med en gang vi vet hvem brukeren er
+      renderContinueWatching();
+
       const aktivProfilIndex = parseInt(localStorage.getItem("aktivProfilIndex")) || 0;
       
       try {
@@ -1297,7 +1293,6 @@ main {
             const nyIsKids = gjeldendeProfil.isKids === true;
             const nyMaks = gjeldendeProfil.maksAldersgrense || "12";
 
-            // 1. Oppdater kun profilbilder i UI
             if (bildeUrl) {
               const menyProfil = document.getElementById("menyProfilbilde");
               if (menyProfil) menyProfil.src = bildeUrl;
@@ -1306,12 +1301,10 @@ main {
               localStorage.setItem("profilbilde", bildeUrl);
             }
 
-            // Lagrer navnet i bakgrunnen (localStorage) i tilfelle andre systemer trenger det
             if (profilNavn) {
               localStorage.setItem("profilnavn", profilNavn);
             }
 
-            // 2. Sikkerhetssjekk for aldersgrenser
             const gammelIsKids = localStorage.getItem("isKids") === "true";
             const gammelMaks = localStorage.getItem("maksAldersgrense") || "12";
 
@@ -1323,7 +1316,7 @@ main {
           }
         }
       } catch (error) {
-        console.error("Feil beim synkronisering:", error);
+        console.error("Feil ved synkronisering:", error);
       }
     }
   });
@@ -1361,12 +1354,11 @@ main {
     window.location.href = "konto.html";
   }
 
-  // ==================== PROFILBILDE (Rask lokal fallback under lasting) ==================== //
+  // ==================== PROFILBILDE LOCAL FALLBACK ==================== //
   const lagretBilde = localStorage.getItem("profilbilde");
   if (lagretBilde) {
     const menyProfil = document.getElementById("menyProfilbilde");
     if (menyProfil) menyProfil.src = lagretBilde;
-
     const headerProfil = document.getElementById("headerProfilbilde");
     if (headerProfil) headerProfil.src = lagretBilde;
   }
@@ -1374,24 +1366,18 @@ main {
   // ==================== HERO-BANNER ==================== //
   function hentBannerInnhold() {
     let bannerInnhold = [];
-    
     if (typeof filmer !== "undefined") {
       Object.keys(filmer).forEach(key => {
         if (filmer[key].banner || filmer[key].bannerMobil) {
-          if (erInnloggetSomBarn) {
-            if (!erEgnetForBarn(filmer[key]) || !sjekkAldersgrense(filmer[key])) return;
-          }
+          if (erInnloggetSomBarn && (!erEgnetForBarn(filmer[key]) || !sjekkAldersgrense(filmer[key]))) return;
           bannerInnhold.push({ ...filmer[key], key, type: "film" });
         }
       });
     }
-
     if (typeof serier !== "undefined") {
       Object.keys(serier).forEach(key => {
         if (serier[key].banner || serier[key].bannerMobil) {
-          if (erInnloggetSomBarn) {
-            if (!erEgnetForBarn(serier[key]) || !sjekkAldersgrense(serier[key])) return;
-          }
+          if (erInnloggetSomBarn && (!erEgnetForBarn(serier[key]) || !sjekkAldersgrense(serier[key]))) return;
           bannerInnhold.push({ ...serier[key], key, type: "serie" });
         }
       });
@@ -1408,7 +1394,7 @@ main {
   function hentMobilBanner() {
     const innhold = hentBannerInnhold();
     if (innhold.length === 0) return null;
-    return innhold[(new Date().getHours() + 1) % innhold.length];
+    return innhold[new Date().getHours() % innhold.length];
   }
 
   function oppdaterBanner() {
@@ -1643,7 +1629,6 @@ main {
     });
   }
 
-  // Sørget for at serier også sjekker og respekterer aldersgrenser her
   function renderSeries(galleryId) {
     const gallery = document.getElementById(galleryId);
     if (!gallery || typeof serier === "undefined") return;
@@ -1707,57 +1692,100 @@ main {
     });
   }
 
-  function renderContinueWatching() {
+  // ==================== SKYLAGRET (FIREBASE) FORTSETT Å SE ==================== //
+  async function renderContinueWatching() {
     const section = document.getElementById("fortsett-section");
     const gallery = document.getElementById("fortsett-galleri");
-    if (!section || !gallery) return;
+    if (!section || !gallery || !registrertBruker) return;
+    
     gallery.innerHTML = "";
-    let items = [];
 
-    if (typeof filmer !== "undefined") {
-      Object.keys(filmer).forEach((key) => {
-        const progress = localStorage.getItem("progress_" + key);
-        if (progress && parseFloat(progress) > 0 && parseFloat(progress) < 100) {
-          if (erInnloggetSomBarn && (!erEgnetForBarn(filmer[key]) || !sjekkAldersgrense(filmer[key]))) return;
-          items.push({ key, data: filmer[key], type: "film", progress });
+    try {
+      // Slå opp i brukerdata/{uid}/profiler/{aktivProfil}/fremdrift
+      const fremdriftRef = collection(db, "brukerdata", registrertBruker.uid, "profiler", aktivProfil, "fremdrift");
+      
+      // Henter alle dokumenter som har status "paabegynt"
+      const q = query(fremdriftRef, where("status", "==", "paabegynt"));
+      const querySnapshot = await getDocs(q);
+
+      if (querySnapshot.empty) {
+        section.style.display = "none";
+        return;
+      }
+
+      let fantInnhold = false;
+
+      querySnapshot.forEach((docSnap) => {
+        const dbData = docSnap.data();
+        const filmId = docSnap.id; // F.eks "film-titanic" eller "serie-skam-s1-e1"
+        
+        let metadataMatch = null;
+        let urlParamNavn = "";
+        let spillType = "film";
+
+        // De-konstruer om det er en film eller en serie for å hente riktig plakat/bilde fra listene dine
+        if (filmId.startsWith("film-")) {
+          urlParamNavn = filmId.replace("film-", "");
+          if (typeof filmer !== "undefined" && filmer[urlParamNavn]) {
+            metadataMatch = filmer[urlParamNavn];
+            spillType = "film";
+          }
+        } else if (filmId.startsWith("serie-")) {
+          const deler = filmId.split("-"); // ["serie", "skam", "s1", "e1"]
+          urlParamNavn = deler[1];
+          if (typeof serier !== "undefined" && serier[urlParamNavn]) {
+            metadataMatch = serier[urlParamNavn];
+            spillType = "serie";
+          }
         }
-      });
-    }
 
-    if (typeof serier !== "undefined") {
-      Object.keys(serier).forEach((key) => {
-        const progress = localStorage.getItem("progress_" + key);
-        if (progress && parseFloat(progress) > 0 && parseFloat(progress) < 100) {
-          if (erInnloggetSomBarn && (!erEgnetForBarn(serier[key]) || !sjekkAldersgrense(serier[key]))) return;
-          items.push({ key, data: serier[key], type: "serie", progress });
+        // Hvis innholdet ikke finnes i js-filene eller bryter med aldersgrenser til barne-profiler, hopp over
+        if (!metadataMatch) return;
+        if (erInnloggetSomBarn && (!erEgnetForBarn(metadataMatch) || !sjekkAldersgrense(metadataMatch))) return;
+
+        fantInnhold = true;
+
+        // URL-generering basert på fil eller serie
+        let hrefUrl = `film.html?navn=${urlParamNavn}`;
+        if (spillType === "serie") {
+          const deler = filmId.split("-");
+          const s = deler[2].replace("s", "");
+          const e = deler[3].replace("e", "");
+          hrefUrl = `film-mal.html?navn=${urlParamNavn}&sesong=${s}&episode=${e}`;
         }
-      });
-    }
 
-    if (items.length === 0) {
-      section.style.display = "none";
-      return;
-    }
-    section.style.display = "block";
+        // Beregn en visuell fremdriftsprosent hvis du har lagret lokal progress, eller fallback til en standard bar
+        const progressVerdi = localStorage.getItem("progress_" + filmId) || 50; 
 
-    items.forEach((item) => {
-      const link = document.createElement("a");
-      link.href = `film.html?navn=${item.key}`;
-      link.classList.add("gallery-item", "image-with-progress");
-      link.innerHTML = `
-        <img src="${item.data.poster}" alt="${item.data.tittel}">
-        <div class="progress-container" style="background: rgba(255,255,255,0.2); width: 100%; height: 6px; position: absolute; bottom: 0; left: 0; z-index: 2;">
-          <div class="progress-bar" style="width: ${item.progress}%; height: 100%; background: #00FFCC;"></div>
-        </div>
-        <div class="image-overlay">
-          <div class="overlay-content">
-            <div class="overlay-title">${item.data.tittel}</div>
-            <div class="overlay-meta">Fortsett å se (${Math.round(item.progress)}%)</div>
+        const link = document.createElement("a");
+        link.href = hrefUrl;
+        link.classList.add("gallery-item", "image-with-progress");
+        link.innerHTML = `
+          <img src="${metadataMatch.poster}" alt="${dbData.tittel || metadataMatch.tittel}">
+          <div class="progress-container" style="background: rgba(255,255,255,0.2); width: 100%; height: 6px; position: absolute; bottom: 0; left: 0; z-index: 2;">
+            <div class="progress-bar" style="width: ${progressVerdi}%; height: 100%; background: #00FFCC;"></div>
           </div>
-        </div>
-      `;
-      gallery.appendChild(link);
-    });
+          <div class="image-overlay">
+            <div class="overlay-content">
+              <div class="overlay-title">${dbData.tittel || metadataMatch.tittel}</div>
+              <div class="overlay-meta">Fortsett på denne enheten</div>
+            </div>
+          </div>
+        `;
+        gallery.appendChild(link);
+      });
+
+      if (fantInnhold) {
+        section.style.display = "block";
+        oppdaterAlleGalleripiler();
+      } else {
+        section.style.display = "none";
+      }
+
+    } catch (error) {
+      console.error("Feil ved innlasting av sky-fremdrift:", error);
+      section.style.display = "none";
+    }
   }
 
   // ==================== INIT ==================== //
@@ -1795,7 +1823,6 @@ main {
     }
 
     oppdaterBanner();
-    renderContinueWatching();
     oppdaterAlleGalleripiler();
 
     setTimeout(oppdaterAlleGalleripiler, 50);
