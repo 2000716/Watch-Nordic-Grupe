@@ -464,7 +464,6 @@
     let docRef = null;
 
     // ================= LYNRAST OPPSTART (Mellomlagring) =================
-    // Leser de lagrede profilene og e-posten fra localStorage med en gang, slik at siden oppdateres øyeblikkelig
     const cachedProfiles = localStorage.getItem("watch_nordic_profiles_cache");
     const cachedEmail = localStorage.getItem("watch_nordic_email_cache");
 
@@ -473,7 +472,6 @@
         profiler = JSON.parse(cachedProfiles);
         if (cachedEmail) globalEpost = cachedEmail;
         
-        // Hvis profilen eksisterer i minnet, bygger vi grensesnittet umiddelbart (0ms ventetid!)
         if (profiler[aktivProfilIndex]) {
           byggProfilgrensesnitt();
         }
@@ -489,12 +487,13 @@
         globalEpost = user.email || ""; 
         hentKontodata();
       } else {
-        window.location.href = "Innlogging.html";
+        window.location.href = "index.html"; // Endret fra Innlogging.html til index.html
       }
     });
 
+    // Endret her for å føre knappen til hvem-ser-på.html med profilindexen som parameter
     document.getElementById("navHovedsideBtn").addEventListener("click", () => {
-      window.location.href = `Hovedside.html?index=${aktivProfilIndex}`;
+      window.location.href = `hvem-ser-på.html?index=${aktivProfilIndex}`;
     });
     document.getElementById("navLoggUtBtn").addEventListener("click", loggUt);
 
@@ -507,7 +506,6 @@
           profiler = data.profiler || [];
           if (data.epost) globalEpost = data.epost;
           
-          // Oppdaterer den lokale cachen til neste besøk
           localStorage.setItem("watch_nordic_profiles_cache", JSON.stringify(profiler));
           localStorage.setItem("watch_nordic_email_cache", globalEpost);
         }
@@ -531,7 +529,6 @@
           return;
         }
 
-        // Tegner på nytt med helt ferske data fra Firebase
         byggProfilgrensesnitt();
       } catch (error) {
         console.error("Feil under lasting av kontodata:", error);
@@ -601,7 +598,7 @@
       profiler[aktivProfilIndex].navn = nyttNavn;
       
       await setDoc(docRef, { profiler: profiler }, { merge: true });
-      localStorage.setItem("watch_nordic_profiles_cache", JSON.stringify(profiler)); // Oppdaterer cache
+      localStorage.setItem("watch_nordic_profiles_cache", JSON.stringify(profiler));
 
       navnView.innerText = nyttNavn;
       navnDisplay.innerText = nyttNavn;
@@ -634,7 +631,7 @@
         
         globalEpost = nyEpost;
         await setDoc(docRef, { epost: globalEpost }, { merge: true });
-        localStorage.setItem("watch_nordic_email_cache", globalEpost); // Oppdaterer cache
+        localStorage.setItem("watch_nordic_email_cache", globalEpost);
 
         epostView.innerText = nyEpost;
         alert("E-postadresse ble oppdatert!");
@@ -657,11 +654,10 @@
 
     async function loggUt() {
       try {
-        // Tømmer cachen ved utlogging for sikkerhet skyld, så neste bruker ikke ser gamle profiler
         localStorage.removeItem("watch_nordic_profiles_cache");
         localStorage.removeItem("watch_nordic_email_cache");
         await signOut(auth);
-        window.location.href = "Starts side.html";
+        window.location.href = "index.html"; // Endret fra Starts side.html til index.html
       } catch (error) {
         console.error("Feil under utlogging:", error);
       }
@@ -675,7 +671,7 @@
         
         profiler.splice(aktivProfilIndex, 1);
         await setDoc(docRef, { profiler: profiler }, { merge: true });
-        localStorage.setItem("watch_nordic_profiles_cache", JSON.stringify(profiler)); // Oppdaterer cache
+        localStorage.setItem("watch_nordic_profiles_cache", JSON.stringify(profiler));
 
         alert("Profilen ble slettet. Du sendes til hovedprofilen.");
         window.location.href = "konto.html?index=0";
@@ -708,7 +704,7 @@
       profiler[aktivProfilIndex].maksAldersgrense = valgtGrense;
 
       await setDoc(docRef, { profiler: profiler }, { merge: true });
-      localStorage.setItem("watch_nordic_profiles_cache", JSON.stringify(profiler)); // Oppdaterer cache
+      localStorage.setItem("watch_nordic_profiles_cache", JSON.stringify(profiler));
       oppdaterMaksGrenseTekst();
     }
 
