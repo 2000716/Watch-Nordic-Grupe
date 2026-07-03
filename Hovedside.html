@@ -1692,102 +1692,100 @@ main {
     });
   }
 
-  // ==================== SKYLAGRET (FIREBASE) FORTSETT Å SE ==================== //
-  async function renderContinueWatching() {
-    const section = document.getElementById("fortsett-section");
-    const gallery = document.getElementById("fortsett-galleri");
-    if (!section || !gallery || !registrertBruker) return;
+// ==================== SKYLAGRET (FIREBASE) FORTSETT Å SE ==================== //
+async function renderContinueWatching() {
+  const section = document.getElementById("fortsett-section");
+  const gallery = document.getElementById("fortsett-galleri");
+  if (!section || !gallery || !registrertBruker) return;
+  
+  gallery.innerHTML = "";
+
+  try {
+    // Slå opp i brukerdata/{uid}/profiler/{aktivProfil}/fremdrift (Matcher spilleren perfekt)
+    const fremdriftRef = collection(db, "brukerdata", registrertBruker.uid, "profiler", aktivProfil, "fremdrift");
     
-    gallery.innerHTML = "";
+    // Henter alle dokumenter som har status "paabegynt"
+    const q = query(fremdriftRef, where("status", "==", "paabegynt"));
+    const querySnapshot = await getDocs(q);
 
-    try {
-      // Slå opp i brukerdata/{uid}/profiler/{aktivProfil}/fremdrift
-      const fremdriftRef = collection(db, "brukerdata", registrertBruker.uid, "profiler", aktivProfil, "fremdrift");
+    if (querySnapshot.empty) {
+      section.style.display = "none";
+      return;
+    }
+
+    let fantInnhold = false;
+
+    querySnapshot.forEach((docSnap) => {
+      const dbData = docSnap.data();
+      const filmId = docSnap.id; // F.eks "film-titanic" eller "serie-skam-s1-e1"
       
-      // Henter alle dokumenter som har status "paabegynt"
-      const q = query(fremdriftRef, where("status", "==", "paabegynt"));
-      const querySnapshot = await getDocs(q);
+      let metadataMatch = null;
+      let urlParamNavn = "";
+      let spillType = "film";
 
-      if (querySnapshot.empty) {
-        section.style.display = "none";
-        return;
+      // De-konstruer om det er en film eller en serie for å hente riktig plakat/bilde
+      if (filmId.startsWith("film-")) {
+        urlParamNavn = filmId.replace("film-", "");
+        if (typeof filmer !== "undefined" && filmer[urlParamNavn]) {
+          metadataMatch = filmer[urlParamNavn];
+          spillType = "film";
+        }
+      } else if (filmId.startsWith("serie-")) {
+        const deler = filmId.split("-"); // ["serie", "skam", "s1", "e1"]
+        urlParamNavn = deler[1];
+        if (typeof serier !== "undefined" && serier[urlParamNavn]) {
+          metadataMatch = serier[urlParamNavn];
+          spillType = "serie";
+        }
       }
 
-      let fantInnhold = false;
+      if (!metadataMatch) return;
+      if (erInnloggetSomBarn && (!erEgnetForBarn(metadataMatch) || !sjekkAldersgrense(metadataMatch))) return;
 
-      querySnapshot.forEach((docSnap) => {
-        const dbData = docSnap.data();
-        const filmId = docSnap.id; // F.eks "film-titanic" eller "serie-skam-s1-e1"
-        
-        let metadataMatch = null;
-        let urlParamNavn = "";
-        let spillType = "film";
+      fantInnhold = true;
 
-        // De-konstruer om det er en film eller en serie for å hente riktig plakat/bilde fra listene dine
-        if (filmId.startsWith("film-")) {
-          urlParamNavn = filmId.replace("film-", "");
-          if (typeof filmer !== "undefined" && filmer[urlParamNavn]) {
-            metadataMatch = filmer[urlParamNavn];
-            spillType = "film";
-          }
-        } else if (filmId.startsWith("serie-")) {
-          const deler = filmId.split("-"); // ["serie", "skam", "s1", "e1"]
-          urlParamNavn = deler[1];
-          if (typeof serier !== "undefined" && serier[urlParamNavn]) {
-            metadataMatch = serier[urlParamNavn];
-            spillType = "serie";
-          }
-        }
-
-        // Hvis innholdet ikke finnes i js-filene eller bryter med aldersgrenser til barne-profiler, hopp over
-        if (!metadataMatch) return;
-        if (erInnloggetSomBarn && (!erEgnetForBarn(metadataMatch) || !sjekkAldersgrense(metadataMatch))) return;
-
-        fantInnhold = true;
-
-        // URL-generering basert på fil eller serie
-        let hrefUrl = `film.html?navn=${urlParamNavn}`;
-        if (spillType === "serie") {
-          const deler = filmId.split("-");
-          const s = deler[2].replace("s", "");
-          const e = deler[3].replace("e", "");
-          hrefUrl = `film-mal.html?navn=${urlParamNavn}&sesong=${s}&episode=${e}`;
-        }
-
-        // Beregn en visuell fremdriftsprosent hvis du har lagret lokal progress, eller fallback til en standard bar
-        const progressVerdi = localStorage.getItem("progress_" + filmId) || 50; 
-
-        const link = document.createElement("a");
-        link.href = hrefUrl;
-        link.classList.add("gallery-item", "image-with-progress");
-        link.innerHTML = `
-          <img src="${metadataMatch.poster}" alt="${dbData.tittel || metadataMatch.tittel}">
-          <div class="progress-container" style="background: rgba(255,255,255,0.2); width: 100%; height: 6px; position: absolute; bottom: 0; left: 0; z-index: 2;">
-            <div class="progress-bar" style="width: ${progressVerdi}%; height: 100%; background: #00FFCC;"></div>
-          </div>
-          <div class="image-overlay">
-            <div class="overlay-content">
-              <div class="overlay-title">${dbData.tittel || metadataMatch.tittel}</div>
-              <div class="overlay-meta"></div>
-            </div>
-          </div>
-        `;
-        gallery.appendChild(link);
-      });
-
-      if (fantInnhold) {
-        section.style.display = "block";
-        oppdaterAlleGalleripiler();
-      } else {
-        section.style.display = "none";
+      // URL-generering basert på film eller serie
+      let hrefUrl = `film.html?navn=${urlParamNavn}`;
+      if (spillType === "serie") {
+        const deler = filmId.split("-");
+        const s = deler[2].replace("s", "");
+        const e = deler[3].replace("e", "");
+        hrefUrl = `film-mal.html?navn=${urlParamNavn}&sesong=${s}&episode=${e}`;
       }
 
-    } catch (error) {
-      console.error("Feil ved innlasting av sky-fremdrift:", error);
+      // Henter fremdriftsprosent direkte fra Firebase-dataen vi lagret i spilleren (fallback til 50% hvis tom)
+      const progressVerdi = dbData.percent || 50; 
+
+      const link = document.createElement("a");
+      link.href = hrefUrl;
+      link.classList.add("gallery-item", "image-with-progress");
+      link.innerHTML = `
+        <img src="${metadataMatch.poster || metadataMatch.bilde}" alt="${dbData.tittel || metadataMatch.tittel}">
+        <div class="progress-container" style="background: rgba(255,255,255,0.2); width: 100%; height: 6px; position: absolute; bottom: 0; left: 0; z-index: 2;">
+          <div class="progress-bar" style="width: ${progressVerdi}%; height: 100%; background: #00FFCC;"></div>
+        </div>
+        <div class="image-overlay">
+          <div class="overlay-content">
+            <div class="overlay-title">${metadataMatch.tittel}</div>
+            <div class="overlay-meta">${spillType === "serie" ? `S${filmId.split("-")[2].replace("s","")}E${filmId.split("-")[3].replace("e","")}` : ""}</div>
+          </div>
+        </div>
+      `;
+      gallery.appendChild(link);
+    });
+
+    if (fantInnhold) {
+      section.style.display = "block";
+      if (typeof oppdaterAlleGalleripiler === "function") oppdaterAlleGalleripiler();
+    } else {
       section.style.display = "none";
     }
-  }
 
+  } catch (error) {
+    console.error("Feil ved innlasting av sky-fremdrift:", error);
+    section.style.display = "none";
+  }
+}
   // ==================== INIT ==================== //
   document.addEventListener("DOMContentLoaded", () => {
     if (typeof filmer === "undefined") {
