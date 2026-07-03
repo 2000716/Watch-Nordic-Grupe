@@ -763,12 +763,9 @@ video::cue {
   box-shadow: 0 0 18px rgba(15, 221, 203, 1);
 }
 
-</style>
-</head>
-<body>
-  <div class="container" id="container">
+<div class="container" id="container">
     
-    <div id="videoWrapper" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; transition: all 0.4s ease-in-out; z-index: 1;">
+    <div id="videoWrapper" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; transition: all 0.4s ease-in-out; z-index: 4;">
       <video id="video" preload="metadata" style="width: 100%; height: 100%; object-fit: contain;">
         <source src="" type="video/mp4">
         <track label="Norsk" kind="subtitles" srclang="no" src="" default>
@@ -784,6 +781,8 @@ video::cue {
       right: 30px;
       bottom: 90px;
       display: none;
+      align-items: center;
+      gap: 8px;
       padding: 12px 24px;
       border: 1px solid rgba(255,255,255,0.3);
       border-radius: 4px;
@@ -797,7 +796,8 @@ video::cue {
       z-index: 10;
       transition: background 0.2s;
     " onmouseover="this.style.background='rgba(255,255,255,0.2)'" onmouseout="this.style.background='rgba(0,0,0,0.7)'">
-      ⏭️ Hopp over intro
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 4 15 12 5 20 5 4"></polygon><line x1="19" y1="5" x2="19" y2="19" stroke="currentColor" stroke-width="2" stroke-linecap="round"></line></svg>
+      Hopp over intro
     </button>
 
     <button id="skipOutroBtn" style="
@@ -805,6 +805,8 @@ video::cue {
       right: 30px; 
       bottom: 90px; 
       display: none; 
+      align-items: center;
+      gap: 8px;
       padding: 12px 24px; 
       border: 1px solid rgba(255,255,255,0.3); 
       border-radius: 4px; 
@@ -818,7 +820,8 @@ video::cue {
       z-index: 10;
       transition: background 0.2s;
     " onmouseover="this.style.background='rgba(255,255,255,0.2)'" onmouseout="this.style.background='rgba(0,0,0,0.7)'">
-      ⏭️ Neste episode
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 4 15 12 5 20 5 4"></polygon><line x1="19" y1="5" x2="19" y2="19" stroke="currentColor" stroke-width="2" stroke-linecap="round"></line></svg>
+      Neste episode
     </button>
 
     <div id="autoplayBackground" style="
@@ -832,7 +835,8 @@ video::cue {
     <div id="autoplayOverlay" style="
       display: none; 
       position: absolute; 
-      bottom: 12%; 
+      top: 50%; 
+      transform: translateY(-50%);
       left: 6%; 
       width: 450px;
       background: rgba(0, 0, 0, 0.75);
