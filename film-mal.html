@@ -1059,8 +1059,9 @@ function formatTime(time) {
 
 /* ================= FIREBASE BRUKERHÅNDTERING OG SYNC ================= */
 const aktivProfil = localStorage.getItem("aktivProfil") || "default";
+let forrigeLagringstidspunkt = 0;
 
-// LYTTER PÅ BRUKERSTATUS (Kritisk fiks: Denne var glemt i forrige skript!)
+// LYTTER PÅ BRUKERSTATUS
 onAuthStateChanged(auth, async (user) => {
   if (user) {
     currentUser = user;
@@ -1074,6 +1075,7 @@ onAuthStateChanged(auth, async (user) => {
   }
 });
 
+// HENT LAGRET FREMDRIFT VED OPPSTART
 async function sjekkLagretFremdrift() {
   if (!currentUser) return;
   try {
@@ -1083,14 +1085,23 @@ async function sjekkLagretFremdrift() {
     if (docSnap.exists()) {
       const data = docSnap.data();
       const savedTime = parseFloat(data.currentTime);
+      const status = data.status;
       
-      // Hvis brukeren har sett mer enn 10 sekunder, og det er mindre enn hele videoen
-      if (!isNaN(savedTime) && savedTime > 10 && video.duration > savedTime) {
+      // Hvis brukeren har sett mer enn 10 sekunder, det er mindre enn hele videoen, og status ikke allerede er ferdig
+      if (!isNaN(savedTime) && savedTime > 10 && video.duration > savedTime && status !== "ferdig") {
         video.currentTime = savedTime;
         resumeOverlay.style.display = "flex";
         
-        continueBtn.onclick = () => { resumeOverlay.style.display = "none"; video.play().catch(err => console.warn(err)); };
-        restartBtn.onclick = () => { video.currentTime = 0; resumeOverlay.style.display = "none"; video.play().catch(err => console.warn(err)); };
+        continueBtn.onclick = () => { 
+          resumeOverlay.style.display = "none"; 
+          video.play().catch(err => console.warn(err)); 
+        };
+        
+        restartBtn.onclick = () => { 
+          video.currentTime = 0; 
+          resumeOverlay.style.display = "none"; 
+          video.play().catch(err => console.warn(err)); 
+        };
         return;
       }
     }
@@ -1103,6 +1114,7 @@ async function sjekkLagretFremdrift() {
   video.play().catch(err => console.warn(err));
 }
 
+// LAGRE POSITION UNDERVEIS ELLER VED PAUSE
 async function lagreSistePosisjon(tvingLagring = false) {
   if (!currentUser || isNaN(video.currentTime) || video.currentTime <= 0 || isNaN(video.duration)) return;
   
@@ -1113,10 +1125,14 @@ async function lagreSistePosisjon(tvingLagring = false) {
     try {
       const percent = (video.currentTime / video.duration) * 100;
       
+      // Hvis brukeren har sett mer enn 95% (rulletekst), setter vi status til "ferdig"
+      // slik at den ikke dukker opp igjen på hovedsiden hvis de lukker fanen nå.
+      const statusVerdi = percent > 95 ? "ferdig" : "paabegynt";
+      
       await setDoc(doc(db, "brukerdata", currentUser.uid, "profiler", aktivProfil, "fremdrift", filmId), {
         currentTime: video.currentTime,
         percent: parseFloat(percent.toFixed(1)),
-        status: "paabegynt", // Matcher nøyaktig med query på Hovedsiden
+        status: statusVerdi,
         sistOppdatert: new Date()
       }, { merge: true });
     } catch (error) {
@@ -1125,12 +1141,14 @@ async function lagreSistePosisjon(tvingLagring = false) {
   }
 }
 
+// SLETT FRA FREMDRIFT OG LEGG TIL I HISTORIKK NÅR DEN ER HELT FERDIG
 async function ryddeOgNeste() {
   video.pause();
   if (currentUser) {
     try {
-      // Sletter fra aktiv profils fremdrift så den forsvinner fra "Fortsett å se"
+      // Sletter fra aktiv profils fremdrift så den forsvinner umiddelbart fra "Fortsett å se"
       await deleteDoc(doc(db, "brukerdata", currentUser.uid, "profiler", aktivProfil, "fremdrift", filmId));
+      
       // Flytter til historikk
       await setDoc(doc(db, "brukerdata", currentUser.uid, "profiler", aktivProfil, "historikk", filmId), {
         status: "ferdig",
@@ -1140,9 +1158,30 @@ async function ryddeOgNeste() {
       console.error("Feil under ryddeOgNeste i Firebase:", error);
     }
   }
-  window.location.href = nesteEpisodeUrl ? nesteEpisodeUrl : `film.html?navn=${navn}`;
+  window.location.href = typeof nesteEpisodeUrl !== "undefined" && nesteEpisodeUrl ? nesteEpisodeUrl : `film.html?navn=${navn}`;
 }
 
+/* ================= EVENT LYTTERE FOR VIDEOELEMENTET ================= */
+
+// 1. Når videoen spilles helt til slutten
+video.addEventListener("ended", async () => {
+  await ryddeOgNeste();
+});
+
+// 2. Mens videoen spiller (oppdaterer databasen hvert 5. sekund)
+video.addEventListener("timeupdate", () => {
+  lagreSistePosisjon(false);
+});
+
+// 3. Når brukeren trykker på pause (tvinger lagring med én gang)
+video.addEventListener("pause", () => {
+  lagreSistePosisjon(true);
+});
+
+// 4. Hvis brukeren krysser ut nettleserfanen eller går bakover i nettleseren
+window.addEventListener("beforeunload", () => {
+  lagreSistePosisjon(true);
+});
 /* ================= INTERFACES OG KONTROLLER ================= */
 function updateProgress() {
   if (!isDragging) {
