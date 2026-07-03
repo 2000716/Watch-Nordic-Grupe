@@ -928,7 +928,8 @@ video::cue {
   
 <script src="Filmdata.js"></script>
 <script src="Seriedata.js"></script>
-<script>
+
+<script type="module">
 /* ===========================================================
    UNIVERSELL PLAYER – FILM + SERIE (OPTIMALISERT MED FIREBASE)
    =========================================================== */
@@ -946,16 +947,15 @@ let filmId = "";
 let tilbakeUrl = "";
 let isSerie = false;
 let currentUser = null;
-let sisteLagredeTid = 0;
 let forrigeLagringstidspunkt = 0;
 
 /* ================= RESOLVE MEDIA ================= */
-if (navn && filmer?.[navn] && !sesong && !episode) {
+if (navn && typeof filmer !== "undefined" && filmer?.[navn] && !sesong && !episode) {
   film = filmer[navn];
   filmId = `film-${navn}`;
   tilbakeUrl = film.tilbakeUrl || "filmer.html";
   isSerie = false;
-} else if (navn && serier?.[navn] && sesong && episode && serier[navn].sesonger?.[sesong]?.episoder?.[episode]) {
+} else if (navn && typeof serier !== "undefined" && serier?.[navn] && sesong && episode && serier[navn].sesonger?.[sesong]?.episoder?.[episode]) {
   const serie = serier[navn];
   const ep = serie.sesonger[sesong].episoder[episode];
   film = {
@@ -1027,7 +1027,7 @@ let subtitlesEnabled = true;
 let autoplayTriggered = false;
 
 function hentNesteEpisodeUrl() {
-  if (navn && sesong && episode && serier?.[navn]) {
+  if (navn && sesong && episode && typeof serier !== "undefined" && serier?.[navn]) {
     const s = parseInt(sesong);
     const e = parseInt(episode);
     const serie = serier[navn];
@@ -1057,13 +1057,26 @@ function formatTime(time) {
   return `${m}:${s < 10 ? '0' + s : s}`;
 }
 
-/* ================= OPPDATERTE FIREBASE-FUNKSJONER FOR SPILLEREN ================= */
-const aktivProfil = localStorage.getItem("aktivProfil") || "default"; // Henter aktiv profil
+/* ================= FIREBASE BRUKERHÅNDTERING OG SYNC ================= */
+const aktivProfil = localStorage.getItem("aktivProfil") || "default";
+
+// LYTTER PÅ BRUKERSTATUS (Kritisk fiks: Denne var glemt i forrige skript!)
+onAuthStateChanged(auth, async (user) => {
+  if (user) {
+    currentUser = user;
+    // Vi venter med å starte avspilling til vi har sjekket om det finnes lagret fremdrift i skyen
+    await sjekkLagretFremdrift();
+  } else {
+    console.warn("Ingen bruker logget inn. Starter video uten skylagring.");
+    video.currentTime = 0;
+    video.muted = false;
+    video.play().catch(err => console.warn(err));
+  }
+});
 
 async function sjekkLagretFremdrift() {
   if (!currentUser) return;
   try {
-    // NY BANE: matcher profilsystemet til hovedsiden
     const docRef = doc(db, "brukerdata", currentUser.uid, "profiler", aktivProfil, "fremdrift", filmId);
     const docSnap = await getDoc(docRef);
 
@@ -1071,6 +1084,7 @@ async function sjekkLagretFremdrift() {
       const data = docSnap.data();
       const savedTime = parseFloat(data.currentTime);
       
+      // Hvis brukeren har sett mer enn 10 sekunder, og det er mindre enn hele videoen
       if (!isNaN(savedTime) && savedTime > 10 && video.duration > savedTime) {
         video.currentTime = savedTime;
         resumeOverlay.style.display = "flex";
@@ -1083,24 +1097,26 @@ async function sjekkLagretFremdrift() {
   } catch (error) {
     console.error("Feil ved henting av fremdrift fra Firebase:", error);
   }
+  // Standard fallback hvis ingen fremdrift finnes
   video.currentTime = 0;
   video.muted = false;
   video.play().catch(err => console.warn(err));
 }
 
 async function lagreSistePosisjon(tvingLagring = false) {
-  if (!currentUser || isNaN(video.currentTime) || video.currentTime <= 0) return;
+  if (!currentUser || isNaN(video.currentTime) || video.currentTime <= 0 || isNaN(video.duration)) return;
   
   const nå = Date.now();
+  // Lagrer hvert 5. sekund, eller umiddelbart hvis det tvinges (pause, lukke fane)
   if (tvingLagring || (nå - forrigeLagringstidspunkt > 5000)) {
     forrigeLagringstidspunkt = nå;
     try {
       const percent = (video.currentTime / video.duration) * 100;
-      // NY BANE og status endret til "paabegynt" for å matche hovedsidens query
+      
       await setDoc(doc(db, "brukerdata", currentUser.uid, "profiler", aktivProfil, "fremdrift", filmId), {
         currentTime: video.currentTime,
         percent: parseFloat(percent.toFixed(1)),
-        status: "paabegynt", 
+        status: "paabegynt", // Matcher nøyaktig med query på Hovedsiden
         sistOppdatert: new Date()
       }, { merge: true });
     } catch (error) {
@@ -1113,9 +1129,9 @@ async function ryddeOgNeste() {
   video.pause();
   if (currentUser) {
     try {
-      // Sletter fra aktiv profils fremdrift
+      // Sletter fra aktiv profils fremdrift så den forsvinner fra "Fortsett å se"
       await deleteDoc(doc(db, "brukerdata", currentUser.uid, "profiler", aktivProfil, "fremdrift", filmId));
-      // Lagrer i historikken til profilen
+      // Flytter til historikk
       await setDoc(doc(db, "brukerdata", currentUser.uid, "profiler", aktivProfil, "historikk", filmId), {
         status: "ferdig",
         fullførtDato: new Date()
@@ -1126,6 +1142,7 @@ async function ryddeOgNeste() {
   }
   window.location.href = nesteEpisodeUrl ? nesteEpisodeUrl : `film.html?navn=${navn}`;
 }
+
 /* ================= INTERFACES OG KONTROLLER ================= */
 function updateProgress() {
   if (!isDragging) {
@@ -1156,7 +1173,7 @@ video.addEventListener('play', () => {
 video.addEventListener('pause', () => { 
   playIcon.src = "https://static.wixstatic.com/media/fd2fb2_f6f25f56b00e49eea8dc4f811b50bb5c~mv2.png"; 
   showUI(); 
-  lagreSistePosisjon(true);
+  lagreSistePosisjon(true); // Tvinger lagring med en gang man trykker pause
 });
 
 muteBtn.addEventListener('click', () => {
@@ -1260,6 +1277,7 @@ video.addEventListener('waiting', () => loadingSpinner.style.display = 'block');
 video.addEventListener('playing', () => loadingSpinner.style.display = 'none');
 video.addEventListener('canplay', () => loadingSpinner.style.display = 'none');
 
+// Tving lagring til databasen rett før brukeren forlater siden eller lukker nettleseren
 window.addEventListener('beforeunload', () => lagreSistePosisjon(true));
 video.addEventListener('ended', ryddeOgNeste);
 
