@@ -26,30 +26,31 @@ const filmer = {
     expireDate: "2027-11-15T23:59:59",
   },
 
-    "house-on-haunted-hill": {
+"house-on-haunted-hill": {
     tittel: "House on Haunted Hill",
     rating: "6.7",
     bakgrunn: "https://image.tmdb.org/t/p/original/tS2qaOAG1Yqepp0Hm9AJjH7Zg14.jpg",
     banner: "", 
     logo: "https://image.tmdb.org/t/p/original/ulRnCQUtXRLNnQKu4vRmMAg0llS.png",
-    trailer: "", // 🎥 NY 
+    trailer: "", 
     poster: "https://image.tmdb.org/t/p/original/9S97udaoo9wP5puoeyGlHK4I8iN.jpg",
-    posterVertikal: "https://image.tmdb.org/t/p/original/p0Gh3QubR6WPhfPkKJXuYO76zag.jpg", // portrett
+    posterVertikal: "https://image.tmdb.org/t/p/original/p0Gh3QubR6WPhfPkKJXuYO76zag.jpg",
     beskrivelse: "En millionær tilbyr 10 000 dollar til fem personer som går med på å være innelåst i et stort, skummelt, leid hus over natten med ham og kona.",
     metadata: ["1959", "16 år", "Grøsser", "1 t 15 min"],
     skuespillere: "Vincent Price, Carol Ohmart, Richard Long",
     regissor: "William Castle",
     watchUrl: "film-mal.html?id=house-on-haunted-hill",
     videoUrl:"https://ia801504.us.archive.org/20/items/house-on-haunted-hill-1959_202511/House%20on%20Haunted%20Hill%20%281959%29/House%20on%20Haunted%20Hill%20-%201959.mp4",
-   subtitleUrl: "house-on-haunted-hill.VTT",
-   tilbakeUrl: "film.html?navn=house-on-haunted-hill",
-  audioLanguages: [
-    { code: "en", label: "Engelsk" } ],
-  subtitleLanguages: [
-    { code: "nb", label: "Norsk" },
-    { code: "off", label: "Av" }
-  ],
-   publishDate: "2025-10-02T00:00:00", // ISO datoformat
+    subtitleUrl: "house-on-haunted-hill.VTT",
+    tilbakeUrl: "film.html?navn=house-on-haunted-hill",
+    audioLanguages: [
+      { code: "en", label: "Engelsk" } // Endret også code her fra "no" til "en" siden det er engelsk tale
+    ],
+    subtitleLanguages: [
+      { code: "nb", label: "Norsk" }, // Endret fra "no" til "nb"
+      { code: "off", label: "Av" }
+    ],
+    publishDate: "2025-10-02T00:00:00",
     expireDate: "2027-11-15T23:59:59",
   },
 
