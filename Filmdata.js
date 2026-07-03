@@ -44,7 +44,7 @@ const filmer = {
     tilbakeUrl: "film.html?navn=house-on-haunted-hill",
     audioLanguages: [{ code: "en", label: "Engelsk" }],
     subtitleLanguages: [
-      { code: "nb", label: "Norsk" },
+      { code: "no", label: "Norsk" },
       { code: "off", label: "Av" }
     ],
     publishDate: "2025-10-02T00:00:00",
