@@ -352,7 +352,6 @@
     let docRef = null;
 
     // ================= LYNRAST OPPSTART (Mellomlagring) =================
-    // Sjekker om vi har lagrede profiler fra forrige besøk og tegner dem ut umiddelbart (0 millisekunder forsinkelse)
     const cachedProfiles = localStorage.getItem("watch_nordic_profiles_cache");
     if (cachedProfiles) {
       try {
@@ -379,7 +378,6 @@
         
         if (docSnap.exists()) {
           profiler = docSnap.data().profiler || [];
-          // Oppdaterer den lokale cachen til neste gang siden åpnes
           localStorage.setItem("watch_nordic_profiles_cache", JSON.stringify(profiler));
         } else {
           profiler = [
@@ -395,7 +393,6 @@
           localStorage.setItem("watch_nordic_profiles_cache", JSON.stringify(profiler));
         }
         
-        // Gjen-tegner skjermen lydløst i bakgrunnen for å sikre 100% ferske data
         renderProfiler();
       } catch (error) {
         console.error("Feil ved henting av profiler:", error);
@@ -464,7 +461,7 @@
       profiler.splice(index, 1);
       
       await setDoc(docRef, { profiler: profiler }, { merge: true });
-      localStorage.setItem("watch_nordic_profiles_cache", JSON.stringify(profiler)); // Oppdaterer cache ved sletting
+      localStorage.setItem("watch_nordic_profiles_cache", JSON.stringify(profiler));
       renderProfiler();
     }
 
@@ -481,6 +478,7 @@
 
       localStorage.setItem("aktivProfilIndex", index);
       localStorage.setItem("profilnavn", profil.navn || "");
+      localStorage.setItem("aktivProfil", profil.navn || "");
       localStorage.setItem("profilbilde", profil.bilde || (profil.isKids ? barnBilde : standardBilde));
       localStorage.setItem("isKids", profil.isKids ? "true" : "false");
       localStorage.setItem("maksAldersgrense", profil.maksAldersgrense || "12");
@@ -518,7 +516,7 @@
       });
 
       await setDoc(docRef, { profiler: profiler }, { merge: true });
-      localStorage.setItem("watch_nordic_profiles_cache", JSON.stringify(profiler)); // Oppdaterer cache ved ny profil
+      localStorage.setItem("watch_nordic_profiles_cache", JSON.stringify(profiler));
       
       lukkModal();
       renderProfiler();
@@ -528,6 +526,5 @@
     window.lukkModal = lukkModal;
     window.åpneModal = åpneModal;
   </script>
-
 </body>
 </html>
