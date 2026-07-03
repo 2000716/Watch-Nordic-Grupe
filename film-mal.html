@@ -1057,23 +1057,14 @@ function formatTime(time) {
   return `${m}:${s < 10 ? '0' + s : s}`;
 }
 
-/* ================= FIREBASE SYNC LOGIKK ================= */
-onAuthStateChanged(auth, async (user) => {
-  if (user) {
-    currentUser = user;
-    sjekkLagretFremdrift();
-  } else {
-    console.warn("Ingen bruker er logget inn. Fremdrift vil ikke bli lagret.");
-    video.currentTime = 0;
-    video.muted = false;
-    video.play().catch(err => console.warn(err));
-  }
-});
+/* ================= OPPDATERTE FIREBASE-FUNKSJONER FOR SPILLEREN ================= */
+const aktivProfil = localStorage.getItem("aktivProfil") || "default"; // Henter aktiv profil
 
 async function sjekkLagretFremdrift() {
   if (!currentUser) return;
   try {
-    const docRef = doc(db, "brukerdata", currentUser.uid, "fremdrift", filmId);
+    // NY BANE: matcher profilsystemet til hovedsiden
+    const docRef = doc(db, "brukerdata", currentUser.uid, "profiler", aktivProfil, "fremdrift", filmId);
     const docSnap = await getDoc(docRef);
 
     if (docSnap.exists()) {
@@ -1101,15 +1092,15 @@ async function lagreSistePosisjon(tvingLagring = false) {
   if (!currentUser || isNaN(video.currentTime) || video.currentTime <= 0) return;
   
   const nå = Date.now();
-  // Lagrer hvert 5. sekund (5000ms), eller tvinges (ved pause, avslutning osv)
   if (tvingLagring || (nå - forrigeLagringstidspunkt > 5000)) {
     forrigeLagringstidspunkt = nå;
     try {
       const percent = (video.currentTime / video.duration) * 100;
-      await setDoc(doc(db, "brukerdata", currentUser.uid, "fremdrift", filmId), {
+      // NY BANE og status endret til "paabegynt" for å matche hovedsidens query
+      await setDoc(doc(db, "brukerdata", currentUser.uid, "profiler", aktivProfil, "fremdrift", filmId), {
         currentTime: video.currentTime,
-        percent: percent.toFixed(1),
-        status: "påbegynt",
+        percent: parseFloat(percent.toFixed(1)),
+        status: "paabegynt", 
         sistOppdatert: new Date()
       }, { merge: true });
     } catch (error) {
@@ -1122,9 +1113,10 @@ async function ryddeOgNeste() {
   video.pause();
   if (currentUser) {
     try {
-      // Sletter midlertidig fremdrift siden videoen er ferdig, og setter status til ferdig
-      await deleteDoc(doc(db, "brukerdata", currentUser.uid, "fremdrift", filmId));
-      await setDoc(doc(db, "brukerdata", currentUser.uid, "historikk", filmId), {
+      // Sletter fra aktiv profils fremdrift
+      await deleteDoc(doc(db, "brukerdata", currentUser.uid, "profiler", aktivProfil, "fremdrift", filmId));
+      // Lagrer i historikken til profilen
+      await setDoc(doc(db, "brukerdata", currentUser.uid, "profiler", aktivProfil, "historikk", filmId), {
         status: "ferdig",
         fullførtDato: new Date()
       }, { merge: true });
@@ -1134,7 +1126,6 @@ async function ryddeOgNeste() {
   }
   window.location.href = nesteEpisodeUrl ? nesteEpisodeUrl : `film.html?navn=${navn}`;
 }
-
 /* ================= INTERFACES OG KONTROLLER ================= */
 function updateProgress() {
   if (!isDragging) {
