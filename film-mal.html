@@ -757,23 +757,6 @@ video::cue {
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
-/* Animasjon når man hoverer på prikken */
-.thumb:hover {
-  transform: translate(-50%, -50%) scale(1.4);
-  box-shadow: 0 0 18px rgba(15, 221, 203, 1);
-}
-    #subtitleOverlay {
-  position: absolute;
-  bottom: 50px; /* Standard posisjon i bunnen */
-  left: 50%;
-  transform: translateX(-50%);
-  transition: bottom 0.3s ease-in-out; /* Sørger for glidende bevegelse */
-  z-index: 10;
-}
-
-#subtitleOverlay.subtitle-up {
-  bottom: 130px; /* Flyttes opp når kontrollene/UI er synlig */
-}
 
 </style>
 </head>
