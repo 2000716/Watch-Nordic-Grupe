@@ -1059,13 +1059,11 @@ function formatTime(time) {
 
 /* ================= FIREBASE BRUKERHÅNDTERING OG SYNC ================= */
 const aktivProfil = localStorage.getItem("aktivProfil") || "default";
-let forrigeLagringstidspunkt = 0;
 
 // LYTTER PÅ BRUKERSTATUS
 onAuthStateChanged(auth, async (user) => {
   if (user) {
     currentUser = user;
-    // Vi venter med å starte avspilling til vi har sjekket om det finnes lagret fremdrift i skyen
     await sjekkLagretFremdrift();
   } else {
     console.warn("Ingen bruker logget inn. Starter video uten skylagring.");
@@ -1075,7 +1073,6 @@ onAuthStateChanged(auth, async (user) => {
   }
 });
 
-// HENT LAGRET FREMDRIFT VED OPPSTART
 async function sjekkLagretFremdrift() {
   if (!currentUser) return;
   try {
@@ -1087,46 +1084,34 @@ async function sjekkLagretFremdrift() {
       const savedTime = parseFloat(data.currentTime);
       const status = data.status;
       
-      // Hvis brukeren har sett mer enn 10 sekunder, det er mindre enn hele videoen, og status ikke allerede er ferdig
+      // Hvis brukeren har sett mer enn 10 sekunder, det er mindre enn hele videoen, og status ikke er satt til "ferdig"
       if (!isNaN(savedTime) && savedTime > 10 && video.duration > savedTime && status !== "ferdig") {
         video.currentTime = savedTime;
         resumeOverlay.style.display = "flex";
         
-        continueBtn.onclick = () => { 
-          resumeOverlay.style.display = "none"; 
-          video.play().catch(err => console.warn(err)); 
-        };
-        
-        restartBtn.onclick = () => { 
-          video.currentTime = 0; 
-          resumeOverlay.style.display = "none"; 
-          video.play().catch(err => console.warn(err)); 
-        };
+        continueBtn.onclick = () => { resumeOverlay.style.display = "none"; video.play().catch(err => console.warn(err)); };
+        restartBtn.onclick = () => { video.currentTime = 0; resumeOverlay.style.display = "none"; video.play().catch(err => console.warn(err)); };
         return;
       }
     }
   } catch (error) {
     console.error("Feil ved henting av fremdrift fra Firebase:", error);
   }
-  // Standard fallback hvis ingen fremdrift finnes
   video.currentTime = 0;
   video.muted = false;
   video.play().catch(err => console.warn(err));
 }
 
-// LAGRE POSITION UNDERVEIS ELLER VED PAUSE
 async function lagreSistePosisjon(tvingLagring = false) {
   if (!currentUser || isNaN(video.currentTime) || video.currentTime <= 0 || isNaN(video.duration)) return;
   
   const nå = Date.now();
-  // Lagrer hvert 5. sekund, eller umiddelbart hvis det tvinges (pause, lukke fane)
   if (tvingLagring || (nå - forrigeLagringstidspunkt > 5000)) {
     forrigeLagringstidspunkt = nå;
     try {
       const percent = (video.currentTime / video.duration) * 100;
       
-      // Hvis brukeren har sett mer enn 95% (rulletekst), setter vi status til "ferdig"
-      // slik at den ikke dukker opp igjen på hovedsiden hvis de lukker fanen nå.
+      // GJØR AT DEN FORSVINNER FRA FORTSETT Å SE HVIS DE LUKKER VIDOEN UNDER RULLETEKSTEN (>95%)
       const statusVerdi = percent > 95 ? "ferdig" : "paabegynt";
       
       await setDoc(doc(db, "brukerdata", currentUser.uid, "profiler", aktivProfil, "fremdrift", filmId), {
@@ -1141,14 +1126,12 @@ async function lagreSistePosisjon(tvingLagring = false) {
   }
 }
 
-// SLETT FRA FREMDRIFT OG LEGG TIL I HISTORIKK NÅR DEN ER HELT FERDIG
 async function ryddeOgNeste() {
   video.pause();
   if (currentUser) {
     try {
-      // Sletter fra aktiv profils fremdrift så den forsvinner umiddelbart fra "Fortsett å se"
+      // Sletter fra aktiv profils fremdrift så den forsvinner helt fra "Fortsett å se"
       await deleteDoc(doc(db, "brukerdata", currentUser.uid, "profiler", aktivProfil, "fremdrift", filmId));
-      
       // Flytter til historikk
       await setDoc(doc(db, "brukerdata", currentUser.uid, "profiler", aktivProfil, "historikk", filmId), {
         status: "ferdig",
@@ -1158,30 +1141,9 @@ async function ryddeOgNeste() {
       console.error("Feil under ryddeOgNeste i Firebase:", error);
     }
   }
-  window.location.href = typeof nesteEpisodeUrl !== "undefined" && nesteEpisodeUrl ? nesteEpisodeUrl : `film.html?navn=${navn}`;
+  window.location.href = nesteEpisodeUrl ? nesteEpisodeUrl : `film.html?navn=${navn}`;
 }
 
-/* ================= EVENT LYTTERE FOR VIDEOELEMENTET ================= */
-
-// 1. Når videoen spilles helt til slutten
-video.addEventListener("ended", async () => {
-  await ryddeOgNeste();
-});
-
-// 2. Mens videoen spiller (oppdaterer databasen hvert 5. sekund)
-video.addEventListener("timeupdate", () => {
-  lagreSistePosisjon(false);
-});
-
-// 3. Når brukeren trykker på pause (tvinger lagring med én gang)
-video.addEventListener("pause", () => {
-  lagreSistePosisjon(true);
-});
-
-// 4. Hvis brukeren krysser ut nettleserfanen eller går bakover i nettleseren
-window.addEventListener("beforeunload", () => {
-  lagreSistePosisjon(true);
-});
 /* ================= INTERFACES OG KONTROLLER ================= */
 function updateProgress() {
   if (!isDragging) {
@@ -1212,7 +1174,7 @@ video.addEventListener('play', () => {
 video.addEventListener('pause', () => { 
   playIcon.src = "https://static.wixstatic.com/media/fd2fb2_f6f25f56b00e49eea8dc4f811b50bb5c~mv2.png"; 
   showUI(); 
-  lagreSistePosisjon(true); // Tvinger lagring med en gang man trykker pause
+  lagreSistePosisjon(true);
 });
 
 muteBtn.addEventListener('click', () => {
@@ -1316,9 +1278,11 @@ video.addEventListener('waiting', () => loadingSpinner.style.display = 'block');
 video.addEventListener('playing', () => loadingSpinner.style.display = 'none');
 video.addEventListener('canplay', () => loadingSpinner.style.display = 'none');
 
-// Tving lagring til databasen rett før brukeren forlater siden eller lukker nettleseren
+// HÅNDTERING NÅR VIDEOEN ER FERDIG
 window.addEventListener('beforeunload', () => lagreSistePosisjon(true));
-video.addEventListener('ended', ryddeOgNeste);
+video.addEventListener('ended', async () => {
+  await ryddeOgNeste();
+});
 
 let mouseTimer;
 function showCursor() { document.body.style.cursor = 'default'; clearTimeout(mouseTimer); mouseTimer = setTimeout(() => { document.body.style.cursor = 'none'; }, 3000); }
