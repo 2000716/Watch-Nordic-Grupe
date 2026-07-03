@@ -1119,6 +1119,7 @@ import { doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/12.15.0/
 
 let currentUser = null;
 let aktivProfil = localStorage.getItem("aktivProfil") || "Hovedprofil";
+let aktivProfilIndex = localStorage.getItem("aktivProfilIndex") || "0";
 
 /* ===========================================================
    2. DYNAMISK STØTTE FOR FILMER OG SERIER
@@ -1254,51 +1255,93 @@ function oppdaterListeKnapp() {
 }
 
 /* ===========================================================
-   3. FIREBASE BRUKER-STATUS & DATA-HENTING
+   3. LYNRAST CACHE-SJEKK (Sparer Firestore-lesinger)
+   =========================================================== */
+let heleProfilArrayet = [];
+const cachedProfiles = localStorage.getItem("watch_nordic_profiles_cache");
+
+if (cachedProfiles) {
+  try {
+    heleProfilArrayet = JSON.parse(cachedProfiles);
+    // Prøv å finne den aktive profilen enten via indeks eller navn
+    let profilData = heleProfilArrayet[parseInt(aktivProfilIndex)] || heleProfilArrayet.find(p => p.navn === aktivProfil);
+    
+    if (profilData) {
+      const historikk = profilData.historikk || {};
+      status = historikk[navn] || "ikke-påbegynt";
+      minListe = profilData.minListe || [];
+      
+      // Oppdaterer knapper umiddelbart (0ms ventetid for brukeren)
+      oppdaterWatchKnapp();
+      oppdaterListeKnapp();
+      byggAnbefalingerEllerEpisoder();
+    }
+  } catch (e) {
+    console.error("Kunne ikke laste lokal profil-cache:", e);
+  }
+}
+
+/* ===========================================================
+   4. FIREBASE BRUKER-STATUS & DATA-HENTING (Kjører asynkront)
    =========================================================== */
 onAuthStateChanged(auth, async (user) => {
   if (user) {
     currentUser = user;
     try {
-      const profilDocRef = doc(db, "users", user.uid, "profiler", aktivProfil);
-      const docSnap = await getDoc(profilDocRef);
+      // Bruker samme dokumentstruktur som profilsiden din for å holde alt samlet i ett enkelt dokument per bruker
+      const userDocRef = doc(db, "users", user.uid);
+      const docSnap = await getDoc(userDocRef);
       
       if (docSnap.exists()) {
-        const userData = docSnap.data();
+        heleProfilArrayet = docSnap.data().profiler || [];
+        localStorage.setItem("watch_nordic_profiles_cache", JSON.stringify(heleProfilArrayet));
         
-        // Hent historikk/status for gjeldende film/serie
-        const historikk = userData.historikk || {};
-        status = historikk[navn] || "ikke-påbegynt";
-        
-        // Hent Min Liste
-        minListe = userData.minListe || [];
+        let profilData = heleProfilArrayet[parseInt(aktivProfilIndex)] || heleProfilArrayet.find(p => p.navn === aktivProfil);
+        if (profilData) {
+          const historikk = profilData.historikk || {};
+          status = historikk[navn] || "ikke-påbegynt";
+          minListe = profilData.minListe || [];
+        }
       }
     } catch (err) {
-      console.error("Feil ved henting av profil-data fra Firebase:", err);
+      console.error("Feil ved bakgrunnshenting av data fra Firebase:", err);
     }
   } else {
     window.location.href = "index.html";
   }
   
-  // Oppdater UI etter at Firebase har svart
+  // Sikrer at alt av visuelle elementer er 100% i sync med databasen
   oppdaterWatchKnapp();
   oppdaterListeKnapp();
   byggAnbefalingerEllerEpisoder();
 });
 
 /* ===========================================================
-   4. INTERAKSJONER & FIREBASE LAGRING
+   5. INTERAKSJONER & FIREBASE LAGRING (Optimalisert skriving)
    =========================================================== */
-async function lagreStatusTilFirebase(nyStatus) {
+async function oppdaterOgLagreProfilArray() {
   if (!currentUser) return;
-  const profilDocRef = doc(db, "users", currentUser.uid, "profiler", aktivProfil);
+  
+  let indeks = parseInt(aktivProfilIndex);
+  if (!heleProfilArrayet[indeks]) {
+    indeks = heleProfilArrayet.findIndex(p => p.navn === aktivProfil);
+  }
+  if (indeks === -1) return;
+
+  // Oppdaterer det lokale objektet før det pushes til skyen
+  if (!heleProfilArrayet[indeks].historikk) heleProfilArrayet[indeks].historikk = {};
+  heleProfilArrayet[indeks].historikk[navn] = status;
+  heleProfilArrayet[indeks].minListe = minListe;
+
+  // Lagre i lokal cache umiddelbart (0ms responstid lokalt)
+  localStorage.setItem("watch_nordic_profiles_cache", JSON.stringify(heleProfilArrayet));
+
+  // Skriv til Firestore i bakgrunnen (teller kun som 1 write-operasjon)
+  const userDocRef = doc(db, "users", currentUser.uid);
   try {
-    // Korrigert dyp-fletting (deep merge) ved hjelp av dot-notation slik at kun denne filmen endres
-    await setDoc(profilDocRef, {
-      [`historikk.${navn}`]: nyStatus
-    }, { merge: true });
+    await setDoc(userDocRef, { profiler: heleProfilArrayet }, { merge: true });
   } catch (err) {
-    console.error("Kunne ikke lagre status til Firebase:", err);
+    console.error("Kunne ikke lagre profildata til Firestore:", err);
   }
 }
 
@@ -1307,8 +1350,8 @@ if (watchBtn) {
     if (erUpublisert || erUtgått) return;
 
     status = "påbegynt";
-    oppdaterWatchKnapp(); // Oppdaterer knappen visuelt umiddelbart
-    await lagreStatusTilFirebase("påbegynt");
+    oppdaterWatchKnapp(); 
+    await oppdaterOgLagreProfilArray();
 
     if (type === "film") {
       window.location.href = data.watchUrl;
@@ -1342,13 +1385,7 @@ if (addToListBtn) {
     }
     
     oppdaterListeKnapp();
-    
-    const profilDocRef = doc(db, "users", currentUser.uid, "profiler", aktivProfil);
-    try {
-      await setDoc(profilDocRef, { minListe: minListe }, { merge: true });
-    } catch (err) {
-      console.error("Kunne ikke lagre Min Liste til Firebase:", err);
-    }
+    await oppdaterOgLagreProfilArray();
   });
 }
 
@@ -1398,7 +1435,7 @@ if (erUpublisert) {
 }
 
 /* ===========================================================
-   5. ANBEFALINGER / EPISODER GENERERING
+   6. ANBEFALINGER / EPISODER GENERERING
    =========================================================== */
 const gallery = document.getElementById("recommendationGallery");
 const tittelEl = document.querySelector(".recommendations h2");
@@ -1421,14 +1458,18 @@ function hentTilfeldige(antall) {
 }
 
 function byggAnbefalingerEllerEpisoder() {
+  // Sjekker om elementet i det hele tatt finnes før vi bygger for å unngå feilmeldinger i konsollen
+  const recommendationsDiv = document.querySelector(".recommendations");
+  if (!recommendationsDiv) return;
+
   if (type === "serie" && data.sesonger) {
-    const recommendationsDiv = document.querySelector(".recommendations");
-    if (recommendationsDiv) {
-      recommendationsDiv.innerHTML = `
-        <div class="season-buttons" id="seasonButtons"></div>
-        <div class="episode-gallery" id="episodeGallery"></div>
-      `;
-    }
+    // Sjekk om sesongknappene allerede er tegnet (så vi slipper å restarte UI hvis koden kalles på nytt fra Firebase-lytteren)
+    if (document.getElementById("seasonButtons")) return;
+
+    recommendationsDiv.innerHTML = `
+      <div class="season-buttons" id="seasonButtons"></div>
+      <div class="episode-gallery" id="episodeGallery"></div>
+    `;
 
     const seasonButtons = document.getElementById("seasonButtons");
     const episodeGallery = document.getElementById("episodeGallery");
@@ -1513,7 +1554,7 @@ function byggAnbefalingerEllerEpisoder() {
     }
   } else {
     /* === Anbefalinger for film === */
-    if (!gallery) return;
+    if (!gallery || gallery.children.length > 0) return; // Avbryt hvis allerede generert
     gallery.innerHTML = "";
     const anbefalte = hentTilfeldige(8);
     if (tittelEl) {
@@ -1543,7 +1584,7 @@ function byggAnbefalingerEllerEpisoder() {
 }
 
 /* ===========================================================
-   6. TRAILER & UI LOGIKK
+   7. TRAILER & UI LOGIKK
    =========================================================== */
 const trailerVideo = document.getElementById("trailerVideo");
 const backgroundImage = document.getElementById("backgroundImage");
