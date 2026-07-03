@@ -391,20 +391,11 @@
           <button class="edit-trigger" id="endreEpostKnapp">Endre</button>
         </div>
 
-        <div class="row" id="passordRow">
+        <div class="row">
           <div class="info-block">
             <div class="label">Passord</div>
-            <div class="value" id="passordView">••••••••</div>
-            <div class="edit-field hidden" id="passordEditField">
-              <input type="password" id="gammeltPassordInput" placeholder="Nåværende passord">
-              <input type="password" id="nyttPassordInput" placeholder="Nytt sikkert passord (min. 6 tegn)">
-              <div class="edit-actions">
-                <button class="btn-save" id="lagrePassordBtn">Oppdater passord</button>
-                <button class="btn-cancel" id="avbrytPassordBtn">Avbryt</button>
-              </div>
-            </div>
+            <div class="value">••••••••</div>
           </div>
-          <button class="edit-trigger" id="endrePassordKnapp">Endre</button>
         </div>
       </div>
 
@@ -446,7 +437,7 @@
 
   <script type="module">
     import { auth, db } from "./firebase-oppsett.js";
-    import { onAuthStateChanged, signOut, updateEmail, updatePassword, EmailAuthProvider, reauthenticateWithCredential } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-auth.js";
+    import { onAuthStateChanged, signOut, updateEmail } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-auth.js";
     import { doc, getDoc, setDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
 
     const urlParams = new URLSearchParams(window.location.search);
@@ -457,10 +448,8 @@
     const navnDisplay = document.getElementById("navnDisplay");
     const navnView = document.getElementById("navnView");
     const navnInput = document.getElementById("navnInput");
-    const navnRow = document.getElementById("navnRow");
     const epostView = document.getElementById("epostView");
     const epostInput = document.getElementById("epostInput");
-    const epostRow = document.getElementById("epostRow");
     const sletteKnapp = document.getElementById("sletteKnapp");
     
     const foreldreKontrollSeksjon = document.getElementById("foreldreKontrollSeksjon");
@@ -507,7 +496,7 @@
     document.getElementById("navLoggUtBtn").addEventListener("click", loggUt);
     document.getElementById("avatarContainer").addEventListener("click", velgProfilbildeSide);
     document.getElementById("endreBildeSideBtn").addEventListener("click", velgProfilbildeSide);
-    document.getElementById("sletteKnapp").addEventListener("click", haandterSletting);
+    sletteKnapp.addEventListener("click", haandterSletting);
     
     document.getElementById("endreNavnKnapp").addEventListener("click", endreNavn);
     document.getElementById("lagreNavnBtn").addEventListener("click", lagreNavn);
@@ -516,10 +505,6 @@
     document.getElementById("endreEpostKnapp").addEventListener("click", endreEpost);
     document.getElementById("lagreEpostBtn").addEventListener("click", lagreEpost);
     document.getElementById("avbrytEpostBtn").addEventListener("click", avbrytEpost);
-
-    document.getElementById("endrePassordKnapp").addEventListener("click", endrePassord);
-    document.getElementById("lagrePassordBtn").addEventListener("click", lagrePassord);
-    document.getElementById("avbrytPassordBtn").addEventListener("click", avbrytPassord);
 
     document.getElementById("laasOppForeldreKontrollBtn").addEventListener("click", laasOppForeldreKontroll);
     ageRestrictionSelect.addEventListener("change", lagreAldersgrense);
@@ -571,7 +556,6 @@
         document.getElementById("avatarContainer").style.pointerEvents = "none";
         document.getElementById("endreNavnKnapp").classList.add("hidden");
         document.getElementById("endreEpostKnapp").classList.add("hidden");
-        document.getElementById("endrePassordKnapp").classList.add("hidden");
         foreldreKontrollSeksjon.classList.remove("hidden");
         oppdaterMaksGrenseTekst();
       } else {
@@ -579,7 +563,6 @@
         document.getElementById("avatarContainer").style.pointerEvents = "auto";
         document.getElementById("endreNavnKnapp").classList.remove("hidden");
         document.getElementById("endreEpostKnapp").classList.remove("hidden");
-        document.getElementById("endrePassordKnapp").classList.remove("hidden");
         foreldreKontrollSeksjon.classList.add("hidden");
 
         if (aktivProfilIndex !== 0) {
@@ -667,44 +650,6 @@
       epostView.classList.remove("hidden");
       document.getElementById("epostEditField").classList.add("hidden");
       document.getElementById("endreEpostKnapp").classList.remove("hidden");
-    }
-
-    // ================= SIKKER PASSORDENDRING =================
-    function endrePassord() {
-      if (profiler[aktivProfilIndex]?.isKids) return;
-      document.getElementById("passordEditField").classList.remove("hidden");
-      document.getElementById("endrePassordKnapp").classList.add("hidden");
-    }
-
-    async function lagrePassord() {
-      const gammeltPassord = document.getElementById("gammeltPassordInput").value;
-      const nyttPassord = document.getElementById("nyttPassordInput").value;
-
-      if (!gammeltPassord || !nyttPassord) return alert("Begge feltene må fylles ut!");
-      if (nyttPassord.length < 6) return alert("Det nye passordet må være minst 6 tegn langt.");
-
-      const bruker = auth.currentUser;
-      if (!bruker) return;
-
-      try {
-        // Firebase krever re-autentisering før passordendring av sikkerhetsmessige årsaker
-        const credential = EmailAuthProvider.credential(bruker.email, gammeltPassord);
-        await reauthenticateWithCredential(bruker, credential);
-        
-        await updatePassword(bruker, nyttPassord);
-        alert("Passordet ditt ble trygt oppdatert!");
-        avbrytPassord();
-      } catch (error) {
-        console.error(error);
-        alert("Feil under oppdatering av passord. Sjekk at nåværende passord er riktig.");
-      }
-    }
-
-    function avbrytPassord() {
-      document.getElementById("gammeltPassordInput").value = "";
-      document.getElementById("nyttPassordInput").value = "";
-      document.getElementById("passordEditField").classList.add("hidden");
-      document.getElementById("endrePassordKnapp").classList.remove("hidden");
     }
 
     async function loggUt() {
