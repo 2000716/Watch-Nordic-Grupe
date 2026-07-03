@@ -1199,16 +1199,17 @@ video::cue {
   video.addEventListener('playing', () => loadingSpinner.style.display = 'none');
   video.addEventListener('canplay', () => loadingSpinner.style.display = 'none');
 
-  /* ===========================================================
-     3. FIREBASE SYNC & RESUME SYSTEM
+/* ===========================================================
+     3. FIREBASE SYNC & RESUME SYSTEM (OPTIMALISERT)
      =========================================================== */
+  let sisteSkyLagringTid = 0; // Holder styr på throttling (5 sekunder)
+
   onAuthStateChanged(auth, async (user) => {
     let savedTime = parseFloat(localStorage.getItem(`${filmId}-lastPosition`));
     
     if (user) {
       currentUser = user;
       try {
-        // Henter lagret fremdrift fra databasen for denne spesifikke profilen
         const docRef = doc(db, "brukerdata", user.uid, "profiler", aktivProfil, "fremdrift", filmId);
         const docSnap = await getDoc(docRef);
         
@@ -1220,34 +1221,50 @@ video::cue {
       }
     }
 
-    // Starter avspilling eller viser "Fortsett"-vinduet hvis det finnes lagret data
-    if (!isNaN(savedTime) && savedTime > 10 && video.duration > savedTime) {
-      video.currentTime = savedTime; 
-      resumeOverlay.style.display = "flex";
-      
-      continueBtn.onclick = () => { 
-        resumeOverlay.style.display = "none"; 
-        video.play().catch(err => console.warn(err)); 
-      };
-      
-      restartBtn.onclick = () => { 
+    // Funksjon for å faktisk anvende tiden når videoen er klar
+    const plasserSpillerPaaLagretTid = () => {
+      if (!isNaN(savedTime) && savedTime > 10 && (isNaN(video.duration) || video.duration > savedTime)) {
+        video.currentTime = savedTime; 
+        resumeOverlay.style.display = "flex";
+        
+        continueBtn.onclick = () => { 
+          resumeOverlay.style.display = "none"; 
+          video.play().catch(err => console.warn(err)); 
+        };
+        
+        restartBtn.onclick = () => { 
+          video.currentTime = 0; 
+          resumeOverlay.style.display = "none"; 
+          video.play().catch(err => console.warn(err)); 
+        };
+      } else {
         video.currentTime = 0; 
-        resumeOverlay.style.display = "none"; 
-        video.play().catch(err => console.warn(err)); 
-      };
+        video.muted = false; 
+        video.play().catch(err => console.warn(err));
+      }
+    };
+
+    // Hvis metadata allerede er lastet, kjør med en gang. Hvis ikke, vent på 'loadedmetadata'
+    if (video.readyState >= 1) {
+      plasserSpillerPaaLagretTid();
     } else {
-      video.currentTime = 0; 
-      video.muted = false; 
-      video.play().catch(err => console.warn(err));
+      video.addEventListener('loadedmetadata', plasserSpillerPaaLagretTid, { once: true });
     }
   });
 
-  // Lagrer strømmeposisjon kontinuerlig (Firebase + Lokal fallback)
+  // Lagrer strømmeposisjon (Lokal fallback med en gang + Firestore hvert 5. sekund)
   async function lagreSistePosisjon() { 
     const nuvaerendeTid = video.currentTime;
+    if (isNaN(nuvaerendeTid) || nuvaerendeTid <= 0) return;
+
+    // 1. Lagre til localStorage med en gang
     localStorage.setItem(`${filmId}-lastPosition`, nuvaerendeTid); 
 
-    if (currentUser && !isNaN(nuvaerendeTid) && nuvaerendeTid > 0) {
+    // 2. Lagre til skyen (Firestore) maks én gang hvert 5. sekund
+    const naa = Date.now();
+    if (currentUser && (naa - sisteSkyLagringTid > 5000)) {
+      sisteSkyLagringTid = naa; 
+
       try {
         const docRef = doc(db, "brukerdata", currentUser.uid, "profiler", aktivProfil, "fremdrift", filmId);
         await setDoc(docRef, {
@@ -1267,6 +1284,9 @@ video::cue {
   video.addEventListener('ended', ryddeOgNeste);
 
   async function ryddeOgNeste() {
+    // VIKTIG: Fjern lytteren med en gang så den ikke overskriver slettingen vår
+    video.removeEventListener('timeupdate', lagreSistePosisjon);
+
     localStorage.removeItem(`${filmId}-lastPosition`);
     localStorage.removeItem("progress_" + filmId);
     localStorage.removeItem("progress_" + navn); 
@@ -1275,7 +1295,6 @@ video::cue {
     if (currentUser) {
       try {
         const docRef = doc(db, "brukerdata", currentUser.uid, "profiler", aktivProfil, "fremdrift", filmId);
-        // Setter status til ferdig og sletter posisjonssekundene slik at den starter forfra neste gang
         await setDoc(docRef, {
           sistePosisjon: deleteField(),
           status: "ferdig",
@@ -1288,44 +1307,6 @@ video::cue {
 
     window.location.href = nesteEpisodeUrl ? nesteEpisodeUrl : `film.html?navn=${navn}`;
   }
-
-  let mouseTimer;
-  function showCursor() { document.body.style.cursor = 'default'; clearTimeout(mouseTimer); mouseTimer = setTimeout(() => { document.body.style.cursor = 'none'; }, 3000); }
-  document.addEventListener('mousemove', showCursor);
-
-  for (let i = 0; i < video.textTracks.length; i++) video.textTracks[i].mode = "hidden";
-
-  const subtitleSettingKey = "global-subtitle-setting";
-  let globalSubtitleSetting = localStorage.getItem(subtitleSettingKey) || "off";
-
-  function updateSubtitleButtons(activeLang) {
-    document.querySelectorAll("#subtitleTracks button").forEach(btn => {
-      if (btn.dataset.lang === activeLang) { btn.classList.add("active"); } else { btn.classList.remove("active"); }
-    });
-  }
-
-  video.addEventListener("loadedmetadata", () => {
-    if (globalSubtitleSetting === "off") {
-      subtitlesEnabled = false; subtitleOverlay.textContent = "";
-    } else {
-      subtitlesEnabled = true;
-      for (let i = 0; i < video.textTracks.length; i++) {
-        const track = video.textTracks[i];
-        if (track.language === globalSubtitleSetting || track.label.toLowerCase() === globalSubtitleSetting) {
-          track.mode = "hidden";
-          track.addEventListener("cuechange", () => {
-            if (!subtitlesEnabled) { subtitleOverlay.textContent = ""; return; }
-            const cues = track.activeCues; subtitleOverlay.textContent = cues && cues.length > 0 ? cues[0].text : "";
-          });
-        }
-      }
-    }
-    updateSubtitleButtons(globalSubtitleSetting);
-  });
-
-  video.addEventListener("contextmenu", e => e.preventDefault());
-  document.addEventListener("contextmenu", e => e.preventDefault());
-
   /* ===========================================================
      4. SMART INTRO & ADVANCED NETFLIX OUTRO AUTOPLAY
      =========================================================== */
