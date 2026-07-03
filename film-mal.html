@@ -775,7 +775,6 @@ video::cue {
   bottom: 130px; /* Flyttes opp når kontrollene/UI er synlig */
 }
 
-
 </style>
 </head>
 <body>
@@ -791,6 +790,29 @@ video::cue {
 
     <div class="subtitle-overlay" id="subtitleOverlay" style="z-index: 2;"></div>
     <div class="loading-spinner" id="loadingSpinner" style="z-index: 3;"></div>
+
+    <button id="nextEpisodeBtn" style="
+      position: absolute;
+      right: 210px;
+      bottom: 90px;
+      display: none;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 24px;
+      border: 1px solid rgba(255,255,255,0.3);
+      border-radius: 4px;
+      background: rgba(0, 0, 0, 0.7);
+      backdrop-filter: blur(5px);
+      color: white;
+      font-weight: bold;
+      font-size: 15px;
+      letter-spacing: 0.5px;
+      cursor: pointer;
+      z-index: 10;
+      transition: background 0.2s;
+    " onmouseover="this.style.background='rgba(255,255,255,0.2)'" onmouseout="this.style.background='rgba(0,0,0,0.7)'">
+      Neste episode
+    </button>
 
     <button id="skipIntroBtn" style="
       position: absolute;
@@ -850,6 +872,7 @@ video::cue {
 
     <div id="autoplayOverlay" style="
       display: none; 
+      flex-direction: column;
       position: absolute; 
       top: 50%; 
       transform: translateY(-50%);
@@ -884,7 +907,7 @@ video::cue {
       </div>
     </div>
 
-    <div id="resumeOverlay" class="resume-overlay" style="z-index: 15;">
+    <div id="resumeOverlay" class="resume-overlay" style="z-index: 15; display: none;">
       <div class="resume-box">
         <p>Vil du fortsette der du slapp?</p>
         <div class="resume-buttons">
@@ -977,7 +1000,7 @@ video::cue {
   const sesong = urlParams.get("sesong") || urlParams.get("s");
   const episode = urlParams.get("episode") || urlParams.get("e");
 
-  let film; // Beholder variabelnavnet 'film' slik at du slipper å endre det i resten av HTML-en
+  let film; 
   let filmId = "";
   let tilbakeUrl = "Hovedside.html";
   let nesteEpisodeData = null;
