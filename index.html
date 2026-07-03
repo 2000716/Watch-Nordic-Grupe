@@ -27,7 +27,7 @@
     }
 
     body{
-      background:#000000; /* Endret til ren sort for ekte Netflix-kontrast */
+      background:#071214; /* Endret tilbake til kontosidens originale farge */
       color:white;
       font-family: Inter, Arial, sans-serif;
       overflow-x:hidden;
@@ -48,12 +48,12 @@
       z-index:999;
 
       backdrop-filter:blur(14px);
-      background:rgba(0,0,0,0.75); /* Gjort mer transparent sort */
+      background:rgba(7,18,20,0.75); /* Tilpasset bakgrunnsfargen */
       border-bottom:1px solid rgba(255,255,255,0.06);
     }
 
     .logo img {
-      height: 42px; /* Perfekt høyde for bannerlogoen */
+      height: 42px;
       display: block;
       object-fit: contain;
     }
@@ -102,7 +102,7 @@
       display:flex;
       align-items:center;
       overflow:hidden; 
-      background:#000000;
+      background:#071214; /* Tilpasset bakgrunnsfargen */
     }
 
     .hero::before{
@@ -112,9 +112,9 @@
       background:
         linear-gradient(
           to right,
-          rgba(0,0,0,1) 30%,      /* Endret til sort toning */
-          rgba(0,0,0,0.7) 60%,
-          rgba(0,0,0,0.1) 100__
+          rgba(7,18,20,1) 30%,      /* Tilpasset bakgrunnsfargen */
+          rgba(7,18,20,0.7) 60%,
+          rgba(7,18,20,0.1) 100%
         );
       z-index:1;
     }
@@ -128,7 +128,7 @@
       height:250px;
       background:linear-gradient(
         to top,
-        #000000, /* Slår seg perfekt sammen med den sorte bakgrunnen */
+        #071214, /* Slår seg perfekt sammen med bakgrunnen */
         transparent
       );
       z-index:1;
@@ -172,10 +172,8 @@
     .primary-btn{
       background:#00FFCC;
       color:#071214;
-
       padding:16px 34px;
       border-radius:999px;
-
       box-shadow:0 0 30px rgba(0,255,204,0.35);
     }
 
@@ -186,7 +184,7 @@
     /* ================= SECTION ================= */
     .section{
       padding:70px 60px;
-      background: #000000;
+      background: #071214; /* Tilpasset bakgrunnsfargen */
     }
 
     .section-header{
@@ -197,92 +195,13 @@
     }
 
     .section h2{
-      font-size:26px; /* Litt mer elegant Netflix-størrelse */
+      font-size:26px;
       font-weight: 700;
       color:white;
     }
 
     .section span{
       color:#00FFCC;
-    }
-
-    /* ================= FILM ROW ================= */
-    .movie-row{
-      display:flex;
-      gap:14px;
-      overflow-x:auto;
-      padding: 15px 0;
-      scroll-behavior:smooth;
-    }
-
-    .movie-row::-webkit-scrollbar{
-      height:6px;
-    }
-
-    .movie-row::-webkit-scrollbar-thumb{
-      background:#00FFCC55;
-      border-radius:999px;
-    }
-
-    .movie-card{
-      position:relative;
-      min-width:240px;
-      transition:0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
-      cursor:pointer;
-      flex-shrink:0;
-    }
-
-    .movie-card:hover{
-      transform: scale(1.08); /* Kraftigere pop-out effekt i ekte Netflix-stil */
-      z-index:5;
-      box-shadow: 0 15px 40px rgba(0,0,0,0.8);
-    }
-
-    .movie-card img{
-      width:100%;
-      height:350px;
-      object-fit:cover;
-      border-radius:8px; /* Litt mer firkantede hjørner for en mer moderne look */
-      border:1px solid rgba(255,255,255,0.08);
-      box-shadow: 0 8px 24px rgba(0,0,0,0.5);
-    }
-
-    .movie-overlay{
-      position:absolute;
-      inset:0;
-      border-radius:8px;
-
-      display:flex;
-      flex-direction:column;
-      justify-content:flex-end;
-
-      padding:18px;
-
-      background:linear-gradient(
-        to top,
-        rgba(0,0,0,0.95) 0%,
-        rgba(0,0,0,0.4) 50%,
-        rgba(0,0,0,0) 100%
-      );
-
-      opacity:0;
-      transition:0.3s ease;
-    }
-
-    .movie-card:hover .movie-overlay{
-      opacity:1;
-    }
-
-    .movie-overlay h3{
-      margin-bottom:6px;
-      font-size:16px;
-      font-weight: 700;
-    }
-
-    .movie-overlay p{
-      color:#00FFCC; /* Fremhever kvalitetsteksten med din farge */
-      font-size:13px;
-      font-weight: 600;
     }
 
     /* ================= DEVICES ================= */
@@ -295,21 +214,16 @@
     .device{
       padding:35px 25px;
       text-align:center;
-
       border-radius:16px;
-
       background:rgba(255,255,255,0.02);
       border:1px solid rgba(255,255,255,0.05);
-
       transition:0.3s ease;
     }
 
     .device:hover{
       transform:translateY(-6px);
       border-color:rgba(0,255,204,0.3);
-
-      box-shadow:
-        0 0 25px rgba(0,255,204,0.12);
+      box-shadow: 0 0 25px rgba(0,255,204,0.12);
     }
 
     .device i{
@@ -333,7 +247,7 @@
       width: 100%;
       padding: 70px 80px 35px;
       margin-top: 100px;
-      background: #000000;
+      background: #071214; /* Tilpasset bakgrunnsfargen */
       display: flex;
       flex-direction: column;
       align-items: flex-start;
@@ -391,7 +305,7 @@
       color: #555;
     }
 
-    /* ================= HERO POSTER WALL (3D EFFEKT PC - NETFLIX INTEGRASJON) ================= */
+    /* ================= HERO POSTER WALL (RENERE 3D VEGG) ================= */
     .hero-wall{
       position:absolute;
       inset:0;
@@ -403,10 +317,8 @@
         rotateX(2deg)
         scale(1.2);
       transform-origin:right center;
-      opacity:.22; /* Litt mer subtilt for en renere kinofølelse */
-      filter: grayscale(15%) blur(0.5px); /* Gjør plakatveggen mer filmisk */
-      
-      /* Maskeringseffekt som gjør at den tones ut perfekt i bunnen */
+      opacity:.22; 
+      filter: grayscale(15%) blur(0.5px);
       -webkit-mask-image: linear-gradient(to bottom, rgba(0,0,0,1) 60%, rgba(0,0,0,0) 100%);
       mask-image: linear-gradient(to bottom, rgba(0,0,0,1) 60%, rgba(0,0,0,0) 100%);
     }
@@ -425,26 +337,13 @@
       border-radius:6px;
       box-shadow:0 12px 30px rgba(0,0,0,.65);
       transition: transform 0.3s ease;
-      
-      /* Base transform bruker variabler satt fra JS */
-      transform: scale(var(--scale, 1)) rotate(var(--rot, 0deg));
     }
 
-    .row1{margin-left:220px;}
-    .row2{margin-left:50px;}
-    .row3{margin-left:310px;}
-    .row4{margin-left:140px;}
-
-    /* Forskyver og bryter opp rette linjer automatisk, kombinert med CSS-variabler */
-    .wall-row img:nth-child(2n) {
-      transform: translateY(15px) scale(var(--scale, 1)) rotate(var(--rot, 0deg));
-    }
-    .wall-row img:nth-child(3n) {
-      transform: translateY(-25px) scale(var(--scale, 1)) rotate(var(--rot, 0deg));
-    }
-    .wall-row img:nth-child(5n) {
-      transform: translateY(10px) scale(var(--scale, 1)) rotate(var(--rot, 0deg));
-    }
+    /* Fjernet urolige forskyvninger og skjevheter slik at veggen er helt ryddig */
+    .row1{margin-left:0px;}
+    .row2{margin-left:-60px;}
+    .row3{margin-left:-120px;}
+    .row4{margin-left:-180px;}
 
     /* ================= MODERN COOKIE BANNER STYLE ================= */
     .cookie-banner {
@@ -454,7 +353,7 @@
       transform: translateX(-50%);
       width: 90%;
       max-width: 850px;
-      background: rgba(10, 10, 10, 0.98);
+      background: rgba(7, 18, 20, 0.98); /* Tilpasset bakgrunnsfargen */
       border: 1px solid rgba(0, 255, 204, 0.2);
       backdrop-filter: blur(20px);
       border-radius: 16px;
@@ -569,9 +468,8 @@
       color: white;
     }
 
-    /* ================= RESPONSIVE / MEDIA QUERIES (VAKKER MOBIL) ================= */
+    /* ================= RESPONSIVE / MEDIA QUERIES ================= */
     @media (max-width: 768px) {
-      
       .hero {
         height: auto;
         min-height: 95vh;
@@ -582,7 +480,7 @@
       }
 
       .hero::before {
-        background: radial-gradient(circle, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0.98) 90%);
+        background: radial-gradient(circle, rgba(7,18,20,0.6) 0%, rgba(7,18,20,0.98) 90%);
       }
 
       .hero-content {
@@ -660,18 +558,6 @@
         font-size: 22px;
       }
 
-      .movie-row {
-        gap: 12px;
-      }
-
-      .movie-card {
-        min-width: 150px;
-      }
-
-      .movie-card img {
-        height: 220px;
-      }
-
       .devices {
         grid-template-columns: repeat(2, 1fr);
         gap: 14px;
@@ -722,14 +608,6 @@
         font-size: 30px;
       }
 
-      .movie-card {
-        min-width: 125px;
-      }
-
-      .movie-card img {
-        height: 195px;
-      }
-
       .devices {
         grid-template-columns: 1fr;
       }
@@ -769,13 +647,6 @@
         <a href="Innloggings%20side.html" class="primary-btn">Begynn å se</a>
       </div>
     </div>
-  </section>
-
-  <section class="section" id="filmer">
-    <div class="section-header">
-      <h2>Populært på <span>Watch</span></h2>
-    </div>
-    <div class="movie-row" id="film-galleri"></div>
   </section>
 
   <section class="section">
@@ -875,27 +746,9 @@
   <script src="Seriedata.js"></script>
 
   <script>
-    const gallery = document.getElementById("film-galleri");
+    /* Generering av film-galleri JS er fjernet */
 
-    if(typeof filmer !== "undefined"){
-      const fragment = document.createDocumentFragment();
-      Object.keys(filmer).forEach(key => {
-        const film = filmer[key];
-        const card = document.createElement("div");
-        card.className = "movie-card";
-        card.innerHTML = `
-          <img src="${film.poster}" alt="">
-          <div class="movie-overlay">
-            <h3>${film.tittel || "Watch Original"}</h3>
-            <p>Stream nå i premium kvalitet</p>
-          </div>
-        `;
-        fragment.appendChild(card);
-      });
-      gallery.appendChild(fragment);
-    }
-
-    /* ================= HERO WALL (3D VEGG ØVERST) ================= */
+    /* ================= HERO WALL (3D VEGG LOGIKK - RYDDET OPP) ================= */
     const rows = [
       document.querySelector(".row1"),
       document.querySelector(".row2"),
@@ -935,12 +788,7 @@
               img.src = src;
               img.loading = "lazy";
               
-              const randomRotation = (Math.random() * 4 - 2).toFixed(1);
-              const randomScale = (0.96 + Math.random() * 0.08).toFixed(2);
-              
-              img.style.setProperty('--rot', `${randomRotation}deg`);
-              img.style.setProperty('--scale', randomScale);
-              
+              // Alle bilder er nå helt uten skjeve rotasjoner eller tilfeldige størrelsesforskjeller
               rowFragment.appendChild(img);
             });
           }
