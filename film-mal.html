@@ -777,7 +777,7 @@ video::cue {
     <div id="videoWrapper" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; transition: all 0.4s ease-in-out; z-index: 4;">
       <video id="video" preload="metadata" style="width: 100%; height: 100%; object-fit: contain;">
         <source src="" type="video/mp4">
-        <track label="Norsk" kind="subtitles" srclang="no" src="" default>
+        <track label="Norsk" kind="subtitles" srclang="nb" src="" default>
         Din nettleser støtter ikke videoavspilling.
       </video>
     </div>
@@ -1323,7 +1323,7 @@ video::cue {
   document.addEventListener('mousemove', showCursor);
 
   /* ===========================================================
-     UNDERTEKST INNSTILLINGER
+     UNDERTEKST INNSTILLINGER (OPTIMALISERT FOR BÅDE FILM OG SERIE)
      =========================================================== */
   const subtitleSettingKey = "global-subtitle-setting";
   let globalSubtitleSetting = localStorage.getItem(subtitleSettingKey) || "nb"; 
@@ -1339,8 +1339,17 @@ video::cue {
       subtitlesEnabled = true;
       for (let i = 0; i < video.textTracks.length; i++) {
         const track = video.textTracks[i];
-        
-        if (track.language === valgtSpraak || track.label.toLowerCase() === valgtSpraak) {
+        const tLang = (track.language || "").toLowerCase();
+        const tLabel = (track.label || "").toLowerCase();
+        const vSpraak = valgtSpraak.toLowerCase();
+
+        // Forbedret sjekk: Matcher både "nb", "no" og råtekst mot hverandre
+        const matcherSpraak = tLang === vSpraak || 
+                             (vSpraak === "nb" && tLang === "no") || 
+                             (vSpraak === "no" && tLang === "nb") || 
+                             tLabel.includes(vSpraak);
+
+        if (matcherSpraak) {
           track.mode = "hidden"; 
           
           track.oncuechange = () => {
@@ -1348,6 +1357,10 @@ video::cue {
             const cues = track.activeCues; 
             subtitleOverlay.textContent = cues && cues.length > 0 ? cues[0].text : "";
           };
+          // Tvinger en umiddelbar sjekk i tilfelle en cue allerede er aktiv
+          if (track.activeCues && track.activeCues.length > 0) {
+            subtitleOverlay.textContent = track.activeCues[0].text;
+          }
         } else {
           track.mode = "disabled";
         }
@@ -1383,12 +1396,24 @@ video::cue {
       subtitleTracksDiv.appendChild(btn);
     });
   } else { 
-    subtitleTracksDiv.innerHTML = "<em style='color:gray;'>Ingen eksterne spor</em>"; 
+    // Fallback hvis arrayet er tomt, men filmen likevel har et innebygd/standard spor
+    const btn = document.createElement("button");
+    btn.textContent = "Norsk";
+    btn.dataset.lang = "nb";
+    btn.addEventListener("click", () => {
+      globalSubtitleSetting = "nb";
+      oppdaterUndertekstSpor("nb");
+      captionMenu.style.display = "none";
+    });
+    subtitleTracksDiv.appendChild(btn);
   }
 
-  video.addEventListener("loadeddata", () => {
-    oppdaterUndertekstSpor(globalSubtitleSetting);
-  });
+  // Kjører lyttere på flere nivåer for å sikre at filmer aktiverer sporet uansett innlastingstidspunkt
+  video.addEventListener("loadeddata", () => oppdaterUndertekstSpor(globalSubtitleSetting));
+  video.addEventListener("canplay", () => oppdaterUndertekstSpor(globalSubtitleSetting));
+  if (video.textTracks) {
+    video.textTracks.addEventListener("addtrack", () => oppdaterUndertekstSpor(globalSubtitleSetting));
+  }
 
   video.addEventListener("contextmenu", e => e.preventDefault());
   document.addEventListener("contextmenu", e => e.preventDefault());
