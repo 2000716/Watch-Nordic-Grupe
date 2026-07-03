@@ -433,14 +433,11 @@
 
 <script type="module">
 /* ===========================================================
-     1. MODERNE FIREBASE IMPORT FRA SEPARAT OPPSETTSFIL (v12.15.0)
+     1. FIREBASE IMPORT FRA SEPARAT OPPSETTSFIL
      =========================================================== */
-  // Importer initialiserte instanser fra din egen sentrale fil
   import { auth, db } from "./firebase-oppsett.js";
-  
-  // Importer funksjonene du trenger fra de offisielle CDN-lenkene (samme versjon)
-  import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-auth.js";
-  import { doc, getDoc, setDoc, deleteField } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
+  import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-auth.js"; // Bruker stabil v11+ CDN eller din foretrukne v12
+  import { doc, getDoc, setDoc, deleteField } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
 
   // Profil- og brukerstyring
   let currentUser = null;
@@ -499,12 +496,43 @@
     });
   }
 
-  // Klargjør video-elementet
+  // Klargjør video-elementet og dynamiske tekstspor
   const video = document.getElementById("video");
   const videoWrapper = document.getElementById("videoWrapper");
-  video.querySelector("source").src = film.videoUrl || film.video || film.src;
-  const track = video.querySelector("track");
-  if (track && film.subtitleUrl) track.src = film.subtitleUrl;
+  
+  // Tøm gamle spor før vi legger til nye
+  video.innerHTML = ""; 
+  
+  // Legg til video kilde
+  const source = document.createElement("source");
+  source.src = film.videoUrl || film.video || film.src;
+  source.type = "video/mp4";
+  video.appendChild(source);
+
+  // Generer dynamiske tekstspor basert på datafilen din
+  if (film.subtitleLanguages && film.subtitleLanguages.length > 0) {
+    film.subtitleLanguages.forEach((sub, index) => {
+      const track = document.createElement("track");
+      track.kind = "subtitles";
+      track.label = sub.label;
+      track.srclang = sub.code;
+      track.src = sub.src || sub.url || film.subtitleUrl; // Bruker spesifikt språk eller fallback
+      if (localStorage.getItem("global-subtitle-setting") === sub.code) {
+        track.default = true;
+      }
+      video.appendChild(track);
+    });
+  } else if (film.subtitleUrl) {
+    // Fallback til standard spor hvis kun én url er oppgitt
+    const track = document.createElement("track");
+    track.kind = "subtitles";
+    track.label = "Standard";
+    track.srclang = "no";
+    track.src = film.subtitleUrl;
+    track.default = true;
+    video.appendChild(track);
+  }
+
   video.load();
 
   /* ===========================================================
@@ -527,7 +555,6 @@
   const container = document.getElementById("container");
   const loadingSpinner = document.getElementById("loadingSpinner");
   const previewBox = document.getElementById("previewBox");
-  const previewImage = document.getElementById("previewImage");
   const previewTime = document.getElementById("previewTime");
   const subtitleOverlay = document.getElementById("subtitleOverlay");
   const resumeOverlay = document.getElementById("resumeOverlay");
@@ -547,7 +574,6 @@
 
   let isDragging = false;
   let hideTimeout;
-  let subtitlesEnabled = true;
   let autoplayTriggered = false;
   let harSjekketLagretTid = false; 
 
@@ -568,11 +594,9 @@
   onAuthStateChanged(auth, (user) => {
     if (user) {
       currentUser = user;
-      
       if (harSjekketLagretTid) return;
       harSjekketLagretTid = true;
 
-      // REPARASJON: Vi venter til videoen har lastet metadata (duration) før vi sjekker databasen
       video.addEventListener('loadedmetadata', async () => {
         try {
           const profilDocRef = doc(db, "users", user.uid, "profiler", aktivProfil);
@@ -583,7 +607,6 @@
             const avspillingsTid = userData.avspillingsTid || {};
             const savedTime = parseFloat(avspillingsTid[filmId]);
 
-            // Sjekk om det finnes lagret tid og om filmen ikke er helt ferdig
             if (!isNaN(savedTime) && savedTime > 10 && video.duration > (savedTime + 15)) {
               if (resumeOverlay) {
                 resumeOverlay.style.display = "flex";
@@ -641,10 +664,8 @@
 
     const nåværendeTid = video.currentTime;
     
-    // Sparer på databasen: Skriver kun hvert 5. sekund, ELLER hvis video settes på pause
     if (Math.abs(nåværendeTid - forrigeLagretTid) > 5 || video.paused) {
       forrigeLagretTid = nåværendeTid;
-      
       const profilDocRef = doc(db, "users", currentUser.uid, "profiler", aktivProfil);
       
       try {
@@ -662,16 +683,19 @@
     updateProgress();
     lagrePosisjonTilFirebase();
   });
-  video.addEventListener('loadedmetadata', updateProgress);
+  video.addEventListener('loadedmetadata', () => {
+    updateProgress();
+    // Bruk lagret undertekst-språk ved oppstart hvis lagret
+    const lagretSprak = localStorage.getItem("global-subtitle-setting");
+    if (lagretSprak) handleSubtitleChange(lagretSprak);
+  });
   video.addEventListener('pause', lagrePosisjonTilFirebase);
-
-  // Video ferdig: marker som ferdig og slett tidsstempel med deleteField()
   video.addEventListener('ended', ryddeOgNeste);
 
   async function ryddeOgNeste() {
+    clearInterval(autoplayTimer);
     if (currentUser) {
       const profilDocRef = doc(db, "users", currentUser.uid, "profiler", aktivProfil);
-      
       try {
         await setDoc(profilDocRef, {
           [`avspillingsTid.${filmId}`]: deleteField(),
@@ -681,13 +705,11 @@
         console.error("Feil under rydde-prosess i Firestore:", err);
       }
     }
-
-    clearInterval(autoplayTimer);
     window.location.href = nesteEpisodeUrl ? nesteEpisodeUrl : tilbakeUrl;
   }
 
   /* ===========================================================
-     6. UI-LOGIKK, SØKING & CONTROLS
+     6. UI-LOGIKK, SØKING & AVANSERTE CONTROLS (UNDERTEKST/LYD)
      =========================================================== */
   function formatTime(time) {
     if (isNaN(time)) return "0:00";
@@ -751,9 +773,15 @@
 
   rewindBtn.addEventListener('click', () => video.currentTime = Math.max(0, video.currentTime - 10));
   forwardBtn.addEventListener('click', () => video.currentTime = Math.min(video.duration, video.currentTime + 10));
-  captionsBtn.addEventListener('click', () => { captionMenu.style.display = captionMenu.style.display === 'block' ? 'none' : 'block'; });
+  
+  captionsBtn.addEventListener('click', (e) => { 
+    e.stopPropagation();
+    captionMenu.style.display = captionMenu.style.display === 'block' ? 'none' : 'block'; 
+  });
+  document.addEventListener("click", () => { if (captionMenu) captionMenu.style.display = "none"; });
+  if (captionMenu) captionMenu.addEventListener("click", e => e.stopPropagation());
 
-  // Lyd- og tekstsidelister
+  // Generer lydspor-meny
   const audioTracksDiv = document.getElementById("audioTracks");
   if (audioTracksDiv) {
     audioTracksDiv.innerHTML = "";
@@ -761,19 +789,33 @@
       film.audioLanguages.forEach(lang => {
         const btn = document.createElement("button");
         btn.textContent = lang.label;
-        btn.addEventListener("click", () => { alert(`Lydspråk: ${lang.label}`); captionMenu.style.display = "none"; });
+        btn.addEventListener("click", () => { alert(`Lydspråk endret til: ${lang.label}`); captionMenu.style.display = "none"; });
         audioTracksDiv.appendChild(btn);
       });
     } else { audioTracksDiv.innerHTML = "<em style='color:gray;font-size:12px;padding:6px;'>Standard lydspor</em>"; }
   }
 
+  // Generer tekstspor-meny med AV-knapp
   const subtitleTracksDiv = document.getElementById("subtitleTracks");
   if (subtitleTracksDiv) {
     subtitleTracksDiv.innerHTML = "";
+    
+    // Legg til en "Av"-knapp først
+    const offBtn = document.createElement("button");
+    offBtn.textContent = "Av";
+    offBtn.dataset.lang = "off";
+    offBtn.addEventListener("click", () => {
+      localStorage.setItem("global-subtitle-setting", "off");
+      handleSubtitleChange("off");
+      captionMenu.style.display = "none";
+    });
+    subtitleTracksDiv.appendChild(offBtn);
+
     if (film.subtitleLanguages && film.subtitleLanguages.length > 0) {
       film.subtitleLanguages.forEach(sub => {
         const btn = document.createElement("button");
-        btn.textContent = sub.label; btn.dataset.lang = sub.code;
+        btn.textContent = sub.label; 
+        btn.dataset.lang = sub.code;
         btn.addEventListener("click", () => {
           localStorage.setItem("global-subtitle-setting", sub.code);
           handleSubtitleChange(sub.code);
@@ -781,15 +823,23 @@
         });
         subtitleTracksDiv.appendChild(btn);
       });
-    } else { subtitleTracksDiv.innerHTML = "<em style='color:gray;font-size:12px;padding:6px;'>Ingen eksterne spor</em>"; }
+    }
   }
 
+  // FIKSET: Styring av faktiske HTML5 undertekstspor
   function handleSubtitleChange(langCode) {
-    if (langCode === "off") {
-      subtitlesEnabled = false; if (subtitleOverlay) subtitleOverlay.textContent = "";
-    } else {
-      subtitlesEnabled = true;
+    const tracks = video.textTracks;
+    for (let i = 0; i < tracks.length; i++) {
+      if (langCode === "off") {
+        tracks[i].mode = "disabled";
+      } else if (tracks[i].language === langCode) {
+        tracks[i].mode = "showing";
+      } else {
+        tracks[i].mode = "disabled";
+      }
     }
+    
+    // Oppdater aktiv klasse i menyen
     document.querySelectorAll("#subtitleTracks button").forEach(b => {
       b.classList.toggle("active", b.dataset.lang === langCode);
     });
@@ -801,7 +851,7 @@
     const x = e.clientX - rect.left;
     const percent = Math.min(Math.max(0, x / rect.width), 1);
     progressFilled.style.width = percent * 100 + '%';
-    thumb.style.left = percent * 100 + '%';
+    if (thumb) thumb.style.left = percent * 100 + '%';
     return percent;
   }
   progress.addEventListener('mousedown', e => { isDragging = true; scrubTo(e); });
