@@ -91,7 +91,7 @@
       color: #ff4d4d;
     }
     header button.logout-btn:hover {
-      background: rgba(255, 77, 77, 0.1);
+      background: rgba(255, 77, 77, 0.15);
       border-color: #ff4d4d;
     }
 
@@ -462,7 +462,7 @@
     let globalEpost = ""; 
     let docRef = null;
 
-    // LYNRAST OPPSTART (Mellomlagring)
+    // MELLOMLAGRING (Forhindrer hvit skjerm og unødvendig venting)
     const cachedProfiles = localStorage.getItem("watch_nordic_profiles_cache");
     const cachedEmail = localStorage.getItem("watch_nordic_email_cache");
 
@@ -478,18 +478,21 @@
       }
     }
 
-    // Sjekker autentisering
     onAuthStateChanged(auth, (user) => {
       if (user) {
         docRef = doc(db, "users", user.uid);
-        globalEpost = user.email || ""; 
+        // Bruk e-post direkte fra auth-sesjonen hvis tilgjengelig for å spare tid
+        if (!globalEpost && user.email) {
+          globalEpost = user.email;
+          epostView.innerText = globalEpost;
+        }
         hentKontodata();
       } else {
         window.location.href = "index.html";
       }
     });
 
-    // Event listeners i stedet for inline-onclick (Sikrere mot manipulering)
+    // Event listeners
     document.getElementById("navHovedsideBtn").addEventListener("click", () => {
       window.location.href = `hvem-ser-på.html?index=${aktivProfilIndex}`;
     });
@@ -512,16 +515,9 @@
     async function hentKontodata() {
       try {
         const docSnap = await getDoc(docRef);
-        if (docSnap.exists()) {
-          const data = docSnap.data();
-          profiler = data.profiler || [];
-          if (data.epost) globalEpost = data.epost;
-          
-          localStorage.setItem("watch_nordic_profiles_cache", JSON.stringify(profiler));
-          localStorage.setItem("watch_nordic_email_cache", globalEpost);
-        }
-
-        if (profiler.length === 0) {
+        
+        // OPTIMALISERING: Hvis dokumentet ikke finnes i det hele tatt (Helt ny bruker)
+        if (!docSnap.exists()) {
           profiler = [{
             navn: "Hovedprofil",
             bilde: "https://static.wixstatic.com/media/fd2fb2_39376e4ee55b460ab7a3ebbfcf35fef7~mv2.png",
@@ -529,6 +525,14 @@
             isKids: false
           }];
           await setDoc(docRef, { profiler: profiler, epost: globalEpost }, { merge: true });
+          localStorage.setItem("watch_nordic_profiles_cache", JSON.stringify(profiler));
+          localStorage.setItem("watch_nordic_email_cache", globalEpost);
+        } else {
+          // Dokumentet finnes, hent data
+          const data = docSnap.data();
+          profiler = data.profiler || [];
+          if (data.epost) globalEpost = data.epost;
+          
           localStorage.setItem("watch_nordic_profiles_cache", JSON.stringify(profiler));
           localStorage.setItem("watch_nordic_email_cache", globalEpost);
         }
@@ -596,6 +600,12 @@
     async function lagreNavn() {
       const nyttNavn = navnInput.value.trim();
       if (!nyttNavn) return alert("Navnet kan ikke være tomt!");
+      
+      // OPTIMALISERING: Ikke skriv til databasen hvis navnet er uendret
+      if (nyttNavn === profiler[aktivProfilIndex].navn) {
+        avbrytNavn();
+        return;
+      }
 
       profiler[aktivProfilIndex].navn = nyttNavn;
       await setDoc(docRef, { profiler: profiler }, { merge: true });
@@ -629,6 +639,8 @@
         if (auth.currentUser) {
           await updateEmail(auth.currentUser, nyEpost);
         }
+        
+        // OPTIMALISERING: setDoc kjører KUN hvis updateEmail i Firebase Auth var vellykket!
         globalEpost = nyEpost;
         await setDoc(docRef, { epost: globalEpost }, { merge: true });
         localStorage.setItem("watch_nordic_email_cache", globalEpost);
@@ -692,6 +704,10 @@
 
     async function lagreAldersgrense() {
       const valgtGrense = ageRestrictionSelect.value;
+      
+      // OPTIMALISERING: Avbryt hvis grensen ikke er endret
+      if (valgtGrense === profiler[aktivProfilIndex].maksAldersgrense) return;
+
       profiler[aktivProfilIndex].maksAldersgrense = valgtGrense;
 
       await setDoc(docRef, { profiler: profiler }, { merge: true });
