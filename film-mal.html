@@ -764,17 +764,12 @@ video::cue {
 }
 
 
-
-
-
-
-
 </style>
 </head>
 <body>
 <div class="container" id="container">
     
-    <div id="videoWrapper" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; transition: all 0.4s ease-in-out; z-index: 4;">
+    <div id="videoWrapper" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; transition: all 0.4s ease-in-out; z-index: 1;">
       <video id="video" preload="metadata" style="width: 100%; height: 100%; object-fit: contain;">
         <source src="" type="video/mp4">
         <track label="Norsk" kind="subtitles" srclang="nb" src="" default>
@@ -782,7 +777,7 @@ video::cue {
       </video>
     </div>
 
-    <div class="subtitle-overlay" id="subtitleOverlay" style="z-index: 2;"></div>
+    <div class="subtitle-overlay" id="subtitleOverlay" style="z-index: 2; position: absolute; bottom: 12%; left: 50%; transform: translateX(-50%); pointer-events: none; text-align: center;"></div>
     <div class="loading-spinner" id="loadingSpinner" style="z-index: 3;"></div>
 
     <button id="skipIntroBtn" style="
@@ -1322,7 +1317,7 @@ video::cue {
   function showCursor() { document.body.style.cursor = 'default'; clearTimeout(mouseTimer); mouseTimer = setTimeout(() => { if(!video.paused) document.body.style.cursor = 'none'; }, 3000); }
   document.addEventListener('mousemove', showCursor);
 
-/* ================= UNDERTEKST INNSTILLINGER (FORBEDRET) ================= */
+/* ================= UNDERTEKST INNSTILLINGER (FIKSET) ================= */
 const subtitleSettingKey = "global-subtitle-setting";
 let globalSubtitleSetting = localStorage.getItem(subtitleSettingKey) || "nb";
 
@@ -1341,19 +1336,20 @@ function oppdaterUndertekstSpor(valgtSpraak) {
       const tLabel = (track.label || "").toLowerCase();
       const vSpraak = valgtSpraak.toLowerCase();
 
-      // Fleksibel sjekk som gjør at "no" og "nb" godtas om hverandre
       const matcherSpraak = tLang === vSpraak || 
                            (vSpraak === "nb" && tLang === "no") || 
                            (vSpraak === "no" && tLang === "nb") || 
                            tLabel.includes(vSpraak);
 
       if (matcherSpraak) {
+        // Endret til "hidden" slik at vi kan fange opp cuechange, men nettleseren ikke viser sin egen svarte boks
         track.mode = "hidden";
         track.oncuechange = () => {
           if (!subtitlesEnabled) { subtitleOverlay.textContent = ""; return; }
           const cues = track.activeCues; 
           subtitleOverlay.textContent = cues && cues.length > 0 ? cues[0].text : "";
         };
+        // Sjekk om det allerede ligger aktive tekststrenger klare
         if (track.activeCues && track.activeCues.length > 0) {
           subtitleOverlay.textContent = track.activeCues[0].text;
         }
@@ -1365,8 +1361,22 @@ function oppdaterUndertekstSpor(valgtSpraak) {
   updateSubtitleButtons(valgtSpraak);
 }
 
+// Bygg opp menyen dynamisk med data fra film / serie, samt en "Av"-knapp
 const subtitleTracksDiv = document.getElementById("subtitleTracks");
 subtitleTracksDiv.innerHTML = "";
+
+// Legger til "Av"-knapp først
+const offBtn = document.createElement("button");
+offBtn.textContent = "Av";
+offBtn.dataset.lang = "off";
+offBtn.addEventListener("click", () => {
+  globalSubtitleSetting = "off";
+  localStorage.setItem(subtitleSettingKey, "off");
+  oppdaterUndertekstSpor("off");
+  captionMenu.style.display = "none";
+});
+subtitleTracksDiv.appendChild(offBtn);
+
 if (film.subtitleLanguages && film.subtitleLanguages.length > 0) {
   film.subtitleLanguages.forEach(sub => {
     const btn = document.createElement("button");
@@ -1379,8 +1389,18 @@ if (film.subtitleLanguages && film.subtitleLanguages.length > 0) {
     });
     subtitleTracksDiv.appendChild(btn);
   });
-} else { 
-  subtitleTracksDiv.innerHTML = "<em style='color:gray;'>Ingen undertekster</em>"; 
+} else if (track && track.src) {
+  // Fallback dersom datafilen mangler 'subtitleLanguages', men HTML <track> eksisterer
+  const btn = document.createElement("button");
+  btn.textContent = track.label || "Norsk";
+  btn.dataset.lang = track.srclang || "nb";
+  btn.addEventListener("click", () => {
+    globalSubtitleSetting = track.srclang || "nb";
+    localStorage.setItem(subtitleSettingKey, globalSubtitleSetting);
+    oppdaterUndertekstSpor(globalSubtitleSetting);
+    captionMenu.style.display = "none";
+  });
+  subtitleTracksDiv.appendChild(btn);
 }
 
 function updateSubtitleButtons(activeLang) {
@@ -1389,21 +1409,16 @@ function updateSubtitleButtons(activeLang) {
   });
 }
 
-// Lyttere som sørger for at underteksten oppdateres uansett når video-dataen blir klar
+// Kjører oppdateringer så fort dataen er klar
 video.addEventListener("loadedmetadata", () => oppdaterUndertekstSpor(globalSubtitleSetting));
+video.addEventListener("loadeddata", () => oppdaterUndertekstSpor(globalSubtitleSetting));
 video.addEventListener("canplay", () => oppdaterUndertekstSpor(globalSubtitleSetting));
 if (video.textTracks) {
   video.textTracks.addEventListener("addtrack", () => oppdaterUndertekstSpor(globalSubtitleSetting));
 }
-  // Kjører lyttere på flere nivåer for å sikre at filmer aktiverer sporet uansett innlastingstidspunkt
-  video.addEventListener("loadeddata", () => oppdaterUndertekstSpor(globalSubtitleSetting));
-  video.addEventListener("canplay", () => oppdaterUndertekstSpor(globalSubtitleSetting));
-  if (video.textTracks) {
-    video.textTracks.addEventListener("addtrack", () => oppdaterUndertekstSpor(globalSubtitleSetting));
-  }
 
-  video.addEventListener("contextmenu", e => e.preventDefault());
-  document.addEventListener("contextmenu", e => e.preventDefault());
+video.addEventListener("contextmenu", e => e.preventDefault());
+document.addEventListener("contextmenu", e => e.preventDefault());
 
   /* ===========================================================
      4. SMART INTRO & ADVANCED NETFLIX OUTRO AUTOPLAY (SERIE)
