@@ -1701,10 +1701,7 @@ async function renderContinueWatching() {
   gallery.innerHTML = "";
 
   try {
-    // Slå opp i brukerdata/{uid}/profiler/{aktivProfil}/fremdrift (Matcher spilleren perfekt)
     const fremdriftRef = collection(db, "brukerdata", registrertBruker.uid, "profiler", aktivProfil, "fremdrift");
-    
-    // Henter alle dokumenter som har status "paabegynt"
     const q = query(fremdriftRef, where("status", "==", "paabegynt"));
     const querySnapshot = await getDocs(q);
 
@@ -1717,13 +1714,18 @@ async function renderContinueWatching() {
 
     querySnapshot.forEach((docSnap) => {
       const dbData = docSnap.data();
-      const filmId = docSnap.id; // F.eks "film-titanic" eller "serie-skam-s1-e1"
+      const filmId = docSnap.id; 
+      
+      // >>> NYTT: Hvis filmen har over 95% fremdrift, hopp over den (regnes som ferdig) <<<
+      const progressVerdi = dbData.percent || 0;
+      if (progressVerdi > 95) {
+        return; 
+      }
       
       let metadataMatch = null;
       let urlParamNavn = "";
       let spillType = "film";
 
-      // De-konstruer om det er en film eller en serie for å hente riktig plakat/bilde
       if (filmId.startsWith("film-")) {
         urlParamNavn = filmId.replace("film-", "");
         if (typeof filmer !== "undefined" && filmer[urlParamNavn]) {
@@ -1731,7 +1733,7 @@ async function renderContinueWatching() {
           spillType = "film";
         }
       } else if (filmId.startsWith("serie-")) {
-        const deler = filmId.split("-"); // ["serie", "skam", "s1", "e1"]
+        const deler = filmId.split("-"); 
         urlParamNavn = deler[1];
         if (typeof serier !== "undefined" && serier[urlParamNavn]) {
           metadataMatch = serier[urlParamNavn];
@@ -1744,7 +1746,6 @@ async function renderContinueWatching() {
 
       fantInnhold = true;
 
-      // URL-generering basert på film eller serie
       let hrefUrl = `film.html?navn=${urlParamNavn}`;
       if (spillType === "serie") {
         const deler = filmId.split("-");
@@ -1752,9 +1753,6 @@ async function renderContinueWatching() {
         const e = deler[3].replace("e", "");
         hrefUrl = `film-mal.html?navn=${urlParamNavn}&sesong=${s}&episode=${e}`;
       }
-
-      // Henter fremdriftsprosent direkte fra Firebase-dataen vi lagret i spilleren (fallback til 50% hvis tom)
-      const progressVerdi = dbData.percent || 50; 
 
       const link = document.createElement("a");
       link.href = hrefUrl;
