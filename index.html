@@ -27,7 +27,7 @@
     }
 
     body{
-      background:#071214; /* Endret tilbake til kontosidens originale farge */
+      background:#071214; 
       color:white;
       font-family: Inter, Arial, sans-serif;
       overflow-x:hidden;
@@ -48,7 +48,7 @@
       z-index:999;
 
       backdrop-filter:blur(14px);
-      background:rgba(7,18,20,0.75); /* Tilpasset bakgrunnsfargen */
+      background:rgba(7,18,20,0.75); 
       border-bottom:1px solid rgba(255,255,255,0.06);
     }
 
@@ -102,7 +102,7 @@
       display:flex;
       align-items:center;
       overflow:hidden; 
-      background:#071214; /* Tilpasset bakgrunnsfargen */
+      background:#071214; 
     }
 
     .hero::before{
@@ -112,9 +112,9 @@
       background:
         linear-gradient(
           to right,
-          rgba(7,18,20,1) 30%,      /* Tilpasset bakgrunnsfargen */
-          rgba(7,18,20,0.7) 60%,
-          rgba(7,18,20,0.1) 100%
+          rgba(7,18,20,1) 25%,      /* Justert for å slippe mer av veggen igjennom sideveis */
+          rgba(7,18,20,0.5) 60%,
+          rgba(7,18,20,0.05) 100%
         );
       z-index:1;
     }
@@ -125,10 +125,10 @@
       left:0;
       right:0;
       bottom:0;
-      height:250px;
+      height:120px; /* Redusert fra 250px slik at bunnfaiden ikke stjeler så mye av veggen */
       background:linear-gradient(
         to top,
-        #071214, /* Slår seg perfekt sammen med bakgrunnen */
+        #071214, 
         transparent
       );
       z-index:1;
@@ -184,7 +184,7 @@
     /* ================= SECTION ================= */
     .section{
       padding:70px 60px;
-      background: #071214; /* Tilpasset bakgrunnsfargen */
+      background: #071214; 
     }
 
     .section-header{
@@ -247,7 +247,7 @@
       width: 100%;
       padding: 70px 80px 35px;
       margin-top: 100px;
-      background: #071214; /* Tilpasset bakgrunnsfargen */
+      background: #071214; 
       display: flex;
       flex-direction: column;
       align-items: flex-start;
@@ -305,7 +305,7 @@
       color: #555;
     }
 
-    /* ================= HERO POSTER WALL (RENERE 3D VEGG) ================= */
+    /* ================= HERO POSTER WALL (MER SYNLIG VEGG) ================= */
     .hero-wall{
       position:absolute;
       inset:0;
@@ -317,10 +317,10 @@
         rotateX(2deg)
         scale(1.2);
       transform-origin:right center;
-      opacity:.22; 
-      filter: grayscale(15%) blur(0.5px);
-      -webkit-mask-image: linear-gradient(to bottom, rgba(0,0,0,1) 60%, rgba(0,0,0,0) 100%);
-      mask-image: linear-gradient(to bottom, rgba(0,0,0,1) 60%, rgba(0,0,0,0) 100%);
+      opacity:.35; /* Økt fra .22 for å gjøre veggen mer fremtredende */
+      filter: grayscale(10%) blur(0px);
+      -webkit-mask-image: linear-gradient(to bottom, rgba(0,0,0,1) 80%, rgba(0,0,0,0) 100%); /* Flyttet maskeringen lenger ned */
+      mask-image: linear-gradient(to bottom, rgba(0,0,0,1) 80%, rgba(0,0,0,0) 100%);
     }
 
     .wall-row{
@@ -339,7 +339,6 @@
       transition: transform 0.3s ease;
     }
 
-    /* Fjernet urolige forskyvninger og skjevheter slik at veggen er helt ryddig */
     .row1{margin-left:0px;}
     .row2{margin-left:-60px;}
     .row3{margin-left:-120px;}
@@ -353,7 +352,7 @@
       transform: translateX(-50%);
       width: 90%;
       max-width: 850px;
-      background: rgba(7, 18, 20, 0.98); /* Tilpasset bakgrunnsfargen */
+      background: rgba(7, 18, 20, 0.98); 
       border: 1px solid rgba(0, 255, 204, 0.2);
       backdrop-filter: blur(20px);
       border-radius: 16px;
@@ -480,7 +479,7 @@
       }
 
       .hero::before {
-        background: radial-gradient(circle, rgba(7,18,20,0.6) 0%, rgba(7,18,20,0.98) 90%);
+        background: radial-gradient(circle, rgba(7,18,20,0.4) 0%, rgba(7,18,20,0.95) 90%);
       }
 
       .hero-content {
@@ -500,7 +499,7 @@
       }
 
       .hero-wall {
-        opacity: .15;
+        opacity: .25;
         transform: perspective(1000px) rotateY(-15deg) rotateX(5deg) scale(1.3);
         transform-origin: center center;
       }
@@ -738,7 +737,7 @@
 
     <div class="footer-copy">© 2026 Watch Nordic™</div>
     <div class="footer-bottom">
-       Alle varemerker fra WATCH NORDIC™, WATCH NORDIC ORIGINALS™ og alle øvrige tilknyttede immaterielle rettigheter tilhører Watch Nordic Group og brukes under lisens av Watch Nordic™. Alle varemerker, logoer, filmer, serier, bilder, design og øvrige tilknyttede immaterielle rettigheter tilhører sine respektive eiere. Alt innhold er beskyttet av opphavsrett og internasjonale varemerkelover. Alle rettigheter forbeholdt.
+       Alle varemerker fra WATCH NORDIC™, WATCH NORDIC ORIGINALS™ og alle øvrige tilknyttede immaterielle rettigheter tilhører Watch Nordic Group og brukes under lisens av Watch Nordic™. Alle varemerker, logoer, filmer, serier, images, design og øvrige tilknyttede immaterielle rettigheter tilhører sine respektive eiere. Alt innhold er beskyttet av opphavsrett og internasjonale varemerkelover. Alle rettigheter forbeholdt.
     </div>
   </footer>
 
@@ -746,9 +745,6 @@
   <script src="Seriedata.js"></script>
 
   <script>
-    /* Generering av film-galleri JS er fjernet */
-
-    /* ================= HERO WALL (3D VEGG LOGIKK - RYDDET OPP) ================= */
     const rows = [
       document.querySelector(".row1"),
       document.querySelector(".row2"),
@@ -787,8 +783,6 @@
               const img = document.createElement("img");
               img.src = src;
               img.loading = "lazy";
-              
-              // Alle bilder er nå helt uten skjeve rotasjoner eller tilfeldige størrelsesforskjeller
               rowFragment.appendChild(img);
             });
           }
@@ -797,7 +791,6 @@
       });
     }
 
-    /* ================= COOKIE BANNER JAVASCRIPT LOGIKK ================= */
     const cookieBanner = document.getElementById("cookieBanner");
     const cookieOptions = document.getElementById("cookieOptions");
     const btnAccept = document.getElementById("btnAccept");
