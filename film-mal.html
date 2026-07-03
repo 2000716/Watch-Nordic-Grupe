@@ -803,7 +803,9 @@ video::cue {
       z-index: 10;
       transition: background 0.2s;
     " onmouseover="this.style.background='rgba(255,255,255,0.2)'" onmouseout="this.style.background='rgba(0,0,0,0.7)'">
-      ⏭️ Hopp over intro
+      <span style="display: flex; align-items: center; gap: 8px;">
+        <img src="https://static.wixstatic.com/media/fd2fb2_08262621a72944c498e8124d461ce786~mv2.png" alt="Next" style="width: 16px; height: 16px; transform: scaleX(1);"> Hopp over intro
+      </span>
     </button>
 
     <button id="skipOutroBtn" style="
@@ -824,31 +826,38 @@ video::cue {
       z-index: 10;
       transition: background 0.2s;
     " onmouseover="this.style.background='rgba(255,255,255,0.2)'" onmouseout="this.style.background='rgba(0,0,0,0.7)'">
-      ⏭️ Neste episode
+      <span style="display: flex; align-items: center; gap: 8px;">
+        Neste episode <img src="https://static.wixstatic.com/media/fd2fb2_08262621a72944c498e8124d461ce786~mv2.png" alt="Next" style="width: 16px; height: 16px;">
+      </span>
     </button>
 
+    <!-- Posisjonert øverst til høyre med bakgrunnsbilde-støtte -->
     <div id="autoplayOverlay" style="
       display: none; 
       position: absolute; 
-      top: 0; 
-      left: 0; 
-      width: 100%; 
-      height: 100%; 
-      background: linear-gradient(to right, rgba(0,0,0,0.95) 40%, rgba(0,0,0,0.6) 100%); 
+      top: 40px; 
+      right: 40px; 
+      width: 380px;
+      height: 220px;
+      background-size: cover;
+      background-position: center;
+      border-radius: 12px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.6);
+      border: 1px solid rgba(255,255,255,0.1);
+      overflow: hidden;
       z-index: 5; 
-      flex-direction: column; 
-      justify-content: center; 
-      align-items: flex-start; 
-      padding-left: 8%;
       color: white; 
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
     ">
-      <span style="text-transform: uppercase; color: #aaa; font-size: 14px; font-weight: bold; letter-spacing: 2px;">Neste episode starter om</span>
-      <div id="autoplayCountdown" style="font-size: 96px; font-weight: 900; color: #fff; margin: 5px 0; line-height: 1;">8</div>
-      
-      <div style="margin-top: 15px; display: flex; gap: 15px;">
-        <button id="autoplayPlayNextBtn" style="padding: 14px 35px; background: #fff; color: #000; border: none; cursor: pointer; border-radius: 4px; font-size: 16px; font-weight: bold; transition: opacity 0.2s;" onmouseover="this.style.opacity='0.8'" onmouseout="this.style.opacity='1'">Spill nå</button>
-        <button id="autoplayCancelBtn" style="padding: 14px 35px; background: rgba(255,255,255,0.1); color: white; border: 1px solid rgba(255,255,255,0.4); cursor: pointer; border-radius: 4px; font-size: 16px; font-weight: bold; transition: background 0.2s;" onmouseover="this.style.background='rgba(255,255,255,0.2)'" onmouseout="this.style.background='rgba(255,255,255,0.1)'">Avbryt</button>
+      <!-- Mørkt filter over bildet så teksten popper ut -->
+      <div style="background: rgba(0, 0, 0, 0.65); width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 20px; text-align: center; box-sizing: border-box;">
+        <span style="text-transform: uppercase; color: #ccc; font-size: 12px; font-weight: bold; letter-spacing: 2px;">Neste episode om</span>
+        <div id="autoplayCountdown" style="font-size: 54px; font-weight: 900; color: #fff; margin: 5px 0; line-height: 1;">8</div>
+        
+        <div style="margin-top: 10px; display: flex; gap: 10px;">
+          <button id="autoplayPlayNextBtn" style="padding: 10px 22px; background: #fff; color: #000; border: none; cursor: pointer; border-radius: 4px; font-size: 14px; font-weight: bold; transition: opacity 0.2s;" onmouseover="this.style.opacity='0.8'" onmouseout="this.style.opacity='1'">Spill nå</button>
+          <button id="autoplayCancelBtn" style="padding: 10px 22px; background: rgba(0,0,0,0.5); color: white; border: 1px solid rgba(255,255,255,0.4); cursor: pointer; border-radius: 4px; font-size: 14px; font-weight: bold; transition: background 0.2s;" onmouseover="this.style.background='rgba(255,255,255,0.2)'" onmouseout="this.style.background='rgba(0,0,0,0.5)'">Avbryt</button>
+        </div>
       </div>
     </div>
 
@@ -901,9 +910,6 @@ video::cue {
         </div>
 
         <div class="right-controls">
-          <button id="nextEpisodeBtn" class="btn" style="display: none; color: white; font-weight: bold; background: none; border: none; cursor: pointer; font-size: 14px; margin-right: 15px;">
-            Neste ⏭️
-          </button>
           <button class="btn" id="muteBtn">
             <img id="muteIcon" src="https://static.wixstatic.com/media/fd2fb2_5c4fab8430e94d2381fc487b1654191d~mv2.png" alt="Mute">
           </button>
@@ -1019,7 +1025,6 @@ video::cue {
   const continueBtn = document.getElementById("continueBtn");
   const restartBtn = document.getElementById("restartBtn");
 
-  const nextEpisodeBtn = document.getElementById("nextEpisodeBtn");
   const autoplayOverlay = document.getElementById("autoplayOverlay");
   const autoplayCountdown = document.getElementById("autoplayCountdown");
   const autoplayCancelBtn = document.getElementById("autoplayCancelBtn");
@@ -1045,15 +1050,6 @@ video::cue {
     return null;
   }
   const nesteEpisodeUrl = hentNesteEpisodeUrl();
-
-  if (nextEpisodeBtn) {
-    if (isSerie && nesteEpisodeUrl) {
-      nextEpisodeBtn.style.display = "inline-block";
-      nextEpisodeBtn.onclick = () => { ryddeOgNeste(); };
-    } else {
-      nextEpisodeBtn.style.display = "none";
-    }
-  }
 
   function formatTime(time) {
     const m = Math.floor(time / 60);
@@ -1307,7 +1303,7 @@ video::cue {
   document.addEventListener('mousemove', showCursor);
 
   /* ===========================================================
-     UNDERTEKST INNSTILLINGER (GJENOPPRETTET)
+     UNDERTEKST INNSTILLINGER
      =========================================================== */
   for (let i = 0; i < video.textTracks.length; i++) video.textTracks[i].mode = "hidden";
 
@@ -1375,15 +1371,15 @@ video::cue {
   let autoplayTimer;
   function startPremiumAutoplay() {
     if (!autoplayOverlay) return;
+
+    const nesteBildeUrl = film.nesteBilde || film.bilde || film.image || "";
+    if (nesteBildeUrl) {
+      autoplayOverlay.style.backgroundImage = `url('${nesteBildeUrl}')`;
+    } else {
+      autoplayOverlay.style.background = "linear-gradient(135deg, #141414, #222)";
+    }
     
-    videoWrapper.style.transform = "scale(0.35)";
-    videoWrapper.style.transformOrigin = "bottom right";
-    videoWrapper.style.right = "30px";
-    videoWrapper.style.bottom = "90px";
-    videoWrapper.style.borderRadius = "8px";
-    videoWrapper.style.boxShadow = "0 10px 30px rgba(0,0,0,0.8)";
-    
-    autoplayOverlay.style.display = "flex";
+    autoplayOverlay.style.display = "block";
     
     let teller = 8;
     autoplayCountdown.textContent = teller;
@@ -1402,12 +1398,6 @@ video::cue {
     autoplayCancelBtn.addEventListener("click", () => {
       clearInterval(autoplayTimer);
       autoplayOverlay.style.display = "none";
-      
-      videoWrapper.style.transform = "scale(1)";
-      videoWrapper.style.right = "0px";
-      videoWrapper.style.bottom = "0px";
-      videoWrapper.style.borderRadius = "0px";
-      
       if (skipOutroBtn) skipOutroBtn.style.display = "block";
     });
   }
