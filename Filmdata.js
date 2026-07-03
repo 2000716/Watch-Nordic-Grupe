@@ -44,10 +44,10 @@ const filmer = {
     subtitleUrl: "house-on-haunted-hill.VTT",
     tilbakeUrl: "film.html?navn=house-on-haunted-hill",
     audioLanguages: [
-      { code: "en", label: "Engelsk" } // Endret også code her fra "no" til "en" siden det er engelsk tale
+      { code: "no", label: "Engelsk" } // Endret også code her fra "no" til "en" siden det er engelsk tale
     ],
     subtitleLanguages: [
-      { code: "nb", label: "Norsk" }, // Endret fra "no" til "nb"
+      { code: "no", label: "Norsk" }, // Endret fra "no" til "nb"
       { code: "off", label: "Av" }
     ],
     publishDate: "2025-10-02T00:00:00",
