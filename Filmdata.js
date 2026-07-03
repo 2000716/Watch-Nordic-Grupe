@@ -160,7 +160,6 @@ const filmer = {
     tittel: "Tears of Steel",
     rating: "5.5",
     bakgrunn: "https://m.media-amazon.com/images/M/MV5BODc0MDgzZDAtOWM5YS00ZTg0LTlhMDEtMjljNmJiZDg5MmExXkEyXkFqcGc@._V1_.jpg",
-    banner: "",
     bannerMobil: "https://mango.blender.org/wp-content/uploads/2013/05/08_captain_thom.jpg",
     logo: "",
     trailer: "",
