@@ -931,7 +931,7 @@ video::cue {
 
 <script type="module">
 /* ===========================================================
-   UNIVERSELL PLAYER – FILM + SERIE (OPTIMALISERT MED FIREBASE)
+   UNIVERSELL PLAYER – FILM + SERIE (OPTIMALISERT FOR FIRESTORE-SPARING)
    =========================================================== */
 import { db, auth } from './firebase-oppsett.js';
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-auth.js";
@@ -947,7 +947,6 @@ let filmId = "";
 let tilbakeUrl = "";
 let isSerie = false;
 let currentUser = null;
-let forrigeLagringstidspunkt = 0;
 
 /* ================= RESOLVE MEDIA ================= */
 if (navn && typeof filmer !== "undefined" && filmer?.[navn] && !sesong && !episode) {
@@ -1060,7 +1059,7 @@ function formatTime(time) {
 /* ================= FIREBASE BRUKERHÅNDTERING OG SYNC ================= */
 const aktivProfil = localStorage.getItem("aktivProfil") || "default";
 
-// LYTTER PÅ BRUKERSTATUS
+// HENT STATUS (Kjører kun én gang når siden lastes)
 onAuthStateChanged(auth, async (user) => {
   if (user) {
     currentUser = user;
@@ -1084,7 +1083,6 @@ async function sjekkLagretFremdrift() {
       const savedTime = parseFloat(data.currentTime);
       const status = data.status;
       
-      // Hvis brukeren har sett mer enn 10 sekunder, det er mindre enn hele videoen, og status ikke er satt til "ferdig"
       if (!isNaN(savedTime) && savedTime > 10 && video.duration > savedTime && status !== "ferdig") {
         video.currentTime = savedTime;
         resumeOverlay.style.display = "flex";
@@ -1102,27 +1100,24 @@ async function sjekkLagretFremdrift() {
   video.play().catch(err => console.warn(err));
 }
 
-async function lagreSistePosisjon(tvingLagring = false) {
+// SKRIV TIL FIRESTORE (Kjører kun når brukeren går ut av siden/videoen er ferdig)
+async function lagreSistePosisjon() {
   if (!currentUser || isNaN(video.currentTime) || video.currentTime <= 0 || isNaN(video.duration)) return;
   
-  const nå = Date.now();
-  if (tvingLagring || (nå - forrigeLagringstidspunkt > 5000)) {
-    forrigeLagringstidspunkt = nå;
-    try {
-      const percent = (video.currentTime / video.duration) * 100;
-      
-      // GJØR AT DEN FORSVINNER FRA FORTSETT Å SE HVIS DE LUKKER VIDOEN UNDER RULLETEKSTEN (>95%)
-      const statusVerdi = percent > 95 ? "ferdig" : "paabegynt";
-      
-      await setDoc(doc(db, "brukerdata", currentUser.uid, "profiler", aktivProfil, "fremdrift", filmId), {
-        currentTime: video.currentTime,
-        percent: parseFloat(percent.toFixed(1)),
-        status: statusVerdi,
-        sistOppdatert: new Date()
-      }, { merge: true });
-    } catch (error) {
-      console.error("Kunne ikke lagre posisjon til Firebase:", error);
-    }
+  const percent = (video.currentTime / video.duration) * 100;
+  if (percent > 95) return; // Ikke lagre hvis filmen nesten er ferdig
+
+  try {
+    await setDoc(doc(db, "brukerdata", currentUser.uid, "profiler", aktivProfil, "fremdrift", filmId), {
+      currentTime: video.currentTime,
+      percent: parseFloat(percent.toFixed(1)),
+      status: "paabegynt",
+      sistOppdatert: new Date()
+    }, { merge: true });
+    
+    console.log("Posisjon lagret til Firebase ved avslutning:", video.currentTime);
+  } catch (error) {
+    console.error("Kunne ikke lagre posisjon til Firebase:", error);
   }
 }
 
@@ -1130,9 +1125,7 @@ async function ryddeOgNeste() {
   video.pause();
   if (currentUser) {
     try {
-      // Sletter fra aktiv profils fremdrift så den forsvinner helt fra "Fortsett å se"
       await deleteDoc(doc(db, "brukerdata", currentUser.uid, "profiler", aktivProfil, "fremdrift", filmId));
-      // Flytter til historikk
       await setDoc(doc(db, "brukerdata", currentUser.uid, "profiler", aktivProfil, "historikk", filmId), {
         status: "ferdig",
         fullførtDato: new Date()
@@ -1144,6 +1137,13 @@ async function ryddeOgNeste() {
   window.location.href = nesteEpisodeUrl ? nesteEpisodeUrl : `film.html?navn=${navn}`;
 }
 
+/* ================= AUTOMATISKE TRIGGERE FOR LAGRING ================= */
+
+// Lagrer kun når brukeren lukker fanen, går tilbake, oppdaterer eller navigerer bort
+window.addEventListener('beforeunload', () => {
+  lagreSistePosisjon();
+});
+
 /* ================= INTERFACES OG KONTROLLER ================= */
 function updateProgress() {
   if (!isDragging) {
@@ -1152,7 +1152,7 @@ function updateProgress() {
     thumb.style.left = percent + '%';
   }
   timeDisplay.textContent = `${formatTime(video.currentTime)} / ${formatTime(video.duration)}`;
-  lagreSistePosisjon(false); 
+  // FIKSET: Fjernet lagreSistePosisjon() herfra så den ikke skriver til databasen hvert sekund!
 }
 
 video.addEventListener('timeupdate', updateProgress);
@@ -1174,7 +1174,7 @@ video.addEventListener('play', () => {
 video.addEventListener('pause', () => { 
   playIcon.src = "https://static.wixstatic.com/media/fd2fb2_f6f25f56b00e49eea8dc4f811b50bb5c~mv2.png"; 
   showUI(); 
-  lagreSistePosisjon(true);
+  // FIKSET: Fjernet lagring ved pause for å spare enda flere skriveoperasjoner. Det lagres uansett når de lukker siden.
 });
 
 muteBtn.addEventListener('click', () => {
@@ -1237,7 +1237,7 @@ function scrubTo(e) {
   return percent;
 }
 progress.addEventListener('mousedown', e => { isDragging = true; scrubTo(e); });
-document.addEventListener('mouseup', e => { if (isDragging) { const percent = scrubTo(e); video.currentTime = percent * video.duration; isDragging = false; hidePreview(); lagreSistePosisjon(true); } });
+document.addEventListener('mouseup', e => { if (isDragging) { const percent = scrubTo(e); video.currentTime = percent * video.duration; isDragging = false; hidePreview(); } });
 document.addEventListener('mousemove', e => { if (isDragging) { scrubTo(e); showPreview(e); } });
 thumb.addEventListener('mousedown', e => { e.preventDefault(); isDragging = true; });
 
@@ -1279,7 +1279,6 @@ video.addEventListener('playing', () => loadingSpinner.style.display = 'none');
 video.addEventListener('canplay', () => loadingSpinner.style.display = 'none');
 
 // HÅNDTERING NÅR VIDEOEN ER FERDIG
-window.addEventListener('beforeunload', () => lagreSistePosisjon(true));
 video.addEventListener('ended', async () => {
   await ryddeOgNeste();
 });
@@ -1347,7 +1346,7 @@ video.addEventListener("timeupdate", () => {
   }
 });
 
-if (skipIntroBtn) { skipIntroBtn.addEventListener("click", () => { video.currentTime = film.introEnd; lagreSistePosisjon(true); }); }
+if (skipIntroBtn) { skipIntroBtn.addEventListener("click", () => { video.currentTime = film.introEnd; }); }
 if (skipOutroBtn) { skipOutroBtn.addEventListener("click", () => { ryddeOgNeste(); }); }
 if (autoplayPlayNextBtn) { autoplayPlayNextBtn.addEventListener("click", () => { ryddeOgNeste(); }); }
 
