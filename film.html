@@ -264,6 +264,24 @@ img, video {
   color: #eee;
 }
 
+/* Mer-knapp i teksten */
+.more-btn {
+  background: none;
+  border: none;
+  color: #00ffcc;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 0 4px;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  transition: color 0.2s ease;
+}
+
+.more-btn:hover {
+  color: #ffffff;
+}
+
 .metadata {
   margin-top: 12px;
   display: flex;
@@ -314,7 +332,7 @@ img, video {
 }
 
 /* ==========================================================================
-   5. DYNAMISKE KNAPPER (.watch-button & kolonner)
+   5. DYNAMISKE KNAPPER (Klassisk Hvit & Svart)
    ========================================================================== */
 .buttons-column {
   display: flex;
@@ -330,18 +348,20 @@ img, video {
   gap: 12px;
   width: 100%;
   padding: 16px 32px;
-  background: #00ffcc;
-  color: #050b0c;
+  background: #ffffff;
+  color: #000000;
   font-size: 16px;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: .5px;
-  border: none;
+  border: 2px solid #ffffff;
   border-radius: 50px;
   cursor: pointer;
-  box-shadow: 0 0 20px rgba(0, 255, 204, 0.3);
+  box-shadow: 0 4px 15px rgba(255, 255, 255, 0.1);
   transition: transform 0.25s cubic-bezier(0.2, 0.8, 0.2, 1), 
               background-color 0.25s ease, 
+              color 0.25s ease,
+              border-color 0.25s ease,
               box-shadow 0.25s ease;
 }
 
@@ -350,10 +370,11 @@ img, video {
 }
 
 .watch-button:hover {
-  background: #ffffff;
-  color: #000000;
+  background: #000000;
+  color: #ffffff;
+  border-color: #ffffff;
   transform: translateY(-2px);
-  box-shadow: 0 0 30px rgba(255, 255, 255, 0.5);
+  box-shadow: 0 8px 25px rgba(255, 255, 255, 0.2);
 }
 
 .watch-button:active {
@@ -363,14 +384,14 @@ img, video {
 /* Status-variasjoner for knappene */
 .watch-button.paabegynt {
   background: transparent;
-  color: #00ffcc;
-  border: 2px solid #00ffcc;
+  color: #ffffff;
+  border: 2px solid rgba(255, 255, 255, 0.4);
   box-shadow: none;
 }
 
 .watch-button.paabegynt:hover {
-  background: rgba(0, 255, 204, 0.1);
-  color: #ffffff;
+  background: #ffffff;
+  color: #000000;
   border-color: #ffffff;
 }
 
@@ -382,6 +403,19 @@ img, video {
   box-shadow: none !important;
   cursor: not-allowed;
   transform: none !important;
+}
+
+/* Secondary knapp (F.eks. Min Liste hvis den deler klassen) */
+#addToListBtn {
+  background: transparent;
+  color: #ffffff;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+}
+
+#addToListBtn:hover {
+  background: #ffffff;
+  color: #000000;
+  border-color: #ffffff;
 }
 
 /* ==========================================================================
@@ -472,7 +506,7 @@ img, video {
 }
 
 .season-btn.active {
-  background: #00ffcc;
+  background: #ffffff;
   color: #000;
   font-weight: 700;
 }
@@ -494,7 +528,7 @@ img, video {
 
 .episode-card:hover {
   transform: translateY(-5px);
-  border: 1px solid rgba(0,255,204,.3);
+  border: 1px solid rgba(255,255,255,.3);
 }
 
 .episode-thumb {
@@ -525,7 +559,7 @@ img, video {
 
 .play-overlay i {
   font-size: 36px;
-  color: #00ffcc;
+  color: #ffffff;
 }
 
 .episode-info {
