@@ -817,8 +817,36 @@ img, video {
     font-size: 16px !important;
   }
 
+  /* Gjør "Legg til i min liste"-knappen litt gråere på mobil */
+  #addToListBtn, .list-button {
+    background-color: rgba(255, 255, 255, 0.2) !important;
+    color: #ccc !important;
+    border: 1px solid rgba(255, 255, 255, 0.3) !important;
+  }
+
+  /* OPPDATERT: Sørger for at tekst-elementene kan flyttes om hverandre med Flexbox */
   .text-container {
     order: 2 !important;
+    display: flex !important;
+    flex-direction: column !important;
+  }
+
+  /* Flytter metadata øverst i tekstboksen */
+  .metadata {
+    order: 1 !important;
+    margin-bottom: 10px !important;
+  }
+
+  /* Beskrivelsen blir stående i midten */
+  .description {
+    order: 2 !important;
+    margin-bottom: 15px !important;
+  }
+
+  /* Flytter medvirkende/skaper (cast-info) nederst, der metadata var før */
+  .cast-info {
+    order: 3 !important;
+    margin-top: 10px !important;
   }
 
   /* Oppdatert bakgrunnsfargen på resten av modulene nedover siden */
