@@ -739,19 +739,25 @@ img, video {
   }
 
   .hero {
+    /* Gjort relativ slik at bildet kan legge seg som en ekte bakgrunn under innholdet */
+    position: relative; 
     height: auto;
     min-height: auto;
     display: flex;
     flex-direction: column;
-    /* BYTTET TIL DIN TOPPFARGE: Sørger for at bakgrunnen bak innholdet matcher */
     background: #din-topp-farge; 
   }
 
   .background-image,
   .background-video {
-    position: relative;
+    /* Endret til absolute så den oppfører seg som en ren bakgrunn */
+    position: absolute;
+    top: 0;
+    left: 0;
     height: 65vh; 
     width: 100%;
+    z-index: 1;
+    object-fit: cover;
   }
 
   .overlay {
@@ -760,9 +766,8 @@ img, video {
     left: 0;
     width: 100%;
     height: 100%;
-    /* BYTTET TIL DIN TOPPFARGE: Fader mykt over til fargen du har øverst */
     background: linear-gradient(to top, #din-topp-farge 0%, transparent 100%);
-    z-index: 1;
+    z-index: 2; /* Ligger rett over bildet, men under teksten */
   }
 
   .bottom-fade {
@@ -774,10 +779,11 @@ img, video {
     inset: auto;
     width: 100%;
     padding: 20px;
-    margin-top: 0; 
-    z-index: 2;
-    /* SIKKERHET: Tvinger bakgrunnen her til å bruke samme farge om innholdet strekker seg */
-    background: #din-topp-farge;
+    /* Dytter innholdet ned slik at det starter mot bunnen av det 65vh høye bildet */
+    padding-top: 48vh; 
+    /* Juster denne litt opp/ned (f.eks. -10px eller -20px) hvis du vil ha logoen enda høyere eller lavere på faden */
+    margin-top: -15px; 
+    z-index: 3; /* Sørger for at logo, tekst og knapper ligger øverst */
   }
 
   .logo-container {
@@ -818,8 +824,9 @@ img, video {
   .recommendations {
     margin: 30px 0 0;
     padding: 0 20px 40px;
-    /* SIKKERHET: Passer på at anbefalingene også har riktig bakgrunn */
     background: #din-topp-farge;
+    position: relative;
+    z-index: 3;
   }
 
   .recommendations h2 {
@@ -838,8 +845,9 @@ img, video {
 
   .footer {
     padding: 40px 20px 20px;
-    /* VALGFRITT: Hvis du vil at footeren også skal smelte sammen med resten */
     background: #din-topp-farge;
+    position: relative;
+    z-index: 3;
   }
 
   .footer-links {
