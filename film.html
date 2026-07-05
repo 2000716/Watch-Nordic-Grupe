@@ -235,18 +235,18 @@ img, video {
   flex-direction: column;
 }
 
-/* Infopanel med Apple glassgrå (Frosted Glass) effekt */
+/* Infopanel med en mørkere Apple glassgrå (Frosted Glass) effekt */
 .text-button-container {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
   gap: 40px;
-  background: rgba(255, 255, 255, 0.08); 
+  background: rgba(30, 30, 30, 0.65); /* Endret til en dypere mørkegrå, transparent tone */
   backdrop-filter: blur(30px); 
   -webkit-backdrop-filter: blur(30px);
   border-radius: 16px; 
   padding: 40px;
-  border: 1px solid rgba(255, 255, 255, 0.15); 
+  border: 1px solid rgba(255, 255, 255, 0.12); /* Subtil lys kant for dybde */
   box-shadow: none;
   width: 100%;
 }
@@ -340,8 +340,9 @@ img, video {
   min-width: 260px;
 }
 
-/* Begge knappene har hvit bakgrunn og svart tekst som standard design */
+/* Alle hovedknapper (inkludert Gjenoppta/paabegynt) er nå helt hvite med svart tekst */
 .watch-button,
+.watch-button.paabegynt,
 #addToListBtn {
   display: inline-flex;
   align-items: center;
@@ -349,13 +350,13 @@ img, video {
   gap: 12px;
   width: 100%;
   padding: 14px 28px;
-  background: #ffffff; /* Hvit bakgrunn */
-  color: #000000;    /* Svart tekst */
+  background: #ffffff !important; /* Alltid tvunget hvit bakgrunn */
+  color: #000000 !important;      /* Alltid tvunget svart tekst */
   font-size: 16px;
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: .5px;
-  border: none;
+  border: none !important;
   border-radius: 12px;
   cursor: pointer;
   box-shadow: none;
@@ -363,31 +364,22 @@ img, video {
 }
 
 .watch-button i,
+.watch-button.paabegynt i,
 #addToListBtn i {
   font-size: 18px;
 }
 
-/* Helt flatt og rent tonefall ved hover */
+/* Helt flatt og rent tonefall ved hover for alle knappetyper */
 .watch-button:hover,
+.watch-button.paabegynt:hover,
 #addToListBtn:hover {
-  background: #e6e6e6; /* Subtilt mørkere hvitfarge, teksten forblir svart */
-  color: #000000;
+  background: #e6e6e6 !important; /* Subtilt mørkere hvitfarge ved hover */
+  color: #000000 !important;
   transform: none;
   box-shadow: none;
 }
 
-/* Status-variasjoner */
-.watch-button.paabegynt {
-  background: rgba(255, 255, 255, 0.2);
-  color: #ffffff;
-  border: none;
-}
-
-.watch-button.paabegynt:hover {
-  background: #ffffff;
-  color: #000000;
-}
-
+/* Låst status */
 .watch-button.locked,
 .watch-button[disabled] {
   background: rgba(255, 255, 255, 0.1) !important;
