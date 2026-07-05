@@ -589,19 +589,24 @@ const urlParams = new URLSearchParams(window.location.search);
 const navn = urlParams.get("navn") || urlParams.get("id");
 const sesong = urlParams.get("sesong") || urlParams.get("s");
 const episode = urlParams.get("episode") || urlParams.get("e");
+// Henter returUrl fra URLen for å vite hvor vi skal hoppe tilbake
+const returUrlParam = urlParams.get("returUrl");
 
 let film;
 let filmId = "";
-let tilbakeUrl = "";
+// Definerer tilbakeUrl basert på parameter, faller tilbake til standard hvis mangler
+let tilbakeUrl = returUrlParam ? decodeURIComponent(returUrlParam) : "Hovedside.html";
 let isSerie = false;
 let currentUser = null;
 let heleProfilArrayet = [];
 
 /* ================= 1. MEDIA RESOLVER ================= */
+// Sjekker om vi spiller en film eller en serieepisode
 if (navn && typeof filmer !== "undefined" && filmer?.[navn] && !sesong && !episode) {
   film = filmer[navn];
   filmId = `film-${navn}`;
-  tilbakeUrl = film.tilbakeUrl || `film.html?navn=${navn}`;
+  // Oppdaterer tilbakeUrl spesifikt for filmer hvis ikke satt via parameter
+  if (!returUrlParam) tilbakeUrl = film.tilbakeUrl || `film.html?navn=${navn}`;
   isSerie = false;
 } else if (navn && typeof serier !== "undefined" && serier?.[navn] && sesong && episode && serier[navn].sesonger?.[sesong]?.episoder?.[episode]) {
   const serie = serier[navn];
@@ -610,10 +615,12 @@ if (navn && typeof filmer !== "undefined" && filmer?.[navn] && !sesong && !episo
     ...ep,
     audioLanguages: serie.audioLanguages || [],
     subtitleLanguages: serie.subtitleLanguages || [],
-    tittel: `${serie.tittel} – S${sesong}E${episode}: ${ep.tittel}`
+    // Bygger tittel for serieepisode: Serietittel - S01E01: Episodetittel
+    tittel: `${serie.tittel} – S${String(sesong).padStart(2, '0')}E${String(episode).padStart(2, '0')}: ${ep.tittel}`
   };
   filmId = `serie-${navn}-s${sesong}-e${episode}`;
-  tilbakeUrl = `film.html?navn=${navn}`; 
+  // Oppdaterer tilbakeUrl spesifikt for serier hvis ikke satt via parameter
+  if (!returUrlParam) tilbakeUrl = `film.html?navn=${navn}`; 
   isSerie = true;
 } else {
   alert("Ugyldig innhold");
@@ -630,19 +637,23 @@ if (backButton) {
   backButton.innerHTML = '<i class="fa-solid fa-xmark" style="color: #ffffff; font-size: 26px; padding: 5px;"></i>';
   backButton.addEventListener("click", async (e) => {
     e.preventDefault();
+    // Lagrer posisjon før vi går tilbake
     await lagreSistePosisjonEkspress();
     window.location.href = tilbakeUrl;
   });
 }
 
+// Initialiserer videoelementet
 const video = document.getElementById("video");
 const videoWrapper = document.getElementById("videoWrapper");
+// Støtter ulike datastrukturer for videokilde
 video.querySelector("source").src = film.videoUrl || film.video || film.src;
 const track = video.querySelector("track");
 if (track && film.subtitleUrl) track.src = film.subtitleUrl;
 video.load();
 
 /* ================= 2. DOM-ELEMENTER ================= */
+// Henter referanser til alle nødvendige UI-elementer
 const ui = document.getElementById("ui");
 const playBtn = document.getElementById("playPauseBtn");
 const muteBtn = document.getElementById("muteBtn");
@@ -671,6 +682,7 @@ const autoplayCountdown = document.getElementById("autoplayCountdown");
 const autoplayCancelBtn = document.getElementById("autoplayCancelBtn");
 const autoplayPlayNextBtn = document.getElementById("autoplayPlayNextBtn");
 
+// Globale tilstandsvariabler for spilleren
 let isDragging = false;
 let hideTimeout;
 let subtitlesEnabled = true;
@@ -686,26 +698,30 @@ if (fullscreenBtn) fullscreenBtn.innerHTML = '<i class="fa-solid fa-expand" styl
 if (playBtn) playBtn.innerHTML = '<i class="fa-solid fa-play" style="color: #ffffff; font-size: 26px;"></i>';
 if (muteBtn) muteBtn.innerHTML = '<i class="fa-solid fa-volume-high" style="color: #ffffff; font-size: 22px;"></i>';
 
-// Henter URL-en for neste episode basert på filmnavnet i malen din
+// Henter URL-en for neste episode basert på datastrukturen i Seriedata.js
 function hentNesteEpisodeUrl() {
   if (navn && sesong && episode && typeof serier !== "undefined" && serier?.[navn]) {
     const s = parseInt(sesong);
     const e = parseInt(episode);
     const serie = serier[navn];
     
+    // Bevarer returUrl for neste episode
+    const returParam = returUrlParam ? `&returUrl=${returUrlParam}` : '';
+
     // Sjekk om neste episode finnes i samme sesong
     if (serie.sesonger[s]?.episoder?.[e + 1]) {
-      return `film-mal.html?navn=${navn}&sesong=${s}&episode=${e + 1}`;
+      return `film-mal.html?navn=${navn}&sesong=${s}&episode=${e + 1}${returParam}`;
     }
     // Sjekk om første episode i neste sesong finnes
     if (serie.sesonger[s + 1]?.episoder?.[1]) {
-      return `film-mal.html?navn=${navn}&sesong=${s + 1}&episode=1`;
+      return `film-mal.html?navn=${navn}&sesong=${s + 1}&episode=1${returParam}`;
     }
   }
   return null;
 }
 const nesteEpisodeUrl = hentNesteEpisodeUrl();
 
+// Konfigurerer "Neste episode"-knappen i kontrolllinjen
 if (nextEpisodeBtn) {
   if (isSerie && nesteEpisodeUrl) {
     nextEpisodeBtn.style.display = "inline-block";
@@ -715,6 +731,7 @@ if (nextEpisodeBtn) {
   }
 }
 
+// Hjelpefunksjon for å formatere sekunder til MM:SS
 function formatTime(time) {
   if (isNaN(time)) return "00:00";
   const m = Math.floor(time / 60);
@@ -722,32 +739,39 @@ function formatTime(time) {
   return `${m}:${s < 10 ? '0' + s : s}`;
 }
 
-/* ================= 3. DB-LOGIKK ================= */
+/* ================= 3. DB-LOGIKK (Firebase & LocalStorage) ================= */
 const aktivProfilNavn = localStorage.getItem("aktivProfil") || "Hovedprofil";
 
+// Lytter etter endringer i autentiseringstilstand
 onAuthStateChanged(auth, async (user) => {
   if (user) {
     currentUser = user;
+    // Laster profil-cache fra LocalStorage for rask oppstart
     const cacheData = localStorage.getItem("watch_nordic_profiles_cache");
     if (cacheData) {
       heleProfilArrayet = JSON.parse(cacheData);
     }
+    // Henter oppdaterte profildata fra Firestore i bakgrunnen
     try {
       const userDocRef = doc(db, "users", user.uid);
       const docSnap = await getDoc(userDocRef);
       if (docSnap.exists()) {
         heleProfilArrayet = docSnap.data().profiler || [];
+        // Oppdaterer cache
         localStorage.setItem("watch_nordic_profiles_cache", JSON.stringify(heleProfilArrayet));
       }
     } catch (err) {
       console.error("Feil ved bakgrunnssynk:", err);
     }
+    // Sjekker om brukeren har sett på dette innholdet før
     sjekkLagretFremdrift();
   } else {
+    // Kaster ut brukeren hvis ikke logget inn
     window.location.href = "index.html";
   }
 });
 
+// Sjekker lagret fremdrift for gjeldende film/episode
 function sjekkLagretFremdrift() {
   const profil = heleProfilArrayet.find(p => p.navn === aktivProfilNavn);
   if (!profil) {
@@ -755,10 +779,12 @@ function sjekkLagretFremdrift() {
     return;
   }
   const fremdriftInfo = profil.fremdrift?.[filmId];
+  // Viser resume-overlay hvis sett mer enn 10 sek og ikke markert som ferdig
   if (fremdriftInfo && fremdriftInfo.currentTime > 10 && fremdriftInfo.status !== "ferdig") {
     video.currentTime = parseFloat(fremdriftInfo.currentTime);
     resumeOverlay.style.display = "flex";
     
+    // Håndterer valg i resume-overlay
     continueBtn.onclick = () => { resumeOverlay.style.display = "none"; video.play().catch(w => {}); startLokalLagringsLoop(); };
     restartBtn.onclick = () => { video.currentTime = 0; resumeOverlay.style.display = "none"; video.play().catch(w => {}); startLokalLagringsLoop(); };
   } else {
@@ -766,12 +792,14 @@ function sjekkLagretFremdrift() {
   }
 }
 
+// Starter avspilling fra begynnelsen
 function startVideoFraStart() {
   video.currentTime = 0;
   video.play().catch(w => {});
   startLokalLagringsLoop();
 }
 
+// Starter loop for periodisk lagring av fremdrift til LocalStorage (hvert 5. sek)
 function startLokalLagringsLoop() {
   clearInterval(lokalLagringsInterval);
   lokalLagringsInterval = setInterval(() => {
@@ -779,6 +807,7 @@ function startLokalLagringsLoop() {
   }, 5000);
 }
 
+// Oppdaterer fremdriftsdata i den lokale profilmatrisen (heleProfilArrayet)
 function oppdaterFremdriftILokalMatrise(status) {
   if (isNaN(video.currentTime) || video.currentTime <= 0 || isNaN(video.duration)) return;
   
@@ -786,43 +815,47 @@ function oppdaterFremdriftILokalMatrise(status) {
   let profilIdx = heleProfilArrayet.findIndex(p => p.navn === aktivProfilNavn);
   if (profilIdx === -1) return;
 
+  // Initialiserer datastrukturer hvis de mangler
   if (!heleProfilArrayet[profilIdx].fremdrift) heleProfilArrayet[profilIdx].fremdrift = {};
   if (!heleProfilArrayet[profilIdx].historikk) heleProfilArrayet[profilIdx].historikk = [];
 
-  if (status === "ferdig") {
+  // Håndterer logikk for ferdigsett innhold (>96%)
+  if (status === "ferdig" || percent > 96) {
+    // Fjerner fra påbegynt-liste (fremdrift)
     delete heleProfilArrayet[profilIdx].fremdrift[filmId];
+    // Legger til i historikk (ferdig-liste) hvis ikke allerede der
     if (!heleProfilArrayet[profilIdx].historikk.includes(filmId)) {
       heleProfilArrayet[profilIdx].historikk.push(filmId);
     }
   } else {
-    if (percent > 96) {
-      delete heleProfilArrayet[profilIdx].fremdrift[filmId];
-      if (!heleProfilArrayet[profilIdx].historikk.includes(filmId)) {
-        heleProfilArrayet[profilIdx].historikk.push(filmId);
-      }
-    } else {
-      heleProfilArrayet[profilIdx].fremdrift[filmId] = {
-        currentTime: video.currentTime,
-        percent: percent,
-        status: "paabegynt",
-        sistOppdatert: new Date().toISOString(),
-        tittel: film.tittel,
-        id: filmId,
-        navn: navn,
-        sesong: sesong || null,
-        episode: episode || null
-      };
-    }
+    // Oppdaterer påbegynt-status med metadata
+    heleProfilArrayet[profilIdx].fremdrift[filmId] = {
+      currentTime: video.currentTime,
+      percent: percent,
+      status: "paabegynt",
+      sistOppdatert: new Date().toISOString(),
+      tittel: film.tittel,
+      id: filmId,
+      navn: navn,
+      sesong: sesong || null,
+      episode: episode || null
+    };
   }
+  // Lagrer oppdatert matrise til LocalStorage-cache
   localStorage.setItem("watch_nordic_profiles_cache", JSON.stringify(heleProfilArrayet));
 }
 
+// Lagrer nåværende posisjon til Firestore umiddelbart (f.eks. ved klikk på tilbake)
 async function lagreSistePosisjonEkspress() {
   clearInterval(lokalLagringsInterval);
-  oppdaterFremdriftILokalMatrise(video.currentTime / video.duration > 0.96 ? "ferdig" : "paabegynt");
+  // Markerer som ferdig hvis sett mer enn 96%
+  const erFerdig = video.currentTime / video.duration > 0.96;
+  oppdaterFremdriftILokalMatrise(erFerdig ? "ferdig" : "paabegynt");
+  
   if (currentUser) {
     try {
       const userDocRef = doc(db, "users", currentUser.uid);
+      // Bruker merge: true for å kun oppdatere 'profiler'-feltet
       await setDoc(userDocRef, { profiler: heleProfilArrayet }, { merge: true });
     } catch (err) {
       console.error("Feil ved ekspresslagring til skyen:", err);
@@ -830,19 +863,23 @@ async function lagreSistePosisjonEkspress() {
   }
 }
 
+// Rydder opp tilstander, lagrer som ferdig, og navigerer til neste episode eller tilbakeUrl
 async function ryddeOgNeste() {
   video.pause();
   clearInterval(lokalLagringsInterval);
   clearInterval(autoplayTimer);
+  
+  // Markerer innholdet som ferdig i databasen
   oppdaterFremdriftILokalMatrise("ferdig");
+  
   if (currentUser) {
     try {
       const userDocRef = doc(db, "users", currentUser.uid);
       await setDoc(userDocRef, { profiler: heleProfilArrayet }, { merge: true });
-    } catch (e) { console.error(e); }
+    } catch (e) { console.error("Feil ved lagring før navigering:", e); }
   }
   
-  // Hvis det er en serie og det finnes en neste episode, gå til den. Hvis ikke, gå til info-siden.
+  // Navigerer til neste episode hvis tilgjengelig, ellers tilbake til info-siden (tilbakeUrl)
   if (isSerie && nesteEpisodeUrl) {
     window.location.href = nesteEpisodeUrl;
   } else {
@@ -850,15 +887,18 @@ async function ryddeOgNeste() {
   }
 }
 
+// Sikrer lagring via Beacon API hvis brukeren lukker fanen/nettleseren
 window.addEventListener('beforeunload', () => {
   oppdaterFremdriftILokalMatrise(video.currentTime / video.duration > 0.96 ? "ferdig" : "paabegynt");
   if (currentUser && navigator.sendBeacon) {
     const userDocRef = doc(db, "users", currentUser.uid);
+    // Beacon API garanterer lagring selv om siden lukkes
     setDoc(userDocRef, { profiler: heleProfilArrayet }, { merge: true }).catch(w => {});
   }
 });
 
 /* ================= 4. MEDIEKONTROLLER OG UI-LOGIKK ================= */
+// Oppdaterer tidslinjen og tidsvisningen
 function updateProgress() {
   if (!isDragging) {
     const percent = (video.currentTime / video.duration) * 100;
@@ -868,18 +908,22 @@ function updateProgress() {
   timeDisplay.textContent = `${formatTime(video.currentTime)} / ${formatTime(video.duration)}`;
 }
 
+// Eventlisteners for video-oppdateringer
 video.addEventListener('timeupdate', updateProgress);
 video.addEventListener('loadedmetadata', updateProgress);
 
+// Play/Pause logikk (klikk på knapp eller selve videoen)
 playBtn.addEventListener('click', () => video.paused ? video.play() : video.pause());
 video.addEventListener('click', () => video.paused ? video.play() : video.pause());
 
+// Tastatursnarveier (Mellomrom for Play/Pause, Piler for spol)
 document.addEventListener('keydown', e => {
   if (e.code === 'Space') { e.preventDefault(); video.paused ? video.play() : video.pause(); }
   if (e.key === 'ArrowRight') video.currentTime += 10;
   if (e.key === 'ArrowLeft') video.currentTime -= 10;
 });
 
+// Oppdaterer Play/Pause ikon basert på videotilstand
 video.addEventListener('play', () => { 
   playBtn.innerHTML = '<i class="fa-solid fa-pause" style="color: #ffffff; font-size: 26px;"></i>'; 
   showUI(); 
@@ -889,6 +933,7 @@ video.addEventListener('pause', () => {
   showUI(); 
 });
 
+// Volum/Mute logikk med ikonbytte
 muteBtn.addEventListener('click', () => {
   video.muted = !video.muted;
   muteBtn.innerHTML = video.muted
@@ -896,41 +941,58 @@ muteBtn.addEventListener('click', () => {
     : '<i class="fa-solid fa-volume-high" style="color: #ffffff; font-size: 22px;"></i>';
 });
 
+// Spol frem/tilbake knapper
 rewindBtn.addEventListener('click', () => video.currentTime = Math.max(0, video.currentTime - 10));
 forwardBtn.addEventListener('click', () => video.currentTime = Math.min(video.duration, video.currentTime + 10));
+
+// Viser/skjuler meny for undertekster
 captionsBtn.addEventListener('click', () => { captionMenu.style.display = captionMenu.style.display === 'block' ? 'none' : 'block'; });
 
 /* ================= 5. UNDERTEKSTER & LYDVALG ================= */
+// Genererer dynamisk valg for lydspråk basert på data i Filmdata.js/Seriedata.js
 const audioTracksDiv = document.getElementById("audioTracks");
 audioTracksDiv.innerHTML = "";
 if (film.audioLanguages && film.audioLanguages.length > 0) {
   film.audioLanguages.forEach(lang => {
     const btn = document.createElement("button");
     btn.textContent = lang.label;
+    // Logikk for bytte av lydspor må implementeres her hvis spilleren støtter det (f.eks. HLS/DASH)
     btn.addEventListener("click", () => { captionMenu.style.display = "none"; });
     audioTracksDiv.appendChild(btn);
   });
 } else { audioTracksDiv.innerHTML = "<em style='color:gray;'>Standard lydspor</em>"; }
 
+// Genererer dynamisk valg for undertekster (CC)
 const subtitleTracksDiv = document.getElementById("subtitleTracks");
 subtitleTracksDiv.innerHTML = "";
 if (film.subtitleLanguages && film.subtitleLanguages.length > 0) {
   film.subtitleLanguages.forEach(sub => {
     const btn = document.createElement("button");
     btn.textContent = sub.label; btn.dataset.lang = sub.code;
+    
+    // Håndterer bytte av undertekster
     btn.addEventListener("click", () => {
-      const selectedLang = sub.code; globalSubtitleSetting = selectedLang; localStorage.setItem("global-subtitle-setting", selectedLang);
+      const selectedLang = sub.code; globalSubtitleSetting = selectedLang; 
+      localStorage.setItem("global-subtitle-setting", selectedLang);
+      
       if (selectedLang === "off") {
-        subtitlesEnabled = false; for (let i = 0; i < video.textTracks.length; i++) video.textTracks[i].mode = "hidden"; subtitleOverlay.textContent = "";
+        // Slår av undertekster
+        subtitlesEnabled = false; 
+        for (let i = 0; i < video.textTracks.length; i++) video.textTracks[i].mode = "hidden"; 
+        subtitleOverlay.textContent = "";
       } else {
+        // Slår på valgt undertekst spor
         subtitlesEnabled = true;
         for (let i = 0; i < video.textTracks.length; i++) {
           const track = video.textTracks[i];
+          // Matcher språkkode eller label
           if (track.language === selectedLang || track.label.toLowerCase() === selectedLang) {
-            track.mode = "hidden";
+            track.mode = "hidden"; // Bruker skjult modus for å rendre i custom overlay
             track.addEventListener("cuechange", () => {
               if (!subtitlesEnabled) { subtitleOverlay.textContent = ""; return; }
-              const cues = track.activeCues; subtitleOverlay.textContent = cues && cues.length > 0 ? cues[0].text : "";
+              const cues = track.activeCues; 
+              // Oppdaterer custom overlay med teksten fra cue
+              subtitleOverlay.textContent = cues && cues.length > 0 ? cues[0].text : "";
             });
           }
         }
@@ -941,6 +1003,7 @@ if (film.subtitleLanguages && film.subtitleLanguages.length > 0) {
   });
 } else { subtitleTracksDiv.innerHTML = "<em style='color:gray;'>Ingen teksting tilgjengelig</em>"; }
 
+// Logikk for søking/scrubbing i tidslinjen
 function scrubTo(e) {
   const rect = progress.getBoundingClientRect();
   const x = e.clientX - rect.left;
@@ -953,6 +1016,8 @@ progress.addEventListener('mousedown', e => { isDragging = true; scrubTo(e); });
 document.addEventListener('mouseup', e => { if (isDragging) { const percent = scrubTo(e); video.currentTime = percent * video.duration; isDragging = false; hidePreview(); } });
 document.addEventListener('mousemove', e => { if (isDragging) { scrubTo(e); showPreview(e); } });
 
+// Forhåndsvisning (thumbnails) ved hovering over tidslinjen
+// Bruker et skjult videoelement for å generere thumbnails on-the-fly via Canvas
 const hiddenVideo = document.createElement("video");
 hiddenVideo.src = film.videoUrl || film.video || film.src; hiddenVideo.muted = true; hiddenVideo.crossOrigin = "anonymous";
 const canvas = document.createElement("canvas"); const ctx = canvas.getContext("2d");
@@ -962,24 +1027,43 @@ function showPreview(e) {
   const x = e.clientX - rect.left;
   const percent = Math.min(Math.max(0, x / rect.width), 1);
   const time = percent * video.duration;
+  
+  // Plasserer forhåndsvisningsboksen over muspekeren
   previewBox.style.left = `${x - 120}px`; previewBox.style.display = "block"; previewTime.textContent = formatTime(time);
+  
+  // Søker i den skjulte videoen
   hiddenVideo.currentTime = time;
   hiddenVideo.addEventListener("seeked", function handler() {
-    canvas.width = 240; canvas.height = 135; ctx.drawImage(hiddenVideo, 0, 0, canvas.width, canvas.height);
-    previewImage.src = canvas.toDataURL("image/jpeg"); hiddenVideo.removeEventListener("seeked", handler);
+    // Tegner gjeldende ramme fra videoen til canvas
+    canvas.width = 240; canvas.height = 135; 
+    ctx.drawImage(hiddenVideo, 0, 0, canvas.width, canvas.height);
+    // Setter canvas-data som kilde for forhåndsvisningsbildet
+    previewImage.src = canvas.toDataURL("image/jpeg"); 
+    hiddenVideo.removeEventListener("seeked", handler);
   });
 }
 function hidePreview() { previewBox.style.display = "none"; }
 progress.addEventListener("mousemove", showPreview);
 progress.addEventListener("mouseleave", hidePreview);
 
+// Viser UI (kontroller) og undertekster i "opp"-posisjon, skjuler automatisk etter 3 sek
 function showUI() {
-  ui.classList.remove('hidden'); subtitleOverlay.classList.add("subtitle-up"); clearTimeout(hideTimeout);
-  hideTimeout = setTimeout(() => { if (!video.paused) { ui.classList.add('hidden'); subtitleOverlay.classList.remove("subtitle-up"); } }, 3000);
+  ui.classList.remove('hidden'); 
+  subtitleOverlay.classList.add("subtitle-up"); 
+  clearTimeout(hideTimeout);
+  hideTimeout = setTimeout(() => { 
+    // Skjuler kun hvis videoen faktisk spiller
+    if (!video.paused) { 
+      ui.classList.add('hidden'); 
+      subtitleOverlay.classList.remove("subtitle-up"); 
+    } 
+  }, 3000);
 }
+// Viser UI ved musbevegelse eller tastetrykk
 document.addEventListener('mousemove', showUI);
 document.addEventListener('keydown', showUI);
 
+// Fullskjermslogikk med ikonbytte
 fullscreenBtn.addEventListener('click', () => { if (!document.fullscreenElement) { container.requestFullscreen(); } else { document.exitFullscreen(); } });
 document.addEventListener('fullscreenchange', () => {
   fullscreenBtn.innerHTML = document.fullscreenElement 
@@ -987,6 +1071,7 @@ document.addEventListener('fullscreenchange', () => {
     : '<i class="fa-solid fa-expand" style="color: #ffffff; font-size: 22px;"></i>';
 });
 
+// Viser loading spinner ved buffering, skjuler når avspilling starter
 video.addEventListener('waiting', () => loadingSpinner.style.display = 'block');
 video.addEventListener('playing', () => loadingSpinner.style.display = 'none');
 
@@ -995,6 +1080,7 @@ video.addEventListener('ended', async () => {
   await ryddeOgNeste(); 
 });
 
+// Hjelpefunksjon for å oppdatere aktiv status på undertekst knapper i menyen
 let globalSubtitleSetting = localStorage.getItem("global-subtitle-setting") || "off";
 function updateSubtitleButtons(activeLang) {
   document.querySelectorAll("#subtitleTracks button").forEach(btn => {
@@ -1003,12 +1089,15 @@ function updateSubtitleButtons(activeLang) {
 }
 
 /* ================= 6. PREMIUM NETFLIX-FLYTT & INTRO/OUTRO ================= */
+// Henter referanser til "Hopp over" knapper
 const skipIntroBtn = document.getElementById("skipIntroBtn");
 const skipOutroBtn = document.getElementById("skipOutroBtn");
 
+// Lytter på tidsendringer for å trigge intro/outro knapper og autoplay
 video.addEventListener("timeupdate", () => {
   const tid = video.currentTime;
 
+  // Håndterer "Hopp over intro" knapp hvis tidspunkt er definert i data
   if (isSerie && film.introStart != null && film.introEnd != null) {
     if (tid >= film.introStart && tid <= film.introEnd) {
       if (skipIntroBtn) skipIntroBtn.style.display = "block";
@@ -1017,21 +1106,25 @@ video.addEventListener("timeupdate", () => {
     }
   }
 
-  // Trigger kun autoplay hvis innholdet faktisk er en serie og det eksisterer en URL for neste episode
+  // Definerer når outro/autoplay skal starte. Standard er 15 sek før slutt.
   const triggerTid = film.outroStart != null ? film.outroStart : (video.duration - 15);
+  // Trigger premium autoplay (Netflix-flytt) hvis tidsnok, ikke trigget før, video spiller, og neste finnes
   if (isSerie && nesteEpisodeUrl && tid >= triggerTid && !autoplayTriggered && !video.paused) {
     autoplayTriggered = true;
     startPremiumAutoplay();
   }
 });
 
+// Eventlisteners for skip knapper og autoplay knapper
 if (skipIntroBtn) { skipIntroBtn.addEventListener("click", () => { video.currentTime = film.introEnd; }); }
 if (skipOutroBtn) { skipOutroBtn.addEventListener("click", () => { ryddeOgNeste(); }); }
 if (autoplayPlayNextBtn) { autoplayPlayNextBtn.addEventListener("click", () => { ryddeOgNeste(); }); }
 
+// Starter premium autoplay opplevelse ("Netflix-flytt")
 function startPremiumAutoplay() {
   if (!autoplayOverlay) return;
   
+  // Krymper videoen og flytter den ned i hjørnet med en glatt CSS overgang
   videoWrapper.style.transform = "scale(0.45)";
   videoWrapper.style.transformOrigin = "bottom right";
   videoWrapper.style.position = "absolute";
@@ -1042,14 +1135,17 @@ function startPremiumAutoplay() {
   videoWrapper.style.borderRadius = "8px";
   videoWrapper.style.boxShadow = "0 10px 30px rgba(0,0,0,0.8)";
   
+  // Viser autoplay overlay med nedtelling
   autoplayOverlay.style.display = "flex";
   
+  // Starter nedtelling (8 sekunder)
   let teller = 8; 
   autoplayCountdown.textContent = teller;
 
   autoplayTimer = setInterval(() => {
     teller--;
     autoplayCountdown.textContent = teller;
+    // Når nedtelling når 0, start neste episode automatisk
     if (teller <= 0) {
       clearInterval(autoplayTimer);
       ryddeOgNeste();
@@ -1057,11 +1153,15 @@ function startPremiumAutoplay() {
   }, 1000);
 }
 
+// Håndterer avbryting av autoplay
 if (autoplayCancelBtn) {
   autoplayCancelBtn.addEventListener("click", () => {
+    // Stopper timeren
     clearInterval(autoplayTimer);
+    // Skjuler overlay
     autoplayOverlay.style.display = "none";
     
+    // Nullstiller video wrapper transformasjoner (går tilbake til fullskjerm)
     videoWrapper.style.transform = "none";
     videoWrapper.style.position = "absolute";
     videoWrapper.style.width = "100%";
@@ -1070,9 +1170,11 @@ if (autoplayCancelBtn) {
     videoWrapper.style.bottom = "0px";
     videoWrapper.style.borderRadius = "0px";
     
+    // Viser den statiske "Neste episode" knappen i stedet
     if (skipOutroBtn) skipOutroBtn.style.display = "block";
   });
 }
 
+// Deaktiverer høyreklikk meny på siden
 document.addEventListener("contextmenu", e => e.preventDefault());
 </script>
