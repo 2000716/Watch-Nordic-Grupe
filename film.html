@@ -241,12 +241,12 @@ img, video {
   justify-content: space-between;
   align-items: flex-start;
   gap: 40px;
-  background: rgba(255, 255, 255, 0.08); /* Endret til lys transparent hvit/grå for Apple-look */
-  backdrop-filter: blur(30px); /* Økt blur for mer premium ugjennomsiktig glass-effekt */
+  background: rgba(255, 255, 255, 0.08); 
+  backdrop-filter: blur(30px); 
   -webkit-backdrop-filter: blur(30px);
-  border-radius: 16px; /* Litt mer avrundet for å matche Apple-stilen */
+  border-radius: 16px; 
   padding: 40px;
-  border: 1px solid rgba(255, 255, 255, 0.15); /* Litt tydeligere hvit glasskant */
+  border: 1px solid rgba(255, 255, 255, 0.15); 
   box-shadow: none;
   width: 100%;
 }
@@ -260,7 +260,7 @@ img, video {
   font-size: 16px;
   line-height: 1.6;
   margin-bottom: 10px;
-  color: #fff; /* Endret til ren hvit for bedre kontrast på lysere glass */
+  color: #fff; 
 }
 
 /* Mer-knapp i teksten (Ren, lys grå) */
@@ -331,7 +331,7 @@ img, video {
 }
 
 /* ==========================================================================
-   5. STRØMMETJENESTE-KNAPPER (Hvite, flate og mer avrundet)
+   5. STRØMMETJENESTE-KNAPPER (Hvit bakgrunn, svart tekst - Flate og avrundede)
    ========================================================================== */
 .buttons-column {
   display: flex;
@@ -340,7 +340,7 @@ img, video {
   min-width: 260px;
 }
 
-/* Begge hovedknappene er nå helt hvite med sort tekst */
+/* Begge knappene har hvit bakgrunn og svart tekst som standard design */
 .watch-button,
 #addToListBtn {
   display: inline-flex;
@@ -349,8 +349,8 @@ img, video {
   gap: 12px;
   width: 100%;
   padding: 14px 28px;
-  background: #ffffff;
-  color: #000000;
+  background: #ffffff; /* Hvit bakgrunn */
+  color: #000000;    /* Svart tekst */
   font-size: 16px;
   font-weight: 600;
   text-transform: uppercase;
@@ -367,10 +367,10 @@ img, video {
   font-size: 18px;
 }
 
-/* Enkel og ren hover-effekt uten glød eller hopp */
+/* Helt flatt og rent tonefall ved hover */
 .watch-button:hover,
 #addToListBtn:hover {
-  background: #e6e6e6;
+  background: #e6e6e6; /* Subtilt mørkere hvitfarge, teksten forblir svart */
   color: #000000;
   transform: none;
   box-shadow: none;
