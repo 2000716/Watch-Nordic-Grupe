@@ -14,8 +14,9 @@
       --muted: #bfc9c9;
       --accent: #00FFCC;
       --border: rgba(255, 255, 255, 0.08);
-      --delete: #ff4d4d;
       --kids-accent: #33b5ff;
+      --btn-gray: rgba(255, 255, 255, 0.1);
+      --btn-gray-hover: rgba(255, 255, 255, 0.18);
     }
 
     * {
@@ -29,8 +30,7 @@
       color: white;
       font-family: 'Inter', Arial, sans-serif;
       display: flex;
-      align-items: center;
-      justify-content: center;
+      flex-direction: column;
       min-height: 100vh;
       overflow-x: hidden;
       transition: opacity 0.4s ease;
@@ -44,11 +44,51 @@
       z-index: -1;
     }
 
+    /* Topplinje for logo og kontoknapp */
+    .top-bar {
+      width: 100%;
+      padding: 20px 60px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: 100;
+    }
+
+    .logo-img {
+      height: 40px;
+      object-fit: contain;
+    }
+
+    .account-btn {
+      background: var(--btn-gray);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      color: white;
+      padding: 10px 20px;
+      border-radius: 999px;
+      font-weight: 700;
+      font-size: 14px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: 0.25s ease;
+      text-decoration: none;
+    }
+
+    .account-btn:hover {
+      background: var(--btn-gray-hover);
+      border-color: rgba(255, 255, 255, 0.3);
+    }
+
     .container {
       text-align: center;
       width: 100%;
       max-width: 1200px;
       padding: 40px 20px;
+      margin: auto;
     }
 
     h1 {
@@ -132,6 +172,7 @@
       letter-spacing: 0.5px;
     }
 
+    /* Redigeringsknapp-styling (Pennen) */
     .action-btn {
       position: absolute;
       background: rgba(9, 27, 30, 0.9);
@@ -164,18 +205,6 @@
     .edit-btn:hover {
       background: var(--accent);
       color: #071214;
-    }
-
-    .delete-btn {
-      top: 0;
-      left: 15px;
-      color: var(--delete);
-      border-color: rgba(255, 77, 77, 0.3);
-    }
-    .delete-btn:hover {
-      background: var(--delete);
-      color: white;
-      border-color: var(--delete);
     }
 
     .add-profile .avatar {
@@ -302,6 +331,7 @@
     .btn-close:hover { color: white; border-color: rgba(255,255,255,0.3); }
 
     @media (max-width: 768px) {
+      .top-bar { padding: 15px 20px; }
       h1 { font-size: 30px; margin-bottom: 40px; }
       .profiles { gap: 30px; }
       .profile { width: 130px; }
@@ -311,6 +341,13 @@
   </style>
 </head>
 <body>
+
+  <div class="top-bar">
+    <img src="https://static.wixstatic.com/media/d9ace9_95bbe3f5ff4b4aab9314a8d08804344e~mv2.png" alt="Logo" class="logo-img">
+    <a href="konto.html?index=0" class="account-btn" id="kontoLink">
+      <i class="fa-solid fa-gear"></i> Konto
+    </a>
+  </div>
 
   <div class="container">
     <h1>Hvem er det som ser på?</h1>
@@ -344,6 +381,7 @@
     const modal = document.getElementById("addProfileModal");
     const newProfileNameInput = document.getElementById("newProfileName");
     const isKidsProfileInput = document.getElementById("isKidsProfile");
+    const kontoLink = document.getElementById("kontoLink");
 
     const standardBilde = "https://static.wixstatic.com/media/fd2fb2_39376e4ee55b460ab7a3ebbfcf35fef7~mv2.png";
     const barnBilde = "https://static.wixstatic.com/media/fd2fb2_3df40a7e62c545afa3918fc10393284d~mv2.png";
@@ -351,7 +389,7 @@
     let profiler = [];
     let docRef = null;
 
-    // ================= LYNRAST OPPSTART (Mellomlagring) =================
+    // LYNRAST OPPSTART (Mellomlagring)
     const cachedProfiles = localStorage.getItem("watch_nordic_profiles_cache");
     if (cachedProfiles) {
       try {
@@ -362,7 +400,6 @@
       }
     }
 
-    // Sjekker autentisering i bakgrunnen
     onAuthStateChanged(auth, (user) => {
       if (user) {
         docRef = doc(db, "users", user.uid);
@@ -375,24 +412,43 @@
     async function hentProfiler() {
       try {
         const docSnap = await getDoc(docRef);
+        let databaseEndret = false;
         
         if (docSnap.exists()) {
           profiler = docSnap.data().profiler || [];
-          localStorage.setItem("watch_nordic_profiles_cache", JSON.stringify(profiler));
         } else {
-          profiler = [
-            {
-              navn: "Hovedprofil",
-              bilde: standardBilde,
-              pin: null,
-              isKids: false,
-              maksAldersgrense: "12"
-            }
-          ];
+          profiler = [];
+        }
+
+        if (profiler.length === 0) {
+          profiler.push({
+            navn: "Hovedprofil",
+            bilde: standardBilde,
+            pin: null,
+            isKids: false,
+            maksAldersgrense: "18"
+          });
+          databaseEndret = true;
+        }
+
+        // Automatisk barnekonto
+        const harBarneprofil = profiler.some(p => p.isKids === true);
+        if (!harBarneprofil) {
+          profiler.push({
+            navn: "Barn",
+            bilde: barnBilde,
+            pin: null,
+            isKids: true,
+            maksAldersgrense: "12"
+          });
+          databaseEndret = true;
+        }
+
+        if (databaseEndret) {
           await setDoc(docRef, { profiler: profiler }, { merge: true });
-          localStorage.setItem("watch_nordic_profiles_cache", JSON.stringify(profiler));
         }
         
+        localStorage.setItem("watch_nordic_profiles_cache", JSON.stringify(profiler));
         renderProfiler();
       } catch (error) {
         console.error("Feil ved henting av profiler:", error);
@@ -406,12 +462,9 @@
         const div = document.createElement("div");
         div.className = "profile" + (profil.isKids ? " kids-profile" : "");
 
-        const deleteBtnHtml = index > 0 
-          ? `<div class="action-btn delete-btn" title="Slett denne profilen"><i class="fa-solid fa-trash"></i></div>` 
-          : '';
-
         const kidsBadgeHtml = profil.isKids ? `<br><span class="kids-badge">Kids</span>` : '';
 
+        // Lagt tilbake ".edit-btn" (pennen) i HTML-strukturen
         div.innerHTML = `
           <div class="avatar">
             <img src="${profil.bilde || (profil.isKids ? barnBilde : standardBilde)}">
@@ -420,25 +473,17 @@
           <div class="action-btn edit-btn" title="Endre navn og bilde">
             <i class="fa-solid fa-pen"></i>
           </div>
-          ${deleteBtnHtml}
         `;
 
         div.addEventListener("click", () => {
           velgProfil(index);
         });
 
+        // Event listener for pennen som sender brukeren til konto.html med riktig profilindex
         div.querySelector(".edit-btn").addEventListener("click", (e) => {
-          e.stopPropagation();
+          e.stopPropagation(); // Hindrer at profilen velges når man trykker på pennen
           window.location.href = `konto.html?index=${index}`;
         });
-
-        const dBtn = div.querySelector(".delete-btn");
-        if (dBtn) {
-          dBtn.addEventListener("click", (e) => {
-            e.stopPropagation();
-            slettProfil(index, profil.navn);
-          });
-        }
 
         container.appendChild(div);
       });
@@ -453,16 +498,6 @@
         addDiv.addEventListener("click", åpneModal);
         container.appendChild(addDiv);
       }
-    }
-
-    async function slettProfil(index, navn) {
-      if (!confirm(`Er du sikker på at du vil slette profilen "${navn}"? Alle innstillinger for denne profilen vil forsvinne.`)) return;
-
-      profiler.splice(index, 1);
-      
-      await setDoc(docRef, { profiler: profiler }, { merge: true });
-      localStorage.setItem("watch_nordic_profiles_cache", JSON.stringify(profiler));
-      renderProfiler();
     }
 
     function velgProfil(index) {
@@ -482,6 +517,8 @@
       localStorage.setItem("profilbilde", profil.bilde || (profil.isKids ? barnBilde : standardBilde));
       localStorage.setItem("isKids", profil.isKids ? "true" : "false");
       localStorage.setItem("maksAldersgrense", profil.maksAldersgrense || "12");
+
+      kontoLink.href = `konto.html?index=${index}`;
 
       document.body.style.opacity = "0";
       setTimeout(() => {
@@ -512,7 +549,7 @@
         bilde: erBarn ? barnBilde : standardBilde, 
         pin: null,
         isKids: erBarn,
-        maksAldersgrense: "12"
+        maksAldersgrense: erBarn ? "12" : "18"
       });
 
       await setDoc(docRef, { profiler: profiler }, { merge: true });
