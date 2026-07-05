@@ -30,7 +30,7 @@ const filmer = {
     rating: "7.6",
     bakgrunn: "https://image.tmdb.org/t/p/original/gZwQip2KQRDNZZOEDe0Yi25tW9Z.jpg",
     banner: "",
-    logo: "https://beam-images.warnermediacdn.com/BEAM_LWM_DELIVERABLES/730f0be0-7cf9-48ee-86a5-0b1352a85a1d/c3126a93065c93330d8a8e8a440bd604b9d998da.png",
+    logo: "",
     trailer: "",
     poster: "https://image.tmdb.org/t/p/original/5TqIPddZaDsza8ID7X5HGwX2Txv.jpg",
     posterVertikal: "https://image.tmdb.org/t/p/original/A4ErFUf7FGNF3DFjp0CaRchxeNL.jpg",
