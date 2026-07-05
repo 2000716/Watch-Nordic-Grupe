@@ -313,76 +313,40 @@ img, video{
   border-radius: 8px;
 }
 
-/* ==========================================================================
-   5. KNAPPER & MEDIE-KONTROLLER
-   ========================================================================== */
-.buttons-column{
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-  flex-shrink: 0;
-}
+/* ==========================================
+     5. EVENT LISTENERS FOR KNAPPER
+     ========================================== */
+  if (watchBtn) {
+    watchBtn.addEventListener("click", async () => {
+      if (erUpublisert || erUtgått) return;
 
-.watch-button{
-  background: #fff;
-  color: #000;
-  font-size: 16px;
-  font-weight: 600;
-  padding: 14px 30px;
-  border-radius: 999px;
-  border: none;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-  transition: all .25s ease;
-}
+      status = "påbegynt";
+      oppdaterWatchKnapp(); 
+      await lagreProfilDataTilSkyen();
 
-.watch-button:hover{
-  transform: scale(1.04);
-  background: #e6e6e6;
-}
+      // Lagrer den nåværende siden som retur-adresse
+      const returUrl = encodeURIComponent(window.location.href);
 
-.more-btn{
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  height: 22px;
-  padding: 0 8px;
-  font-size: 11px;
-  color: #fff;
-  background: rgba(255,255,255,0.12);
-  border: 1px solid rgba(255,255,255,0.2);
-  border-radius: 4px;
-  cursor: pointer;
-  margin-left: 5px;
-}
+      if (type === "film") {
+        // Sjekker om watchUrl allerede har parametere fra før (? eller &)
+        const separator = data.watchUrl.includes("?") ? "&" : "?";
+        window.location.href = `${data.watchUrl}${separator}returUrl=${returUrl}`;
+      } else if (type === "serie" && data.sesonger) {
+        const sisteEpKey = `${navn}-siste-episode`;
+        let sisteEp = JSON.parse(localStorage.getItem(sisteEpKey));
+        let sesongNr, epNr;
 
-.video-controls{
-  position: absolute;
-  top: 100px;
-  right: 40px;
-  z-index: 3;
-  display: flex;
-  gap: 10px;
-  opacity: 0;
-  transition: opacity .5s ease;
-}
-
-.video-controls button{
-  background: rgba(0,0,0,.6);
-  border: none;
-  color: #fff;
-  font-size: 18px;
-  padding: 10px 14px;
-  border-radius: 50%;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
+        if (sisteEp && data.sesonger[sisteEp.sesong]?.episoder[sisteEp.episode]) {
+          sesongNr = sisteEp.sesong;
+          epNr = sisteEp.episode;
+        } else {
+          sesongNr = Object.keys(data.sesonger)[0];
+          epNr = Object.keys(data.sesonger[sesongNr].episoder)[0];
+        }
+        window.location.href = `film-mal.html?navn=${encodeURIComponent(navn)}&sesong=${sesongNr}&episode=${epNr}&returUrl=${returUrl}`;
+      }
+    });
+  }
 /* ==========================================================================
    6. ANBEFALINGER & EPISODER (PREMIUM RESPONSIV DESIGN)
    ========================================================================== */
@@ -917,7 +881,7 @@ img, video{
 <script src="Seriedata.js"></script>
 
 <script type="module">
-  import { auth, db } from "./firebase-oppsett.js";
+import { auth, db } from "./firebase-oppsett.js";
   import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-auth.js";
   import { doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
 
@@ -1086,7 +1050,7 @@ img, video{
     }
   }
 
-// Firebase Auth & Cloud Firestore-oppdatering
+  // Firebase Auth & Cloud Firestore-oppdatering
   onAuthStateChanged(auth, async (user) => {
     if (user) {
       currentUser = user;
@@ -1143,8 +1107,12 @@ img, video{
       oppdaterWatchKnapp(); 
       await lagreProfilDataTilSkyen();
 
+      // Genererer returUrl for den gjeldende siden
+      const returUrl = encodeURIComponent(window.location.href);
+
       if (type === "film") {
-        window.location.href = data.watchUrl || "Hovedside.html";
+        const separator = data.watchUrl.includes("?") ? "&" : "?";
+        window.location.href = `${data.watchUrl}${separator}returUrl=${returUrl}`;
       } else if (type === "serie" && data.sesonger) {
         const sisteEpKey = `${navn}-siste-episode`;
         let sisteEp = JSON.parse(localStorage.getItem(sisteEpKey));
@@ -1157,7 +1125,7 @@ img, video{
           sesongNr = Object.keys(data.sesonger)[0];
           epNr = Object.keys(data.sesonger[sesongNr].episoder)[0];
         }
-        window.location.href = `film-mal.html?navn=${encodeURIComponent(navn)}&sesong=${sesongNr}&episode=${epNr}`;
+        window.location.href = `film-mal.html?navn=${encodeURIComponent(navn)}&sesong=${sesongNr}&episode=${epNr}&returUrl=${returUrl}`;
       }
     });
   }
@@ -1248,7 +1216,10 @@ img, video{
           if (!erLåst) {
             epCard.addEventListener("click", () => {
               localStorage.setItem(`${navn}-siste-episode`, JSON.stringify({ sesong: sesongNr, episode: epNr }));
-              window.location.href = `film-mal.html?navn=${encodeURIComponent(navn)}&sesong=${sesongNr}&episode=${epNr}`;
+              
+              // Legger med returUrl når man klikker på et spesifikt episodekort
+              const returUrl = encodeURIComponent(window.location.href);
+              window.location.href = `film-mal.html?navn=${encodeURIComponent(navn)}&sesong=${sesongNr}&episode=${epNr}&returUrl=${returUrl}`;
             });
           }
           episodeGallery.appendChild(epCard);
