@@ -1,30 +1,4 @@
 const filmer = {
-  "the-kid": {
-    tittel: "The Kid",
-    rating: "8.2",
-    bakgrunn: "https://image.tmdb.org/t/p/original/jnZKUavR4Ju4jTFP3HjGxdgSh9g.jpg",
-    banner: "",
-    logo: "https://static.wixstatic.com/media/fd2fb2_bcc26c34a5a2490dabd3f5b6bdf20bb8~mv2.png",
-    trailer: "",
-    poster: "https://image.tmdb.org/t/p/original/pMeqhS16RXQhNw2hpBkDvBR7r7Z.jpg",
-    posterVertikal: "https://image.tmdb.org/t/p/original/cIIsmZ4az8AaJJoDgtIOS797RCA.jpg",
-    beskrivelse: "En mor efterlader sit nyfødte barn i en limousine. På en seddel bønfalder hun ejeren om at tage sig af drengen. Men bilen bliver stjålet at tyve, der smider barnet i skraldespanden.",
-    metadata: ["1921", "Alle", "Komedie", "1 t 8 min"],
-    skuespillere: "Charles Chaplin, Edna Purviance, Jackie Coogan",
-    regissor: "Charles Chaplin",
-    watchUrl: "film-mal.html?id=the-kid",
-    videoUrl: "https://dn720708.ca.archive.org/0/items/the-kid-1921_20250723/The%20Kid%20%281921%29.mp4",
-    subtitleUrl: "",
-    tilbakeUrl: "film.html?navn=the-kid",
-    audioLanguages: [{ code: "en", label: "Engelsk" }],
-    subtitleLanguages: [
-      { code: "no", label: "Norsk" },
-      { code: "off", label: "Av" }
-    ],
-    publishDate: "2025-10-02T00:00:00",
-    expireDate: "2027-11-15T23:59:59",
-  },
-
   "house-on-haunted-hill": {
     tittel: "House on Haunted Hill",
     rating: "6.7",
