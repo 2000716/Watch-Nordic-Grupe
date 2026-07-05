@@ -963,6 +963,9 @@ img, video {
 <script src="Filmdata.js"></script>
 <script src="Seriedata.js"></script>
 
+<script src="Filmdata.js"></script>
+<script src="Seriedata.js"></script>
+
 <script type="module">
   import { auth, db } from "./firebase-oppsett.js";
   import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-auth.js";
@@ -1006,16 +1009,16 @@ img, video {
      ========================================== */
   document.title = data.tittel || "Watch Nordic";
   
-  // SONE-DATA FIX: Henter fra bannerMobil på telefon, og banner / bakgrunn på desktop
+  // OPPDATERT: Bruker nå bakgrunnMobil på mobil og bakgrunn på desktop
   const bgImg = document.getElementById("backgroundImage");
   function oppdaterBakgrunnsBilde() {
     if (!bgImg) return;
     const erMobil = window.innerWidth <= 768;
     
-    if (erMobil && data.bannerMobil) {
-      bgImg.src = data.bannerMobil;
+    if (erMobil && data.bakgrunnMobil) {
+      bgImg.src = data.bakgrunnMobil;
     } else {
-      bgImg.src = data.banner || data.bakgrunn || "";
+      bgImg.src = data.bakgrunn || "";
     }
   }
   oppdaterBakgrunnsBilde();
