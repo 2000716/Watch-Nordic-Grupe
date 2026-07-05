@@ -7,127 +7,90 @@
   <link rel="icon" type="image/png" href="https://static.wixstatic.com/media/d9ace9_95bbe3f5ff4b4aab9314a8d08804344e~mv2.png" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
   <style>
-    :root { --bg: #091B1E; --muted: #bfc9c9; --accent: #00FFCC; --card-bg: rgba(255, 255, 255, 0.04); --border: rgba(255, 255, 255, 0.08); --kids-accent: #33b5ff; }
+    :root {
+      --bg: #091B1E; --muted: #bfc9c9; --accent: #00FFCC;
+      --card-bg: rgba(255, 255, 255, 0.04); --border: rgba(255, 255, 255, 0.08);
+    }
     * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { background: var(--bg); color: white; font-family: 'Inter', Arial, sans-serif; min-height: 100vh; display: flex; flex-direction: column; }
-    header { padding: 20px 60px; background: rgba(9, 27, 30, 0.65); backdrop-filter: blur(14px); border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; }
-    header h1 { font-size: 24px; font-weight: 900; color: var(--accent); }
-    .container { max-width: 1200px; width: 100%; margin: 0 auto; padding: 40px 60px; display: grid; grid-template-columns: 300px 1fr; gap: 40px; }
-    .sidebar { background: var(--card-bg); border-radius: 24px; padding: 35px; text-align: center; border: 1px solid var(--border); height: fit-content; }
-    .avatar { width: 150px; height: 150px; border-radius: 50%; overflow: hidden; margin: 0 auto 20px; border: 3px solid rgba(255,255,255,0.1); }
-    .avatar img { width: 100%; height: 100%; object-fit: cover; }
-    .card { background: var(--card-bg); border-radius: 24px; padding: 20px 24px; margin-bottom: 35px; border: 1px solid var(--border); }
-    .row { display: flex; justify-content: space-between; align-items: center; padding: 20px 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
+    body { background: var(--bg); color: white; font-family: 'Inter', sans-serif; min-height: 100vh; }
+    .container { max-width: 900px; margin: 40px auto; padding: 20px; }
+    .card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 20px; padding: 24px; margin-bottom: 20px; }
+    .row { display: flex; justify-content: space-between; align-items: center; padding: 15px 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
+    .label { color: var(--muted); font-size: 12px; text-transform: uppercase; }
+    .value { font-size: 16px; margin-top: 5px; }
+    .btn-action { background: var(--accent); color: #071214; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer; font-weight: 700; }
     .hidden { display: none !important; }
-    .edit-field { width: 100%; margin-top: 10px; }
-    .edit-field input, .edit-field select { width: 100%; padding: 12px; background: #091B1E; border: 1px solid var(--border); border-radius: 10px; color: white; }
-    .btn-save { background: var(--accent); color: #071214; padding: 8px 16px; border-radius: 8px; border: none; cursor: pointer; font-weight: 700; }
-    footer { border-top: 1px solid var(--border); padding: 30px; text-align: center; color: #666; margin-top: auto; }
   </style>
 </head>
 <body>
 
-  <header>
-    <h1>WATCH</h1>
-    <div>
-      <button id="navHovedsideBtn">Hovedside</button>
-      <button id="navLoggUtBtn">Logg Ut</button>
-    </div>
-  </header>
-
   <div class="container">
-    <aside class="sidebar">
-      <div class="avatar"><img id="profilbilde" src="" alt="Profil"></div>
-      <div id="navnDisplay" style="font-size: 22px; font-weight: 700;">Laster...</div>
-      <div id="sidebarActions" style="margin-top:20px;">
-        <button id="sletteKnapp">Slett profil</button>
+    <h2><i class="fa-solid fa-gear"></i> Kontoinnstillinger</h2>
+    
+    <div class="card">
+      <div class="row">
+        <div><div class="label">Profilnavn</div><div class="value" id="navnView">Laster...</div></div>
+        <button class="btn-action" id="endreNavnKnapp">Endre</button>
       </div>
-    </aside>
+      <div class="row">
+        <div><div class="label">E-postadresse</div><div class="value" id="epostView">Laster...</div></div>
+      </div>
+    </div>
 
-    <section class="content">
-      <h2>Kontoinformasjon</h2>
+    <div id="foreldreKontrollSeksjon">
+      <h2><i class="fa-solid fa-shield-halved"></i> Foreldrekontroll</h2>
       <div class="card">
-        <div class="row">
-          <div>
-            <div style="font-size:12px; color:var(--muted);">Profilnavn</div>
-            <div id="navnView">Laster...</div>
-            <div id="navnEditField" class="edit-field hidden">
-              <input type="text" id="navnInput">
-              <button class="btn-save" id="lagreNavnBtn">Lagre</button>
-            </div>
-          </div>
-          <button id="endreNavnKnapp">Endre</button>
+        <div id="parentLockPanel">
+          <button class="btn-action" id="laasOppForeldreKontrollBtn">Lås opp foreldrekontroll</button>
+        </div>
+        <div id="parentSettingsPanel" class="hidden">
+          <label>Maks aldersgrense:</label>
+          <select id="ageRestrictionSelect">
+            <option value="A">Alle (A)</option>
+            <option value="6">6 år</option>
+            <option value="12">12 år</option>
+          </select>
         </div>
       </div>
-
-      <div id="foreldreKontrollSeksjon" class="hidden">
-        <h2>Foreldrekontroll</h2>
-        <div class="card">
-          <div id="parentLockPanel">
-            <button id="laasOppForeldreKontrollBtn">Lås opp med PIN</button>
-          </div>
-          <div id="parentSettingsPanel" class="hidden">
-            <select id="ageRestrictionSelect">
-              <option value="A">Alle (A)</option>
-              <option value="6">6 år</option>
-              <option value="12">12 år</option>
-            </select>
-          </div>
-        </div>
-      </div>
-    </section>
+    </div>
   </div>
-
-  <footer>© 2026 Watch Nordic Group AS.</footer>
 
   <script type="module">
     import { auth, db } from "./firebase-oppsett.js";
-    import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-auth.js";
     import { doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
 
-    const urlParams = new URLSearchParams(window.location.search);
-    const index = parseInt(urlParams.get('index')) || 0;
-    let profiler = [], docRef = null;
-
-    onAuthStateChanged(auth, (user) => {
+    // Enkel caching-mekanisme for å unngå unødvendige reads
+    async function loadData() {
+      const cached = localStorage.getItem("user_data");
+      if (cached) {
+        render(JSON.parse(cached));
+      }
+      
+      const user = auth.currentUser;
       if (user) {
-        docRef = doc(db, "users", user.uid);
-        hentData();
-      } else { window.location.href = "index.html"; }
-    });
-
-    async function hentData() {
-      const snap = await getDoc(docRef);
-      if (snap.exists()) {
-        profiler = snap.data().profiler;
-        const p = profiler[index];
-        document.getElementById("navnDisplay").innerText = p.navn;
-        document.getElementById("navnView").innerText = p.navn;
-        document.getElementById("profilbilde").src = p.bilde;
-        if (p.isKids) document.getElementById("foreldreKontrollSeksjon").classList.remove("hidden");
+        const docRef = doc(db, "users", user.uid);
+        const snap = await getDoc(docRef); // Kun 1 read ved innlasting
+        if (snap.exists()) {
+          const data = snap.data();
+          localStorage.setItem("user_data", JSON.stringify(data));
+          render(data);
+        }
       }
     }
 
-    document.getElementById("endreNavnKnapp").onclick = () => {
-      document.getElementById("navnView").classList.add("hidden");
-      document.getElementById("navnEditField").classList.remove("hidden");
-      document.getElementById("navnInput").value = document.getElementById("navnView").innerText;
-    };
+    async function saveData(newData) {
+      // Skriver kun til Firestore hvis nødvendig
+      const user = auth.currentUser;
+      await setDoc(doc(db, "users", user.uid), newData, { merge: true });
+      localStorage.setItem("user_data", JSON.stringify(newData));
+    }
 
-    document.getElementById("lagreNavnBtn").onclick = async () => {
-      profiler[index].navn = document.getElementById("navnInput").value;
-      await setDoc(docRef, { profiler }, { merge: true });
-      location.reload();
-    };
+    function render(data) {
+      document.getElementById("navnView").innerText = data.profiler[0].navn;
+      document.getElementById("epostView").innerText = data.epost;
+    }
 
-    document.getElementById("laasOppForeldreKontrollBtn").onclick = () => {
-      if (prompt("Skriv PIN (1234):") === "1234") {
-        document.getElementById("parentLockPanel").classList.add("hidden");
-        document.getElementById("parentSettingsPanel").classList.remove("hidden");
-      }
-    };
-
-    document.getElementById("navLoggUtBtn").onclick = () => { signOut(auth); window.location.href = "index.html"; };
+    loadData();
   </script>
 </body>
 </html>
