@@ -25,19 +25,10 @@ html, body {
   background: #091B1E;
   color: white;
   overflow-x: hidden;
-  margin: 0;
-  padding: 0;
-}
-
-body {
-  padding-top: 0; 
 }
 
 main {
-  margin-left: 0; 
-  margin-right: 0; 
-  padding-top: 0;
-  max-width: 100%; 
+  width: 100%;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -64,7 +55,6 @@ main {
   justify-content: space-between;
   padding: 0 40px;
   z-index: 9999;
-  box-sizing: border-box;
   background: linear-gradient(to bottom, 
     rgba(9, 27, 30, 0.95) 0%, 
     rgba(9, 27, 30, 0.75) 40%, 
@@ -72,10 +62,6 @@ main {
     rgba(9, 27, 30, 0) 100%
   );
   transition: background 0.4s ease, box-shadow 0.4s ease, height 0.4s ease;
-}
-
-.top-nav::before {
-  display: none;
 }
 
 .top-nav.scrolled {
@@ -172,23 +158,10 @@ main {
 }
 
 /* ==========================================================================
-   3. OPTIMALISERING FOR SMÅ/MELLOMSTORE PC-SKJERMER & LAPTOPS
-   ========================================================================== */
-@media (max-width: 1200px) and (min-width: 769px) {
-  .top-nav { padding: 0 20px; }
-  .nav-left { gap: 20px; }
-  .nav-links { gap: 15px; }
-  .nav-links a { font-size: 14px; }
-  .watch-logo-svg { height: 30px; }
-}
-
-/* ==========================================================================
-   4. HERO BANNER (PC)
+   3. HERO BANNER (PC)
    ========================================================================== */
 .hero-banner {
   position: relative;
-  top: 0;
-  margin-top: 0; 
   height: 85vh;
   min-height: 600px;
   width: 100%;
@@ -258,7 +231,6 @@ main {
   max-width: 80%;
   max-height: 180px;
   object-fit: contain;
-  filter: none;
 }
 
 .banner-meta {
@@ -327,21 +299,18 @@ main {
 }
 
 /* ==========================================================================
-   5a. STANDARD GALLERIER & SEKSJONER
+   4. STANDARD GALLERIER & SEKSJONER (PC)
    ========================================================================== */
-.gallery-section {
-  margin-bottom: 30px;
+.gallery-section, .continue-watching-section {
+  margin: 0 auto 30px;
   position: relative;
   z-index: 2;
   width: 100%;
   max-width: 1400px; 
-  margin-left: auto;
-  margin-right: auto;
-  padding: 0; 
   overflow: visible;
 }
 
-.gallery-section h2 {
+.gallery-section h2, .continue-watching-section h2 {
   font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
   font-size: 18px;
   font-weight: 600;
@@ -349,20 +318,16 @@ main {
   color: #00FFCC;
   margin-bottom: 10px;
   margin-left: 10px; 
-  text-transform: none;
-  padding-left: 0;
 }
 
-.gallery-wrapper {
+.gallery-wrapper, .continue-gallery-wrapper {
   position: relative;
   display: flex;
   align-items: center;
-  padding-left: 0;
-  padding-right: 0;
   overflow: visible;
 }
 
-.image-gallery {
+.image-gallery, .continue-image-gallery {
   flex: 1;
   display: flex;
   overflow-x: auto;
@@ -372,89 +337,24 @@ main {
   -ms-overflow-style: none;
 }
 
-.image-gallery::-webkit-scrollbar {
+.image-gallery::-webkit-scrollbar, .continue-image-gallery::-webkit-scrollbar {
   display: none;
 }
 
-.image-gallery a {
+.image-gallery a, .continue-image-gallery a {
   display: inline-block;
   position: relative;
   border-radius: 5px;
   background: transparent;
-  overflow: visible; 
   border: 2px solid transparent;
   transition: border 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
-}
-
-.image-gallery a img {
-  width: 330px;
-  aspect-ratio: 2.2 / 1;
-  height: 175px;
-  object-fit: cover;
-  border-radius: 5px;
-  display: block;
-  transition: transform 0.3s ease;
-}
-
-/* ==========================================================================
-   5b. EGEN SEKSJON: FORTSETT Å SE (CONTINUE WATCHING)
-   ========================================================================== */
-.continue-watching-section {
-  margin-bottom: 30px;
-  position: relative;
-  z-index: 2;
-  width: 100%;
-  max-width: 1400px;
-  margin-left: auto;
-  margin-right: auto;
-  padding: 0;
-  overflow: visible;
-}
-
-.continue-watching-section h2 {
-  font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
-  font-size: 18px;
-  font-weight: 600;
-  letter-spacing: 0.3px;
-  color: #00FFCC;
-  margin-bottom: 10px;
-  margin-left: 10px;
-  text-transform: none;
-  padding-left: 0;
-}
-
-.continue-gallery-wrapper {
-  position: relative;
-  display: flex;
-  align-items: center;
-  overflow: visible;
-}
-
-.continue-image-gallery {
-  flex: 1;
-  display: flex;
-  overflow-x: auto;
-  gap: 16px;
-  padding: 15px 10px;
-  scroll-behavior: smooth;
-  -ms-overflow-style: none;
-}
-
-.continue-image-gallery::-webkit-scrollbar {
-  display: none;
 }
 
 .continue-image-gallery a {
-  display: inline-block;
-  position: relative;
-  border-radius: 5px;
-  background: transparent;
   overflow: hidden;
-  border: 2px solid transparent;
-  transition: border 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
 }
 
-.continue-image-gallery a img {
+.image-gallery a img, .continue-image-gallery a img {
   width: 330px;
   aspect-ratio: 2.2 / 1;
   height: 175px;
@@ -485,66 +385,13 @@ main {
   transition: width 0.3s ease;
 }
 
-/* Standard/Skjult tilstand for knapper på touch-enheter */
 .scroll-button {
   display: none;
   opacity: 0;
 }
 
 /* ==========================================================================
-   STRENG PC-KONTROLL (KUN ENHETER MED MUS/HOVER AKTIVERT, DVS. IKKE IPAD/MOBIL)
-   ========================================================================== */
-@media (hover: hover) {
-  .image-gallery a:hover, .continue-image-gallery a:hover {
-    z-index: 10;
-  }
-
-  .image-gallery a:hover img, .continue-image-gallery a:hover img {
-    transform: scale(1.05);
-  }
-
-  /* Aktiver knapper kun på PC */
-  .scroll-button {
-    display: flex;
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 44px;
-    height: 44px;
-    border-radius: 50%;
-    background: rgba(9, 27, 30, 0.75);
-    border: 1px solid rgba(255, 255, 255, 0.25);
-    color: white;
-    font-size: 22px;
-    cursor: pointer;
-    z-index: 11; 
-    align-items: center;
-    justify-content: center;
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.25s ease, background 0.25s ease, transform 0.25s ease;
-    backdrop-filter: blur(6px);
-    user-select: none;
-  }
-
-  .scroll-button.left { left: 2px; }
-  .scroll-button.right { right: 2px; }
-
-  .scroll-button:hover {
-    background: rgba(0, 255, 204, 0.85);
-    color: #000;
-    transform: translateY(-50%) scale(1.08);
-  }
-
-  /* Vis piler når man hoverer over wrapperen (Kun på PC) */
-  .gallery-wrapper:hover .scroll-button:not(.hidden),
-  .continue-gallery-wrapper:hover .scroll-button:not(.hidden) {
-    opacity: 1;
-    pointer-events: auto;
-  }
-}
-/* ==========================================================================
-   6. TOP 10 GALLERI
+   5. TOP 10 GALLERI
    ========================================================================== */
 .top10-gallery {
   display: flex;
@@ -573,10 +420,6 @@ main {
   display: block;
 }
 
-@media (hover: hover) {
-  .top10-item:hover { transform: scale(1.05); }
-}
-
 .top10-number {
   position: absolute;
   bottom: -10px;
@@ -591,15 +434,8 @@ main {
   pointer-events: none;
 }
 
-@media (hover: hover) {
-  .top10-item:hover .top10-number {
-    color: #00FFCC;
-    -webkit-text-stroke: 0;
-  }
-}
-
 /* ==========================================================================
-   7. HOVER OVERLAY FOR BILDER (Kun PC)
+   6. HOVER OVERLAY FOR BILDER (PC)
    ========================================================================== */
 .gallery-item {
   position: relative !important;
@@ -631,16 +467,6 @@ main {
   display: flex;
   align-items: flex-end;
   z-index: 2;
-  transform: scale(1);
-  transform-origin: center;
-}
-
-@media (hover: hover) {
-  .gallery-item:hover > img { transform: scale(1.05); }
-  .gallery-item:hover .image-overlay {
-    opacity: 1;
-    transform: scale(1.05); 
-  }
 }
 
 .overlay-content {
@@ -665,7 +491,7 @@ main {
 }
 
 /* ==========================================================================
-   8. BARNE BANNER & SPESIALINNHOLD
+   7. BARNE BANNER & SPESIALINNHOLD
    ========================================================================== */
 .kids-banner {
   position: relative;
@@ -705,7 +531,7 @@ main {
 }
 
 /* ==========================================================================
-   9. FOOTER
+   8. FOOTER
    ========================================================================== */
 .footer {
   width: 100%;
@@ -785,27 +611,104 @@ main {
 }
 
 /* ==========================================================================
-   10. MOBIL-OPTIMALISERING (768px og nedover)
+   9. HOVER EFFEKTER KUN FOR ENHETER MED MUS (PC / LAPTOP)
+   ========================================================================== */
+@media (hover: hover) {
+  .image-gallery a:hover, .continue-image-gallery a:hover {
+    z-index: 10;
+  }
+
+  .image-gallery a:hover img, .continue-image-gallery a:hover img {
+    transform: scale(1.05);
+  }
+
+  .top10-item:hover { 
+    transform: scale(1.05); 
+  }
+
+  .top10-item:hover .top10-number {
+    color: #00FFCC;
+    -webkit-text-stroke: 0;
+  }
+
+  .gallery-item:hover > img { 
+    transform: scale(1.05); 
+  }
+
+  .gallery-item:hover .image-overlay {
+    opacity: 1;
+    transform: scale(1.05); 
+  }
+
+  /* Aktiver og vis rullepiler */
+  .scroll-button {
+    display: flex;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: rgba(9, 27, 30, 0.75);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    color: white;
+    font-size: 22px;
+    cursor: pointer;
+    z-index: 11; 
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.25s ease, background 0.25s ease, transform 0.25s ease;
+    backdrop-filter: blur(6px);
+    user-select: none;
+  }
+
+  .scroll-button.left { left: 2px; }
+  .scroll-button.right { right: 2px; }
+
+  .scroll-button:hover {
+    background: rgba(0, 255, 204, 0.85);
+    color: #000;
+    transform: translateY(-50%) scale(1.08);
+  }
+
+  .gallery-wrapper:hover .scroll-button:not(.hidden),
+  .continue-gallery-wrapper:hover .scroll-button:not(.hidden) {
+    opacity: 1;
+    pointer-events: auto;
+  }
+}
+
+/* ==========================================================================
+   10. OPTIMALISERING FOR SKJERMER MELLOM 769px og 1200px (LAPTOPS)
+   ========================================================================== */
+@media (max-width: 1200px) and (min-width: 769px) {
+  .top-nav { padding: 0 20px; }
+  .nav-left { gap: 20px; }
+  .nav-links { gap: 15px; }
+  .nav-links a { font-size: 14px; }
+  .watch-logo-svg { height: 30px; }
+}
+
+/* ==========================================================================
+   11. MOBIL-OPTIMALISERING (768px og nedover)
    ========================================================================== */
 @media (max-width: 768px) {
   body { 
-    padding-top: 0px; 
-    padding-bottom: 75px; /* Plass slik at innholdet ikke skjules bak bunnstripen */
+    padding-bottom: 75px;
   }
 
   main {
-    padding-left: 0px !important;
-    padding-right: 0px !important;
-    margin-left: 0px !important;
-    margin-right: 0px !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
   }
 
-  /* TOPPMENY MOBIL (Logo, søk og profil på topp) */
+  /* TOPPMENY MOBIL */
   .top-nav {
     position: fixed !important;
-    top: 0;
-    left: 0;
-    width: 100%;
     padding: 0 20px !important;
     height: 65px;
     background: linear-gradient(to bottom, 
@@ -816,7 +719,6 @@ main {
     backdrop-filter: none !important;    
     box-shadow: none !important;
     border: none !important;
-    z-index: 9999;
     display: flex !important;
     justify-content: space-between !important;
     align-items: center !important;
@@ -831,11 +733,11 @@ main {
     transform: none !important;
     width: 100% !important;
     height: 60px;
-    background: rgba(9, 27, 30, 0.9) !important; /* Mørk solid/transparent base */
-    backdrop-filter: blur(15px) !important; /* Gjør at innholdet bak blir uskarpt */
+    background: rgba(9, 27, 30, 0.9) !important;
+    backdrop-filter: blur(15px) !important;
     -webkit-backdrop-filter: blur(15px) !important;
-    border-top: 1px solid rgba(255, 255, 255, 0.1) !important; /* Elegant linje på toppen */
-    border-radius: 0px !important; /* Fjerner pilleformen */
+    border-top: 1px solid rgba(255, 255, 255, 0.1) !important;
+    border-radius: 0 !important;
     box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.4) !important;
     z-index: 99999;
     align-items: center !important;
@@ -844,9 +746,8 @@ main {
     gap: 0 !important;
   }
 
-  /* STYLING AV LENKER (KUN IKONER) */
   .nav-links a {
-    font-size: 0px !important; 
+    font-size: 0 !important; 
     color: #a0a0a0 !important;
     text-decoration: none;
     display: flex !important;
@@ -856,15 +757,12 @@ main {
     height: 100%;
   }
 
-  /* Ikon-størrelse og fjerning av PC-marginer */
   .nav-links a i {
     font-size: 22px !important; 
-    margin-right: 0px !important; 
+    margin-right: 0 !important; 
     display: block !important;
-    transition: color 0.2s ease;
   }
 
-  /* Aktivt ikon markeres med din cyan-farge */
   .nav-links a.active i {
     color: #00FFCC !important;
   }
@@ -891,8 +789,6 @@ main {
 
   /* HERO BANNER MOBIL */
   .hero-banner {
-    top: 0 !important;
-    margin-top: 0 !important;
     height: 55vh !important; 
     min-height: 360px !important;
     max-height: 500px !important;
@@ -944,16 +840,16 @@ main {
     background: rgba(255, 255, 255, 0.2);
   }
 
-  /* Mobiljustering for gallerier */
+  /* GALLERIER MOBIL */
   .gallery-section, .continue-watching-section {
     margin-left: 32px !important; 
-    margin-right: 0px !important;
+    margin-right: 0 !important;
     margin-bottom: 22px;
   }
 
   .gallery-section h2, .continue-watching-section h2 {
-    padding-left: 0px !important; 
-    margin-left: 0px !important;
+    padding-left: 0 !important; 
+    margin-left: 0 !important;
     font-size: 16px;
     font-weight: 700;
     letter-spacing: 0.5px;
@@ -981,7 +877,6 @@ main {
     aspect-ratio: 16 / 9 !important; 
     object-fit: cover !important; 
     border-radius: 4px !important;
-    transform: none !important;
   }
 
   .image-overlay { display: none !important; }
@@ -1005,7 +900,6 @@ main {
     left: -10px !important;
     bottom: -6px !important;
     -webkit-text-stroke: 2px rgba(0, 255, 204, 0.8) !important;
-    color: transparent !important;
   }
 
   .kids-banner {
@@ -1019,18 +913,19 @@ main {
   .kids-overlay h2 { font-size: 18px !important; margin-bottom: 2px; }
   .kids-overlay p { font-size: 12px !important; }
 
-  /* FJERN FOOTER FOR MOBIL */
   .footer {
     display: none !important;
   }
-/* Nødbrems: Hvis enheten er i landskap, tving innholdet til å se ut som portrett */
+}
+
+/* ==========================================================================
+   12. NØDBREMS (TVUNGET PORTRETT I LANDSKAPSMODUS PÅ MOBIL)
+   ========================================================================== */
 @media screen and (orientation: landscape) and (max-width: 900px) {
   body {
-    transform: none !important;
     overflow: hidden !important;
   }
 
-  /* Dette er et triks for å vise en melding eller bare tvinge størrelsen */
   body::after {
     content: "Vennligst roter telefonen til portrett-modus for å bruke appen.";
     position: fixed;
