@@ -1121,7 +1121,7 @@ main {
 <script src="Seriedata.js"></script>
 
 <script type="module">
-  // ==================== CSS INJEKSJON FOR VIAPLAY-LÅSING ==================== //
+  // ==================== CSS INJEKSJON FOR GALLERILÅSING ==================== //
   const style = document.createElement('style');
   if (window.matchMedia("(pointer: coarse)").matches) {
     style.textContent = `
@@ -1658,18 +1658,19 @@ main {
           hrefUrl = `film-mal.html?navn=${urlParamNavn}&sesong=${s}&episode=${e}`;
         }
 
+        // RETTET: Strukturert nøyaktig som vanlige gallerielementer med progress-bar lagt til som et CSS-variabel-element
         const link = document.createElement("a");
         link.href = hrefUrl;
-        link.classList.add("gallery-item", "image-with-progress");
+        link.classList.add("gallery-item");
+        link.style.setProperty('--progress', `${progressVerdi}%`);
+        
         link.innerHTML = `
           <img src="${metadataMatch.poster || metadataMatch.bilde}" alt="${dbData.tittel || metadataMatch.tittel}">
-          <div class="progress-container" style="background: rgba(255,255,255,0.2); width: 100%; height: 6px; position: absolute; bottom: 0; left: 0; z-index: 2;">
-            <div class="progress-bar" style="width: ${progressVerdi}%; height: 100%; background: #00FFCC;"></div>
-          </div>
+          <div class="progress-bar"></div>
           <div class="image-overlay">
             <div class="overlay-content">
               <div class="overlay-title">${metadataMatch.tittel}</div>
-              <div class="overlay-meta">${spillType === "serie" ? `S${filmId.split("-")[2].replace("s","")}E${filmId.split("-")[3].replace("e","")}` : ""}</div>
+              <div class="overlay-meta">${spillType === "serie" ? `S${filmId.split("-")[2].replace("s","")}E${filmId.split("-")[3].replace("e","")}` : (metadataMatch.metadata || []).join(" • ")}</div>
             </div>
           </div>
         `;
