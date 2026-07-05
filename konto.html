@@ -8,341 +8,386 @@
   <link rel="icon" type="image/png" href="https://static.wixstatic.com/media/d9ace9_95bbe3f5ff4b4aab9314a8d08804344e~mv2.png" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
   <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
     :root {
-      /* De originale fargene og stilene er satt tilbake her */
-      --bg: #0d1b2a;
-      --muted: #a0aab2;
-      --accent: #e50914;
-      --card-bg: rgba(255, 255, 255, 0.05);
-      --border: rgba(255, 255, 255, 0.1);
-      --input-bg: #1b263b;
-      --kids-accent: #33b5ff;
-      --danger: #ff4d4d;
-      --gray-btn: rgba(255, 255, 255, 0.1);
+      --bg-color: #0b0f14;
+      --surface-color: #151a22;
+      --surface-hover: #1e2530;
+      --border-color: #2a3441;
+      --text-main: #ffffff;
+      --text-muted: #8b9eb0;
+      --accent-color: #00FFCC;
+      --danger-color: #ff4757;
+      --kids-color: #33b5ff;
     }
 
-    * { box-sizing: border-box; margin: 0; padding: 0; }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
 
     body {
-      background: var(--bg);
-      color: white;
-      font-family: 'Inter', Arial, sans-serif;
+      background-color: var(--bg-color);
+      color: var(--text-main);
       min-height: 100vh;
       display: flex;
       flex-direction: column;
+      overflow-x: hidden;
     }
 
+    /* HEADER */
     header {
-      padding: 15px 50px;
-      background: rgba(13, 27, 42, 0.95);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-      border-bottom: 1px solid var(--border);
+      background-color: rgba(11, 15, 20, 0.95);
+      backdrop-filter: blur(10px);
+      padding: 20px 5%;
       display: flex;
       justify-content: space-between;
       align-items: center;
+      border-bottom: 1px solid var(--border-color);
       position: sticky;
       top: 0;
       z-index: 100;
     }
 
-    .logo-img {
-      height: 35px;
-      object-fit: contain;
-    }
+    .logo-img { height: 32px; object-fit: contain; cursor: pointer; }
 
-    header .nav-btns { display: flex; gap: 12px; }
+    .header-actions { display: flex; gap: 15px; }
 
-    header button {
-      background: var(--gray-btn);
-      border: 1px solid rgba(255,255,255,0.15);
-      color: white;
-      padding: 10px 20px;
-      border-radius: 999px;
-      font-weight: 700;
-      font-size: 13px;
+    .btn-header {
+      background: transparent;
+      color: var(--text-main);
+      border: 1px solid var(--border-color);
+      padding: 8px 16px;
+      border-radius: 6px;
+      font-weight: 600;
+      font-size: 14px;
       cursor: pointer;
-      transition: all 0.2s ease;
+      transition: all 0.2s;
     }
+    .btn-header:hover { background: var(--surface-hover); border-color: var(--text-muted); }
+    .btn-logout { color: var(--danger-color); border-color: rgba(255, 71, 87, 0.3); }
+    .btn-logout:hover { background: rgba(255, 71, 87, 0.1); border-color: var(--danger-color); }
 
-    header button:hover { 
-      background: rgba(255, 255, 255, 0.2);
-      border-color: rgba(255,255,255,0.4);
-    }
-
-    header button.logout-btn {
-      border-color: rgba(255, 77, 77, 0.3);
-      color: var(--danger);
-    }
-    header button.logout-btn:hover {
-      background: rgba(255, 77, 77, 0.15);
-      border-color: var(--danger);
-    }
-
-    .container {
-      max-width: 1050px;
+    /* LAYOUT */
+    .app-container {
+      display: flex;
+      max-width: 1200px;
       width: 100%;
-      margin: 0 auto;
-      padding: 40px 30px;
-      display: grid;
-      grid-template-columns: 260px 1fr;
-      gap: 50px;
+      margin: 40px auto;
+      padding: 0 5%;
+      gap: 40px;
       flex: 1;
     }
 
+    /* SIDEBAR NAVIGATION */
     .sidebar {
-      background: var(--card-bg);
-      border-radius: 16px;
-      padding: 30px 20px;
-      text-align: center;
-      border: 1px solid var(--border);
-      height: fit-content;
+      width: 280px;
+      flex-shrink: 0;
     }
 
-    .avatar {
-      width: 120px;
-      height: 120px;
-      border-radius: 50%;
-      overflow: hidden;
-      margin: 0 auto 15px;
-      cursor: pointer;
-      border: 2px solid rgba(255,255,255,0.2);
-      transition: transform 0.2s ease, border-color 0.2s;
-    }
-
-    .avatar:hover {
-      border-color: var(--accent);
-      transform: scale(1.03);
-    }
-
-    .avatar img { width: 100%; height: 100%; object-fit: cover; }
-
-    .profile-name { font-size: 19px; font-weight: 700; margin-bottom: 25px; color: white; text-shadow: 0 2px 4px rgba(0,0,0,0.5); }
-
-    .profile-actions { display: flex; flex-direction: column; gap: 10px; }
-
-    .profile-actions button {
-      background: rgba(255,255,255,0.05);
-      border: 1px solid rgba(255,255,255,0.1);
-      color: white;
-      padding: 11px;
-      border-radius: 8px;
-      font-weight: 600;
-      font-size: 13px;
-      cursor: pointer;
-      transition: background 0.2s;
+    .user-brief {
       display: flex;
       align-items: center;
-      justify-content: center;
-      gap: 8px;
+      gap: 15px;
+      margin-bottom: 30px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid var(--border-color);
     }
+    .user-brief img { width: 50px; height: 50px; border-radius: 50%; object-fit: cover; }
+    .user-brief h3 { font-size: 16px; font-weight: 700; }
+    .user-brief p { font-size: 13px; color: var(--text-muted); margin-top: 4px; word-break: break-all;}
 
-    .profile-actions button:hover { background: rgba(255,255,255,0.1); }
-
-    .profile-actions button.delete-btn {
-      border-color: rgba(255, 77, 77, 0.3);
-      color: var(--danger);
-      margin-top: 15px;
+    .nav-menu { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+    .nav-menu li {
+      padding: 14px 20px;
+      border-radius: 8px;
+      color: var(--text-muted);
+      font-weight: 600;
+      font-size: 15px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      transition: all 0.2s;
     }
-    .profile-actions button.delete-btn:hover {
-      background: rgba(255, 77, 77, 0.1);
-      border-color: var(--danger);
-    }
+    .nav-menu li:hover { background-color: var(--surface-color); color: var(--text-main); }
+    .nav-menu li.active { background-color: var(--surface-hover); color: var(--accent-color); }
 
-    .content-section { margin-bottom: 40px; }
+    /* MAIN CONTENT AREA */
+    .content-area { flex: 1; }
+    
+    .tab-content { display: none; animation: fadeIn 0.3s ease; }
+    .tab-content.active { display: block; }
 
-    .content h2 {
-      margin: 0 0 15px;
-      font-size: 14px;
-      font-weight: 800;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      color: var(--muted);
-    }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
 
-    .card {
-      background: var(--card-bg);
+    .section-header { margin-bottom: 25px; }
+    .section-header h2 { font-size: 28px; font-weight: 800; margin-bottom: 8px; }
+    .section-header p { color: var(--text-muted); font-size: 15px; }
+
+    /* CARDS & ROWS (STREAMING STYLE) */
+    .settings-card {
+      background-color: var(--surface-color);
+      border: 1px solid var(--border-color);
       border-radius: 12px;
-      padding: 0 24px;
-      border: 1px solid var(--border);
+      overflow: hidden;
+      margin-bottom: 24px;
     }
 
-    .row {
+    .settings-row {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 20px 0;
-      border-bottom: 1px solid rgba(255,255,255,0.05);
+      padding: 24px;
+      border-bottom: 1px solid var(--border-color);
     }
+    .settings-row:last-child { border-bottom: none; }
 
-    .row:last-child { border-bottom: none; }
+    .row-info h4 { font-size: 14px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; }
+    .row-info p { font-size: 16px; font-weight: 500; }
 
-    .info-block { flex: 1; padding-right: 20px; }
-
-    .label {
-      color: rgba(255, 255, 255, 0.4);
-      font-size: 11px;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      margin-bottom: 5px;
-      font-weight: 700;
-    }
-
-    .value { font-size: 15px; font-weight: 500; color: #f0f0f0; }
-
-    .row button.edit-trigger {
+    .btn-action {
       background: transparent;
-      border: 1px solid rgba(255,255,255,0.2);
-      color: white;
+      color: var(--text-main);
+      border: 1px solid var(--border-color);
       padding: 8px 16px;
       border-radius: 6px;
-      cursor: pointer;
-      font-size: 13px;
-      font-weight: 600;
-      transition: all 0.2s;
-    }
-
-    .row button.edit-trigger:hover {
-      background: rgba(255,255,255,0.1);
-      border-color: white;
-    }
-
-    .hidden { display: none !important; }
-
-    .edit-field { margin-top: 12px; width: 100%; max-width: 420px; }
-
-    .edit-field input, .edit-field select {
-      width: 100%;
-      padding: 12px;
-      background: var(--input-bg);
-      border: 1px solid rgba(255, 255, 255, 0.15);
-      border-radius: 6px;
-      color: white;
       font-size: 14px;
-      margin-bottom: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+    .btn-action:hover { background: var(--surface-hover); border-color: var(--text-main); }
+    
+    .btn-primary { background: var(--accent-color); color: #000; border: none; }
+    .btn-primary:hover { background: #00e6b8; }
+    
+    .btn-danger { color: var(--danger-color); border-color: rgba(255,71,87,0.3); }
+    .btn-danger:hover { background: rgba(255,71,87,0.1); border-color: var(--danger-color); }
+
+    /* FORMS & INPUTS */
+    .input-group { margin-top: 15px; display: none; width: 100%; max-width: 400px; }
+    .input-group.active { display: block; }
+    
+    .input-group input, .input-group select {
+      width: 100%;
+      padding: 12px 16px;
+      background-color: var(--bg-color);
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      color: var(--text-main);
+      font-size: 15px;
+      margin-bottom: 12px;
       outline: none;
     }
-    .edit-field input:focus, .edit-field select:focus { border-color: var(--accent); }
-    .edit-field select option { background: var(--bg); color: white; }
+    .input-group input:focus, .input-group select:focus { border-color: var(--accent-color); }
+    .input-group select option { background-color: var(--bg-color); }
 
-    .edit-actions { display: flex; gap: 10px; margin-top: 4px; }
-    .edit-actions button {
-      padding: 8px 14px; border-radius: 6px; font-size: 12px; font-weight: 700; cursor: pointer; transition: 0.2s;
-    }
-    .btn-save { background: var(--accent); color: white; border: none; }
-    .btn-cancel { background: transparent; border: 1px solid rgba(255,255,255,0.2); color: var(--muted); }
+    .input-actions { display: flex; gap: 10px; }
 
-    .parent-lock-screen { text-align: center; padding: 30px 0; }
-    
-    .btn-parent-unlock {
-      background: var(--gray-btn);
-      border: 1px solid rgba(255,255,255,0.2);
+    /* PROFILE SELECTOR (Inside settings) */
+    .profile-selector { margin-bottom: 20px; }
+    .profile-selector select {
+      width: 100%;
+      max-width: 300px;
+      padding: 12px;
+      background: var(--surface-color);
+      border: 1px solid var(--border-color);
       color: white;
-      padding: 10px 24px;
-      font-weight: 700;
-      font-size: 13px;
-      border-radius: 6px;
+      border-radius: 8px;
+      font-size: 15px;
+      font-weight: 600;
       cursor: pointer;
-      transition: all 0.2s;
     }
-    .btn-parent-unlock:hover { background: rgba(255,255,255,0.2); border-color: var(--accent); }
+
+    /* PARENTAL CONTROL LOCK */
+    .lock-screen { text-align: center; padding: 40px 20px; }
+    .lock-screen i { font-size: 40px; color: var(--text-muted); margin-bottom: 15px; }
 
     footer {
-      border-top: 1px solid var(--border);
-      padding: 25px;
-      color: var(--muted);
-      opacity: 0.6;
-      font-size: 12px;
-      margin-top: auto;
       text-align: center;
+      padding: 30px;
+      border-top: 1px solid var(--border-color);
+      color: var(--text-muted);
+      font-size: 13px;
+      margin-top: auto;
     }
 
-    @media (max-width: 850px) {
-      .container { grid-template-columns: 1fr; padding: 20px; gap: 30px; }
+    @media (max-width: 900px) {
+      .app-container { flex-direction: column; }
       .sidebar { width: 100%; }
-      .row { flex-direction: column; align-items: flex-start; gap: 12px; }
-      header { padding: 15px 20px; }
+      .nav-menu { flex-direction: row; overflow-x: auto; padding-bottom: 10px; }
+      .nav-menu li { white-space: nowrap; }
+      .settings-row { flex-direction: column; align-items: flex-start; gap: 15px; }
     }
   </style>
 </head>
 <body>
 
   <header>
-    <img src="https://static.wixstatic.com/media/d9ace9_95bbe3f5ff4b4aab9314a8d08804344e~mv2.png" alt="Watch Nordic Logo" class="logo-img">
-    <div class="nav-btns">
-      <button id="navHovedsideBtn"><i class="fa-solid fa-house"></i> Hovedside</button>
-      <button class="logout-btn" id="navLoggUtBtn"><i class="fa-solid fa-right-from-bracket"></i> Logg Ut</button>
+    <img src="https://static.wixstatic.com/media/d9ace9_95bbe3f5ff4b4aab9314a8d08804344e~mv2.png" alt="Logo" class="logo-img" id="logoBtn">
+    <div class="header-actions">
+      <button class="btn-header" id="navHovedsideBtn">Tilbake til Tjenesten</button>
+      <button class="btn-header btn-logout" id="navLoggUtBtn">Logg ut</button>
     </div>
   </header>
 
-  <div class="container">
+  <div class="app-container">
+    
     <aside class="sidebar">
-      <div class="avatar" id="avatarContainer">
-        <img id="profilbilde" src="" alt="Profilbilde">
+      <div class="user-brief">
+        <img id="sideAvatar" src="https://static.wixstatic.com/media/fd2fb2_39376e4ee55b460ab7a3ebbfcf35fef7~mv2.png" alt="Avatar">
+        <div>
+          <h3 id="sideNavn">Laster...</h3>
+          <p id="sideEpost">Laster e-post...</p>
+        </div>
       </div>
-      <div class="profile-name" id="navnDisplay">Laster...</div>
-      <div class="profile-actions" id="sidebarActions">
-        <button id="endreBildeSideBtn"><i class="fa-solid fa-user-gear"></i> Endre bilde</button>
-        <button class="delete-btn" id="sletteKnapp"><i class="fa-solid fa-trash-can"></i> Slett profil</button>
-      </div>
+
+      <ul class="nav-menu">
+        <li class="active" data-tab="tab-oversikt"><i class="fa-solid fa-house-user"></i> Kontooversikt</li>
+        <li data-tab="tab-profiler"><i class="fa-solid fa-users"></i> Administrer Profiler</li>
+        <li data-tab="tab-foreldrekontroll"><i class="fa-solid fa-shield-halved"></i> Foreldrekontroll</li>
+        <li data-tab="tab-abonnement"><i class="fa-solid fa-credit-card"></i> Mitt Abonnement</li>
+      </ul>
     </aside>
 
-    <section class="content">
-      <div class="content-section">
-        <h2>Medlemskap og personvern</h2>
-        <div class="card">
-          <div class="row" id="navnRow">
-            <div class="info-block">
-              <div class="label">Profilnavn</div>
-              <div class="value" id="navnView">Laster...</div>
+    <main class="content-area">
+      
+      <section id="tab-oversikt" class="tab-content active">
+        <div class="section-header">
+          <h2>Kontooversikt</h2>
+          <p>Administrer din personlige informasjon og sikkerhet.</p>
+        </div>
+
+        <div class="settings-card">
+          <div class="settings-row">
+            <div class="row-info">
+              <h4>E-postadresse</h4>
+              <p id="oversiktEpost">Laster...</p>
+            </div>
+            <button class="btn-action">Endre e-post</button>
+          </div>
+          <div class="settings-row">
+            <div class="row-info">
+              <h4>Passord</h4>
+              <p>••••••••</p>
+            </div>
+            <button class="btn-action">Oppdater passord</button>
+          </div>
+        </div>
+
+        <div class="settings-card">
+          <div class="settings-row">
+            <div class="row-info">
+              <h4>Aktiv Profil</h4>
+              <p id="oversiktAktivProfil">Laster...</p>
+            </div>
+            <button class="btn-action btn-danger" id="slettKontoBtn">Slett hele kontoen</button>
+          </div>
+        </div>
+      </section>
+
+      <section id="tab-profiler" class="tab-content">
+        <div class="section-header">
+          <h2>Administrer Profiler</h2>
+          <p>Endre navn, bilde eller slett profiler på kontoen din.</p>
+        </div>
+
+        <div class="profile-selector">
+          <select id="editProfileSelect"></select>
+        </div>
+
+        <div class="settings-card">
+          <div class="settings-row">
+            <div class="row-info">
+              <h4>Profilnavn</h4>
+              <p id="profilNavnVisning">Laster...</p>
               
-              <div class="edit-field hidden" id="navnEditField">
-                <input type="text" id="navnInput" maxlength="15">
-                <div class="edit-actions">
-                  <button class="btn-save" id="lagreNavnBtn">Lagre</button>
-                  <button class="btn-cancel" id="avbrytNavnBtn">Avbryt</button>
+              <div class="input-group" id="editNavnGroup">
+                <input type="text" id="nyttProfilNavn" maxlength="15">
+                <div class="input-actions">
+                  <button class="btn-action btn-primary" id="lagreNavnBtn">Lagre</button>
+                  <button class="btn-action" id="avbrytNavnBtn">Avbryt</button>
                 </div>
               </div>
             </div>
-            <button class="edit-trigger" id="endreNavnKnapp">Endre</button>
+            <button class="btn-action" id="endreNavnBtn">Endre</button>
           </div>
-          <div class="row" id="epostRow">
-            <div class="info-block">
-              <div class="label">E-postadresse (Konto)</div>
-              <div class="value" id="epostView">Laster...</div>
+          
+          <div class="settings-row">
+            <div class="row-info">
+              <h4>Profilbilde</h4>
+              <p>Endre avataren for denne profilen.</p>
             </div>
-          </div>
-        </div>
-      </div>
-
-      <div id="foreldreKontrollSeksjon" class="content-section hidden">
-        <h2>Foreldrekontroll</h2>
-        <div class="card">
-          <div id="parentLockPanel" class="parent-lock-screen">
-            <p style="margin-bottom: 15px; color: var(--muted); font-size: 13px;">Innholdsbegrensninger er låst. Foreldre må bekrefte PIN.</p>
-            <button class="btn-parent-unlock" id="laasOppForeldreKontrollBtn"><i class="fa-solid fa-lock"></i> Vis innstillinger med PIN</button>
+            <button class="btn-action" id="endreBildeBtn">Endre bilde</button>
           </div>
 
-          <div id="parentSettingsPanel" class="hidden" style="padding: 15px 0;">
-            <div class="edit-field">
-              <label class="label">Velg profil du vil begrense:</label>
-              <select id="profileSelect" style="margin-top: 5px;"></select>
+          <div class="settings-row" id="slettProfilRad">
+            <div class="row-info">
+              <h4>Slett Profil</h4>
+              <p style="color: var(--text-muted); font-size: 13px;">Dette vil fjerne profilen og all historikk permanent.</p>
             </div>
-            
-            <div class="edit-field" style="margin-top: 15px;">
-              <label class="label">Maks tillatt aldersgrense:</label>
-              <select id="ageRestrictionSelect" style="margin-top: 5px;">
-                <option value="A">Tillat kun innhold for alle (A)</option>
-                <option value="6">Maks 6 år</option>
-                <option value="9">Maks 9 år</option>
-                <option value="12">Maks 12 år</option>
-                <option value="18">Ingen restriksjoner (Voksen)</option>
-              </select>
-            </div>
+            <button class="btn-action btn-danger" id="slettProfilKnapp">Slett profil</button>
           </div>
         </div>
-      </div>
-    </section>
+      </section>
+
+      <section id="tab-foreldrekontroll" class="tab-content">
+        <div class="section-header">
+          <h2>Foreldrekontroll</h2>
+          <p>Beskytt barna ved å sette aldersgrenser på profilene.</p>
+        </div>
+
+        <div class="settings-card">
+          <div id="parentLockPanel" class="lock-screen">
+            <i class="fa-solid fa-lock"></i>
+            <h3 style="margin-bottom: 10px;">Innstillinger er låst</h3>
+            <p style="margin-bottom: 20px; color: var(--text-muted);">Krever kontopassord / PIN for å endre aldersgrenser.</p>
+            <button class="btn-action btn-primary" id="laasOppPinBtn">Lås opp med PIN</button>
+          </div>
+
+          <div id="parentSettingsPanel" style="display: none; padding: 24px;">
+            <div class="profile-selector" style="margin-bottom: 24px;">
+              <h4 style="margin-bottom: 8px; color: var(--text-muted); font-size: 13px; text-transform: uppercase;">Velg profil å begrense:</h4>
+              <select id="parentalProfileSelect"></select>
+            </div>
+
+            <h4 style="margin-bottom: 8px; color: var(--text-muted); font-size: 13px; text-transform: uppercase;">Maks tillatt aldersgrense:</h4>
+            <select id="ageRestrictionSelect" style="width: 100%; max-width: 300px; padding: 12px; border-radius: 8px; background: var(--bg-color); color: white; border: 1px solid var(--border-color);">
+              <option value="A">Kun innhold for alle (A)</option>
+              <option value="6">Maks 6 år</option>
+              <option value="9">Maks 9 år</option>
+              <option value="12">Maks 12 år</option>
+              <option value="18">Ingen restriksjoner (Voksen 18+)</option>
+            </select>
+          </div>
+        </div>
+      </section>
+
+      <section id="tab-abonnement" class="tab-content">
+        <div class="section-header">
+          <h2>Mitt Abonnement</h2>
+          <p>Administrer din nåværende plan og fakturering.</p>
+        </div>
+
+        <div class="settings-card">
+          <div class="settings-row">
+            <div class="row-info">
+              <h4>Nåværende Plan</h4>
+              <p style="color: var(--accent-color); font-weight: 700; font-size: 18px;">Premium Nordic Ultra</p>
+              <p style="font-size: 13px; color: var(--text-muted); margin-top: 4px;">4K UHD + HDR • 4 Skjermer samtidig</p>
+            </div>
+            <button class="btn-action">Endre plan</button>
+          </div>
+          <div class="settings-row">
+            <div class="row-info">
+              <h4>Neste Fakturadato</h4>
+              <p>12. Juli 2026</p>
+            </div>
+            <button class="btn-action">Administrer betaling</button>
+          </div>
+        </div>
+      </section>
+
+    </main>
   </div>
 
   <footer>© 2026 Watch Nordic Group AS. Alle rettigheter forbeholdt.</footer>
@@ -352,34 +397,41 @@
     import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-auth.js";
     import { doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
 
+    // Globale variabler & State
     const urlParams = new URLSearchParams(window.location.search);
     const aktivProfilIndex = parseInt(urlParams.get('index')) || 0;
     const FORELDRE_PIN = "1234";
-
-    const navnDisplay = document.getElementById("navnDisplay");
-    const navnView = document.getElementById("navnView");
-    const navnInput = document.getElementById("navnInput");
-    const epostView = document.getElementById("epostView");
-    const foreldreKontrollSeksjon = document.getElementById("foreldreKontrollSeksjon");
-    const parentLockPanel = document.getElementById("parentLockPanel");
-    const parentSettingsPanel = document.getElementById("parentSettingsPanel");
-    const profileSelect = document.getElementById("profileSelect");
-    const ageRestrictionSelect = document.getElementById("ageRestrictionSelect");
-    const sletteKnapp = document.getElementById("sletteKnapp");
 
     let profiler = [];
     let globalEpost = ""; 
     let docRef = null;
 
-    // Økonomisk lokal-caching
+    // FANE-NAVIGASJON (Tabs)
+    const navItems = document.querySelectorAll('.nav-menu li');
+    const tabContents = document.querySelectorAll('.tab-content');
+
+    navItems.forEach(item => {
+      item.addEventListener('click', () => {
+        // Fjern active fra alle nav-items og tabs
+        navItems.forEach(nav => nav.classList.remove('active'));
+        tabContents.forEach(tab => tab.classList.remove('active'));
+        
+        // Sett active på valgt
+        item.classList.add('active');
+        document.getElementById(item.getAttribute('data-tab')).classList.add('active');
+      });
+    });
+
+    // CACHING (Firebase-sparing)
     const cachedProfiles = localStorage.getItem("watch_nordic_profiles_cache");
     const cachedEmail = localStorage.getItem("watch_nordic_email_cache");
     if (cachedProfiles && cachedEmail) {
       profiler = JSON.parse(cachedProfiles);
       globalEpost = cachedEmail;
-      if(profiler[aktivProfilIndex]) byggProfilgrensesnitt();
+      oppdaterGrensesnitt();
     }
 
+    // AUTH LISTENER
     onAuthStateChanged(auth, (user) => {
       if (user) {
         docRef = doc(db, "users", user.uid);
@@ -390,19 +442,7 @@
       }
     });
 
-    document.getElementById("navHovedsideBtn").addEventListener("click", () => {
-      window.location.href = `hvem-ser-på.html?index=${aktivProfilIndex}`;
-    });
-    document.getElementById("navLoggUtBtn").addEventListener("click", loggUt);
-    document.getElementById("laasOppForeldreKontrollBtn").addEventListener("click", laasOppForeldreKontroll);
-    profileSelect.addEventListener("change", oppdaterValgtProfilISekvens);
-    ageRestrictionSelect.addEventListener("change", lagreAldersgrenseGlobalt);
-    sletteKnapp.addEventListener("click", haandterSlettingMellomProfil);
-    
-    document.getElementById("endreNavnKnapp").addEventListener("click", endreNavn);
-    document.getElementById("lagreNavnBtn").addEventListener("click", lagreNavn);
-    document.getElementById("avbrytNavnBtn").addEventListener("click", avbrytNavn);
-
+    // HENT DATA FRA FIREBASE
     async function hentKontodata() {
       try {
         const docSnap = await getDoc(docRef);
@@ -410,123 +450,185 @@
           const data = docSnap.data();
           profiler = data.profiler || [];
           globalEpost = data.epost || globalEpost;
+          
           localStorage.setItem("watch_nordic_profiles_cache", JSON.stringify(profiler));
           localStorage.setItem("watch_nordic_email_cache", globalEpost);
-          byggProfilgrensesnitt();
+          oppdaterGrensesnitt();
         }
-      } catch (e) { console.error(e); }
+      } catch (e) { console.error("Feil ved henting:", e); }
     }
 
-    function byggProfilgrensesnitt() {
-      const gjeldendeProfil = profiler[aktivProfilIndex];
-      if (!gjeldendeProfil) return;
+    // OPPDATER HELE GRENSESNITTET
+    function oppdaterGrensesnitt() {
+      if (!profiler[aktivProfilIndex]) return;
 
-      navnDisplay.innerText = gjeldendeProfil.navn;
-      navnView.innerText = gjeldendeProfil.navn;
-      epostView.innerText = globalEpost;
-      document.getElementById("profilbilde").src = gjeldendeProfil.bilde;
+      const aktiv = profiler[aktivProfilIndex];
 
-      if (aktivProfilIndex === 0) {
-        sletteKnapp.innerHTML = `<i class="fa-solid fa-trash-can"></i> Slett konto permanent`;
-      } else {
-        sletteKnapp.innerHTML = `<i class="fa-solid fa-user-xmark"></i> Slett profil`;
-      }
+      // Oppdater Sidebar & Oversikt
+      document.getElementById("sideNavn").innerText = aktiv.navn;
+      document.getElementById("sideEpost").innerText = globalEpost;
+      document.getElementById("sideAvatar").src = aktiv.bilde || "https://static.wixstatic.com/media/fd2fb2_39376e4ee55b460ab7a3ebbfcf35fef7~mv2.png";
+      
+      document.getElementById("oversiktEpost").innerText = globalEpost;
+      document.getElementById("oversiktAktivProfil").innerText = aktiv.navn;
 
-      if (gjeldendeProfil.isKids) {
-        foreldreKontrollSeksjon.classList.add("hidden");
-        document.getElementById("endreNavnKnapp").classList.add("hidden");
-      } else {
-        foreldreKontrollSeksjon.classList.remove("hidden");
-        fyllProfilVelger();
-      }
+      // Oppdater nedtrekkslister for redigering av profiler
+      fyllProfilVelgere();
     }
 
-    function fyllProfilVelger() {
-      profileSelect.innerHTML = "";
+    // FYLL DROPDOWNS FOR PROFIL-REDIGERING OG FORELDREKONTROLL
+    const editProfileSelect = document.getElementById("editProfileSelect");
+    const parentalProfileSelect = document.getElementById("parentalProfileSelect");
+
+    function fyllProfilVelgere() {
+      editProfileSelect.innerHTML = "";
+      parentalProfileSelect.innerHTML = "";
+
       profiler.forEach((prof, index) => {
-        const opt = document.createElement("option");
-        opt.value = index;
-        opt.innerText = prof.navn + (prof.isKids ? " (Barn)" : "");
-        profileSelect.appendChild(opt);
+        const tittel = prof.navn + (prof.isKids ? " (Barn)" : "");
+        
+        const optEdit = new Option(tittel, index);
+        const optParent = new Option(tittel, index);
+        
+        editProfileSelect.add(optEdit);
+        parentalProfileSelect.add(optParent);
       });
-      profileSelect.value = aktivProfilIndex;
-      oppdaterValgtProfilISekvens();
+
+      editProfileSelect.value = aktivProfilIndex;
+      parentalProfileSelect.value = aktivProfilIndex;
+
+      // Trigger oppdatering av visning basert på valgt dropdown
+      oppdaterProfilRedigeringsVisning();
+      oppdaterForeldrekontrollVisning();
     }
 
-    function oppdaterValgtProfilISekvens() {
-      const targetIndex = profileSelect.value;
-      ageRestrictionSelect.value = profiler[targetIndex].maksAldersgrense || "18";
+    // LOGIKK FOR PROFIL-FANEN (Endre navn / Slette)
+    const endreNavnBtn = document.getElementById("endreNavnBtn");
+    const navnView = document.getElementById("profilNavnVisning");
+    const editGroup = document.getElementById("editNavnGroup");
+    const navnInput = document.getElementById("nyttProfilNavn");
+    const slettProfilRad = document.getElementById("slettProfilRad");
+
+    editProfileSelect.addEventListener("change", oppdaterProfilRedigeringsVisning);
+
+    function oppdaterProfilRedigeringsVisning() {
+      const valgtIdx = editProfileSelect.value;
+      navnView.innerText = profiler[valgtIdx].navn;
+      
+      // Avbryt pågående redigering
+      avbrytNavnRedigering();
+
+      // Hovedprofilen (0) kan ikke slettes fra denne knappen (den sletter hele kontoen på oversikten i stedet)
+      if (valgtIdx == 0) {
+        slettProfilRad.style.display = "none";
+      } else {
+        slettProfilRad.style.display = "flex";
+      }
     }
 
-    function endreNavn() {
-      navnInput.value = navnView.innerText;
-      navnView.classList.add("hidden");
-      document.getElementById("navnEditField").classList.remove("hidden");
-      document.getElementById("endreNavnKnapp").classList.add("hidden");
+    endreNavnBtn.addEventListener("click", () => {
+      navnInput.value = profiler[editProfileSelect.value].navn;
+      navnView.style.display = "none";
+      endreNavnBtn.style.display = "none";
+      editGroup.classList.add("active");
+    });
+
+    document.getElementById("avbrytNavnBtn").addEventListener("click", avbrytNavnRedigering);
+
+    function avbrytNavnRedigering() {
+      navnView.style.display = "block";
+      endreNavnBtn.style.display = "block";
+      editGroup.classList.remove("active");
     }
 
-    async function lagreNavn() {
+    document.getElementById("lagreNavnBtn").addEventListener("click", async () => {
+      const valgtIdx = editProfileSelect.value;
       const nyttNavn = navnInput.value.trim();
-      if (!nyttNavn) return alert("Navnet kan ikke være tomt!");
       
-      if (nyttNavn === profiler[aktivProfilIndex].navn) {
-        avbrytNavn();
-        return;
-      }
+      if (!nyttNavn) return alert("Navn kan ikke være tomt.");
+      if (nyttNavn === profiler[valgtIdx].navn) return avbrytNavnRedigering(); // Økonomisk sjekk
 
-      profiler[aktivProfilIndex].navn = nyttNavn;
+      profiler[valgtIdx].navn = nyttNavn;
       await setDoc(docRef, { profiler: profiler }, { merge: true });
       localStorage.setItem("watch_nordic_profiles_cache", JSON.stringify(profiler));
 
-      navnView.innerText = nyttNavn;
-      navnDisplay.innerText = nyttNavn;
-      avbrytNavn();
-    }
+      oppdaterGrensesnitt();
+      avbrytNavnRedigering();
+    });
 
-    function avbrytNavn() {
-      navnView.classList.remove("hidden");
-      document.getElementById("navnEditField").classList.add("hidden");
-      document.getElementById("endreNavnKnapp").classList.remove("hidden");
-    }
+    // SLETTE PROFIL
+    document.getElementById("slettProfilKnapp").addEventListener("click", async () => {
+      const valgtIdx = editProfileSelect.value;
+      if (valgtIdx == 0) return; // Sikkerhet
 
-    function laasOppForeldreKontroll() {
-      if (prompt("Skriv inn foreldre-PIN:") === FORELDRE_PIN) {
-        parentLockPanel.classList.add("hidden");
-        parentSettingsPanel.classList.remove("hidden");
-      } else {
-        alert("Feil PIN!");
-      }
-    }
+      if (!confirm(`Er du sikker på at du vil slette profilen "${profiler[valgtIdx].navn}" permanent?`)) return;
 
-    async function lagreAldersgrenseGlobalt() {
-      const targetIndex = profileSelect.value;
-      const nyGrense = ageRestrictionSelect.value;
-
-      if (profiler[targetIndex].maksAldersgrense === nyGrense) return;
-
-      profiler[targetIndex].maksAldersgrense = nyGrense;
-      
+      profiler.splice(valgtIdx, 1);
       await setDoc(docRef, { profiler: profiler }, { merge: true });
       localStorage.setItem("watch_nordic_profiles_cache", JSON.stringify(profiler));
-      alert(`Aldersgrense for ${profiler[targetIndex].navn} ble oppdatert.`);
+      
+      // Omdiriger til profilvelger
+      window.location.href = "hvem-ser-på.html?index=0";
+    });
+
+    // SLETTE HELE KONTOEN
+    document.getElementById("slettKontoBtn").addEventListener("click", () => {
+      if (confirm("ADVARSEL: Dette vil slette hele Watch Nordic-kontoen din permanent. Er du sikker?")) {
+        alert("Sletting av hovedkonto initiert.");
+        loggUt(); // Legg inn funksjon for deleteDoc her om nødvendig
+      }
+    });
+
+    // LOGIKK FOR FORELDREKONTROLL
+    const parentLockPanel = document.getElementById("parentLockPanel");
+    const parentSettingsPanel = document.getElementById("parentSettingsPanel");
+    const ageSelect = document.getElementById("ageRestrictionSelect");
+
+    document.getElementById("laasOppPinBtn").addEventListener("click", () => {
+      const pin = prompt("Skriv inn konto-PIN (Standard: 1234):");
+      if (pin === FORELDRE_PIN) {
+        parentLockPanel.style.display = "none";
+        parentSettingsPanel.style.display = "block";
+      } else {
+        alert("Feil PIN-kode.");
+      }
+    });
+
+    parentalProfileSelect.addEventListener("change", oppdaterForeldrekontrollVisning);
+
+    function oppdaterForeldrekontrollVisning() {
+      const valgtIdx = parentalProfileSelect.value;
+      const grense = profiler[valgtIdx].maksAldersgrense || "18";
+      ageSelect.value = grense;
     }
 
-    async function haandterSlettingMellomProfil() {
-      if (aktivProfilIndex !== 0) {
-        if (!confirm(`Er du sikker på at du vil slette profilen "${profiler[aktivProfilIndex].navn}" permanent?`)) return;
-        
-        profiler.splice(aktivProfilIndex, 1);
-        await setDoc(docRef, { profiler: profiler }, { merge: true });
-        localStorage.setItem("watch_nordic_profiles_cache", JSON.stringify(profiler));
-        
-        alert("Profilen ble slettet.");
-        window.location.href = "hvem-ser-på.html?index=0"; 
-      } else {
-        if (!confirm("ADVARSEL: Vil du slette HELE kontoen og alle underprofiler permanent? Dette sletter alt.")) return;
-        alert("Forespørsel om sletting sendt.");
-        loggUt();
-      }
-    }
+    ageSelect.addEventListener("change", async () => {
+      const valgtIdx = parentalProfileSelect.value;
+      const nyGrense = ageSelect.value;
+
+      if (profiler[valgtIdx].maksAldersgrense === nyGrense) return; // Økonomisk sjekk
+
+      profiler[valgtIdx].maksAldersgrense = nyGrense;
+      await setDoc(docRef, { profiler: profiler }, { merge: true });
+      localStorage.setItem("watch_nordic_profiles_cache", JSON.stringify(profiler));
+      
+      alert(`Aldersgrense for ${profiler[valgtIdx].navn} oppdatert.`);
+    });
+
+
+    // TOPP-NAVIGASJON
+    document.getElementById("navHovedsideBtn").addEventListener("click", () => window.location.href = `Hovedside.html?index=${aktivProfilIndex}`);
+    document.getElementById("logoBtn").addEventListener("click", () => window.location.href = `hvem-ser-på.html?index=${aktivProfilIndex}`);
+    
+    document.getElementById("navLoggUtBtn").addEventListener("click", loggUt);
+
+    // Endre Bilde Navigasjon
+    document.getElementById("endreBildeSideBtn").addEventListener("click", () => {
+      window.location.href = `VelgProfilbilde.html?index=${aktivProfilIndex}`;
+    });
+    document.getElementById("endreBildeBtn").addEventListener("click", () => {
+      window.location.href = `VelgProfilbilde.html?index=${editProfileSelect.value}`;
+    });
 
     async function loggUt() {
       localStorage.clear();
