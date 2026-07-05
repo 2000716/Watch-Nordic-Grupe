@@ -704,6 +704,47 @@ main {
     display: flex !important;
     justify-content: space-between !important;
     align-items: center !important;
+    z-index: 1000;
+  }
+
+  .watch-logo-svg { 
+    height: 30px !important; 
+  }
+
+  /* Hvis du bruker tekst/ikon-logo i stedet for SVG, matcher denne høyden her */
+  .nav-logo a {
+    display: flex !important;
+    align-items: center !important;
+    gap: 8px;
+    color: #ffffff !important;
+    text-decoration: none !important;
+    font-size: 20px !important;
+    font-weight: 700 !important;
+  }
+  .nav-logo i {
+    font-size: 24px !important;
+    color: #00FFCC !important;
+  }
+
+  .top-nav > div:last-child {
+    display: flex !important;
+    align-items: center !important;
+    gap: 16px; 
+  }
+
+  .nav-search {
+    font-size: 18px;
+    text-shadow: 0 1px 3px rgba(0,0,0,0.6);
+    color: #ffffff;
+  }
+
+  .profilmeny img, .avatar {
+    width: 34px !important;
+    height: 34px !important;
+    display: block !important;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.6);
+    border-radius: 4px !important;
+    object-fit: cover !important;
   }
 
   /* MINIMALISTISK MENYSTRIPE I BUNN */
@@ -747,26 +788,6 @@ main {
 
   .nav-links a.active i {
     color: #00FFCC !important;
-  }
-
-  .top-nav > div:last-child {
-    display: flex !important;
-    align-items: center !important;
-    gap: 16px; 
-  }
-
-  .watch-logo-svg { height: 30px !important; }
-
-  .nav-search {
-    font-size: 18px;
-    text-shadow: 0 1px 3px rgba(0,0,0,0.6);
-  }
-
-  .profilmeny img {
-    width: 34px;
-    height: 34px;
-    display: block;
-    box-shadow: 0 1px 4px rgba(0,0,0,0.6);
   }
 
   /* HERO BANNER MOBIL */
@@ -856,7 +877,7 @@ main {
 
   .image-gallery a img, .continue-image-gallery a img, .gallery-item img {
     width: 200px !important;  
-    height: 113px !important; /* Beholder riktig 16:9-skala på mobil */
+    height: 113px !important; 
     aspect-ratio: 16 / 9 !important; 
     object-fit: cover !important; 
     border-radius: 4px !important;
