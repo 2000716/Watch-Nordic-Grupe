@@ -696,33 +696,6 @@ img, video {
   display: flex;
 }
 
-/* ==========================================================================
-   8. MEDIA QUERIES (LAPTOPS, IPADS & MOBIL-OPTIMALISERING)
-   ========================================================================== */
-@media (max-width: 1200px) and (min-width: 769px) {
-  .top-nav { padding: 0 20px; }
-  .nav-left { gap: 20px; }
-  .nav-links { gap: 15px; }
-  .nav-links a { font-size: 14px; }
-  .content-wrapper { left: 40px; right: 40px; }
-  .recommendations { padding: 0 40px 40px; }
-}
-
-@media(max-width: 1024px) {
-  .text-button-container {
-    flex-direction: column;
-    gap: 30px;
-    padding: 30px;
-  }
-  .text-container {
-    max-width: 100%;
-  }
-  .cast-info {
-    max-width: 100%;
-    flex: none;
-  }
-}
-
 @media(max-width: 768px) {
   .top-nav {
     padding: 0 20px;
@@ -733,7 +706,7 @@ img, video {
     display: none;
   }
 
-  /* Endret bakgrunnsfargen på hele siden til å matche toppfargen din */
+  /* Bakgrunnsfargen på hele siden matcher toppfargen */
   body, .hero {
     background: rgb(9, 27, 30) !important; 
     position: relative; 
@@ -743,7 +716,7 @@ img, video {
     flex-direction: column;
   }
 
-  /* Bildet gjøres lenger (65vh) og lagt helt som bakgrunn */
+  /* Mobilbakgrunn */
   .background-image,
   .background-video {
     position: absolute !important;
@@ -755,7 +728,7 @@ img, video {
     object-fit: cover;
   }
 
-  /* Aktivert og tvunget en glatt fade over bildet som toner ut til toppfargen din */
+  /* Fade over bildet */
   .overlay {
     display: block !important;
     position: absolute !important;
@@ -767,27 +740,29 @@ img, video {
     z-index: 2 !important;
   }
 
-  /* Skjuler den tomme bottom-fade-diven */
   .bottom-fade {
     display: none !important;
   }
 
-  /* Flyttet innholdet litt opp, slik at logoen treffer bunnen av faden */
+  /* Flytter innholdet opp mot faden */
   .content-wrapper {
     position: relative !important;
     inset: auto !important;
     width: 100% !important;
     padding: 20px;
-    padding-top: 53vh !important; /* Starter innholdet rett før bildets slutt */
-    margin-top: -35px !important; /* Flytter logoen fint oppå overgangen */
+    padding-top: 53vh !important; 
+    margin-top: -35px !important; 
     background: transparent !important;
     z-index: 3 !important; 
+    display: flex !important;
+    flex-direction: column !important;
   }
 
   .logo-container {
     display: flex !important;
     justify-content: center !important;
-    margin-bottom: 20px !important;
+    margin-bottom: 15px !important;
+    order: 1 !important; /* 1. Logoen øverst */
   }
 
   .film-logo {
@@ -796,7 +771,12 @@ img, video {
     height: auto !important;
   }
 
-  /* GJØR OM HELE BOKSEN TIL KOLONNE FOR Å STYRE REKKEFØLGE PÅ MOBIL */
+  .left-content {
+    order: 2 !important;
+    width: 100% !important;
+  }
+
+  /* Setter hovedbeholderen til flex-column så vi kan bestemme rekkefølgen fritt */
   .text-button-container {
     background: transparent !important;
     backdrop-filter: none !important;
@@ -809,10 +789,22 @@ img, video {
     flex-direction: column !important;
   }
 
-  /* 1. Knappene øverst */
+  /* 2. Metadata plasseres mellom logo og knapper */
+  .text-container .metadata,
+  .metadata {
+    order: 1 !important;
+    margin: 5px 0 10px 0 !important;
+    justify-content: center !important; /* Sentrerer stjernene og info på mobil */
+    width: 100% !important;
+  }
+
+  /* 3. Knappene plasseres under metadata */
   .buttons-column {
     width: 100% !important;
-    order: 1 !important;
+    order: 2 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 10px !important;
   }
 
   .watch-button {
@@ -821,7 +813,7 @@ img, video {
     font-size: 16px !important;
   }
 
-  /* GJØR MIN LISTE-KNAPPEN GRÅERE (Overstyrer den globale hvitfargen) */
+  /* Gjør "Legg til i min liste"-knappen mer grålig */
   #addToListBtn {
     background: rgba(255, 255, 255, 0.25) !important;
     color: #ffffff !important;
@@ -831,40 +823,35 @@ img, video {
     background: rgba(255, 255, 255, 0.35) !important;
   }
 
-  /* 2. Metadata flyttes opp under knappene */
-  .metadata {
-    order: 2 !important;
-    margin: 10px 0 !important;
-  }
-
-  /* 3. Beskrivelsen og utløpsinfo midt på */
-  .text-container {
-    width: 100% !important;
-    max-width: 100% !important;
-    order: 3 !important;
-    display: flex !important;
-    flex-direction: column !important;
-  }
-  .description {
-    order: 1 !important;
-  }
-  .availability-info {
-    order: 2 !important;
-    align-self: flex-start;
-  }
-
-  /* 4. Medvirkende og skaper (cast-info) flyttes helt nederst */
+  /* 4. Skaper og medvirkende (cast-info) under knappene, men over infodelen */
   .cast-info {
     width: 100% !important;
     max-width: 100% !important;
     flex: none !important;
-    order: 4 !important;
-    margin-top: 5px !important;
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
-    padding-top: 15px;
+    order: 3 !important;
+    margin: 10px 0 !important;
+    padding: 5px 0 !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1); /* Liten skillestrek før beskrivelsen */
   }
 
-  /* Oppdatert bakgrunnsfargen på resten av modulene nedover siden */
+  /* 5. Infodelen (Beskrivelse og utløpsinfo) havner nederst */
+  .text-container {
+    width: 100% !important;
+    max-width: 100% !important;
+    order: 4 !important;
+    display: flex !important;
+    flex-direction: column !important;
+  }
+  
+  .description {
+    margin-bottom: 10px !important;
+  }
+  
+  .availability-info {
+    align-self: flex-start !important;
+  }
+
+  /* Anbefalinger og nedover siden */
   .recommendations {
     margin: 30px 0 0 !important;
     padding: 0 20px 40px !important;
