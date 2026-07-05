@@ -17,11 +17,7 @@
       --kids-accent: #33b5ff;
     }
 
-    * { 
-      box-sizing: border-box; 
-      margin: 0;
-      padding: 0;
-    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
 
     body {
       background: var(--bg);
@@ -63,10 +59,7 @@
       text-shadow: 0 0 10px rgba(0,255,204,0.3);
     }
 
-    header .nav-btns {
-      display: flex;
-      gap: 12px;
-    }
+    header .nav-btns { display: flex; gap: 12px; }
 
     header button {
       background: rgba(255,255,255,0.05);
@@ -78,7 +71,6 @@
       font-size: 14px;
       cursor: pointer;
       transition: 0.25s ease;
-      white-space: nowrap;
     }
 
     header button:hover { 
@@ -126,7 +118,6 @@
       cursor: pointer;
       border: 3px solid rgba(255,255,255,0.1);
       transition: 0.3s ease;
-      position: relative;
     }
 
     .avatar:hover {
@@ -134,24 +125,11 @@
       transform: scale(1.02);
     }
 
-    .avatar img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
+    .avatar img { width: 100%; height: 100%; object-fit: cover; }
 
-    .profile-name {
-      font-size: 22px;
-      font-weight: 700;
-      margin-bottom: 25px;
-      word-break: break-word;
-    }
+    .profile-name { font-size: 22px; font-weight: 700; margin-bottom: 25px; word-break: break-word; }
 
-    .profile-actions {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-    }
+    .profile-actions { display: flex; flex-direction: column; gap: 12px; }
 
     .profile-actions button {
       background: rgba(255,255,255,0.03);
@@ -193,10 +171,7 @@
       gap: 10px;
     }
     
-    .content h2 i {
-      color: var(--accent);
-      font-size: 18px;
-    }
+    .content h2 i { color: var(--accent); font-size: 18px; }
 
     .card {
       background: var(--card-bg);
@@ -218,10 +193,7 @@
 
     .row:last-child { border-bottom: none; }
 
-    .info-block {
-      flex: 1;
-      padding-right: 20px;
-    }
+    .info-block { flex: 1; padding-right: 20px; }
 
     .label {
       color: var(--muted);
@@ -267,26 +239,8 @@
     }
     .edit-field select option { background: #091B1E; color: white; }
 
-    .edit-field input:focus, .edit-field select:focus { outline: none; border-color: var(--accent); }
-
-    .edit-actions { margin-top: 12px; display: flex; gap: 10px; }
-
-    .edit-actions button {
-      padding: 8px 16px;
-      border-radius: 8px;
-      font-size: 13px;
-      font-weight: 700;
-      cursor: pointer;
-      transition: 0.2s;
-    }
-
-    .btn-save { background: var(--accent); color: #071214; border: none; }
-    .btn-cancel { background: transparent; border: 1px solid rgba(255,255,255,0.15); color: var(--muted); }
-
-    .parent-lock-screen {
-      text-align: center;
-      padding: 20px 0;
-    }
+    .parent-lock-screen { text-align: center; padding: 20px 0; }
+    
     .btn-parent-unlock {
       background: var(--kids-accent);
       color: #071214;
@@ -309,28 +263,9 @@
     }
 
     @media (max-width: 960px) {
-      header { padding: 15px 20px; }
-      header h1 { font-size: 20px; }
-      header button { padding: 8px 14px; font-size: 13px; }
-      
-      .container { grid-template-columns: 1fr; padding: 20px; gap: 24px; }
-      .sidebar { padding: 24px 20px; border-radius: 20px; }
-      .avatar { width: 110px; height: 110px; margin-bottom: 12px; }
-      .profile-name { font-size: 19px; margin-bottom: 15px; }
-      .profile-actions { flex-direction: row; gap: 10px; }
-      .profile-actions button { flex: 1; padding: 10px; font-size: 13px; border-radius: 10px; }
-      .profile-actions button.delete-btn { margin-top: 0; }
-      .content h2 { font-size: 19px; margin-bottom: 12px; }
-      .card { padding: 5px 16px; border-radius: 20px; margin-bottom: 24px; }
-      .row { padding: 16px 0; flex-direction: column; align-items: flex-start; gap: 12px; }
-      .info-block { padding-right: 0; width: 100%; }
-      .row button.edit-trigger { width: 100%; text-align: center; padding: 10px; background: rgba(255,255,255,0.03); }
-      .edit-field { max-width: 100%; }
-      footer { padding: 24px 20px; }
-    }
-
-    @media (max-width: 480px) {
-      .profile-actions { flex-direction: column; }
+      .container { grid-template-columns: 1fr; padding: 20px; }
+      .sidebar { padding: 24px 20px; }
+      .row { flex-direction: column; align-items: flex-start; gap: 12px; }
     }
   </style>
 </head>
@@ -345,13 +280,11 @@
   </header>
 
   <div class="container">
-
     <aside class="sidebar">
       <div class="avatar" id="avatarContainer">
-        <img id="profilbilde" src="https://static.wixstatic.com/media/fd2fb2_39376e4ee55b460ab7a3ebbfcf35fef7~mv2.png" alt="Profilbilde">
+        <img id="profilbilde" src="" alt="Profilbilde">
       </div>
       <div class="profile-name" id="navnDisplay">Laster...</div>
-
       <div class="profile-actions" id="sidebarActions">
         <button id="endreBildeSideBtn"><i class="fa-solid fa-user-gear"></i> Endre bilde</button>
         <button class="delete-btn" id="sletteKnapp"><i class="fa-solid fa-trash-can"></i> Slett profil permanent</button>
@@ -365,71 +298,44 @@
           <div class="info-block">
             <div class="label">Profilnavn</div>
             <div class="value" id="navnView">Laster...</div>
-            <div class="edit-field hidden" id="navnEditField">
-              <input type="text" id="navnInput" maxlength="15">
-              <div class="edit-actions">
-                <button class="btn-save" id="lagreNavnBtn">Lagre</button>
-                <button class="btn-cancel" id="avbrytNavnBtn">Avbryt</button>
-              </div>
-            </div>
           </div>
           <button class="edit-trigger" id="endreNavnKnapp">Endre</button>
         </div>
-
         <div class="row" id="epostRow">
           <div class="info-block">
             <div class="label">E-postadresse (Konto)</div>
             <div class="value" id="epostView">Laster...</div>
-            <div class="edit-field hidden" id="epostEditField">
-              <input type="email" id="epostInput">
-              <div class="edit-actions">
-                <button class="btn-save" id="lagreEpostBtn">Lagre</button>
-                <button class="btn-cancel" id="avbrytEpostBtn">Avbryt</button>
-              </div>
-            </div>
-          </div>
-          <button class="edit-trigger" id="endreEpostKnapp">Endre</button>
-        </div>
-
-        <div class="row">
-          <div class="info-block">
-            <div class="label">Passord</div>
-            <div class="value">••••••••</div>
           </div>
         </div>
-      </div>
-
-      <h2><i class="fa-solid fa-id-card"></i> Mitt Abonnement</h2>
-      <div class="card">
-        <div class="row"><div class="info-block"><div class="label">Plan</div><div class="value">Premium Nordic Ultra</div></div></div>
-        <div class="row"><div class="info-block"><div class="label">Kvalitet</div><div class="value">4K UHD + HDR</div></div></div>
       </div>
 
       <div id="foreldreKontrollSeksjon" class="hidden">
         <h2><i class="fa-solid fa-shield-halved" style="color: var(--kids-accent);"></i> Foreldrekontroll</h2>
         <div class="card">
           <div id="parentLockPanel" class="parent-lock-screen">
-            <p style="margin-bottom: 15px; color: var(--muted);">Dette panelet er låst. Foreldre kan låse opp for å endre aldersgrenser.</p>
-            <button class="btn-parent-unlock" id="laasOppForeldreKontrollBtn"><i class="fa-solid fa-lock"></i> Lås opp med PIN</button>
+            <p style="margin-bottom: 15px; color: var(--muted);">Tjenestebegrensninger er låst. Foreldre kan låse opp med PIN.</p>
+            <button class="btn-parent-unlock" id="laasOppForeldreKontrollBtn"><i class="fa-solid fa-lock"></i> Lås opp foreldrekontroll</button>
           </div>
 
-          <div id="parentSettingsPanel" class="row hidden" style="border:none;">
-            <div class="info-block">
-              <div class="label">Maks tillatt aldersgrense på hovedsiden</div>
-              <div class="value" id="currentLimitView">Laster...</div>
-              <div class="edit-field" style="margin-top:15px;">
-                <select id="ageRestrictionSelect">
-                  <option value="A">Tillat kun innhold for alle (A)</option>
-                  <option value="6">Maks 6 år</option>
-                  <option value="9">Maks 9 år</option>
-                  <option value="12">Maks 12 år</option>
-                </select>
-              </div>
+          <div id="parentSettingsPanel" class="hidden" style="padding: 10px 0;">
+            <div class="edit-field">
+              <label class="label">Velg profil du vil begrense:</label>
+              <select id="profileSelect" style="margin-top: 5px;"></select>
+            </div>
+            
+            <div class="edit-field" style="margin-top: 15px;">
+              <label class="label">Maks tillatt aldersgrense:</label>
+              <select id="ageRestrictionSelect" style="margin-top: 5px;">
+                <option value="A">Tillat kun innhold for alle (A)</option>
+                <option value="6">Maks 6 år</option>
+                <option value="9">Maks 9 år</option>
+                <option value="12">Maks 12 år</option>
+                <option value="18">Ingen restriksjoner (Voksen)</option>
+              </select>
             </div>
           </div>
         </div>
       </div>
-
     </section>
   </div>
 
@@ -437,282 +343,131 @@
 
   <script type="module">
     import { auth, db } from "./firebase-oppsett.js";
-    import { onAuthStateChanged, signOut, updateEmail } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-auth.js";
-    import { doc, getDoc, setDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
+    import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-auth.js";
+    import { doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
 
     const urlParams = new URLSearchParams(window.location.search);
     const aktivProfilIndex = parseInt(urlParams.get('index')) || 0;
-
     const FORELDRE_PIN = "1234";
 
     const navnDisplay = document.getElementById("navnDisplay");
     const navnView = document.getElementById("navnView");
-    const navnInput = document.getElementById("navnInput");
     const epostView = document.getElementById("epostView");
-    const epostInput = document.getElementById("epostInput");
-    const sletteKnapp = document.getElementById("sletteKnapp");
-    
     const foreldreKontrollSeksjon = document.getElementById("foreldreKontrollSeksjon");
     const parentLockPanel = document.getElementById("parentLockPanel");
     const parentSettingsPanel = document.getElementById("parentSettingsPanel");
+    const profileSelect = document.getElementById("profileSelect");
     const ageRestrictionSelect = document.getElementById("ageRestrictionSelect");
-    const currentLimitView = document.getElementById("currentLimitView");
 
     let profiler = [];
     let globalEpost = ""; 
     let docRef = null;
 
-    // MELLOMLAGRING (Forhindrer hvit skjerm og unødvendig venting)
+    // Økonomisk lokal-caching
     const cachedProfiles = localStorage.getItem("watch_nordic_profiles_cache");
     const cachedEmail = localStorage.getItem("watch_nordic_email_cache");
-
-    if (cachedProfiles) {
-      try {
-        profiler = JSON.parse(cachedProfiles);
-        if (cachedEmail) globalEpost = cachedEmail;
-        if (profiler[aktivProfilIndex]) {
-          byggProfilgrensesnitt();
-        }
-      } catch (e) {
-        console.error("Kunne ikke lese mellomlagret data:", e);
-      }
+    if (cachedProfiles && cachedEmail) {
+      profiler = JSON.parse(cachedProfiles);
+      globalEpost = cachedEmail;
+      if(profiler[aktivProfilIndex]) byggProfilgrensesnitt();
     }
 
     onAuthStateChanged(auth, (user) => {
       if (user) {
         docRef = doc(db, "users", user.uid);
-        // Bruk e-post direkte fra auth-sesjonen hvis tilgjengelig for å spare tid
-        if (!globalEpost && user.email) {
-          globalEpost = user.email;
-          epostView.innerText = globalEpost;
-        }
+        globalEpost = user.email || globalEpost;
         hentKontodata();
       } else {
         window.location.href = "index.html";
       }
     });
 
-    // Event listeners
     document.getElementById("navHovedsideBtn").addEventListener("click", () => {
       window.location.href = `hvem-ser-på.html?index=${aktivProfilIndex}`;
     });
     document.getElementById("navLoggUtBtn").addEventListener("click", loggUt);
-    document.getElementById("avatarContainer").addEventListener("click", velgProfilbildeSide);
-    document.getElementById("endreBildeSideBtn").addEventListener("click", velgProfilbildeSide);
-    sletteKnapp.addEventListener("click", haandterSletting);
-    
-    document.getElementById("endreNavnKnapp").addEventListener("click", endreNavn);
-    document.getElementById("lagreNavnBtn").addEventListener("click", lagreNavn);
-    document.getElementById("avbrytNavnBtn").addEventListener("click", avbrytNavn);
-
-    document.getElementById("endreEpostKnapp").addEventListener("click", endreEpost);
-    document.getElementById("lagreEpostBtn").addEventListener("click", lagreEpost);
-    document.getElementById("avbrytEpostBtn").addEventListener("click", avbrytEpost);
-
     document.getElementById("laasOppForeldreKontrollBtn").addEventListener("click", laasOppForeldreKontroll);
-    ageRestrictionSelect.addEventListener("change", lagreAldersgrense);
+    profileSelect.addEventListener("change", oppdaterValgtProfilISekvens);
+    ageRestrictionSelect.addEventListener("change", lagreAldersgrenseGlobalt);
 
     async function hentKontodata() {
       try {
-        const docSnap = await getDoc(docRef);
-        
-        // OPTIMALISERING: Hvis dokumentet ikke finnes i det hele tatt (Helt ny bruker)
-        if (!docSnap.exists()) {
-          profiler = [{
-            navn: "Hovedprofil",
-            bilde: "https://static.wixstatic.com/media/fd2fb2_39376e4ee55b460ab7a3ebbfcf35fef7~mv2.png",
-            pin: null,
-            isKids: false
-          }];
-          await setDoc(docRef, { profiler: profiler, epost: globalEpost }, { merge: true });
-          localStorage.setItem("watch_nordic_profiles_cache", JSON.stringify(profiler));
-          localStorage.setItem("watch_nordic_email_cache", globalEpost);
-        } else {
-          // Dokumentet finnes, hent data
+        const docSnap = await getDoc(docRef); // Økonomisk lesing
+        if (docSnap.exists()) {
           const data = docSnap.data();
           profiler = data.profiler || [];
-          if (data.epost) globalEpost = data.epost;
-          
+          globalEpost = data.epost || globalEpost;
           localStorage.setItem("watch_nordic_profiles_cache", JSON.stringify(profiler));
           localStorage.setItem("watch_nordic_email_cache", globalEpost);
+          byggProfilgrensesnitt();
         }
-
-        if (!profiler[aktivProfilIndex]) {
-          window.location.href = "konto.html?index=0";
-          return;
-        }
-
-        byggProfilgrensesnitt();
-      } catch (error) {
-        console.error("Feil under lasting av kontodata:", error);
-      }
+      } catch (e) { console.error(e); }
     }
 
     function byggProfilgrensesnitt() {
       const gjeldendeProfil = profiler[aktivProfilIndex];
+      if (!gjeldendeProfil) return;
+
       navnDisplay.innerText = gjeldendeProfil.navn;
       navnView.innerText = gjeldendeProfil.navn;
-      epostView.innerText = globalEpost || "Ingen registrert";
-      document.getElementById("profilbilde").src = gjeldendeProfil.bilde || "https://static.wixstatic.com/media/fd2fb2_39376e4ee55b460ab7a3ebbfcf35fef7~mv2.png";
+      epostView.innerText = globalEpost;
+      document.getElementById("profilbilde").src = gjeldendeProfil.bilde;
 
+      // HVIS BARN: Skjul hele administrasjonspanelet (Standard oppførsel i strømmetjenester)
       if (gjeldendeProfil.isKids) {
-        document.getElementById("sidebarActions").classList.add("hidden");
-        document.getElementById("avatarContainer").style.pointerEvents = "none";
-        document.getElementById("endreNavnKnapp").classList.add("hidden");
-        document.getElementById("endreEpostKnapp").classList.add("hidden");
-        foreldreKontrollSeksjon.classList.remove("hidden");
-        oppdaterMaksGrenseTekst();
-      } else {
-        document.getElementById("sidebarActions").classList.remove("hidden");
-        document.getElementById("avatarContainer").style.pointerEvents = "auto";
-        document.getElementById("endreNavnKnapp").classList.remove("hidden");
-        document.getElementById("endreEpostKnapp").classList.remove("hidden");
         foreldreKontrollSeksjon.classList.add("hidden");
-
-        if (aktivProfilIndex !== 0) {
-          sletteKnapp.innerHTML = `<i class="fa-solid fa-user-xmark"></i> Slett profil`;
-        } else {
-          sletteKnapp.innerHTML = `<i class="fa-solid fa-trash-can"></i> Slett hele kontoen`;
-        }
-      }
-    }
-
-    function oppdaterMaksGrenseTekst() {
-      const gjeldendeProfil = profiler[aktivProfilIndex];
-      if (!gjeldendeProfil) return;
-      const grense = gjeldendeProfil.maksAldersgrense || "12";
-      currentLimitView.innerText = grense === "A" ? "Tillater kun innhold for Alle (A)" : `Maks ${grense} år`;
-    }
-
-    function velgProfilbildeSide() {
-      if (profiler[aktivProfilIndex]?.isKids) return;
-      window.location.href = `VelgProfilbilde.html?index=${aktivProfilIndex}`;
-    }
-
-    function endreNavn() {
-      if (profiler[aktivProfilIndex]?.isKids) return;
-      navnInput.value = navnView.innerText;
-      navnView.classList.add("hidden");
-      document.getElementById("navnEditField").classList.remove("hidden");
-      document.getElementById("endreNavnKnapp").classList.add("hidden");
-    }
-
-    async function lagreNavn() {
-      const nyttNavn = navnInput.value.trim();
-      if (!nyttNavn) return alert("Navnet kan ikke være tomt!");
-      
-      // OPTIMALISERING: Ikke skriv til databasen hvis navnet er uendret
-      if (nyttNavn === profiler[aktivProfilIndex].navn) {
-        avbrytNavn();
-        return;
-      }
-
-      profiler[aktivProfilIndex].navn = nyttNavn;
-      await setDoc(docRef, { profiler: profiler }, { merge: true });
-      localStorage.setItem("watch_nordic_profiles_cache", JSON.stringify(profiler));
-
-      navnView.innerText = nyttNavn;
-      navnDisplay.innerText = nyttNavn;
-      avbrytNavn();
-    }
-
-    function avbrytNavn() {
-      navnView.classList.remove("hidden");
-      document.getElementById("navnEditField").classList.add("hidden");
-      document.getElementById("endreNavnKnapp").classList.remove("hidden");
-    }
-
-    function endreEpost() {
-      if (profiler[aktivProfilIndex]?.isKids) return;
-      epostInput.value = epostView.innerText;
-      epostView.classList.add("hidden");
-      document.getElementById("epostEditField").classList.remove("hidden");
-      document.getElementById("endreEpostKnapp").classList.add("hidden");
-    }
-
-    async function lagreEpost() {
-      const nyEpost = epostInput.value.trim().toLowerCase();
-      if (!nyEpost) return alert("E-posten kan ikke være tom!");
-      if (nyEpost === globalEpost) { avbrytEpost(); return; }
-
-      try {
-        if (auth.currentUser) {
-          await updateEmail(auth.currentUser, nyEpost);
-        }
-        
-        // OPTIMALISERING: setDoc kjører KUN hvis updateEmail i Firebase Auth var vellykket!
-        globalEpost = nyEpost;
-        await setDoc(docRef, { epost: globalEpost }, { merge: true });
-        localStorage.setItem("watch_nordic_email_cache", globalEpost);
-
-        epostView.innerText = nyEpost;
-        alert("E-postadresse ble oppdatert!");
-        avbrytEpost();
-      } catch (error) {
-        console.error(error);
-        if (error.code === "auth/requires-recent-login") {
-          alert("Av sikkerhetsmessige årsaker må du logge ut og inn igjen for å bekrefte identiteten din før du endrer e-post.");
-        } else {
-          alert("Kunne ikke endre e-post: " + error.message);
-        }
-      }
-    }
-
-    function avbrytEpost() {
-      epostView.classList.remove("hidden");
-      document.getElementById("epostEditField").classList.add("hidden");
-      document.getElementById("endreEpostKnapp").classList.remove("hidden");
-    }
-
-    async function loggUt() {
-      try {
-        localStorage.removeItem("watch_nordic_profiles_cache");
-        localStorage.removeItem("watch_nordic_email_cache");
-        await signOut(auth);
-        window.location.href = "index.html";
-      } catch (error) {
-        console.error("Feil under utlogging:", error);
-      }
-    }
-
-    async function haandterSletting() {
-      if (profiler[aktivProfilIndex]?.isKids) return;
-
-      if (aktivProfilIndex !== 0) {
-        if (!confirm(`Er du sikker på at du vil slette profilen "${profiler[aktivProfilIndex].navn}"?`)) return;
-        profiler.splice(aktivProfilIndex, 1);
-        await setDoc(docRef, { profiler: profiler }, { merge: true });
-        localStorage.setItem("watch_nordic_profiles_cache", JSON.stringify(profiler));
-        window.location.href = "konto.html?index=0";
+        document.getElementById("sidebarActions").classList.add("hidden");
+        document.getElementById("endreNavnKnapp").classList.add("hidden");
       } else {
-        if (!confirm("Vennligst bekreft: Vil du slette hele kontoen og alle underprofiler permanent?")) return;
-        await deleteDoc(docRef);
-        loggUt(); 
+        // HVIS VOKSEN: Vis foreldrekontrollpanelet slik at de kan styre ungenes profiler
+        foreldreKontrollSeksjon.classList.remove("hidden");
+        fyllProfilVelger();
       }
+    }
+
+    function fyllProfilVelger() {
+      profileSelect.innerHTML = "";
+      profiler.forEach((prof, index) => {
+        const opt = document.createElement("option");
+        opt.value = index;
+        opt.innerText = prof.navn + (prof.isKids ? " (Barn)" : "");
+        profileSelect.appendChild(opt);
+      });
+      profileSelect.value = aktivProfilIndex;
+      oppdaterValgtProfilISekvens();
+    }
+
+    function oppdaterValgtProfilISekvens() {
+      const targetIndex = profileSelect.value;
+      ageRestrictionSelect.value = profiler[targetIndex].maksAldersgrense || "18";
     }
 
     function laasOppForeldreKontroll() {
-      const pinInput = prompt("Skriv inn PIN-kode for foreldrekontroll (Standard: 1234):");
-      if (pinInput === FORELDRE_PIN) {
+      if (prompt("Skriv inn foreldre-PIN:") === FORELDRE_PIN) {
         parentLockPanel.classList.add("hidden");
         parentSettingsPanel.classList.remove("hidden");
-        ageRestrictionSelect.value = profiler[aktivProfilIndex].maksAldersgrense || "12";
       } else {
-        alert("Feil PIN-kode! Kun foreldre har tilgang.");
+        alert("Feil PIN!");
       }
     }
 
-    async function lagreAldersgrense() {
-      const valgtGrense = ageRestrictionSelect.value;
+    async function lagreAldersgrenseGlobalt() {
+      const targetIndex = profileSelect.value;
+      const nyGrense = ageRestrictionSelect.value;
+
+      if (profiler[targetIndex].maksAldersgrense === nyGrense) return; // Sparer unødvendig skriving
+
+      profiler[targetIndex].maksAldersgrense = nyGrense;
       
-      // OPTIMALISERING: Avbryt hvis grensen ikke er endret
-      if (valgtGrense === profiler[aktivProfilIndex].maksAldersgrense) return;
-
-      profiler[aktivProfilIndex].maksAldersgrense = valgtGrense;
-
-      await setDoc(docRef, { profiler: profiler }, { merge: true });
+      await setDoc(docRef, { profiler: profiler }, { merge: true }); // Økonomisk Firebase-skriving
       localStorage.setItem("watch_nordic_profiles_cache", JSON.stringify(profiler));
-      oppdaterMaksGrenseTekst();
+      alert(`Aldersgrense for ${profiler[targetIndex].navn} ble oppdatert.`);
+    }
+
+    async function loggUt() {
+      localStorage.clear();
+      await signOut(auth);
+      window.location.href = "index.html";
     }
   </script>
 </body>
