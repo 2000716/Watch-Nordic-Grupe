@@ -912,7 +912,7 @@ img, video {
 <script src="Seriedata.js"></script>
 
 <script type="module">
-import { auth, db } from "./firebase-oppsett.js";
+  import { auth, db } from "./firebase-oppsett.js";
   import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-auth.js";
   import { doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
 
@@ -1009,8 +1009,7 @@ import { auth, db } from "./firebase-oppsett.js";
     [watchBtn, addToListBtn].forEach(btn => {
       if (btn) {
         btn.disabled = true;
-        btn.style.opacity = "0.5";
-        btn.style.cursor = "not-allowed";
+        btn.classList.add("locked");
       }
     });
   }
@@ -1020,45 +1019,70 @@ import { auth, db } from "./firebase-oppsett.js";
      ========================================== */
   function oppdaterWatchKnapp() {
     if (!watchBtn) return;
-    const icon = watchBtn.querySelector("i");
-    const text = watchBtn.querySelector("span");
+    
+    // Sørg for at vi har et i-element og et span-element i knappen
+    let icon = watchBtn.querySelector("i");
+    let text = watchBtn.querySelector("span");
+    
+    if (!icon) {
+      icon = document.createElement("i");
+      watchBtn.prepend(icon);
+    }
+    if (!text) {
+      text = document.createElement("span");
+      watchBtn.appendChild(text);
+    }
+
+    // Nullstill klasser for statusendring
+    watchBtn.classList.remove("paabegynt");
 
     if (erUtgått) {
-      if (icon) icon.className = "fas fa-ban";
-      if (text) text.textContent = " Ikke tilgjengelig";
+      icon.className = "fas fa-ban";
+      text.textContent = " Ikke tilgjengelig";
+      watchBtn.disabled = true;
       return;
     }
 
     if (status === "påbegynt") {
-      if (icon) icon.className = "fas fa-play";
-      if (text) text.textContent = " Gjenoppta";
+      watchBtn.classList.add("paabegynt");
+      icon.className = "fas fa-play";
+      text.textContent = " Gjenoppta";
     } else if (status === "ferdig") {
-      if (icon) icon.className = "fas fa-check";
-      if (text) text.textContent = type === "film" ? " Sett ferdig" : " Ferdig";
+      icon.className = "fas fa-check";
+      text.textContent = type === "film" ? " Sett ferdig" : " Ferdig";
     } else {
-      if (icon) icon.className = "fas fa-play";
-      if (text) text.textContent = type === "film" ? " Se nå" : " Se episode";
+      icon.className = "fas fa-play";
+      text.textContent = type === "film" ? " Se nå" : " Se episode";
     }
   }
 
   function oppdaterListeKnapp() {
     if (!addToListBtn) return;
-    const icon = addToListBtn.querySelector("i");
-    const text = addToListBtn.querySelector("span");
+    
+    let icon = addToListBtn.querySelector("i");
+    let text = addToListBtn.querySelector("span");
+    
+    if (!icon) {
+      icon = document.createElement("i");
+      addToListBtn.prepend(icon);
+    }
+    if (!text) {
+      text = document.createElement("span");
+      addToListBtn.appendChild(text);
+    }
     
     if (minListe.includes(`${type}:${navn}`)) {
-      if (icon) icon.className = "fas fa-check";
-      if (text) text.textContent = " Lagt til i Min liste";
+      icon.className = "fas fa-check";
+      text.textContent = " Lagt til i Min liste";
     } else {
-      if (icon) icon.className = "fas fa-plus";
-      if (text) text.textContent = " Legg til i Min liste";
+      icon.className = "fas fa-plus";
+      text.textContent = " Legg til i Min liste";
     }
   }
 
   /* ==========================================
      4. CACHE OG FIREBASE DATA-LAGRING
      ========================================== */
-  // Hurtiginnlasting fra Cache (Lokalt)
   const cachedProfiles = localStorage.getItem("watch_nordic_profiles_cache");
   if (cachedProfiles) {
     try {
@@ -1081,7 +1105,7 @@ import { auth, db } from "./firebase-oppsett.js";
     }
   }
 
-  // Firebase Auth & Cloud Firestore-oppdatering
+  // Firebase Auth
   onAuthStateChanged(auth, async (user) => {
     if (user) {
       currentUser = user;
@@ -1116,7 +1140,6 @@ import { auth, db } from "./firebase-oppsett.js";
     heleProfilArrayet[indeks].historikk[navn] = status;
     heleProfilArrayet[indeks].minListe = minListe;
 
-    // Mellomlagre lokalt øyeblikkelig for ekstremt kjapp respons
     localStorage.setItem("watch_nordic_profiles_cache", JSON.stringify(heleProfilArrayet));
 
     try {
@@ -1138,7 +1161,6 @@ import { auth, db } from "./firebase-oppsett.js";
       oppdaterWatchKnapp(); 
       await lagreProfilDataTilSkyen();
 
-      // Genererer returUrl for den gjeldende siden
       const returUrl = encodeURIComponent(window.location.href);
 
       if (type === "film") {
@@ -1185,7 +1207,7 @@ import { auth, db } from "./firebase-oppsett.js";
     if (!recommendationsDiv) return;
 
     if (type === "serie" && data.sesonger) {
-      if (document.getElementById("seasonButtons")) return; // Unngå duplikater
+      if (document.getElementById("seasonButtons")) return;
 
       recommendationsDiv.innerHTML = `
         <div class="season-buttons" id="seasonButtons"></div>
@@ -1247,8 +1269,6 @@ import { auth, db } from "./firebase-oppsett.js";
           if (!erLåst) {
             epCard.addEventListener("click", () => {
               localStorage.setItem(`${navn}-siste-episode`, JSON.stringify({ sesong: sesongNr, episode: epNr }));
-              
-              // Legger med returUrl når man klikker på et spesifikt episodekort
               const returUrl = encodeURIComponent(window.location.href);
               window.location.href = `film-mal.html?navn=${encodeURIComponent(navn)}&sesong=${sesongNr}&episode=${epNr}&returUrl=${returUrl}`;
             });
@@ -1270,7 +1290,6 @@ import { auth, db } from "./firebase-oppsett.js";
       const kilde = filmer || {};
       const alleMedier = Object.keys(kilde).filter(k => k !== navn && (!kilde[k].publishDate || new Date(kilde[k].publishDate) <= nå));
       
-      // Plukk ut opptil 8 tilfeldige filmer
       const utvalgte = alleMedier.sort(() => 0.5 - Math.random()).slice(0, 8);
 
       utvalgte.forEach(n => {
