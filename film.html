@@ -12,18 +12,18 @@
 /* ==========================================================================
    1. GLOBALE TILBAKESTILLINGER & BASE STYLES
    ========================================================================== */
-*{
+* {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
 }
 
-html{
+html {
   font-size: clamp(14px, 1vw + 10px, 18px);
   scroll-behavior: smooth;
 }
 
-body{
+body {
   background: #000;
   color: #fff;
   font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
@@ -33,11 +33,11 @@ body{
   overflow-x: hidden;
 }
 
-body.loaded{
+body.loaded {
   opacity: 1;
 }
 
-img, video{
+img, video {
   max-width: 100%;
   height: auto;
 }
@@ -158,7 +158,7 @@ img, video{
 /* ==========================================================================
    3. HERO-SEKSJON OG BAKGRUNNSMEDIA
    ========================================================================== */
-.hero{
+.hero {
   position: relative;
   width: 100vw;
   height: 100vh;
@@ -166,7 +166,7 @@ img, video{
 }
 
 .background-image,
-.background-video{
+.background-video {
   position: absolute;
   inset: 0;
   width: 100%;
@@ -176,12 +176,12 @@ img, video{
   z-index: 0;
 }
 
-.background-video{
+.background-video {
   opacity: 0;
   filter: brightness(.8);
 }
 
-.overlay{
+.overlay {
   position: absolute;
   inset: 0;
   background:
@@ -190,7 +190,7 @@ img, video{
   z-index: 1;
 }
 
-.bottom-fade{
+.bottom-fade {
   position: absolute;
   bottom: 0;
   width: 100%;
@@ -202,7 +202,7 @@ img, video{
 /* ==========================================================================
    4. INNHOLD OG GLASS PANEL
    ========================================================================== */
-.content-wrapper{
+.content-wrapper {
   position: absolute;
   bottom: 5%;
   left: 5%;
@@ -212,7 +212,7 @@ img, video{
   margin: auto;
 }
 
-.logo-container{
+.logo-container {
   width: 100%;
   max-width: 1100px; 
   margin-bottom: 20px;
@@ -220,19 +220,19 @@ img, video{
   justify-content: flex-start;
 }
 
-.film-logo{
+.film-logo {
   max-width: 70%;
   max-height: 120px;
   object-fit: contain;
 }
 
-.text-logo{
+.text-logo {
   font-size: clamp(2rem, 3vw, 2.8rem);
   font-weight: 700;
   line-height: 1.2;
 }
 
-.left-content{
+.left-content {
   display: flex;
   flex-direction: column;
 }
@@ -252,19 +252,19 @@ img, video{
   width: 100%;
 }
 
-.text-container{
+.text-container {
   flex: 1;
   max-width: 65%;
 }
 
-.description{
+.description {
   font-size: 16px;
   line-height: 1.6;
   margin-bottom: 10px;
   color: #eee;
 }
 
-.metadata{
+.metadata {
   margin-top: 12px;
   display: flex;
   flex-wrap: wrap;
@@ -274,12 +274,12 @@ img, video{
   align-items: center;
 }
 
-.metadata span:nth-child(even){
+.metadata span:nth-child(even) {
   font-weight: bold;
   font-size: 16px;
 }
 
-.cast-info{
+.cast-info {
   flex: 0 0 280px;
   max-width: 280px;
   font-size: 13px;
@@ -287,21 +287,21 @@ img, video{
   line-height: 1.6;
 }
 
-.cast-info strong{
+.cast-info strong {
   color: #fff;
 }
 
-.cast-info a{
+.cast-info a {
   color: #aaa;
   text-decoration: none;
   transition: .25s;
 }
 
-.cast-info a:hover{
+.cast-info a:hover {
   color: #fff;
 }
 
-.availability-info{
+.availability-info {
   margin-top: 15px;
   font-size: 12px;
   color: #ccc;
@@ -313,44 +313,81 @@ img, video{
   border-radius: 8px;
 }
 
-/* ==========================================
-     5. EVENT LISTENERS FOR KNAPPER
-     ========================================== */
-  if (watchBtn) {
-    watchBtn.addEventListener("click", async () => {
-      if (erUpublisert || erUtgått) return;
+/* ==========================================================================
+   5. DYNAMISKE KNAPPER (.watch-button & kolonner)
+   ========================================================================== */
+.buttons-column {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-width: 260px;
+}
 
-      status = "påbegynt";
-      oppdaterWatchKnapp(); 
-      await lagreProfilDataTilSkyen();
+.watch-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  width: 100%;
+  padding: 16px 32px;
+  background: #00ffcc;
+  color: #050b0c;
+  font-size: 16px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .5px;
+  border: none;
+  border-radius: 50px;
+  cursor: pointer;
+  box-shadow: 0 0 20px rgba(0, 255, 204, 0.3);
+  transition: transform 0.25s cubic-bezier(0.2, 0.8, 0.2, 1), 
+              background-color 0.25s ease, 
+              box-shadow 0.25s ease;
+}
 
-      // Lagrer den nåværende siden som retur-adresse
-      const returUrl = encodeURIComponent(window.location.href);
+.watch-button i {
+  font-size: 18px;
+}
 
-      if (type === "film") {
-        // Sjekker om watchUrl allerede har parametere fra før (? eller &)
-        const separator = data.watchUrl.includes("?") ? "&" : "?";
-        window.location.href = `${data.watchUrl}${separator}returUrl=${returUrl}`;
-      } else if (type === "serie" && data.sesonger) {
-        const sisteEpKey = `${navn}-siste-episode`;
-        let sisteEp = JSON.parse(localStorage.getItem(sisteEpKey));
-        let sesongNr, epNr;
+.watch-button:hover {
+  background: #ffffff;
+  color: #000000;
+  transform: translateY(-2px);
+  box-shadow: 0 0 30px rgba(255, 255, 255, 0.5);
+}
 
-        if (sisteEp && data.sesonger[sisteEp.sesong]?.episoder[sisteEp.episode]) {
-          sesongNr = sisteEp.sesong;
-          epNr = sisteEp.episode;
-        } else {
-          sesongNr = Object.keys(data.sesonger)[0];
-          epNr = Object.keys(data.sesonger[sesongNr].episoder)[0];
-        }
-        window.location.href = `film-mal.html?navn=${encodeURIComponent(navn)}&sesong=${sesongNr}&episode=${epNr}&returUrl=${returUrl}`;
-      }
-    });
-  }
+.watch-button:active {
+  transform: translateY(1px);
+}
+
+/* Status-variasjoner for knappene */
+.watch-button.paabegynt {
+  background: transparent;
+  color: #00ffcc;
+  border: 2px solid #00ffcc;
+  box-shadow: none;
+}
+
+.watch-button.paabegynt:hover {
+  background: rgba(0, 255, 204, 0.1);
+  color: #ffffff;
+  border-color: #ffffff;
+}
+
+.watch-button.locked,
+.watch-button[disabled] {
+  background: rgba(255, 255, 255, 0.1) !important;
+  color: rgba(255, 255, 255, 0.3) !important;
+  border: none !important;
+  box-shadow: none !important;
+  cursor: not-allowed;
+  transform: none !important;
+}
+
 /* ==========================================================================
    6. ANBEFALINGER & EPISODER (PREMIUM RESPONSIV DESIGN)
    ========================================================================== */
-.recommendations{
+.recommendations {
   margin: 40px auto 0;
   padding: 0 50px 50px;
   background: #000;
@@ -359,21 +396,20 @@ img, video{
   max-width: 1400px;
 }
 
-.recommendations h2{
+.recommendations h2 {
   font-size: 24px;
   font-weight: 600;
   margin-bottom: 20px;
 }
 
-/* Skikkelig responsiv film-grid */
-.gallery{
+.gallery {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
   gap: 20px;
   width: 100%;
 }
 
-.movie-card{
+.movie-card {
   width: 100%;
   height: 165px;
   border-radius: 10px;
@@ -383,19 +419,19 @@ img, video{
   transition: transform .3s ease, box-shadow .3s ease;
 }
 
-.movie-card img{
+.movie-card img {
   width: 100%;
   height: 100%;
   object-fit: cover;
 }
 
-.movie-card:hover{
+.movie-card:hover {
   transform: scale(1.05);
   box-shadow: 0 15px 30px rgba(0,0,0,.8);
   z-index: 2;
 }
 
-.movie-overlay{
+.movie-overlay {
   position: absolute;
   inset: 0;
   background: linear-gradient(to top, rgba(0,0,0,.9), transparent 70%);
@@ -406,17 +442,17 @@ img, video{
   padding: 15px;
 }
 
-.movie-card:hover .movie-overlay{
+.movie-card:hover .movie-overlay {
   opacity: 1;
 }
 
-.movie-title{
+.movie-title {
   font-size: 14px;
   font-weight: 600;
 }
 
 /* Episoder system */
-.season-buttons{
+.season-buttons {
   display: flex;
   gap: 12px;
   margin-bottom: 20px;
@@ -424,7 +460,7 @@ img, video{
   padding-bottom: 8px;
 }
 
-.season-btn{
+.season-btn {
   background: rgba(255,255,255,.08);
   color: #ccc;
   border: none;
@@ -435,19 +471,19 @@ img, video{
   white-space: nowrap;
 }
 
-.season-btn.active{
+.season-btn.active {
   background: #00ffcc;
   color: #000;
   font-weight: 700;
 }
 
-.episode-gallery{
+.episode-gallery {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
   gap: 24px;
 }
 
-.episode-card{
+.episode-card {
   background: #0c0c0c;
   border-radius: 14px;
   overflow: hidden;
@@ -456,23 +492,23 @@ img, video{
   border: 1px solid rgba(255,255,255,.05);
 }
 
-.episode-card:hover{
+.episode-card:hover {
   transform: translateY(-5px);
   border: 1px solid rgba(0,255,204,.3);
 }
 
-.episode-thumb{
+.episode-thumb {
   position: relative;
   height: 180px;
 }
 
-.episode-thumb img{
+.episode-thumb img {
   width: 100%;
   height: 100%;
   object-fit: cover;
 }
 
-.play-overlay{
+.play-overlay {
   position: absolute;
   inset: 0;
   display: flex;
@@ -483,32 +519,32 @@ img, video{
   transition: opacity .3s;
 }
 
-.episode-card:hover .play-overlay{
+.episode-card:hover .play-overlay {
   opacity: 1;
 }
 
-.play-overlay i{
+.play-overlay i {
   font-size: 36px;
   color: #00ffcc;
 }
 
-.episode-info{
+.episode-info {
   padding: 16px;
 }
 
-.episode-title{
+.episode-title {
   font-size: 15px;
   font-weight: 600;
   margin-bottom: 4px;
 }
 
-.episode-meta{
+.episode-meta {
   font-size: 12px;
   color: #888;
   margin-bottom: 8px;
 }
 
-.episode-desc{
+.episode-desc {
   font-size: 13px;
   color: #bbb;
   line-height: 1.5;
@@ -590,7 +626,7 @@ img, video{
   color: #444;
 }
 
-.popup-overlay{
+.popup-overlay {
   position: fixed;
   inset: 0;
   background: rgba(0,0,0,.8);
@@ -601,7 +637,7 @@ img, video{
   padding: 20px;
 }
 
-.popup-box{
+.popup-box {
   background: #111;
   color: #fff;
   max-width: 600px;
@@ -614,7 +650,7 @@ img, video{
   border: 1px solid rgba(255,255,255,0.1);
 }
 
-.close-btn{
+.close-btn {
   position: absolute;
   top: 15px;
   right: 15px;
@@ -625,7 +661,7 @@ img, video{
   cursor: pointer;
 }
 
-#expiredOverlay{
+#expiredOverlay {
   position: fixed;
   inset: 0;
   background: #091b1e;
@@ -635,7 +671,7 @@ img, video{
   z-index: 999999;
 }
 
-#expiredOverlay.active{
+#expiredOverlay.active {
   display: flex;
 }
 
@@ -651,34 +687,31 @@ img, video{
   .recommendations { padding: 0 40px 40px; }
 }
 
-@media(max-width: 1024px){
-  .text-button-container{
+@media(max-width: 1024px) {
+  .text-button-container {
     flex-direction: column;
     gap: 30px;
     padding: 30px;
   }
-  .text-container{
+  .text-container {
     max-width: 100%;
   }
-  .cast-info{
+  .cast-info {
     max-width: 100%;
     flex: none;
   }
 }
 
-/* 🔥 KOMPLETT MOBIL-REPARASJON (768px og nedover) */
-@media(max-width: 768px){
+@media(max-width: 768px) {
   .top-nav {
     padding: 0 20px;
     height: 70px;
   }
   
-  /* Skjul navigasjonslenker på mobil for å unngå krasj (Standard streaming-stil) */
   .nav-links {
     display: none;
   }
 
-  /* Gjør Hero om til en naturlig vertikal flyt i stedet for fullskjerm-lås */
   .hero {
     height: auto;
     min-height: auto;
@@ -687,7 +720,6 @@ img, video{
     background: #000;
   }
 
-  /* Bildet tar toppen av mobilskjermen */
   .background-image,
   .background-video {
     position: relative;
@@ -703,13 +735,12 @@ img, video{
     display: none;
   }
 
-  /* Flytt teksten og kontrollene under bildet */
   .content-wrapper {
     position: relative;
     inset: auto;
     width: 100%;
     padding: 20px;
-    margin-top: -40px; /* Drar elementene litt opp over faden */
+    margin-top: -40px;
   }
 
   .logo-container {
@@ -734,7 +765,7 @@ img, video{
 
   .buttons-column {
     width: 100%;
-    order: 1; /* Flytter knappene øverst på mobil */
+    order: 1;
   }
 
   .watch-button {
@@ -757,7 +788,7 @@ img, video{
   }
 
   .gallery {
-    grid-template-columns: repeat(2, 1fr); /* 2 ryddige kolonner på mobil */
+    grid-template-columns: repeat(2, 1fr);
     gap: 12px;
   }
 
