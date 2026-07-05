@@ -331,6 +331,7 @@ main {
   flex: 1;
   display: flex;
   overflow-x: auto;
+  overflow-y: visible; /* Sikrer at forstørrede bilder ikke kuttes på topp/bunn */
   gap: 16px;
   padding: 15px 10px; 
   scroll-behavior: smooth;
@@ -341,23 +342,22 @@ main {
   display: none;
 }
 
-.image-gallery a, .continue-image-gallery a {
+/* Base-stil for gallerielementer slik at bildet zoomer UTEN å kuttes */
+.image-gallery a, .continue-image-gallery a, .gallery-item {
   display: inline-block;
   position: relative;
   border-radius: 5px;
   background: transparent;
   border: 2px solid transparent;
   transition: border 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
+  overflow: visible !important; /* VIKTIG: Hindrer kutting ved zoom */
 }
 
-.continue-image-gallery a {
-  overflow: hidden;
-}
-
-.image-gallery a img, .continue-image-gallery a img {
-  width: 330px;
+/* Alle galleribilder tvinges til nøyaktig samme størrelse */
+.image-gallery a img, .continue-image-gallery a img, .gallery-item img {
+  width: 330px !important;
+  height: 175px !important;
   aspect-ratio: 2.2 / 1;
-  height: 175px;
   object-fit: cover;
   border-radius: 5px;
   display: block;
@@ -437,20 +437,6 @@ main {
 /* ==========================================================================
    6. HOVER OVERLAY FOR BILDER (PC)
    ========================================================================== */
-.gallery-item {
-  position: relative !important;
-  display: inline-block;
-  overflow: hidden; 
-  border-radius: 5px;
-}
-
-.gallery-item > img {
-  display: block;
-  width: 100%;
-  height: auto;
-  transition: transform 0.3s ease;
-}
-
 .image-overlay {
   position: absolute !important;
   inset: 0;
@@ -614,12 +600,13 @@ main {
    9. HOVER EFFEKTER KUN FOR ENHETER MED MUS (PC / LAPTOP)
    ========================================================================== */
 @media (hover: hover) {
-  .image-gallery a:hover, .continue-image-gallery a:hover {
-    z-index: 10;
+  .image-gallery a:hover, .continue-image-gallery a:hover, .gallery-item:hover {
+    z-index: 999;
+    transform: scale(1.05); /* Forstørrer hele elementet */
   }
 
-  .image-gallery a:hover img, .continue-image-gallery a:hover img {
-    transform: scale(1.05);
+  .image-gallery a:hover img, .continue-image-gallery a:hover img, .gallery-item:hover img {
+    transform: scale(1.0); /* Forhindrer dobbel-zoom på selve bildefila */
   }
 
   .top10-item:hover { 
@@ -631,13 +618,8 @@ main {
     -webkit-text-stroke: 0;
   }
 
-  .gallery-item:hover > img { 
-    transform: scale(1.05); 
-  }
-
   .gallery-item:hover .image-overlay {
     opacity: 1;
-    transform: scale(1.05); 
   }
 
   /* Aktiver og vis rullepiler */
@@ -654,7 +636,7 @@ main {
     color: white;
     font-size: 22px;
     cursor: pointer;
-    z-index: 11; 
+    z-index: 1001; 
     align-items: center;
     justify-content: center;
     opacity: 0;
@@ -863,6 +845,7 @@ main {
     gap: 10px !important;
     scroll-snap-type: x mandatory !important;
     -webkit-overflow-scrolling: touch !important;
+    overflow-y: visible !important;
   }
 
   .image-gallery a, .continue-image-gallery a, .top10-item {
@@ -871,9 +854,9 @@ main {
     transition: none !important;
   }
 
-  .image-gallery a img, .continue-image-gallery a img {
+  .image-gallery a img, .continue-image-gallery a img, .gallery-item img {
     width: 200px !important;  
-    height: auto !important;
+    height: 113px !important; /* Beholder riktig 16:9-skala på mobil */
     aspect-ratio: 16 / 9 !important; 
     object-fit: cover !important; 
     border-radius: 4px !important;
@@ -913,10 +896,10 @@ main {
   .kids-overlay h2 { font-size: 18px !important; margin-bottom: 2px; }
   .kids-overlay p { font-size: 12px !important; }
 
-  /* FOOTER PÅ MOBIL - Vises nå stabla i stedet for å skjules helt */
+  /* FOOTER PÅ MOBIL */
   .footer {
     display: flex !important;
-    padding: 40px 32px 95px !important; /* Ekstra bunn-padding pga. menylinja på mobil */
+    padding: 40px 32px 95px !important; 
     margin-top: 50px !important;
   }
   .footer-links {
