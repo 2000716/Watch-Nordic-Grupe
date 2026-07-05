@@ -16,6 +16,7 @@
       padding: 0; 
       box-sizing: border-box; 
       user-select: none;
+      -webkit-user-select: none; /* Bedre for iOS/Safari */
     }
     
     body { 
@@ -404,35 +405,127 @@
       pointer-events: none;
     }
 
-    /* ================= RESPONSIVITET & MOBIL (100% SØMLØS) ================= */
+    /* ================= RESPONSIVITET & MOBIL OPTIMALISERING ================= */
     @media (max-width: 768px) {
-      .top-bar { padding: 15px 20px; }
-      .movie-title { font-size: 16px; margin-left: 12px; }
+      .top-bar { 
+        padding: 15px 20px; 
+      }
+      .movie-title { 
+        font-size: 16px; 
+        margin-left: 12px; 
+      }
 
-      .controls { padding: 15px 20px; }
-      .center-controls { gap: 20px; }
+      /* Knapper og kontroller optimalisert for berøring på mobil */
+      .controls { 
+        padding: 15px 20px 20px 20px; 
+      }
+      .left-controls, .right-controls {
+        min-width: auto;
+        gap: 16px;
+      }
+      .center-controls { 
+        gap: 24px; 
+      }
       
-      .progress-container { bottom: 65px; padding: 0 20px; }
-      .time-display { bottom: 78px; right: 20px; font-size: 11px; }
+      /* Gir knappene større usynlig trykkflate (touch target) */
+      .btn {
+        padding: 10px;
+      }
+      .btn svg, .btn i {
+        transform: scale(0.9);
+      }
+      
+      /* Tidsstripen flyttes noe ned for å ikke kollidere med fingre på knappene */
+      .progress-container { 
+        bottom: 70px; 
+        padding: 0 20px; 
+      }
+      .progress {
+        height: 5px; /* Gjør tidslinjen ørlite tykkere og lettere å treffe på mobil */
+      }
+      .thumb {
+        transform: translate(-50%, -50%) scale(1) !important; /* Alltid synlig på mobil */
+        width: 12px;
+        height: 12px;
+      }
+      .time-display { 
+        bottom: 82px; 
+        right: 20px; 
+        font-size: 11px; 
+      }
 
+      /* Premium undertekster skreddersydd mindre skjermer */
       .subtitle-overlay {
         font-size: 18px;
         width: 90%;
-        bottom: 6%;
+        bottom: 8%;
       }
-      .subtitle-overlay.subtitle-up { bottom: 18%; }
+      .subtitle-overlay.subtitle-up { 
+        bottom: 22%; 
+      }
       
-      .caption-menu { bottom: 80px; right: 20px; min-width: 160px; padding: 12px; }
-      .caption-menu button { font-size: 13px; padding: 6px 10px; }
+      video::cue {
+        font-size: 16px !important;
+      }
       
-      .preview-box { width: 160px; height: 90px; bottom: 85px; }
+      .caption-menu { 
+        bottom: 85px; 
+        right: 20px; 
+        min-width: 160px; 
+        padding: 12px; 
+      }
+      .caption-menu button { 
+        font-size: 13px; 
+        padding: 6px 10px; 
+      }
+      
+      .preview-box { 
+        width: 160px; 
+        height: 90px; 
+        bottom: 90px; 
+      }
+
+      .watermark {
+        top: 15px;
+        right: 20px;
+        width: 40px;
+      }
     }
 
     @media (max-width: 480px) {
-      .center-controls { gap: 15px; }
-      .movie-title { max-width: 180px; }
-      .right-controls { gap: 14px; }
-      #nextEpisodeBtn { font-size: 12px !important; margin-right: 5px !important; }
+      .center-controls { gap: 18px; }
+      .movie-title { max-width: 150px; }
+      .right-controls { gap: 12px; }
+      #nextEpisodeBtn { font-size: 11px !important; margin-right: 2px !important; }
+    }
+
+    /* ================= NØDBREMS: TVUNGET LIGGENDE MODUS FOR FILMSPILLEREN ================= */
+    /* Hvis mobilen holdes stående (portrett), tvinges brukeren til å snu den for best mulig opplevelse */
+    @media screen and (orientation: portrait) and (max-width: 900px) {
+      .container {
+        display: none !important; /* Skjuler selve videospilleren midlertidig */
+      }
+      
+      body::after {
+        content: "Vennligst roter telefonen til liggende modus for å se filmen.";
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background: #000000;
+        color: #ffffff;
+        font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+        font-size: 16px;
+        font-weight: 500;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        z-index: 999999;
+        padding: 30px;
+        box-sizing: border-box;
+      }
     }
 </style>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
