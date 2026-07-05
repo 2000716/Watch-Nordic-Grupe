@@ -605,10 +605,10 @@ if (navn && typeof filmer !== "undefined" && filmer?.[navn] && !sesong && !episo
     ...ep,
     audioLanguages: serie.audioLanguages || [],
     subtitleLanguages: serie.subtitleLanguages || [],
-    tilbakeUrl: `film.html?navn=${navn}`,
     tittel: `${serie.tittel} – S${sesong}E${episode}: ${ep.tittel}`
   };
   filmId = `serie-${navn}-s${sesong}-e${episode}`;
+  tilbakeUrl = `film.html?navn=${navn}`; 
   isSerie = true;
 } else {
   alert("Ugyldig innhold");
@@ -621,6 +621,7 @@ if (movieTitleEl && film?.tittel) movieTitleEl.textContent = film.tittel;
 
 const backButton = document.getElementById("backButton");
 if (backButton) {
+  backButton.innerHTML = '<i class="fa-solid fa-xmark" style="color: #ffffff; font-size: 28px; padding: 5px;"></i>';
   backButton.addEventListener("click", async (e) => {
     e.preventDefault();
     await lagreSistePosisjonEkspress();
@@ -638,9 +639,7 @@ video.load();
 /* ================= 2. DOM-ELEMENTER ================= */
 const ui = document.getElementById("ui");
 const playBtn = document.getElementById("playPauseBtn");
-const playIcon = document.getElementById("playIcon");
 const muteBtn = document.getElementById("muteBtn");
-const muteIcon = document.getElementById("muteIcon");
 const rewindBtn = document.getElementById("rewindBtn");
 const forwardBtn = document.getElementById("forwardBtn");
 const progress = document.getElementById("progress");
@@ -671,6 +670,14 @@ let hideTimeout;
 let subtitlesEnabled = true;
 let autoplayTriggered = false;
 let lokalLagringsInterval;
+
+// Plasserer strømme-ikonene i kontrollknappene
+if (rewindBtn) rewindBtn.innerHTML = '<i class="fa-solid fa-rotate-left" style="color: #ffffff; font-size: 22px;"></i>';
+if (forwardBtn) forwardBtn.innerHTML = '<i class="fa-solid fa-rotate-right" style="color: #ffffff; font-size: 22px;"></i>';
+if (captionsBtn) captionsBtn.innerHTML = '<i class="fa-solid fa-closed-captioning" style="color: #ffffff; font-size: 22px;"></i>';
+if (fullscreenBtn) fullscreenBtn.innerHTML = '<i class="fa-solid fa-expand" style="color: #ffffff; font-size: 22px;"></i>';
+if (playBtn) playBtn.innerHTML = '<i class="fa-solid fa-play" style="color: #ffffff; font-size: 26px;"></i>';
+if (muteBtn) muteBtn.innerHTML = '<i class="fa-solid fa-volume-high" style="color: #ffffff; font-size: 22px;"></i>';
 
 function hentNesteEpisodeUrl() {
   if (navn && sesong && episode && typeof serier !== "undefined" && serier?.[navn]) {
@@ -704,20 +711,16 @@ function formatTime(time) {
   return `${m}:${s < 10 ? '0' + s : s}`;
 }
 
-/* ================= 3. ØKONOMISK DB-LOGIKK (INGEN UNØDVENDIGE SKRIV) ================= */
+/* ================= 3. DB-LOGIKK ================= */
 const aktivProfilNavn = localStorage.getItem("aktivProfil") || "Hovedprofil";
 
 onAuthStateChanged(auth, async (user) => {
   if (user) {
     currentUser = user;
-    
-    // Hent profil-matrisen fra Cache først (lynkjapt)
     const cacheData = localStorage.getItem("watch_nordic_profiles_cache");
     if (cacheData) {
       heleProfilArrayet = JSON.parse(cacheData);
     }
-
-    // Synkroniser mot skyen i bakgrunnen for å hente siste kryssplattform-data
     try {
       const userDocRef = doc(db, "users", user.uid);
       const docSnap = await getDoc(userDocRef);
@@ -728,7 +731,6 @@ onAuthStateChanged(auth, async (user) => {
     } catch (err) {
       console.error("Feil ved bakgrunnssynk:", err);
     }
-
     sjekkLagretFremdrift();
   } else {
     window.location.href = "index.html";
@@ -741,7 +743,6 @@ function sjekkLagretFremdrift() {
     startVideoFraStart();
     return;
   }
-
   const fremdriftInfo = profil.fremdrift?.[filmId];
   if (fremdriftInfo && fremdriftInfo.currentTime > 10 && fremdriftInfo.status !== "ferdig") {
     video.currentTime = parseFloat(fremdriftInfo.currentTime);
@@ -760,7 +761,6 @@ function startVideoFraStart() {
   startLokalLagringsLoop();
 }
 
-// Lagrer til nettleserens minne hvert 5. sekund (Koster 0 kroner)
 function startLokalLagringsLoop() {
   clearInterval(lokalLagringsInterval);
   lokalLagringsInterval = setInterval(() => {
@@ -784,7 +784,6 @@ function oppdaterFremdriftILokalMatrise(status) {
       heleProfilArrayet[profilIdx].historikk.push(filmId);
     }
   } else {
-    // Hvis brukeren er helt på slutten (f.eks. rulletekster), marker som ferdig i stedet
     if (percent > 96) {
       delete heleProfilArrayet[profilIdx].fremdrift[filmId];
       if (!heleProfilArrayet[profilIdx].historikk.includes(filmId)) {
@@ -804,20 +803,16 @@ function oppdaterFremdriftILokalMatrise(status) {
       };
     }
   }
-
   localStorage.setItem("watch_nordic_profiles_cache", JSON.stringify(heleProfilArrayet));
 }
 
-// Kraftig flush-funksjon som tvinger lagringen til Firebase når brukeren forlater filmen
 async function lagreSistePosisjonEkspress() {
   clearInterval(lokalLagringsInterval);
   oppdaterFremdriftILokalMatrise(video.currentTime / video.duration > 0.96 ? "ferdig" : "paabegynt");
-
   if (currentUser) {
     try {
       const userDocRef = doc(db, "users", currentUser.uid);
       await setDoc(userDocRef, { profiler: heleProfilArrayet }, { merge: true });
-      console.log("Fremdrift lagret til skyen.");
     } catch (err) {
       console.error("Feil ved ekspresslagring til skyen:", err);
     }
@@ -828,7 +823,6 @@ async function ryddeOgNeste() {
   video.pause();
   clearInterval(lokalLagringsInterval);
   oppdaterFremdriftILokalMatrise("ferdig");
-  
   if (currentUser) {
     try {
       const userDocRef = doc(db, "users", currentUser.uid);
@@ -838,7 +832,6 @@ async function ryddeOgNeste() {
   window.location.href = nesteEpisodeUrl ? nesteEpisodeUrl : tilbakeUrl;
 }
 
-// Trigger synkronisering når fanen lukkes eller oppdateres
 window.addEventListener('beforeunload', () => {
   oppdaterFremdriftILokalMatrise(video.currentTime / video.duration > 0.96 ? "ferdig" : "paabegynt");
   if (currentUser && navigator.sendBeacon) {
@@ -870,19 +863,19 @@ document.addEventListener('keydown', e => {
 });
 
 video.addEventListener('play', () => { 
-  playIcon.src = "https://static.wixstatic.com/media/fd2fb2_f4658d43d3204506948e5c5ab65461d7~mv2.png"; 
+  playBtn.innerHTML = '<i class="fa-solid fa-pause" style="color: #ffffff; font-size: 26px;"></i>'; 
   showUI(); 
 });
 video.addEventListener('pause', () => { 
-  playIcon.src = "https://static.wixstatic.com/media/fd2fb2_f6f25f56b00e49eea8dc4f811b50bb5c~mv2.png"; 
+  playBtn.innerHTML = '<i class="fa-solid fa-play" style="color: #ffffff; font-size: 26px;"></i>'; 
   showUI(); 
 });
 
 muteBtn.addEventListener('click', () => {
   video.muted = !video.muted;
-  muteIcon.src = video.muted
-    ? "https://static.wixstatic.com/media/fd2fb2_e7e7e77a59964f018d9e2d4605a047db~mv2.png"
-    : "https://static.wixstatic.com/media/fd2fb2_5c4fab8430e94d2381fc487b1654191d~mv2.png";
+  muteBtn.innerHTML = video.muted
+    ? '<i class="fa-solid fa-volume-xmark" style="color: #ffffff; font-size: 22px;"></i>'
+    : '<i class="fa-solid fa-volume-high" style="color: #ffffff; font-size: 22px;"></i>';
 });
 
 rewindBtn.addEventListener('click', () => video.currentTime = Math.max(0, video.currentTime - 10));
@@ -942,7 +935,7 @@ progress.addEventListener('mousedown', e => { isDragging = true; scrubTo(e); });
 document.addEventListener('mouseup', e => { if (isDragging) { const percent = scrubTo(e); video.currentTime = percent * video.duration; isDragging = false; hidePreview(); } });
 document.addEventListener('mousemove', e => { if (isDragging) { scrubTo(e); showPreview(e); } });
 
-// Forhåndsvisning / Thumbnail-generator under søking
+// Forhåndsvisning under søking
 const hiddenVideo = document.createElement("video");
 hiddenVideo.src = film.videoUrl || film.video || film.src; hiddenVideo.muted = true; hiddenVideo.crossOrigin = "anonymous";
 const canvas = document.createElement("canvas"); const ctx = canvas.getContext("2d");
@@ -972,7 +965,9 @@ document.addEventListener('keydown', showUI);
 
 fullscreenBtn.addEventListener('click', () => { if (!document.fullscreenElement) { container.requestFullscreen(); } else { document.exitFullscreen(); } });
 document.addEventListener('fullscreenchange', () => {
-  fullscreenBtn.querySelector('img').src = document.fullscreenElement ? "https://static.wixstatic.com/media/fd2fb2_c9b139f2774c4bf7b32c7271fd6c1c1a~mv2.png" : "https://static.wixstatic.com/media/3fa37682b3b34c04a2cd08ffcde2763a~mv2.png";
+  fullscreenBtn.innerHTML = document.fullscreenElement 
+    ? '<i class="fa-solid fa-compress" style="color: #ffffff; font-size: 22px;"></i>' 
+    : '<i class="fa-solid fa-expand" style="color: #ffffff; font-size: 22px;"></i>';
 });
 
 video.addEventListener('waiting', () => loadingSpinner.style.display = 'block');
