@@ -58,63 +58,6 @@ const serier = {
     }
   },
 
-  "vasaskipet": {
-    tittel: "Vasaskipet - Et stille vitne i tiden",
-    rating: "0.0",
-    bakgrunn: "https://static.wixstatic.com/media/d9ace9_43006d61b876444e829ebf7b67b90d87~mv2.png",
-    logo: "https://static.wixstatic.com/media/d9ace9_7e338923e3c84d92b6a2fdbd1599744b~mv2.png",
-    poster: "https://static.wixstatic.com/media/d9ace9_7754297ad1094e16b488b2cbd0b238cf~mv2.jpg",
-    posterVertikal: "https://static.wixstatic.com/media/d9ace9_dfe22382394348a1ad40f034d0c8cd82~mv2.jpg",
-    beskrivelse: "I denne dokumentaren tar Watch Originals deg med på reisen til oppdagelsen av krigsskipet Vasa. Hvordan kunne et så mektig krigsskip synke bare få meter fra kaien? Og hvordan har dette skipet blitt et levende vitnesbyrd om hendelsene på 1600-tallet?",
-    metadata: ["2026", "10 år", "Dokumentar", "4K"],
-    imdb: "",
-    skapere: "Watch Nordic Originals Studio",
-    tilbakeUrl: "serie.html?navn=vasaskipet",
-    publishDate: "2026-05-02T00:00:00",
-    expireDate: "2027-11-15T23:59:59",
-    audioLanguages: [],
-    subtitleLanguages: [],
-    sesonger: {
-      1: {
-        sesongNummer: 1,
-        beskrivelse: "Sesong 1",
-        episoder: {
-          1: {
-            episodeNummer: 1,
-            tittel: "Vasa",
-            beskrivelse: "Det svenske krigsskipet legger ut fra kaien – hvem kunne tro at reisen skulle få en så brå slutt?",
-            varighet: "5 min",
-            thumbnail: "https://static.wixstatic.com/media/d9ace9_43006d61b876444e829ebf7b67b90d87~mv2.png",
-            publishDate: "2026-06-10T18:00:00",
-            videoUrl: ""
-          },
-          2: {
-            episodeNummer: 2,
-            tittel: "Hevingen",
-            beskrivelse: "Skipet blir oppdaget, og planene om å heve det fra havets dyp blir satt på dagsorden.",
-            varighet: "5 min",
-            thumbnail: "https://static.wixstatic.com/media/d9ace9_43006d61b876444e829ebf7b67b90d87~mv2.png",
-            publishDate: "2026-06-10T18:00:00",
-            videoUrl: "",
-            introStart: 2,
-            introEnd: 89
-          },
-          3: {
-            episodeNummer: 3,
-            tittel: "Skipet til liv",
-            beskrivelse: "Vasa står i dag som et storslått vitnesbyrd om Sveriges historie",
-            varighet: "5 min",
-            thumbnail: "https://static.wixstatic.com/media/d9ace9_43006d61b876444e829ebf7b67b90d87~mv2.png",
-            publishDate: "2026-06-10T18:00:00",
-            videoUrl: "",
-            introStart: 2,
-            introEnd: 89
-          }
-        }
-      }
-    }
-  },
-
   "apollo11-was-it-real": {
     tittel: "Apollo 11 - Was It Real?",
     rating: "0.0",
