@@ -264,11 +264,11 @@ img, video {
   color: #eee;
 }
 
-/* Mer-knapp i teksten */
+/* Mer-knapp i teksten (Lysere grå farge) */
 .more-btn {
   background: none;
   border: none;
-  color: #00ffcc;
+  color: #cccccc; /* Endret fra turkis til lys grå */
   font-size: 14px;
   font-weight: 600;
   cursor: pointer;
@@ -279,7 +279,7 @@ img, video {
 }
 
 .more-btn:hover {
-  color: #ffffff;
+  color: #ffffff; /* Blir helt hvit ved hover */
 }
 
 .metadata {
@@ -332,7 +332,7 @@ img, video {
 }
 
 /* ==========================================================================
-   5. DYNAMISKE KNAPPER (Klassisk Hvit & Svart)
+   5. DYNAMISKE KNAPPER (Klassisk Hvit & Svart hoveddesign)
    ========================================================================== */
 .buttons-column {
   display: flex;
@@ -341,6 +341,7 @@ img, video {
   min-width: 260px;
 }
 
+/* Hovedknapp: Se nå (Hvit med sort tekst) */
 .watch-button {
   display: inline-flex;
   align-items: center;
@@ -405,11 +406,11 @@ img, video {
   transform: none !important;
 }
 
-/* Secondary knapp (F.eks. Min Liste hvis den deler klassen) */
+/* Sekundærknapp: Min Liste (Svart/transparent med hvit kant og tekst) */
 #addToListBtn {
   background: transparent;
   color: #ffffff;
-  border: 2px solid rgba(255, 255, 255, 0.3);
+  border: 2px solid #ffffff; /* Gjort til ren hvit for rent sort/hvitt design */
 }
 
 #addToListBtn:hover {
@@ -417,7 +418,6 @@ img, video {
   color: #000000;
   border-color: #ffffff;
 }
-
 /* ==========================================================================
    6. ANBEFALINGER & EPISODER (PREMIUM RESPONSIV DESIGN)
    ========================================================================== */
