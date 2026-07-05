@@ -57,20 +57,20 @@ img, video {
   padding: 0 40px;
   z-index: 9999;
   background: linear-gradient(to bottom, 
-    rgba(9, 27, 30, 0.95) 0%, 
-    rgba(9, 27, 30, 0.75) 40%, 
-    rgba(9, 27, 30, 0.3) 75%, 
-    rgba(9, 27, 30, 0) 100%
+    rgba(20, 20, 20, 0.95) 0%, 
+    rgba(20, 20, 20, 0.75) 40%, 
+    rgba(20, 20, 20, 0.3) 75%, 
+    rgba(20, 20, 20, 0) 100%
   );
-  transition: background 0.4s ease, box-shadow 0.4s ease, height 0.4s ease;
+  transition: background 0.4s ease, height 0.4s ease;
 }
 
 .top-nav.scrolled {
   height: 70px;
-  background: rgba(9, 27, 30, 0.98);
+  background: rgba(20, 20, 20, 0.98);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
-  box-shadow: 0 2px 15px rgba(0, 0, 0, 0.6);
+  box-shadow: none;
 }
 
 .nav-left {
@@ -103,7 +103,6 @@ img, video {
   text-decoration: none;
   font-size: 15px;
   font-weight: 500;
-  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.8);
   transition: color 0.3s ease;
 }
 
@@ -117,7 +116,7 @@ img, video {
 }
 
 .nav-links a.active {
-  color: #00FFCC;
+  color: #ffffff; /* Endret fra turkis til hvit */
   font-weight: 700;
 }
 
@@ -136,7 +135,7 @@ img, video {
 }
 
 .nav-search:hover {
-  color: #00FFCC;
+  color: #ffffff; /* Endret fra turkis til hvit */
 }
 
 .profilmeny {
@@ -149,10 +148,9 @@ img, video {
 .profilmeny img, #menyProfilbilde {
   width: 42px;
   height: 42px;
-  border-radius: 50%;
+  border-radius: 4px; /* Endret fra sirkel til moderne avrundet firkant */
   object-fit: cover;
   border: 2px solid #ffffff;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.5);
 }
 
 /* ==========================================================================
@@ -242,13 +240,13 @@ img, video {
   justify-content: space-between;
   align-items: flex-start;
   gap: 40px;
-  background: rgba(10, 15, 18, 0.6);
+  background: rgba(20, 20, 20, 0.8); /* Gjort mer nøytral mørk i stedet for blåtone */
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  border-radius: 24px;
+  border-radius: 8px; /* Mindre avrundet for renere stil */
   padding: 40px;
   border: 1px solid rgba(255,255,255,.08);
-  box-shadow: 0 20px 60px rgba(0,0,0,.7);
+  box-shadow: none; /* Fjernet tung skygge */
   width: 100%;
 }
 
@@ -264,11 +262,11 @@ img, video {
   color: #eee;
 }
 
-/* Mer-knapp i teksten (Lysere grå farge) */
+/* Mer-knapp i teksten (Ren, lys grå) */
 .more-btn {
   background: none;
   border: none;
-  color: #cccccc; /* Endret fra turkis til lys grå */
+  color: #cccccc;
   font-size: 14px;
   font-weight: 600;
   cursor: pointer;
@@ -279,7 +277,7 @@ img, video {
 }
 
 .more-btn:hover {
-  color: #ffffff; /* Blir helt hvit ved hover */
+  color: #ffffff;
 }
 
 .metadata {
@@ -328,11 +326,11 @@ img, video {
   gap: 8px;
   background: rgba(255,255,255,0.08);
   padding: 6px 12px;
-  border-radius: 8px;
+  border-radius: 4px;
 }
 
 /* ==========================================================================
-   5. DYNAMISKE KNAPPER (Klassisk Hvit & Svart hoveddesign)
+   5. STANDARD STRØMMETJENESTE-KNAPPER (Flate, hvite og enkle)
    ========================================================================== */
 .buttons-column {
   display: flex;
@@ -341,59 +339,52 @@ img, video {
   min-width: 260px;
 }
 
-/* Hovedknapp: Se nå (Hvit med sort tekst) */
-.watch-button {
+/* Felles flatt design for "Se nå" og "Min liste" (Hvit bakgrunn, svart tekst) */
+.watch-button,
+#addToListBtn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 12px;
   width: 100%;
-  padding: 16px 32px;
+  padding: 14px 28px;
   background: #ffffff;
   color: #000000;
   font-size: 16px;
-  font-weight: 700;
+  font-weight: 600;
   text-transform: uppercase;
   letter-spacing: .5px;
-  border: 2px solid #ffffff;
-  border-radius: 50px;
+  border: none;
+  border-radius: 4px; /* Standard moderne avrunding */
   cursor: pointer;
-  box-shadow: 0 4px 15px rgba(255, 255, 255, 0.1);
-  transition: transform 0.25s cubic-bezier(0.2, 0.8, 0.2, 1), 
-              background-color 0.25s ease, 
-              color 0.25s ease,
-              border-color 0.25s ease,
-              box-shadow 0.25s ease;
+  box-shadow: none;
+  transition: background-color 0.2s ease;
 }
 
-.watch-button i {
+.watch-button i,
+#addToListBtn i {
   font-size: 18px;
 }
 
-.watch-button:hover {
-  background: #000000;
-  color: #ffffff;
-  border-color: #ffffff;
-  transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(255, 255, 255, 0.2);
-}
-
-.watch-button:active {
-  transform: translateY(1px);
-}
-
-/* Status-variasjoner for knappene */
-.watch-button.paabegynt {
-  background: transparent;
-  color: #ffffff;
-  border: 2px solid rgba(255, 255, 255, 0.4);
+/* Helt enkel hover-effekt uten glød eller 3D-hopp */
+.watch-button:hover,
+#addToListBtn:hover {
+  background: #e6e6e6; /* Subtil mørkere hvitfarge på hover */
+  color: #000000;
+  transform: none;
   box-shadow: none;
+}
+
+/* Status-variasjoner */
+.watch-button.paabegynt {
+  background: rgba(255, 255, 255, 0.2);
+  color: #ffffff;
+  border: none;
 }
 
 .watch-button.paabegynt:hover {
   background: #ffffff;
   color: #000000;
-  border-color: #ffffff;
 }
 
 .watch-button.locked,
@@ -406,20 +397,8 @@ img, video {
   transform: none !important;
 }
 
-/* Sekundærknapp: Min Liste (Svart/transparent med hvit kant og tekst) */
-#addToListBtn {
-  background: transparent;
-  color: #ffffff;
-  border: 2px solid #ffffff; /* Gjort til ren hvit for rent sort/hvitt design */
-}
-
-#addToListBtn:hover {
-  background: #ffffff;
-  color: #000000;
-  border-color: #ffffff;
-}
 /* ==========================================================================
-   6. ANBEFALINGER & EPISODER (PREMIUM RESPONSIV DESIGN)
+   6. ANBEFALINGER & EPISODER (FLATT PREMIUM DESIGN)
    ========================================================================== */
 .recommendations {
   margin: 40px auto 0;
@@ -446,11 +425,11 @@ img, video {
 .movie-card {
   width: 100%;
   height: 165px;
-  border-radius: 10px;
+  border-radius: 4px;
   overflow: hidden;
   position: relative;
   cursor: pointer;
-  transition: transform .3s ease, box-shadow .3s ease;
+  transition: opacity .2s ease; /* Endret fra transform til enkel opacity/overgang */
 }
 
 .movie-card img {
@@ -460,17 +439,16 @@ img, video {
 }
 
 .movie-card:hover {
-  transform: scale(1.05);
-  box-shadow: 0 15px 30px rgba(0,0,0,.8);
-  z-index: 2;
+  transform: none; /* Fjernet zooming av bildekort */
+  box-shadow: none; /* Fjernet skygge */
 }
 
 .movie-overlay {
   position: absolute;
   inset: 0;
-  background: linear-gradient(to top, rgba(0,0,0,.9), transparent 70%);
+  background: rgba(0, 0, 0, 0.7); /* Standard flatt overlay */
   opacity: 0;
-  transition: opacity .3s ease;
+  transition: opacity .2s ease;
   display: flex;
   align-items: flex-end;
   padding: 15px;
@@ -499,7 +477,7 @@ img, video {
   color: #ccc;
   border: none;
   padding: 10px 24px;
-  border-radius: 999px;
+  border-radius: 4px;
   cursor: pointer;
   font-size: 14px;
   white-space: nowrap;
@@ -519,16 +497,16 @@ img, video {
 
 .episode-card {
   background: #0c0c0c;
-  border-radius: 14px;
+  border-radius: 4px;
   overflow: hidden;
   cursor: pointer;
-  transition: all .3s ease;
+  transition: border-color .2s ease;
   border: 1px solid rgba(255,255,255,.05);
 }
 
 .episode-card:hover {
-  transform: translateY(-5px);
-  border: 1px solid rgba(255,255,255,.3);
+  transform: none; /* Fjernet bevegelse */
+  border: 1px solid rgba(255,255,255,.5);
 }
 
 .episode-thumb {
@@ -550,7 +528,7 @@ img, video {
   justify-content: center;
   background: rgba(0,0,0,.4);
   opacity: 0;
-  transition: opacity .3s;
+  transition: opacity .2s;
 }
 
 .episode-card:hover .play-overlay {
@@ -679,7 +657,7 @@ img, video {
   max-height: 80vh;
   overflow-y: auto;
   padding: 30px;
-  border-radius: 16px;
+  border-radius: 8px;
   position: relative;
   border: 1px solid rgba(255,255,255,0.1);
 }
@@ -698,7 +676,7 @@ img, video {
 #expiredOverlay {
   position: fixed;
   inset: 0;
-  background: #091b1e;
+  background: #141414;
   display: none;
   align-items: center;
   justify-content: center;
@@ -828,7 +806,7 @@ img, video {
 
   .movie-card {
     height: 110px;
-    border-radius: 6px;
+    border-radius: 4px;
   }
 
   .footer {
