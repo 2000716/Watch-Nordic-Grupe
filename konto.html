@@ -12,9 +12,10 @@
       --bg: #091B1E;
       --muted: #bfc9c9;
       --accent: #00FFCC;
-      --card-bg: rgba(255, 255, 255, 0.04);
-      --border: rgba(255, 255, 255, 0.08);
+      --card-bg: rgba(255, 255, 255, 0.03);
+      --border: rgba(255, 255, 255, 0.06);
       --kids-accent: #33b5ff;
+      --danger: #ff4d4d;
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -33,15 +34,15 @@
       content: "";
       position: fixed;
       inset: 0;
-      background: radial-gradient(circle at top left, rgba(0,255,204,0.08), transparent 35%);
+      background: radial-gradient(circle at top left, rgba(0,255,204,0.06), transparent 40%);
       z-index: -1;
     }
 
     header {
-      padding: 20px 60px;
-      background: rgba(9, 27, 30, 0.65);
-      backdrop-filter: blur(14px);
-      -webkit-backdrop-filter: blur(14px);
+      padding: 15px 60px;
+      background: rgba(9, 27, 30, 0.8);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
       border-bottom: 1px solid var(--border);
       display: flex;
       justify-content: space-between;
@@ -51,94 +52,89 @@
       z-index: 100;
     }
 
-    header h1 { 
-      font-size: 24px; 
-      font-weight: 900;
-      letter-spacing: 2px;
-      color: var(--accent);
-      text-shadow: 0 0 10px rgba(0,255,204,0.3);
+    .logo-img {
+      height: 38px;
+      object-fit: contain;
     }
 
     header .nav-btns { display: flex; gap: 12px; }
 
     header button {
-      background: rgba(255,255,255,0.05);
-      border: 1px solid rgba(255,255,255,0.15);
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.12);
       color: white;
-      padding: 10px 20px;
+      padding: 10px 22px;
       border-radius: 999px;
       font-weight: 700;
       font-size: 14px;
       cursor: pointer;
-      transition: 0.25s ease;
+      transition: 0.2s ease;
     }
 
     header button:hover { 
-      background: rgba(255,255,255,0.12);
-      border-color: white;
+      background: rgba(255,255,255,0.15);
+      border-color: rgba(255,255,255,0.4);
     }
 
     header button.logout-btn {
-      border-color: rgba(255, 77, 77, 0.4);
-      color: #ff4d4d;
+      border-color: rgba(255, 77, 77, 0.3);
+      color: var(--danger);
     }
     header button.logout-btn:hover {
-      background: rgba(255, 77, 77, 0.15);
-      border-color: #ff4d4d;
+      background: rgba(255, 77, 77, 0.12);
+      border-color: var(--danger);
     }
 
     .container {
-      max-width: 1200px;
+      max-width: 1100px;
       width: 100%;
       margin: 0 auto;
-      padding: 40px 60px;
+      padding: 50px 40px;
       display: grid;
-      grid-template-columns: 300px 1fr;
-      gap: 40px;
+      grid-template-columns: 280px 1fr;
+      gap: 50px;
       flex: 1;
     }
 
     .sidebar {
-      background: var(--card-bg);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-      border-radius: 24px;
-      padding: 35px 24px;
+      background: rgba(255, 255, 255, 0.02);
+      border-radius: 20px;
+      padding: 30px 20px;
       text-align: center;
       border: 1px solid var(--border);
       height: fit-content;
     }
 
     .avatar {
-      width: 150px;
-      height: 150px;
+      width: 130px;
+      height: 130px;
       border-radius: 50%;
       overflow: hidden;
       margin: 0 auto 20px;
       cursor: pointer;
-      border: 3px solid rgba(255,255,255,0.1);
-      transition: 0.3s ease;
+      border: 3px solid rgba(255,255,255,0.08);
+      transition: 0.25s ease;
     }
 
     .avatar:hover {
       border-color: var(--accent);
-      transform: scale(1.02);
+      transform: scale(1.03);
     }
 
     .avatar img { width: 100%; height: 100%; object-fit: cover; }
 
-    .profile-name { font-size: 22px; font-weight: 700; margin-bottom: 25px; word-break: break-word; }
+    .profile-name { font-size: 20px; font-weight: 700; margin-bottom: 25px; color: white; }
 
-    .profile-actions { display: flex; flex-direction: column; gap: 12px; }
+    .profile-actions { display: flex; flex-direction: column; gap: 10px; }
 
     .profile-actions button {
       background: rgba(255,255,255,0.03);
-      border: 1px solid rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.08);
       color: white;
-      padding: 12px;
-      border-radius: 12px;
+      padding: 11px;
+      border-radius: 10px;
       font-weight: 600;
-      font-size: 14px;
+      font-size: 13px;
       cursor: pointer;
       transition: 0.2s ease;
       display: flex;
@@ -149,37 +145,38 @@
 
     .profile-actions button:hover { 
       background: rgba(255,255,255,0.08);
-      border-color: rgba(255,255,255,0.3);
     }
 
     .profile-actions button.delete-btn {
-      border-color: rgba(255, 77, 77, 0.2);
-      color: #ff4d4d;
-      margin-top: 15px;
+      border-color: rgba(255, 77, 77, 0.25);
+      color: var(--danger);
+      margin-top: 10px;
     }
     .profile-actions button.delete-btn:hover {
-      background: rgba(255, 77, 77, 0.15);
-      border-color: #ff4d4d;
+      background: rgba(255, 77, 77, 0.1);
+      border-color: var(--danger);
+    }
+
+    .content-section {
+      margin-bottom: 35px;
     }
 
     .content h2 {
-      margin: 0 0 18px;
-      font-size: 22px;
+      margin: 0 0 15px;
+      font-size: 18px;
       font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--muted);
       display: flex;
       align-items: center;
       gap: 10px;
     }
-    
-    .content h2 i { color: var(--accent); font-size: 18px; }
 
     .card {
       background: var(--card-bg);
-      backdrop-filter: blur(18px);
-      -webkit-backdrop-filter: blur(18px);
-      border-radius: 24px;
-      padding: 10px 24px;
-      margin-bottom: 35px;
+      border-radius: 16px;
+      padding: 5px 24px;
       border: 1px solid var(--border);
     }
 
@@ -187,8 +184,8 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 20px 0;
-      border-bottom: 1px solid rgba(255,255,255,0.05);
+      padding: 18px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.04);
     }
 
     .row:last-child { border-bottom: none; }
@@ -196,24 +193,24 @@
     .info-block { flex: 1; padding-right: 20px; }
 
     .label {
-      color: var(--muted);
-      font-size: 12px;
+      color: rgba(255, 255, 255, 0.4);
+      font-size: 11px;
       text-transform: uppercase;
       letter-spacing: 0.5px;
-      margin-bottom: 6px;
-      font-weight: 600;
+      margin-bottom: 4px;
+      font-weight: 700;
     }
 
-    .value { font-size: 16px; font-weight: 500; word-break: break-all; }
+    .value { font-size: 15px; font-weight: 500; color: #e5e5e5; }
 
     .row button.edit-trigger {
-      background: none;
+      background: transparent;
       border: 1px solid rgba(255,255,255,0.15);
       color: white;
       padding: 8px 16px;
-      border-radius: 8px;
+      border-radius: 6px;
       cursor: pointer;
-      font-size: 14px;
+      font-size: 13px;
       font-weight: 600;
       transition: 0.2s;
     }
@@ -230,49 +227,51 @@
     .edit-field input, .edit-field select {
       width: 100%;
       padding: 12px;
-      background: rgba(9, 27, 30, 0.8);
-      border: 1px solid rgba(255, 255, 255, 0.15);
-      border-radius: 10px;
+      background: rgba(5, 14, 16, 0.9);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 8px;
       color: white;
-      font-size: 15px;
+      font-size: 14px;
       margin-bottom: 8px;
     }
     .edit-field select option { background: #091B1E; color: white; }
 
-    .parent-lock-screen { text-align: center; padding: 20px 0; }
+    .parent-lock-screen { text-align: center; padding: 25px 0; }
     
     .btn-parent-unlock {
-      background: var(--kids-accent);
-      color: #071214;
-      border: none;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.15);
+      color: white;
       padding: 10px 20px;
       font-weight: 700;
-      border-radius: 10px;
+      font-size: 13px;
+      border-radius: 8px;
       cursor: pointer;
       transition: 0.2s;
     }
-    .btn-parent-unlock:hover { background: #2299dd; }
+    .btn-parent-unlock:hover { background: rgba(255,255,255,0.12); border-color: var(--kids-accent); color: var(--kids-accent); }
 
     footer {
       border-top: 1px solid var(--border);
-      padding: 30px 60px;
-      color: #666;
-      font-size: 13px;
+      padding: 25px;
+      color: #555;
+      font-size: 12px;
       margin-top: auto;
       text-align: center;
     }
 
-    @media (max-width: 960px) {
-      .container { grid-template-columns: 1fr; padding: 20px; }
-      .sidebar { padding: 24px 20px; }
+    @media (max-width: 850px) {
+      .container { grid-template-columns: 1fr; padding: 20px; gap: 30px; }
+      .sidebar { padding: 20px; width: 100%; }
       .row { flex-direction: column; align-items: flex-start; gap: 12px; }
+      header { padding: 15px 20px; }
     }
   </style>
 </head>
 <body>
 
   <header>
-    <h1>WATCH</h1>
+    <img src="https://static.wixstatic.com/media/d9ace9_95bbe3f5ff4b4aab9314a8d08804344e~mv2.png" alt="Watch Nordic Logo" class="logo-img">
     <div class="nav-btns">
       <button id="navHovedsideBtn"><i class="fa-solid fa-house"></i> Hovedside</button>
       <button class="logout-btn" id="navLoggUtBtn"><i class="fa-solid fa-right-from-bracket"></i> Logg Ut</button>
@@ -287,34 +286,36 @@
       <div class="profile-name" id="navnDisplay">Laster...</div>
       <div class="profile-actions" id="sidebarActions">
         <button id="endreBildeSideBtn"><i class="fa-solid fa-user-gear"></i> Endre bilde</button>
-        <button class="delete-btn" id="sletteKnapp"><i class="fa-solid fa-trash-can"></i> Slett profil permanent</button>
+        <button class="delete-btn" id="sletteKnapp"><i class="fa-solid fa-trash-can"></i> Slett profil</button>
       </div>
     </aside>
 
     <section class="content">
-      <h2><i class="fa-solid fa-user"></i> Kontoinformasjon</h2>
-      <div class="card">
-        <div class="row" id="navnRow">
-          <div class="info-block">
-            <div class="label">Profilnavn</div>
-            <div class="value" id="navnView">Laster...</div>
+      <div class="content-section">
+        <h2>Medlemskap og personvern</h2>
+        <div class="card">
+          <div class="row" id="navnRow">
+            <div class="info-block">
+              <div class="label">Profilnavn</div>
+              <div class="value" id="navnView">Laster...</div>
+            </div>
+            <button class="edit-trigger" id="endreNavnKnapp">Endre</button>
           </div>
-          <button class="edit-trigger" id="endreNavnKnapp">Endre</button>
-        </div>
-        <div class="row" id="epostRow">
-          <div class="info-block">
-            <div class="label">E-postadresse (Konto)</div>
-            <div class="value" id="epostView">Laster...</div>
+          <div class="row" id="epostRow">
+            <div class="info-block">
+              <div class="label">E-postadresse (Konto)</div>
+              <div class="value" id="epostView">Laster...</div>
+            </div>
           </div>
         </div>
       </div>
 
-      <div id="foreldreKontrollSeksjon" class="hidden">
-        <h2><i class="fa-solid fa-shield-halved" style="color: var(--kids-accent);"></i> Foreldrekontroll</h2>
+      <div id="foreldreKontrollSeksjon" class="content-section hidden">
+        <h2>Foreldrekontroll</h2>
         <div class="card">
           <div id="parentLockPanel" class="parent-lock-screen">
-            <p style="margin-bottom: 15px; color: var(--muted);">Tjenestebegrensninger er låst. Foreldre kan låse opp med PIN.</p>
-            <button class="btn-parent-unlock" id="laasOppForeldreKontrollBtn"><i class="fa-solid fa-lock"></i> Lås opp foreldrekontroll</button>
+            <p style="margin-bottom: 15px; color: var(--muted); font-size: 14px;">Innholdsbegrensninger er låst. Foreldre må bekrefte tilgang.</p>
+            <button class="btn-parent-unlock" id="laasOppForeldreKontrollBtn"><i class="fa-solid fa-lock"></i> Vis innstillinger med PIN</button>
           </div>
 
           <div id="parentSettingsPanel" class="hidden" style="padding: 10px 0;">
@@ -358,6 +359,7 @@
     const parentSettingsPanel = document.getElementById("parentSettingsPanel");
     const profileSelect = document.getElementById("profileSelect");
     const ageRestrictionSelect = document.getElementById("ageRestrictionSelect");
+    const sletteKnapp = document.getElementById("sletteKnapp");
 
     let profiler = [];
     let globalEpost = ""; 
@@ -389,6 +391,7 @@
     document.getElementById("laasOppForeldreKontrollBtn").addEventListener("click", laasOppForeldreKontroll);
     profileSelect.addEventListener("change", oppdaterValgtProfilISekvens);
     ageRestrictionSelect.addEventListener("change", lagreAldersgrenseGlobalt);
+    sletteKnapp.addEventListener("click", haandterSlettingMellomProfil);
 
     async function hentKontodata() {
       try {
@@ -413,13 +416,19 @@
       epostView.innerText = globalEpost;
       document.getElementById("profilbilde").src = gjeldendeProfil.bilde;
 
-      // HVIS BARN: Skjul hele administrasjonspanelet (Standard oppførsel i strømmetjenester)
+      // DYNAMISK FORENKLET TEKST PÅ SLETTEKNAPPEN BASERT PÅ PROFIL
+      if (aktivProfilIndex === 0) {
+        sletteKnapp.innerHTML = `<i class="fa-solid fa-trash-can"></i> Slett kontoen permanent`;
+      } else {
+        sletteKnapp.innerHTML = `<i class="fa-solid fa-user-xmark"></i> Slett profil`;
+      }
+
+      // HVIS BARN: Skjul administrasjon og endringsmuligheter
       if (gjeldendeProfil.isKids) {
         foreldreKontrollSeksjon.classList.add("hidden");
         document.getElementById("sidebarActions").classList.add("hidden");
         document.getElementById("endreNavnKnapp").classList.add("hidden");
       } else {
-        // HVIS VOKSEN: Vis foreldrekontrollpanelet slik at de kan styre ungenes profiler
         foreldreKontrollSeksjon.classList.remove("hidden");
         fyllProfilVelger();
       }
@@ -455,13 +464,33 @@
       const targetIndex = profileSelect.value;
       const nyGrense = ageRestrictionSelect.value;
 
-      if (profiler[targetIndex].maksAldersgrense === nyGrense) return; // Sparer unødvendig skriving
+      if (profiler[targetIndex].maksAldersgrense === nyGrense) return; // Økonomisk sjekk
 
       profiler[targetIndex].maksAldersgrense = nyGrense;
       
       await setDoc(docRef, { profiler: profiler }, { merge: true }); // Økonomisk Firebase-skriving
       localStorage.setItem("watch_nordic_profiles_cache", JSON.stringify(profiler));
       alert(`Aldersgrense for ${profiler[targetIndex].navn} ble oppdatert.`);
+    }
+
+    async function haandterSlettingMellomProfil() {
+      if (aktivProfilIndex !== 0) {
+        // GJØR AT ALLE UNDERPROFILER (INKLUDERT BARNEKONTOER) KAN SLETTES HERFRA
+        if (!confirm(`Er du sikker på at du vil slette profilen "${profiler[aktivProfilIndex].navn}" permanent?`)) return;
+        
+        profiler.splice(aktivProfilIndex, 1);
+        await setDoc(docRef, { profiler: profiler }, { merge: true }); // Lagrer endring i Firebase
+        localStorage.setItem("watch_nordic_profiles_cache", JSON.stringify(profiler));
+        
+        alert("Profilen ble slettet.");
+        window.location.href = "hvem-ser-på.html?index=0"; // Sender tilbake til profilvalg
+      } else {
+        // Slett hele kontoen hvis det er Hovedprofilen
+        if (!confirm("ADVARSEL: Er du sikker på at du vil slette HELE kontoen din og alle profiler permanent? Dette kan ikke angres.")) return;
+        // Her kan du integrere din deleteDoc(docRef) eller lignende funksjonalitet ved behov
+        alert("Funksjon for sletting av hele brukerkontoen kalles.");
+        loggUt();
+      }
     }
 
     async function loggUt() {
