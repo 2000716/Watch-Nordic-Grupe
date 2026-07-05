@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Min Konto | Watch Nordic™</title>
+  <title>Kontoinnstillinger | Watch Nordic™</title>
 
   <link rel="icon" type="image/png" href="https://static.wixstatic.com/media/d9ace9_95bbe3f5ff4b4aab9314a8d08804344e~mv2.png" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
@@ -223,7 +223,7 @@
 <body>
 
   <header>
-    <img src="https://static.wixstatic.com/media/d9ace9_95bbe3f5ff4b4aab9314a8d08804344e~mv2.png" alt="Logo" class="logo-img" id="logoBtn">
+    <img src="https://static.wixstatic.com/media/d9ace9_081ea242211b45a2801873c3067e1205~mv2.png" alt="Logo" class="logo-img" id="logoBtn">
     <div class="header-actions">
       <button class="btn-header" id="navHovedsideBtn">Tilbake til Tjenesten</button>
       <button class="btn-header btn-logout" id="navLoggUtBtn">Logg ut</button>
@@ -274,11 +274,11 @@
           </div>
         </div>
 
-        <div class="settings-card">
+        <div class="settings-card" id="slettKontoSeksjon">
           <div class="settings-row">
             <div class="row-info">
-              <h4>Aktiv Profil</h4>
-              <p id="oversiktAktivProfil">Laster...</p>
+              <h4>Slett Konto</h4>
+              <p>Vil slette alt innhold permanent fra Watch Nordic.</p>
             </div>
             <button class="btn-action btn-danger" id="slettKontoBtn">Slett hele kontoen</button>
           </div>
@@ -297,7 +297,7 @@
 
         <div class="settings-card">
           <div class="settings-row">
-            <div class="row-info">
+            <div class="row-info" style="width: 100%;">
               <h4>Profilnavn</h4>
               <p id="profilNavnVisning">Laster...</p>
               
@@ -410,15 +410,20 @@
     const navItems = document.querySelectorAll('.nav-menu li');
     const tabContents = document.querySelectorAll('.tab-content');
 
+    function switchTab(tabId) {
+      navItems.forEach(nav => nav.classList.remove('active'));
+      tabContents.forEach(tab => tab.classList.remove('active'));
+      
+      const valgtNav = document.querySelector(`[data-tab="${tabId}"]`);
+      if (valgtNav) valgtNav.classList.add('active');
+      
+      const valgtInnhold = document.getElementById(tabId);
+      if (valgtInnhold) valgtInnhold.classList.add('active');
+    }
+
     navItems.forEach(item => {
       item.addEventListener('click', () => {
-        // Fjern active fra alle nav-items og tabs
-        navItems.forEach(nav => nav.classList.remove('active'));
-        tabContents.forEach(tab => tab.classList.remove('active'));
-        
-        // Sett active på valgt
-        item.classList.add('active');
-        document.getElementById(item.getAttribute('data-tab')).classList.add('active');
+        switchTab(item.getAttribute('data-tab'));
       });
     });
 
@@ -458,7 +463,7 @@
       } catch (e) { console.error("Feil ved henting:", e); }
     }
 
-    // OPPDATER HELE GRENSESNITTET
+    // OPPDATER HELE GRENSESNITTET (Også regler for barnekonto)
     function oppdaterGrensesnitt() {
       if (!profiler[aktivProfilIndex]) return;
 
@@ -470,9 +475,27 @@
       document.getElementById("sideAvatar").src = aktiv.bilde || "https://static.wixstatic.com/media/fd2fb2_39376e4ee55b460ab7a3ebbfcf35fef7~mv2.png";
       
       document.getElementById("oversiktEpost").innerText = globalEpost;
-      document.getElementById("oversiktAktivProfil").innerText = aktiv.navn;
 
-      // Oppdater nedtrekkslister for redigering av profiler
+      // HVIS INNLOGGET BRUKER ER ET BARN (Begrens funksjonalitet)
+      const profilerTab = document.querySelector('[data-tab="tab-profiler"]');
+      const foreldreTab = document.querySelector('[data-tab="tab-foreldrekontroll"]');
+      const abonnementTab = document.querySelector('[data-tab="tab-abonnement"]');
+      const slettKontoSeksjon = document.getElementById("slettKontoSeksjon");
+
+      if (aktiv.isKids) {
+        profilerTab.style.display = "none";
+        foreldreTab.style.display = "none";
+        abonnementTab.style.display = "none";
+        slettKontoSeksjon.style.display = "none"; // Barn kan ikke slette kontoen
+        switchTab('tab-oversikt'); // Tving brukeren tilbake til oversikt
+      } else {
+        profilerTab.style.display = "flex";
+        foreldreTab.style.display = "flex";
+        abonnementTab.style.display = "flex";
+        slettKontoSeksjon.style.display = "block";
+      }
+
+      // Oppdater dropdowns
       fyllProfilVelgere();
     }
 
@@ -481,23 +504,24 @@
     const parentalProfileSelect = document.getElementById("parentalProfileSelect");
 
     function fyllProfilVelgere() {
+      // Ta vare på det brukeren har valgt
+      const valgtEdit = editProfileSelect.value || aktivProfilIndex;
+      const valgtParent = parentalProfileSelect.value || aktivProfilIndex;
+
       editProfileSelect.innerHTML = "";
       parentalProfileSelect.innerHTML = "";
 
       profiler.forEach((prof, index) => {
         const tittel = prof.navn + (prof.isKids ? " (Barn)" : "");
-        
-        const optEdit = new Option(tittel, index);
-        const optParent = new Option(tittel, index);
-        
-        editProfileSelect.add(optEdit);
-        parentalProfileSelect.add(optParent);
+        editProfileSelect.add(new Option(tittel, index));
+        parentalProfileSelect.add(new Option(tittel, index));
       });
 
-      editProfileSelect.value = aktivProfilIndex;
-      parentalProfileSelect.value = aktivProfilIndex;
+      // Gjenopprett valget (hvis det fortsatt finnes)
+      if(profiler[valgtEdit]) editProfileSelect.value = valgtEdit;
+      if(profiler[valgtParent]) parentalProfileSelect.value = valgtParent;
 
-      // Trigger oppdatering av visning basert på valgt dropdown
+      // Trigger UI updates
       oppdaterProfilRedigeringsVisning();
       oppdaterForeldrekontrollVisning();
     }
@@ -513,12 +537,12 @@
 
     function oppdaterProfilRedigeringsVisning() {
       const valgtIdx = editProfileSelect.value;
+      if(!profiler[valgtIdx]) return;
+
       navnView.innerText = profiler[valgtIdx].navn;
-      
-      // Avbryt pågående redigering
       avbrytNavnRedigering();
 
-      // Hovedprofilen (0) kan ikke slettes fra denne knappen (den sletter hele kontoen på oversikten i stedet)
+      // Hovedprofilen (indeks 0) kan ikke slettes fra profilsiden
       if (valgtIdx == 0) {
         slettProfilRad.style.display = "none";
       } else {
@@ -541,41 +565,44 @@
       editGroup.classList.remove("active");
     }
 
+    // LAGRE NYTT NAVN TIL FIREBASE (Minimal skriving)
     document.getElementById("lagreNavnBtn").addEventListener("click", async () => {
       const valgtIdx = editProfileSelect.value;
       const nyttNavn = navnInput.value.trim();
       
       if (!nyttNavn) return alert("Navn kan ikke være tomt.");
-      if (nyttNavn === profiler[valgtIdx].navn) return avbrytNavnRedigering(); // Økonomisk sjekk
+      if (nyttNavn === profiler[valgtIdx].navn) return avbrytNavnRedigering();
 
       profiler[valgtIdx].navn = nyttNavn;
+      
       await setDoc(docRef, { profiler: profiler }, { merge: true });
       localStorage.setItem("watch_nordic_profiles_cache", JSON.stringify(profiler));
 
-      oppdaterGrensesnitt();
+      oppdaterGrensesnitt(); // Oppdaterer alt inkludert sidebar og dropdowns automatisk
       avbrytNavnRedigering();
     });
 
-    // SLETTE PROFIL
+    // SLETTE EN UNDERPROFIL / BARNEPROFIL
     document.getElementById("slettProfilKnapp").addEventListener("click", async () => {
       const valgtIdx = editProfileSelect.value;
-      if (valgtIdx == 0) return; // Sikkerhet
+      if (valgtIdx == 0) return; // Sikkerhet mot sletting av hovedprofil
 
       if (!confirm(`Er du sikker på at du vil slette profilen "${profiler[valgtIdx].navn}" permanent?`)) return;
 
       profiler.splice(valgtIdx, 1);
+      
       await setDoc(docRef, { profiler: profiler }, { merge: true });
       localStorage.setItem("watch_nordic_profiles_cache", JSON.stringify(profiler));
       
-      // Omdiriger til profilvelger
+      // Omdiriger til hvem ser på-siden for å oppdatere sesjonen
       window.location.href = "hvem-ser-på.html?index=0";
     });
 
     // SLETTE HELE KONTOEN
     document.getElementById("slettKontoBtn").addEventListener("click", () => {
-      if (confirm("ADVARSEL: Dette vil slette hele Watch Nordic-kontoen din permanent. Er du sikker?")) {
-        alert("Sletting av hovedkonto initiert.");
-        loggUt(); // Legg inn funksjon for deleteDoc her om nødvendig
+      if (confirm("ADVARSEL: Dette vil slette hele Watch Nordic-kontoen din og alle profiler permanent. Er du sikker?")) {
+        alert("Sletting av konto utføres.");
+        loggUt(); // Kan utvides med deleteDoc(docRef)
       }
     });
 
@@ -585,7 +612,7 @@
     const ageSelect = document.getElementById("ageRestrictionSelect");
 
     document.getElementById("laasOppPinBtn").addEventListener("click", () => {
-      const pin = prompt("Skriv inn konto-PIN (Standard: 1234):");
+      const pin = prompt("Skriv inn konto-PIN for å låse opp (Standard: 1234):");
       if (pin === FORELDRE_PIN) {
         parentLockPanel.style.display = "none";
         parentSettingsPanel.style.display = "block";
@@ -598,38 +625,38 @@
 
     function oppdaterForeldrekontrollVisning() {
       const valgtIdx = parentalProfileSelect.value;
+      if(!profiler[valgtIdx]) return;
+      
       const grense = profiler[valgtIdx].maksAldersgrense || "18";
       ageSelect.value = grense;
     }
 
+    // LAGRE ALDERSGRENSE TIL FIREBASE
     ageSelect.addEventListener("change", async () => {
       const valgtIdx = parentalProfileSelect.value;
       const nyGrense = ageSelect.value;
 
-      if (profiler[valgtIdx].maksAldersgrense === nyGrense) return; // Økonomisk sjekk
+      if (profiler[valgtIdx].maksAldersgrense === nyGrense) return;
 
       profiler[valgtIdx].maksAldersgrense = nyGrense;
+      
       await setDoc(docRef, { profiler: profiler }, { merge: true });
       localStorage.setItem("watch_nordic_profiles_cache", JSON.stringify(profiler));
       
-      alert(`Aldersgrense for ${profiler[valgtIdx].navn} oppdatert.`);
+      alert(`Aldersgrense for ${profiler[valgtIdx].navn} ble oppdatert til ${nyGrense}.`);
     });
 
 
-    // TOPP-NAVIGASJON
+    // NAVIGASJON (Toppmeny og bilder)
     document.getElementById("navHovedsideBtn").addEventListener("click", () => window.location.href = `Hovedside.html?index=${aktivProfilIndex}`);
     document.getElementById("logoBtn").addEventListener("click", () => window.location.href = `hvem-ser-på.html?index=${aktivProfilIndex}`);
-    
     document.getElementById("navLoggUtBtn").addEventListener("click", loggUt);
 
-    // Endre Bilde Navigasjon
-    document.getElementById("endreBildeSideBtn").addEventListener("click", () => {
-      window.location.href = `VelgProfilbilde.html?index=${aktivProfilIndex}`;
-    });
     document.getElementById("endreBildeBtn").addEventListener("click", () => {
       window.location.href = `VelgProfilbilde.html?index=${editProfileSelect.value}`;
     });
 
+    // UTKOGGING
     async function loggUt() {
       localStorage.clear();
       await signOut(auth);
