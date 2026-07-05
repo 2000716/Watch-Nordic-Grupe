@@ -43,7 +43,7 @@ img, video {
 }
 
 /* ==========================================================================
-   2. TOPPMENY (RESPONSIV)
+   2. TOPPMENY (PC)
    ========================================================================== */
 .top-nav {
   position: fixed;
@@ -56,21 +56,25 @@ img, video {
   justify-content: space-between;
   padding: 0 40px;
   z-index: 9999;
+  box-sizing: border-box;
   background: linear-gradient(to bottom, 
-    rgba(20, 20, 20, 0.95) 0%, 
-    rgba(20, 20, 20, 0.75) 40%, 
-    rgba(20, 20, 20, 0.3) 75%, 
-    rgba(20, 20, 20, 0) 100%
+    rgba(9, 27, 30, 0.95) 0%, 
+    rgba(9, 27, 30, 0.75) 40%, 
+    rgba(9, 27, 30, 0.3) 75%, 
+    rgba(9, 27, 30, 0) 100%
   );
-  transition: background 0.4s ease, height 0.4s ease;
+  transition: background 0.4s ease, box-shadow 0.4s ease, height 0.4s ease;
+}
+
+.top-nav::before {
+  display: none;
 }
 
 .top-nav.scrolled {
   height: 70px;
-  background: rgba(20, 20, 20, 0.98);
+  background: rgba(9, 27, 30, 0.98);
   backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  box-shadow: none;
+  box-shadow: 0 2px 15px rgba(0, 0, 0, 0.6);
 }
 
 .nav-left {
@@ -81,7 +85,7 @@ img, video {
 }
 
 .watch-logo-svg {
-  height: 35px;
+  height: 40px;
   width: auto;
   cursor: pointer;
   display: flex;
@@ -103,7 +107,8 @@ img, video {
   text-decoration: none;
   font-size: 15px;
   font-weight: 500;
-  transition: color 0.3s ease;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.8), 0 2px 8px rgba(0, 0, 0, 0.8);
+  transition: color 0.3s ease, font-size 0.3s ease;
 }
 
 .nav-links a i {
@@ -116,7 +121,7 @@ img, video {
 }
 
 .nav-links a.active {
-  color: #ffffff;
+  color: #00FFCC;
   font-weight: 700;
 }
 
@@ -131,11 +136,12 @@ img, video {
   color: #e0e0e0;
   font-size: 18px;
   text-decoration: none;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.8);
   transition: color 0.3s ease;
 }
 
 .nav-search:hover {
-  color: #ffffff;
+  color: #00FFCC;
 }
 
 .profilmeny {
@@ -143,14 +149,29 @@ img, video {
   align-items: center;
   gap: 10px;
   text-decoration: none;
+  cursor: pointer;
 }
 
 .profilmeny img, #menyProfilbilde {
   width: 42px;
   height: 42px;
-  border-radius: 4px;
+  border-radius: 50%;
   object-fit: cover;
   border: 2px solid #ffffff;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.5);
+  vertical-align: middle;
+  transform: translateY(1px);
+}
+
+/* ==========================================================================
+   3. OPTIMALISERING FOR SMÅ/MELLOMSTORE PC-SKJERMER & LAPTOPS
+   ========================================================================== */
+@media (max-width: 1200px) and (min-width: 769px) {
+  .top-nav { padding: 0 20px; }
+  .nav-left { gap: 20px; }
+  .nav-links { gap: 15px; }
+  .nav-links a { font-size: 14px; }
+  .watch-logo-svg { height: 30px; }
 }
 
 /* ==========================================================================
