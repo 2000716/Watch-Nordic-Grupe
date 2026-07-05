@@ -1,4 +1,4 @@
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="no">
 <head>
   <meta charset="UTF-8" />
@@ -256,18 +256,17 @@ img, video {
   flex-direction: column;
 }
 
-/* Infopanel med en mørkere Apple glassgrå (Frosted Glass) effekt */
 .text-button-container {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
   gap: 40px;
-  background: rgba(30, 30, 30, 0.65); /* Endret til en dypere mørkegrå, transparent tone */
+  background: rgba(30, 30, 30, 0.65);
   backdrop-filter: blur(30px); 
   -webkit-backdrop-filter: blur(30px);
   border-radius: 16px; 
   padding: 40px;
-  border: 1px solid rgba(255, 255, 255, 0.12); /* Subtil lys kant for dybde */
+  border: 1px solid rgba(255, 255, 255, 0.12);
   box-shadow: none;
   width: 100%;
 }
@@ -284,7 +283,6 @@ img, video {
   color: #fff; 
 }
 
-/* Mer-knapp i teksten (Ren, lys grå) */
 .more-btn {
   background: none;
   border: none;
@@ -352,7 +350,7 @@ img, video {
 }
 
 /* ==========================================================================
-   5. STRØMMETJENESTE-KNAPPER (Hvit bakgrunn, svart tekst - Flate og avrundede)
+   5. STRØMMETJENESTE-KNAPPER
    ========================================================================== */
 .buttons-column {
   display: flex;
@@ -361,7 +359,6 @@ img, video {
   min-width: 260px;
 }
 
-/* Alle hovedknapper (inkludert Gjenoppta/paabegynt) er nå helt hvite med svart tekst */
 .watch-button,
 .watch-button.paabegynt,
 #addToListBtn {
@@ -371,8 +368,8 @@ img, video {
   gap: 12px;
   width: 100%;
   padding: 14px 28px;
-  background: #ffffff !important; /* Alltid tvunget hvit bakgrunn */
-  color: #000000 !important;      /* Alltid tvunget svart tekst */
+  background: #ffffff !important;
+  color: #000000 !important;      
   font-size: 16px;
   font-weight: 600;
   text-transform: uppercase;
@@ -390,17 +387,15 @@ img, video {
   font-size: 18px;
 }
 
-/* Helt flatt og rent tonefall ved hover for alle knappetyper */
 .watch-button:hover,
 .watch-button.paabegynt:hover,
 #addToListBtn:hover {
-  background: #e6e6e6 !important; /* Subtilt mørkere hvitfarge ved hover */
+  background: #e6e6e6 !important;
   color: #000000 !important;
   transform: none;
   box-shadow: none;
 }
 
-/* Låst status */
 .watch-button.locked,
 .watch-button[disabled] {
   background: rgba(255, 255, 255, 0.1) !important;
@@ -738,124 +733,132 @@ img, video {
     display: none;
   }
 
-  .hero {
-    /* Gjort relativ slik at bildet kan legge seg som en ekte bakgrunn under innholdet */
+  /* Endret bakgrunnsfargen på hele siden til å matche toppfargen din */
+  body, .hero {
+    background: rgb(9, 27, 30) !important; 
     position: relative; 
     height: auto;
     min-height: auto;
     display: flex;
     flex-direction: column;
-    background: #din-topp-farge; 
   }
 
+  /* Bildet gjøres lenger (65vh) og lagt helt som bakgrunn */
   .background-image,
   .background-video {
-    /* Endret til absolute så den oppfører seg som en ren bakgrunn */
-    position: absolute;
+    position: absolute !important;
     top: 0;
     left: 0;
-    height: 65vh; 
-    width: 100%;
-    z-index: 1;
+    height: 65vh !important; 
+    width: 100% !important;
+    z-index: 1 !important;
     object-fit: cover;
   }
 
+  /* Aktivert og tvunget en glatt fade over bildet som toner ut til toppfargen din */
   .overlay {
-    position: absolute;
+    display: block !important;
+    position: absolute !important;
     top: 0;
     left: 0;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(to top, #din-topp-farge 0%, transparent 100%);
-    z-index: 2; /* Ligger rett over bildet, men under teksten */
+    width: 100% !important;
+    height: 65vh !important;
+    background: linear-gradient(to bottom, transparent 30%, rgb(9, 27, 30) 100%) !important;
+    z-index: 2 !important;
   }
 
+  /* Skjuler den tomme bottom-fade-diven */
   .bottom-fade {
-    display: none;
+    display: none !important;
   }
 
+  /* Flyttet innholdet litt opp, slik at logoen treffer bunnen av faden */
   .content-wrapper {
-    position: relative;
-    inset: auto;
-    width: 100%;
+    position: relative !important;
+    inset: auto !important;
+    width: 100% !important;
     padding: 20px;
-    /* Dytter innholdet ned slik at det starter mot bunnen av det 65vh høye bildet */
-    padding-top: 48vh; 
-    /* Juster denne litt opp/ned (f.eks. -10px eller -20px) hvis du vil ha logoen enda høyere eller lavere på faden */
-    margin-top: -15px; 
-    z-index: 3; /* Sørger for at logo, tekst og knapper ligger øverst */
+    padding-top: 53vh !important; /* Starter innholdet rett før bildets slutt */
+    margin-top: -35px !important; /* Flytter logoen fint oppå overgangen */
+    background: transparent !important;
+    z-index: 3 !important; 
   }
 
   .logo-container {
-    justify-content: center;
-    margin-bottom: 20px;
+    display: flex !important;
+    justify-content: center !important;
+    margin-bottom: 20px !important;
   }
 
   .film-logo {
-    max-width: 60%;
-    max-height: 80px;
+    max-width: 60% !important;
+    max-height: 80px !important;
+    height: auto !important;
   }
 
   .text-button-container {
-    background: transparent;
-    backdrop-filter: none;
-    -webkit-backdrop-filter: none;
-    border: none;
-    box-shadow: none;
-    padding: 0;
-    gap: 20px;
+    background: transparent !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    border: none !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+    gap: 20px !important;
   }
 
   .buttons-column {
-    width: 100%;
-    order: 1;
+    width: 100% !important;
+    order: 1 !important;
   }
 
   .watch-button {
-    width: 100%;
-    padding: 16px;
-    font-size: 16px;
+    width: 100% !important;
+    padding: 16px !important;
+    font-size: 16px !important;
   }
 
   .text-container {
-    order: 2;
+    order: 2 !important;
   }
 
+  /* Oppdatert bakgrunnsfargen på resten av modulene nedover siden */
   .recommendations {
-    margin: 30px 0 0;
-    padding: 0 20px 40px;
-    background: #din-topp-farge;
+    margin: 30px 0 0 !important;
+    padding: 0 20px 40px !important;
+    background: rgb(9, 27, 30) !important;
     position: relative;
     z-index: 3;
   }
 
   .recommendations h2 {
-    font-size: 20px;
+    font-size: 20px !important;
   }
 
   .gallery {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 12px;
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 12px !important;
   }
 
   .movie-card {
-    height: 110px;
-    border-radius: 4px;
+    height: 110px !important;
+    border-radius: 4px !important;
   }
 
   .footer {
-    padding: 40px 20px 20px;
-    background: #din-topp-farge;
+    padding: 40px 20px 20px !important;
+    background: rgb(9, 27, 30) !important;
     position: relative;
     z-index: 3;
   }
 
   .footer-links {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 15px;
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 15px !important;
   }
 }
 </style>
+</head>
+<body>
 
 <header class="top-nav">
   <div class="nav-left">
