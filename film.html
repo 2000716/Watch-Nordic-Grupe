@@ -1006,8 +1006,20 @@ img, video {
      ========================================== */
   document.title = data.tittel || "Watch Nordic";
   
+  // SONE-DATA FIX: Henter fra bannerMobil på telefon, og banner / bakgrunn på desktop
   const bgImg = document.getElementById("backgroundImage");
-  if (bgImg) bgImg.src = data.bakgrunn || "";
+  function oppdaterBakgrunnsBilde() {
+    if (!bgImg) return;
+    const erMobil = window.innerWidth <= 768;
+    
+    if (erMobil && data.bannerMobil) {
+      bgImg.src = data.bannerMobil;
+    } else {
+      bgImg.src = data.banner || data.bakgrunn || "";
+    }
+  }
+  oppdaterBakgrunnsBilde();
+  window.addEventListener("resize", oppdaterBakgrunnsBilde);
 
   const fLogo = document.querySelector(".film-logo");
   const logoContainer = document.querySelector(".logo-container");
@@ -1072,7 +1084,6 @@ img, video {
   function oppdaterWatchKnapp() {
     if (!watchBtn) return;
     
-    // Sørg for at vi har et i-element og et span-element i knappen
     let icon = watchBtn.querySelector("i");
     let text = watchBtn.querySelector("span");
     
@@ -1085,7 +1096,6 @@ img, video {
       watchBtn.appendChild(text);
     }
 
-    // Nullstill klasser for statusendring
     watchBtn.classList.remove("paabegynt");
 
     if (erUtgått) {
@@ -1332,7 +1342,6 @@ img, video {
       if (sesongNumre.length > 0) visSesong(sesongNumre[0]);
 
     } else {
-      // Film-anbefalinger
       const gallery = document.getElementById("recommendationGallery");
       if (!gallery || gallery.children.length > 0) return;
 
