@@ -116,7 +116,7 @@ img, video {
 }
 
 .nav-links a.active {
-  color: #ffffff; /* Endret fra turkis til hvit */
+  color: #ffffff;
   font-weight: 700;
 }
 
@@ -135,7 +135,7 @@ img, video {
 }
 
 .nav-search:hover {
-  color: #ffffff; /* Endret fra turkis til hvit */
+  color: #ffffff;
 }
 
 .profilmeny {
@@ -148,7 +148,7 @@ img, video {
 .profilmeny img, #menyProfilbilde {
   width: 42px;
   height: 42px;
-  border-radius: 4px; /* Endret fra sirkel til moderne avrundet firkant */
+  border-radius: 4px;
   object-fit: cover;
   border: 2px solid #ffffff;
 }
@@ -235,18 +235,19 @@ img, video {
   flex-direction: column;
 }
 
+/* Infopanel med Apple glassgrå (Frosted Glass) effekt */
 .text-button-container {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
   gap: 40px;
-  background: rgba(20, 20, 20, 0.8); /* Gjort mer nøytral mørk i stedet for blåtone */
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border-radius: 8px; /* Mindre avrundet for renere stil */
+  background: rgba(255, 255, 255, 0.08); /* Endret til lys transparent hvit/grå for Apple-look */
+  backdrop-filter: blur(30px); /* Økt blur for mer premium ugjennomsiktig glass-effekt */
+  -webkit-backdrop-filter: blur(30px);
+  border-radius: 16px; /* Litt mer avrundet for å matche Apple-stilen */
   padding: 40px;
-  border: 1px solid rgba(255,255,255,.08);
-  box-shadow: none; /* Fjernet tung skygge */
+  border: 1px solid rgba(255, 255, 255, 0.15); /* Litt tydeligere hvit glasskant */
+  box-shadow: none;
   width: 100%;
 }
 
@@ -259,14 +260,14 @@ img, video {
   font-size: 16px;
   line-height: 1.6;
   margin-bottom: 10px;
-  color: #eee;
+  color: #fff; /* Endret til ren hvit for bedre kontrast på lysere glass */
 }
 
 /* Mer-knapp i teksten (Ren, lys grå) */
 .more-btn {
   background: none;
   border: none;
-  color: #cccccc;
+  color: #e0e0e0;
   font-size: 14px;
   font-weight: 600;
   cursor: pointer;
@@ -286,7 +287,7 @@ img, video {
   flex-wrap: wrap;
   gap: 8px;
   font-size: 13px;
-  color: #ccc;
+  color: #ddd;
   align-items: center;
 }
 
@@ -299,7 +300,7 @@ img, video {
   flex: 0 0 280px;
   max-width: 280px;
   font-size: 13px;
-  color: #aaa;
+  color: #ddd;
   line-height: 1.6;
 }
 
@@ -308,7 +309,7 @@ img, video {
 }
 
 .cast-info a {
-  color: #aaa;
+  color: #ddd;
   text-decoration: none;
   transition: .25s;
 }
@@ -320,17 +321,17 @@ img, video {
 .availability-info {
   margin-top: 15px;
   font-size: 12px;
-  color: #ccc;
+  color: #fff;
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  background: rgba(255,255,255,0.08);
+  background: rgba(255, 255, 255, 0.15);
   padding: 6px 12px;
-  border-radius: 4px;
+  border-radius: 6px;
 }
 
 /* ==========================================================================
-   5. STANDARD STRØMMETJENESTE-KNAPPER (Flate, hvite og enkle)
+   5. STRØMMETJENESTE-KNAPPER (Hvite, flate og mer avrundet)
    ========================================================================== */
 .buttons-column {
   display: flex;
@@ -339,7 +340,7 @@ img, video {
   min-width: 260px;
 }
 
-/* Felles flatt design for "Se nå" og "Min liste" (Hvit bakgrunn, svart tekst) */
+/* Begge hovedknappene er nå helt hvite med sort tekst */
 .watch-button,
 #addToListBtn {
   display: inline-flex;
@@ -355,7 +356,7 @@ img, video {
   text-transform: uppercase;
   letter-spacing: .5px;
   border: none;
-  border-radius: 4px; /* Standard moderne avrunding */
+  border-radius: 12px;
   cursor: pointer;
   box-shadow: none;
   transition: background-color 0.2s ease;
@@ -366,10 +367,10 @@ img, video {
   font-size: 18px;
 }
 
-/* Helt enkel hover-effekt uten glød eller 3D-hopp */
+/* Enkel og ren hover-effekt uten glød eller hopp */
 .watch-button:hover,
 #addToListBtn:hover {
-  background: #e6e6e6; /* Subtil mørkere hvitfarge på hover */
+  background: #e6e6e6;
   color: #000000;
   transform: none;
   box-shadow: none;
@@ -398,7 +399,7 @@ img, video {
 }
 
 /* ==========================================================================
-   6. ANBEFALINGER & EPISODER (FLATT PREMIUM DESIGN)
+   6. ANBEFALINGER & EPISODER (FLATT DESIGN)
    ========================================================================== */
 .recommendations {
   margin: 40px auto 0;
@@ -429,7 +430,7 @@ img, video {
   overflow: hidden;
   position: relative;
   cursor: pointer;
-  transition: opacity .2s ease; /* Endret fra transform til enkel opacity/overgang */
+  transition: opacity .2s ease;
 }
 
 .movie-card img {
@@ -439,14 +440,14 @@ img, video {
 }
 
 .movie-card:hover {
-  transform: none; /* Fjernet zooming av bildekort */
-  box-shadow: none; /* Fjernet skygge */
+  transform: none;
+  box-shadow: none;
 }
 
 .movie-overlay {
   position: absolute;
   inset: 0;
-  background: rgba(0, 0, 0, 0.7); /* Standard flatt overlay */
+  background: rgba(0, 0, 0, 0.7);
   opacity: 0;
   transition: opacity .2s ease;
   display: flex;
@@ -505,7 +506,7 @@ img, video {
 }
 
 .episode-card:hover {
-  transform: none; /* Fjernet bevegelse */
+  transform: none;
   border: 1px solid rgba(255,255,255,.5);
 }
 
