@@ -135,7 +135,11 @@
       align-items: center;
     }
 
-    .back-button { 
+    /* Fikset: Fjerner understreking og standardfarge for lenken permanent */
+    .back-button, 
+    .back-button:visited, 
+    .back-button:hover, 
+    .back-button:active { 
       background: none; 
       border: none; 
       cursor: pointer; 
@@ -143,6 +147,8 @@
       align-items: center;
       justify-content: center;
       transition: transform 0.2s ease;
+      text-decoration: none !important;
+      outline: none;
     }
     .back-button:hover { transform: scale(1.1); }
 
@@ -835,7 +841,13 @@ async function ryddeOgNeste() {
       await setDoc(userDocRef, { profiler: heleProfilArrayet }, { merge: true });
     } catch (e) { console.error(e); }
   }
-  window.location.href = nesteEpisodeUrl ? nesteEpisodeUrl : tilbakeUrl;
+  
+  // Hvis det er en serie og det finnes en neste episode, gå til den. Hvis ikke, gå til info-siden.
+  if (isSerie && nesteEpisodeUrl) {
+    window.location.href = nesteEpisodeUrl;
+  } else {
+    window.location.href = tilbakeUrl;
+  }
 }
 
 window.addEventListener('beforeunload', () => {
@@ -977,7 +989,11 @@ document.addEventListener('fullscreenchange', () => {
 
 video.addEventListener('waiting', () => loadingSpinner.style.display = 'block');
 video.addEventListener('playing', () => loadingSpinner.style.display = 'none');
-video.addEventListener('ended', async () => { await ryddeOgNeste(); });
+
+// Håndterer at videoen slutter helt
+video.addEventListener('ended', async () => { 
+  await ryddeOgNeste(); 
+});
 
 let globalSubtitleSetting = localStorage.getItem("global-subtitle-setting") || "off";
 function updateSubtitleButtons(activeLang) {
@@ -1001,8 +1017,9 @@ video.addEventListener("timeupdate", () => {
     }
   }
 
+  // Trigger kun autoplay hvis innholdet faktisk er en serie og det eksisterer en URL for neste episode
   const triggerTid = film.outroStart != null ? film.outroStart : (video.duration - 15);
-  if (tid >= triggerTid && !autoplayTriggered && !video.paused && nesteEpisodeUrl) {
+  if (isSerie && nesteEpisodeUrl && tid >= triggerTid && !autoplayTriggered && !video.paused) {
     autoplayTriggered = true;
     startPremiumAutoplay();
   }
