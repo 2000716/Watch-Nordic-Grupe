@@ -743,18 +743,26 @@ img, video {
     min-height: auto;
     display: flex;
     flex-direction: column;
-    background: #000;
+    /* BYTTET TIL DIN TOPPFARGE: Sørger for at bakgrunnen bak innholdet matcher */
+    background: #din-topp-farge; 
   }
 
   .background-image,
   .background-video {
     position: relative;
-    height: 45vh;
+    height: 65vh; 
     width: 100%;
   }
 
   .overlay {
-    background: linear-gradient(to top, #000 0%, transparent 100%);
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    /* BYTTET TIL DIN TOPPFARGE: Fader mykt over til fargen du har øverst */
+    background: linear-gradient(to top, #din-topp-farge 0%, transparent 100%);
+    z-index: 1;
   }
 
   .bottom-fade {
@@ -766,7 +774,10 @@ img, video {
     inset: auto;
     width: 100%;
     padding: 20px;
-    margin-top: -40px;
+    margin-top: 0; 
+    z-index: 2;
+    /* SIKKERHET: Tvinger bakgrunnen her til å bruke samme farge om innholdet strekker seg */
+    background: #din-topp-farge;
   }
 
   .logo-container {
@@ -807,6 +818,8 @@ img, video {
   .recommendations {
     margin: 30px 0 0;
     padding: 0 20px 40px;
+    /* SIKKERHET: Passer på at anbefalingene også har riktig bakgrunn */
+    background: #din-topp-farge;
   }
 
   .recommendations h2 {
@@ -825,6 +838,8 @@ img, video {
 
   .footer {
     padding: 40px 20px 20px;
+    /* VALGFRITT: Hvis du vil at footeren også skal smelte sammen med resten */
+    background: #din-topp-farge;
   }
 
   .footer-links {
