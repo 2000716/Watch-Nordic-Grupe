@@ -9,7 +9,7 @@
   <link rel="icon" type="image/png" href="https://static.wixstatic.com/media/fd2fb2_39376e4ee55b460ab7a3ebbfcf35fef7~mv2.png" />
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
-  <style>
+<style>
     /* ================= SYSTEM RESET & GRUNNOPPSETT ================= */
     * { 
       margin: 0; 
@@ -32,17 +32,35 @@
       height: 100vh; 
       overflow: hidden; 
       background: #000;
+      display: flex;
+      justify-content: center;
+      align-items: center;
     }
 
-    /* Omgivelsene rundt videoen som krymper ved outro/autoplay */
+    /* Omgivelsene rundt videoen som tilpasser seg og krymper sømløst ved outro */
     #videoWrapper {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: #000;
       box-shadow: 0 0 0 rgba(0,0,0,0);
+      transition: all 0.4s ease-in-out; /* Sørger for glatt overgang ved Netflix-krymping */
     }
 
+    /* Videoen respekterer nå filmens originale bredde og høyde (aspect ratio) */
     video {
       width: 100%;
       height: 100%;
-      object-fit: contain;
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain; /* Sikrer at filmen aldri strekkes eller kuttes, men fyller optimalt */
       background: #000;
     }
 
@@ -121,10 +139,12 @@
       background: none; 
       border: none; 
       cursor: pointer; 
+      display: flex;
+      align-items: center;
+      justify-content: center;
       transition: transform 0.2s ease;
     }
-    .back-button:hover { transform: scale(1.08); }
-    .back-button img { width: 44px; height: 44px; }
+    .back-button:hover { transform: scale(1.1); }
 
     .movie-title {
       color: #fff;
@@ -153,7 +173,7 @@
       display: flex;
       gap: 24px;
       align-items: center;
-      min-width: 120px;
+      min-width: 150px;
     }
     .right-controls { justify-content: flex-end; }
 
@@ -166,6 +186,7 @@
       gap: 35px;
     }
 
+    /* Justert for å passe FontAwesome vector-ikoner perfekt */
     .btn { 
       background: none; 
       border: none; 
@@ -174,15 +195,15 @@
       align-items: center;
       justify-content: center;
       transition: transform 0.15s ease;
+      padding: 5px;
     }
-    .btn:hover { transform: scale(1.1); }
-    .btn active { transform: scale(0.95); }
-    .btn img { width: 34px; height: 34px; }
+    .btn:hover { transform: scale(1.15); }
+    .btn:active { transform: scale(0.95); }
 
     /* ================= PROGRESS BAR (TIDSSTRIPEN) ================= */
     .progress-container {
       position: absolute;
-      bottom: 80px;
+      bottom: 85px;
       left: 0;
       width: 100%;
       padding: 0 40px;
@@ -199,7 +220,7 @@
       transition: height 0.1s ease;
     }
     .progress-container:hover .progress { 
-      height: 7px; 
+      height: 6px; 
     }
 
     .progress-filled {
@@ -228,12 +249,12 @@
       transform: translate(-50%, -50%) scale(1); 
     }
     .thumb:hover {
-      transform: translate(-50%, -50%) scale(1.3) !important;
+      transform: translate(-50%, -50%) scale(1.25) !important;
     }
 
     .time-display {
       position: absolute;
-      bottom: 95px;
+      bottom: 100px;
       right: 40px;
       color: rgba(255, 255, 255, 0.7);
       font-size: 13px;
@@ -292,7 +313,7 @@
     /* Forhåndsvisning ved søking */
     .preview-box {
       position: absolute;
-      bottom: 105px;
+      bottom: 110px;
       width: 220px;
       height: 124px;
       background: #000;
@@ -379,18 +400,11 @@
 
     /* ================= RESPONSIVITET & MOBIL (100% SØMLØS) ================= */
     @media (max-width: 768px) {
-      video {
-        object-fit: contain; /* Hindrer at sider av filmen blir kuttet bort i stående modus */
-      }
-      
       .top-bar { padding: 15px 20px; }
-      .back-button img { width: 36px; height: 36px; }
       .movie-title { font-size: 16px; margin-left: 12px; }
 
       .controls { padding: 15px 20px; }
       .center-controls { gap: 20px; }
-      .center-controls .btn img { width: 26px; height: 26px; }
-      .left-controls .btn img, .right-controls .btn img { width: 24px; height: 24px; }
       
       .progress-container { bottom: 65px; padding: 0 20px; }
       .time-display { bottom: 78px; right: 20px; font-size: 11px; }
@@ -408,16 +422,16 @@
       .preview-box { width: 160px; height: 90px; bottom: 85px; }
     }
 
-    /* Ekstra tilpasning for små telefoner (f.eks. stående iPhone SE) */
     @media (max-width: 480px) {
       .center-controls { gap: 15px; }
       .movie-title { max-width: 180px; }
       .right-controls { gap: 14px; }
       #nextEpisodeBtn { font-size: 12px !important; margin-right: 5px !important; }
     }
-  </style>
+</style>
 </head>
 <body>
+  
   <div class="container" id="container">
     
     <div id="videoWrapper">
@@ -508,9 +522,7 @@
     <div class="ui" id="ui">
       
       <div class="top-bar">
-        <a href="#" class="back-button" id="backButton">
-          <img src="https://static.wixstatic.com/media/fd2fb2_59ea5a2a1ff34303a71a369537dd62c3~mv2.png" alt="Tilbake">
-        </a>
+        <a href="#" class="back-button" id="backButton"></a>
         <div class="movie-title">Laster tittel...</div>
       </div>
 
@@ -532,30 +544,18 @@
         <div class="left-controls"></div>
 
         <div class="center-controls">
-          <button class="btn" id="rewindBtn" title="10 sekunder tilbake">
-            <img src="https://static.wixstatic.com/media/fd2fb2_a6f7229c8e994a75a12d5849e71156a9~mv2.png" alt="Spol tilbake">
-          </button>
-          <button class="btn" id="playPauseBtn" title="Spill / Pause">
-            <img id="playIcon" src="https://static.wixstatic.com/media/fd2fb2_f6f25f56b00e49eea8dc4f811b50bb5c~mv2.png" alt="Spill/Pause">
-          </button>
-          <button class="btn" id="forwardBtn" title="10 sekunder frem">
-            <img src="https://static.wixstatic.com/media/fd2fb2_08262621a72944c498e8124d461ce786~mv2.png" alt="Spol frem">
-          </button>
+          <button class="btn" id="rewindBtn" title="10 sekunder tilbake"></button>
+          <button class="btn" id="playPauseBtn" title="Spill / Pause"></button>
+          <button class="btn" id="forwardBtn" title="10 sekunder frem"></button>
         </div>
 
         <div class="right-controls">
           <button id="nextEpisodeBtn" class="btn" style="display: none; color: white; font-weight: bold; background: none; border: none; cursor: pointer; font-size: 14px; margin-right: 15px;">
             Neste ⏭️
           </button>
-          <button class="btn" id="muteBtn" title="Lyd av/på">
-            <img id="muteIcon" src="https://static.wixstatic.com/media/fd2fb2_5c4fab8430e94d2381fc487b1654191d~mv2.png" alt="Lyd">
-          </button>
-          <button class="btn" id="captionsBtn" title="Undertekster og lydspråk">
-            <img src="https://static.wixstatic.com/media/fd2fb2_25072ee44a734507912f0b65f9fc9b0e~mv2.png" alt="Teksting">
-          </button>
-          <button class="btn" id="fullscreenBtn" title="Fullskjerm">
-            <img src="https://static.wixstatic.com/media/fd2fb2_3fa37682b3b34c04a2cd08ffcde2763a~mv2.png" alt="Fullskjerm">
-          </button>
+          <button class="btn" id="muteBtn" title="Lyd av/på"></button>
+          <button class="btn" id="captionsBtn" title="Undertekster og lydspråk"></button>
+          <button class="btn" id="fullscreenBtn" title="Fullskjerm"></button>
         </div>
       </div>
 
@@ -568,7 +568,7 @@
 
     </div>
   </div>
-  
+
 <script src="Filmdata.js"></script>
 <script src="Seriedata.js"></script>
 <script type="module">
@@ -618,9 +618,10 @@ document.title = film.tittel;
 const movieTitleEl = document.querySelector(".movie-title");
 if (movieTitleEl && film?.tittel) movieTitleEl.textContent = film.tittel;
 
+// Fikset tilbakeknapp med tynt lukk-ikon (fa-regular fa-xmark)
 const backButton = document.getElementById("backButton");
 if (backButton) {
-  backButton.innerHTML = '<i class="fa-solid fa-xmark" style="color: #ffffff; font-size: 28px; padding: 5px;"></i>';
+  backButton.innerHTML = '<i class="fa-regular fa-xmark" style="color: #ffffff; font-size: 26px; padding: 5px; font-weight: 300;"></i>';
   backButton.addEventListener("click", async (e) => {
     e.preventDefault();
     await lagreSistePosisjonEkspress();
@@ -670,13 +671,13 @@ let subtitlesEnabled = true;
 let autoplayTriggered = false;
 let lokalLagringsInterval;
 
-// Plasserer strømme-ikonene i kontrollknappene
-if (rewindBtn) rewindBtn.innerHTML = '<i class="fa-solid fa-rotate-left" style="color: #ffffff; font-size: 22px;"></i>';
-if (forwardBtn) forwardBtn.innerHTML = '<i class="fa-solid fa-rotate-right" style="color: #ffffff; font-size: 22px;"></i>';
-if (captionsBtn) captionsBtn.innerHTML = '<i class="fa-solid fa-closed-captioning" style="color: #ffffff; font-size: 22px;"></i>';
-if (fullscreenBtn) fullscreenBtn.innerHTML = '<i class="fa-solid fa-expand" style="color: #ffffff; font-size: 22px;"></i>';
-if (playBtn) playBtn.innerHTML = '<i class="fa-solid fa-play" style="color: #ffffff; font-size: 26px;"></i>';
-if (muteBtn) muteBtn.innerHTML = '<i class="fa-solid fa-volume-high" style="color: #ffffff; font-size: 22px;"></i>';
+// Plasserer nye, tynne premium strømme-ikoner (fa-regular) i kontrollknappene
+if (rewindBtn) rewindBtn.innerHTML = '<i class="fa-regular fa-rotate-left" style="color: #ffffff; font-size: 22px;"></i>';
+if (forwardBtn) forwardBtn.innerHTML = '<i class="fa-regular fa-rotate-right" style="color: #ffffff; font-size: 22px;"></i>';
+if (captionsBtn) captionsBtn.innerHTML = '<i class="fa-regular fa-closed-captioning" style="color: #ffffff; font-size: 22px;"></i>';
+if (fullscreenBtn) fullscreenBtn.innerHTML = '<i class="fa-regular fa-expand" style="color: #ffffff; font-size: 22px;"></i>';
+if (playBtn) playBtn.innerHTML = '<i class="fa-regular fa-play" style="color: #ffffff; font-size: 26px;"></i>';
+if (muteBtn) muteBtn.innerHTML = '<i class="fa-regular fa-volume-high" style="color: #ffffff; font-size: 22px;"></i>';
 
 function hentNesteEpisodeUrl() {
   if (navn && sesong && episode && typeof serier !== "undefined" && serier?.[navn]) {
@@ -861,20 +862,22 @@ document.addEventListener('keydown', e => {
   if (e.key === 'ArrowLeft') video.currentTime -= 10;
 });
 
+// Tynne ikoner ved tilstandsendring (spill/pause)
 video.addEventListener('play', () => { 
-  playBtn.innerHTML = '<i class="fa-solid fa-pause" style="color: #ffffff; font-size: 26px;"></i>'; 
+  playBtn.innerHTML = '<i class="fa-regular fa-pause" style="color: #ffffff; font-size: 26px;"></i>'; 
   showUI(); 
 });
 video.addEventListener('pause', () => { 
-  playBtn.innerHTML = '<i class="fa-solid fa-play" style="color: #ffffff; font-size: 26px;"></i>'; 
+  playBtn.innerHTML = '<i class="fa-regular fa-play" style="color: #ffffff; font-size: 26px;"></i>'; 
   showUI(); 
 });
 
+// Tynne ikoner for volum av/på
 muteBtn.addEventListener('click', () => {
   video.muted = !video.muted;
   muteBtn.innerHTML = video.muted
-    ? '<i class="fa-solid fa-volume-xmark" style="color: #ffffff; font-size: 22px;"></i>'
-    : '<i class="fa-solid fa-volume-high" style="color: #ffffff; font-size: 22px;"></i>';
+    ? '<i class="fa-regular fa-volume-xmark" style="color: #ffffff; font-size: 22px;"></i>'
+    : '<i class="fa-regular fa-volume-high" style="color: #ffffff; font-size: 22px;"></i>';
 });
 
 rewindBtn.addEventListener('click', () => video.currentTime = Math.max(0, video.currentTime - 10));
@@ -965,8 +968,8 @@ document.addEventListener('keydown', showUI);
 fullscreenBtn.addEventListener('click', () => { if (!document.fullscreenElement) { container.requestFullscreen(); } else { document.exitFullscreen(); } });
 document.addEventListener('fullscreenchange', () => {
   fullscreenBtn.innerHTML = document.fullscreenElement 
-    ? '<i class="fa-solid fa-compress" style="color: #ffffff; font-size: 22px;"></i>' 
-    : '<i class="fa-solid fa-expand" style="color: #ffffff; font-size: 22px;"></i>';
+    ? '<i class="fa-regular fa-compress" style="color: #ffffff; font-size: 22px;"></i>' 
+    : '<i class="fa-regular fa-expand" style="color: #ffffff; font-size: 22px;"></i>';
 });
 
 video.addEventListener('waiting', () => loadingSpinner.style.display = 'block');
