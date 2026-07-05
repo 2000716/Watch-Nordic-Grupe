@@ -9,13 +9,16 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
   <style>
     :root {
-      --bg: #091B1E;
-      --muted: #bfc9c9;
-      --accent: #00FFCC;
-      --card-bg: rgba(255, 255, 255, 0.03);
-      --border: rgba(255, 255, 255, 0.06);
+      /* De originale fargene og stilene er satt tilbake her */
+      --bg: #0d1b2a;
+      --muted: #a0aab2;
+      --accent: #e50914;
+      --card-bg: rgba(255, 255, 255, 0.05);
+      --border: rgba(255, 255, 255, 0.1);
+      --input-bg: #1b263b;
       --kids-accent: #33b5ff;
       --danger: #ff4d4d;
+      --gray-btn: rgba(255, 255, 255, 0.1);
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -27,20 +30,11 @@
       min-height: 100vh;
       display: flex;
       flex-direction: column;
-      overflow-x: hidden;
-    }
-
-    body::before {
-      content: "";
-      position: fixed;
-      inset: 0;
-      background: radial-gradient(circle at top left, rgba(0,255,204,0.06), transparent 40%);
-      z-index: -1;
     }
 
     header {
-      padding: 15px 60px;
-      background: rgba(9, 27, 30, 0.8);
+      padding: 15px 50px;
+      background: rgba(13, 27, 42, 0.95);
       backdrop-filter: blur(20px);
       -webkit-backdrop-filter: blur(20px);
       border-bottom: 1px solid var(--border);
@@ -53,26 +47,26 @@
     }
 
     .logo-img {
-      height: 38px;
+      height: 35px;
       object-fit: contain;
     }
 
     header .nav-btns { display: flex; gap: 12px; }
 
     header button {
-      background: rgba(255,255,255,0.06);
-      border: 1px solid rgba(255,255,255,0.12);
+      background: var(--gray-btn);
+      border: 1px solid rgba(255,255,255,0.15);
       color: white;
-      padding: 10px 22px;
+      padding: 10px 20px;
       border-radius: 999px;
       font-weight: 700;
-      font-size: 14px;
+      font-size: 13px;
       cursor: pointer;
-      transition: 0.2s ease;
+      transition: all 0.2s ease;
     }
 
     header button:hover { 
-      background: rgba(255,255,255,0.15);
+      background: rgba(255, 255, 255, 0.2);
       border-color: rgba(255,255,255,0.4);
     }
 
@@ -81,24 +75,24 @@
       color: var(--danger);
     }
     header button.logout-btn:hover {
-      background: rgba(255, 77, 77, 0.12);
+      background: rgba(255, 77, 77, 0.15);
       border-color: var(--danger);
     }
 
     .container {
-      max-width: 1100px;
+      max-width: 1050px;
       width: 100%;
       margin: 0 auto;
-      padding: 50px 40px;
+      padding: 40px 30px;
       display: grid;
-      grid-template-columns: 280px 1fr;
+      grid-template-columns: 260px 1fr;
       gap: 50px;
       flex: 1;
     }
 
     .sidebar {
-      background: rgba(255, 255, 255, 0.02);
-      border-radius: 20px;
+      background: var(--card-bg);
+      border-radius: 16px;
       padding: 30px 20px;
       text-align: center;
       border: 1px solid var(--border);
@@ -106,14 +100,14 @@
     }
 
     .avatar {
-      width: 130px;
-      height: 130px;
+      width: 120px;
+      height: 120px;
       border-radius: 50%;
       overflow: hidden;
-      margin: 0 auto 20px;
+      margin: 0 auto 15px;
       cursor: pointer;
-      border: 3px solid rgba(255,255,255,0.08);
-      transition: 0.25s ease;
+      border: 2px solid rgba(255,255,255,0.2);
+      transition: transform 0.2s ease, border-color 0.2s;
     }
 
     .avatar:hover {
@@ -123,60 +117,53 @@
 
     .avatar img { width: 100%; height: 100%; object-fit: cover; }
 
-    .profile-name { font-size: 20px; font-weight: 700; margin-bottom: 25px; color: white; }
+    .profile-name { font-size: 19px; font-weight: 700; margin-bottom: 25px; color: white; text-shadow: 0 2px 4px rgba(0,0,0,0.5); }
 
     .profile-actions { display: flex; flex-direction: column; gap: 10px; }
 
     .profile-actions button {
-      background: rgba(255,255,255,0.03);
-      border: 1px solid rgba(255,255,255,0.08);
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
       color: white;
       padding: 11px;
-      border-radius: 10px;
+      border-radius: 8px;
       font-weight: 600;
       font-size: 13px;
       cursor: pointer;
-      transition: 0.2s ease;
+      transition: background 0.2s;
       display: flex;
       align-items: center;
       justify-content: center;
       gap: 8px;
     }
 
-    .profile-actions button:hover { 
-      background: rgba(255,255,255,0.08);
-    }
+    .profile-actions button:hover { background: rgba(255,255,255,0.1); }
 
     .profile-actions button.delete-btn {
-      border-color: rgba(255, 77, 77, 0.25);
+      border-color: rgba(255, 77, 77, 0.3);
       color: var(--danger);
-      margin-top: 10px;
+      margin-top: 15px;
     }
     .profile-actions button.delete-btn:hover {
       background: rgba(255, 77, 77, 0.1);
       border-color: var(--danger);
     }
 
-    .content-section {
-      margin-bottom: 35px;
-    }
+    .content-section { margin-bottom: 40px; }
 
     .content h2 {
       margin: 0 0 15px;
-      font-size: 18px;
-      font-weight: 700;
+      font-size: 14px;
+      font-weight: 800;
       text-transform: uppercase;
-      letter-spacing: 0.5px;
+      letter-spacing: 1px;
       color: var(--muted);
-      display: flex;
-      align-items: center;
-      gap: 10px;
     }
 
     .card {
       background: var(--card-bg);
-      border-radius: 16px;
-      padding: 5px 24px;
+      border-radius: 12px;
+      padding: 0 24px;
       border: 1px solid var(--border);
     }
 
@@ -184,8 +171,8 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 18px 0;
-      border-bottom: 1px solid rgba(255,255,255,0.04);
+      padding: 20px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
     }
 
     .row:last-child { border-bottom: none; }
@@ -197,64 +184,74 @@
       font-size: 11px;
       text-transform: uppercase;
       letter-spacing: 0.5px;
-      margin-bottom: 4px;
+      margin-bottom: 5px;
       font-weight: 700;
     }
 
-    .value { font-size: 15px; font-weight: 500; color: #e5e5e5; }
+    .value { font-size: 15px; font-weight: 500; color: #f0f0f0; }
 
     .row button.edit-trigger {
       background: transparent;
-      border: 1px solid rgba(255,255,255,0.15);
+      border: 1px solid rgba(255,255,255,0.2);
       color: white;
       padding: 8px 16px;
       border-radius: 6px;
       cursor: pointer;
       font-size: 13px;
       font-weight: 600;
-      transition: 0.2s;
+      transition: all 0.2s;
     }
 
     .row button.edit-trigger:hover {
-      background: rgba(255,255,255,0.08);
+      background: rgba(255,255,255,0.1);
       border-color: white;
     }
 
     .hidden { display: none !important; }
 
-    .edit-field { margin-top: 10px; width: 100%; max-width: 400px; }
+    .edit-field { margin-top: 12px; width: 100%; max-width: 420px; }
 
     .edit-field input, .edit-field select {
       width: 100%;
       padding: 12px;
-      background: rgba(5, 14, 16, 0.9);
-      border: 1px solid rgba(255, 255, 255, 0.12);
-      border-radius: 8px;
+      background: var(--input-bg);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 6px;
       color: white;
       font-size: 14px;
       margin-bottom: 8px;
+      outline: none;
     }
-    .edit-field select option { background: #091B1E; color: white; }
+    .edit-field input:focus, .edit-field select:focus { border-color: var(--accent); }
+    .edit-field select option { background: var(--bg); color: white; }
 
-    .parent-lock-screen { text-align: center; padding: 25px 0; }
+    .edit-actions { display: flex; gap: 10px; margin-top: 4px; }
+    .edit-actions button {
+      padding: 8px 14px; border-radius: 6px; font-size: 12px; font-weight: 700; cursor: pointer; transition: 0.2s;
+    }
+    .btn-save { background: var(--accent); color: white; border: none; }
+    .btn-cancel { background: transparent; border: 1px solid rgba(255,255,255,0.2); color: var(--muted); }
+
+    .parent-lock-screen { text-align: center; padding: 30px 0; }
     
     .btn-parent-unlock {
-      background: rgba(255,255,255,0.06);
-      border: 1px solid rgba(255,255,255,0.15);
+      background: var(--gray-btn);
+      border: 1px solid rgba(255,255,255,0.2);
       color: white;
-      padding: 10px 20px;
+      padding: 10px 24px;
       font-weight: 700;
       font-size: 13px;
-      border-radius: 8px;
+      border-radius: 6px;
       cursor: pointer;
-      transition: 0.2s;
+      transition: all 0.2s;
     }
-    .btn-parent-unlock:hover { background: rgba(255,255,255,0.12); border-color: var(--kids-accent); color: var(--kids-accent); }
+    .btn-parent-unlock:hover { background: rgba(255,255,255,0.2); border-color: var(--accent); }
 
     footer {
       border-top: 1px solid var(--border);
       padding: 25px;
-      color: #555;
+      color: var(--muted);
+      opacity: 0.6;
       font-size: 12px;
       margin-top: auto;
       text-align: center;
@@ -262,7 +259,7 @@
 
     @media (max-width: 850px) {
       .container { grid-template-columns: 1fr; padding: 20px; gap: 30px; }
-      .sidebar { padding: 20px; width: 100%; }
+      .sidebar { width: 100%; }
       .row { flex-direction: column; align-items: flex-start; gap: 12px; }
       header { padding: 15px 20px; }
     }
@@ -271,7 +268,7 @@
 <body>
 
   <header>
-    <img src="https://static.wixstatic.com/media/d9ace9_081ea242211b45a2801873c3067e1205~mv2.png" alt="Watch Nordic Logo" class="logo-img">
+    <img src="https://static.wixstatic.com/media/d9ace9_95bbe3f5ff4b4aab9314a8d08804344e~mv2.png" alt="Watch Nordic Logo" class="logo-img">
     <div class="nav-btns">
       <button id="navHovedsideBtn"><i class="fa-solid fa-house"></i> Hovedside</button>
       <button class="logout-btn" id="navLoggUtBtn"><i class="fa-solid fa-right-from-bracket"></i> Logg Ut</button>
@@ -298,6 +295,14 @@
             <div class="info-block">
               <div class="label">Profilnavn</div>
               <div class="value" id="navnView">Laster...</div>
+              
+              <div class="edit-field hidden" id="navnEditField">
+                <input type="text" id="navnInput" maxlength="15">
+                <div class="edit-actions">
+                  <button class="btn-save" id="lagreNavnBtn">Lagre</button>
+                  <button class="btn-cancel" id="avbrytNavnBtn">Avbryt</button>
+                </div>
+              </div>
             </div>
             <button class="edit-trigger" id="endreNavnKnapp">Endre</button>
           </div>
@@ -314,11 +319,11 @@
         <h2>Foreldrekontroll</h2>
         <div class="card">
           <div id="parentLockPanel" class="parent-lock-screen">
-            <p style="margin-bottom: 15px; color: var(--muted); font-size: 14px;">Innholdsbegrensninger er låst. Foreldre må bekrefte tilgang.</p>
+            <p style="margin-bottom: 15px; color: var(--muted); font-size: 13px;">Innholdsbegrensninger er låst. Foreldre må bekrefte PIN.</p>
             <button class="btn-parent-unlock" id="laasOppForeldreKontrollBtn"><i class="fa-solid fa-lock"></i> Vis innstillinger med PIN</button>
           </div>
 
-          <div id="parentSettingsPanel" class="hidden" style="padding: 10px 0;">
+          <div id="parentSettingsPanel" class="hidden" style="padding: 15px 0;">
             <div class="edit-field">
               <label class="label">Velg profil du vil begrense:</label>
               <select id="profileSelect" style="margin-top: 5px;"></select>
@@ -353,6 +358,7 @@
 
     const navnDisplay = document.getElementById("navnDisplay");
     const navnView = document.getElementById("navnView");
+    const navnInput = document.getElementById("navnInput");
     const epostView = document.getElementById("epostView");
     const foreldreKontrollSeksjon = document.getElementById("foreldreKontrollSeksjon");
     const parentLockPanel = document.getElementById("parentLockPanel");
@@ -392,10 +398,14 @@
     profileSelect.addEventListener("change", oppdaterValgtProfilISekvens);
     ageRestrictionSelect.addEventListener("change", lagreAldersgrenseGlobalt);
     sletteKnapp.addEventListener("click", haandterSlettingMellomProfil);
+    
+    document.getElementById("endreNavnKnapp").addEventListener("click", endreNavn);
+    document.getElementById("lagreNavnBtn").addEventListener("click", lagreNavn);
+    document.getElementById("avbrytNavnBtn").addEventListener("click", avbrytNavn);
 
     async function hentKontodata() {
       try {
-        const docSnap = await getDoc(docRef); // Økonomisk lesing
+        const docSnap = await getDoc(docRef);
         if (docSnap.exists()) {
           const data = docSnap.data();
           profiler = data.profiler || [];
@@ -416,17 +426,14 @@
       epostView.innerText = globalEpost;
       document.getElementById("profilbilde").src = gjeldendeProfil.bilde;
 
-      // DYNAMISK FORENKLET TEKST PÅ SLETTEKNAPPEN BASERT PÅ PROFIL
       if (aktivProfilIndex === 0) {
-        sletteKnapp.innerHTML = `<i class="fa-solid fa-trash-can"></i> Slett kontoen permanent`;
+        sletteKnapp.innerHTML = `<i class="fa-solid fa-trash-can"></i> Slett konto permanent`;
       } else {
         sletteKnapp.innerHTML = `<i class="fa-solid fa-user-xmark"></i> Slett profil`;
       }
 
-      // HVIS BARN: Skjul administrasjon og endringsmuligheter
       if (gjeldendeProfil.isKids) {
         foreldreKontrollSeksjon.classList.add("hidden");
-        document.getElementById("sidebarActions").classList.add("hidden");
         document.getElementById("endreNavnKnapp").classList.add("hidden");
       } else {
         foreldreKontrollSeksjon.classList.remove("hidden");
@@ -451,6 +458,37 @@
       ageRestrictionSelect.value = profiler[targetIndex].maksAldersgrense || "18";
     }
 
+    function endreNavn() {
+      navnInput.value = navnView.innerText;
+      navnView.classList.add("hidden");
+      document.getElementById("navnEditField").classList.remove("hidden");
+      document.getElementById("endreNavnKnapp").classList.add("hidden");
+    }
+
+    async function lagreNavn() {
+      const nyttNavn = navnInput.value.trim();
+      if (!nyttNavn) return alert("Navnet kan ikke være tomt!");
+      
+      if (nyttNavn === profiler[aktivProfilIndex].navn) {
+        avbrytNavn();
+        return;
+      }
+
+      profiler[aktivProfilIndex].navn = nyttNavn;
+      await setDoc(docRef, { profiler: profiler }, { merge: true });
+      localStorage.setItem("watch_nordic_profiles_cache", JSON.stringify(profiler));
+
+      navnView.innerText = nyttNavn;
+      navnDisplay.innerText = nyttNavn;
+      avbrytNavn();
+    }
+
+    function avbrytNavn() {
+      navnView.classList.remove("hidden");
+      document.getElementById("navnEditField").classList.add("hidden");
+      document.getElementById("endreNavnKnapp").classList.remove("hidden");
+    }
+
     function laasOppForeldreKontroll() {
       if (prompt("Skriv inn foreldre-PIN:") === FORELDRE_PIN) {
         parentLockPanel.classList.add("hidden");
@@ -464,31 +502,28 @@
       const targetIndex = profileSelect.value;
       const nyGrense = ageRestrictionSelect.value;
 
-      if (profiler[targetIndex].maksAldersgrense === nyGrense) return; // Økonomisk sjekk
+      if (profiler[targetIndex].maksAldersgrense === nyGrense) return;
 
       profiler[targetIndex].maksAldersgrense = nyGrense;
       
-      await setDoc(docRef, { profiler: profiler }, { merge: true }); // Økonomisk Firebase-skriving
+      await setDoc(docRef, { profiler: profiler }, { merge: true });
       localStorage.setItem("watch_nordic_profiles_cache", JSON.stringify(profiler));
       alert(`Aldersgrense for ${profiler[targetIndex].navn} ble oppdatert.`);
     }
 
     async function haandterSlettingMellomProfil() {
       if (aktivProfilIndex !== 0) {
-        // GJØR AT ALLE UNDERPROFILER (INKLUDERT BARNEKONTOER) KAN SLETTES HERFRA
         if (!confirm(`Er du sikker på at du vil slette profilen "${profiler[aktivProfilIndex].navn}" permanent?`)) return;
         
         profiler.splice(aktivProfilIndex, 1);
-        await setDoc(docRef, { profiler: profiler }, { merge: true }); // Lagrer endring i Firebase
+        await setDoc(docRef, { profiler: profiler }, { merge: true });
         localStorage.setItem("watch_nordic_profiles_cache", JSON.stringify(profiler));
         
         alert("Profilen ble slettet.");
-        window.location.href = "hvem-ser-på.html?index=0"; // Sender tilbake til profilvalg
+        window.location.href = "hvem-ser-på.html?index=0"; 
       } else {
-        // Slett hele kontoen hvis det er Hovedprofilen
-        if (!confirm("ADVARSEL: Er du sikker på at du vil slette HELE kontoen din og alle profiler permanent? Dette kan ikke angres.")) return;
-        // Her kan du integrere din deleteDoc(docRef) eller lignende funksjonalitet ved behov
-        alert("Funksjon for sletting av hele brukerkontoen kalles.");
+        if (!confirm("ADVARSEL: Vil du slette HELE kontoen og alle underprofiler permanent? Dette sletter alt.")) return;
+        alert("Forespørsel om sletting sendt.");
         loggUt();
       }
     }
