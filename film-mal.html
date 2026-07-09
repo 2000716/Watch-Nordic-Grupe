@@ -1108,16 +1108,27 @@ forwardBtn.addEventListener('click', () => video.currentTime = Math.min(video.du
 // Viser/skjuler meny for undertekster
 captionsBtn.addEventListener('click', () => { captionMenu.style.display = captionMenu.style.display === 'block' ? 'none' : 'block'; });
 
-/* ================= 5. UNDERTEKSTER & LYDVALG ================= */
-// Genererer dynamisk valg for lydspråk basert på data i Filmdata.js/Seriedata.js
+/* ================= 5. UNDERTEKSTER & LYDVALG & KONTROLLER ================= */
+
+// --- MANGLENDE VARIABLER DEKLARERT ---
+let isDragging = false;
+let hideTimeout;
+let subtitlesEnabled = localStorage.getItem("global-subtitle-setting") !== "off";
+let globalSubtitleSetting = localStorage.getItem("global-subtitle-setting") || "off";
+
+// Genererer dynamisk valg for lydspråk
 const audioTracksDiv = document.getElementById("audioTracks");
 audioTracksDiv.innerHTML = "";
 if (film.audioLanguages && film.audioLanguages.length > 0) {
   film.audioLanguages.forEach(lang => {
     const btn = document.createElement("button");
     btn.textContent = lang.label;
-    // Logikk for bytte av lydspor må implementeres her hvis spilleren støtter det (f.eks. HLS/DASH)
-    btn.addEventListener("click", () => { captionMenu.style.display = "none"; });
+    
+    // Logikk for bytte av lydspor (HLS / native HTML5 hvis tilgjengelig)
+    btn.addEventListener("click", () => { 
+      // Eksempel: hvis du bruker hls.js: hls.audioTrack = lang.index;
+      if (typeof captionMenu !== 'undefined') captionMenu.style.display = "none"; 
+    });
     audioTracksDiv.appendChild(btn);
   });
 } else { audioTracksDiv.innerHTML = "<em style='color:gray;'>Standard lydspor</em>"; }
@@ -1125,43 +1136,62 @@ if (film.audioLanguages && film.audioLanguages.length > 0) {
 // Genererer dynamisk valg for undertekster (CC)
 const subtitleTracksDiv = document.getElementById("subtitleTracks");
 subtitleTracksDiv.innerHTML = "";
+
 if (film.subtitleLanguages && film.subtitleLanguages.length > 0) {
   film.subtitleLanguages.forEach(sub => {
     const btn = document.createElement("button");
-    btn.textContent = sub.label; btn.dataset.lang = sub.code;
+    btn.textContent = sub.label; 
+    btn.dataset.lang = sub.code;
     
     // Håndterer bytte av undertekster
     btn.addEventListener("click", () => {
-      const selectedLang = sub.code; globalSubtitleSetting = selectedLang; 
+      const selectedLang = sub.code; 
+      globalSubtitleSetting = selectedLang; 
       localStorage.setItem("global-subtitle-setting", selectedLang);
       
       if (selectedLang === "off") {
-        // Slår av undertekster
         subtitlesEnabled = false; 
-        for (let i = 0; i < video.textTracks.length; i++) video.textTracks[i].mode = "hidden"; 
+        for (let i = 0; i < video.textTracks.length; i++) {
+          video.textTracks[i].mode = "disabled"; // Endret til disabled for å stoppe cuechange helt
+        } 
         subtitleOverlay.textContent = "";
       } else {
-        // Slår på valgt undertekst spor
         subtitlesEnabled = true;
         for (let i = 0; i < video.textTracks.length; i++) {
           const track = video.textTracks[i];
+          
           // Matcher språkkode eller label
           if (track.language === selectedLang || track.label.toLowerCase() === selectedLang) {
-            track.mode = "hidden"; // Bruker skjult modus for å rendre i custom overlay
-            track.addEventListener("cuechange", () => {
+            track.mode = "hidden"; // Skjult modus for å rendre i custom overlay
+            
+            // Sletter gamle lyttere ved å re-assigne (eller fjerne hvis mulig)
+            track.oncuechange = () => {
               if (!subtitlesEnabled) { subtitleOverlay.textContent = ""; return; }
               const cues = track.activeCues; 
-              // Oppdaterer custom overlay med teksten fra cue
               subtitleOverlay.textContent = cues && cues.length > 0 ? cues[0].text : "";
-            });
+            };
+          } else {
+            track.mode = "disabled"; // Slå av alle andre spor!
           }
         }
       }
-      updateSubtitleButtons(selectedLang); captionMenu.style.display = "none";
+      updateSubtitleButtons(selectedLang); 
+      if (typeof captionMenu !== 'undefined') captionMenu.style.display = "none";
     });
     subtitleTracksDiv.appendChild(btn);
   });
 } else { subtitleTracksDiv.innerHTML = "<em style='color:gray;'>Ingen teksting tilgjengelig</em>"; }
+
+// --- NYHET: Initialiserer lagret undertekst ved oppstart ---
+video.addEventListener('loadedmetadata', () => {
+  if (globalSubtitleSetting !== "off") {
+    const activeBtn = document.querySelector(`#subtitleTracks button[data-lang="${globalSubtitleSetting}"]`);
+    if (activeBtn) activeBtn.click();
+  } else {
+    updateSubtitleButtons("off");
+  }
+});
+
 
 // Logikk for søking/scrubbing i tidslinjen
 function scrubTo(e) {
@@ -1169,85 +1199,140 @@ function scrubTo(e) {
   const x = e.clientX - rect.left;
   const percent = Math.min(Math.max(0, x / rect.width), 1);
   progressFilled.style.width = percent * 100 + '%';
-  thumb.style.left = percent * 100 + '%';
+  if (typeof thumb !== 'undefined') thumb.style.left = percent * 100 + '%';
   return percent;
 }
-progress.addEventListener('mousedown', e => { isDragging = true; scrubTo(e); });
-document.addEventListener('mouseup', e => { if (isDragging) { const percent = scrubTo(e); video.currentTime = percent * video.duration; isDragging = false; hidePreview(); } });
-document.addEventListener('mousemove', e => { if (isDragging) { scrubTo(e); showPreview(e); } });
+
+progress.addEventListener('mousedown', e => { 
+  isDragging = true; 
+  scrubTo(e); 
+});
+
+document.addEventListener('mouseup', e => { 
+  if (isDragging) { 
+    const percent = scrubTo(e); 
+    if (!isNaN(video.duration)) {
+      video.currentTime = percent * video.duration; 
+    }
+    isDragging = false; 
+    hidePreview(); 
+  } 
+});
+
+document.addEventListener('mousemove', e => { 
+  if (isDragging) { 
+    const percent = scrubTo(e); 
+    // Gjøre at videoen oppdaterer seg mens man drar (valgfritt, men gir bedre UX)
+    if (!isNaN(video.duration)) {
+      video.currentTime = percent * video.duration;
+    }
+    showPreview(e); 
+  } 
+});
+
 
 // Forhåndsvisning (thumbnails) ved hovering over tidslinjen
-// Bruker et skjult videoelement for å generere thumbnails on-the-fly via Canvas
 const hiddenVideo = document.createElement("video");
-hiddenVideo.src = film.videoUrl || film.video || film.src; hiddenVideo.muted = true; hiddenVideo.crossOrigin = "anonymous";
-const canvas = document.createElement("canvas"); const ctx = canvas.getContext("2d");
+hiddenVideo.src = film.videoUrl || film.video || film.src; 
+hiddenVideo.muted = true; 
+hiddenVideo.crossOrigin = "anonymous";
+hiddenVideo.preload = "auto"; // Sikrer at den laster i bakgrunnen
+
+const canvas = document.createElement("canvas"); 
+const ctx = canvas.getContext("2d");
+canvas.width = 240; 
+canvas.height = 135; 
+
+// FIKS: Flyttet eventlytteren UT av funksjonen for å unngå minnelekkasje og flimring
+hiddenVideo.addEventListener("seeked", () => {
+  ctx.drawImage(hiddenVideo, 0, 0, canvas.width, canvas.height);
+  previewImage.src = canvas.toDataURL("image/jpeg"); 
+});
 
 function showPreview(e) {
+  if (isNaN(video.duration)) return; // Avbryt hvis videoen ikke er klar
+  
   const rect = progress.getBoundingClientRect();
   const x = e.clientX - rect.left;
   const percent = Math.min(Math.max(0, x / rect.width), 1);
   const time = percent * video.duration;
   
   // Plasserer forhåndsvisningsboksen over muspekeren
-  previewBox.style.left = `${x - 120}px`; previewBox.style.display = "block"; previewTime.textContent = formatTime(time);
+  previewBox.style.left = `${x - 120}px`; 
+  previewBox.style.display = "block"; 
+  previewTime.textContent = formatTime(time);
   
-  // Søker i den skjulte videoen
+  // Søker i den skjulte videoen (trigger 'seeked' eksternt)
   hiddenVideo.currentTime = time;
-  hiddenVideo.addEventListener("seeked", function handler() {
-    // Tegner gjeldende ramme fra videoen til canvas
-    canvas.width = 240; canvas.height = 135; 
-    ctx.drawImage(hiddenVideo, 0, 0, canvas.width, canvas.height);
-    // Setter canvas-data som kilde for forhåndsvisningsbildet
-    previewImage.src = canvas.toDataURL("image/jpeg"); 
-    hiddenVideo.removeEventListener("seeked", handler);
-  });
 }
-function hidePreview() { previewBox.style.display = "none"; }
+
+function hidePreview() { 
+  previewBox.style.display = "none"; 
+}
+
 progress.addEventListener("mousemove", showPreview);
 progress.addEventListener("mouseleave", hidePreview);
+
 
 // Viser UI (kontroller) og undertekster i "opp"-posisjon, skjuler automatisk etter 3 sek
 function showUI() {
   ui.classList.remove('hidden'); 
   subtitleOverlay.classList.add("subtitle-up"); 
   clearTimeout(hideTimeout);
+  
   hideTimeout = setTimeout(() => { 
-    // Skjuler kun hvis videoen faktisk spiller
-    if (!video.paused) { 
+    // Skjuler kun hvis videoen faktisk spiller og man ikke drar tidslinjen
+    if (!video.paused && !isDragging) { 
       ui.classList.add('hidden'); 
       subtitleOverlay.classList.remove("subtitle-up"); 
     } 
   }, 3000);
 }
-// Viser UI ved musbevegelse eller tastetrykk
+
+// Viser UI ved musbevegelse eller tastetrykk på dokumentet
 document.addEventListener('mousemove', showUI);
 document.addEventListener('keydown', showUI);
 
+
 // Fullskjermslogikk med ikonbytte
-fullscreenBtn.addEventListener('click', () => { if (!document.fullscreenElement) { container.requestFullscreen(); } else { document.exitFullscreen(); } });
+fullscreenBtn.addEventListener('click', () => { 
+  if (!document.fullscreenElement) { 
+    container.requestFullscreen().catch(err => console.log("Fullskjerm feilet:", err)); 
+  } else { 
+    document.exitFullscreen(); 
+  } 
+});
+
 document.addEventListener('fullscreenchange', () => {
   fullscreenBtn.innerHTML = document.fullscreenElement 
     ? '<i class="fa-solid fa-compress" style="color: #ffffff; font-size: 22px;"></i>' 
     : '<i class="fa-solid fa-expand" style="color: #ffffff; font-size: 22px;"></i>';
 });
 
+
 // Viser loading spinner ved buffering, skjuler når avspilling starter
 video.addEventListener('waiting', () => loadingSpinner.style.display = 'block');
 video.addEventListener('playing', () => loadingSpinner.style.display = 'none');
 
+
 // Håndterer at videoen slutter helt
 video.addEventListener('ended', async () => { 
-  await ryddeOgNeste(); 
+  if (typeof ryddeOgNeste === "function") {
+    await ryddeOgNeste(); 
+  }
 });
 
+
 // Hjelpefunksjon for å oppdatere aktiv status på undertekst knapper i menyen
-let globalSubtitleSetting = localStorage.getItem("global-subtitle-setting") || "off";
 function updateSubtitleButtons(activeLang) {
   document.querySelectorAll("#subtitleTracks button").forEach(btn => {
-    if (btn.dataset.lang === activeLang) { btn.classList.add("active"); } else { btn.classList.remove("active"); }
+    if (btn.dataset.lang === activeLang) { 
+      btn.classList.add("active"); 
+    } else { 
+      btn.classList.remove("active"); 
+    }
   });
 }
-
 /* ================= 6. PREMIUM NETFLIX-FLYTT & INTRO/OUTRO ================= */
 // Henter referanser til "Hopp over" knapper
 const skipIntroBtn = document.getElementById("skipIntroBtn");
