@@ -854,7 +854,7 @@ if (playBtn) playBtn.innerHTML = '<i class="fa-solid fa-play" style="color: #fff
 if (muteBtn) muteBtn.innerHTML = '<i class="fa-solid fa-volume-high" style="color: #ffffff; font-size: 22px;"></i>';
 
 function hentNesteEpisodeUrl() {
-  if (navn && sesong && episode && typeof serier !== "undefined" && serier?.[navn]) {
+  if (isSerie && navn && sesong && episode && typeof serier !== "undefined" && serier?.[navn]) {
     const s = parseInt(sesong);
     const e = parseInt(episode);
     const serie = serier[navn];
@@ -1004,6 +1004,7 @@ async function ryddeOgNeste() {
     } catch (e) { console.error("Feil ved lagring før navigering:", e); }
   }
   
+  // FIKS: Hvis det er en serie og det finnes en neste episode, gå til den. Ellers send brukeren alltid til infosiden.
   if (isSerie && nesteEpisodeUrl) {
     window.location.href = nesteEpisodeUrl;
   } else {
@@ -1105,7 +1106,6 @@ if (subtitleTracksDiv) {
             if (track.language === selectedLang || track.label.toLowerCase() === selectedLang) {
               track.mode = "hidden"; 
               
-              // FIKS: Bruker .oncuechange for å hindre duplikate lyttere på samme spor
               track.oncuechange = () => {
                 if (!subtitlesEnabled) { if (subtitleOverlay) subtitleOverlay.textContent = ""; return; }
                 const cues = track.activeCues; 
@@ -1114,7 +1114,7 @@ if (subtitleTracksDiv) {
                 }
               };
             } else {
-              track.mode = "disabled"; // Slår av inaktive spor helt
+              track.mode = "disabled";
             }
           }
         }
@@ -1126,7 +1126,6 @@ if (subtitleTracksDiv) {
   } else { subtitleTracksDiv.innerHTML = "<em style='color:gray;'>Ingen teksting tilgjengelig</em>"; }
 }
 
-// Koble på oppstartssjekk for lagret undertekst
 video.addEventListener('loadedmetadata', () => {
   if (globalSubtitleSetting !== "off") {
     const aktivKnapp = document.querySelector(`#subtitleTracks button[data-lang="${globalSubtitleSetting}"]`);
@@ -1160,12 +1159,11 @@ document.addEventListener('mouseup', e => {
 document.addEventListener('mousemove', e => { 
   if (isDragging) { 
     const percent = scrubTo(e); 
-    video.currentTime = percent * video.duration; // Garanterer oppdatering under drag
+    video.currentTime = percent * video.duration; 
     showPreview(e); 
   } 
 });
 
-// Forhåndsvisning (thumbnails) – Optimalisert struktur
 const hiddenVideo = document.createElement("video");
 hiddenVideo.src = film.videoUrl || film.video || film.src; 
 hiddenVideo.muted = true; 
@@ -1177,7 +1175,6 @@ const ctx = canvas.getContext("2d");
 canvas.width = 240; 
 canvas.height = 135;
 
-// FIKS: Flyttet ut av showPreview for å unngå minnelekkasje og blinking
 hiddenVideo.addEventListener("seeked", () => {
   ctx.drawImage(hiddenVideo, 0, 0, canvas.width, canvas.height);
   if (previewImage) previewImage.src = canvas.toDataURL("image/jpeg");
