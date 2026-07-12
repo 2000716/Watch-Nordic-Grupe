@@ -48,9 +48,10 @@
       align-items: center;
     }
 
-    .logo-svg {
-      height: 26px;
-      fill: var(--accent);
+    /* Styling for logo-bildet */
+    .logo-image {
+      height: 35px; /* Juster høyden etter ønske */
+      width: auto;  /* Beholder bildeforholdet */
       display: block;
     }
 
@@ -279,8 +280,12 @@
     /* RESPONSIVITET / MOBIL-OPPSETT */
     @media (max-width: 960px) {
       header { padding: 15px 20px; }
+      
+      /* Litt mindre logo på mobil */
+      .logo-image { height: 28px; }
+
       header button { padding: 8px 12px; font-size: 13px; }
-      header button span { display: none; } /* Skjuler tekst på mini-mobiler om nødvendig, men ikon blir stående */
+      header button span { display: none; } /* Skjuler tekst på mini-mobiler, men ikon blir stående */
       
       .container { 
         grid-template-columns: 1fr; 
@@ -312,9 +317,7 @@
 
   <header>
     <div class="logo-container">
-      <svg class="logo-svg" viewBox="0 0 150 30" xmlns="http://www.w3.org/2000/svg">
-        <text x="0" y="22" fill="#00FFCC" font-family="'Inter', sans-serif" font-weight="800" font-size="20" letter-spacing="1">WATCH NORDIC</text>
-      </svg>
+      <img src="https://static.wixstatic.com/media/d9ace9_95bbe3f5ff4b4aab9314a8d08804344e~mv2.png" alt="Watch Nordic Logo" class="logo-image">
     </div>
     <div class="nav-btns">
       <button id="navHovedsideBtn"><i class="fa-solid fa-house"></i> <span>Hovedside</span></button>
