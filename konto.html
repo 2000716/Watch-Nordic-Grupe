@@ -3,35 +3,37 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Min Konto | Watch Nordic™</title>
+  <title>Innstillinger | Watch Nordic™</title>
 
   <link rel="icon" type="image/png" href="https://static.wixstatic.com/media/d9ace9_95bbe3f5ff4b4aab9314a8d08804344e~mv2.png" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
   <style>
     :root {
       --bg: #091B1E;
-      --muted: #bfc9c9;
+      --card-bg: rgba(255, 255, 255, 0.04);
+      --card-hover: rgba(255, 255, 255, 0.07);
+      --muted: #8fa3a6;
       --accent: #00FFCC;
-      --card-bg: rgba(255, 255, 255, 0.03);
-      --border: rgba(255, 255, 255, 0.08);
+      --border: rgba(255, 255, 255, 0.1);
       --kids-accent: #33b5ff;
+      --danger: #ff4d4d;
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
     body {
       background: var(--bg);
-      color: white;
-      font-family: 'Street', 'Inter', Arial, sans-serif; /* Max-lignende ren font-fallback */
+      color: #ffffff;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
       min-height: 100vh;
       display: flex;
       flex-direction: column;
     }
 
-    /* Minimalistisk Max-header uten unødvendig stæsj */
+    /* Max Top Bar */
     header {
-      padding: 15px 40px;
-      background: var(--bg);
+      padding: 18px 40px;
+      background: rgba(9, 27, 30, 0.95);
       border-bottom: 1px solid var(--border);
       display: flex;
       justify-content: space-between;
@@ -39,301 +41,428 @@
       position: sticky;
       top: 0;
       z-index: 100;
+      backdrop-filter: blur(10px);
     }
 
     header h1 { 
-      font-size: 24px; 
+      font-size: 22px; 
       font-weight: 900;
-      letter-spacing: 3px;
+      letter-spacing: 2px;
       color: var(--accent);
+      cursor: pointer;
     }
 
-    header .nav-btns { display: flex; gap: 20px; }
+    header .nav-btns { display: flex; gap: 12px; }
 
     header button {
-      background: none;
-      border: none;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid var(--border);
       color: white;
-      font-weight: 500;
-      font-size: 14px;
+      padding: 8px 18px;
+      border-radius: 20px;
+      font-weight: 600;
+      font-size: 13px;
       cursor: pointer;
-      transition: color 0.2s;
+      transition: all 0.2s ease;
     }
 
-    header button:hover { color: var(--accent); }
-    header button.logout-btn { color: #ff4d4d; }
+    header button:hover { 
+      background: rgba(255,255,255,0.15);
+      border-color: white;
+    }
 
-    /* Sentrert Max-layout wrapper */
-    .max-container {
-      max-width: 680px; /* Max bruker en smalere, fokusert container til kontosider */
+    header button.logout-btn {
+      border-color: rgba(255, 77, 77, 0.3);
+      color: var(--danger);
+    }
+    header button.logout-btn:hover {
+      background: rgba(255, 77, 77, 0.15);
+    }
+
+    /* Max Settings Layout (Sidebar Navigation + Main Area) */
+    .max-settings-container {
+      max-width: 1100px;
       width: 100%;
       margin: 0 auto;
       padding: 40px 20px;
+      display: grid;
+      grid-template-columns: 240px 1fr;
+      gap: 40px;
       flex: 1;
     }
 
-    .max-page-title {
-      font-size: 32px;
-      font-weight: 700;
-      margin-bottom: 8px;
-      letter-spacing: -0.5px;
+    /* Venstre Sidemeny (Max style) */
+    .settings-nav {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
     }
 
-    .max-page-subtitle {
+    .settings-nav-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 16px;
+      border-radius: 8px;
+      color: var(--muted);
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      text-decoration: none;
+    }
+
+    .settings-nav-item:hover {
+      color: white;
+      background: rgba(255, 255, 255, 0.03);
+    }
+
+    .settings-nav-item.active {
+      color: var(--accent);
+      background: rgba(0, 255, 204, 0.08);
+      font-weight: 700;
+    }
+
+    /* Høyre Hovedinnhold */
+    .settings-content {
+      display: flex;
+      flex-direction: column;
+      gap: 28px;
+    }
+
+    .page-header h2 {
+      font-size: 28px;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+      margin-bottom: 6px;
+    }
+
+    .page-header p {
       color: var(--muted);
       font-size: 14px;
-      margin-bottom: 30px;
     }
 
-    /* Max-kortmoduler */
-    .max-section-card {
-      background: rgba(255, 255, 255, 0.02);
+    /* Max-kort (Kort-baserte moduler) */
+    .max-card {
+      background: var(--card-bg);
       border: 1px solid var(--border);
-      border-radius: 8px;
+      border-radius: 12px;
       padding: 24px;
-      margin-bottom: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
     }
 
-    .max-section-title {
-      font-size: 18px;
-      font-weight: 600;
-      margin-bottom: 20px;
+    .max-card-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 16px;
     }
 
-    /* Profil-oppsett i kortet */
-    .max-profile-row {
+    .max-card-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: white;
+    }
+
+    /* Profil Topp-seksjon */
+    .profile-header-card {
       display: flex;
       align-items: center;
       gap: 20px;
-      padding-bottom: 20px;
-      border-bottom: 1px solid var(--border);
-      margin-bottom: 20px;
     }
 
-    /* Runde profilbilde beholdes nøyaktig */
+    /* RUNDT PROFILBILDE BEHOLDES */
+    .avatar-wrapper {
+      position: relative;
+    }
+
     .avatar {
-      width: 80px;
-      height: 80px;
+      width: 84px;
+      height: 84px;
       border-radius: 50%;
       overflow: hidden;
-      border: 2px solid rgba(255, 255, 255, 0.2);
+      border: 3px solid rgba(255, 255, 255, 0.15);
+      transition: transform 0.2s, border-color 0.2s;
+      cursor: pointer;
+    }
+
+    .avatar:hover {
+      border-color: var(--accent);
+      transform: scale(1.03);
     }
 
     .avatar img { width: 100%; height: 100%; object-fit: cover; }
 
     .profile-details h3 {
-      font-size: 20px;
+      font-size: 22px;
       font-weight: 700;
+      margin-bottom: 6px;
     }
 
     .kids-badge {
-      display: inline-block;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
       background: var(--kids-accent);
-      color: #091B1E;
+      color: #000;
       font-size: 11px;
-      font-weight: 700;
-      padding: 1px 6px;
-      border-radius: 3px;
-      margin-top: 4px;
+      font-weight: 800;
+      padding: 3px 8px;
+      border-radius: 12px;
       text-transform: uppercase;
+      letter-spacing: 0.5px;
     }
 
-    /* Informasjonslinjer */
-    .max-info-row {
+    /* Rader inne i kortene */
+    .max-row {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 14px 0;
-    }
-    .max-info-row:not(:last-child) {
-      border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+      gap: 20px;
     }
 
-    .info-label {
+    .max-row-info {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .max-label {
       font-size: 12px;
-      color: var(--muted);
+      font-weight: 600;
       text-transform: uppercase;
+      color: var(--muted);
       letter-spacing: 0.5px;
-      margin-bottom: 2px;
     }
 
-    .info-value {
+    .max-value {
       font-size: 15px;
       font-weight: 500;
+      color: white;
     }
 
-    /* Flate lenkeknapper inspirert av Max */
-    .max-link-btn {
-      background: none;
-      border: none;
-      color: var(--accent);
-      font-size: 14px;
+    /* Flate Max-knapper */
+    .max-btn-secondary {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid var(--border);
+      color: white;
+      padding: 8px 16px;
+      border-radius: 6px;
+      font-size: 13px;
       font-weight: 600;
       cursor: pointer;
-      transition: opacity 0.2s;
-    }
-    .max-link-btn:hover { opacity: 0.8; text-decoration: underline; }
-    .max-link-btn.danger { color: #ff4d4d; }
-
-    /* Foreldrekontroll låseskjerm */
-    .max-lock-box {
-      text-align: center;
-      padding: 20px 0;
+      transition: all 0.2s;
+      white-space: nowrap;
     }
 
-    .max-lock-box p {
-      color: var(--muted);
-      font-size: 14px;
-      margin-bottom: 15px;
+    .max-btn-secondary:hover {
+      background: rgba(255, 255, 255, 0.18);
+      border-color: rgba(255, 255, 255, 0.4);
     }
 
-    .max-btn-primary {
-      background: white;
-      color: #091B1E;
-      border: none;
-      padding: 12px 24px;
-      border-radius: 4px;
-      font-size: 14px;
-      font-weight: 700;
-      cursor: pointer;
-      transition: background 0.2s;
-    }
-    .max-btn-primary:hover { background: #e0e0e0; }
-
-    /* Input-felter */
-    .edit-field {
-      margin-top: 15px;
-    }
-    .edit-field label {
-      display: block;
-      font-size: 13px;
-      color: var(--muted);
-      margin-bottom: 5px;
-    }
-    .edit-field select {
-      width: 100%;
-      padding: 12px;
-      background: rgba(0,0,0,0.4);
-      border: 1px solid var(--border);
-      border-radius: 4px;
-      color: white;
-      font-size: 15px;
-    }
-
-    /* Barnekonto/Junior sperreboks */
-    .max-kids-alert {
-      background: rgba(51, 181, 255, 0.05);
-      border: 1px solid rgba(51, 181, 255, 0.15);
+    .max-btn-danger {
+      background: rgba(255, 77, 77, 0.1);
+      border: 1px solid rgba(255, 77, 77, 0.3);
+      color: var(--danger);
+      padding: 8px 16px;
       border-radius: 6px;
-      padding: 16px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .max-btn-danger:hover {
+      background: rgba(255, 77, 77, 0.25);
+      border-color: var(--danger);
+    }
+
+    /* Barn Restriksjons-Seksjon */
+    .kids-restricted-card {
+      background: rgba(51, 181, 255, 0.05);
+      border: 1px solid rgba(51, 181, 255, 0.2);
+      border-radius: 12px;
+      padding: 20px;
       display: flex;
       align-items: center;
-      gap: 12px;
-      font-size: 14px;
-      color: #e0f2fe;
+      gap: 16px;
     }
-    .max-kids-alert i { color: var(--kids-accent); font-size: 18px; }
 
-    footer {
-      border-top: 1px solid var(--border);
-      padding: 30px;
-      color: var(--muted);
-      font-size: 11px;
+    .kids-restricted-card i {
+      font-size: 24px;
+      color: var(--kids-accent);
+    }
+
+    /* Foreldrekontroll Skjema */
+    .parent-lock-box {
       text-align: center;
-      margin-top: auto;
-      opacity: 0.5;
+      padding: 20px;
+    }
+
+    .btn-parent-unlock {
+      background: var(--accent);
+      color: #091B1E;
+      border: none;
+      padding: 10px 20px;
+      font-weight: 700;
+      border-radius: 20px;
+      cursor: pointer;
+      font-size: 14px;
+      transition: opacity 0.2s;
+    }
+
+    .btn-parent-unlock:hover { opacity: 0.85; }
+
+    .select-input {
+      width: 100%;
+      max-width: 320px;
+      padding: 10px 12px;
+      background: #061214;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      color: white;
+      font-size: 14px;
+      margin-top: 6px;
     }
 
     .hidden { display: none !important; }
+
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 24px 40px;
+      color: var(--muted);
+      font-size: 12px;
+      text-align: center;
+      margin-top: auto;
+    }
+
+    @media (max-width: 850px) {
+      .max-settings-container { grid-template-columns: 1fr; gap: 24px; }
+      .settings-nav { flex-direction: row; overflow-x: auto; padding-bottom: 10px; }
+      header { padding: 15px 20px; }
+    }
   </style>
 </head>
 <body>
 
   <header>
-    <h1>WATCH</h1>
+    <h1 id="logoHome">WATCH</h1>
     <div class="nav-btns">
-      <button id="navHovedsideBtn">Hovedside</button>
-      <button class="logout-btn" id="navLoggUtBtn">Logg ut</button>
+      <button id="navHovedsideBtn"><i class="fa-solid fa-house"></i> Hovedside</button>
+      <button class="logout-btn" id="navLoggUtBtn"><i class="fa-solid fa-right-from-bracket"></i> Logg ut</button>
     </div>
   </header>
 
-  <div class="max-container">
-    <h2 class="max-page-title">Konto</h2>
-    <p class="max-page-subtitle">Administrer profilen din og kontoinnstillinger.</p>
+  <div class="max-settings-container">
+    
+    <nav class="settings-nav">
+      <a href="#" class="settings-nav-item active"><i class="fa-solid fa-user"></i> Konto & Profiler</a>
+      <a href="#" class="settings-nav-item"><i class="fa-solid fa-shield-halved"></i> Foreldrekontroll</a>
+      <a href="#" class="settings-nav-item"><i class="fa-solid fa-tv"></i> Enheter</a>
+    </nav>
 
-    <div class="max-section-card">
-      <div class="max-profile-row">
-        <div class="avatar">
-          <img id="profilbilde" src="" alt="Profilbilde">
-        </div>
-        <div class="profile-details">
-          <h3 id="navnDisplay">Laster...</h3>
-          <div id="kidsBadgeContainer"></div>
-        </div>
-      </div>
-      <div class="max-info-row" id="sidebarActions">
-        <button class="max-link-btn" id="endreBildeSideBtn">Endre profilbilde</button>
-        <button class="max-link-btn danger" id="sletteKnapp">Slett profil permanent</button>
-      </div>
-    </div>
-
-    <div class="max-section-card">
-      <div class="max-section-title">Kontodetaljer</div>
+    <main class="settings-content">
       
-      <div class="max-info-row">
-        <div>
-          <div class="info-label">Profilnavn</div>
-          <div class="info-value" id="navnView">Laster...</div>
-        </div>
-        <button class="max-link-btn" id="endreNavnKnapp">Endre</button>
+      <div class="page-header">
+        <h2>Kontoinnstillinger</h2>
+        <p>Administrer profiler, abonnement og foreldrebegrensninger.</p>
       </div>
 
-      <div class="max-info-row">
-        <div>
-          <div class="info-label">E-postadresse</div>
-          <div class="info-value" id="epostView">Laster...</div>
-        </div>
-      </div>
-    </div>
-
-    <div class="max-section-card" id="foreldreSeksjon">
-      <div class="max-section-title">Foreldrekontroll</div>
-
-      <div id="parentAdminPanel" class="hidden">
-        <div id="parentLockPanel" class="max-lock-box">
-          <p>Instillingene er låst. Foreldre må låse opp for å endre profilbegrensninger.</p>
-          <button class="max-btn-primary" id="laasOppForeldreKontrollBtn">Lås opp innstillinger</button>
-        </div>
-
-        <div id="parentSettingsPanel" class="hidden">
-          <div class="edit-field">
-            <label>Velg profil du vil begrense:</label>
-            <select id="profileSelect"></select>
+      <div class="max-card">
+        <div class="profile-header-card">
+          <div class="avatar-wrapper">
+            <div class="avatar" id="avatarContainer">
+              <img id="profilbilde" src="" alt="Profilbilde">
+            </div>
           </div>
-          <div class="edit-field">
-            <label>Maks tillatt aldersgrense:</label>
-            <select id="ageRestrictionSelect">
-              <option value="A">Tillat kun innhold for alle (A)</option>
-              <option value="6">Maks 6 år</option>
-              <option value="9">Maks 9 år</option>
-              <option value="12">Maks 12 år</option>
-              <option value="18">Ingen restriksjoner (Voksen)</option>
-            </select>
+          <div class="profile-details">
+            <h3 id="navnDisplay">Laster...</h3>
+            <div id="kidsBadgeContainer"></div>
           </div>
         </div>
-      </div>
 
-      <div id="kidsRestrictedPanel" class="max-kids-alert hidden">
-        <i class="fa-solid fa-circle-exclamation"></i>
-        <div>
-          <strong>Dette er en barnekonto.</strong> Foreldrekontroller og profilendringer kan kun gjøres av en voksen fra hovedprofilen.
+        <div class="max-row" id="sidebarActions">
+          <div class="max-row-info">
+            <span class="max-label">Profilbilde</span>
+            <span class="max-value">Tilpass utseende på denne profilen</span>
+          </div>
+          <button class="max-btn-secondary" id="endreBildeSideBtn">Endre bilde</button>
+        </div>
+
+        <div class="max-row" id="deleteRow">
+          <div class="max-row-info">
+            <span class="max-label">Slett profil</span>
+            <span class="max-value">Fjern denne profilen permanent</span>
+          </div>
+          <button class="max-btn-danger" id="sletteKnapp">Slett profil</button>
         </div>
       </div>
 
-    </div>
+      <div class="max-card">
+        <div class="max-card-header">
+          <span class="max-card-title">Abonnementsdetaljer</span>
+        </div>
+
+        <div class="max-row">
+          <div class="max-row-info">
+            <span class="max-label">Profilnavn</span>
+            <span class="max-value" id="navnView">Laster...</span>
+          </div>
+          <button class="max-btn-secondary" id="endreNavnKnapp">Rediger</button>
+        </div>
+
+        <div class="max-row">
+          <div class="max-row-info">
+            <span class="max-label">E-post for konto</span>
+            <span class="max-value" id="epostView">Laster...</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="max-card" id="foreldreCard">
+        <div class="max-card-header">
+          <span class="max-card-title">Foreldrekontroll</span>
+        </div>
+
+        <div id="parentAdminPanel" class="hidden">
+          <div id="parentLockPanel" class="parent-lock-box">
+            <p style="color: var(--muted); margin-bottom: 16px; font-size: 14px;">Innholdsbegrensninger er låst med PIN-kode.</p>
+            <button class="btn-parent-unlock" id="laasOppForeldreKontrollBtn"><i class="fa-solid fa-lock"></i> Lås opp innstillinger</button>
+          </div>
+
+          <div id="parentSettingsPanel" class="hidden" style="display: flex; flex-direction: column; gap: 16px;">
+            <div>
+              <label class="max-label">Velg profil du vil begrense:</label><br>
+              <select id="profileSelect" class="select-input"></select>
+            </div>
+            
+            <div>
+              <label class="max-label">Maks tillatt aldersgrense:</label><br>
+              <select id="ageRestrictionSelect" class="select-input">
+                <option value="A">Kun innhold for alle (A)</option>
+                <option value="6">Maks 6 år</option>
+                <option value="9">Maks 9 år</option>
+                <option value="12">Maks 12 år</option>
+                <option value="18">Ingen restriksjoner (Voksen)</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div id="kidsRestrictedPanel" class="kids-restricted-card hidden">
+          <i class="fa-solid fa-child-reaching"></i>
+          <div>
+            <h4 style="font-size: 15px; font-weight: 700;">Dette er en Junior-profil</h4>
+            <p style="font-size: 13px; color: var(--muted); margin-top: 2px;">Aldersgrenser og restriksjoner kan kun endres av en voksen fra en hovedprofil.</p>
+          </div>
+        </div>
+
+      </div>
+
+    </main>
   </div>
 
   <footer>© 2026 Watch Nordic Group AS. Alle rettigheter forbeholdt.</footer>
@@ -362,7 +491,7 @@
     let globalEpost = ""; 
     let docRef = null;
 
-    // Lokalcaching
+    // Cache-håndtering
     const cachedProfiles = localStorage.getItem("watch_nordic_profiles_cache");
     const cachedEmail = localStorage.getItem("watch_nordic_email_cache");
     if (cachedProfiles && cachedEmail) {
@@ -381,9 +510,9 @@
       }
     });
 
-    document.getElementById("navHovedsideBtn").addEventListener("click", () => {
-      window.location.href = `hvem-ser-på.html?index=${aktivProfilIndex}`;
-    });
+    const gåTilHovedside = () => { window.location.href = `hvem-ser-på.html?index=${aktivProfilIndex}`; };
+    document.getElementById("navHovedsideBtn").addEventListener("click", gåTilHovedside);
+    document.getElementById("logoHome").addEventListener("click", gåTilHovedside);
     document.getElementById("navLoggUtBtn").addEventListener("click", loggUt);
     document.getElementById("laasOppForeldreKontrollBtn").addEventListener("click", laasOppForeldreKontroll);
     profileSelect.addEventListener("change", oppdaterValgtProfilISekvens);
@@ -413,11 +542,12 @@
       document.getElementById("profilbilde").src = gjeldendeProfil.bilde;
 
       if (gjeldendeProfil.isKids) {
-        kidsBadgeContainer.innerHTML = `<span class="kids-badge">Barn / Junior</span>`;
+        kidsBadgeContainer.innerHTML = `<span class="kids-badge"><i class="fa-solid fa-child"></i> Junior</span>`;
         kidsRestrictedPanel.classList.remove("hidden");
         parentAdminPanel.classList.add("hidden");
         
         document.getElementById("sidebarActions").classList.add("hidden");
+        document.getElementById("deleteRow").classList.add("hidden");
         document.getElementById("endreNavnKnapp").classList.add("hidden");
       } else {
         kidsBadgeContainer.innerHTML = "";
@@ -425,6 +555,7 @@
         parentAdminPanel.classList.remove("hidden");
         
         document.getElementById("sidebarActions").classList.remove("hidden");
+        document.getElementById("deleteRow").classList.remove("hidden");
         document.getElementById("endreNavnKnapp").classList.remove("hidden");
         fyllProfilVelger();
       }
