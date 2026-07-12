@@ -12,7 +12,7 @@
       --bg: #091B1E;
       --muted: #bfc9c9;
       --accent: #00FFCC;
-      --card-bg: rgba(255, 255, 255, 0.02);
+      --card-bg: rgba(255, 255, 255, 0.03);
       --border: rgba(255, 255, 255, 0.08);
       --kids-accent: #33b5ff;
     }
@@ -22,16 +22,16 @@
     body {
       background: var(--bg);
       color: white;
-      font-family: 'Inter', Arial, sans-serif;
+      font-family: 'Street', 'Inter', Arial, sans-serif; /* Max-lignende ren font-fallback */
       min-height: 100vh;
       display: flex;
       flex-direction: column;
     }
 
-    /* Strømlinjeformet topplinje */
+    /* Minimalistisk Max-header uten unødvendig stæsj */
     header {
       padding: 15px 40px;
-      background: rgba(9, 27, 30, 0.9);
+      background: var(--bg);
       border-bottom: 1px solid var(--border);
       display: flex;
       justify-content: space-between;
@@ -42,93 +42,91 @@
     }
 
     header h1 { 
-      font-size: 20px; 
+      font-size: 24px; 
       font-weight: 900;
-      letter-spacing: 2px;
+      letter-spacing: 3px;
       color: var(--accent);
     }
 
-    header .nav-btns { display: flex; gap: 15px; }
+    header .nav-btns { display: flex; gap: 20px; }
 
     header button {
-      background: transparent;
-      border: 1px solid transparent;
+      background: none;
+      border: none;
       color: white;
-      padding: 8px 16px;
-      font-weight: 600;
+      font-weight: 500;
       font-size: 14px;
       cursor: pointer;
-      transition: 0.2s;
+      transition: color 0.2s;
     }
 
     header button:hover { color: var(--accent); }
     header button.logout-btn { color: #ff4d4d; }
-    header button.logout-btn:hover { color: #ff3333; }
 
-    /* Strømmetjeneste-layout: Sentrert bredt innhold */
-    .account-wrapper {
-      max-width: 1000px;
+    /* Sentrert Max-layout wrapper */
+    .max-container {
+      max-width: 680px; /* Max bruker en smalere, fokusert container til kontosider */
       width: 100%;
       margin: 0 auto;
       padding: 40px 20px;
       flex: 1;
     }
 
-    .account-title {
-      font-size: 28px;
-      font-weight: 400;
-      margin-bottom: 30px;
-      border-bottom: 1px solid var(--border);
-      padding-bottom: 15px;
+    .max-page-title {
+      font-size: 32px;
+      font-weight: 700;
+      margin-bottom: 8px;
+      letter-spacing: -0.5px;
     }
 
-    /* Seksjons-oppsett likt SkyShowtime/Netflix */
-    .account-section {
-      display: grid;
-      grid-template-columns: 250px 1fr;
-      padding: 25px 0;
-      border-bottom: 1px solid var(--border);
-    }
-
-    .section-header h3 {
-      font-size: 14px;
-      text-transform: uppercase;
-      letter-spacing: 1px;
+    .max-page-subtitle {
       color: var(--muted);
+      font-size: 14px;
+      margin-bottom: 30px;
+    }
+
+    /* Max-kortmoduler */
+    .max-section-card {
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 24px;
+      margin-bottom: 24px;
+    }
+
+    .max-section-title {
+      font-size: 18px;
       font-weight: 600;
-    }
-
-    /* Høyre side med data */
-    .section-content {
+      margin-bottom: 20px;
       display: flex;
-      flex-direction: column;
-      gap: 20px;
+      justify-content: space-between;
+      align-items: center;
     }
 
-    /* Profilområde øverst */
-    .profile-meta {
+    /* Profil-oppsett i kortet */
+    .max-profile-row {
       display: flex;
       align-items: center;
       gap: 20px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 20px;
     }
 
-    /* Rundt profilbilde beholdes nøyaktig */
+    /* Runde profilbilde beholdes nøyaktig */
     .avatar {
-      width: 90px;
-      height: 90px;
+      width: 80px;
+      height: 80px;
       border-radius: 50%;
       overflow: hidden;
-      border: 2px solid rgba(255,255,255,0.2);
-      transition: 0.2s ease;
-      position: relative;
+      border: 2px solid rgba(255, 255, 255, 0.2);
     }
 
     .avatar img { width: 100%; height: 100%; object-fit: cover; }
 
-    .profile-info-text h2 {
-      font-size: 22px;
+    .profile-details h3 {
+      font-size: 20px;
       font-weight: 700;
-      margin-bottom: 4px;
     }
 
     .kids-badge {
@@ -137,99 +135,119 @@
       color: #091B1E;
       font-size: 11px;
       font-weight: 700;
-      padding: 2px 6px;
-      border-radius: 4px;
+      padding: 1px 6px;
+      border-radius: 3px;
+      margin-top: 4px;
       text-transform: uppercase;
     }
 
-    /* Data-rader */
-    .data-row {
+    /* Informasjonslinjer */
+    .max-info-row {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      width: 100%;
+      padding: 14px 0;
+    }
+    .max-info-row:not(:last-child) {
+      border-bottom: 1px solid rgba(255, 255, 255, 0.04);
     }
 
-    .data-label {
-      font-size: 13px;
+    .info-label {
+      font-size: 12px;
       color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
       margin-bottom: 2px;
     }
 
-    .data-value {
+    .info-value {
       font-size: 15px;
       font-weight: 500;
     }
 
-    /* Flate, rene strømmeknapper */
-    .action-link {
+    /* Flate lenkeknapper inspirert av Max */
+    .max-link-btn {
       background: none;
       border: none;
       color: var(--accent);
       font-size: 14px;
       font-weight: 600;
       cursor: pointer;
-      padding: 5px 0;
       transition: opacity 0.2s;
     }
-    .action-link:hover { text-decoration: underline; opacity: 0.9; }
-    .action-link.danger { color: #ff4d4d; }
+    .max-link-btn:hover { opacity: 0.8; text-decoration: underline; }
+    .max-link-btn.danger { color: #ff4d4d; }
 
-    /* Barnekonto Begrensnings-boks */
-    .kids-info-box {
-      background: rgba(51, 181, 255, 0.05);
-      border: 1px solid rgba(51, 181, 255, 0.15);
-      padding: 20px;
-      border-radius: 8px;
-      display: flex;
-      align-items: center;
-      gap: 15px;
-    }
-    .kids-info-box i { font-size: 20px; color: var(--kids-accent); }
-
-    /* Foreldrelås */
-    .lock-panel {
+    /* Foreldrekontroll låseskjerm */
+    .max-lock-box {
+      text-align: center;
       padding: 20px 0;
     }
-    .btn-unlock {
+
+    .max-lock-box p {
+      color: var(--muted);
+      font-size: 14px;
+      margin-bottom: 15px;
+    }
+
+    .max-btn-primary {
       background: white;
       color: #091B1E;
       border: none;
-      padding: 10px 20px;
-      font-weight: 700;
+      padding: 12px 24px;
       border-radius: 4px;
-      cursor: pointer;
       font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.2s;
     }
+    .max-btn-primary:hover { background: #e0e0e0; }
 
-    .edit-field { margin-top: 15px; }
+    /* Input-felter */
+    .edit-field {
+      margin-top: 15px;
+    }
+    .edit-field label {
+      display: block;
+      font-size: 13px;
+      color: var(--muted);
+      margin-bottom: 5px;
+    }
     .edit-field select {
-      padding: 10px;
-      background: rgba(0,0,0,0.3);
-      border: 1px solid var(--border);
-      color: white;
-      border-radius: 4px;
       width: 100%;
-      max-width: 300px;
-      margin-top: 5px;
+      padding: 12px;
+      background: rgba(0,0,0,0.4);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      color: white;
+      font-size: 15px;
     }
 
-    .hidden { display: none !important; }
+    /* Barnekonto/Junior sperreboks */
+    .max-kids-alert {
+      background: rgba(51, 181, 255, 0.05);
+      border: 1px solid rgba(51, 181, 255, 0.15);
+      border-radius: 6px;
+      padding: 16px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 14px;
+      color: #e0f2fe;
+    }
+    .max-kids-alert i { color: var(--kids-accent); font-size: 18px; }
 
     footer {
       border-top: 1px solid var(--border);
       padding: 30px;
       color: var(--muted);
-      font-size: 12px;
+      font-size: 11px;
       text-align: center;
       margin-top: auto;
-      opacity: 0.6;
+      opacity: 0.5;
     }
 
-    @media (max-width: 768px) {
-      .account-section { grid-template-columns: 1fr; gap: 15px; }
-      header { padding: 15px 20px; }
-    }
+    .hidden { display: none !important; }
   </style>
 </head>
 <body>
@@ -237,95 +255,84 @@
   <header>
     <h1>WATCH</h1>
     <div class="nav-btns">
-      <button id="navHovedsideBtn"><i class="fa-solid fa-house"></i> Hovedside</button>
-      <button class="logout-btn" id="navLoggUtBtn"><i class="fa-solid fa-right-from-bracket"></i> Logg Ut</button>
+      <button id="navHovedsideBtn">Hovedside</button>
+      <button class="logout-btn" id="navLoggUtBtn">Logg ut</button>
     </div>
   </header>
 
-  <div class="account-wrapper">
-    <h2 class="account-title">Konto</h2>
+  <div class="max-container">
+    <h2 class="max-page-title">Konto</h2>
+    <p class="max-page-subtitle">Administrer profilen din og kontoinnstillinger.</p>
 
-    <div class="account-section">
-      <div class="section-header">
-        <h3>Profilfakta</h3>
-      </div>
-      <div class="section-content">
-        <div class="profile-meta">
-          <div class="avatar">
-            <img id="profilbilde" src="" alt="Profilbilde">
-          </div>
-          <div class="profile-info-text">
-            <h2 id="navnDisplay">Laster...</h2>
-            <div id="kidsBadgeContainer"></div>
-          </div>
+    <div class="max-section-card">
+      <div class="max-profile-row">
+        <div class="avatar">
+          <img id="profilbilde" src="" alt="Profilbilde">
         </div>
-        <div class="data-row" id="sidebarActions">
-          <button class="action-link" id="endreBildeSideBtn">Endre profilbilde</button>
-          <button class="action-link danger" id="sletteKnapp">Slett denne profilen</button>
+        <div class="profile-details">
+          <h3 id="navnDisplay">Laster...</h3>
+          <div id="kidsBadgeContainer"></div>
+        </div>
+      </div>
+      <div class="max-info-row" id="sidebarActions">
+        <button class="max-link-btn" id="endreBildeSideBtn">Endre profilbilde</button>
+        <button class="max-link-btn danger" id="sletteKnapp">Slett profil permanent</button>
+      </div>
+    </div>
+
+    <div class="max-section-card">
+      <div class="max-section-title">Kontodetaljer</div>
+      
+      <div class="max-info-row">
+        <div>
+          <div class="info-label">Profilnavn</div>
+          <div class="info-value" id="navnView">Laster...</div>
+        </div>
+        <button class="max-link-btn" id="endreNavnKnapp">Endre</button>
+      </div>
+
+      <div class="max-info-row">
+        <div>
+          <div class="info-label">E-postadresse</div>
+          <div class="info-value" id="epostView">Laster...</div>
         </div>
       </div>
     </div>
 
-    <div class="account-section">
-      <div class="section-header">
-        <h3>Medlemskapsdetaljer</h3>
-      </div>
-      <div class="section-content">
-        <div class="data-row">
-          <div>
-            <div class="data-label">Profilnavn</div>
-            <div class="data-value" id="navnView">Laster...</div>
-          </div>
-          <button class="action-link" id="endreNavnKnapp">Oppdater navn</button>
-        </div>
-        <div class="data-row">
-          <div>
-            <div class="data-label">E-postadresse for konto</div>
-            <div class="data-value" id="epostView">Laster...</div>
-          </div>
-        </div>
-      </div>
-    </div>
+    <div class="max-section-card" id="foreldreSeksjon">
+      <div class="max-section-title">Foreldrekontroll</div>
 
-    <div class="account-section" id="foreldreSeksjonWrapper">
-      <div class="section-header">
-        <h3>Trygghet og innstillinger</h3>
-      </div>
-      <div class="section-content">
-        
-        <div id="parentAdminPanel" class="hidden">
-          <div id="parentLockPanel" class="lock-panel">
-            <p style="color: var(--muted); margin-bottom: 15px; font-size: 14px;">Innholdsbegrensninger er låst for å beskytte yngre seere.</p>
-            <button class="btn-unlock" id="laasOppForeldreKontrollBtn"><i class="fa-solid fa-lock"></i> Lås opp foreldrekontroll</button>
-          </div>
-
-          <div id="parentSettingsPanel" class="hidden">
-            <div class="edit-field">
-              <label class="data-label">Velg profil du vil begrense:</label>
-              <select id="profileSelect"></select>
-            </div>
-            <div class="edit-field">
-              <label class="data-label">Maks tillatt aldersgrense:</label>
-              <select id="ageRestrictionSelect">
-                <option value="A">Kun innhold for alle (A)</option>
-                <option value="6">Maks 6 år</option>
-                <option value="9">Maks 9 år</option>
-                <option value="12">Maks 12 år</option>
-                <option value="18">Ingen restriksjoner (Voksen)</option>
-              </select>
-            </div>
-          </div>
+      <div id="parentAdminPanel" class="hidden">
+        <div id="parentLockPanel" class="max-lock-box">
+          <p>Instillingene er låst. Foreldre må låse opp for å endre profilbegrensninger.</p>
+          <button class="max-btn-primary" id="laasOppForeldreKontrollBtn">Lås opp innstillinger</button>
         </div>
 
-        <div id="kidsRestrictedPanel" class="kids-info-box hidden">
-          <i class="fa-solid fa-user-shield"></i>
-          <div>
-            <p style="font-weight: 600;">Dette er en Junior-konto</p>
-            <p style="font-size: 13px; color: var(--muted); margin-top: 2px;">Aldersgrenser og innstillinger kan kun endres av en forelder fra hovedprofilen.</p>
+        <div id="parentSettingsPanel" class="hidden">
+          <div class="edit-field">
+            <label>Velg profil du vil begrense:</label>
+            <select id="profileSelect"></select>
+          </div>
+          <div class="edit-field">
+            <label>Maks tillatt aldersgrense:</label>
+            <select id="ageRestrictionSelect">
+              <option value="A">Tillat kun innhold for alle (A)</option>
+              <option value="6">Maks 6 år</option>
+              <option value="9">Maks 9 år</option>
+              <option value="12">Maks 12 år</option>
+              <option value="18">Ingen restriksjoner (Voksen)</option>
+            </select>
           </div>
         </div>
-
       </div>
+
+      <div id="kidsRestrictedPanel" class="max-kids-alert hidden">
+        <i class="fa-solid fa-circle-exclamation"></i>
+        <div>
+          <strong>Dette er en barnekonto.</strong> Foreldrekontroller og profilendringer kan kun gjøres av en voksen fra hovedprofilen.
+        </div>
+      </div>
+
     </div>
   </div>
 
@@ -355,7 +362,7 @@
     let globalEpost = ""; 
     let docRef = null;
 
-    // Lokal-caching
+    // Lokalcaching
     const cachedProfiles = localStorage.getItem("watch_nordic_profiles_cache");
     const cachedEmail = localStorage.getItem("watch_nordic_email_cache");
     if (cachedProfiles && cachedEmail) {
@@ -406,7 +413,7 @@
       document.getElementById("profilbilde").src = gjeldendeProfil.bilde;
 
       if (gjeldendeProfil.isKids) {
-        kidsBadgeContainer.innerHTML = `<span class="kids-badge">Junior</span>`;
+        kidsBadgeContainer.innerHTML = `<span class="kids-badge">Barn / Junior</span>`;
         kidsRestrictedPanel.classList.remove("hidden");
         parentAdminPanel.classList.add("hidden");
         
