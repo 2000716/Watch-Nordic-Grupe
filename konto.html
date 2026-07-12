@@ -9,19 +9,21 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
   <style>
     :root {
-      --bg: #091B1E;
-      --muted: #bfc9c9;
+      --bg: #090e10;
+      --muted: #8e9a9c;
       --accent: #00FFCC;
-      --card-bg: rgba(255, 255, 255, 0.04);
-      --border: rgba(255, 255, 255, 0.08);
-      --kids-accent: #33b5ff;
+      --card-bg: rgba(255, 255, 255, 0.03);
+      --border: rgba(255, 255, 255, 0.06);
+      --kids-accent: #ffb703;
+      --kids-bg: #1e1b4b;
+      --text: #f3f4f6;
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
     body {
       background: var(--bg);
-      color: white;
+      color: var(--text);
       font-family: 'Inter', Arial, sans-serif;
       min-height: 100vh;
       display: flex;
@@ -29,19 +31,21 @@
       overflow-x: hidden;
     }
 
+    /* Strømmetjeneste-inspirert glød i bakgrunnen */
     body::before {
       content: "";
       position: fixed;
       inset: 0;
-      background: radial-gradient(circle at top left, rgba(0,255,204,0.08), transparent 35%);
+      background: radial-gradient(circle at top right, rgba(0,255,204,0.05), transparent 40%),
+                  radial-gradient(circle at bottom left, rgba(51,181,255,0.03), transparent 40%);
       z-index: -1;
     }
 
     header {
-      padding: 20px 60px;
-      background: rgba(9, 27, 30, 0.65);
-      backdrop-filter: blur(14px);
-      -webkit-backdrop-filter: blur(14px);
+      padding: 16px 60px;
+      background: rgba(9, 14, 16, 0.8);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
       border-bottom: 1px solid var(--border);
       display: flex;
       justify-content: space-between;
@@ -52,95 +56,111 @@
     }
 
     header h1 { 
-      font-size: 24px; 
+      font-size: 22px; 
       font-weight: 900;
-      letter-spacing: 2px;
+      letter-spacing: 3px;
       color: var(--accent);
-      text-shadow: 0 0 10px rgba(0,255,204,0.3);
+      text-shadow: 0 0 12px rgba(0,255,204,0.4);
+      cursor: pointer;
     }
 
     header .nav-btns { display: flex; gap: 12px; }
 
     header button {
-      background: rgba(255,255,255,0.05);
-      border: 1px solid rgba(255,255,255,0.15);
+      background: transparent;
+      border: 1px solid rgba(255,255,255,0.2);
       color: white;
-      padding: 10px 20px;
-      border-radius: 999px;
-      font-weight: 700;
+      padding: 8px 18px;
+      border-radius: 4px;
+      font-weight: 600;
       font-size: 14px;
       cursor: pointer;
-      transition: 0.25s ease;
+      transition: all 0.2s ease;
     }
 
     header button:hover { 
-      background: rgba(255,255,255,0.12);
+      background: rgba(255,255,255,0.1);
       border-color: white;
     }
 
     header button.logout-btn {
-      border-color: rgba(255, 77, 77, 0.4);
+      border-color: rgba(255, 77, 77, 0.3);
       color: #ff4d4d;
     }
     header button.logout-btn:hover {
-      background: rgba(255, 77, 77, 0.15);
+      background: rgba(255, 77, 77, 0.1);
       border-color: #ff4d4d;
     }
 
     .container {
-      max-width: 1200px;
+      max-width: 1100px;
       width: 100%;
       margin: 0 auto;
-      padding: 40px 60px;
+      padding: 40px 30px;
       display: grid;
-      grid-template-columns: 300px 1fr;
-      gap: 40px;
+      grid-template-columns: 280px 1fr;
+      gap: 50px;
       flex: 1;
     }
 
+    /* Profil-sidebaren */
     .sidebar {
-      background: var(--card-bg);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-      border-radius: 24px;
-      padding: 35px 24px;
+      background: rgba(255, 255, 255, 0.02);
+      border-radius: 16px;
+      padding: 30px 20px;
       text-align: center;
       border: 1px solid var(--border);
       height: fit-content;
     }
 
+    /* Rund avatar beholdes nøyaktig som ønsket */
     .avatar {
-      width: 150px;
-      height: 150px;
+      width: 130px;
+      height: 130px;
       border-radius: 50%;
       overflow: hidden;
-      margin: 0 auto 20px;
+      margin: 0 auto 15px;
       cursor: pointer;
-      border: 3px solid rgba(255,255,255,0.1);
-      transition: 0.3s ease;
+      border: 4px solid rgba(255,255,255,0.1);
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      position: relative;
     }
 
     .avatar:hover {
       border-color: var(--accent);
-      transform: scale(1.02);
+      transform: scale(1.05);
     }
 
     .avatar img { width: 100%; height: 100%; object-fit: cover; }
 
-    .profile-name { font-size: 22px; font-weight: 700; margin-bottom: 25px; word-break: break-word; }
+    .profile-name { font-size: 20px; font-weight: 700; margin-bottom: 8px; word-break: break-word; }
+    
+    /* Junior/Barn Badge */
+    .kids-badge {
+      display: inline-block;
+      background: var(--kids-accent);
+      color: #000;
+      font-size: 11px;
+      font-weight: 800;
+      padding: 2px 8px;
+      border-radius: 4px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 20px;
+    }
 
-    .profile-actions { display: flex; flex-direction: column; gap: 12px; }
+    .profile-actions { display: flex; flex-direction: column; gap: 8px; }
 
     .profile-actions button {
-      background: rgba(255,255,255,0.03);
-      border: 1px solid rgba(255,255,255,0.1);
-      color: white;
-      padding: 12px;
-      border-radius: 12px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid transparent;
+      color: rgba(255,255,255,0.8);
+      padding: 10px;
+      border-radius: 6px;
       font-weight: 600;
-      font-size: 14px;
+      font-size: 13px;
       cursor: pointer;
-      transition: 0.2s ease;
+      transition: all 0.2s;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -148,131 +168,136 @@
     }
 
     .profile-actions button:hover { 
-      background: rgba(255,255,255,0.08);
-      border-color: rgba(255,255,255,0.3);
+      background: rgba(255,255,255,0.1);
+      color: white;
     }
 
     .profile-actions button.delete-btn {
-      border-color: rgba(255, 77, 77, 0.2);
-      color: #ff4d4d;
-      margin-top: 15px;
+      color: rgba(255, 77, 77, 0.7);
+      margin-top: 10px;
+      font-size: 12px;
     }
     .profile-actions button.delete-btn:hover {
-      background: rgba(255, 77, 77, 0.15);
-      border-color: #ff4d4d;
+      background: rgba(255, 77, 77, 0.1);
+      color: #ff4d4d;
     }
 
+    /* Hovedinnhold */
     .content h2 {
-      margin: 0 0 18px;
-      font-size: 22px;
-      font-weight: 700;
-      display: flex;
-      align-items: center;
-      gap: 10px;
+      margin: 0 0 14px;
+      font-size: 18px;
+      font-weight: 600;
+      color: white;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 10px;
+      letter-spacing: 0.5px;
     }
-    
-    .content h2 i { color: var(--accent); font-size: 18px; }
 
     .card {
-      background: var(--card-bg);
-      backdrop-filter: blur(18px);
-      -webkit-backdrop-filter: blur(18px);
-      border-radius: 24px;
-      padding: 10px 24px;
       margin-bottom: 35px;
-      border: 1px solid var(--border);
     }
 
     .row {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 20px 0;
-      border-bottom: 1px solid rgba(255,255,255,0.05);
+      padding: 16px 0;
     }
 
-    .row:last-child { border-bottom: none; }
-
-    .info-block { flex: 1; padding-right: 20px; }
+    .info-block { flex: 1; }
 
     .label {
       color: var(--muted);
-      font-size: 12px;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      margin-bottom: 6px;
-      font-weight: 600;
+      font-size: 13px;
+      margin-bottom: 4px;
     }
 
-    .value { font-size: 16px; font-weight: 500; word-break: break-all; }
+    .value { font-size: 15px; font-weight: 500; color: white; }
 
     .row button.edit-trigger {
-      background: none;
-      border: 1px solid rgba(255,255,255,0.15);
-      color: white;
-      padding: 8px 16px;
-      border-radius: 8px;
+      background: transparent;
+      border: none;
+      color: var(--accent);
       cursor: pointer;
       font-size: 14px;
       font-weight: 600;
-      transition: 0.2s;
+      transition: opacity 0.2s;
     }
 
     .row button.edit-trigger:hover {
-      background: rgba(255,255,255,0.08);
-      border-color: white;
+      text-decoration: underline;
+      opacity: 0.8;
     }
 
     .hidden { display: none !important; }
 
-    .edit-field { margin-top: 10px; width: 100%; max-width: 400px; }
-
-    .edit-field input, .edit-field select {
-      width: 100%;
-      padding: 12px;
-      background: rgba(9, 27, 30, 0.8);
-      border: 1px solid rgba(255, 255, 255, 0.15);
-      border-radius: 10px;
-      color: white;
-      font-size: 15px;
-      margin-bottom: 8px;
+    /* Foreldrekontroll panel styling */
+    .parent-lock-screen { 
+      background: rgba(255,255,255,0.01);
+      border: 1px dashed var(--border);
+      border-radius: 8px;
+      text-align: center; 
+      padding: 30px 20px; 
     }
-    .edit-field select option { background: #091B1E; color: white; }
-
-    .parent-lock-screen { text-align: center; padding: 20px 0; }
     
     .btn-parent-unlock {
-      background: var(--kids-accent);
-      color: #071214;
+      background: white;
+      color: black;
       border: none;
-      padding: 10px 20px;
+      padding: 10px 24px;
       font-weight: 700;
-      border-radius: 10px;
+      font-size: 14px;
+      border-radius: 4px;
       cursor: pointer;
-      transition: 0.2s;
+      transition: opacity 0.2s;
     }
-    .btn-parent-unlock:hover { background: #2299dd; }
+    .btn-parent-unlock:hover { opacity: 0.9; }
+
+    .edit-field { margin-top: 15px; width: 100%; max-width: 400px; }
+    .edit-field label { display: block; margin-bottom: 6px; }
+    .edit-field select {
+      width: 100%;
+      padding: 10px;
+      background: #141a1c;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      color: white;
+      font-size: 14px;
+    }
+
+    /* Eget låst utseende for barna (Når de er logget inn på barnekonto) */
+    .kids-restricted-box {
+      background: rgba(255, 183, 3, 0.05);
+      border: 1px solid rgba(255, 183, 3, 0.2);
+      border-radius: 12px;
+      padding: 20px;
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      color: #ffe099;
+    }
+    .kids-restricted-box i { font-size: 24px; color: var(--kids-accent); }
 
     footer {
       border-top: 1px solid var(--border);
-      padding: 30px 60px;
-      color: #666;
-      font-size: 13px;
+      padding: 24px;
+      color: #4b5563;
+      font-size: 12px;
       margin-top: auto;
       text-align: center;
     }
 
-    @media (max-width: 960px) {
-      .container { grid-template-columns: 1fr; padding: 20px; }
-      .sidebar { padding: 24px 20px; }
-      .row { flex-direction: column; align-items: flex-start; gap: 12px; }
+    @media (max-width: 768px) {
+      .container { grid-template-columns: 1fr; padding: 20px; gap: 30px; }
+      header { padding: 16px 20px; }
+      .avatar { width: 100px; height: 100px; }
     }
   </style>
 </head>
 <body>
 
   <header>
-    <h1>WATCH</h1>
+    <h1 id="logoHome">WATCH</h1>
     <div class="nav-btns">
       <button id="navHovedsideBtn"><i class="fa-solid fa-house"></i> Hovedside</button>
       <button class="logout-btn" id="navLoggUtBtn"><i class="fa-solid fa-right-from-bracket"></i> Logg Ut</button>
@@ -285,14 +310,16 @@
         <img id="profilbilde" src="" alt="Profilbilde">
       </div>
       <div class="profile-name" id="navnDisplay">Laster...</div>
+      <div id="kidsBadgeContainer"></div>
+      
       <div class="profile-actions" id="sidebarActions">
-        <button id="endreBildeSideBtn"><i class="fa-solid fa-user-gear"></i> Endre bilde</button>
-        <button class="delete-btn" id="sletteKnapp"><i class="fa-solid fa-trash-can"></i> Slett profil permanent</button>
+        <button id="endreBildeSideBtn"><i class="fa-solid fa-camera"></i> Endre bilde</button>
+        <button class="delete-btn" id="sletteKnapp"><i class="fa-solid fa-trash-can"></i> Slett profil</button>
       </div>
     </aside>
 
     <section class="content">
-      <h2><i class="fa-solid fa-user"></i> Kontoinformasjon</h2>
+      <h2>Kontoinformasjon</h2>
       <div class="card">
         <div class="row" id="navnRow">
           <div class="info-block">
@@ -303,29 +330,30 @@
         </div>
         <div class="row" id="epostRow">
           <div class="info-block">
-            <div class="label">E-postadresse (Konto)</div>
+            <div class="label">E-postadresse (Hovedkonto)</div>
             <div class="value" id="epostView">Laster...</div>
           </div>
         </div>
       </div>
 
-      <div id="foreldreKontrollSeksjon" class="hidden">
-        <h2><i class="fa-solid fa-shield-halved" style="color: var(--kids-accent);"></i> Foreldrekontroll</h2>
-        <div class="card">
+      <div id="foreldreKontrollSeksjon">
+        <h2>Foreldrekontroll og Begrensninger</h2>
+        
+        <div id="parentAdminPanel" class="card hidden">
           <div id="parentLockPanel" class="parent-lock-screen">
-            <p style="margin-bottom: 15px; color: var(--muted);">Tjenestebegrensninger er låst. Foreldre kan låse opp med PIN.</p>
-            <button class="btn-parent-unlock" id="laasOppForeldreKontrollBtn"><i class="fa-solid fa-lock"></i> Lås opp foreldrekontroll</button>
+            <p style="margin-bottom: 15px; color: var(--muted); font-size: 14px;">Innstillinger for barnekontoer er låst.</p>
+            <button class="btn-parent-unlock" id="laasOppForeldreKontrollBtn"><i class="fa-solid fa-lock"></i> Lås opp med PIN</button>
           </div>
 
           <div id="parentSettingsPanel" class="hidden" style="padding: 10px 0;">
             <div class="edit-field">
               <label class="label">Velg profil du vil begrense:</label>
-              <select id="profileSelect" style="margin-top: 5px;"></select>
+              <select id="profileSelect"></select>
             </div>
             
-            <div class="edit-field" style="margin-top: 15px;">
+            <div class="edit-field">
               <label class="label">Maks tillatt aldersgrense:</label>
-              <select id="ageRestrictionSelect" style="margin-top: 5px;">
+              <select id="ageRestrictionSelect">
                 <option value="A">Tillat kun innhold for alle (A)</option>
                 <option value="6">Maks 6 år</option>
                 <option value="9">Maks 9 år</option>
@@ -335,6 +363,15 @@
             </div>
           </div>
         </div>
+
+        <div id="kidsRestrictedPanel" class="kids-restricted-box hidden">
+          <i class="fa-solid fa-user-lock"></i>
+          <div>
+            <h4 style="font-weight: 700; margin-bottom: 2px; color: white;">Dette er en Junior-profil</h4>
+            <p style="font-size: 13px; color: var(--muted);">Endringer og foreldrekontroller kan bare administreres fra en voksenprofil.</p>
+          </div>
+        </div>
+
       </div>
     </section>
   </div>
@@ -353,7 +390,9 @@
     const navnDisplay = document.getElementById("navnDisplay");
     const navnView = document.getElementById("navnView");
     const epostView = document.getElementById("epostView");
-    const foreldreKontrollSeksjon = document.getElementById("foreldreKontrollSeksjon");
+    const parentAdminPanel = document.getElementById("parentAdminPanel");
+    const kidsRestrictedPanel = document.getElementById("kidsRestrictedPanel");
+    const kidsBadgeContainer = document.getElementById("kidsBadgeContainer");
     const parentLockPanel = document.getElementById("parentLockPanel");
     const parentSettingsPanel = document.getElementById("parentSettingsPanel");
     const profileSelect = document.getElementById("profileSelect");
@@ -363,7 +402,7 @@
     let globalEpost = ""; 
     let docRef = null;
 
-    // Økonomisk lokal-caching
+    // Lokal caching
     const cachedProfiles = localStorage.getItem("watch_nordic_profiles_cache");
     const cachedEmail = localStorage.getItem("watch_nordic_email_cache");
     if (cachedProfiles && cachedEmail) {
@@ -382,9 +421,10 @@
       }
     });
 
-    document.getElementById("navHovedsideBtn").addEventListener("click", () => {
-      window.location.href = `hvem-ser-på.html?index=${aktivProfilIndex}`;
-    });
+    const gåTilHovedside = () => { window.location.href = `hvem-ser-på.html?index=${aktivProfilIndex}`; };
+    document.getElementById("navHovedsideBtn").addEventListener("click", gåTilHovedside);
+    document.getElementById("logoHome").addEventListener("click", gåTilHovedside);
+    
     document.getElementById("navLoggUtBtn").addEventListener("click", loggUt);
     document.getElementById("laasOppForeldreKontrollBtn").addEventListener("click", laasOppForeldreKontroll);
     profileSelect.addEventListener("change", oppdaterValgtProfilISekvens);
@@ -392,7 +432,7 @@
 
     async function hentKontodata() {
       try {
-        const docSnap = await getDoc(docRef); // Økonomisk lesing
+        const docSnap = await getDoc(docRef);
         if (docSnap.exists()) {
           const data = docSnap.data();
           profiler = data.profiler || [];
@@ -413,14 +453,23 @@
       epostView.innerText = globalEpost;
       document.getElementById("profilbilde").src = gjeldendeProfil.bilde;
 
-      // HVIS BARN: Skjul hele administrasjonspanelet (Standard oppførsel i strømmetjenester)
+      // HVIS BARN: Gi siden et tilpasset barneoppsett fremfor å bare skjule alt blankt
       if (gjeldendeProfil.isKids) {
-        foreldreKontrollSeksjon.classList.add("hidden");
+        kidsBadgeContainer.innerHTML = `<span class="kids-badge">Junior</span>`;
+        kidsRestrictedPanel.classList.remove("hidden");
+        parentAdminPanel.classList.add("hidden");
+        
+        // Skjuler administrasjonsknapper for barnet
         document.getElementById("sidebarActions").classList.add("hidden");
         document.getElementById("endreNavnKnapp").classList.add("hidden");
       } else {
-        // HVIS VOKSEN: Vis foreldrekontrollpanelet slik at de kan styre ungenes profiler
-        foreldreKontrollSeksjon.classList.remove("hidden");
+        // HVIS VOKSEN: Vis foreldrekontrollpanelet
+        kidsBadgeContainer.innerHTML = "";
+        kidsRestrictedPanel.classList.add("hidden");
+        parentAdminPanel.classList.remove("hidden");
+        
+        document.getElementById("sidebarActions").classList.remove("hidden");
+        document.getElementById("endreNavnKnapp").classList.remove("hidden");
         fyllProfilVelger();
       }
     }
@@ -455,11 +504,11 @@
       const targetIndex = profileSelect.value;
       const nyGrense = ageRestrictionSelect.value;
 
-      if (profiler[targetIndex].maksAldersgrense === nyGrense) return; // Sparer unødvendig skriving
+      if (profiler[targetIndex].maksAldersgrense === nyGrense) return;
 
       profiler[targetIndex].maksAldersgrense = nyGrense;
       
-      await setDoc(docRef, { profiler: profiler }, { merge: true }); // Økonomisk Firebase-skriving
+      await setDoc(docRef, { profiler: profiler }, { merge: true });
       localStorage.setItem("watch_nordic_profiles_cache", JSON.stringify(profiler));
       alert(`Aldersgrense for ${profiler[targetIndex].navn} ble oppdatert.`);
     }
