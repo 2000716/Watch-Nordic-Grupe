@@ -168,7 +168,7 @@ const filmer = {
     rating: "6.1",
     bakgrunn: "https://image.tmdb.org/t/p/original/aOhCtjYQMeeMTbvZnSafnGizvPX.jpg",
     bakgrunnMobil: "https://image.tmdb.org/t/p/original/aOhCtjYQMeeMTbvZnSafnGizvPX.jpg",
-    logo: "",
+    logo: "https://occ-0-3668-41.1.nflxso.net/dnm/api/v6/S4oi7EPZbv2UEPaukW54OORa0S8/AAAABd3AiKG0uXGKEjVEfZNSd1ldNNs4hwv0xyhoBTOVhPwGYJOSVAvxt4JEpWOofBl88qG-aE1K1FO99ecB1hMcO4Iy8cpiaTPxvg.webp?r=f73",
     trailer: "",
     poster: "https://image.tmdb.org/t/p/original/oujMFkWtIimaXQ0g6Fu5F8HZ7EV.jpg",
     posterVertikal: "https://image.tmdb.org/t/p/original/iluWXdeutaRpRmk7CYDXo8wYXdn.jpg",
