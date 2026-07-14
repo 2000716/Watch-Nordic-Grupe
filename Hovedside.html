@@ -342,7 +342,7 @@ main {
   display: none;
 }
 
-/* Base-stil for gallerielementer */
+/* Base-stil for gallerielementer (Sikrer rulling og klikkbare bokser for alle) */
 .image-gallery a, .continue-image-gallery a, .gallery-item {
   display: inline-block;
   position: relative;
@@ -350,10 +350,10 @@ main {
   background: transparent;
   border: 2px solid transparent;
   transition: border 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
-  overflow: hidden !important; /* Maskerer bildets hjørner og progressbar */
+  overflow: hidden !important; /* Maskerer bildets hjørner */
 }
 
-/* Alle galleribilder tvinges til nøyaktig samme størrelse */
+/* Alle bilder i ALLE gallerier er nøyaktig like store på PC */
 .image-gallery a img, .continue-image-gallery a img, .gallery-item img {
   width: 330px !important;
   height: 175px !important;
@@ -365,7 +365,7 @@ main {
 }
 
 /* ==========================================================================
-   SPESIFIKT FOR "FORTSETT Å SE" SPOLINGSLINJE
+   SPESIFIKT FOR "FORTSETT Å SE" - INGEN OVERLAYS, KUN PROGRESS BAR
    ========================================================================== */
 .continue-image-gallery a .progress-bar {
   position: absolute;
@@ -391,9 +391,11 @@ main {
   border-bottom-left-radius: 5px;
 }
 
-/* Fjerner metadata-skjermen helt i "Fortsett å se" */
+/* Fjerner alt som heter hover-fader og tekst spesifikt fra Fortsett å se-galleriet */
 .continue-image-gallery .image-overlay {
   display: none !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
 }
 
 .scroll-button {
@@ -446,7 +448,7 @@ main {
 }
 
 /* ==========================================================================
-   6. HOVER OVERLAY FOR BILDER (PC) - Kun for standard-gallerier nå
+   6. HOVER OVERLAY FOR BILDER (PC) - Fungerer som før på de andre galleriene
    ========================================================================== */
 .image-overlay {
   position: absolute !important;
@@ -612,6 +614,7 @@ main {
    9. HOVER EFFEKTER KUN FOR ENHETER MED MUS (PC / LAPTOP)
    ========================================================================== */
 @media (hover: hover) {
+  /* Skalerer opp elementene ved hover */
   .image-gallery a:hover, .continue-image-gallery a:hover, .gallery-item:hover {
     z-index: 999;
     transform: scale(1.05);
@@ -630,7 +633,7 @@ main {
     -webkit-text-stroke: 0;
   }
 
-  /* Viser kun overlay på standard-gallerier */
+  /* Vis kun overtoning og metadata på STANDARD gallerier */
   .image-gallery a:hover .image-overlay,
   .gallery-item:hover .image-overlay {
     opacity: 1;
@@ -764,7 +767,7 @@ main {
     background: rgba(255, 255, 255, 0.2);
   }
 
-  /* GALLERIER MOBIL */
+  /* GALLERIER MOBIL - RETTET SÅ ALLE BILDER HAR LIK OG RIKTIG STØRRELSE */
   .gallery-section, .continue-watching-section {
     margin-left: 32px !important; 
     margin-right: 0 !important;
@@ -796,9 +799,10 @@ main {
     transition: none !important;
   }
 
+  /* RETTET STØRRELSE: Alle galleribilder på mobil er nå nøyaktig like store, med fungerende rulling */
   .image-gallery a img, .continue-image-gallery a img, .gallery-item img {
-    width: 200px !important;  
-    height: 113px !important; 
+    width: 280px !important;  /* Satt opp fra 200px til en god, lesbar mobil-størrelse */
+    height: 150px !important; /* Justert proporsjonalt */
     aspect-ratio: 16 / 9 !important; 
     object-fit: cover !important; 
     border-radius: 4px !important;
