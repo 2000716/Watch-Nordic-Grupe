@@ -342,7 +342,7 @@ main {
   display: none;
 }
 
-/* Base-stil for gallerielementer (Sikrer rulling og klikkbare bokser for alle) */
+/* Base-stil for gallerielementer (Sikrer rulling, klikkbare bokser og at de ALDRI krymper) */
 .image-gallery a, .continue-image-gallery a, .gallery-item {
   display: inline-block;
   position: relative;
@@ -351,6 +351,7 @@ main {
   border: 2px solid transparent;
   transition: border 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
   overflow: hidden !important; /* Maskerer bildets hjørner */
+  flex-shrink: 0 !important;   /* HINDRER AT BILDENE BLIR SMÅ/SKEIVE NÅR DE SCROLLER */
 }
 
 /* Alle bilder i ALLE gallerier er nøyaktig like store på PC */
@@ -424,6 +425,7 @@ main {
   border-radius: 8px;
   cursor: pointer;
   transition: transform 0.3s ease;
+  flex-shrink: 0 !important; /* Hindrer krymping i Topp 10 */
 }
 
 .top10-item img {
@@ -793,16 +795,18 @@ main {
     overflow-y: visible !important;
   }
 
+  /* Rettet på mobil slik at de heller ikke her krymper */
   .image-gallery a, .continue-image-gallery a, .top10-item {
     scroll-snap-align: start !important;
     transform: none !important;
     transition: none !important;
+    flex-shrink: 0 !important; /* Hindrer krymping på mobil */
   }
 
   /* RETTET STØRRELSE: Alle galleribilder på mobil er nå nøyaktig like store, med fungerende rulling */
   .image-gallery a img, .continue-image-gallery a img, .gallery-item img {
-    width: 280px !important;  /* Satt opp fra 200px til en god, lesbar mobil-størrelse */
-    height: 150px !important; /* Justert proporsjonalt */
+    width: 280px !important;  
+    height: 150px !important; 
     aspect-ratio: 16 / 9 !important; 
     object-fit: cover !important; 
     border-radius: 4px !important;
