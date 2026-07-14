@@ -1455,7 +1455,7 @@ img, video {
     });
   }
 
-  function byggAnbefalingerEllerEpisoder() {
+function byggAnbefalingerEllerEpisoder() {
     const recommendationsDiv = document.querySelector(".recommendations");
     if (!recommendationsDiv) return;
 
@@ -1485,14 +1485,13 @@ img, video {
       if (sesongNumre.length > 0) visSesong(sesongNumre[0]);
 
     } else {
-      // Vis smarte anbefalinger for filmer
+      // Vis smarte anbefalinger for filmer basert på dine metadata-felt
       const gallery = document.getElementById("recommendationGallery");
       if (!gallery || gallery.children.length > 0) return;
 
       const tittelEl = document.querySelector(".recommendations h2");
       if (tittelEl) tittelEl.textContent = "Filmer du kanskje vil like";
 
-      // Vi henter alle tilgjengelige medier (både filmer og serier for å gi bredere utvalg, eller kun filmer)
       const kilde = filmerData;
       const alleKandidatNøkler = Object.keys(kilde).filter(k => {
         const item = kilde[k];
@@ -1501,40 +1500,49 @@ img, video {
         return erIkkeGjeldende && erPublisert;
       });
 
-      // Beregn en "likhetsscore" for hver eneste film i databasen
+      // Beregn en "likhetsscore" tilpasset din datastruktur
       const anbefalingerMedScore = alleKandidatNøkler.map(nøkkel => {
         const kandidat = kilde[nøkkel];
         let score = 0;
 
-        // 1. Sjekk felles sjangere (Filmer bør ha f.eks. data.sjanger = ["Action", "Drama"])
-        if (data.sjanger && kandidat.sjanger) {
-          const gjeldendeSjangere = Array.isArray(data.sjanger) ? data.sjanger : [data.sjanger];
-          const kandidatSjangere = Array.isArray(kandidat.sjanger) ? kandidat.sjanger : [kandidat.sjanger];
-          
-          gjeldendeSjangere.forEach(sj => {
-            if (kandidatSjangere.includes(sj)) {
-              score += 5; // +5 poeng per felles sjanger
-            }
-          });
-        }
+        const gjeldendeMeta = data.metadata || [];
+        const kandidatMeta = kandidat.metadata || [];
 
-        // 2. Sjekk aldersgrense / aldersmerking (f.eks. "12", "15", "A")
-        // Vi sjekker om det ligger i metadata-arrayet (f.eks. ["2024", "15", "2t 10m"])
-        const gjeldendeAlder = data.metadata ? data.metadata.find(m => !isNaN(m) || m === "A" || m.includes("år")) : null;
-        const kandidatAlder = kandidat.metadata ? kandidat.metadata.find(m => !isNaN(m) || m === "A" || m.includes("år")) : null;
-        
+        // 1. FINN ALDERSGRENSE (leter etter element med "år" eller en ren "A")
+        const finnAlder = (metaArray) => metaArray.find(m => m.toLowerCase().includes("år") || m.trim() === "A");
+        const gjeldendeAlder = finnAlder(gjeldendeMeta);
+        const kandidatAlder = finnAlder(kandidatMeta);
+
         if (gjeldendeAlder && kandidatAlder && gjeldendeAlder === kandidatAlder) {
           score += 3; // +3 poeng for lik aldersgrense
         }
 
-        // 3. Sjekk felles Regissør/Skaper
-        const gjeldendeSkaper = data.skapere || data.regissor;
-        const kandidatSkaper = kandidat.skapere || kandidat.regissor;
-        if (gjeldendeSkaper && kandidatSkaper && gjeldendeSkaper.toLowerCase() === kandidatSkaper.toLowerCase()) {
-          score += 4; // +4 poeng for samme regissør/skaper
+        // 2. FINN SJANGER (vi sammenligner alle elementer i metadata-arrayet)
+        // Vi ekskluderer årstall (4 siffer) og varighet/alder for å kun stå igjen med sjanger
+        const finnSjangere = (metaArray) => {
+          return metaArray.filter(m => {
+            const erAarstall = /^\d{4}$/.test(m.trim());
+            const erAlder = m.toLowerCase().includes("år") || m.trim() === "A";
+            const erVarighet = m.toLowerCase().includes("min") || m.toLowerCase().includes("t");
+            return !erAarstall && !erAlder && !erVarighet;
+          });
+        };
+
+        const gjeldendeSjangere = finnSjangere(gjeldendeMeta);
+        const kandidatSjangere = finnSjangere(kandidatMeta);
+
+        gjeldendeSjangere.forEach(sj => {
+          if (kandidatSjangere.includes(sj)) {
+            score += 6; // +6 poeng per felles sjanger (f.eks. "Grøsser")
+          }
+        });
+
+        // 3. REGISSØR-MATCH
+        if (data.regissor && kandidat.regissor && data.regissor.toLowerCase() === kandidat.regissor.toLowerCase()) {
+          score += 4; // +4 poeng for samme regissør
         }
 
-        // 4. Sjekk felles skuespillere (f.eks. hvis data.skuespillere er en streng "Skuespiller A, Skuespiller B")
+        // 4. SKUESPILLER-MATCH (splitter opp navnene dine separert med komma)
         if (data.skuespillere && kandidat.skuespillere) {
           const gjeldendeCast = data.skuespillere.split(",").map(s => s.trim().toLowerCase());
           const kandidatCast = kandidat.skuespillere.split(",").map(s => s.trim().toLowerCase());
@@ -1546,25 +1554,28 @@ img, video {
           });
         }
 
-        // Legg til litt tilfeldighet i scoren så listen ikke blir 100% statisk hver gang
-        score += Math.random() * 1.5;
+        // Legg til en liten dæsj tilfeldighet (0 til 1 poeng) så listen lever litt hver gang man laster siden
+        score += Math.random();
 
         return { nøkkel, score };
       });
 
-      // Sorter kandidatene slik at de med høyest score kommer først
+      // Sorter etter høyeste score først
       anbefalingerMedScore.sort((a, b) => b.score - a.score);
 
-      // Velg de 8 beste treffene (eller 3/6 avhengig av hvor mange du vil vise i griddet ditt)
-      const utvalgteAnbefalinger = anbefalingerMedScore.slice(0, 8);
+      // Tar de 6 beste (passer perfekt inn i rader med 3 i bredden som stables nedover)
+      const utvalgteAnbefalinger = anbefalingerMedScore.slice(0, 6);
 
-      // Bygg og legg til kortene i galleriet
       utvalgteAnbefalinger.forEach(anbefaling => {
         const item = kilde[anbefaling.nøkkel];
         const card = document.createElement("div");
         card.className = "movie-card";
+        
+        // Bruker liggende bakgrunnsbilde hvis posterHorisontal mangler
+        const bildeUrl = item.posterHorisontal || item.bakgrunn || item.poster || '';
+        
         card.innerHTML = `
-          <img src="${item.posterHorisontal || item.poster || item.bakgrunn || ''}" alt="${item.tittel || ''}">
+          <img src="${bildeUrl}" alt="${item.tittel || ''}">
           <div class="movie-overlay"><div class="movie-title">${item.tittel || ''}</div></div>
         `;
         card.addEventListener("click", () => {
