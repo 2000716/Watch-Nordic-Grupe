@@ -407,7 +407,7 @@ img, video {
 }
 
 /* ==========================================================================
-   6. ANBEFALINGER & EPISODER (FLATT DESIGN MED HORISONTAL SCROLL)
+   6. ANBEFALINGER & EPISODER (FLATT DESIGN MED 3 KOLONNER)
    ========================================================================== */
 .recommendations {
   margin: 40px auto 0;
@@ -424,30 +424,23 @@ img, video {
   margin-bottom: 20px;
 }
 
-/* Gjort om til flexbox med horisontal scroll som ikke krymper */
+/* ANBEFALINGER: Fast rutenett med nøyaktig 3 store filmplakater i bredden */
 .gallery {
-  display: flex;
-  overflow-x: auto;
-  overflow-y: visible;
-  gap: 20px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); /* Tvinger nøyaktig 3 kolonner i bredden */
+  gap: 24px; /* Fin avstand mellom filmplakatene */
   width: 100%;
-  padding-bottom: 15px; /* Gir litt luft til scrollbaren */
-  scroll-behavior: smooth;
-  -ms-overflow-style: none; /* Skjuler scrollbar i IE/Edge */
-}
-.gallery::-webkit-scrollbar {
-  display: none; /* Skjuler scrollbar i Chrome/Safari/Opera */
 }
 
+/* Filmplakatene i rutenettet */
 .movie-card {
-  width: 280px;               /* Satt fast bredde */
-  height: 165px;
-  border-radius: 4px;
+  width: 100%;                /* Fyller sin del av rutenettet (1/3 av bredden) */
+  height: 220px;              /* Fin, kino-aktig høyde for liggende filmplakater */
+  border-radius: 6px;
   overflow: hidden;
   position: relative;
   cursor: pointer;
-  transition: opacity .2s ease;
-  flex-shrink: 0 !important;  /* HINDRER KRYMPING */
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .movie-card img {
@@ -456,20 +449,21 @@ img, video {
   object-fit: cover;
 }
 
+/* Elegant hover-effekt */
 .movie-card:hover {
-  transform: none;
-  box-shadow: none;
+  transform: translateY(-5px); /* Løfter kortet litt opp */
+  box-shadow: 0 10px 20px rgba(0, 255, 204, 0.2);
 }
 
 .movie-overlay {
   position: absolute;
   inset: 0;
-  background: rgba(0, 0, 0, 0.7);
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.9) 0%, rgba(0, 0, 0, 0.2) 100%);
   opacity: 0;
-  transition: opacity .2s ease;
+  transition: opacity .3s ease;
   display: flex;
   align-items: flex-end;
-  padding: 15px;
+  padding: 16px;
 }
 
 .movie-card:hover .movie-overlay {
@@ -477,14 +471,18 @@ img, video {
 }
 
 .movie-title {
-  font-size: 14px;
-  font-weight: 600;
+  font-size: 15px;
+  font-weight: 700;
+  color: #fff;
 }
 
-/* Episoder system */
+/* ==========================================================================
+   EPISODER SYSTEM (Beholder den fine scrollingen sidelengs)
+   ========================================================================== */
 .season-buttons {
   display: flex;
   gap: 12px;
+  margin-top: 50px; /* Godt med luft under de 3 filmplakat-radene */
   margin-bottom: 20px;
   overflow-x: auto;
   padding-bottom: 8px;
@@ -503,7 +501,7 @@ img, video {
   cursor: pointer;
   font-size: 14px;
   white-space: nowrap;
-  flex-shrink: 0; /* Hindrer at knappene blir klemt flate */
+  flex-shrink: 0;
 }
 
 .season-btn.active {
@@ -512,7 +510,7 @@ img, video {
   font-weight: 700;
 }
 
-/* Gjort om til flexbox med horisontal scroll som ikke krymper */
+/* Episodene scroller sidelengs og krymper aldri */
 .episode-gallery {
   display: flex;
   overflow-x: auto;
@@ -528,14 +526,14 @@ img, video {
 }
 
 .episode-card {
-  width: 320px;               /* Satt fast bredde */
+  width: 320px;               /* Fast bredde på episodene */
   background: #0c0c0c;
   border-radius: 4px;
   overflow: hidden;
   cursor: pointer;
   transition: border-color .2s ease;
   border: 1px solid rgba(255,255,255,.05);
-  flex-shrink: 0 !important;  /* HINDRER KRYMPING */
+  flex-shrink: 0 !important;  /* Sikrer at episodene ikke krymper */
 }
 
 .episode-card:hover {
@@ -613,11 +611,11 @@ img, video {
 }
 
 /* ==========================================================================
-   MOBIL-OPTIMALISERING FOR ANBEFALINGER & EPISODER (Gjør dem litt mer kompakte på mobil)
+   MOBIL-TILPASSING FOR DENNE SEKSJONEN
    ========================================================================== */
 @media (max-width: 768px) {
   .recommendations {
-    padding: 0 32px 30px; /* Samme innrykk som resten på mobil */
+    padding: 0 32px 30px;
   }
   
   .recommendations h2 {
@@ -625,21 +623,36 @@ img, video {
     margin-bottom: 12px;
   }
 
-  .gallery, .episode-gallery {
+  /* På mobil blir 3 kolonner for trangt. Vi endrer det til 2 kolonner så 
+     plakatene fortsatt ser bra ut og teksten blir leselig. */
+  .gallery {
+    grid-template-columns: repeat(2, 1fr); 
     gap: 12px;
   }
 
   .movie-card {
-    width: 240px; /* Litt mer mobilvennlig bredde */
-    height: 135px;
+    height: 120px; /* Litt lavere høyde tilpasset mobilskjermer */
+  }
+
+  .movie-overlay {
+    padding: 10px;
+  }
+
+  .movie-title {
+    font-size: 12px;
+  }
+
+  /* Episodene beholder rullingen sidelengs, men blir mer kompakte på mobil */
+  .episode-gallery {
+    gap: 12px;
   }
 
   .episode-card {
-    width: 260px; /* Litt mer mobilvennlig bredde */
+    width: 260px; 
   }
 
   .episode-thumb {
-    height: 146px; /* Tilpasset høyde for mobil */
+    height: 146px; 
   }
 }
 /* ==========================================================================
