@@ -331,7 +331,7 @@ main {
   flex: 1;
   display: flex;
   overflow-x: auto;
-  overflow-y: visible; /* Sikrer at forstørrede bilder ikke kuttes på topp/bunn */
+  overflow-y: visible;
   gap: 16px;
   padding: 15px 10px; 
   scroll-behavior: smooth;
@@ -342,7 +342,7 @@ main {
   display: none;
 }
 
-/* Base-stil for gallerielementer slik at bildet zoomer UTEN å kuttes */
+/* Base-stil for gallerielementer */
 .image-gallery a, .continue-image-gallery a, .gallery-item {
   display: inline-block;
   position: relative;
@@ -350,7 +350,7 @@ main {
   background: transparent;
   border: 2px solid transparent;
   transition: border 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
-  overflow: visible !important; /* VIKTIG: Hindrer kutting ved zoom */
+  overflow: hidden !important; /* Maskerer bildets hjørner og progressbar */
 }
 
 /* Alle galleribilder tvinges til nøyaktig samme størrelse */
@@ -364,14 +364,19 @@ main {
   transition: transform 0.3s ease;
 }
 
+/* ==========================================================================
+   SPESIFIKT FOR "FORTSETT Å SE" SPOLINGSLINJE
+   ========================================================================== */
 .continue-image-gallery a .progress-bar {
   position: absolute;
   bottom: 0;
   left: 0;
   height: 4px;
   width: 100%;
-  background-color: rgba(255, 255, 255, 0.2);
-  z-index: 3;
+  background-color: rgba(255, 255, 255, 0.3);
+  z-index: 4;
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
 }
 
 .continue-image-gallery a .progress-bar::after {
@@ -383,6 +388,12 @@ main {
   background-color: #00FFCC;
   width: var(--progress, 0%);
   transition: width 0.3s ease;
+  border-bottom-left-radius: 5px;
+}
+
+/* Fjerner metadata-skjermen helt i "Fortsett å se" */
+.continue-image-gallery .image-overlay {
+  display: none !important;
 }
 
 .scroll-button {
@@ -435,7 +446,7 @@ main {
 }
 
 /* ==========================================================================
-   6. HOVER OVERLAY FOR BILDER (PC)
+   6. HOVER OVERLAY FOR BILDER (PC) - Kun for standard-gallerier nå
    ========================================================================== */
 .image-overlay {
   position: absolute !important;
@@ -446,13 +457,14 @@ main {
   background: linear-gradient(
     to top,
     rgba(0, 0, 0, 0.95) 0%,   
-    rgba(0, 0, 0, 0.7) 40%,    
-    rgba(0, 0, 0, 0) 80%       
+    rgba(0, 0, 0, 0.7) 50%,    
+    rgba(0, 0, 0, 0.2) 80%,
+    rgba(0, 0, 0, 0) 100%       
   );
   border-radius: inherit;
   display: flex;
   align-items: flex-end;
-  z-index: 2;
+  z-index: 3;
 }
 
 .overlay-content {
@@ -602,11 +614,11 @@ main {
 @media (hover: hover) {
   .image-gallery a:hover, .continue-image-gallery a:hover, .gallery-item:hover {
     z-index: 999;
-    transform: scale(1.05); /* Forstørrer hele elementet */
+    transform: scale(1.05);
   }
 
   .image-gallery a:hover img, .continue-image-gallery a:hover img, .gallery-item:hover img {
-    transform: scale(1.0); /* Forhindrer dobbel-zoom på selve bildefila */
+    transform: scale(1.0);
   }
 
   .top10-item:hover { 
@@ -618,6 +630,8 @@ main {
     -webkit-text-stroke: 0;
   }
 
+  /* Viser kun overlay på standard-gallerier */
+  .image-gallery a:hover .image-overlay,
   .gallery-item:hover .image-overlay {
     opacity: 1;
   }
@@ -677,7 +691,6 @@ main {
    11. MOBIL-OPTIMALISERING (768px og nedover)
    ========================================================================== */
 @media (max-width: 768px) {
-  /* HENTET FRA FILMINFO: Sørger for at menyen oppfører seg likt */
   .top-nav {
     padding: 0 20px;
     height: 70px;
@@ -687,7 +700,6 @@ main {
     display: none;
   }
 
-  /* RESTEN AV FORSIDENS MOBIL-CSS */
   body { 
     padding-bottom: 75px;
   }
@@ -930,17 +942,19 @@ main {
     </div>
   </section>
 
-  <section class="gallery-section" id="fortsett-section" style="display:none;">
-    <h2>Fortsett å se</h2>
-    <div class="gallery-wrapper">
-      <div class="fade-left"></div>
-      <button class="scroll-button left">❮</button>
-      <div class="image-gallery" id="fortsett-galleri"></div>
-      <button class="scroll-button right">❯</button>
-      <div class="fade-right"></div>
-    </div>
-  </section>
+<section class="continue-watching-section" id="fortsett-section" style="display:none;">
+  <h2>Fortsett å se</h2>
+  <div class="continue-gallery-wrapper">
+    <div class="fade-left"></div>
+    <button class="scroll-button left">❮</button>
     
+    <div class="continue-image-gallery" id="fortsett-galleri"></div>
+    
+    <button class="scroll-button right">❯</button>
+    <div class="fade-right"></div>
+  </div>
+</section>
+  
   <section class="gallery-section" id="barn-seksjon" style="display:none;">
     <h2>Barne- og familieinnhold</h2>
     <div class="gallery-wrapper">
@@ -1590,18 +1604,16 @@ async function renderContinueWatching() {
 
       const link = document.createElement("a");
       link.href = hrefUrl;
-      link.classList.add("gallery-item");
+      
+      // SIKRER AT KLASSEN ER FOR FORTSETT-GALLERIET
+      link.classList.add("gallery-item"); 
       link.style.setProperty('--progress', `${progressVerdi}%`);
       
-      // RETTET: Viser kun tittelen i overlayet, metadata (overlay-meta) er fjernet helt herfra.
+      // HELT RENT BILDE: Nå er både .image-overlay, metadata og faden fjernet helt herfra.
+      // Kun bildet og progress-baren beholdes.
       link.innerHTML = `
         <img src="${metadataMatch.poster || metadataMatch.bilde}" alt="${dbData.tittel || metadataMatch.tittel}">
         <div class="progress-bar"></div>
-        <div class="image-overlay">
-          <div class="overlay-content">
-            <div class="overlay-title">${metadataMatch.tittel}</div>
-          </div>
-        </div>
       `;
       gallery.appendChild(link);
     });
