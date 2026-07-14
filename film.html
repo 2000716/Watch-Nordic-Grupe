@@ -1566,13 +1566,13 @@ function byggAnbefalingerEllerEpisoder() {
       // Tar de 6 beste (passer perfekt inn i rader med 3 i bredden som stables nedover)
       const utvalgteAnbefalinger = anbefalingerMedScore.slice(0, 6);
 
-      utvalgteAnbefalinger.forEach(anbefaling => {
+        utvalgteAnbefalinger.forEach(anbefaling => {
         const item = kilde[anbefaling.nøkkel];
         const card = document.createElement("div");
         card.className = "movie-card";
         
-        // Bruker liggende bakgrunnsbilde hvis posterHorisontal mangler
-        const bildeUrl = item.posterHorisontal || item.bakgrunn || item.poster || '';
+        // Henter nøyaktig "poster"-feltet fra filmen, og bruker bakgrunn som nødløsning
+        const bildeUrl = item.poster || item.bakgrunn || '';
         
         card.innerHTML = `
           <img src="${bildeUrl}" alt="${item.tittel || ''}">
