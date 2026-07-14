@@ -407,7 +407,7 @@ img, video {
 }
 
 /* ==========================================================================
-   6. ANBEFALINGER & EPISODER (FLATT DESIGN)
+   6. ANBEFALINGER & EPISODER (FLATT DESIGN MED HORISONTAL SCROLL)
    ========================================================================== */
 .recommendations {
   margin: 40px auto 0;
@@ -424,21 +424,30 @@ img, video {
   margin-bottom: 20px;
 }
 
+/* Gjort om til flexbox med horisontal scroll som ikke krymper */
 .gallery {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  display: flex;
+  overflow-x: auto;
+  overflow-y: visible;
   gap: 20px;
   width: 100%;
+  padding-bottom: 15px; /* Gir litt luft til scrollbaren */
+  scroll-behavior: smooth;
+  -ms-overflow-style: none; /* Skjuler scrollbar i IE/Edge */
+}
+.gallery::-webkit-scrollbar {
+  display: none; /* Skjuler scrollbar i Chrome/Safari/Opera */
 }
 
 .movie-card {
-  width: 100%;
+  width: 280px;               /* Satt fast bredde */
   height: 165px;
   border-radius: 4px;
   overflow: hidden;
   position: relative;
   cursor: pointer;
   transition: opacity .2s ease;
+  flex-shrink: 0 !important;  /* HINDRER KRYMPING */
 }
 
 .movie-card img {
@@ -479,6 +488,10 @@ img, video {
   margin-bottom: 20px;
   overflow-x: auto;
   padding-bottom: 8px;
+  -ms-overflow-style: none;
+}
+.season-buttons::-webkit-scrollbar {
+  display: none;
 }
 
 .season-btn {
@@ -490,6 +503,7 @@ img, video {
   cursor: pointer;
   font-size: 14px;
   white-space: nowrap;
+  flex-shrink: 0; /* Hindrer at knappene blir klemt flate */
 }
 
 .season-btn.active {
@@ -498,19 +512,30 @@ img, video {
   font-weight: 700;
 }
 
+/* Gjort om til flexbox med horisontal scroll som ikke krymper */
 .episode-gallery {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  display: flex;
+  overflow-x: auto;
+  overflow-y: visible;
   gap: 24px;
+  width: 100%;
+  padding-bottom: 15px;
+  scroll-behavior: smooth;
+  -ms-overflow-style: none;
+}
+.episode-gallery::-webkit-scrollbar {
+  display: none;
 }
 
 .episode-card {
+  width: 320px;               /* Satt fast bredde */
   background: #0c0c0c;
   border-radius: 4px;
   overflow: hidden;
   cursor: pointer;
   transition: border-color .2s ease;
   border: 1px solid rgba(255,255,255,.05);
+  flex-shrink: 0 !important;  /* HINDRER KRYMPING */
 }
 
 .episode-card:hover {
@@ -587,6 +612,36 @@ img, video {
   gap: 8px;
 }
 
+/* ==========================================================================
+   MOBIL-OPTIMALISERING FOR ANBEFALINGER & EPISODER (Gjør dem litt mer kompakte på mobil)
+   ========================================================================== */
+@media (max-width: 768px) {
+  .recommendations {
+    padding: 0 32px 30px; /* Samme innrykk som resten på mobil */
+  }
+  
+  .recommendations h2 {
+    font-size: 18px;
+    margin-bottom: 12px;
+  }
+
+  .gallery, .episode-gallery {
+    gap: 12px;
+  }
+
+  .movie-card {
+    width: 240px; /* Litt mer mobilvennlig bredde */
+    height: 135px;
+  }
+
+  .episode-card {
+    width: 260px; /* Litt mer mobilvennlig bredde */
+  }
+
+  .episode-thumb {
+    height: 146px; /* Tilpasset høyde for mobil */
+  }
+}
 /* ==========================================================================
    7. FOOTER OG SKJERM-POPUPS
    ========================================================================== */
