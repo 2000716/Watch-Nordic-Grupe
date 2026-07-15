@@ -1303,7 +1303,32 @@ img, video {
     let profilData = heleProfilArrayet[indexId] || heleProfilArrayet.find(p => p.navn === aktivProfil);
     
     if (profilData) {
-      status = (profilData.historikk && profilData.historikk[navn]) ? profilData.historikk[navn] : "ikke-påbegynt";
+      // Nullstill standardstatus før vi gjør en ny, presis sjekk
+      status = "ikke-påbegynt";
+
+      if (type === "film") {
+        const filmId = `film-${navn}`;
+        if (profilData.fremdrift && profilData.fremdrift[filmId]) {
+          status = "påbegynt";
+        } else if (profilData.historikk && profilData.historikk.includes(filmId)) {
+          status = "ferdig";
+        }
+      } else if (type === "serie") {
+        // Sjekk om det finnes en aktiv uferdig episode for denne serien i fremdrift-listen
+        const fremdriftNøkler = Object.keys(profilData.fremdrift || {});
+        const aktivEp = fremdriftNøkler.find(key => key.startsWith(`serie-${navn}-`));
+
+        if (aktivEp) {
+          status = "påbegynt";
+        } else {
+          // Hvis ingen påbegynte, sjekk om brukeren har fullført minst én episode tidligere i historikk-arrayet
+          const harSettNoe = profilData.historikk && profilData.historikk.some(hId => hId.startsWith(`serie-${navn}-`));
+          if (harSettNoe) {
+            status = "ferdig";
+          }
+        }
+      }
+
       minListe = profilData.minListe || [];
       
       oppdaterWatchKnapp();
@@ -1321,8 +1346,7 @@ img, video {
     }
     if (indeks === -1) return;
 
-    if (!heleProfilArrayet[indeks].historikk) heleProfilArrayet[indeks].historikk = {};
-    heleProfilArrayet[indeks].historikk[navn] = status;
+    // Lagrer KUN minListe fra denne siden for å unngå å overskrive og ødelegge historikk-arrayet
     heleProfilArrayet[indeks].minListe = minListe;
 
     localStorage.setItem("watch_nordic_profiles_cache", JSON.stringify(heleProfilArrayet));
@@ -1362,26 +1386,44 @@ img, video {
   async function handterWatchClick() {
     if (erUpublisert || erUtgått) return;
 
-    status = "påbegynt";
-    oppdaterWatchKnapp(); 
-    await lagreProfilDataTilSkyen();
-
     const returUrl = encodeURIComponent(window.location.href);
 
     if (type === "film") {
       const separator = data.watchUrl.includes("?") ? "&" : "?";
       window.location.href = `${data.watchUrl}${separator}returUrl=${returUrl}`;
     } else if (type === "serie" && data.sesonger) {
-      const sisteEpKey = `${navn}-siste-episode`;
-      let sisteEp = JSON.parse(localStorage.getItem(sisteEpKey));
       let sesongNr, epNr;
+      let indexId = parseInt(aktivProfilIndex);
+      let profilData = heleProfilArrayet[indexId] || heleProfilArrayet.find(p => p.navn === aktivProfil);
 
-      if (sisteEp && data.sesonger[sisteEp.sesong]?.episoder[sisteEp.episode]) {
-        sesongNr = sisteEp.sesong;
-        epNr = sisteEp.episode;
-      } else {
-        sesongNr = Object.keys(data.sesonger)[0];
-        epNr = Object.keys(data.sesonger[sesongNr].episoder)[0];
+      // Sjekk om det ligger en uferdig episode i database-fremdriften akkurat nå
+      let aktivEpIProgress = null;
+      if (profilData && profilData.fremdrift) {
+        const fremdriftNøkler = Object.keys(profilData.fremdrift);
+        aktivEpIProgress = fremdriftNøkler.find(key => key.startsWith(`serie-${navn}-`));
+      }
+
+      if (aktivEpIProgress) {
+        // Ekstraher sesong og episode automatisk fra ID-en (f.eks. "serie-friends-s1-e2")
+        const match = aktivEpIProgress.match(/-s(\d+)-e(\d+)/);
+        if (match) {
+          sesongNr = match[1];
+          epNr = match[2];
+        }
+      }
+
+      // Hvis ikke funnet i db-fremdrift, sjekk localStorage eller ta første episode som standard
+      if (!sesongNr || !epNr) {
+        const sisteEpKey = `${navn}-siste-episode`;
+        let sisteEp = JSON.parse(localStorage.getItem(sisteEpKey));
+
+        if (sisteEp && data.sesonger[sisteEp.sesong]?.episoder[sisteEp.episode]) {
+          sesongNr = sisteEp.sesong;
+          epNr = sisteEp.episode;
+        } else {
+          sesongNr = Object.keys(data.sesonger)[0];
+          epNr = Object.keys(data.sesonger[sesongNr].episoder)[0];
+        }
       }
       window.location.href = `film-mal.html?navn=${encodeURIComponent(navn)}&sesong=${sesongNr}&episode=${epNr}&returUrl=${returUrl}`;
     }
@@ -1508,17 +1550,16 @@ function byggAnbefalingerEllerEpisoder() {
         const gjeldendeMeta = data.metadata || [];
         const kandidatMeta = kandidat.metadata || [];
 
-        // 1. FINN ALDERSGRENSE (leter etter element med "år" eller en ren "A")
+        // 1. FINN ALDERSGRENSE
         const finnAlder = (metaArray) => metaArray.find(m => m.toLowerCase().includes("år") || m.trim() === "A");
         const gjeldendeAlder = finnAlder(gjeldendeMeta);
         const kandidatAlder = finnAlder(kandidatMeta);
 
         if (gjeldendeAlder && kandidatAlder && gjeldendeAlder === kandidatAlder) {
-          score += 3; // +3 poeng for lik aldersgrense
+          score += 3;
         }
 
-        // 2. FINN SJANGER (vi sammenligner alle elementer i metadata-arrayet)
-        // Vi ekskluderer årstall (4 siffer) og varighet/alder for å kun stå igjen med sjanger
+        // 2. FINN SJANGER
         const finnSjangere = (metaArray) => {
           return metaArray.filter(m => {
             const erAarstall = /^\d{4}$/.test(m.trim());
@@ -1533,45 +1574,40 @@ function byggAnbefalingerEllerEpisoder() {
 
         gjeldendeSjangere.forEach(sj => {
           if (kandidatSjangere.includes(sj)) {
-            score += 6; // +6 poeng per felles sjanger (f.eks. "Grøsser")
+            score += 6;
           }
         });
 
         // 3. REGISSØR-MATCH
         if (data.regissor && kandidat.regissor && data.regissor.toLowerCase() === kandidat.regissor.toLowerCase()) {
-          score += 4; // +4 poeng for samme regissør
+          score += 4;
         }
 
-        // 4. SKUESPILLER-MATCH (splitter opp navnene dine separert med komma)
+        // 4. SKUESPILLER-MATCH
         if (data.skuespillere && kandidat.skuespillere) {
           const gjeldendeCast = data.skuespillere.split(",").map(s => s.trim().toLowerCase());
           const kandidatCast = kandidat.skuespillere.split(",").map(s => s.trim().toLowerCase());
           
           gjeldendeCast.forEach(skuespiller => {
             if (kandidatCast.includes(skuespiller)) {
-              score += 2; // +2 poeng per felles skuespiller
+              score += 2;
             }
           });
         }
 
-        // Legg til en liten dæsj tilfeldighet (0 til 1 poeng) så listen lever litt hver gang man laster siden
         score += Math.random();
 
         return { nøkkel, score };
       });
 
-      // Sorter etter høyeste score først
       anbefalingerMedScore.sort((a, b) => b.score - a.score);
-
-      // Tar de 6 beste (passer perfekt inn i rader med 3 i bredden som stables nedover)
       const utvalgteAnbefalinger = anbefalingerMedScore.slice(0, 6);
 
-        utvalgteAnbefalinger.forEach(anbefaling => {
+      utvalgteAnbefalinger.forEach(anbefaling => {
         const item = kilde[anbefaling.nøkkel];
         const card = document.createElement("div");
         card.className = "movie-card";
         
-        // Henter nøyaktig "poster"-feltet fra filmen, og bruker bakgrunn som nødløsning
         const bildeUrl = item.poster || item.bakgrunn || '';
         
         card.innerHTML = `
