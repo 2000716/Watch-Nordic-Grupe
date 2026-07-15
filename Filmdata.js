@@ -179,7 +179,7 @@ const filmer = {
     lisens: "(CC) BY 4.0 | Netflix Open Content",
     kilde: "https://netflix.com",
     watchUrl: "film-mal.html?id=meridian",
-    videoUrl: "https://archive.org",
+    videoUrl: "https://drive.google.com/file/d/1xs_p9ED-NQpxSyLE6Gx1rAEE6OF6a4wL/view?usp=drive_link",
     subtitleUrl: "",
     tilbakeUrl: "film.html?navn=meridian",
     audioLanguages: [{ code: "en", label: "Engelsk" }],
