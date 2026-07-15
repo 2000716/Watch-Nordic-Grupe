@@ -1070,9 +1070,9 @@ img, video {
   const params = new URLSearchParams(window.location.search);
   const navn = params.get("navn");
 
-  // Hent data trygt fra globale skripts
-  const filmerData = window.filmer || typeof filmer !== "undefined" ? filmer : {};
-  const serierData = window.serier || typeof serier !== "undefined" ? serier : {};
+  // Hent data trygt fra globale skripts uten å krasje
+  const filmerData = typeof window.filmer !== "undefined" ? window.filmer : (typeof filmer !== "undefined" ? filmer : {});
+  const serierData = typeof window.serier !== "undefined" ? window.serier : (typeof serier !== "undefined" ? serier : {});
 
   let type = "film";
   let data = filmerData[navn] || null;
@@ -1182,7 +1182,7 @@ img, video {
       `;
     }
 
-    // Deaktiver knapper ved utgått/låst innhold
+    // Deaktiver knapper ved utgått/låst innhold (Flyttet trygt inn i init)
     if (erUtgått || erUpublisert) {
       [watchBtn, addToListBtn].forEach(btn => {
         if (btn) {
@@ -1303,32 +1303,7 @@ img, video {
     let profilData = heleProfilArrayet[indexId] || heleProfilArrayet.find(p => p.navn === aktivProfil);
     
     if (profilData) {
-      // Nullstill standardstatus før vi gjør en ny, presis sjekk
-      status = "ikke-påbegynt";
-
-      if (type === "film") {
-        const filmId = `film-${navn}`;
-        if (profilData.fremdrift && profilData.fremdrift[filmId]) {
-          status = "påbegynt";
-        } else if (profilData.historikk && profilData.historikk.includes(filmId)) {
-          status = "ferdig";
-        }
-      } else if (type === "serie") {
-        // Sjekk om det finnes en aktiv uferdig episode for denne serien i fremdrift-listen
-        const fremdriftNøkler = Object.keys(profilData.fremdrift || {});
-        const aktivEp = fremdriftNøkler.find(key => key.startsWith(`serie-${navn}-`));
-
-        if (aktivEp) {
-          status = "påbegynt";
-        } else {
-          // Hvis ingen påbegynte, sjekk om brukeren har fullført minst én episode tidligere i historikk-arrayet
-          const harSettNoe = profilData.historikk && profilData.historikk.some(hId => hId.startsWith(`serie-${navn}-`));
-          if (harSettNoe) {
-            status = "ferdig";
-          }
-        }
-      }
-
+      status = (profilData.historikk && profilData.historikk[navn]) ? profilData.historikk[navn] : "ikke-påbegynt";
       minListe = profilData.minListe || [];
       
       oppdaterWatchKnapp();
@@ -1346,7 +1321,8 @@ img, video {
     }
     if (indeks === -1) return;
 
-    // Lagrer KUN minListe fra denne siden for å unngå å overskrive og ødelegge historikk-arrayet
+    if (!heleProfilArrayet[indeks].historikk) heleProfilArrayet[indeks].historikk = {};
+    heleProfilArrayet[indeks].historikk[navn] = status;
     heleProfilArrayet[indeks].minListe = minListe;
 
     localStorage.setItem("watch_nordic_profiles_cache", JSON.stringify(heleProfilArrayet));
@@ -1386,44 +1362,26 @@ img, video {
   async function handterWatchClick() {
     if (erUpublisert || erUtgått) return;
 
+    status = "påbegynt";
+    oppdaterWatchKnapp(); 
+    await lagreProfilDataTilSkyen();
+
     const returUrl = encodeURIComponent(window.location.href);
 
     if (type === "film") {
       const separator = data.watchUrl.includes("?") ? "&" : "?";
       window.location.href = `${data.watchUrl}${separator}returUrl=${returUrl}`;
     } else if (type === "serie" && data.sesonger) {
+      const sisteEpKey = `${navn}-siste-episode`;
+      let sisteEp = JSON.parse(localStorage.getItem(sisteEpKey));
       let sesongNr, epNr;
-      let indexId = parseInt(aktivProfilIndex);
-      let profilData = heleProfilArrayet[indexId] || heleProfilArrayet.find(p => p.navn === aktivProfil);
 
-      // Sjekk om det ligger en uferdig episode i database-fremdriften akkurat nå
-      let aktivEpIProgress = null;
-      if (profilData && profilData.fremdrift) {
-        const fremdriftNøkler = Object.keys(profilData.fremdrift);
-        aktivEpIProgress = fremdriftNøkler.find(key => key.startsWith(`serie-${navn}-`));
-      }
-
-      if (aktivEpIProgress) {
-        // Ekstraher sesong og episode automatisk fra ID-en (f.eks. "serie-friends-s1-e2")
-        const match = aktivEpIProgress.match(/-s(\d+)-e(\d+)/);
-        if (match) {
-          sesongNr = match[1];
-          epNr = match[2];
-        }
-      }
-
-      // Hvis ikke funnet i db-fremdrift, sjekk localStorage eller ta første episode som standard
-      if (!sesongNr || !epNr) {
-        const sisteEpKey = `${navn}-siste-episode`;
-        let sisteEp = JSON.parse(localStorage.getItem(sisteEpKey));
-
-        if (sisteEp && data.sesonger[sisteEp.sesong]?.episoder[sisteEp.episode]) {
-          sesongNr = sisteEp.sesong;
-          epNr = sisteEp.episode;
-        } else {
-          sesongNr = Object.keys(data.sesonger)[0];
-          epNr = Object.keys(data.sesonger[sesongNr].episoder)[0];
-        }
+      if (sisteEp && data.sesonger[sisteEp.sesong]?.episoder[sisteEp.episode]) {
+        sesongNr = sisteEp.sesong;
+        epNr = sisteEp.episode;
+      } else {
+        sesongNr = Object.keys(data.sesonger)[0];
+        epNr = Object.keys(data.sesonger[sesongNr].episoder)[0];
       }
       window.location.href = `film-mal.html?navn=${encodeURIComponent(navn)}&sesong=${sesongNr}&episode=${epNr}&returUrl=${returUrl}`;
     }
@@ -1477,7 +1435,7 @@ img, video {
       epCard.innerHTML = `
         <div class="episode-thumb">
           <img src="${ep.thumbnail || ''}" alt="${ep.tittel || ''}">
-          			${overlayHTML}
+          ${overlayHTML}
         </div>
         <div class="episode-info">
           <div class="episode-title">Episode ${epNr}: ${ep.tittel || ''}</div>
@@ -1497,7 +1455,7 @@ img, video {
     });
   }
 
-function byggAnbefalingerEllerEpisoder() {
+  function byggAnbefalingerEllerEpisoder() {
     const recommendationsDiv = document.querySelector(".recommendations");
     if (!recommendationsDiv) return;
 
@@ -1596,7 +1554,6 @@ function byggAnbefalingerEllerEpisoder() {
         }
 
         score += Math.random();
-
         return { nøkkel, score };
       });
 
