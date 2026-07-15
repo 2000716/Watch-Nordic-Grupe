@@ -954,6 +954,7 @@ function oppdaterFremdriftILokalMatrise(status) {
   if (!heleProfilArrayet[profilIdx].fremdrift) heleProfilArrayet[profilIdx].fremdrift = {};
   if (!heleProfilArrayet[profilIdx].historikk) heleProfilArrayet[profilIdx].historikk = [];
 
+  // FIKS: Hvis status settes direkte til "ferdig", eller videofremdrift overskrider 96%
   if (status === "ferdig" || percent > 96) {
     delete heleProfilArrayet[profilIdx].fremdrift[filmId];
     if (!heleProfilArrayet[profilIdx].historikk.includes(filmId)) {
@@ -995,6 +996,7 @@ async function ryddeOgNeste() {
   clearInterval(lokalLagringsInterval);
   clearInterval(autoplayTimer);
   
+  // Sett status til fullført for å fjerne fra "Fortsett å se"
   oppdaterFremdriftILokalMatrise("ferdig");
   
   if (currentUser) {
@@ -1004,7 +1006,7 @@ async function ryddeOgNeste() {
     } catch (e) { console.error("Feil ved lagring før navigering:", e); }
   }
   
-  // FIKS: Hvis det er en serie og det finnes en neste episode, gå til den. Ellers send brukeren alltid til infosiden.
+  // FIKS: Navigering basert på om det faktisk finnes en neste episode eller ikke
   if (isSerie && nesteEpisodeUrl) {
     window.location.href = nesteEpisodeUrl;
   } else {
