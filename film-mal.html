@@ -1048,11 +1048,12 @@ if (video) {
   if (trackTag && film.subtitleUrl) trackTag.src = film.subtitleUrl;
   video.load();
 }
+
 /* ================= 2. DOM-ELEMENTER ================= */
 const ui = document.getElementById("ui");
 const playBtn = document.getElementById("playPauseBtn");
 const muteBtn = document.getElementById("muteBtn");
-const volumeSlider = document.querySelector(".volume-slider"); // NY: Henter selve volumslideren
+const volumeSlider = document.querySelector(".volume-slider");
 const rewindBtn = document.getElementById("rewindBtn");
 const forwardBtn = document.getElementById("forwardBtn");
 const progress = document.getElementById("progress");
@@ -1074,9 +1075,6 @@ const restartBtn = document.getElementById("restartBtn");
 
 const nextEpisodeBtn = document.getElementById("nextEpisodeBtn");
 const autoplayOverlay = document.getElementById("autoplayOverlay");
-const autoplayCountdown = document.getElementById("autoplayCountdown");
-const autoplayCancelBtn = document.getElementById("autoplayCancelBtn");
-const autoplayPlayNextBtn = document.getElementById("autoplayPlayNextBtn");
 
 // Globale tilstandsvariabler
 let isDragging = false;
@@ -1086,7 +1084,7 @@ let subtitlesEnabled = globalSubtitleSetting !== "off";
 let autoplayTriggered = false;
 let lokalLagringsInterval;
 let autoplayTimer;
-let lastVolume = localStorage.getItem("video-last-volume") || 1; // Lagrer forrige volum for un-mute
+let lastVolume = localStorage.getItem("video-last-volume") || 1;
 
 // Setter FontAwesome ikoner
 if (rewindBtn) rewindBtn.innerHTML = '<i class="fa-solid fa-rotate-left" style="color: #ffffff; font-size: 22px;"></i>';
@@ -1101,8 +1099,6 @@ function hentNesteEpisodeUrl() {
     const s = parseInt(sesong);
     const e = parseInt(episode);
     const serie = serier[navn];
-    
-    // NYTT: Her videresender vi returUrl slik at vi fortsatt kan gå tilbake til infosiden etter flere auto-spilte episoder!
     const returParam = returUrlParam ? `&returUrl=${encodeURIComponent(returUrlParam)}` : '';
 
     if (serie.sesonger[s]?.episoder?.[e + 1]) {
@@ -1197,16 +1193,12 @@ function oppdaterFremdriftILokalMatrise(status) {
   if (profilIdx === -1) return;
 
   if (!heleProfilArrayet[profilIdx].fremdrift) heleProfilArrayet[profilIdx].fremdrift = {};
-  if (!heleProfilArrayet[profilIdx].historikk) heleProfilArrayet[profilIdx].historikk = {}; // Fikset til objekt for å samsvare med infosiden
+  if (!heleProfilArrayet[profilIdx].historikk) heleProfilArrayet[profilIdx].historikk = {};
 
-  // Hvis status settes direkte til "ferdig", eller videofremdrift overskrider 96%
   if (status === "ferdig" || percent > 96) {
     delete heleProfilArrayet[profilIdx].fremdrift[filmId];
-    
-    // Lagre statusen som "ferdig" i historikk for infosiden
     heleProfilArrayet[profilIdx].historikk[navn] = "ferdig";
     
-    // Rydd også opp gamle LocalStorage-nøkler
     localStorage.removeItem("progress_" + filmId);
     localStorage.removeItem("progress_" + navn);
     localStorage.removeItem(`${filmId}-lastPosition`);
@@ -1222,8 +1214,6 @@ function oppdaterFremdriftILokalMatrise(status) {
       sesong: sesong || null,
       episode: episode || null
     };
-    
-    // Sett status i historikken til "påbegynt" for infosiden
     heleProfilArrayet[profilIdx].historikk[navn] = "påbegynt";
   }
   localStorage.setItem("watch_nordic_profiles_cache", JSON.stringify(heleProfilArrayet));
@@ -1249,7 +1239,6 @@ async function ryddeOgNeste() {
   clearInterval(lokalLagringsInterval);
   clearInterval(autoplayTimer);
   
-  // Markerer filmen/serien som ferdig i databasen
   oppdaterFremdriftILokalMatrise("ferdig");
   
   if (currentUser) {
@@ -1259,12 +1248,9 @@ async function ryddeOgNeste() {
     } catch (e) { console.error("Feil ved lagring før navigering:", e); }
   }
   
-  // Håndtering av ruting:
   if (isSerie && nesteEpisodeUrl) {
-    // Spiller av neste episode automatisk hvis tilgjengelig
     window.location.href = nesteEpisodeUrl;
   } else {
-    // Hvis vi er ferdig med filmen, eller det var siste episode -> Send tilbake til infosiden!
     window.location.href = tilbakeUrl;
   }
 }
@@ -1310,7 +1296,7 @@ video.addEventListener('pause', () => {
   showUI(); 
 });
 
-/* ================= NYTT: PREMIUM INTERAKTIV VOLUMLOGIKK ================= */
+/* ================= PREMIUM INTERAKTIV VOLUMLOGIKK ================= */
 function oppdaterVolumIkon(vol, isMuted) {
   if (isMuted || vol === 0) {
     muteBtn.innerHTML = '<i class="fa-solid fa-volume-xmark" style="color: #ffffff; font-size: 22px;"></i>';
@@ -1331,7 +1317,6 @@ function settVolum(volVal) {
     localStorage.setItem("video-last-volume", vol);
   }
   
-  // Oppdaterer den fargede linjen bak slider-knappen din dynamisk via CSS-variabelen
   if (volumeSlider) {
     volumeSlider.value = vol;
     volumeSlider.style.setProperty('--volume-percent', `${vol * 100}%`);
@@ -1339,7 +1324,6 @@ function settVolum(volVal) {
   oppdaterVolumIkon(vol, video.muted);
 }
 
-// Klikk på høyttaler-ikon (Mute / Unmute)
 muteBtn.addEventListener('click', () => {
   if (video.muted || video.volume === 0) {
     video.muted = false;
@@ -1354,16 +1338,12 @@ muteBtn.addEventListener('click', () => {
   }
 });
 
-// Lytt etter endringer på selve volumlinjen (slideren)
 if (volumeSlider) {
-  // Setter initialt volum ved oppstart
   settVolum(lastVolume);
-
   volumeSlider.addEventListener('input', (e) => {
     settVolum(e.target.value);
   });
 }
-/* ======================================================================= */
 
 rewindBtn.addEventListener('click', () => video.currentTime = Math.max(0, video.currentTime - 10));
 forwardBtn.addEventListener('click', () => video.currentTime = Math.min(video.duration, video.currentTime + 10));
@@ -1538,7 +1518,6 @@ if (loadingSpinner) {
   video.addEventListener('playing', () => loadingSpinner.style.display = 'none');
 }
 
-// Når videoen slutter -> rydde opp og naviger til neste episode eller tilbake til infosiden
 video.addEventListener('ended', async () => { 
   await ryddeOgNeste(); 
 });
@@ -1548,6 +1527,34 @@ function updateSubtitleButtons(activeLang) {
     if (btn.dataset.lang === activeLang) { btn.classList.add("active"); } else { btn.classList.remove("active"); }
   });
 }
+
+/* ================= 6. PREMIUM NETFLIX-FLYTT & AUTOPLAY ================= */
+const skipIntroBtn = document.getElementById("skipIntroBtn");
+const skipOutroBtn = document.getElementById("skipOutroBtn");
+
+video.addEventListener("timeupdate", () => {
+  const tid = video.currentTime;
+
+  if (isSerie && film.introStart != null && film.introEnd != null) {
+    if (tid >= film.introStart && tid <= film.introEnd) {
+      if (skipIntroBtn) skipIntroBtn.style.display = "block";
+    } else {
+      if (skipIntroBtn) skipIntroBtn.style.display = "none";
+    }
+  }
+
+  // Sikrer at video.duration har lastet og er et gyldig tall før utregning
+  if (video.duration && !isNaN(video.duration)) {
+    const triggerTid = film.outroStart != null ? film.outroStart : (video.duration - 15);
+    if (isSerie && nesteEpisodeUrl && tid >= triggerTid && !autoplayTriggered && !video.paused) {
+      autoplayTriggered = true;
+      startPremiumAutoplay();
+    }
+  }
+});
+
+if (skipIntroBtn) { skipIntroBtn.addEventListener("click", () => { video.currentTime = film.introEnd; }); }
+if (skipOutroBtn) { skipOutroBtn.addEventListener("click", () => { ryddeOgNeste(); }); }
 
 function startPremiumAutoplay() {
   if (!autoplayOverlay || !videoWrapper) return;
@@ -1563,35 +1570,27 @@ function startPremiumAutoplay() {
     const e = parseInt(episode);
     const serie = serier[navn];
     
-    // Henter ut logoen til serien
     serieLogoUrl = serie.logo || "";
 
-    // Sjekker neste episode
     let nesteEpData = serie.sesonger[s]?.episoder?.[e + 1] || serie.sesonger[s + 1]?.episoder?.[1];
     let nesteSNum = serie.sesonger[s]?.episoder?.[e + 1] ? s : s + 1;
     let nesteENum = serie.sesonger[s]?.episoder?.[e + 1] ? (e + 1) : 1;
 
     if (nesteEpData) {
-      nesteBildeUrl = nesteEpData.thumbnail || nesteEpData.bildeUrl || serie.bakgrunnsbilde || serie.bakgrunnn || "";
+      nesteBildeUrl = nesteEpData.thumbnail || nesteEpData.bildeUrl || serie.bakgrunnsbilde || serie.bakgrunns || "";
       nesteTittel = nesteEpData.tittel || "Neste episode";
       nesteBeskrivelse = nesteEpData.beskrivelse || "";
       nesteEpInfoText = `S${nesteSNum}:E${nesteENum}`;
     }
   }
 
-  // 1. Sett neste episode-bilde som mørklagt fullskjermsbakgrunn bakerst
   if (container && nesteBildeUrl) {
-    container.style.backgroundImage = `linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8)), url('${nesteBildeUrl}')`;
+    container.style.backgroundImage = `linear-gradient(rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0.75)), url('${nesteBildeUrl}')`;
     container.style.backgroundSize = "cover";
     container.style.backgroundPosition = "center";
     container.style.backgroundRepeat = "no-repeat";
   }
 
-  // Skjul de vanlige videokontrollene midlertidig
-  const uiElement = document.querySelector(".ui");
-  if (uiElement) uiElement.style.display = "none";
-
-  // 2. Oppdater innholdet i autoplay-overlayen (Netflix-stil på venstre side)
   autoplayOverlay.innerHTML = `
     <div class="autoplay-content">
       ${serieLogoUrl ? `<img src="${serieLogoUrl}" class="autoplay-serie-logo" alt="Serie Logo">` : ''}
@@ -1618,20 +1617,20 @@ function startPremiumAutoplay() {
     </div>
   `;
 
-  // Legg til lyttere på de nye knappene
   document.getElementById("autoplayPlayNextBtn").addEventListener("click", () => { ryddeOgNeste(); });
   document.getElementById("autoplayCancelBtn").addEventListener("click", () => { avbrytAutoplay(); });
 
-  // 3. Krymping og flytting til høyre side med en solid, lekker hvit ramme
-  videoWrapper.style.left = "auto";       // Fjerner venstrefiksering
-  videoWrapper.style.top = "auto";        // Fjerner toppfiksering
-  videoWrapper.style.right = "10%";       // 10% avstand fra høyre kant
-  videoWrapper.style.bottom = "15%";      // Settes pent opp fra bunnen
-  videoWrapper.style.width = "450px";     // Generøs og synlig bredde på ruten
-  videoWrapper.style.height = "253px";    // Holder 16:9 formatet perfekt
-  videoWrapper.style.border = "4px solid #ffffff"; // Ekstremt tydelig hvit ramme
-  videoWrapper.style.borderRadius = "6px";
-  videoWrapper.style.zIndex = "9999";     // Garanterer at ruten ligger fremst av alt
+  // FIKS: Nullstiller "top" og "left" slik at bottom/right faktisk styrer posisjonen perfekt
+  videoWrapper.style.transform = "none";
+  videoWrapper.style.position = "absolute";
+  videoWrapper.style.top = "auto";
+  videoWrapper.style.left = "auto";
+  videoWrapper.style.right = "80px";
+  videoWrapper.style.bottom = "120px";
+  videoWrapper.style.width = "420px";
+  videoWrapper.style.height = "236px";
+  videoWrapper.style.border = "3px solid #ffffff";
+  videoWrapper.style.borderRadius = "4px";
   
   autoplayOverlay.style.display = "flex";
   
@@ -1663,23 +1662,19 @@ function avbrytAutoplay() {
   if (container) {
     container.style.backgroundImage = "";
   }
-
-  // Vis de vanlige kontrollene igjen
-  const uiElement = document.querySelector(".ui");
-  if (uiElement) uiElement.style.display = "";
   
+  // FIKS: Tilbakestiller alle stilene – inkludert top og left
   if (videoWrapper) {
-    // Nullstiller alle inline-stilene slik at CSS-filens fulle skjermstørrelse tar over igjen
+    videoWrapper.style.transform = "";
     videoWrapper.style.position = "";
-    videoWrapper.style.left = "";
-    videoWrapper.style.right = "";
     videoWrapper.style.top = "";
-    videoWrapper.style.bottom = "";
+    videoWrapper.style.left = "";
     videoWrapper.style.width = "";
     videoWrapper.style.height = "";
-    videoWrapper.style.border = "";
+    videoWrapper.style.right = "";
+    videoWrapper.style.bottom = "";
+    videoWrapper.style.border = "none";
     videoWrapper.style.borderRadius = "";
-    videoWrapper.style.zIndex = "";
   }
   
   if (skipOutroBtn) skipOutroBtn.style.display = "block";
