@@ -61,6 +61,20 @@ body.no-cursor, body.no-cursor * {
   transition: all 0.6s cubic-bezier(0.25, 1, 0.5, 1);
   z-index: 2;
 }
+  /* Sørger for at videoen fyller skjermen helt og animeres mykt tilbake til normalen */
+#videoWrapper.video-fullscreen {
+  position: absolute !important;
+  width: 100% !important;
+  height: 100% !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  border: none !important;
+  border-radius: 0 !important;
+  z-index: 2 !important;
+  transform: none !important;
+}
 
 /* Videoen respekterer nå filmens originale bredde og høyde (aspect ratio) */
 video {
@@ -1603,7 +1617,7 @@ function startPremiumAutoplay() {
     }
   }
 
-  // FIKS: Fjernet linear-gradient sløret slik at bildet vises lyst og klart i bakgrunnen
+  // Bakgrunnsbilde uten mørkt slør
   if (container && nesteBildeUrl) {
     container.style.backgroundImage = `url('${nesteBildeUrl}')`;
     container.style.backgroundSize = "cover";
@@ -1640,7 +1654,9 @@ function startPremiumAutoplay() {
   document.getElementById("autoplayPlayNextBtn").addEventListener("click", () => { ryddeOgNeste(); });
   document.getElementById("autoplayCancelBtn").addEventListener("click", () => { avbrytAutoplay(); });
 
-  // FIKS: Lagt til 'zIndex = "9999"' for å tvinge videoruten over eventuelle mørke overlays!
+  // Sørger for at fullskjerm-klassen fjernes før krympe-stiler blir satt, slik at krympingen kan animeres
+  videoWrapper.classList.remove("video-fullscreen");
+
   videoWrapper.style.transform = "none";
   videoWrapper.style.position = "absolute";
   videoWrapper.style.top = "110px";
@@ -1692,8 +1708,10 @@ function avbrytAutoplay() {
     showUI();
   }
   
-  // Tilbakestiller alle videostilene fullstendig (inkludert zIndex)
+  // GJØR OVERGANGEN ULTRA-SMOOTH: Vi rydder vekk de faste inline-stilene og legger til klassen i stedet
   if (videoWrapper) {
+    videoWrapper.classList.add("video-fullscreen");
+    
     videoWrapper.style.transform = "";
     videoWrapper.style.position = "";
     videoWrapper.style.top = "";
@@ -1702,12 +1720,15 @@ function avbrytAutoplay() {
     videoWrapper.style.height = "";
     videoWrapper.style.right = "";
     videoWrapper.style.bottom = "";
-    videoWrapper.style.border = "none";
+    videoWrapper.style.border = "";
     videoWrapper.style.borderRadius = "";
     videoWrapper.style.zIndex = "";
   }
   
-  if (skipOutroBtn) skipOutroBtn.style.display = "block";
+  // HIERARKISK KNAPP-ENDRING: Fjerner og skjuler knappen under avbrytelsen helt, i stedet for å sette den til 'block'
+  if (skipOutroBtn) {
+    skipOutroBtn.style.display = "none";
+  }
 }
 
 document.addEventListener("contextmenu", e => e.preventDefault());
