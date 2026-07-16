@@ -8,6 +8,7 @@
  <link rel="icon" type="image/png" href="https://static.wixstatic.com/media/d9ace9_95bbe3f5ff4b4aab9314a8d08804344e~mv2.png" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
 <style>
+    
 /* ==========================================================================
    1. GLOBALE TILBAKESTILLINGER & BASE STYLES
    ========================================================================== */
@@ -23,7 +24,7 @@ html {
 }
 
 body {
-  background: #091B1E;
+  background: #050F11; /* PC: Ny mørkere farge */
   color: #fff;
   font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
   letter-spacing: .2px;
@@ -57,10 +58,10 @@ img, video {
   z-index: 9999;
   box-sizing: border-box;
   background: linear-gradient(to bottom, 
-    rgba(9, 27, 30, 0.95) 0%, 
-    rgba(9, 27, 30, 0.75) 40%, 
-    rgba(9, 27, 30, 0.3) 75%, 
-    rgba(9, 27, 30, 0) 100%
+    rgba(5, 15, 17, 0.95) 0%, 
+    rgba(5, 15, 17, 0.75) 40%, 
+    rgba(5, 15, 17, 0.3) 75%, 
+    rgba(5, 15, 17, 0) 100%
   );
   transition: background 0.4s ease, box-shadow 0.4s ease, height 0.4s ease;
 }
@@ -71,7 +72,7 @@ img, video {
 
 .top-nav.scrolled {
   height: 70px;
-  background: rgba(9, 27, 30, 0.98);
+  background: rgba(5, 15, 17, 0.98);
   backdrop-filter: blur(10px);
   box-shadow: 0 2px 15px rgba(0, 0, 0, 0.6);
 }
@@ -174,14 +175,13 @@ img, video {
 }
 
 /* ==========================================================================
-   4. HERO-SEKSJON OG BAKGRUNNSMEDIA
+   3. HERO-SEKSJON OG BAKGRUNNSMEDIA
    ========================================================================== */
 .hero {
   position: relative;
   width: 100vw;
   height: 100vh;
   overflow: hidden;
-  background: #091B1E;
 }
 
 .background-image,
@@ -204,8 +204,8 @@ img, video {
   position: absolute;
   inset: 0;
   background:
-    linear-gradient(to top, rgba(9, 27, 30, 0.9) 0%, rgba(9, 27, 30, 0.4) 40%, transparent 75%),
-    linear-gradient(to right, rgba(9, 27, 30, 0.6) 0%, transparent 50%);
+    linear-gradient(to top, rgba(0,0,0,.9) 0%, rgba(0,0,0,.4) 40%, transparent 75%),
+    linear-gradient(to right, rgba(0,0,0,.6) 0%, transparent 50%);
   z-index: 1;
 }
 
@@ -214,12 +214,12 @@ img, video {
   bottom: 0;
   width: 100%;
   height: 200px;
-  background: linear-gradient(to top, #091B1E, transparent);
+  background: linear-gradient(to top, #050F11, transparent); /* PC: Ny mørkere farge */
   z-index: 1;
 }
 
 /* ==========================================================================
-   5. INNHOLD OG GLASS PANEL
+   4. INNHOLD OG GLASS PANEL
    ========================================================================== */
 .content-wrapper {
   position: absolute;
@@ -350,7 +350,7 @@ img, video {
 }
 
 /* ==========================================================================
-   6. STRØMMETJENESTE-KNAPPER
+   5. STRØMMETJENESTE-KNAPPER
    ========================================================================== */
 .buttons-column {
   display: flex;
@@ -407,12 +407,12 @@ img, video {
 }
 
 /* ==========================================================================
-   7. ANBEFALINGER & EPISODER (KUN VERTIKALT DESIGN - INGEN SCROLLING)
+   6. ANBEFALINGER & EPISODER (KUN VERTIKALT DESIGN - INGEN SCROLLING)
    ========================================================================== */
 .recommendations {
   margin: 40px auto 0;
   padding: 0 50px 50px;
-  background: #091B1E;
+  background: #050F11; /* PC: Ny mørkere farge */
   position: relative;
   z-index: 5;
   max-width: 1400px;
@@ -602,13 +602,54 @@ img, video {
 }
 
 /* ==========================================================================
-   8. FOOTER OG SKJERM-POPUPS
+   MOBIL-TILPASSING FOR DENNE SEKSJONEN
+   ========================================================================== */
+@media (max-width: 768px) {
+  .recommendations {
+    padding: 0 32px 30px;
+  }
+  
+  .recommendations h2 {
+    font-size: 18px;
+    margin-bottom: 12px;
+  }
+
+  /* Filmer blir til 2 i bredden på mobil */
+  .gallery {
+    grid-template-columns: repeat(2, 1fr); 
+    gap: 12px;
+  }
+
+  .movie-card {
+    height: 120px; 
+  }
+
+  .movie-overlay {
+    padding: 10px;
+  }
+
+  .movie-title {
+    font-size: 12px;
+  }
+
+  /* Episoder stables til 1 i bredden på mobil for å beholde leservennlig tekst */
+  .episode-gallery {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .episode-thumb {
+    height: 180px; /* God størrelse på mobilskjermer */
+  }
+}
+/* ==========================================================================
+   7. FOOTER OG SKJERM-POPUPS
    ========================================================================== */
 .footer {
   width: 100%;
   padding: 70px 80px 35px;
   margin-top: 100px;
-  background: #091B1E;
+  background: #050F11; /* PC: Ny mørkere farge */
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -731,9 +772,9 @@ img, video {
 }
 
 /* ==========================================================================
-   9. MEDIA QUERIES (MOBIL-OPTIMALISERING - 768px og mindre)
+   8. MEDIA QUERIES (MOBIL-OPTIMALISERING - 768px og mindre)
    ========================================================================== */
-@media (max-width: 768px) {
+@media(max-width: 768px) {
   .top-nav {
     padding: 0 20px;
     height: 70px;
@@ -743,9 +784,9 @@ img, video {
     display: none;
   }
 
-  /* Bakgrunnsfargen på hele siden matcher toppfargen */
+  /* MOBIL: Bakgrunnsfargen beholder den opprinnelige rgb(9, 27, 30) / #091B1E */
   body, .hero {
-    background: #091B1E !important; 
+    background: rgb(9, 27, 30) !important; 
     position: relative; 
     height: auto;
     min-height: auto;
@@ -765,7 +806,7 @@ img, video {
     object-fit: cover;
   }
 
-  /* Mørk fade over bildet som toner ut i bakgrunnsfargen */
+  /* Mørk fade over bildet som toner ut i den originale mobilbakgrunnen */
   .overlay {
     display: block !important;
     position: absolute !important;
@@ -773,7 +814,7 @@ img, video {
     left: 0;
     width: 100% !important;
     height: 65vh !important;
-    background: linear-gradient(to bottom, transparent 30%, #091B1E 100%) !important;
+    background: linear-gradient(to bottom, transparent 30%, rgb(9, 27, 30) 100%) !important;
     z-index: 2 !important;
   }
 
@@ -799,7 +840,7 @@ img, video {
     display: flex !important;
     justify-content: center !important;
     margin-bottom: 15px !important;
-    order: 1 !important; /* 1. LOGO ØVERST */
+    order: 1 !important;
   }
 
   .film-logo {
@@ -813,7 +854,6 @@ img, video {
     width: 100% !important;
   }
 
-  /* Gjør hovedboksen til flex-kolonne for fri rekkefølge */
   .text-button-container {
     background: transparent !important;
     backdrop-filter: none !important;
@@ -826,12 +866,10 @@ img, video {
     flex-direction: column !important;
   }
 
-  /* Løser opp den omsluttende boksen slik at barna kan flyttes fritt på mobil */
   .text-container {
     display: contents !important;
   }
 
-  /* 2. METADATA (Mellom logo og knapper) */
   .metadata {
     order: 2 !important;
     margin: 5px 0 10px 0 !important;
@@ -840,7 +878,6 @@ img, video {
     width: 100% !important;
   }
 
-  /* 3. KNAPPER (Under metadata) */
   .buttons-column {
     width: 100% !important;
     order: 3 !important;
@@ -855,7 +892,6 @@ img, video {
     font-size: 16px !important;
   }
 
-  /* Gjør "Legg til i min liste"-knappen mer grålig på mobil */
   #addToListBtn {
     background: rgba(255, 255, 255, 0.25) !important;
     color: #ffffff !important;
@@ -865,7 +901,6 @@ img, video {
     background: rgba(255, 255, 255, 0.35) !important;
   }
 
-  /* 4. SKAPER OG MEDVIRKENDE (Under knappen, over infodelen) */
   .cast-info {
     width: 100% !important;
     max-width: 100% !important;
@@ -876,7 +911,6 @@ img, video {
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   }
 
-  /* 5. INFODELEN (Beskrivelse og utløpsinfo helt nederst) */
   .description {
     order: 5 !important;
     margin-bottom: 10px !important;
@@ -888,11 +922,11 @@ img, video {
     align-self: flex-start !important;
   }
 
-  /* Seksjon for anbefalinger på mobil */
+  /* MOBIL: Anbefalinger beholder original farge */
   .recommendations {
     margin: 30px 0 0 !important;
     padding: 0 20px 40px !important;
-    background: #091B1E !important;
+    background: rgb(9, 27, 30) !important;
     position: relative;
     z-index: 3;
   }
@@ -901,7 +935,6 @@ img, video {
     font-size: 20px !important;
   }
 
-  /* Filmer blir til 2 i bredden på mobil */
   .gallery {
     grid-template-columns: repeat(2, 1fr) !important;
     gap: 12px !important;
@@ -912,20 +945,10 @@ img, video {
     border-radius: 4px !important;
   }
 
-  /* Episoder stables til 1 i bredden på mobil for å beholde leservennlig tekst */
-  .episode-gallery {
-    grid-template-columns: 1fr !important;
-    gap: 16px !important;
-  }
-
-  .episode-thumb {
-    height: 180px !important;
-  }
-
-  /* Footer på mobil */
+  /* MOBIL: Footer beholder original farge */
   .footer {
     padding: 40px 20px 20px !important;
-    background: #091B1E !important;
+    background: rgb(9, 27, 30) !important;
     position: relative;
     z-index: 3;
   }
