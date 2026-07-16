@@ -305,55 +305,52 @@ video::cue {
 
 .progress {
   width: 100%;
-  height: 8px; /* Gjort tykkere som standard */
+  height: 5px; /* Fast, elegant og tynnere linje */
   background: rgba(255, 255, 255, 0.25);
   border-radius: 6px;
   position: relative;
   cursor: pointer;
-  transition: height 0.12s cubic-bezier(0.25, 1, 0.5, 1);
+  /* transition for height er fjernet her slik at linjen ikke hever eller endrer tykkelse */
 }
 
-/* Blir enda mer robust ved hover */
-.progress-container:hover .progress { 
-  height: 12px; 
-}
+/* Hover-effekt på .progress er fjernet helt for å hindre at den blir tykkere */
 
-/* Farge endret fra turkis til solid hvit, og gløden (box-shadow) er fjernet */
+/* Hvit fremdriftslinje uten glød */
 .progress-filled {
   width: 0%;
   height: 100%;
   background: #ffffff; 
   border-radius: 6px;
-  box-shadow: none; /* Fjernet glød */
+  box-shadow: none; 
   transition: width 0.1s linear;
 }
 
-/* Filmlinjens prikk: Gjort større (20px standard) og farget hvit. Ingen glød. */
+/* Prikken på filmlinjen: Fast størrelse på 20px, ingen glød, helt hvit */
 .thumb {
   position: absolute;
   top: 50%;
   left: 0%;
-  width: 20px; /* Økt fra 16px for å være mer synlig og lettere å treffe */
-  height: 20px; /* Økt fra 16px */
-  background: #ffffff; /* Farge endret til hvit */
+  width: 20px; 
+  height: 20px; 
+  background: #ffffff; 
   border-radius: 50%;
   transform: translate(-50%, -50%) scale(1); /* Alltid synlig */
-  box-shadow: none; /* Fjernet glød */
-  transition: transform 0.15s ease, width 0.15s ease, height 0.15s ease;
+  box-shadow: none; 
+  transition: transform 0.15s ease;
   z-index: 30;
 }
 
-/* Gjør den enda litt større (24px) ved berøring/hover */
+/* Zoomer prikken ørlite grann når du holder over den eller linjen for god respons, men linjen under forblir tynn */
 .progress-container:hover .thumb { 
-  transform: translate(-50%, -50%) scale(1.15); /* Skalerer opp ved hover på tidslinjen */
+  transform: translate(-50%, -50%) scale(1.15); 
 }
 .thumb:hover {
-  transform: translate(-50%, -50%) scale(1.2) !important; /* Ekstra zoom direkte på prikken */
+  transform: translate(-50%, -50%) scale(1.2) !important; 
 }
 
 .time-display {
   position: absolute;
-  bottom: 110px; /* Hevet litt opp for å ikke krasje med den tykkere linjen */
+  bottom: 102px; 
   right: 40px;
   color: rgba(255, 255, 255, 0.7);
   font-size: 13px;
@@ -404,7 +401,7 @@ video::cue {
 }
 
 .caption-menu button:hover, .caption-menu button.active {
-  background: #ffffff; /* Endret til hvit for å matche det nye fargetemaet */
+  background: #0fddcb; /* Original turkis farge */
   color: #000;
   font-weight: 600;
 }
@@ -416,7 +413,7 @@ video::cue {
   width: 220px;
   height: 124px;
   background: #000;
-  border: 2px solid #ffffff; /* Endret ramme til hvit */
+  border: 2px solid #0fddcb; /* Original turkis farge */
   border-radius: 6px;
   overflow: hidden;
   display: none;
@@ -436,14 +433,14 @@ video::cue {
   text-align: center;
 }
 
-/* System spinner */
+/* System spinner - Original, flytende og roterende turkis stil */
 .loading-spinner {
   position: absolute;
   top: 50%; left: 50%;
   width: 65px; height: 65px;
   margin: -32.5px 0 0 -32.5px;
   border: 5px solid rgba(255,255,255,0.1);
-  border-top: 5px solid #ffffff; /* Spinner endret til hvit */
+  border-top: 5px solid #0fddcb; 
   border-radius: 50%;
   animation: spin 0.8s linear infinite;
   z-index: 4;
@@ -483,8 +480,10 @@ video::cue {
   transition: background 0.2s, transform 0.1s;
 }
 .resume-buttons button:active { transform: scale(0.97); }
-#continueBtn { background: #ffffff; color: #000; } /* Endret til hvit */
-#continueBtn:hover { background: #e0e0e0; }
+
+/* Turkis farge på Fortsett-knappen */
+#continueBtn { background: #0fddcb; color: #000; } 
+#continueBtn:hover { background: #0bc4b4; }
 #restartBtn { background: rgba(255,255,255,0.1); color: #fff; border: 1px solid rgba(255,255,255,0.2); }
 #restartBtn:hover { background: rgba(255,255,255,0.2); }
 
@@ -512,9 +511,8 @@ video::cue {
     width: 40px;
   }
 
-  /* ================= STÅENDE MODUS (PORTRETT) - MAKS TILGJENGELIGHET ================= */
+  /* ================= STÅENDE MODUS (PORTRETT) ================= */
   @media (orientation: portrait) {
-    /* Flytter Play/Pause og spoling til midten av skjermen for optimal tommel-tilgang */
     .center-controls {
       position: absolute;
       top: 50%;
@@ -526,7 +524,6 @@ video::cue {
       display: flex !important;
     }
 
-    /* Store, tydelige knapper midt på skjermen med mørk glass-effekt */
     .center-controls .btn {
       background: rgba(0, 0, 0, 0.6) !important;
       backdrop-filter: blur(8px);
@@ -540,28 +537,26 @@ video::cue {
 
     .center-controls .btn svg, 
     .center-controls .btn i {
-      transform: scale(1.4) !important; /* Store ikoner som er enkle å treffe */
+      transform: scale(1.4) !important; 
       color: #ffffff;
     }
 
-    /* Bunnbaren renses for kontrollknapper for å gi plass */
     .controls {
       padding: 20px;
       padding-bottom: 35px;
     }
 
     .left-controls {
-      display: none !important; /* Skjuler volum/avspilling nede */
+      display: none !important; 
     }
 
     .right-controls {
       width: 100%;
-      justify-content: space-between; /* Sprer innstillinger og neste episode ut til hver sin side */
+      justify-content: space-between; 
       gap: 20px;
       display: flex !important;
     }
 
-    /* Enklere knapper for undertekster/lyd */
     .right-controls .btn {
       background: rgba(255, 255, 255, 0.15) !important;
       padding: 12px 20px;
@@ -575,25 +570,24 @@ video::cue {
       transform: scale(1.1) !important;
     }
 
-    /* Tidsstripen gjøres kraftigere for berøring */
     .progress-container {
       bottom: 95px;
       padding: 0 20px;
     }
 
     .progress {
-      height: 10px; /* Enda tykkere linje på mobil for bedre touch-styring */
+      height: 5px; /* Holder seg tynn på 5px også på mobil i portrett */
       background: rgba(255, 255, 255, 0.2);
     }
 
     .thumb {
-      width: 22px; /* Ekstra godt touchområde på mobil */
+      width: 22px; 
       height: 22px;
       transform: translate(-50%, -50%) scale(1) !important;
     }
 
     .time-display {
-      bottom: 115px;
+      bottom: 110px;
       right: 20px;
       font-size: 12px;
       background: rgba(0, 0, 0, 0.6);
@@ -601,14 +595,12 @@ video::cue {
       border-radius: 4px;
     }
 
-    /* Hever undertekstene så de ikke krasjer med tidslinjen */
     .subtitle-overlay {
       font-size: 20px;
       width: 85%;
       bottom: 20%;
     }
     
-    /* Gjør undertekst-menyen bredere og mer fingervennlig */
     .caption-menu {
       bottom: 145px;
       right: 20px;
@@ -644,7 +636,7 @@ video::cue {
       padding: 0 20px; 
     }
     .progress {
-      height: 8px; /* Beholder god bredde i liggende modus på mobil */
+      height: 5px; /* Holder seg tynn på 5px også her */
     }
     .thumb {
       transform: translate(-50%, -50%) scale(1) !important;
