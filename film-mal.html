@@ -45,28 +45,20 @@ body.no-cursor, body.no-cursor * {
   transition: background 0.6s ease-in-out; /* Glatt toning av bakgrunnsbildet */
 }
 
-/* VIDEOWRAPPER: Optimalisert for en utrolig flytende "Netflix-krymping" */
+/* VIDEOWRAPPER: Optimalisert for en utrolig flytende "Netflix-krymping" med overganger */
 #videoWrapper {
   position: absolute;
   width: 100%;
   height: 100%;
   top: 0;
   left: 0;
-  right: 0;
-  bottom: 0;
   display: flex;
   justify-content: center;
   align-items: center;
   background: #000;
   box-shadow: 0 0 0 rgba(0,0,0,0);
-  /* Avansert transition som animerer skalering og posisjon helt synkront */
-  transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1), 
-              width 0.6s cubic-bezier(0.25, 1, 0.5, 1), 
-              height 0.6s cubic-bezier(0.25, 1, 0.5, 1), 
-              right 0.6s cubic-bezier(0.25, 1, 0.5, 1), 
-              bottom 0.6s cubic-bezier(0.25, 1, 0.5, 1),
-              border-radius 0.6s ease,
-              box-shadow 0.6s ease;
+  /* "all" sikrer at alle endringer som right, bottom, width og border flyter perfekt synkront */
+  transition: all 0.6s cubic-bezier(0.25, 1, 0.5, 1);
   z-index: 2;
 }
 
@@ -1557,32 +1549,6 @@ function updateSubtitleButtons(activeLang) {
   });
 }
 
-/* ================= 6. PREMIUM NETFLIX-FLYTT & AUTOPLAY ================= */
-const skipIntroBtn = document.getElementById("skipIntroBtn");
-const skipOutroBtn = document.getElementById("skipOutroBtn");
-
-video.addEventListener("timeupdate", () => {
-  const tid = video.currentTime;
-
-  if (isSerie && film.introStart != null && film.introEnd != null) {
-    if (tid >= film.introStart && tid <= film.introEnd) {
-      if (skipIntroBtn) skipIntroBtn.style.display = "block";
-    } else {
-      if (skipIntroBtn) skipIntroBtn.style.display = "none";
-    }
-  }
-
-  const triggerTid = film.outroStart != null ? film.outroStart : (video.duration - 15);
-  if (isSerie && nesteEpisodeUrl && tid >= triggerTid && !autoplayTriggered && !video.paused) {
-    autoplayTriggered = true;
-    startPremiumAutoplay();
-  }
-});
-
-if (skipIntroBtn) { skipIntroBtn.addEventListener("click", () => { video.currentTime = film.introEnd; }); }
-if (skipOutroBtn) { skipOutroBtn.addEventListener("click", () => { ryddeOgNeste(); }); }
-if (autoplayPlayNextBtn) { autoplayPlayNextBtn.addEventListener("click", () => { ryddeOgNeste(); }); }
-
 function startPremiumAutoplay() {
   if (!autoplayOverlay || !videoWrapper) return;
   
@@ -1597,31 +1563,35 @@ function startPremiumAutoplay() {
     const e = parseInt(episode);
     const serie = serier[navn];
     
-    // Hent logoen til serien
+    // Henter ut logoen til serien
     serieLogoUrl = serie.logo || "";
 
-    // Sjekk om det er en neste episode i samme sesong, eller første i neste
+    // Sjekker neste episode
     let nesteEpData = serie.sesonger[s]?.episoder?.[e + 1] || serie.sesonger[s + 1]?.episoder?.[1];
     let nesteSNum = serie.sesonger[s]?.episoder?.[e + 1] ? s : s + 1;
     let nesteENum = serie.sesonger[s]?.episoder?.[e + 1] ? (e + 1) : 1;
 
     if (nesteEpData) {
-      nesteBildeUrl = nesteEpData.thumbnail || nesteEpData.bildeUrl || serie.bakgrunnsbilde || serie.bakgrunns || "";
+      nesteBildeUrl = nesteEpData.thumbnail || nesteEpData.bildeUrl || serie.bakgrunnsbilde || serie.bakgrunnn || "";
       nesteTittel = nesteEpData.tittel || "Neste episode";
       nesteBeskrivelse = nesteEpData.beskrivelse || "";
       nesteEpInfoText = `S${nesteSNum}:E${nesteENum}`;
     }
   }
 
-  // 1. Sett neste episode-bilde som mørklagt fullskjermsbakgrunn på containeren
+  // 1. Sett neste episode-bilde som mørklagt fullskjermsbakgrunn bakerst
   if (container && nesteBildeUrl) {
-    container.style.backgroundImage = `linear-gradient(rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0.75)), url('${nesteBildeUrl}')`;
+    container.style.backgroundImage = `linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8)), url('${nesteBildeUrl}')`;
     container.style.backgroundSize = "cover";
     container.style.backgroundPosition = "center";
     container.style.backgroundRepeat = "no-repeat";
   }
 
-  // 2. Oppdater innholdet i autoplay-overlayen (Netflix-stil)
+  // Skjul de vanlige videokontrollene midlertidig
+  const uiElement = document.querySelector(".ui");
+  if (uiElement) uiElement.style.display = "none";
+
+  // 2. Oppdater innholdet i autoplay-overlayen (Netflix-stil på venstre side)
   autoplayOverlay.innerHTML = `
     <div class="autoplay-content">
       ${serieLogoUrl ? `<img src="${serieLogoUrl}" class="autoplay-serie-logo" alt="Serie Logo">` : ''}
@@ -1648,19 +1618,20 @@ function startPremiumAutoplay() {
     </div>
   `;
 
-  // Bind event-lyttere på de nye dynamiske knappene i overlayet
+  // Legg til lyttere på de nye knappene
   document.getElementById("autoplayPlayNextBtn").addEventListener("click", () => { ryddeOgNeste(); });
   document.getElementById("autoplayCancelBtn").addEventListener("click", () => { avbrytAutoplay(); });
 
-  // 3. Premium krymping med hvit ramme i høyre hjørne (ingen skygge eller glød, helt clean)
-  videoWrapper.style.transform = "none"; // Koble ut scale for å unngå uklar video
-  videoWrapper.style.position = "absolute";
-  videoWrapper.style.right = "80px";
-  videoWrapper.style.bottom = "120px";
-  videoWrapper.style.width = "420px";
-  videoWrapper.style.height = "236px";
-  videoWrapper.style.border = "3px solid #ffffff"; // Den ikoniske hvite Netflix-rammen
-  videoWrapper.style.borderRadius = "4px";
+  // 3. Krymping og flytting til høyre side med en solid, lekker hvit ramme
+  videoWrapper.style.left = "auto";       // Fjerner venstrefiksering
+  videoWrapper.style.top = "auto";        // Fjerner toppfiksering
+  videoWrapper.style.right = "10%";       // 10% avstand fra høyre kant
+  videoWrapper.style.bottom = "15%";      // Settes pent opp fra bunnen
+  videoWrapper.style.width = "450px";     // Generøs og synlig bredde på ruten
+  videoWrapper.style.height = "253px";    // Holder 16:9 formatet perfekt
+  videoWrapper.style.border = "4px solid #ffffff"; // Ekstremt tydelig hvit ramme
+  videoWrapper.style.borderRadius = "6px";
+  videoWrapper.style.zIndex = "9999";     // Garanterer at ruten ligger fremst av alt
   
   autoplayOverlay.style.display = "flex";
   
@@ -1673,7 +1644,6 @@ function startPremiumAutoplay() {
     teller--;
     if (countdownEl) countdownEl.textContent = teller;
     
-    // Oppdater den sirkulære progresjonslinjen
     if (progressPath) {
       const prosent = (teller / totalTid) * 100;
       progressPath.style.strokeDasharray = `${prosent}, 100`;
@@ -1690,21 +1660,26 @@ function avbrytAutoplay() {
   clearInterval(autoplayTimer);
   if (autoplayOverlay) autoplayOverlay.style.display = "none";
   
-  // Fjern bakgrunnsbildet på containeren
   if (container) {
     container.style.backgroundImage = "";
   }
+
+  // Vis de vanlige kontrollene igjen
+  const uiElement = document.querySelector(".ui");
+  if (uiElement) uiElement.style.display = "";
   
-  // Sett videospilleren sømløst tilbake til fullskjerm uten ramme
   if (videoWrapper) {
-    videoWrapper.style.transform = "";
+    // Nullstiller alle inline-stilene slik at CSS-filens fulle skjermstørrelse tar over igjen
     videoWrapper.style.position = "";
+    videoWrapper.style.left = "";
+    videoWrapper.style.right = "";
+    videoWrapper.style.top = "";
+    videoWrapper.style.bottom = "";
     videoWrapper.style.width = "";
     videoWrapper.style.height = "";
-    videoWrapper.style.right = "";
-    videoWrapper.style.bottom = "";
-    videoWrapper.style.border = "none";
+    videoWrapper.style.border = "";
     videoWrapper.style.borderRadius = "";
+    videoWrapper.style.zIndex = "";
   }
   
   if (skipOutroBtn) skipOutroBtn.style.display = "block";
