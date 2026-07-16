@@ -267,12 +267,10 @@ video::cue {
   height: 12px;
   border-radius: 50%;
   background: #ffffff; /* Hvit prikk */
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
   cursor: pointer;
-  transition: transform 0.1s;
-}
-.volume-slider::-webkit-slider-thumb:hover {
-  transform: scale(1.25);
+  transform: scale(0); /* Skjult som standard (akkurat som progress bar) */
+  transition: transform 0.15s cubic-bezier(0.25, 1, 0.5, 1);
 }
 
 /* Design på selve glide-knappen/prikken (Firefox) */
@@ -282,14 +280,29 @@ video::cue {
   border: none;
   border-radius: 50%;
   background: #ffffff; /* Hvit prikk */
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
   cursor: pointer;
-  transition: transform 0.1s;
-}
-.volume-slider::-moz-range-thumb:hover {
-  transform: scale(1.25);
+  transform: scale(0); /* Skjult som standard */
+  transition: transform 0.15s cubic-bezier(0.25, 1, 0.5, 1);
 }
 
+/* Vis prikken når man holder over volumkontrollen (scale(1)) */
+.volume-container:hover .volume-slider::-webkit-slider-thumb,
+.volume-container:focus-within .volume-slider::-webkit-slider-thumb {
+  transform: scale(1);
+}
+.volume-container:hover .volume-slider::-moz-range-thumb,
+.volume-container:focus-within .volume-slider::-moz-range-thumb {
+  transform: scale(1);
+}
+
+/* Gjør prikken litt større når man holder direkte over den (scale(1.25)) */
+.volume-slider::-webkit-slider-thumb:hover {
+  transform: scale(1.25) !important;
+}
+.volume-slider::-moz-range-thumb:hover {
+  transform: scale(1.25) !important;
+}
 /* ================= PROGRESS BAR (TIDSSTRIPEN) ================= */
 .progress-container {
   position: absolute;
