@@ -10,7 +10,7 @@
 
   <link rel="icon" type="image/png" href="https://static.wixstatic.com/media/d9ace9_95bbe3f5ff4b4aab9314a8d08804344e~mv2.png" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
-  <style>
+<style>
 /* ==========================================================================
    1. GLOBALE STILER & RESETS
    ========================================================================== */
@@ -22,7 +22,7 @@
 
 html, body {
   font-family: Arial, sans-serif;
-  background: #091B1E;
+  background: #050F11; /* PC: Ny mørkere farge */
   color: white;
   overflow-x: hidden;
 }
@@ -56,17 +56,17 @@ main {
   padding: 0 40px;
   z-index: 9999;
   background: linear-gradient(to bottom, 
-    rgba(9, 27, 30, 0.95) 0%, 
-    rgba(9, 27, 30, 0.75) 40%, 
-    rgba(9, 27, 30, 0.3) 75%, 
-    rgba(9, 27, 30, 0) 100%
+    rgba(5, 15, 17, 0.95) 0%, 
+    rgba(5, 15, 17, 0.75) 40%, 
+    rgba(5, 15, 17, 0.3) 75%, 
+    rgba(5, 15, 17, 0) 100%
   );
   transition: background 0.4s ease, box-shadow 0.4s ease, height 0.4s ease;
 }
 
 .top-nav.scrolled {
   height: 70px;
-  background: rgba(9, 27, 30, 0.98);
+  background: rgba(5, 15, 17, 0.98);
   backdrop-filter: blur(10px);
   box-shadow: 0 2px 15px rgba(0, 0, 0, 0.6);
 }
@@ -166,7 +166,7 @@ main {
   min-height: 600px;
   width: 100%;
   overflow: hidden;
-  background-color: #091B1E;
+  background-color: #050F11; /* PC: Ny mørkere farge */
   margin-bottom: 40px;
   z-index: 0;
 }
@@ -177,10 +177,10 @@ main {
   inset: 0;
   background: linear-gradient(
     to bottom,
-    rgba(9, 27, 30, 0) 45%,
-    rgba(9, 27, 30, 0.3) 65%,
-    rgba(9, 27, 30, 0.8) 85%,
-    rgba(9, 27, 30, 1) 100%
+    rgba(5, 15, 17, 0) 45%,
+    rgba(5, 15, 17, 0.3) 65%,
+    rgba(5, 15, 17, 0.8) 85%,
+    rgba(5, 15, 17, 1) 100%
   );
   z-index: 1;
 }
@@ -342,7 +342,6 @@ main {
   display: none;
 }
 
-/* Base-stil for gallerielementer (Sikrer rulling, klikkbare bokser og at de ALDRI krymper) */
 .image-gallery a, .continue-image-gallery a, .gallery-item {
   display: inline-block;
   position: relative;
@@ -350,11 +349,10 @@ main {
   background: transparent;
   border: 2px solid transparent;
   transition: border 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
-  overflow: hidden !important; /* Maskerer bildets hjørner */
-  flex-shrink: 0 !important;   /* HINDRER AT BILDENE BLIR SMÅ/SKEIVE NÅR DE SCROLLER */
+  overflow: hidden !important;
+  flex-shrink: 0 !important;   
 }
 
-/* Alle bilder i ALLE gallerier er nøyaktig like store på PC */
 .image-gallery a img, .continue-image-gallery a img, .gallery-item img {
   width: 330px !important;
   height: 175px !important;
@@ -366,7 +364,7 @@ main {
 }
 
 /* ==========================================================================
-   SPESIFIKT FOR "FORTSETT Å SE" - INGEN OVERLAYS, KUN PROGRESS BAR
+   SPESIFIKT FOR "FORTSETT Å SE"
    ========================================================================== */
 .continue-image-gallery a .progress-bar {
   position: absolute;
@@ -392,7 +390,6 @@ main {
   border-bottom-left-radius: 5px;
 }
 
-/* Fjerner alt som heter hover-fader og tekst spesifikt fra Fortsett å se-galleriet */
 .continue-image-gallery .image-overlay {
   display: none !important;
   opacity: 0 !important;
@@ -425,7 +422,7 @@ main {
   border-radius: 8px;
   cursor: pointer;
   transition: transform 0.3s ease;
-  flex-shrink: 0 !important; /* Hindrer krymping i Topp 10 */
+  flex-shrink: 0 !important;
 }
 
 .top10-item img {
@@ -450,7 +447,7 @@ main {
 }
 
 /* ==========================================================================
-   6. HOVER OVERLAY FOR BILDER (PC) - Fungerer som før på de andre galleriene
+   6. HOVER OVERLAY FOR BILDER (PC)
    ========================================================================== */
 .image-overlay {
   position: absolute !important;
@@ -514,7 +511,7 @@ main {
 .kids-overlay {
   position: absolute;
   inset: 0;
-  background: linear-gradient(to right, rgba(9,27,30,0.9), rgba(9,27,30,0.2));
+  background: linear-gradient(to right, rgba(5,15,17,0.9), rgba(5,15,17,0.2)); /* PC: Ny mørkere farge */
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -539,7 +536,7 @@ main {
   width: 100%;
   padding: 70px 80px 35px;
   margin-top: 100px;
-  background: #091B1E;
+  background: #050F11; /* PC: Ny mørkere farge */
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -616,7 +613,6 @@ main {
    9. HOVER EFFEKTER KUN FOR ENHETER MED MUS (PC / LAPTOP)
    ========================================================================== */
 @media (hover: hover) {
-  /* Skalerer opp elementene ved hover */
   .image-gallery a:hover, .continue-image-gallery a:hover, .gallery-item:hover {
     z-index: 999;
     transform: scale(1.05);
@@ -635,13 +631,11 @@ main {
     -webkit-text-stroke: 0;
   }
 
-  /* Vis kun overtoning og metadata på STANDARD gallerier */
   .image-gallery a:hover .image-overlay,
   .gallery-item:hover .image-overlay {
     opacity: 1;
   }
 
-  /* Aktiver og vis rullepiler */
   .scroll-button {
     display: flex;
     position: absolute;
@@ -650,7 +644,7 @@ main {
     width: 44px;
     height: 44px;
     border-radius: 50%;
-    background: rgba(9, 27, 30, 0.75);
+    background: rgba(5, 15, 17, 0.75); /* PC: Ny mørkere farge */
     border: 1px solid rgba(255, 255, 255, 0.25);
     color: white;
     font-size: 22px;
@@ -696,17 +690,25 @@ main {
    11. MOBIL-OPTIMALISERING (768px og nedover)
    ========================================================================== */
 @media (max-width: 768px) {
+  /* MOBIL: Beholder den originale fargen (#091B1E) på body og fjerner åpen del/padding i bunnen */
+  html, body {
+    background: #091B1E !important;
+    padding-bottom: 0 !important; 
+  }
+
   .top-nav {
     padding: 0 20px;
     height: 70px;
+    background: linear-gradient(to bottom, 
+      rgba(9, 27, 30, 0.95) 0%, 
+      rgba(9, 27, 30, 0.75) 40%, 
+      rgba(9, 27, 30, 0.3) 75%, 
+      rgba(9, 27, 30, 0) 100%
+    ) !important;
   }
   
   .nav-links {
     display: none;
-  }
-
-  body { 
-    padding-bottom: 75px;
   }
 
   main {
@@ -722,6 +724,7 @@ main {
     min-height: 360px !important;
     max-height: 500px !important;
     margin-bottom: 20px !important;
+    background-color: #091B1E !important;
   }
 
   .hero-banner::after {
@@ -769,7 +772,7 @@ main {
     background: rgba(255, 255, 255, 0.2);
   }
 
-  /* GALLERIER MOBIL - RETTET SÅ ALLE BILDER HAR LIK OG RIKTIG STØRRELSE */
+  /* GALLERIER MOBIL */
   .gallery-section, .continue-watching-section {
     margin-left: 32px !important; 
     margin-right: 0 !important;
@@ -795,15 +798,13 @@ main {
     overflow-y: visible !important;
   }
 
-  /* Rettet på mobil slik at de heller ikke her krymper */
   .image-gallery a, .continue-image-gallery a, .top10-item {
     scroll-snap-align: start !important;
     transform: none !important;
     transition: none !important;
-    flex-shrink: 0 !important; /* Hindrer krymping på mobil */
+    flex-shrink: 0 !important;
   }
 
-  /* RETTET STØRRELSE: Alle galleribilder på mobil er nå nøyaktig like store, med fungerende rulling */
   .image-gallery a img, .continue-image-gallery a img, .gallery-item img {
     width: 280px !important;  
     height: 150px !important; 
@@ -842,15 +843,19 @@ main {
     border-radius: 6px;
   }
   
-  .kids-overlay { padding-left: 20px !important; }
+  .kids-overlay { 
+    padding-left: 20px !important; 
+    background: linear-gradient(to right, rgba(9,27,30,0.9), rgba(9,27,30,0.2)) !important;
+  }
   .kids-overlay h2 { font-size: 18px !important; margin-bottom: 2px; }
   .kids-overlay p { font-size: 12px !important; }
 
-  /* FOOTER PÅ MOBIL */
+  /* FOOTER PÅ MOBIL - Fjerner overflødig bunnpadding helt */
   .footer {
     display: flex !important;
-    padding: 40px 32px 95px !important; 
+    padding: 40px 32px 35px !important; 
     margin-top: 50px !important;
+    background: #091B1E !important;
   }
   .footer-links {
     grid-template-columns: repeat(2, 1fr) !important;
@@ -867,7 +872,7 @@ main {
   }
 
   body::after {
-    content: "Vennligst roter telefonen til portrett-modus for å bruke appen.";
+    content: "Vennligst roter telefonen to portrett-modus for å bruke appen.";
     position: fixed;
     top: 0;
     left: 0;
@@ -883,7 +888,7 @@ main {
     padding: 20px;
   }
 }
-  </style>
+</style>
 </head>
 <body>
   
