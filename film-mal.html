@@ -32,6 +32,7 @@ body.no-cursor, body.no-cursor * {
   cursor: none !important;
 }
 
+/* CONTAINER: Lagt til glatt bakgrunns-transition for neste episode-plakat */
 .container { 
   position: relative; 
   width: 100vw; 
@@ -41,9 +42,10 @@ body.no-cursor, body.no-cursor * {
   display: flex;
   justify-content: center;
   align-items: center;
+  transition: background 0.6s ease-in-out; /* Glatt toning av bakgrunnsbildet */
 }
 
-/* Omgivelsene rundt videoen som tilpasser seg og krymper sømløst ved outro */
+/* VIDEOWRAPPER: Optimalisert for en utrolig flytende "Netflix-krymping" */
 #videoWrapper {
   position: absolute;
   width: 100%;
@@ -57,7 +59,15 @@ body.no-cursor, body.no-cursor * {
   align-items: center;
   background: #000;
   box-shadow: 0 0 0 rgba(0,0,0,0);
-  transition: all 0.4s ease-in-out; /* Sørger for glatt overgang ved Netflix-krymping */
+  /* Avansert transition som animerer skalering og posisjon helt synkront */
+  transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1), 
+              width 0.6s cubic-bezier(0.25, 1, 0.5, 1), 
+              height 0.6s cubic-bezier(0.25, 1, 0.5, 1), 
+              right 0.6s cubic-bezier(0.25, 1, 0.5, 1), 
+              bottom 0.6s cubic-bezier(0.25, 1, 0.5, 1),
+              border-radius 0.6s ease,
+              box-shadow 0.6s ease;
+  z-index: 2;
 }
 
 /* Videoen respekterer nå filmens originale bredde og høyde (aspect ratio) */
@@ -147,7 +157,6 @@ video::cue {
   align-items: center;
 }
 
-/* Fikset: Fjerner understreking og standardfarge for lenken permanent */
 .back-button, 
 .back-button:visited, 
 .back-button:hover, 
@@ -204,7 +213,6 @@ video::cue {
   gap: 35px;
 }
 
-/* Justert for å passe FontAwesome vector-ikoner perfekt */
 .btn { 
   background: none; 
   border: none; 
@@ -258,7 +266,7 @@ video::cue {
   cursor: pointer;
 }
 
-/* Design på selve glide-knappen/prikken (Chrome, Safari, Opera, Edge) - Alltid synlig (scale(1)) - Ingen glød */
+/* Design på selve glide-knappen/prikken (Chrome, Safari, Opera, Edge) */
 .volume-slider::-webkit-slider-thumb {
   -webkit-appearance: none;
   appearance: none;
@@ -272,7 +280,7 @@ video::cue {
   transition: transform 0.15s cubic-bezier(0.25, 1, 0.5, 1);
 }
 
-/* Design på selve glide-knappen/prikken (Firefox) - Alltid synlig - Ingen glød */
+/* Design på selve glide-knappen/prikken (Firefox) */
 .volume-slider::-moz-range-thumb {
   width: 12px;
   height: 12px;
@@ -310,10 +318,7 @@ video::cue {
   border-radius: 6px;
   position: relative;
   cursor: pointer;
-  /* transition for height er fjernet her slik at linjen ikke hever eller endrer tykkelse */
 }
-
-/* Hover-effekt på .progress er fjernet helt for å hindre at den blir tykkere */
 
 /* Hvit fremdriftslinje uten glød */
 .progress-filled {
@@ -340,7 +345,7 @@ video::cue {
   z-index: 30;
 }
 
-/* Zoomer prikken ørlite grann når du holder over den eller linjen for god respons, men linjen under forblir tynn */
+/* Zoomer prikken ørlite grann når du holder over den eller linjen for god respons */
 .progress-container:hover .thumb { 
   transform: translate(-50%, -50%) scale(1.15); 
 }
@@ -433,7 +438,7 @@ video::cue {
   text-align: center;
 }
 
-/* System spinner - Original, flytende og roterende turkis stil */
+/* System spinner */
 .loading-spinner {
   position: absolute;
   top: 50%; left: 50%;
@@ -481,7 +486,6 @@ video::cue {
 }
 .resume-buttons button:active { transform: scale(0.97); }
 
-/* Turkis farge på Fortsett-knappen */
 #continueBtn { background: #0fddcb; color: #000; } 
 #continueBtn:hover { background: #0bc4b4; }
 #restartBtn { background: rgba(255,255,255,0.1); color: #fff; border: 1px solid rgba(255,255,255,0.2); }
@@ -495,6 +499,125 @@ video::cue {
   z-index: 10;
   pointer-events: none;
 }
+
+/* ================= NYTT: PREMIUM AUTOPLAY OVERLAY (NETFLIX-STIL) ================= */
+#autoplayOverlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start; /* Plassert elegant på venstre side */
+  padding-left: 8%;
+  background: transparent; /* Bakgrunnsbildet styres direkte fra .container */
+  z-index: 10;
+  color: #ffffff;
+  pointer-events: auto;
+}
+
+.autoplay-content {
+  max-width: 500px;
+}
+
+.autoplay-content h2 {
+  font-size: 20px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.6);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  margin-bottom: 8px;
+}
+
+.autoplay-content h1 {
+  font-size: 48px;
+  font-weight: bold;
+  line-height: 1.1;
+  margin-bottom: 24px;
+  text-shadow: 0 4px 12px rgba(0,0,0,0.5);
+}
+
+.autoplay-timer-text {
+  font-size: 18px;
+  color: #ffffff;
+  margin-bottom: 30px;
+  font-weight: 300;
+}
+
+#autoplayCountdown {
+  font-weight: bold;
+  color: #0fddcb; /* Vakker turkis farge for nedtellingen */
+  font-size: 20px;
+}
+
+.autoplay-buttons {
+  display: flex;
+  gap: 16px;
+}
+
+.autoplay-btn {
+  padding: 14px 32px;
+  font-size: 16px;
+  font-weight: 600;
+  border-radius: 4px;
+  border: none;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.1s, border-color 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.autoplay-btn:active {
+  transform: scale(0.97);
+}
+
+/* "Spill neste" - Turkis farge for krystallklart fokus */
+#autoplayPlayNextBtn {
+  background: #0fddcb;
+  color: #000000;
+}
+#autoplayPlayNextBtn:hover {
+  background: #0bc4b4;
+}
+
+/* "Avbryt" - Diskré, gjennomsiktig hvit */
+#autoplayCancelBtn {
+  background: rgba(255, 255, 255, 0.15);
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  backdrop-filter: blur(5px);
+}
+#autoplayCancelBtn:hover {
+  background: rgba(255, 255, 255, 0.25);
+  border-color: rgba(255, 255, 255, 0.5);
+}
+
+/* Eksterne intro/outro-knapper (clean cut, uten neon) */
+.skip-btn {
+  position: absolute;
+  bottom: 120px;
+  right: 40px;
+  background: rgba(20, 20, 20, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: #ffffff;
+  padding: 12px 24px;
+  font-size: 16px;
+  font-weight: 500;
+  border-radius: 4px;
+  cursor: pointer;
+  z-index: 21;
+  display: none;
+  transition: background 0.2s, border-color 0.2s;
+}
+.skip-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: #ffffff;
+}
+
 
 /* ================= RESPONSIVITET & MOBIL OPTIMALISERING ================= */
 @media (max-width: 768px) {
@@ -576,7 +699,7 @@ video::cue {
     }
 
     .progress {
-      height: 5px; /* Holder seg tynn på 5px også på mobil i portrett */
+      height: 5px; 
       background: rgba(255, 255, 255, 0.2);
     }
 
@@ -611,6 +734,16 @@ video::cue {
     .preview-box {
       bottom: 120px;
     }
+
+    #autoplayOverlay {
+      padding-left: 20px;
+      padding-right: 20px;
+      justify-content: flex-start;
+      padding-top: 25%;
+    }
+    .autoplay-content h1 {
+      font-size: 32px;
+    }
   }
 
   /* ================= LIGGENDE MODUS (LANDSKAP) ================= */
@@ -636,7 +769,7 @@ video::cue {
       padding: 0 20px; 
     }
     .progress {
-      height: 5px; /* Holder seg tynn på 5px også her */
+      height: 5px; 
     }
     .thumb {
       transform: translate(-50%, -50%) scale(1) !important;
@@ -1415,7 +1548,6 @@ video.addEventListener("timeupdate", () => {
     }
   }
 
-  // Hvis det er en serie OG det finnes en neste episode, start autoplay-nedtellingen mot slutten
   const triggerTid = film.outroStart != null ? film.outroStart : (video.duration - 15);
   if (isSerie && nesteEpisodeUrl && tid >= triggerTid && !autoplayTriggered && !video.paused) {
     autoplayTriggered = true;
@@ -1430,15 +1562,39 @@ if (autoplayPlayNextBtn) { autoplayPlayNextBtn.addEventListener("click", () => {
 function startPremiumAutoplay() {
   if (!autoplayOverlay || !videoWrapper) return;
   
+  // 1. Hent bilde/plakat fra NESTE episode dynamisk for å bruke som ren bakgrunn
+  let nesteBildeUrl = "";
+  if (isSerie && navn && sesong && episode && typeof serier !== "undefined" && serier?.[navn]) {
+    const s = parseInt(sesong);
+    const e = parseInt(episode);
+    const serie = serier[navn];
+    
+    // Sjekk om neste episode er i samme sesong, eller første episode i neste sesong
+    let nesteEpData = serie.sesonger[s]?.episoder?.[e + 1] || serie.sesonger[s + 1]?.episoder?.[1];
+    if (nesteEpData) {
+      // Hent bilde (bruk plakat, bildeUrl eller hva du kaller bildefeltet i databasen din)
+      nesteBildeUrl = nesteEpData.bildeUrl || nesteEpData.bilde || nesteEpData.poster || serie.plakat || "";
+    }
+  }
+
+  // 2. Sett neste episodes bilde som en ren, mørknet fullskjermsbakgrunn på videocontaineren
+  if (container && nesteBildeUrl) {
+    container.style.backgroundImage = `linear-gradient(rgba(0, 0, 0, 0.65), rgba(0, 0, 0, 0.65)), url('${nesteBildeUrl}')`;
+    container.style.backgroundSize = "cover";
+    container.style.backgroundPosition = "center";
+    container.style.backgroundRepeat = "no-repeat";
+  }
+  
+  // 3. Premium krymping av videoen uten noen glød/skygge (clean cut)
   videoWrapper.style.transform = "scale(0.45)";
   videoWrapper.style.transformOrigin = "bottom right";
   videoWrapper.style.position = "absolute";
-  videoWrapper.style.right = "40px";
-  videoWrapper.style.bottom = "90px";
+  videoWrapper.style.right = "50px";
+  videoWrapper.style.bottom = "100px";
   videoWrapper.style.width = "400px";
   videoWrapper.style.height = "225px";
-  videoWrapper.style.borderRadius = "8px";
-  videoWrapper.style.boxShadow = "0 10px 30px rgba(0,0,0,0.8)";
+  videoWrapper.style.borderRadius = "6px";
+  videoWrapper.style.boxShadow = "0 4px 20px rgba(0,0,0,0.5)"; // Ren skygge, null glød
   
   autoplayOverlay.style.display = "flex";
   
@@ -1460,15 +1616,21 @@ if (autoplayCancelBtn) {
     clearInterval(autoplayTimer);
     if (autoplayOverlay) autoplayOverlay.style.display = "none";
     
+    // Fjern bakgrunnsbildet på containeren igjen så skjermen blir sort bak videoen
+    if (container) {
+      container.style.backgroundImage = "";
+    }
+    
     if (videoWrapper) {
-      videoWrapper.style.transform = "none";
-      videoWrapper.style.position = "absolute";
-      videoWrapper.style.width = "100%";
-      videoWrapper.style.height = "100%";
-      videoWrapper.style.right = "0px";
-      videoWrapper.style.bottom = "0px";
-      videoWrapper.style.borderRadius = "0px";
-      videoWrapper.style.boxShadow = "none";
+      // Maksimer videoen sømløst tilbake
+      videoWrapper.style.transform = "";
+      videoWrapper.style.position = "";
+      videoWrapper.style.width = "";
+      videoWrapper.style.height = "";
+      videoWrapper.style.right = "";
+      videoWrapper.style.bottom = "";
+      videoWrapper.style.borderRadius = "";
+      videoWrapper.style.boxShadow = "";
     }
     
     if (skipOutroBtn) skipOutroBtn.style.display = "block";
