@@ -212,6 +212,79 @@ video::cue {
 .btn:hover { transform: scale(1.15); }
 .btn:active { transform: scale(0.95); }
 
+/* ================= PREMIUM INTERAKTIV VOLUMKONTROLL ================= */
+.volume-container {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+}
+
+/* Holderen rundt volum-slideren som animerer bredden */
+.volume-slider-wrapper {
+  display: flex;
+  align-items: center;
+  width: 0;
+  opacity: 0;
+  overflow: hidden;
+  transition: width 0.25s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.2s ease;
+}
+
+/* Når man holder over containeren (eller brukeren fokuserer på den) sklir den ut */
+.volume-container:hover .volume-slider-wrapper,
+.volume-container:focus-within .volume-slider-wrapper {
+  width: 80px;
+  opacity: 1;
+}
+
+/* Selve volumlinjen (slideren) */
+.volume-slider {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 4px;
+  border-radius: 2px;
+  background: rgba(255, 255, 255, 0.3);
+  outline: none;
+  cursor: pointer;
+  transition: background 0.1s;
+}
+
+.volume-slider:hover {
+  background: rgba(255, 255, 255, 0.5);
+}
+
+/* Design på selve glide-knappen (Chrome, Safari, Opera, Edge) */
+.volume-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #0fddcb;
+  box-shadow: 0 0 8px rgba(15, 221, 203, 0.8);
+  cursor: pointer;
+  transition: transform 0.1s;
+}
+.volume-slider::-webkit-slider-thumb:hover {
+  transform: scale(1.2);
+}
+
+/* Design på selve glide-knappen (Firefox) */
+.volume-slider::-moz-range-thumb {
+  width: 12px;
+  height: 12px;
+  border: none;
+  border-radius: 50%;
+  background: #0fddcb;
+  box-shadow: 0 0 8px rgba(15, 221, 203, 0.8);
+  cursor: pointer;
+  transition: transform 0.1s;
+}
+.volume-slider::-moz-range-thumb:hover {
+  transform: scale(1.2);
+}
+
 /* ================= PROGRESS BAR (TIDSSTRIPEN) ================= */
 .progress-container {
   position: absolute;
@@ -723,7 +796,14 @@ video::cue {
         <button id="nextEpisodeBtn" class="btn" style="display: none; color: white; font-weight: bold; background: none; border: none; cursor: pointer; font-size: 14px; margin-right: 15px;">
           Neste <i class="fa-solid fa-forward" style="margin-left: 3px; font-size: 12px;"></i>
         </button>
-        <button class="btn" id="muteBtn" title="Lyd av/på"></button>
+        
+        <div class="volume-container">
+          <button class="btn" id="muteBtn" title="Lyd av/på"></button>
+          <div class="volume-slider-wrapper">
+            <input type="range" class="volume-slider" id="volumeSlider" min="0" max="1" step="0.05" value="1">
+          </div>
+        </div>
+
         <button class="btn" id="captionsBtn" title="Undertekster og lydspråk"></button>
         <button class="btn" id="fullscreenBtn" title="Fullskjerm"></button>
       </div>
@@ -809,7 +889,6 @@ if (video) {
   if (trackTag && film.subtitleUrl) trackTag.src = film.subtitleUrl;
   video.load();
 }
-
 /* ================= 2. DOM-ELEMENTER ================= */
 const ui = document.getElementById("ui");
 const playBtn = document.getElementById("playPauseBtn");
