@@ -1488,7 +1488,11 @@ if (progress) {
 
 // ================= AUTOMATISK SKJULING AV MUSEPEKER & KONTROLLER =================
 function showUI() {
-  if (autoplayAktiv) return; // Avbryt hvis autoplay-skjermen er aktiv!
+  if (autoplayAktiv) {
+    // Sørger for at musepekeren tvinges til å være synlig under autoplay
+    document.body.classList.remove('no-cursor');
+    return; 
+  }
 
   if (ui) ui.classList.remove('hidden'); 
   document.body.classList.remove('no-cursor'); 
@@ -1565,6 +1569,9 @@ function startPremiumAutoplay() {
   
   autoplayAktiv = true; // Markerer autoplay som aktiv
 
+  // Vis musepekeren med en gang
+  document.body.classList.remove('no-cursor');
+
   // Skjuler og deaktiverer kontroller
   if (ui) {
     ui.style.pointerEvents = "none";
@@ -1596,8 +1603,9 @@ function startPremiumAutoplay() {
     }
   }
 
+  // FIKS: Fjernet linear-gradient sløret slik at bildet vises lyst og klart i bakgrunnen
   if (container && nesteBildeUrl) {
-    container.style.backgroundImage = `linear-gradient(rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0.75)), url('${nesteBildeUrl}')`;
+    container.style.backgroundImage = `url('${nesteBildeUrl}')`;
     container.style.backgroundSize = "cover";
     container.style.backgroundPosition = "center";
     container.style.backgroundRepeat = "no-repeat";
@@ -1632,7 +1640,7 @@ function startPremiumAutoplay() {
   document.getElementById("autoplayPlayNextBtn").addEventListener("click", () => { ryddeOgNeste(); });
   document.getElementById("autoplayCancelBtn").addEventListener("click", () => { avbrytAutoplay(); });
 
-  // Flytter den krympede videoen oppe-høyre (110px ned fra topplinjen for ren design)
+  // FIKS: Lagt til 'zIndex = "9999"' for å tvinge videoruten over eventuelle mørke overlays!
   videoWrapper.style.transform = "none";
   videoWrapper.style.position = "absolute";
   videoWrapper.style.top = "110px";
@@ -1643,6 +1651,7 @@ function startPremiumAutoplay() {
   videoWrapper.style.height = "236px";
   videoWrapper.style.border = "3px solid #ffffff";
   videoWrapper.style.borderRadius = "4px";
+  videoWrapper.style.zIndex = "9999";
   
   autoplayOverlay.style.display = "flex";
   
@@ -1668,7 +1677,7 @@ function startPremiumAutoplay() {
 }
 
 function avbrytAutoplay() {
-  autoplayAktiv = false; // Nullstiller autoplay flagget
+  autoplayAktiv = false; // Nullstiller autoplay-flagget
   clearInterval(autoplayTimer);
   if (autoplayOverlay) autoplayOverlay.style.display = "none";
   
@@ -1683,7 +1692,7 @@ function avbrytAutoplay() {
     showUI();
   }
   
-  // Tilbakestiller alle videostilene fullstendig
+  // Tilbakestiller alle videostilene fullstendig (inkludert zIndex)
   if (videoWrapper) {
     videoWrapper.style.transform = "";
     videoWrapper.style.position = "";
@@ -1695,6 +1704,7 @@ function avbrytAutoplay() {
     videoWrapper.style.bottom = "";
     videoWrapper.style.border = "none";
     videoWrapper.style.borderRadius = "";
+    videoWrapper.style.zIndex = "";
   }
   
   if (skipOutroBtn) skipOutroBtn.style.display = "block";
