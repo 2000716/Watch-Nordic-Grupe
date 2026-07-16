@@ -843,7 +843,7 @@ video::cue {
 <script src="Filmdata.js"></script>
 <script src="Seriedata.js"></script>
 <script type="module">
-/* ==========================================================================
+/* ================= ==========================================================
    UNIVERSELL SPINNER & PLAYER – PREMIUM STRØMMETJENESTE-UTGAVE
    ========================================================================== */
 import { db, auth } from './firebase-oppsett.js';
@@ -915,6 +915,7 @@ if (video) {
 const ui = document.getElementById("ui");
 const playBtn = document.getElementById("playPauseBtn");
 const muteBtn = document.getElementById("muteBtn");
+const volumeSlider = document.querySelector(".volume-slider"); // NY: Henter selve volumslideren
 const rewindBtn = document.getElementById("rewindBtn");
 const forwardBtn = document.getElementById("forwardBtn");
 const progress = document.getElementById("progress");
@@ -948,6 +949,7 @@ let subtitlesEnabled = globalSubtitleSetting !== "off";
 let autoplayTriggered = false;
 let lokalLagringsInterval;
 let autoplayTimer;
+let lastVolume = localStorage.getItem("video-last-volume") || 1; // Lagrer forrige volum for un-mute
 
 // Setter FontAwesome ikoner
 if (rewindBtn) rewindBtn.innerHTML = '<i class="fa-solid fa-rotate-left" style="color: #ffffff; font-size: 22px;"></i>';
@@ -1171,12 +1173,60 @@ video.addEventListener('pause', () => {
   showUI(); 
 });
 
+/* ================= NYTT: PREMIUM INTERAKTIV VOLUMLOGIKK ================= */
+function oppdaterVolumIkon(vol, isMuted) {
+  if (isMuted || vol === 0) {
+    muteBtn.innerHTML = '<i class="fa-solid fa-volume-xmark" style="color: #ffffff; font-size: 22px;"></i>';
+  } else if (vol < 0.4) {
+    muteBtn.innerHTML = '<i class="fa-solid fa-volume-low" style="color: #ffffff; font-size: 22px;"></i>';
+  } else {
+    muteBtn.innerHTML = '<i class="fa-solid fa-volume-high" style="color: #ffffff; font-size: 22px;"></i>';
+  }
+}
+
+function settVolum(volVal) {
+  const vol = parseFloat(volVal);
+  video.volume = vol;
+  video.muted = (vol === 0);
+  
+  if (vol > 0) {
+    lastVolume = vol;
+    localStorage.setItem("video-last-volume", vol);
+  }
+  
+  // Oppdaterer den fargede linjen bak slider-knappen din dynamisk via CSS-variabelen
+  if (volumeSlider) {
+    volumeSlider.value = vol;
+    volumeSlider.style.setProperty('--volume-percent', `${vol * 100}%`);
+  }
+  oppdaterVolumIkon(vol, video.muted);
+}
+
+// Klikk på høyttaler-ikon (Mute / Unmute)
 muteBtn.addEventListener('click', () => {
-  video.muted = !video.muted;
-  muteBtn.innerHTML = video.muted
-    ? '<i class="fa-solid fa-volume-xmark" style="color: #ffffff; font-size: 22px;"></i>'
-    : '<i class="fa-solid fa-volume-high" style="color: #ffffff; font-size: 22px;"></i>';
+  if (video.muted || video.volume === 0) {
+    video.muted = false;
+    settVolum(lastVolume > 0 ? lastVolume : 0.5);
+  } else {
+    video.muted = true;
+    if (volumeSlider) {
+      volumeSlider.value = 0;
+      volumeSlider.style.setProperty('--volume-percent', '0%');
+    }
+    oppdaterVolumIkon(0, true);
+  }
 });
+
+// Lytt etter endringer på selve volumlinjen (slideren)
+if (volumeSlider) {
+  // Setter initialt volum ved oppstart
+  settVolum(lastVolume);
+
+  volumeSlider.addEventListener('input', (e) => {
+    settVolum(e.target.value);
+  });
+}
+/* ======================================================================= */
 
 rewindBtn.addEventListener('click', () => video.currentTime = Math.max(0, video.currentTime - 10));
 forwardBtn.addEventListener('click', () => video.currentTime = Math.min(video.duration, video.currentTime + 10));
