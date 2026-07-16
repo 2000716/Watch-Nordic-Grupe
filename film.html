@@ -7,8 +7,7 @@
 
  <link rel="icon" type="image/png" href="https://static.wixstatic.com/media/d9ace9_95bbe3f5ff4b4aab9314a8d08804344e~mv2.png" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
-  <style>
-    
+<style>
 /* ==========================================================================
    1. GLOBALE TILBAKESTILLINGER & BASE STYLES
    ========================================================================== */
@@ -24,7 +23,7 @@ html {
 }
 
 body {
- background: #091B1E;
+  background: #091B1E;
   color: #fff;
   font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
   letter-spacing: .2px;
@@ -175,13 +174,14 @@ img, video {
 }
 
 /* ==========================================================================
-   3. HERO-SEKSJON OG BAKGRUNNSMEDIA
+   4. HERO-SEKSJON OG BAKGRUNNSMEDIA
    ========================================================================== */
 .hero {
   position: relative;
   width: 100vw;
   height: 100vh;
   overflow: hidden;
+  background: #091B1E;
 }
 
 .background-image,
@@ -204,8 +204,8 @@ img, video {
   position: absolute;
   inset: 0;
   background:
-    linear-gradient(to top, rgba(0,0,0,.9) 0%, rgba(0,0,0,.4) 40%, transparent 75%),
-    linear-gradient(to right, rgba(0,0,0,.6) 0%, transparent 50%);
+    linear-gradient(to top, rgba(9, 27, 30, 0.9) 0%, rgba(9, 27, 30, 0.4) 40%, transparent 75%),
+    linear-gradient(to right, rgba(9, 27, 30, 0.6) 0%, transparent 50%);
   z-index: 1;
 }
 
@@ -214,12 +214,12 @@ img, video {
   bottom: 0;
   width: 100%;
   height: 200px;
-  background: linear-gradient(to top, #000, transparent);
+  background: linear-gradient(to top, #091B1E, transparent);
   z-index: 1;
 }
 
 /* ==========================================================================
-   4. INNHOLD OG GLASS PANEL
+   5. INNHOLD OG GLASS PANEL
    ========================================================================== */
 .content-wrapper {
   position: absolute;
@@ -350,7 +350,7 @@ img, video {
 }
 
 /* ==========================================================================
-   5. STRØMMETJENESTE-KNAPPER
+   6. STRØMMETJENESTE-KNAPPER
    ========================================================================== */
 .buttons-column {
   display: flex;
@@ -407,12 +407,12 @@ img, video {
 }
 
 /* ==========================================================================
-   6. ANBEFALINGER & EPISODER (KUN VERTIKALT DESIGN - INGEN SCROLLING)
+   7. ANBEFALINGER & EPISODER (KUN VERTIKALT DESIGN - INGEN SCROLLING)
    ========================================================================== */
 .recommendations {
   margin: 40px auto 0;
   padding: 0 50px 50px;
-  background: #000;
+  background: #091B1E;
   position: relative;
   z-index: 5;
   max-width: 1400px;
@@ -602,48 +602,7 @@ img, video {
 }
 
 /* ==========================================================================
-   MOBIL-TILPASSING FOR DENNE SEKSJONEN
-   ========================================================================== */
-@media (max-width: 768px) {
-  .recommendations {
-    padding: 0 32px 30px;
-  }
-  
-  .recommendations h2 {
-    font-size: 18px;
-    margin-bottom: 12px;
-  }
-
-  /* Filmer blir til 2 i bredden på mobil */
-  .gallery {
-    grid-template-columns: repeat(2, 1fr); 
-    gap: 12px;
-  }
-
-  .movie-card {
-    height: 120px; 
-  }
-
-  .movie-overlay {
-    padding: 10px;
-  }
-
-  .movie-title {
-    font-size: 12px;
-  }
-
-  /* Episoder stables til 1 i bredden på mobil for å beholde leservennlig tekst */
-  .episode-gallery {
-    grid-template-columns: 1fr;
-    gap: 16px;
-  }
-
-  .episode-thumb {
-    height: 180px; /* God størrelse på mobilskjermer */
-  }
-}
-/* ==========================================================================
-   7. FOOTER OG SKJERM-POPUPS
+   8. FOOTER OG SKJERM-POPUPS
    ========================================================================== */
 .footer {
   width: 100%;
@@ -772,9 +731,9 @@ img, video {
 }
 
 /* ==========================================================================
-   8. MEDIA QUERIES (MOBIL-OPTIMALISERING - 768px og mindre)
+   9. MEDIA QUERIES (MOBIL-OPTIMALISERING - 768px og mindre)
    ========================================================================== */
-@media(max-width: 768px) {
+@media (max-width: 768px) {
   .top-nav {
     padding: 0 20px;
     height: 70px;
@@ -786,7 +745,7 @@ img, video {
 
   /* Bakgrunnsfargen på hele siden matcher toppfargen */
   body, .hero {
-    background: rgb(9, 27, 30) !important; 
+    background: #091B1E !important; 
     position: relative; 
     height: auto;
     min-height: auto;
@@ -814,7 +773,7 @@ img, video {
     left: 0;
     width: 100% !important;
     height: 65vh !important;
-    background: linear-gradient(to bottom, transparent 30%, rgb(9, 27, 30) 100%) !important;
+    background: linear-gradient(to bottom, transparent 30%, #091B1E 100%) !important;
     z-index: 2 !important;
   }
 
@@ -933,7 +892,7 @@ img, video {
   .recommendations {
     margin: 30px 0 0 !important;
     padding: 0 20px 40px !important;
-    background: rgb(9, 27, 30) !important;
+    background: #091B1E !important;
     position: relative;
     z-index: 3;
   }
@@ -942,6 +901,7 @@ img, video {
     font-size: 20px !important;
   }
 
+  /* Filmer blir til 2 i bredden på mobil */
   .gallery {
     grid-template-columns: repeat(2, 1fr) !important;
     gap: 12px !important;
@@ -952,10 +912,20 @@ img, video {
     border-radius: 4px !important;
   }
 
+  /* Episoder stables til 1 i bredden på mobil for å beholde leservennlig tekst */
+  .episode-gallery {
+    grid-template-columns: 1fr !important;
+    gap: 16px !important;
+  }
+
+  .episode-thumb {
+    height: 180px !important;
+  }
+
   /* Footer på mobil */
   .footer {
     padding: 40px 20px 20px !important;
-    background: rgb(9, 27, 30) !important;
+    background: #091B1E !important;
     position: relative;
     z-index: 3;
   }
