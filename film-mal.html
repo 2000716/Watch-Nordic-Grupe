@@ -1082,6 +1082,7 @@ let hideTimeout;
 let globalSubtitleSetting = localStorage.getItem("global-subtitle-setting") || "off";
 let subtitlesEnabled = globalSubtitleSetting !== "off";
 let autoplayTriggered = false;
+let autoplayAktiv = false; // Flag for å sjekke om autoplay-skjermen er åpen
 let lokalLagringsInterval;
 let autoplayTimer;
 let lastVolume = localStorage.getItem("video-last-volume") || 1;
@@ -1282,6 +1283,7 @@ playBtn.addEventListener('click', () => video.paused ? video.play() : video.paus
 video.addEventListener('click', () => video.paused ? video.play() : video.pause());
 
 document.addEventListener('keydown', e => {
+  if (autoplayAktiv) return; // Blokkerer tastatursnarveier under nedtellingen
   if (e.code === 'Space') { e.preventDefault(); video.paused ? video.play() : video.pause(); }
   if (e.key === 'ArrowRight') video.currentTime = Math.min(video.duration, video.currentTime + 10);
   if (e.key === 'ArrowLeft') video.currentTime = Math.max(0, video.currentTime - 10);
@@ -1486,6 +1488,8 @@ if (progress) {
 
 // ================= AUTOMATISK SKJULING AV MUSEPEKER & KONTROLLER =================
 function showUI() {
+  if (autoplayAktiv) return; // Avbryt hvis autoplay-skjermen er aktiv!
+
   if (ui) ui.classList.remove('hidden'); 
   document.body.classList.remove('no-cursor'); 
   if (subtitleOverlay) subtitleOverlay.classList.add("subtitle-up"); 
@@ -1559,6 +1563,14 @@ if (skipOutroBtn) { skipOutroBtn.addEventListener("click", () => { ryddeOgNeste(
 function startPremiumAutoplay() {
   if (!autoplayOverlay || !videoWrapper) return;
   
+  autoplayAktiv = true; // Markerer autoplay som aktiv
+
+  // Skjuler og deaktiverer kontroller
+  if (ui) {
+    ui.style.pointerEvents = "none";
+    ui.style.display = "none";
+  }
+  
   let nesteBildeUrl = "";
   let nesteTittel = "Neste episode";
   let nesteBeskrivelse = "";
@@ -1620,13 +1632,13 @@ function startPremiumAutoplay() {
   document.getElementById("autoplayPlayNextBtn").addEventListener("click", () => { ryddeOgNeste(); });
   document.getElementById("autoplayCancelBtn").addEventListener("click", () => { avbrytAutoplay(); });
 
-  // FIKS: Nullstiller "top" og "left" slik at bottom/right faktisk styrer posisjonen perfekt
+  // Flytter den krympede videoen oppe-høyre (110px ned fra topplinjen for ren design)
   videoWrapper.style.transform = "none";
   videoWrapper.style.position = "absolute";
-  videoWrapper.style.top = "auto";
+  videoWrapper.style.top = "110px";
+  videoWrapper.style.bottom = "auto";
   videoWrapper.style.left = "auto";
   videoWrapper.style.right = "80px";
-  videoWrapper.style.bottom = "120px";
   videoWrapper.style.width = "420px";
   videoWrapper.style.height = "236px";
   videoWrapper.style.border = "3px solid #ffffff";
@@ -1656,6 +1668,7 @@ function startPremiumAutoplay() {
 }
 
 function avbrytAutoplay() {
+  autoplayAktiv = false; // Nullstiller autoplay flagget
   clearInterval(autoplayTimer);
   if (autoplayOverlay) autoplayOverlay.style.display = "none";
   
@@ -1663,7 +1676,14 @@ function avbrytAutoplay() {
     container.style.backgroundImage = "";
   }
   
-  // FIKS: Tilbakestiller alle stilene – inkludert top og left
+  // Bringer kontrollene tilbake til synlig og aktiv tilstand
+  if (ui) {
+    ui.style.pointerEvents = "auto";
+    ui.style.display = ""; 
+    showUI();
+  }
+  
+  // Tilbakestiller alle videostilene fullstendig
   if (videoWrapper) {
     videoWrapper.style.transform = "";
     videoWrapper.style.position = "";
