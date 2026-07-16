@@ -139,6 +139,12 @@ video::cue {
   background: linear-gradient(to bottom, rgba(0, 0, 0, 0.8) 0%, rgba(0, 0, 0, 0) 100%);
   display: flex;
   align-items: center;
+  justify-content: space-between; /* Endret for å dytte volumet helt til høyre */
+}
+
+.top-bar-left {
+  display: flex;
+  align-items: center;
 }
 
 /* Fikset: Fjerner understreking og standardfarge for lenken permanent */
@@ -203,21 +209,24 @@ video::cue {
   background: none; 
   border: none; 
   cursor: pointer; 
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  display: flex; 
+  align-items: center; 
+  justify-content: center; 
   transition: transform 0.15s ease;
   padding: 5px;
 }
 .btn:hover { transform: scale(1.15); }
 .btn:active { transform: scale(0.95); }
 
-/* ================= PREMIUM INTERAKTIV VOLUMKONTROLL ================= */
+/* ================= PREMIUM INTERAKTIV VOLUMKONTROLL (TOPP HØYRE) ================= */
 .volume-container {
   display: flex;
+  flex-direction: row-reverse; /* Sørger for at linjen havner til venstre for ikonet */
   align-items: center;
   gap: 8px;
   cursor: pointer;
+  z-index: 30;
+  pointer-events: auto;
 }
 
 /* Holderen rundt volum-slideren som animerer bredden */
@@ -230,10 +239,10 @@ video::cue {
   transition: width 0.25s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.2s ease;
 }
 
-/* Når man holder over containeren (eller brukeren fokuserer på den) sklir den ut */
+/* Når man holder over containeren sklir den ut */
 .volume-container:hover .volume-slider-wrapper,
 .volume-container:focus-within .volume-slider-wrapper {
-  width: 80px;
+  width: 100px; /* Gjort litt bredere for bedre presisjon */
   opacity: 1;
 }
 
@@ -244,45 +253,41 @@ video::cue {
   width: 100%;
   height: 4px;
   border-radius: 2px;
-  background: rgba(255, 255, 255, 0.3);
+  /* Bruker en CSS-variabel for å tegne den fargede aktive delen av sporet */
+  background: linear-gradient(to right, #ffffff var(--volume-percent, 100%), rgba(255, 255, 255, 0.3) var(--volume-percent, 100%));
   outline: none;
   cursor: pointer;
-  transition: background 0.1s;
 }
 
-.volume-slider:hover {
-  background: rgba(255, 255, 255, 0.5);
-}
-
-/* Design på selve glide-knappen (Chrome, Safari, Opera, Edge) */
+/* Design på selve glide-knappen/prikken (Chrome, Safari, Opera, Edge) */
 .volume-slider::-webkit-slider-thumb {
   -webkit-appearance: none;
   appearance: none;
   width: 12px;
   height: 12px;
   border-radius: 50%;
-  background: #0fddcb;
-  box-shadow: 0 0 8px rgba(15, 221, 203, 0.8);
+  background: #ffffff; /* Hvit prikk */
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
   cursor: pointer;
   transition: transform 0.1s;
 }
 .volume-slider::-webkit-slider-thumb:hover {
-  transform: scale(1.2);
+  transform: scale(1.25);
 }
 
-/* Design på selve glide-knappen (Firefox) */
+/* Design på selve glide-knappen/prikken (Firefox) */
 .volume-slider::-moz-range-thumb {
   width: 12px;
   height: 12px;
   border: none;
   border-radius: 50%;
-  background: #0fddcb;
-  box-shadow: 0 0 8px rgba(15, 221, 203, 0.8);
+  background: #ffffff; /* Hvit prikk */
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
   cursor: pointer;
   transition: transform 0.1s;
 }
 .volume-slider::-moz-range-thumb:hover {
-  transform: scale(1.2);
+  transform: scale(1.25);
 }
 
 /* ================= PROGRESS BAR (TIDSSTRIPEN) ================= */
@@ -765,8 +770,19 @@ video::cue {
   <div class="ui" id="ui">
     
     <div class="top-bar">
-      <a href="#" class="back-button" id="backButton"></a>
-      <div class="movie-title">Laster tittel...</div>
+      <div class="top-bar-left">
+        <a href="#" class="back-button" id="backButton"></a>
+        <div class="movie-title">Laster tittel...</div>
+      </div>
+      
+      <div class="volume-container">
+        <button class="btn" id="muteBtn" title="Lyd av/på">
+          <i class="fa-solid fa-volume-high" style="color: white; font-size: 18px;"></i>
+        </button>
+        <div class="volume-slider-wrapper">
+          <input type="range" class="volume-slider" id="volumeSlider" min="0" max="1" step="0.05" value="1" style="--volume-percent: 100%;">
+        </div>
+      </div>
     </div>
 
     <div class="progress-container">
@@ -797,13 +813,6 @@ video::cue {
           Neste <i class="fa-solid fa-forward" style="margin-left: 3px; font-size: 12px;"></i>
         </button>
         
-        <div class="volume-container">
-          <button class="btn" id="muteBtn" title="Lyd av/på"></button>
-          <div class="volume-slider-wrapper">
-            <input type="range" class="volume-slider" id="volumeSlider" min="0" max="1" step="0.05" value="1">
-          </div>
-        </div>
-
         <button class="btn" id="captionsBtn" title="Undertekster og lydspråk"></button>
         <button class="btn" id="fullscreenBtn" title="Fullskjerm"></button>
       </div>
