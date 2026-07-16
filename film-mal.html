@@ -739,7 +739,7 @@
 <script src="Seriedata.js"></script>
 <script type="module">
 /* ==========================================================================
-   UNIVERSELL SPINNER & PLAYER – OPTIMALISERT FOR STRØMMING OG GRATIS FIREBASE
+   UNIVERSELL SPINNER & PLAYER – PREMIUM STRØMMETJENESTE-UTGAVE
    ========================================================================== */
 import { db, auth } from './firebase-oppsett.js';
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-auth.js";
@@ -954,7 +954,7 @@ function oppdaterFremdriftILokalMatrise(status) {
   if (!heleProfilArrayet[profilIdx].fremdrift) heleProfilArrayet[profilIdx].fremdrift = {};
   if (!heleProfilArrayet[profilIdx].historikk) heleProfilArrayet[profilIdx].historikk = [];
 
-  // FIKS: Hvis status settes direkte til "ferdig", eller videofremdrift overskrider 96%
+  // Hvis status settes direkte til "ferdig", eller videofremdrift overskrider 96%
   if (status === "ferdig" || percent > 96) {
     delete heleProfilArrayet[profilIdx].fremdrift[filmId];
     if (!heleProfilArrayet[profilIdx].historikk.includes(filmId)) {
@@ -1006,10 +1006,11 @@ async function ryddeOgNeste() {
     } catch (e) { console.error("Feil ved lagring før navigering:", e); }
   }
   
-  // FIKS: Navigering basert på om det faktisk finnes en neste episode eller ikke
+  // Sjekker om det faktisk finnes en neste episode å spille av
   if (isSerie && nesteEpisodeUrl) {
     window.location.href = nesteEpisodeUrl;
   } else {
+    // Hvis det er film, eller siste episode av en serie -> Gå tilbake til Infosiden/Hovedsiden
     window.location.href = tilbakeUrl;
   }
 }
@@ -1201,16 +1202,20 @@ if (progress) {
   progress.addEventListener("mouseleave", hidePreview);
 }
 
+// ================= AUTOMATISK SKJULING AV MUSEPEKER & KONTROLLER =================
 function showUI() {
   if (ui) ui.classList.remove('hidden'); 
+  document.body.classList.remove('no-cursor'); // Viser musepeker igjen
   if (subtitleOverlay) subtitleOverlay.classList.add("subtitle-up"); 
   clearTimeout(hideTimeout);
+  
   hideTimeout = setTimeout(() => { 
     if (!video.paused && !isDragging) { 
       if (ui) ui.classList.add('hidden'); 
+      document.body.classList.add('no-cursor'); // Skjuler musepekeren ved inaktivitet
       if (subtitleOverlay) subtitleOverlay.classList.remove("subtitle-up"); 
     } 
-  }, 3000);
+  }, 3000); // 3 sekunder
 }
 document.addEventListener('mousemove', showUI);
 document.addEventListener('keydown', showUI);
@@ -1231,6 +1236,7 @@ if (loadingSpinner) {
   video.addEventListener('playing', () => loadingSpinner.style.display = 'none');
 }
 
+// Når videoen slutter -> rydde opp og naviger til neste episode eller tilbake til infosiden
 video.addEventListener('ended', async () => { 
   await ryddeOgNeste(); 
 });
@@ -1241,7 +1247,7 @@ function updateSubtitleButtons(activeLang) {
   });
 }
 
-/* ================= 6. PREMIUM NETFLIX-FLYTT & INTRO/OUTRO ================= */
+/* ================= 6. PREMIUM NETFLIX-FLYTT & AUTOPLAY ================= */
 const skipIntroBtn = document.getElementById("skipIntroBtn");
 const skipOutroBtn = document.getElementById("skipOutroBtn");
 
@@ -1256,6 +1262,7 @@ video.addEventListener("timeupdate", () => {
     }
   }
 
+  // Hvis det er en serie OG det finnes en neste episode, start autoplay-nedtellingen mot slutten
   const triggerTid = film.outroStart != null ? film.outroStart : (video.duration - 15);
   if (isSerie && nesteEpisodeUrl && tid >= triggerTid && !autoplayTriggered && !video.paused) {
     autoplayTriggered = true;
