@@ -9,12 +9,11 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
   <style>
     :root {
-      --bg: #091B1E;
-      --surface: #0e2428;
+      --bg: #071315;
+      --surface: #0d1e22;
       --accent: #00FFCC;
-      --muted: #9fb3b5;
+      --muted: #9aa8ab;
       --border: rgba(255, 255, 255, 0.08);
-      --border-active: #00FFCC;
     }
 
     * {
@@ -27,147 +26,229 @@
       background: var(--bg);
       color: white;
       font-family: 'Inter', Arial, sans-serif;
-      padding: 60px 20px;
-      text-align: center;
       min-height: 100vh;
       display: flex;
       flex-direction: column;
       align-items: center;
+      justify-content: space-between;
+      padding: 40px 20px;
+      overflow-x: hidden;
+    }
+
+    .topp-seksjon {
+      text-align: center;
+      margin-top: 20px;
     }
 
     h1 {
+      font-size: 2.4rem;
+      font-weight: 900;
+      letter-spacing: -0.5px;
       margin-bottom: 8px;
-      font-size: 2.5rem;
-      font-weight: 800;
-      letter-spacing: 0.5px;
     }
 
     p.subtitle {
       color: var(--muted);
-      font-size: 1.05rem;
-      margin-bottom: 50px;
+      font-size: 1rem;
     }
 
-    #hoved-container {
+    /* Hovedkarusellet */
+    .karusell-wrapper {
       width: 100%;
-      max-width: 950px;
+      max-width: 900px;
+      margin: 20px auto;
+      position: relative;
+      display: flex;
+      align-items: center;
     }
 
-    .rad-container {
-      margin: 0 auto 45px;
+    .karusell-viewport {
       width: 100%;
+      overflow: hidden;
+      padding: 50px 10px 20px 10px; /* Ekstra plass på topp slik at PNG-figurer kan stikke opp */
+    }
+
+    .karusell-spor {
+      display: flex;
+      transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+      gap: 30px;
+    }
+
+    .kategori-kort {
+      min-width: 100%;
       background: var(--surface);
       border: 1px solid var(--border);
-      padding: 40px 30px 30px;
-      border-radius: 16px;
+      border-radius: 20px;
+      padding: 40px 30px 30px 30px;
       position: relative;
     }
 
-    .rad-tittel {
-      font-size: 1rem;
-      margin-bottom: 30px;
+    .kategori-tittel {
+      font-size: 1.1rem;
       font-weight: 700;
-      text-align: left;
       color: var(--accent);
       text-transform: uppercase;
-      letter-spacing: 1.5px;
+      letter-spacing: 1px;
+      margin-bottom: 30px;
+      text-align: left;
     }
 
-    .bilder-rad {
+    .avatar-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-      gap: 35px;
+      grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+      gap: 25px;
       justify-items: center;
-      overflow: visible;
     }
 
-    .bilde-container {
+    .avatar-item {
       display: flex;
       flex-direction: column;
       align-items: center;
+      cursor: pointer;
       position: relative;
-      overflow: visible;
-      width: 100%;
     }
 
-    .bilde-navn {
-      margin-top: 14px;
-      font-size: 0.95rem;
+    /* Runde bilder, der PNG-figurer kan posisjoneres slik at de stikker opp */
+    .avatar-bilde-wrap {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      background: rgba(0, 0, 0, 0.25);
+      border: 3px solid transparent;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      transition: all 0.25s ease;
+    }
+
+    .avatar-bilde {
+      width: 115px;
+      height: 115px;
+      border-radius: 50%;
+      object-fit: cover;
+      transition: transform 0.25s ease;
+    }
+
+    /* Spesifikk stil for PNG-figurer som skal stikke ut på topp */
+    .avatar-bilde.png-karakter {
+      object-fit: contain;
+      transform: scale(1.35) translateY(-14px); /* Trekker figurene oppover og ut av rammen */
+    }
+
+    .avatar-item:hover .avatar-bilde-wrap {
+      border-color: rgba(0, 255, 204, 0.5);
+    }
+
+    .avatar-item:hover .avatar-bilde.png-karakter {
+      transform: scale(1.42) translateY(-18px);
+    }
+
+    .avatar-item.selected .avatar-bilde-wrap {
+      border-color: var(--accent);
+      box-shadow: 0 0 15px rgba(0, 255, 204, 0.25);
+    }
+
+    .avatar-navn {
+      margin-top: 15px;
+      font-size: 0.9rem;
       font-weight: 600;
-      text-align: center;
       color: var(--muted);
       transition: color 0.2s ease;
     }
 
-    .profilbilde-valg {
-      width: 130px;
-      height: 130px;
-      border-radius: 14px;
-      object-fit: cover;
-      border: 3px solid transparent;
-      transition: transform 0.25s cubic-bezier(0.2, 0, 0.2, 1), border-color 0.25s ease;
-      cursor: pointer;
-      background: rgba(0,0,0,0.3);
-      position: relative;
-      margin-top: -20px; /* Trekker figurene lenger opp og over rammen */
-    }
-
-    .bilde-container:hover .profilbilde-valg {
-      transform: translateY(-8px) scale(1.04);
-      border-color: rgba(0, 255, 204, 0.5);
-    }
-
-    .bilde-container:hover .bilde-navn {
+    .avatar-item:hover .avatar-navn,
+    .avatar-item.selected .avatar-navn {
       color: #fff;
     }
 
-    .profilbilde-valg.selected {
-      border-color: var(--border-active);
-      transform: translateY(-8px) scale(1.04);
+    /* Navigasjonspiler for karusellen */
+    .nav-pil {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(13, 30, 34, 0.9);
+      border: 1px solid var(--border);
+      color: white;
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      z-index: 10;
+      transition: all 0.2s ease;
     }
 
-    .tilbake-knapp {
+    .nav-pil:hover {
+      background: var(--accent);
+      color: #071315;
+      border-color: var(--accent);
+    }
+
+    .pil-venstre { left: -25px; }
+    .pil-hoyre { right: -25px; }
+
+    /* BunNSEKSJON / Knapp */
+    .bunn-seksjon {
       margin-top: 20px;
+      text-align: center;
+    }
+
+    .lagre-knapp {
       background-color: var(--accent);
-      color: #071214;
-      padding: 16px 40px;
+      color: #071315;
+      padding: 15px 45px;
       font-size: 1rem;
       font-weight: 800;
       border: none;
-      border-radius: 10px;
+      border-radius: 999px;
       cursor: pointer;
       display: inline-flex;
       align-items: center;
       gap: 10px;
       transition: all 0.25s ease;
+      box-shadow: 0 4px 20px rgba(0, 255, 204, 0.2);
     }
 
-    .tilbake-knapp:hover {
+    .lagre-knapp:hover {
       background-color: #00e6b8;
       transform: translateY(-2px);
+      box-shadow: 0 6px 25px rgba(0, 255, 204, 0.35);
     }
 
     @media (max-width: 768px) {
-      h1 { font-size: 2rem; }
-      .profilbilde-valg { width: 110px; height: 110px; margin-top: -15px; }
-      .bilder-rad { grid-template-columns: repeat(3, 1fr); gap: 20px; }
-    }
-
-    @media (max-width: 480px) {
-      h1 { font-size: 1.5rem; }
-      .profilbilde-valg { width: 90px; height: 90px; border-radius: 10px; margin-top: -12px; }
-      .bilde-navn { font-size: 0.85rem; }
+      .karusell-wrapper { max-width: 100%; padding: 0 10px; }
+      .pil-venstre { left: 5px; }
+      .pil-hoyre { right: 5px; }
+      .kategori-kort { padding: 35px 15px 20px 15px; }
     }
   </style>
 </head>
 <body>
 
-<h1>Velg Profilbilde</h1>
-<p class="subtitle">Personaliser kontoen din med en unik karakter</p>
+<div class="topp-seksjon">
+  <h1>Velg Profilbilde</h1>
+  <p class="subtitle">Bla gjennom kategoriene og finn din favoritt</p>
+</div>
 
-<div id="hoved-container"></div>
+<div class="karusell-wrapper">
+  <button class="nav-pil pil-venstre" onclick="flyttKarusell(-1)"><i class="fa-solid fa-chevron-left"></i></button>
+  
+  <div class="karusell-viewport">
+    <div class="karusell-spor" id="karusell-spor">
+      <!-- Genereres via JS -->
+    </div>
+  </div>
 
-<button class="tilbake-knapp" onclick="tilbakeTilKonto()"><i class="fa-solid fa-check"></i> Lagre og fortsett</button>
+  <button class="nav-pil pil-hoyre" onclick="flyttKarusell(1)"><i class="fa-solid fa-chevron-right"></i></button>
+</div>
+
+<div class="bunn-seksjon">
+  <button class="lagre-knapp" onclick="tilbakeTilKonto()"><i class="fa-solid fa-check"></i> Lagre og fortsett</button>
+</div>
 
 <script type="module">
 import { auth, db } from "./firebase-oppsett.js";
@@ -177,39 +258,39 @@ import { doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/12.15.0/
 const urlParams = new URLSearchParams(window.location.search);
 const aktivProfilIndex = parseInt(urlParams.get('index')) || 0;
 
-const rader = [
+// Legg til egenskapen 'erPng: true' på de som skal stikke opp på toppen
+const kategorier = [
   {
     tittel: "Karakterer & Ikoner",
     bilder: [
-      'https://static.wixstatic.com/media/d9ace9_f30eec65f0434128974f59e1bba6d30d~mv2.jpg',
-      'https://static.wixstatic.com/media/d9ace9_ca94b393665e49c98c8432e69a33e49f~mv2.jpg',
-      'https://static.wixstatic.com/media/d9ace9_675337e8909c4b44aa606f634ad6a2ed~mv2.jpg'
-    ],
-    navn: ["Tiger", "Robot", "Alien"]
+      { url: 'https://static.wixstatic.com/media/d9ace9_f30eec65f0434128974f59e1bba6d30d~mv2.jpg', navn: "Tiger", erPng: false },
+      { url: 'https://static.wixstatic.com/media/d9ace9_ca94b393665e49c98c8432e69a33e49f~mv2.jpg', navn: "Robot", erPng: false },
+      { url: 'https://static.wixstatic.com/media/d9ace9_675337e8909c4b44aa606f634ad6a2ed~mv2.jpg', navn: "Alien", erPng: false }
+    ]
   },
   {
     tittel: "Klassiske farger",
     bilder: [
-      'https://static.wixstatic.com/media/fd2fb2_3df40a7e62c545afa3918fc10393284d~mv2.png',
-      'https://static.wixstatic.com/media/fd2fb2_4c90736292b44b59929074fa97b847b3~mv2.png',
-      'https://static.wixstatic.com/media/fd2fb2_bda02652f6384ce59dfaf168afecdb64~mv2.png'
-    ],
-    navn: []
+      { url: 'https://static.wixstatic.com/media/fd2fb2_3df40a7e62c545afa3918fc10393284d~mv2.png', navn: "Rød", erPng: false },
+      { url: 'https://static.wixstatic.com/media/fd2fb2_4c90736292b44b59929074fa97b847b3~mv2.png', navn: "Blå", erPng: false },
+      { url: 'https://static.wixstatic.com/media/fd2fb2_bda02652f6384ce59dfaf168afecdb64~mv2.png', navn: "Grønn", erPng: false }
+    ]
   },
   {
     tittel: "Detektiv Muffins på eventyr",
     bilder: [
-      'https://static.wixstatic.com/media/d9ace9_21edff009aec43ed92ab6f25b38c7592~mv2.png'
-    ],
-    navn: ["Detektiv Muffins"]
+      { url: 'https://static.wixstatic.com/media/d9ace9_dde4cb57bbe74a6d878ba8647651a584~mv2.jpg', navn: "Detektiv Muffins", erPng: false }
+    ]
   }
 ];
 
-const hovedContainer = document.getElementById('hoved-container');
+const sporEl = document.getElementById('karusell-spor');
+let aktivIndex = 0;
 let valgtBilde = null;
 let profiler = [];
 let docRef = null;
 
+// Cache-håndtering
 const cachedProfiles = localStorage.getItem("watch_nordic_profiles_cache");
 if (cachedProfiles) {
   try {
@@ -218,114 +299,124 @@ if (cachedProfiles) {
       valgtBilde = profiler[aktivProfilIndex].bilde || null;
     }
   } catch (e) {
-    console.error("Kunne ikke lese profil-cache:", e);
+    console.error("Feil ved lesing av cache:", e);
   }
 }
 
-lagRader();
-oppdaterValg();
+byggKarusell();
+oppdaterValgMarkering();
+
+function byggKarusell() {
+  sporEl.innerHTML = "";
+  kategorier.forEach(kat => {
+    const kort = document.createElement('div');
+    kort.className = 'kategori-kort';
+
+    const tittel = document.createElement('div');
+    tittel.className = 'kategori-tittel';
+    tittel.textContent = kat.tittel;
+
+    const grid = document.createElement('div');
+    grid.className = 'avatar-grid';
+
+    kat.bilder.forEach(item => {
+      const avatarItem = document.createElement('div');
+      avatarItem.className = 'avatar-item';
+
+      const wrap = document.createElement('div');
+      wrap.className = 'avatar-bilde-wrap';
+
+      const img = document.createElement('img');
+      img.src = item.url;
+      img.alt = item.navn;
+      img.className = `avatar-bilde ${item.erPng ? 'png-karakter' : ''}`;
+
+      wrap.appendChild(img);
+      avatarItem.appendChild(wrap);
+
+      if (item.navn) {
+        const navnEl = document.createElement('div');
+        navnEl.className = 'avatar-navn';
+        navnEl.textContent = item.navn;
+        avatarItem.appendChild(navnEl);
+      }
+
+      avatarItem.addEventListener('click', () => {
+        valgtBilde = item.url;
+        oppdaterValgMarkering();
+      });
+
+      grid.appendChild(avatarItem);
+    });
+
+    kort.appendChild(tittel);
+    kort.appendChild(grid);
+    sporEl.appendChild(kort);
+  });
+}
+
+function flyttKarusell(retning) {
+  aktivIndex += retning;
+  if (aktivIndex < 0) aktivIndex = kategorier.length - 1;
+  if (aktivIndex >= kategorier.length) aktivIndex = 0;
+  
+  sporEl.style.transform = `translateX(-${aktivIndex * 100}%)`;
+}
+
+function oppdaterValgMarkering() {
+  document.querySelectorAll('.avatar-item').forEach(el => {
+    const imgEl = el.querySelector('img');
+    const isSelected = imgEl.src === valgtBilde;
+    el.classList.toggle('selected', isSelected);
+  });
+}
 
 onAuthStateChanged(auth, (user) => {
   if (user) {
     docRef = doc(db, "users", user.uid);
-    hentGjeldendeProfilbilde();
+    hentProfilbildeFraDb();
   } else {
     window.location.href = "Innlogging.html";
   }
 });
 
-async function hentGjeldendeProfilbilde() {
+async function hentProfilbildeFraDb() {
   try {
     const docSnap = await getDoc(docRef);
     if (docSnap.exists()) {
       profiler = docSnap.data().profiler || [];
       localStorage.setItem("watch_nordic_profiles_cache", JSON.stringify(profiler));
-      
       if (profiler[aktivProfilIndex]) {
         valgtBilde = profiler[aktivProfilIndex].bilde || null;
-        oppdaterValg();
+        oppdaterValgMarkering();
       }
     }
-  } catch (error) {
-    console.error("Feil ved henting av profilbilde:", error);
+  } catch (err) {
+    console.error("Feil ved henting:", err);
   }
-}
-
-function oppdaterValg() {
-  document.querySelectorAll('.profilbilde-valg').forEach(img => {
-    const currentSrc = img.src;
-    const attrSrc = img.getAttribute('src');
-    img.classList.toggle('selected', currentSrc === valgtBilde || attrSrc === valgtBilde);
-  });
-}
-
-function lagRader() {
-  hovedContainer.innerHTML = ""; 
-  rader.forEach(rad => {
-    const radWrapper = document.createElement('div');
-    radWrapper.className = 'rad-container';
-
-    const tittelEl = document.createElement('div');
-    tittelEl.className = 'rad-tittel';
-    tittelEl.textContent = rad.tittel;
-
-    const bilderRad = document.createElement('div');
-    bilderRad.className = 'bilder-rad';
-
-    rad.bilder.forEach((url, i) => {
-      const container = document.createElement('div');
-      container.className = 'bilde-container';
-
-      const img = document.createElement('img');
-      img.src = url;
-      img.alt = `Profilbilde`;
-      img.className = 'profilbilde-valg';
-      img.addEventListener('click', () => {
-        valgtBilde = url;
-        oppdaterValg();
-      });
-
-      container.appendChild(img);
-
-      if (rad.navn && rad.navn[i]) {
-        const navn = document.createElement('div');
-        navn.className = 'bilde-navn';
-        navn.textContent = rad.navn[i];
-        container.appendChild(navn);
-      }
-
-      bilderRad.appendChild(container);
-    });
-
-    radWrapper.appendChild(tittelEl);
-    radWrapper.appendChild(bilderRad);
-    hovedContainer.appendChild(radWrapper);
-  });
 }
 
 async function tilbakeTilKonto() {
   if (profiler[aktivProfilIndex] && valgtBilde) {
     profiler[aktivProfilIndex].bilde = valgtBilde;
-    
     localStorage.setItem("watch_nordic_profiles_cache", JSON.stringify(profiler));
 
-    const gjeldendeAktivIndex = localStorage.getItem("aktivProfilIndex");
-    if (gjeldendeAktivIndex !== null && parseInt(gjeldendeAktivIndex) === aktivProfilIndex) {
+    if (localStorage.getItem("aktivProfilIndex") === String(aktivProfilIndex)) {
       localStorage.setItem("profilbilde", valgtBilde);
     }
-    
+
     if (docRef) {
       try {
         await setDoc(docRef, { profiler: profiler }, { merge: true });
-      } catch (error) {
-        console.error("Feil ved lagring av profilbilde i Firestore:", error);
+      } catch (err) {
+        console.error("Feil ved lagring til Firestore:", err);
       }
     }
   }
-  
   window.location.href = `konto.html?index=${aktivProfilIndex}`;
 }
 
+window.flyttKarusell = flyttKarusell;
 window.tilbakeTilKonto = tilbakeTilKonto;
 </script>
 
