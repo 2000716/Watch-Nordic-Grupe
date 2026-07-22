@@ -11,9 +11,8 @@
     :root {
       --bg-dark: #050c0e;
       --accent: #00FFCC;
-      --accent-glow: rgba(0, 255, 204, 0.4);
       --muted: #8e9fa2;
-      --border: rgba(255, 255, 255, 0.12);
+      --circle-gray: #1e2a2e; /* Mørkegrå standard bakgrunn */
     }
 
     * {
@@ -55,7 +54,7 @@
       font-size: 1.1rem;
     }
 
-    /* Karusell (Ren SkyShowtime-stil uten ramme) */
+    /* Karusell (Én samlet rekke uten titler) */
     .karusell-wrapper {
       width: 100%;
       max-width: 1100px;
@@ -68,63 +67,28 @@
     .karusell-viewport {
       width: 100%;
       overflow: hidden;
-      padding: 70px 10px 40px 10px; /* Godt med luft for større 3D-figurer */
+      padding: 80px 10px 40px 10px; /* Ekstra luft i toppen for 3D-figurene */
     }
 
     .karusell-spor {
       display: flex;
       transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
-      gap: 40px;
+      gap: 30px;
     }
 
-    /* Seksjonen er nå helt uten bakgrunn og rammer */
-    .kategori-seksjon {
-      min-width: 100%;
-      background: transparent;
-      border: none;
-      padding: 0 10px;
-      position: relative;
-    }
-
-    .kategori-tittel {
-      font-size: 1.4rem;
-      font-weight: 800;
-      color: #ffffff;
-      text-transform: uppercase;
-      letter-spacing: 1.5px;
-      margin-bottom: 40px;
-      text-align: left;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .kategori-tittel::before {
-      content: '';
-      display: inline-block;
-      width: 4px;
-      height: 20px;
-      background: var(--accent);
-      border-radius: 2px;
-    }
-
-    .avatar-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(165px, 1fr));
-      gap: 45px 30px;
-      justify-items: center;
-    }
-
+    /* Avatar-kort */
     .avatar-item {
       display: flex;
       flex-direction: column;
       align-items: center;
       cursor: pointer;
       position: relative;
+      min-width: 165px;
       width: 165px;
+      flex-shrink: 0;
     }
 
-    /* STØRRE 3D POP-OUT & GLOW STRUKTUR */
+    /* 3D POP-OUT RAMME STRUKTUR */
     .avatar-bilde-wrap {
       width: 165px;
       height: 165px;
@@ -134,14 +98,14 @@
       justify-content: center;
     }
 
-    /* Sirkel-bakgrunn */
+    /* Mørkegrå sirkelbakgrunn som skifter farge */
     .avatar-bg {
       position: absolute;
       inset: 0;
       border-radius: 50%;
-      background: rgba(255, 255, 255, 0.04);
-      border: 2px solid var(--border);
-      transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+      background-color: var(--circle-gray);
+      border: 2px solid rgba(255, 255, 255, 0.1);
+      transition: background-color 0.35s ease, border-color 0.35s ease;
       z-index: 1;
     }
 
@@ -153,69 +117,90 @@
       object-fit: cover;
       border-radius: 50%;
       z-index: 2;
-      transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+      transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
       transform-origin: bottom center;
     }
 
-    /* SPESIAL-EFFEKT: PNG Figurer som spretter ut (Pop-out 3D) */
+    /* PNG-figurer som spretter over toppen PERMANENT */
     .avatar-bilde.png-karakter {
       object-fit: contain;
       border-radius: 0;
       height: 145%;
       bottom: 0;
-      transform: translateY(-5px) scale(1.05);
+      transform: translateY(-20px) scale(1.1); /* Stikker alltid ut over toppen */
     }
 
     /* --- HOVER & VALGT TILSTAND --- */
-    .avatar-item:hover .avatar-bg {
-      background: radial-gradient(circle, var(--glow-color, rgba(0, 255, 204, 0.4)) 0%, rgba(0,0,0,0) 70%);
-      border-color: var(--glow-color, var(--accent));
-      box-shadow: 0 0 35px var(--glow-color, var(--accent-glow));
-    }
 
+    /* Endre bakgrunnsfarge fra grå til aktiv farge */
+    .avatar-item:hover .avatar-bg,
     .avatar-item.selected .avatar-bg {
-      background: radial-gradient(circle, var(--glow-color, rgba(0, 255, 204, 0.55)) 0%, rgba(0,0,0,0.2) 75%);
-      border-color: var(--glow-color, var(--accent));
-      box-shadow: 0 0 40px var(--glow-color, var(--accent-glow));
+      background-color: var(--active-color, var(--accent));
+      border-color: #ffffff;
     }
 
-    /* 3D Pop-out skala-effekt på større figurer */
+    /* Ekstra 3D-løft ved hover */
     .avatar-item:hover .avatar-bilde.png-karakter {
-      transform: translateY(-28px) scale(1.25);
-      filter: drop-shadow(0 15px 20px rgba(0, 0, 0, 0.7));
+      transform: translateY(-30px) scale(1.22);
     }
 
     .avatar-item.selected .avatar-bilde.png-karakter {
-      transform: translateY(-24px) scale(1.2);
-      filter: drop-shadow(0 15px 20px rgba(0, 0, 0, 0.7));
+      transform: translateY(-26px) scale(1.18);
     }
 
-    /* Vanlige sirkelbilder ved hover */
+    /* Vanlige runde bilder ved hover */
     .avatar-item:hover .avatar-bilde:not(.png-karakter) {
       transform: scale(1.08);
     }
 
+    /* Profilnavn */
     .avatar-navn {
-      margin-top: 18px;
+      margin-top: 15px;
       font-size: 1.05rem;
-      font-weight: 600;
+      font-weight: 700;
       color: var(--muted);
-      transition: all 0.25s ease;
+      transition: color 0.25s ease;
       text-align: center;
     }
 
     .avatar-item:hover .avatar-navn,
     .avatar-item.selected .avatar-navn {
       color: #fff;
-      text-shadow: 0 0 12px rgba(255, 255, 255, 0.6);
     }
 
-    /* Navigasjonspiler for ren layout */
+    /* Film / Serie Logo under profilen */
+    .film-logo-wrap {
+      margin-top: 8px;
+      height: 28px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .film-logo {
+      max-height: 100%;
+      max-width: 120px;
+      object-fit: contain;
+      /* Gjør logoen helt hvit som standard uten farger */
+      filter: brightness(0) invert(1);
+      opacity: 0.7;
+      transition: filter 0.3s ease, opacity 0.3s ease, transform 0.3s ease;
+    }
+
+    /* Ved hover/valgt får logoen tilbake sine originale farger */
+    .avatar-item:hover .film-logo,
+    .avatar-item.selected .film-logo {
+      filter: none;
+      opacity: 1;
+      transform: scale(1.05);
+    }
+
+    /* Navigasjonspiler */
     .nav-pil {
       position: absolute;
-      top: 55%;
+      top: 45%;
       transform: translateY(-50%);
-      background: rgba(15, 43, 50, 0.6);
+      background: rgba(15, 43, 50, 0.8);
       border: 1px solid rgba(255, 255, 255, 0.15);
       color: white;
       width: 58px;
@@ -235,14 +220,13 @@
       background: var(--accent);
       color: #050c0e;
       border-color: var(--accent);
-      box-shadow: 0 0 25px var(--accent-glow);
-      transform: translateY(-50%) scale(1.12);
+      transform: translateY(-50%) scale(1.1);
     }
 
     .pil-venstre { left: -35px; }
     .pil-hoyre { right: -35px; }
 
-    /* Knapper */
+    /* Lagre-knapp */
     .bunn-seksjon {
       margin-top: 10px;
       text-align: center;
@@ -260,25 +244,20 @@
       display: inline-flex;
       align-items: center;
       gap: 12px;
-      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-      box-shadow: 0 4px 25px var(--accent-glow);
+      transition: all 0.25s ease;
     }
 
     .lagre-knapp:hover {
       background-color: #33ffd6;
-      transform: translateY(-3px) scale(1.02);
-      box-shadow: 0 8px 32px rgba(0, 255, 204, 0.5);
+      transform: translateY(-2px);
     }
 
     @media (max-width: 850px) {
       .karusell-wrapper { max-width: 100%; }
       .pil-venstre { left: 0px; }
       .pil-hoyre { right: 0px; }
-      .avatar-grid {
-        grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
-        gap: 30px 15px;
-      }
       .avatar-item, .avatar-bilde-wrap {
+        min-width: 130px;
         width: 130px;
         height: 130px;
       }
@@ -289,7 +268,7 @@
 
 <div class="topp-seksjon">
   <h1>Velg Profilbilde</h1>
-  <p class="subtitle">Utforsk karakterer og finn din stil</p>
+  <p class="subtitle">Finn din favorittkarakter</p>
 </div>
 
 <div class="karusell-wrapper">
@@ -297,7 +276,7 @@
   
   <div class="karusell-viewport">
     <div class="karusell-spor" id="karusell-spor">
-      <!-- Genereres via JS -->
+      <!-- Alle bildene samles her via JS -->
     </div>
   </div>
 
@@ -316,33 +295,65 @@ import { doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/12.15.0/
 const urlParams = new URLSearchParams(window.location.search);
 const aktivProfilIndex = parseInt(urlParams.get('index')) || 0;
 
-const kategorier = [
-  {
-    tittel: "Karakterer & Ikoner",
-    bilder: [
-      { url: 'https://static.wixstatic.com/media/d9ace9_f30eec65f0434128974f59e1bba6d30d~mv2.jpg', navn: "Tiger", erPng: false, farge: 'rgba(255, 153, 0, 0.6)' },
-      { url: 'https://static.wixstatic.com/media/d9ace9_ca94b393665e49c98c8432e69a33e49f~mv2.jpg', navn: "Robot", erPng: false, farge: 'rgba(0, 204, 255, 0.6)' },
-      { url: 'https://static.wixstatic.com/media/d9ace9_675337e8909c4b44aa606f634ad6a2ed~mv2.jpg', navn: "Alien", erPng: false, farge: 'rgba(153, 51, 255, 0.6)' }
-    ]
+/*
+  - erPng: true gjør at figuren stikker ut på toppen
+  - farge: Sett bakgrunnsfargen sirkelen skifter til ved hover
+  - logoUrl: Legg inn URL til logoen til filmen/serien
+*/
+const alleProfiler = [
+  { 
+    url: 'https://static.wixstatic.com/media/fd2fb2_3df40a7e62c545afa3918fc10393284d~mv2.png', 
+    navn: "Rød", 
+    erPng: true, 
+    farge: '#e63946',
+    logoUrl: 'https://upload.wikimedia.org/wikipedia/commons/0/08/Netflix_2015_logo.svg'
   },
-  {
-    tittel: "Klassiske farger",
-    bilder: [
-      { url: 'https://static.wixstatic.com/media/fd2fb2_3df40a7e62c545afa3918fc10393284d~mv2.png', navn: "Rød", erPng: true, farge: 'rgba(255, 50, 50, 0.7)' },
-      { url: 'https://static.wixstatic.com/media/fd2fb2_4c90736292b44b59929074fa97b847b3~mv2.png', navn: "Blå", erPng: true, farge: 'rgba(0, 150, 255, 0.7)' },
-      { url: 'https://static.wixstatic.com/media/fd2fb2_bda02652f6384ce59dfaf168afecdb64~mv2.png', navn: "Grønn", erPng: true, farge: 'rgba(0, 230, 115, 0.7)' }
-    ]
+  { 
+    url: 'https://static.wixstatic.com/media/fd2fb2_4c90736292b44b59929074fa97b847b3~mv2.png', 
+    navn: "Blå", 
+    erPng: true, 
+    farge: '#0077b6',
+    logoUrl: 'https://upload.wikimedia.org/wikipedia/commons/0/08/Netflix_2015_logo.svg'
   },
-  {
-    tittel: "Detektiv Muffins på eventyr",
-    bilder: [
-      { url: 'https://static.wixstatic.com/media/d9ace9_dde4cb57bbe74a6d878ba8647651a584~mv2.jpg', navn: "Detektiv Muffins", erPng: false, farge: 'rgba(255, 204, 0, 0.6)' }
-    ]
+  { 
+    url: 'https://static.wixstatic.com/media/fd2fb2_bda02652f6384ce59dfaf168afecdb64~mv2.png', 
+    navn: "Grønn", 
+    erPng: true, 
+    farge: '#2a9d8f',
+    logoUrl: 'https://upload.wikimedia.org/wikipedia/commons/0/08/Netflix_2015_logo.svg'
+  },
+  { 
+    url: 'https://static.wixstatic.com/media/d9ace9_f30eec65f0434128974f59e1bba6d30d~mv2.jpg', 
+    navn: "Tiger", 
+    erPng: false, 
+    farge: '#f4a261',
+    logoUrl: ''
+  },
+  { 
+    url: 'https://static.wixstatic.com/media/d9ace9_ca94b393665e49c98c8432e69a33e49f~mv2.jpg', 
+    navn: "Robot", 
+    erPng: false, 
+    farge: '#00b4d8',
+    logoUrl: ''
+  },
+  { 
+    url: 'https://static.wixstatic.com/media/d9ace9_675337e8909c4b44aa606f634ad6a2ed~mv2.jpg', 
+    navn: "Alien", 
+    erPng: false, 
+    farge: '#7209b7',
+    logoUrl: ''
+  },
+  { 
+    url: 'https://static.wixstatic.com/media/d9ace9_dde4cb57bbe74a6d878ba8647651a584~mv2.jpg', 
+    navn: "Detektiv Muffins", 
+    erPng: false, 
+    farge: '#e9c46a',
+    logoUrl: ''
   }
 ];
 
 const sporEl = document.getElementById('karusell-spor');
-let aktivIndex = 0;
+let scrollPosisjon = 0;
 let valgtBilde = null;
 let profiler = [];
 let docRef = null;
@@ -365,72 +376,76 @@ oppdaterValgMarkering();
 
 function byggKarusell() {
   sporEl.innerHTML = "";
-  kategorier.forEach(kat => {
-    const seksjon = document.createElement('div');
-    seksjon.className = 'kategori-seksjon';
 
-    const tittel = document.createElement('div');
-    tittel.className = 'kategori-tittel';
-    tittel.textContent = kat.tittel;
+  alleProfiler.forEach(item => {
+    const avatarItem = document.createElement('div');
+    avatarItem.className = 'avatar-item';
+    
+    if (item.farge) {
+      avatarItem.style.setProperty('--active-color', item.farge);
+    }
 
-    const grid = document.createElement('div');
-    grid.className = 'avatar-grid';
+    const wrap = document.createElement('div');
+    wrap.className = 'avatar-bilde-wrap';
 
-    kat.bilder.forEach(item => {
-      const avatarItem = document.createElement('div');
-      avatarItem.className = 'avatar-item';
-      
-      if (item.farge) {
-        avatarItem.style.setProperty('--glow-color', item.farge);
-      }
+    const bg = document.createElement('div');
+    bg.className = 'avatar-bg';
 
-      const wrap = document.createElement('div');
-      wrap.className = 'avatar-bilde-wrap';
+    const img = document.createElement('img');
+    img.src = item.url;
+    img.alt = item.navn;
+    img.className = `avatar-bilde ${item.erPng ? 'png-karakter' : ''}`;
 
-      const bg = document.createElement('div');
-      bg.className = 'avatar-bg';
+    wrap.appendChild(bg);
+    wrap.appendChild(img);
+    avatarItem.appendChild(wrap);
 
-      const img = document.createElement('img');
-      img.src = item.url;
-      img.alt = item.navn;
-      img.className = `avatar-bilde ${item.erPng ? 'png-karakter' : ''}`;
+    if (item.navn) {
+      const navnEl = document.createElement('div');
+      navnEl.className = 'avatar-navn';
+      navnEl.textContent = item.navn;
+      avatarItem.appendChild(navnEl);
+    }
 
-      wrap.appendChild(bg);
-      wrap.appendChild(img);
-      avatarItem.appendChild(wrap);
+    // Filmlogo nederst
+    if (item.logoUrl) {
+      const logoWrap = document.createElement('div');
+      logoWrap.className = 'film-logo-wrap';
 
-      if (item.navn) {
-        const navnEl = document.createElement('div');
-        navnEl.className = 'avatar-navn';
-        navnEl.textContent = item.navn;
-        avatarItem.appendChild(navnEl);
-      }
+      const logoImg = document.createElement('img');
+      logoImg.src = item.logoUrl;
+      logoImg.alt = "Serie logo";
+      logoImg.className = "film-logo";
 
-      avatarItem.addEventListener('click', () => {
-        valgtBilde = item.url;
-        oppdaterValgMarkering();
-      });
+      logoWrap.appendChild(logoImg);
+      avatarItem.appendChild(logoWrap);
+    }
 
-      grid.appendChild(avatarItem);
+    avatarItem.addEventListener('click', () => {
+      valgtBilde = item.url;
+      oppdaterValgMarkering();
     });
 
-    seksjon.appendChild(tittel);
-    seksjon.appendChild(grid);
-    sporEl.appendChild(seksjon);
+    sporEl.appendChild(avatarItem);
   });
 }
 
 function flyttKarusell(retning) {
-  aktivIndex += retning;
-  if (aktivIndex < 0) aktivIndex = kategorier.length - 1;
-  if (aktivIndex >= kategorier.length) aktivIndex = 0;
-  
-  sporEl.style.transform = `translateX(-${aktivIndex * 100}%)`;
+  const kortBredde = 195; // 165px bredde + 30px gap
+  const synligBredde = sporEl.parentElement.clientWidth;
+  const maksScroll = -(sporEl.scrollWidth - synligBredde);
+
+  scrollPosisjon += retning * (kortBredde * 2);
+
+  if (scrollPosisjon > 0) scrollPosisjon = 0;
+  if (scrollPosisjon < maksScroll) scrollPosisjon = maksScroll;
+
+  sporEl.style.transform = `translateX(${scrollPosisjon}px)`;
 }
 
 function oppdaterValgMarkering() {
   document.querySelectorAll('.avatar-item').forEach(el => {
-    const imgEl = el.querySelector('img');
+    const imgEl = el.querySelector('.avatar-bilde');
     const isSelected = imgEl.src === valgtBilde;
     el.classList.toggle('selected', isSelected);
   });
@@ -438,7 +453,7 @@ function oppdaterValgMarkering() {
 
 onAuthStateChanged(auth, (user) => {
   if (user) {
-    docRef = doc(db, "users", user.uid);
+    docRef = doc(doc(db, "users", user.uid));
     hentProfilbildeFraDb();
   } else {
     window.location.href = "Innlogging.html";
