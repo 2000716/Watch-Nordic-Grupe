@@ -23,7 +23,7 @@
 
     body {
       background: radial-gradient(circle at top center, #0f2b32 0%, var(--bg-dark) 75%);
-      color: white;
+      color: #ffffff;
       font-family: 'Inter', system-ui, -apple-system, sans-serif;
       min-height: 100vh;
       display: flex;
@@ -39,13 +39,12 @@
       margin-top: 10px;
     }
 
+    /* Rene hvit farge uten gradient */
     h1 {
       font-size: 2.8rem;
       font-weight: 900;
       letter-spacing: -0.5px;
-      background: linear-gradient(135deg, #fff 0%, #00FFCC 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
+      color: #ffffff;
       margin-bottom: 8px;
     }
 
@@ -66,39 +65,41 @@
 
     .karusell-viewport {
       width: 100%;
-      overflow: hidden;
-      padding: 80px 10px 40px 10px; /* Godt med luft over for 3D-popout */
+      overflow: hidden; /* Forhindrer at elementer stikker ut på sidene */
+      padding: 100px 10px 30px 10px; /* God plass på toppen så bildet stikker opp */
     }
 
     .karusell-spor {
       display: flex;
       transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
-      gap: 55px; /* ØKT AVSTAND MELLOM BILDENE */
+      gap: 50px;
     }
 
-    /* Avatar-kort */
+    /* Avatar-kort med større dimensjoner */
     .avatar-item {
       display: flex;
       flex-direction: column;
       align-items: center;
       cursor: pointer;
       position: relative;
-      min-width: 165px;
-      width: 165px;
+      min-width: 210px;
+      width: 210px;
       flex-shrink: 0;
     }
 
     /* 3D POP-OUT RAMME STRUKTUR */
     .avatar-bilde-wrap {
-      width: 165px;
-      height: 165px;
+      width: 210px;
+      height: 210px;
       position: relative;
       display: flex;
       align-items: center;
       justify-content: center;
+      /* overflow: visible lar figuren gå opp over kanten, men viewporten stopper sidetracking */
+      overflow: visible; 
     }
 
-    /* Mørkegrå sirkelbakgrunn som skifter farge uten glød */
+    /* Mørkegrå sirkelbakgrunn */
     .avatar-bg {
       position: absolute;
       inset: 0;
@@ -109,7 +110,7 @@
       z-index: 1;
     }
 
-    /* Selve bildet/figuren */
+    /* Selve bildet/figuren - gjort betydelig større */
     .avatar-bilde {
       position: absolute;
       width: 100%;
@@ -121,13 +122,13 @@
       transform-origin: bottom center;
     }
 
-    /* PNG-figurer som spretter over toppen PERMANENT */
+    /* PNG-figurer som stikker mye mer ut i toppen */
     .avatar-bilde.png-karakter {
       object-fit: contain;
       border-radius: 0;
-      height: 145%;
+      height: 160%; /* Gjort bildet enda større */
       bottom: 0;
-      transform: translateY(-20px) scale(1.1);
+      transform: translateY(-35px) scale(1.15);
     }
 
     /* --- HOVER & VALGT TILSTAND --- */
@@ -137,38 +138,23 @@
       border-color: #ffffff;
     }
 
-    /* Ekstra 3D-løft ved hover */
+    /* Betydelig løft/pop-out på hover og valgt */
     .avatar-item:hover .avatar-bilde.png-karakter {
-      transform: translateY(-30px) scale(1.22);
+      transform: translateY(-50px) scale(1.28);
     }
 
     .avatar-item.selected .avatar-bilde.png-karakter {
-      transform: translateY(-26px) scale(1.18);
+      transform: translateY(-45px) scale(1.22);
     }
 
     .avatar-item:hover .avatar-bilde:not(.png-karakter) {
       transform: scale(1.08);
     }
 
-    /* Profilnavn */
-    .avatar-navn {
-      margin-top: 15px;
-      font-size: 1.05rem;
-      font-weight: 700;
-      color: var(--muted);
-      transition: color 0.25s ease;
-      text-align: center;
-    }
-
-    .avatar-item:hover .avatar-navn,
-    .avatar-item.selected .avatar-navn {
-      color: #fff;
-    }
-
-    /* Film / Serie Logo under profilen */
+    /* Film / Serie Logo plassert nederst på bunnen */
     .film-logo-wrap {
-      margin-top: 8px;
-      height: 28px;
+      margin-top: 20px;
+      height: 32px;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -176,9 +162,9 @@
 
     .film-logo {
       max-height: 100%;
-      max-width: 120px;
+      max-width: 130px;
       object-fit: contain;
-      filter: brightness(0) invert(1); /* Hvit farge som standard */
+      filter: brightness(0) invert(1); /* Ren hvit farge som standard */
       opacity: 0.7;
       transition: filter 0.3s ease, opacity 0.3s ease, transform 0.3s ease;
     }
@@ -187,13 +173,13 @@
     .avatar-item.selected .film-logo {
       filter: none; /* Viser originale farger ved hover/valgt */
       opacity: 1;
-      transform: scale(1.05);
+      transform: scale(1.08);
     }
 
     /* Navigasjonspiler */
     .nav-pil {
       position: absolute;
-      top: 45%;
+      top: 50%;
       transform: translateY(-50%);
       background: rgba(15, 43, 50, 0.9);
       border: 1px solid rgba(255, 255, 255, 0.15);
@@ -252,11 +238,8 @@
       .pil-venstre { left: 0px; }
       .pil-hoyre { right: 0px; }
       .karusell-spor { gap: 30px; }
-      .avatar-item, .avatar-bilde-wrap {
-        min-width: 130px;
-        width: 130px;
-        height: 130px;
-      }
+      .avatar-item { min-width: 160px; width: 160px; }
+      .avatar-bilde-wrap { width: 160px; height: 160px; }
     }
   </style>
 </head>
@@ -391,13 +374,7 @@ function byggKarusell() {
     wrap.appendChild(img);
     avatarItem.appendChild(wrap);
 
-    if (item.navn) {
-      const navnEl = document.createElement('div');
-      navnEl.className = 'avatar-navn';
-      navnEl.textContent = item.navn;
-      avatarItem.appendChild(navnEl);
-    }
-
+    // Navn er fjernet, legger kun inn logo nederst på bunnen
     if (item.logoUrl) {
       const logoWrap = document.createElement('div');
       logoWrap.className = 'film-logo-wrap';
@@ -420,9 +397,8 @@ function byggKarusell() {
   });
 }
 
-// Navigasjonspil-funksjon som flytter karusellen presist
 function flyttKarusell(retning) {
-  const skritt = 220; // 165px kortbredde + 55px gap
+  const skritt = 260; // 210px kortbredde + 50px gap
   const viewportBredde = sporEl.parentElement.clientWidth;
   const totalBredde = sporEl.scrollWidth;
   const maksScroll = -(totalBredde - viewportBredde);
