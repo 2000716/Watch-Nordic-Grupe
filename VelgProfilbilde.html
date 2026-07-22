@@ -192,13 +192,9 @@ const rader = [
   {
     tittel: "Detektiv Muffins på eventyr",
     bilder: [
-      'https://static.wixstatic.com/media/d9ace9_dde4cb57bbe74a6d878ba8647651a584~mv2.jpg',
+      'https://static.wixstatic.com/media/d9ace9_dde4cb57bbe74a6d878ba8647651a584~mv2.jpg'
     ],
-    navn: ["Detektiv Muffins", "Her Marsmellows", "Konstabel Smultring"]
-  },
-  {
-    ],
-    navn: ["Klatremus", "Mikkel Rev", "Morten"]
+    navn: ["Detektiv Muffins"]
   }
 ];
 
@@ -238,7 +234,6 @@ async function hentGjeldendeProfilbilde() {
     const docSnap = await getDoc(docRef);
     if (docSnap.exists()) {
       profiler = docSnap.data().profiler || [];
-      // Lagre oppdaterte data i cache til neste gang
       localStorage.setItem("watch_nordic_profiles_cache", JSON.stringify(profiler));
       
       if (profiler[aktivProfilIndex]) {
@@ -260,7 +255,7 @@ function oppdaterValg() {
 }
 
 function lagRader() {
-  hovedContainer.innerHTML = ""; // Tømmer hvis den kalles flere ganger
+  hovedContainer.innerHTML = ""; 
   rader.forEach(rad => {
     const radWrapper = document.createElement('div');
     radWrapper.className = 'rad-container';
@@ -287,7 +282,7 @@ function lagRader() {
 
       container.appendChild(img);
 
-      if (rad.navn && rad.navn.length > 0) {
+      if (rad.navn && rad.navn[i]) {
         const navn = document.createElement('div');
         navn.className = 'bilde-navn';
         navn.textContent = rad.navn[i];
@@ -305,19 +300,15 @@ function lagRader() {
 
 async function tilbakeTilKonto() {
   if (profiler[aktivProfilIndex] && valgtBilde) {
-    // Oppdaterer lokalt i arrayet
     profiler[aktivProfilIndex].bilde = valgtBilde;
     
-    // Oppdaterer lokal cache umiddelbart så endringen merkes på de andre sidene
     localStorage.setItem("watch_nordic_profiles_cache", JSON.stringify(profiler));
 
-    // Hvis brukeren endrer bildet på profilen som akkurat NÅ er aktiv, oppdaterer vi aktivProfil-variablene også
     const gjeldendeAktivIndex = localStorage.getItem("aktivProfilIndex");
     if (gjeldendeAktivIndex !== null && parseInt(gjeldendeAktivIndex) === aktivProfilIndex) {
       localStorage.setItem("profilbilde", valgtBilde);
     }
     
-    // Skriver til Firestore i bakgrunnen
     if (docRef) {
       try {
         await setDoc(docRef, { profiler: profiler }, { merge: true });
