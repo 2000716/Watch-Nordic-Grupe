@@ -9,11 +9,12 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
   <style>
     :root {
-      --bg: #071315;
-      --surface: #0d1e22;
+      --bg-dark: #050c0e;
+      --surface: rgba(13, 30, 34, 0.75);
       --accent: #00FFCC;
-      --muted: #9aa8ab;
-      --border: rgba(255, 255, 255, 0.08);
+      --accent-glow: rgba(0, 255, 204, 0.4);
+      --muted: #8e9fa2;
+      --border: rgba(255, 255, 255, 0.1);
     }
 
     * {
@@ -23,9 +24,9 @@
     }
 
     body {
-      background: var(--bg);
+      background: radial-gradient(circle at top center, #0f2b32 0%, var(--bg-dark) 70%);
       color: white;
-      font-family: 'Inter', Arial, sans-serif;
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
       min-height: 100vh;
       display: flex;
       flex-direction: column;
@@ -37,25 +38,28 @@
 
     .topp-seksjon {
       text-align: center;
-      margin-top: 20px;
+      margin-top: 10px;
     }
 
     h1 {
-      font-size: 2.4rem;
+      font-size: 2.6rem;
       font-weight: 900;
       letter-spacing: -0.5px;
+      background: linear-gradient(135deg, #fff 0%, #00FFCC 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
       margin-bottom: 8px;
     }
 
     p.subtitle {
       color: var(--muted);
-      font-size: 1rem;
+      font-size: 1.05rem;
     }
 
-    /* Hovedkarusellet */
+    /* Karusell */
     .karusell-wrapper {
       width: 100%;
-      max-width: 900px;
+      max-width: 950px;
       margin: 20px auto;
       position: relative;
       display: flex;
@@ -65,38 +69,40 @@
     .karusell-viewport {
       width: 100%;
       overflow: hidden;
-      padding: 50px 10px 20px 10px; /* Ekstra plass på topp slik at PNG-figurer kan stikke opp */
+      padding: 60px 10px 30px 10px; /* Godt med luft på toppen for 3D-figurene */
     }
 
     .karusell-spor {
       display: flex;
-      transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+      transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
       gap: 30px;
     }
 
     .kategori-kort {
       min-width: 100%;
       background: var(--surface);
+      backdrop-filter: blur(16px);
       border: 1px solid var(--border);
-      border-radius: 20px;
+      border-radius: 24px;
       padding: 40px 30px 30px 30px;
       position: relative;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
     }
 
     .kategori-tittel {
-      font-size: 1.1rem;
-      font-weight: 700;
+      font-size: 1.2rem;
+      font-weight: 800;
       color: var(--accent);
       text-transform: uppercase;
-      letter-spacing: 1px;
-      margin-bottom: 30px;
+      letter-spacing: 1.5px;
+      margin-bottom: 35px;
       text-align: left;
     }
 
     .avatar-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
-      gap: 25px;
+      gap: 35px 25px;
       justify-items: center;
     }
 
@@ -106,72 +112,107 @@
       align-items: center;
       cursor: pointer;
       position: relative;
+      width: 120px;
     }
 
-    /* Runde bilder, der PNG-figurer kan posisjoneres slik at de stikker opp */
+    /* 3D POP-OUT & GLOW STRUKTUR */
     .avatar-bilde-wrap {
       width: 120px;
       height: 120px;
-      border-radius: 50%;
-      background: rgba(0, 0, 0, 0.25);
-      border: 3px solid transparent;
+      position: relative;
       display: flex;
       align-items: center;
       justify-content: center;
-      position: relative;
-      transition: all 0.25s ease;
     }
 
-    .avatar-bilde {
-      width: 115px;
-      height: 115px;
+    /* Sikte/Sirkel-bakgrunn som gløder */
+    .avatar-bg {
+      position: absolute;
+      inset: 0;
       border-radius: 50%;
-      object-fit: cover;
-      transition: transform 0.25s ease;
+      background: rgba(255, 255, 255, 0.05);
+      border: 2px solid var(--border);
+      transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+      z-index: 1;
     }
 
-    /* Spesifikk stil for PNG-figurer som skal stikke ut på topp */
+    /* Selve bildet/figuren */
+    .avatar-bilde {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 50%;
+      z-index: 2;
+      transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+      transform-origin: bottom center;
+    }
+
+    /* SPESIAL-EFFEKT: PNG Figurer som spretter ut (Pop-out 3D) */
     .avatar-bilde.png-karakter {
       object-fit: contain;
-      transform: scale(1.35) translateY(-14px); /* Trekker figurene oppover og ut av rammen */
+      border-radius: 0;
+      height: 145%; /* Gjør figuren høyere slik at den stikker opp */
+      bottom: 0;
+      transform: translateY(-5px) scale(1.05);
     }
 
-    .avatar-item:hover .avatar-bilde-wrap {
-      border-color: rgba(0, 255, 204, 0.5);
+    /* --- HOVER & VALGT TILSTAND --- */
+
+    /* Farget bakgrunnsglød ved hover/valgt */
+    .avatar-item:hover .avatar-bg {
+      background: radial-gradient(circle, var(--glow-color, rgba(0, 255, 204, 0.35)) 0%, rgba(0,0,0,0) 70%);
+      border-color: var(--glow-color, var(--accent));
+      box-shadow: 0 0 25px var(--glow-color, var(--accent-glow));
     }
 
+    .avatar-item.selected .avatar-bg {
+      background: radial-gradient(circle, var(--glow-color, rgba(0, 255, 204, 0.5)) 0%, rgba(0,0,0,0.2) 75%);
+      border-color: var(--glow-color, var(--accent));
+      box-shadow: 0 0 30px var(--glow-color, var(--accent-glow));
+    }
+
+    /* 3D Pop-out skala-effekt */
     .avatar-item:hover .avatar-bilde.png-karakter {
-      transform: scale(1.42) translateY(-18px);
+      transform: translateY(-22px) scale(1.25); /* Figur hoppet ut over rammen */
+      filter: drop-shadow(0 10px 15px rgba(0, 0, 0, 0.6));
     }
 
-    .avatar-item.selected .avatar-bilde-wrap {
-      border-color: var(--accent);
-      box-shadow: 0 0 15px rgba(0, 255, 204, 0.25);
+    .avatar-item.selected .avatar-bilde.png-karakter {
+      transform: translateY(-20px) scale(1.2);
+      filter: drop-shadow(0 10px 15px rgba(0, 0, 0, 0.6));
+    }
+
+    /* Vanlige sirkelbilder ved hover */
+    .avatar-item:hover .avatar-bilde:not(.png-karakter) {
+      transform: scale(1.08);
     }
 
     .avatar-navn {
       margin-top: 15px;
-      font-size: 0.9rem;
+      font-size: 0.95rem;
       font-weight: 600;
       color: var(--muted);
-      transition: color 0.2s ease;
+      transition: all 0.25s ease;
+      text-align: center;
     }
 
     .avatar-item:hover .avatar-navn,
     .avatar-item.selected .avatar-navn {
       color: #fff;
+      text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
     }
 
-    /* Navigasjonspiler for karusellen */
+    /* Navigasjonspiler */
     .nav-pil {
       position: absolute;
       top: 50%;
       transform: translateY(-50%);
-      background: rgba(13, 30, 34, 0.9);
+      background: rgba(13, 30, 34, 0.85);
       border: 1px solid var(--border);
       color: white;
-      width: 50px;
-      height: 50px;
+      width: 52px;
+      height: 52px;
       border-radius: 50%;
       cursor: pointer;
       display: flex;
@@ -179,51 +220,54 @@
       justify-content: center;
       font-size: 1.2rem;
       z-index: 10;
-      transition: all 0.2s ease;
+      backdrop-filter: blur(8px);
+      transition: all 0.25s ease;
     }
 
     .nav-pil:hover {
       background: var(--accent);
       color: #071315;
       border-color: var(--accent);
+      box-shadow: 0 0 20px var(--accent-glow);
+      transform: translateY(-50%) scale(1.1);
     }
 
     .pil-venstre { left: -25px; }
     .pil-hoyre { right: -25px; }
 
-    /* BunNSEKSJON / Knapp */
+    /* Knapper */
     .bunn-seksjon {
-      margin-top: 20px;
+      margin-top: 15px;
       text-align: center;
     }
 
     .lagre-knapp {
-      background-color: var(--accent);
-      color: #071315;
-      padding: 15px 45px;
-      font-size: 1rem;
+      background: var(--accent);
+      color: #050c0e;
+      padding: 16px 48px;
+      font-size: 1.05rem;
       font-weight: 800;
       border: none;
       border-radius: 999px;
       cursor: pointer;
       display: inline-flex;
       align-items: center;
-      gap: 10px;
-      transition: all 0.25s ease;
-      box-shadow: 0 4px 20px rgba(0, 255, 204, 0.2);
+      gap: 12px;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      box-shadow: 0 4px 25px var(--accent-glow);
     }
 
     .lagre-knapp:hover {
-      background-color: #00e6b8;
-      transform: translateY(-2px);
-      box-shadow: 0 6px 25px rgba(0, 255, 204, 0.35);
+      background-color: #33ffd6;
+      transform: translateY(-3px) scale(1.02);
+      box-shadow: 0 8px 30px rgba(0, 255, 204, 0.5);
     }
 
     @media (max-width: 768px) {
-      .karusell-wrapper { max-width: 100%; padding: 0 10px; }
-      .pil-venstre { left: 5px; }
-      .pil-hoyre { right: 5px; }
-      .kategori-kort { padding: 35px 15px 20px 15px; }
+      .karusell-wrapper { max-width: 100%; padding: 0; }
+      .pil-venstre { left: 0px; }
+      .pil-hoyre { right: 0px; }
+      .kategori-kort { padding: 30px 15px 20px 15px; }
     }
   </style>
 </head>
@@ -231,7 +275,7 @@
 
 <div class="topp-seksjon">
   <h1>Velg Profilbilde</h1>
-  <p class="subtitle">Bla gjennom kategoriene og finn din favoritt</p>
+  <p class="subtitle">Utforsk karakterer og finn din stil</p>
 </div>
 
 <div class="karusell-wrapper">
@@ -258,28 +302,31 @@ import { doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/12.15.0/
 const urlParams = new URLSearchParams(window.location.search);
 const aktivProfilIndex = parseInt(urlParams.get('index')) || 0;
 
-// Legg til egenskapen 'erPng: true' på de som skal stikke opp på toppen
+/* 
+  Sett 'erPng: true' for at figuren skal sprette opp over rammen (3D-effekt).
+  Legg valgfritt til 'farge' (f.eks. '#ff0055') for å gi tilpasset bakgrunnsglød på hver figur!
+*/
 const kategorier = [
   {
     tittel: "Karakterer & Ikoner",
     bilder: [
-      { url: 'https://static.wixstatic.com/media/d9ace9_f30eec65f0434128974f59e1bba6d30d~mv2.jpg', navn: "Tiger", erPng: false },
-      { url: 'https://static.wixstatic.com/media/d9ace9_ca94b393665e49c98c8432e69a33e49f~mv2.jpg', navn: "Robot", erPng: false },
-      { url: 'https://static.wixstatic.com/media/d9ace9_675337e8909c4b44aa606f634ad6a2ed~mv2.jpg', navn: "Alien", erPng: false }
+      { url: 'https://static.wixstatic.com/media/d9ace9_f30eec65f0434128974f59e1bba6d30d~mv2.jpg', navn: "Tiger", erPng: false, farge: 'rgba(255, 153, 0, 0.6)' },
+      { url: 'https://static.wixstatic.com/media/d9ace9_ca94b393665e49c98c8432e69a33e49f~mv2.jpg', navn: "Robot", erPng: false, farge: 'rgba(0, 204, 255, 0.6)' },
+      { url: 'https://static.wixstatic.com/media/d9ace9_675337e8909c4b44aa606f634ad6a2ed~mv2.jpg', navn: "Alien", erPng: false, farge: 'rgba(153, 51, 255, 0.6)' }
     ]
   },
   {
     tittel: "Klassiske farger",
     bilder: [
-      { url: 'https://static.wixstatic.com/media/fd2fb2_3df40a7e62c545afa3918fc10393284d~mv2.png', navn: "Rød", erPng: false },
-      { url: 'https://static.wixstatic.com/media/fd2fb2_4c90736292b44b59929074fa97b847b3~mv2.png', navn: "Blå", erPng: false },
-      { url: 'https://static.wixstatic.com/media/fd2fb2_bda02652f6384ce59dfaf168afecdb64~mv2.png', navn: "Grønn", erPng: false }
+      { url: 'https://static.wixstatic.com/media/fd2fb2_3df40a7e62c545afa3918fc10393284d~mv2.png', navn: "Rød", erPng: true, farge: 'rgba(255, 50, 50, 0.7)' },
+      { url: 'https://static.wixstatic.com/media/fd2fb2_4c90736292b44b59929074fa97b847b3~mv2.png', navn: "Blå", erPng: true, farge: 'rgba(0, 150, 255, 0.7)' },
+      { url: 'https://static.wixstatic.com/media/fd2fb2_bda02652f6384ce59dfaf168afecdb64~mv2.png', navn: "Grønn", erPng: true, farge: 'rgba(0, 230, 115, 0.7)' }
     ]
   },
   {
     tittel: "Detektiv Muffins på eventyr",
     bilder: [
-      { url: 'https://static.wixstatic.com/media/d9ace9_dde4cb57bbe74a6d878ba8647651a584~mv2.jpg', navn: "Detektiv Muffins", erPng: false }
+      { url: 'https://static.wixstatic.com/media/d9ace9_dde4cb57bbe74a6d878ba8647651a584~mv2.jpg', navn: "Detektiv Muffins", erPng: false, farge: 'rgba(255, 204, 0, 0.6)' }
     ]
   }
 ];
@@ -322,15 +369,24 @@ function byggKarusell() {
     kat.bilder.forEach(item => {
       const avatarItem = document.createElement('div');
       avatarItem.className = 'avatar-item';
+      
+      // Sett fargeglød om spesifisert
+      if (item.farge) {
+        avatarItem.style.setProperty('--glow-color', item.farge);
+      }
 
       const wrap = document.createElement('div');
       wrap.className = 'avatar-bilde-wrap';
+
+      const bg = document.createElement('div');
+      bg.className = 'avatar-bg';
 
       const img = document.createElement('img');
       img.src = item.url;
       img.alt = item.navn;
       img.className = `avatar-bilde ${item.erPng ? 'png-karakter' : ''}`;
 
+      wrap.appendChild(bg);
       wrap.appendChild(img);
       avatarItem.appendChild(wrap);
 
