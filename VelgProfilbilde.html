@@ -54,7 +54,7 @@
       font-size: 1.1rem;
     }
 
-    /* Karusell (Én samlet rekke uten titler) */
+    /* Karusell-område */
     .karusell-wrapper {
       width: 100%;
       max-width: 1100px;
@@ -67,13 +67,13 @@
     .karusell-viewport {
       width: 100%;
       overflow: hidden;
-      padding: 80px 10px 40px 10px; /* Ekstra luft i toppen for 3D-figurene */
+      padding: 80px 10px 40px 10px; /* Godt med luft over for 3D-popout */
     }
 
     .karusell-spor {
       display: flex;
       transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
-      gap: 30px;
+      gap: 55px; /* ØKT AVSTAND MELLOM BILDENE */
     }
 
     /* Avatar-kort */
@@ -98,7 +98,7 @@
       justify-content: center;
     }
 
-    /* Mørkegrå sirkelbakgrunn som skifter farge */
+    /* Mørkegrå sirkelbakgrunn som skifter farge uten glød */
     .avatar-bg {
       position: absolute;
       inset: 0;
@@ -127,12 +127,10 @@
       border-radius: 0;
       height: 145%;
       bottom: 0;
-      transform: translateY(-20px) scale(1.1); /* Stikker alltid ut over toppen */
+      transform: translateY(-20px) scale(1.1);
     }
 
     /* --- HOVER & VALGT TILSTAND --- */
-
-    /* Endre bakgrunnsfarge fra grå til aktiv farge */
     .avatar-item:hover .avatar-bg,
     .avatar-item.selected .avatar-bg {
       background-color: var(--active-color, var(--accent));
@@ -148,7 +146,6 @@
       transform: translateY(-26px) scale(1.18);
     }
 
-    /* Vanlige runde bilder ved hover */
     .avatar-item:hover .avatar-bilde:not(.png-karakter) {
       transform: scale(1.08);
     }
@@ -181,16 +178,14 @@
       max-height: 100%;
       max-width: 120px;
       object-fit: contain;
-      /* Gjør logoen helt hvit som standard uten farger */
-      filter: brightness(0) invert(1);
+      filter: brightness(0) invert(1); /* Hvit farge som standard */
       opacity: 0.7;
       transition: filter 0.3s ease, opacity 0.3s ease, transform 0.3s ease;
     }
 
-    /* Ved hover/valgt får logoen tilbake sine originale farger */
     .avatar-item:hover .film-logo,
     .avatar-item.selected .film-logo {
-      filter: none;
+      filter: none; /* Viser originale farger ved hover/valgt */
       opacity: 1;
       transform: scale(1.05);
     }
@@ -200,7 +195,7 @@
       position: absolute;
       top: 45%;
       transform: translateY(-50%);
-      background: rgba(15, 43, 50, 0.8);
+      background: rgba(15, 43, 50, 0.9);
       border: 1px solid rgba(255, 255, 255, 0.15);
       color: white;
       width: 58px;
@@ -223,8 +218,8 @@
       transform: translateY(-50%) scale(1.1);
     }
 
-    .pil-venstre { left: -35px; }
-    .pil-hoyre { right: -35px; }
+    .pil-venstre { left: -25px; }
+    .pil-hoyre { right: -25px; }
 
     /* Lagre-knapp */
     .bunn-seksjon {
@@ -256,6 +251,7 @@
       .karusell-wrapper { max-width: 100%; }
       .pil-venstre { left: 0px; }
       .pil-hoyre { right: 0px; }
+      .karusell-spor { gap: 30px; }
       .avatar-item, .avatar-bilde-wrap {
         min-width: 130px;
         width: 130px;
@@ -276,7 +272,7 @@
   
   <div class="karusell-viewport">
     <div class="karusell-spor" id="karusell-spor">
-      <!-- Alle bildene samles her via JS -->
+      <!-- Bildene genereres via JS -->
     </div>
   </div>
 
@@ -295,11 +291,6 @@ import { doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/12.15.0/
 const urlParams = new URLSearchParams(window.location.search);
 const aktivProfilIndex = parseInt(urlParams.get('index')) || 0;
 
-/*
-  - erPng: true gjør at figuren stikker ut på toppen
-  - farge: Sett bakgrunnsfargen sirkelen skifter til ved hover
-  - logoUrl: Legg inn URL til logoen til filmen/serien
-*/
 const alleProfiler = [
   { 
     url: 'https://static.wixstatic.com/media/fd2fb2_3df40a7e62c545afa3918fc10393284d~mv2.png', 
@@ -407,14 +398,13 @@ function byggKarusell() {
       avatarItem.appendChild(navnEl);
     }
 
-    // Filmlogo nederst
     if (item.logoUrl) {
       const logoWrap = document.createElement('div');
       logoWrap.className = 'film-logo-wrap';
 
       const logoImg = document.createElement('img');
       logoImg.src = item.logoUrl;
-      logoImg.alt = "Serie logo";
+      logoImg.alt = "Logo";
       logoImg.className = "film-logo";
 
       logoWrap.appendChild(logoImg);
@@ -430,15 +420,17 @@ function byggKarusell() {
   });
 }
 
+// Navigasjonspil-funksjon som flytter karusellen presist
 function flyttKarusell(retning) {
-  const kortBredde = 195; // 165px bredde + 30px gap
-  const synligBredde = sporEl.parentElement.clientWidth;
-  const maksScroll = -(sporEl.scrollWidth - synligBredde);
+  const skritt = 220; // 165px kortbredde + 55px gap
+  const viewportBredde = sporEl.parentElement.clientWidth;
+  const totalBredde = sporEl.scrollWidth;
+  const maksScroll = -(totalBredde - viewportBredde);
 
-  scrollPosisjon += retning * (kortBredde * 2);
+  scrollPosisjon += retning * (skritt * -2); // Bla 2 bilder av gangen
 
-  if (scrollPosisjon > 0) scrollPosisjon = 0;
   if (scrollPosisjon < maksScroll) scrollPosisjon = maksScroll;
+  if (scrollPosisjon > 0) scrollPosisjon = 0;
 
   sporEl.style.transform = `translateX(${scrollPosisjon}px)`;
 }
@@ -446,14 +438,14 @@ function flyttKarusell(retning) {
 function oppdaterValgMarkering() {
   document.querySelectorAll('.avatar-item').forEach(el => {
     const imgEl = el.querySelector('.avatar-bilde');
-    const isSelected = imgEl.src === valgtBilde;
+    const isSelected = imgEl && imgEl.src === valgtBilde;
     el.classList.toggle('selected', isSelected);
   });
 }
 
 onAuthStateChanged(auth, (user) => {
   if (user) {
-    docRef = doc(doc(db, "users", user.uid));
+    docRef = doc(db, "users", user.uid);
     hentProfilbildeFraDb();
   } else {
     window.location.href = "Innlogging.html";
