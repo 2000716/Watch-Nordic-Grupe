@@ -9,13 +9,12 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
   <style>
     :root {
-      --bg: #0b0e14;
-      --surface: #141b24;
-      --accent: #ffffff;
-      --accent-hover: #e0e0e0;
-      --muted: #8c9ba5;
+      --bg: #091B1E;
+      --surface: #0e2428;
+      --accent: #00FFCC;
+      --muted: #9fb3b5;
       --border: rgba(255, 255, 255, 0.08);
-      --border-active: #ffffff;
+      --border-active: #00FFCC;
     }
 
     * {
@@ -40,7 +39,7 @@
       margin-bottom: 8px;
       font-size: 2.5rem;
       font-weight: 800;
-      letter-spacing: -0.5px;
+      letter-spacing: 0.5px;
     }
 
     p.subtitle {
@@ -55,31 +54,31 @@
     }
 
     .rad-container {
-      margin: 0 auto 40px;
+      margin: 0 auto 45px;
       width: 100%;
       background: var(--surface);
       border: 1px solid var(--border);
-      padding: 30px 24px 24px;
+      padding: 40px 30px 30px;
       border-radius: 16px;
       position: relative;
     }
 
     .rad-tittel {
-      font-size: 0.95rem;
-      margin-bottom: 25px;
+      font-size: 1rem;
+      margin-bottom: 30px;
       font-weight: 700;
       text-align: left;
-      color: var(--muted);
+      color: var(--accent);
       text-transform: uppercase;
       letter-spacing: 1.5px;
     }
 
     .bilder-rad {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
-      gap: 30px;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 35px;
       justify-items: center;
-      overflow: visible; /* Lar elementene bryte ut av rammen ved behov */
+      overflow: visible;
     }
 
     .bilde-container {
@@ -88,33 +87,34 @@
       align-items: center;
       position: relative;
       overflow: visible;
+      width: 100%;
     }
 
     .bilde-navn {
-      margin-top: 12px;
-      font-size: 0.9rem;
-      font-weight: 500;
+      margin-top: 14px;
+      font-size: 0.95rem;
+      font-weight: 600;
       text-align: center;
       color: var(--muted);
       transition: color 0.2s ease;
     }
 
     .profilbilde-valg {
-      width: 120px;
-      height: 120px;
-      border-radius: 12px; /* SkyShowtime-stil avrundede hjørner istedenfor helt runde */
+      width: 130px;
+      height: 130px;
+      border-radius: 14px;
       object-fit: cover;
       border: 3px solid transparent;
       transition: transform 0.25s cubic-bezier(0.2, 0, 0.2, 1), border-color 0.25s ease;
       cursor: pointer;
-      background: #1e2631;
+      background: rgba(0,0,0,0.3);
       position: relative;
-      margin-top: -10px; /* Gjør at figurene trekkes litt oppover */
+      margin-top: -20px; /* Trekker figurene lenger opp og over rammen */
     }
 
     .bilde-container:hover .profilbilde-valg {
-      transform: translateY(-6px) scale(1.03);
-      border-color: rgba(255, 255, 255, 0.4);
+      transform: translateY(-8px) scale(1.04);
+      border-color: rgba(0, 255, 204, 0.5);
     }
 
     .bilde-container:hover .bilde-navn {
@@ -123,48 +123,47 @@
 
     .profilbilde-valg.selected {
       border-color: var(--border-active);
-      transform: translateY(-6px) scale(1.03);
-      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+      transform: translateY(-8px) scale(1.04);
     }
 
     .tilbake-knapp {
       margin-top: 20px;
       background-color: var(--accent);
-      color: #0b0e14;
-      padding: 14px 36px;
-      font-size: 0.95rem;
-      font-weight: 700;
+      color: #071214;
+      padding: 16px 40px;
+      font-size: 1rem;
+      font-weight: 800;
       border: none;
-      border-radius: 8px;
+      border-radius: 10px;
       cursor: pointer;
       display: inline-flex;
       align-items: center;
       gap: 10px;
-      transition: background-color 0.2s ease, transform 0.2s ease;
+      transition: all 0.25s ease;
     }
 
     .tilbake-knapp:hover {
-      background-color: var(--accent-hover);
+      background-color: #00e6b8;
       transform: translateY(-2px);
     }
 
     @media (max-width: 768px) {
       h1 { font-size: 2rem; }
-      .profilbilde-valg { width: 100px; height: 100px; }
-      .bilder-rad { grid-template-columns: repeat(3, 1fr); gap: 15px; }
+      .profilbilde-valg { width: 110px; height: 110px; margin-top: -15px; }
+      .bilder-rad { grid-template-columns: repeat(3, 1fr); gap: 20px; }
     }
 
     @media (max-width: 480px) {
-      h1 { font-size: 1.6rem; }
-      .profilbilde-valg { width: 80px; height: 80px; border-radius: 8px; }
-      .bilde-navn { font-size: 0.8rem; }
+      h1 { font-size: 1.5rem; }
+      .profilbilde-valg { width: 90px; height: 90px; border-radius: 10px; margin-top: -12px; }
+      .bilde-navn { font-size: 0.85rem; }
     }
   </style>
 </head>
 <body>
 
-<h1>Velg profilbilde</h1>
-<p class="subtitle">Velg en av figurene nedenfor for å tilpasse profilen din</p>
+<h1>Velg Profilbilde</h1>
+<p class="subtitle">Personaliser kontoen din med en unik karakter</p>
 
 <div id="hoved-container"></div>
 
