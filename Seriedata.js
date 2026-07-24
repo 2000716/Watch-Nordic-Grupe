@@ -112,7 +112,67 @@ const serier = {
             videoUrl: "",
             introStart: 2,
             introEnd: 89
-          }
+         }
+        }
+      }
+    }
+  },
+
+    "detektiv-muffins": {
+    tittel: "Detektiv Muffins",
+    rating: "0.0",
+    bakgrunn: "https://static.wixstatic.com/media/d9ace9_4148dac16a81424e9a08e544106c05e4~mv2.jpg",
+    bakgrunnMobil: "https://static.wixstatic.com/media/d9ace9_4148dac16a81424e9a08e544106c05e4~mv2.jpg",
+    banner: "https://static.wixstatic.com/media/d9ace9_4148dac16a81424e9a08e544106c05e4~mv2.jpg", 
+    bannerMobil: "https://static.wixstatic.com/media/d9ace9_4148dac16a81424e9a08e544106c05e4~mv2.jpg",
+    logo: "",
+    poster: "https://static.wixstatic.com/media/d9ace9_4148dac16a81424e9a08e544106c05e4~mv2.jpg",
+    posterVertikal: "https://static.wixstatic.com/media/d9ace9_4148dac16a81424e9a08e544106c05e4~mv2.jpg",
+    beskrivelse: "I denne dokumentaren tar Watch Originals deg med tilbake til månelandingen med Apollo 11. Men det store spørsmålet mange har stilt seg er: var det ekte?",
+    metadata: ["2026", "Alle", "Barn", "1 sesong"],
+    imdb: "",
+    skapere: "Watch Nordic Originals Studio",
+    tilbakeUrl: "serie.html?navn=detektiv-muffins",
+    publishDate: "2026-07-24T00:00:00",
+    expireDate: "2027-11-15T23:59:59",
+    audioLanguages: [],
+    subtitleLanguages: [],
+    sesonger: {
+      1: {
+        sesongNummer: 1,
+        beskrivelse: "Sesong 1",
+        episoder: {
+          1: {
+            episodeNummer: 1,
+            tittel: "Muffins",
+            beskrivelse: "Etter mange mislykete forsøk, klarer dem å få Apollo 11 ut i atmosfæren.",
+            varighet: "5 min",
+            thumbnail: "https://static.wixstatic.com/media/d9ace9_6189bb0756b8437ab689f6f65652f701~mv2.png",
+            publishDate: "2027-06-10T18:00:00",
+            videoUrl: "https://video.wixstatic.com/video/d9ace9_9c973766d280472d94f62df7fee0ae1b/1080p/mp4/file.mp4"
+          },
+          2: {
+            episodeNummer: 2,
+            tittel: "Månelandingen",
+            beskrivelse: "Månelandingen er satt i gang, men vil de komme tilbake?",
+            varighet: "5 min",
+            thumbnail: "https://static.wixstatic.com/media/d9ace9_6189bb0756b8437ab689f6f65652f701~mv2.png",
+            publishDate: "2027-06-10T18:00:00",
+            videoUrl: "",
+            introStart: 2,
+            introEnd: 89
+          },
+          3: {
+            episodeNummer: 3,
+            tittel: "Alt var fake!",
+            beskrivelse: "Teorier og spekulasjoner om at månelandingen er fake øker i avisene.",
+            varighet: "5 min",
+            thumbnail: "https://static.wixstatic.com/media/d9ace9_6189bb0756b8437ab689f6f65652f701~mv2.png",
+            publishDate: "2027-06-10T18:00:00",
+            videoUrl: "",
+            introStart: 2,
+            introEnd: 89
+         }
         }
       }
     }
