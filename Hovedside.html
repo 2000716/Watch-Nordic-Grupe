@@ -158,7 +158,7 @@ main {
 }
 
 /* ==========================================================================
-   3. HERO BANNER (PC) - Clean & Stylized Netflix Style
+   3. HERO BANNER (PC) - Cinematic, Clean & Enhanced Meta
    ========================================================================== */
 .hero-banner {
   position: relative;
@@ -171,7 +171,7 @@ main {
   z-index: 0;
 }
 
-/* Ren vertikal fade fra bunnen */
+/* Kinematisk fade fra bunnen */
 .hero-banner::after {
   content: "";
   position: absolute;
@@ -187,7 +187,7 @@ main {
   pointer-events: none;
 }
 
-/* Ren venstre-vignett for lesbarhet av tekst uten fargetskjær */
+/* Ren venstre-vignett for lesbarhet */
 .hero-banner::before {
   content: "";
   position: absolute;
@@ -207,6 +207,15 @@ main {
   height: 100%;
   object-fit: cover;
   display: block;
+  /* Animasjon: Subtil zoom ved start */
+  transform: scale(1.1);
+  animation: imageZoomIn 10s ease-out forwards;
+}
+
+/* Definerer zoom-animasjonen */
+@keyframes imageZoomIn {
+  from { transform: scale(1.1); }
+  to { transform: scale(1.0); }
 }
 
 .banner-video {
@@ -230,6 +239,21 @@ main {
   gap: 14px;
   max-width: 650px;
   color: white;
+  /* Animasjon: Innhold glir inn og fader opp */
+  opacity: 0;
+  animation: contentFadeIn 0.8s ease-out 0.5s forwards; /* Starter etter 0.5s */
+}
+
+/* Definerer content fade-in animasjonen */
+@keyframes contentFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .banner-title {
@@ -248,15 +272,17 @@ main {
   max-width: 80%;
   max-height: 180px;
   object-fit: contain;
+  filter: drop-shadow(0 2px 10px rgba(0,0,0,0.5));
 }
 
-/* Metadata satt til hvit og ren stil */
+/* --- ENDRET: Tydeligere fremhevet metadata --- */
 .banner-meta {
-  font-size: 15px;
-  color: #ffffff;        
-  font-weight: 500;
+  font-size: 16px;        /* Økt bittelitt fra 15px */
+  color: #ffffff;         /* Hvit */
+  font-weight: 600;       /* Gjort fetere for bedre synlighet */
   letter-spacing: 0.5px;
-  opacity: 0.9;
+  text-shadow: 0 1px 4px rgba(0,0,0,0.6); /* Tynn skygge for å løfte fra bakgrunn */
+  margin-top: 4px;        /* Litt ekstra avstand oppover */
 }
 
 .banner-content p {
@@ -268,6 +294,7 @@ main {
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
   overflow: hidden;
+  text-shadow: 0 1px 3px rgba(0,0,0,0.5);
 }
 
 .banner-buttons {
@@ -309,13 +336,14 @@ main {
   justify-content: center;
   font-size: 18px;
   cursor: pointer;
-  transition: background 0.2s ease, border-color 0.2s ease;
+  transition: background 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
   backdrop-filter: blur(6px);
 }
 
 .add-button:hover {
   background: rgba(255, 255, 255, 0.2);
   border-color: #ffffff;
+  transform: scale(1.05);
 }
 /* ==========================================================================
    4. STANDARD GALLERIER & SEKSJONER (PC)
