@@ -87,7 +87,7 @@
       flex-shrink: 0;
     }
 
-    /* 3D POP-OUT RAMME STRUKTUR */
+    /* 3D POP-OUT STRUKTUR */
     .avatar-bilde-wrap {
       width: 210px;
       height: 210px;
@@ -95,7 +95,6 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      overflow: visible; 
     }
 
     /* Mørkegrå sirkelbakgrunn */
@@ -107,6 +106,7 @@
       border: 3px solid rgba(255, 255, 255, 0.15);
       transition: all 0.35s cubic-bezier(0.25, 1, 0.5, 1);
       z-index: 1;
+      overflow: hidden; /* Holder bunnen av bildet inne i sirkelen */
     }
 
     /* Sjekkmerke-ikon ved valgt avatar */
@@ -129,30 +129,30 @@
       transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
     }
 
-    /* Karakterbilde for vanlige runde bilder */
+    /* Standard bilde (JPG) - Ligger inni sirkelen */
     .avatar-bilde {
-      position: absolute;
       width: 100%;
       height: 100%;
       object-fit: cover;
       border-radius: 50%;
       z-index: 2;
       transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
-      transform-origin: bottom center;
     }
 
-    /* POP-OUT PNG EFFEKT (Skjermet nederst i sirkelen, stikker ut øverst) */
+    /* PNG POP-OUT EFFEKT - Plassert over sirkelen */
     .avatar-bilde.png-karakter {
-      object-fit: contain;
-      border-radius: 0;
-      height: 140%; 
+      position: absolute;
       bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 90%;
+      height: 125%; /* Gjør figuren høyere slik at hode stikker over kanten */
+      object-fit: contain;
+      object-position: bottom center;
+      border-radius: 0;
       z-index: 3;
-      /* clip-path kutter alt under bunnen av sirkelen, men lar toppen være åpen */
-      clip-path: inset(-150px 0px 0px 0px);
-      border-bottom-left-radius: 50% 20px;
-      border-bottom-right-radius: 50% 20px;
-      transform: translateY(0) scale(1);
+      pointer-events: none;
+      transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
     }
 
     /* LOGO OPPSETT */
@@ -199,7 +199,7 @@
     }
 
     .avatar-item:hover .avatar-bilde.png-karakter {
-      transform: translateY(-15px) scale(1.15);
+      transform: translateX(-50%) scale(1.1);
     }
 
     .avatar-item:hover .avatar-bilde:not(.png-karakter) {
@@ -224,7 +224,7 @@
     }
 
     .avatar-item.selected .avatar-bilde.png-karakter {
-      transform: translateY(-12px) scale(1.12);
+      transform: translateX(-50%) scale(1.08);
     }
 
     .avatar-item.selected .avatar-bilde:not(.png-karakter) {
@@ -415,7 +415,7 @@ let valgtBilde = null;
 let profiler = [];
 let docRef = null;
 
-// Les inn cache med en gang for å forhindre layout-hopp
+// Les inn cache med en gang for raskere innlasting
 const cachedProfiles = localStorage.getItem("watch_nordic_profiles_cache");
 if (cachedProfiles) {
   try {
@@ -428,7 +428,7 @@ if (cachedProfiles) {
   }
 }
 
-// Event-lyttere for nav-knapper og lagre-knapp
+// Event-lyttere
 pilVenstre.addEventListener('click', () => flyttKarusell(-1));
 pilHoyre.addEventListener('click', () => flyttKarusell(1));
 lagreKnapp.addEventListener('click', tilbakeTilKonto);
@@ -462,9 +462,17 @@ function byggKarusell() {
     img.alt = item.navn;
     img.className = `avatar-bilde ${item.erPng ? 'png-karakter' : ''}`;
 
-    wrap.appendChild(bg);
+    if (item.erPng) {
+      // For PNG legger vi bakgrunnen først, og bildet over
+      wrap.appendChild(bg);
+      wrap.appendChild(img);
+    } else {
+      // For JPG legger vi bildet inni bakgrunnskonteksten
+      bg.appendChild(img);
+      wrap.appendChild(bg);
+    }
+
     wrap.appendChild(badge);
-    wrap.appendChild(img);
 
     if (item.logoUrl) {
       const logoWrap = document.createElement('div');
