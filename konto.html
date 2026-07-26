@@ -133,8 +133,22 @@
       font-size: 11px;
       text-transform: uppercase;
       letter-spacing: 0.8px;
-      margin-bottom: 4px;
+      margin-bottom: 6px;
       font-weight: 600;
+    }
+
+    .profile-display-wrapper {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .profile-avatar-inline {
+      width: 40px;
+      height: 40px;
+      border-radius: 8px;
+      object-fit: cover;
+      border: 1px solid rgba(255, 255, 255, 0.2);
     }
 
     .value { font-size: 15px; font-weight: 500; }
@@ -261,10 +275,14 @@
     <section class="content">
       <h2><i class="fa-solid fa-user"></i> Kontoinformasjon</h2>
       <div class="card">
+        <!-- PROFILNAVN & BILDE -->
         <div class="row">
           <div class="info-block">
             <div class="label">Profilnavn</div>
-            <div class="value" id="navnView">Laster...</div>
+            <div class="profile-display-wrapper">
+              <img id="profilAvatarView" class="profile-avatar-inline" src="https://static.wixstatic.com/media/fd2fb2_39376e4ee55b460ab7a3ebbfcf35fef7~mv2.png" alt="Profilbilde">
+              <div class="value" id="navnView">Laster...</div>
+            </div>
             <div id="editNavnBox" class="edit-box hidden">
               <input type="text" id="nyttNavnInput" placeholder="Nytt navn">
               <button class="btn-save" id="lagreNavnBtn">Lagre</button>
@@ -274,13 +292,13 @@
           <button class="edit-trigger" id="endreNavnKnapp">Endre</button>
         </div>
 
-        <!-- NY RAG MED PROFILPASSORD / PIN -->
+        <!-- PROFIL-PIN / PASSORD -->
         <div class="row">
           <div class="info-block">
             <div class="label">Profil-PIN (Passord)</div>
             <div class="value" id="pinView">Ingen PIN satt</div>
             <div id="editPinBox" class="edit-box hidden">
-              <input type="password" id="nyPinInput" maxlength="6" placeholder="Angi PIN (f.eks. 1234)">
+              <input type="password" id="nyPinInput" maxlength="4" pattern="[0-9]*" inputmode="numeric" placeholder="4 siffer (la stå tom for å fjerne)">
               <button class="btn-save" id="lagrePinBtn">Lagre</button>
               <button class="btn-cancel" id="avbrytPinBtn">Avbryt</button>
             </div>
@@ -288,6 +306,7 @@
           <button class="edit-trigger" id="endrePinKnapp">Endre PIN</button>
         </div>
         
+        <!-- E-POST -->
         <div class="row">
           <div class="info-block">
             <div class="label">E-postadresse (Konto)</div>
@@ -324,6 +343,7 @@
     let aktivProfilIndex = parseInt(urlParams.get('index')) || 0;
 
     const navnView = document.getElementById("navnView");
+    const profilAvatarView = document.getElementById("profilAvatarView");
     const pinView = document.getElementById("pinView");
     const epostView = document.getElementById("epostView");
 
@@ -344,6 +364,8 @@
     let profiler = [];
     let globalEpost = ""; 
     let docRef = null;
+
+    const standardBilde = "https://static.wixstatic.com/media/fd2fb2_39376e4ee55b460ab7a3ebbfcf35fef7~mv2.png";
 
     // Lokal-caching
     const cachedProfiles = localStorage.getItem("watch_nordic_profiles_cache");
@@ -411,9 +433,20 @@
 
     lagrePinBtn.addEventListener("click", async () => {
       const nyPin = nyPinInput.value.trim();
-      profiler[aktivProfilIndex].pin = nyPin; // lagrer tom streng hvis fjernet
+
+      if (nyPin === "") {
+        delete profiler[aktivProfilIndex].pin;
+      } else {
+        if (!/^\d{4}$/.test(nyPin)) {
+          alert("PIN-koden må bestå av nøyaktig 4 siffer (tall).");
+          return;
+        }
+        profiler[aktivProfilIndex].pin = nyPin;
+      }
+
       await oppdaterProfilData();
       byggProfilgrensesnitt();
+
       editPinBox.classList.add("hidden");
       endrePinKnapp.classList.remove("hidden");
     });
@@ -438,6 +471,10 @@
       navnView.innerText = gjeldendeProfil.navn;
       epostView.innerText = globalEpost;
 
+      // Profilbilde
+      profilAvatarView.src = gjeldendeProfil.bilde || standardBilde;
+
+      // PIN Status
       if (gjeldendeProfil.pin) {
         pinView.innerText = "•••• (PIN er aktivert)";
       } else {
