@@ -62,8 +62,6 @@ const serier = {
     tittel: "Apollo 11 - Was It Real?",
     rating: "0.0",
     bakgrunn: "https://static.wixstatic.com/media/d9ace9_6189bb0756b8437ab689f6f65652f701~mv2.png",
-    bakgrunnMobil: "",
-    banner: "", 
     bannerMobil: "https://static.wixstatic.com/media/d9ace9_7226de1d128a4fa0be3604222034519e~mv2.jpg",
     logo: "https://static.wixstatic.com/media/d9ace9_902a792e7c704d788fd251674707d925~mv2.png",
     poster: "https://static.wixstatic.com/media/d9ace9_6597c0df53534dfb800580bb6716c27c~mv2.jpg",
