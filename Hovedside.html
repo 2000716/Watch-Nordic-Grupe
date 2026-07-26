@@ -1169,7 +1169,6 @@ main {
         }
       }
 
-      // Hent fra Firestore som en fallback eller for å sikre ferske data
       try {
         const docRef = doc(db, "users", user.uid);
         const docSnap = await getDoc(docRef);
@@ -1182,7 +1181,6 @@ main {
         console.error("Feil ved henting av profiler:", error);
       }
 
-      // Render "Fortsett å se" etter at profildata er lastet inn
       renderContinueWatching();
 
       const aktivProfilIndex = parseInt(localStorage.getItem("aktivProfilIndex")) || 0;
@@ -1455,16 +1453,19 @@ main {
 
   window.addEventListener("resize", oppdaterAlleGalleripiler);
 
-  // ==================== DYNAMISK GALLERI GENERATOR ==================== //
+  // ==================== DYNAMISK GALLERI GENERATOR (SIKKER MOT TOMME BILDER) ==================== //
   function createGalleryItem(itemKey, item) {
     const link = document.createElement("a");
     link.href = `film.html?navn=${itemKey}`;
     link.classList.add("gallery-item");
+    
+    const bildeKilde = item.poster || item.bilde || "";
+
     link.innerHTML = `
-      <img src="${item.poster}" alt="${item.tittel}">
+      ${bildeKilde ? `<img src="${bildeKilde}" alt="${item.tittel || 'Film'}" loading="lazy">` : `<div style="width:100%; height:100%; background:#1a2629; display:flex; align-items:center; justify-content:center; padding:10px; text-align:center; font-size:12px; color:#fff;">${item.tittel || 'Mangler bilde'}</div>`}
       <div class="image-overlay">
         <div class="overlay-content">
-          <div class="overlay-title">${item.tittel}</div>
+          <div class="overlay-title">${item.tittel || ""}</div>
           <div class="overlay-meta">${(item.metadata || []).join(" • ")}</div>
         </div>
       </div>
@@ -1561,9 +1562,14 @@ main {
       wrapper.href = `film.html?navn=${key}`;
       wrapper.classList.add("top10-item");
 
+      const bildeKilde = film.posterVertikal || film.poster || "";
+
       const img = document.createElement("img");
-      img.src = film.posterVertikal || film.poster;
-      img.alt = film.tittel;
+      if (bildeKilde) {
+        img.src = bildeKilde;
+        img.loading = "lazy";
+      }
+      img.alt = film.tittel || "Topp 10";
 
       const number = document.createElement("div");
       number.classList.add("top10-number");
@@ -1589,7 +1595,7 @@ main {
     });
   }
 
-  // ==================== NYTT: SKYLAGRET (FIREBASE) FORTSETT Å SE ==================== //
+  // ==================== SKYLAGRET (FIREBASE) FORTSETT Å SE ==================== //
   async function renderContinueWatching() {
     const section = document.getElementById("fortsett-section");
     const gallery = document.getElementById("fortsett-galleri");
@@ -1605,7 +1611,6 @@ main {
 
     let fantInnhold = false;
 
-    // Henter alle lagrede elementer fra fremdriftsobjektet i profilen
     Object.keys(profil.fremdrift).forEach((filmId) => {
       const dbData = profil.fremdrift[filmId];
       const progressVerdi = dbData.percent || 0;
@@ -1638,7 +1643,6 @@ main {
 
       fantInnhold = true;
 
-      // Generer riktig url (inklusiv returUrl tilbake til Hovedside.html)
       let hrefUrl = `film.html?navn=${urlParamNavn}`;
       if (spillType === "serie") {
         const deler = filmId.split("-");
@@ -1649,11 +1653,13 @@ main {
         hrefUrl = `film-mal.html?navn=${urlParamNavn}&returUrl=${encodeURIComponent("Hovedside.html")}`;
       }
 
+      const bildeKilde = metadataMatch.poster || metadataMatch.bilde || "";
+
       const link = document.createElement("a");
       link.href = hrefUrl;
       link.classList.add("gallery-item", "image-with-progress");
       link.innerHTML = `
-        <img src="${metadataMatch.poster || metadataMatch.bilde}" alt="${dbData.tittel || metadataMatch.tittel}">
+        ${bildeKilde ? `<img src="${bildeKilde}" alt="${dbData.tittel || metadataMatch.tittel}" loading="lazy">` : `<div style="width:100%; height:100%; background:#1a2629; display:flex; align-items:center; justify-content:center; padding:10px; text-align:center; font-size:12px; color:#fff;">${metadataMatch.tittel || 'Mangler bilde'}</div>`}
         <div class="progress-container" style="background: rgba(255,255,255,0.2); width: 100%; height: 6px; position: absolute; bottom: 0; left: 0; z-index: 2;">
           <div class="progress-bar" style="width: ${progressVerdi}%; height: 100%; background: #00FFCC;"></div>
         </div>
