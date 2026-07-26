@@ -12,7 +12,7 @@
       --bg-dark: #050c0e;
       --accent: #00FFCC;
       --muted: #8e9fa2;
-      --circle-gray: #1e2a2e; /* Mørkegrå standard bakgrunn */
+      --circle-gray: #1e2a2e;
     }
 
     * {
@@ -22,7 +22,7 @@
     }
 
     body {
-      background: radial-gradient(circle at top center, #0f2b32 0%, var(--bg-dark) 75%);
+      background: radial-gradient(circle at top center, #0f2b32 0%, var(--bg-dark) 85%);
       color: #ffffff;
       font-family: 'Inter', system-ui, -apple-system, sans-serif;
       min-height: 100vh;
@@ -32,14 +32,14 @@
       justify-content: space-between;
       padding: 40px 20px;
       overflow-x: hidden;
+      user-select: none;
     }
 
     .topp-seksjon {
       text-align: center;
-      margin-top: 10px;
+      margin-top: 15px;
     }
 
-    /* Rene hvit farge uten gradient */
     h1 {
       font-size: 2.8rem;
       font-weight: 900;
@@ -57,7 +57,7 @@
     .karusell-wrapper {
       width: 100%;
       max-width: 1100px;
-      margin: 10px auto;
+      margin: auto;
       position: relative;
       display: flex;
       align-items: center;
@@ -65,17 +65,17 @@
 
     .karusell-viewport {
       width: 100%;
-      overflow: hidden; /* Forhindrer at elementer stikker ut på sidene */
-      padding: 100px 10px 30px 10px; /* God plass på toppen så bildet stikker opp */
+      overflow: hidden;
+      padding: 80px 10px 50px 10px;
     }
 
     .karusell-spor {
       display: flex;
-      transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+      transition: transform 0.5s cubic-bezier(0.25, 1, 0.5, 1);
       gap: 50px;
     }
 
-    /* Avatar-kort med større dimensjoner */
+    /* Avatar-kort */
     .avatar-item {
       display: flex;
       flex-direction: column;
@@ -95,22 +95,41 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      /* overflow: visible lar figuren gå opp over kanten, men viewporten stopper sidetracking */
       overflow: visible; 
     }
 
-    /* Mørkegrå sirkelbakgrunn */
+    /* Mørkegrå sirkelbakgrunn uden glow */
     .avatar-bg {
       position: absolute;
       inset: 0;
       border-radius: 50%;
       background-color: var(--circle-gray);
-      border: 2px solid rgba(255, 255, 255, 0.1);
-      transition: background-color 0.35s ease, border-color 0.35s ease;
+      border: 3px solid rgba(255, 255, 255, 0.15);
+      transition: all 0.35s cubic-bezier(0.25, 1, 0.5, 1);
       z-index: 1;
     }
 
-    /* Selve bildet/figuren - gjort betydelig større */
+    /* Sjekkmerke-ikon ved valgt avatar uten skygge */
+    .valgt-badget {
+      position: absolute;
+      top: 5px;
+      right: 5px;
+      width: 32px;
+      height: 32px;
+      background: var(--active-color, var(--accent));
+      color: #050c0e;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.95rem;
+      z-index: 12;
+      opacity: 0;
+      transform: scale(0.5);
+      transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    /* Karakterbilde */
     .avatar-bilde {
       position: absolute;
       width: 100%;
@@ -122,94 +141,145 @@
       transform-origin: bottom center;
     }
 
-    /* PNG-figurer som stikker mye mer ut i toppen */
     .avatar-bilde.png-karakter {
       object-fit: contain;
       border-radius: 0;
-      height: 160%; /* Gjort bildet enda større */
+      height: 155%; 
       bottom: 0;
-      transform: translateY(-35px) scale(1.15);
+      transform: translateY(-20px) scale(1.1);
     }
 
-    /* --- HOVER & VALGT TILSTAND --- */
-    .avatar-item:hover .avatar-bg,
-    .avatar-item.selected .avatar-bg {
+    /* LOGO OPPSETT: Plassert midt på nederste bildekarm */
+    .film-logo-wrap {
+      position: absolute;
+      bottom: -12px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 10;
+      height: 36px;
+      width: 120px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      pointer-events: none;
+    }
+
+    .film-logo {
+      max-height: 100%;
+      max-width: 100%;
+      object-fit: contain;
+      filter: brightness(0) invert(1);
+      opacity: 0.6;
+      transition: all 0.35s ease;
+    }
+
+    /* Karakternavn under logo */
+    .karakter-navn {
+      margin-top: 22px;
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--muted);
+      letter-spacing: 0.3px;
+      opacity: 0.5;
+      transform: translateY(-5px);
+      transition: all 0.35s ease;
+      text-align: center;
+    }
+
+    /* HOVER TILSTAND */
+    .avatar-item:hover .avatar-bg {
       background-color: var(--active-color, var(--accent));
       border-color: #ffffff;
     }
 
-    /* Betydelig løft/pop-out på hover og valgt */
     .avatar-item:hover .avatar-bilde.png-karakter {
-      transform: translateY(-50px) scale(1.28);
-    }
-
-    .avatar-item.selected .avatar-bilde.png-karakter {
-      transform: translateY(-45px) scale(1.22);
+      transform: translateY(-45px) scale(1.25);
     }
 
     .avatar-item:hover .avatar-bilde:not(.png-karakter) {
       transform: scale(1.08);
     }
 
-    /* Film / Serie Logo plassert nederst på bunnen */
-    .film-logo-wrap {
-      margin-top: 20px;
-      height: 32px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .film-logo {
-      max-height: 100%;
-      max-width: 130px;
-      object-fit: contain;
-      filter: brightness(0) invert(1); /* Ren hvit farge som standard */
-      opacity: 0.7;
-      transition: filter 0.3s ease, opacity 0.3s ease, transform 0.3s ease;
-    }
-
-    .avatar-item:hover .film-logo,
-    .avatar-item.selected .film-logo {
-      filter: none; /* Viser originale farger ved hover/valgt */
+    .avatar-item:hover .film-logo {
       opacity: 1;
-      transform: scale(1.08);
+      transform: scale(1.15);
     }
 
-    /* Navigasjonspiler */
+    .avatar-item:hover .karakter-navn {
+      color: #ffffff;
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* FREMHEVET / VALGT TILSTAND */
+    .avatar-item.selected .avatar-bg {
+      background-color: var(--active-color, var(--accent));
+      border-color: #ffffff;
+    }
+
+    .avatar-item.selected .avatar-bilde.png-karakter {
+      transform: translateY(-40px) scale(1.22);
+    }
+
+    .avatar-item.selected .avatar-bilde:not(.png-karakter) {
+      transform: scale(1.06);
+    }
+
+    .avatar-item.selected .film-logo {
+      opacity: 1;
+      transform: scale(1.12);
+    }
+
+    .avatar-item.selected .valgt-badget {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    .avatar-item.selected .karakter-navn {
+      color: var(--active-color, var(--accent));
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Navigasjonspiler uten glød */
     .nav-pil {
       position: absolute;
-      top: 50%;
+      top: 42%;
       transform: translateY(-50%);
       background: rgba(15, 43, 50, 0.9);
-      border: 1px solid rgba(255, 255, 255, 0.15);
+      border: 1px solid rgba(255, 255, 255, 0.2);
       color: white;
-      width: 58px;
-      height: 58px;
+      width: 52px;
+      height: 52px;
       border-radius: 50%;
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 1.4rem;
-      z-index: 10;
-      backdrop-filter: blur(12px);
-      transition: all 0.25s ease;
+      font-size: 1.3rem;
+      z-index: 20;
+      backdrop-filter: blur(16px);
+      transition: all 0.3s ease;
     }
 
-    .nav-pil:hover {
+    .nav-pil:hover:not(:disabled) {
       background: var(--accent);
       color: #050c0e;
       border-color: var(--accent);
-      transform: translateY(-50%) scale(1.1);
+      transform: translateY(-50%) scale(1.12);
     }
 
-    .pil-venstre { left: -25px; }
-    .pil-hoyre { right: -25px; }
+    .nav-pil:disabled {
+      opacity: 0;
+      pointer-events: none;
+    }
 
-    /* Lagre-knapp */
+    .pil-venstre { left: -20px; }
+    .pil-hoyre { right: -20px; }
+
+    /* Lagre-knapp helt ren uten glød/skygge */
     .bunn-seksjon {
-      margin-top: 10px;
+      margin-top: 15px;
       text-align: center;
     }
 
@@ -226,20 +296,22 @@
       align-items: center;
       gap: 12px;
       transition: all 0.25s ease;
+      box-shadow: none;
     }
 
     .lagre-knapp:hover {
       background-color: #33ffd6;
       transform: translateY(-2px);
+      box-shadow: none;
     }
 
     @media (max-width: 850px) {
       .karusell-wrapper { max-width: 100%; }
-      .pil-venstre { left: 0px; }
-      .pil-hoyre { right: 0px; }
+      .pil-venstre { left: 5px; }
+      .pil-hoyre { right: 5px; }
       .karusell-spor { gap: 30px; }
-      .avatar-item { min-width: 160px; width: 160px; }
-      .avatar-bilde-wrap { width: 160px; height: 160px; }
+      .avatar-item { min-width: 170px; width: 170px; }
+      .avatar-bilde-wrap { width: 170px; height: 170px; }
     }
   </style>
 </head>
@@ -251,19 +323,25 @@
 </div>
 
 <div class="karusell-wrapper">
-  <button class="nav-pil pil-venstre" onclick="flyttKarusell(-1)"><i class="fa-solid fa-chevron-left"></i></button>
+  <button class="nav-pil pil-venstre" id="pil-venstre" onclick="flyttKarusell(-1)" aria-label="Forrige">
+    <i class="fa-solid fa-chevron-left"></i>
+  </button>
   
-  <div class="karusell-viewport">
+  <div class="karusell-viewport" id="viewport">
     <div class="karusell-spor" id="karusell-spor">
-      <!-- Bildene genereres via JS -->
+      <!-- Bildene genereres dynamisk via JS -->
     </div>
   </div>
 
-  <button class="nav-pil pil-hoyre" onclick="flyttKarusell(1)"><i class="fa-solid fa-chevron-right"></i></button>
+  <button class="nav-pil pil-hoyre" id="pil-hoyre" onclick="flyttKarusell(1)" aria-label="Neste">
+    <i class="fa-solid fa-chevron-right"></i>
+  </button>
 </div>
 
 <div class="bunn-seksjon">
-  <button class="lagre-knapp" onclick="tilbakeTilKonto()"><i class="fa-solid fa-check"></i> Lagre og fortsett</button>
+  <button class="lagre-knapp" onclick="tilbakeTilKonto()">
+    <i class="fa-solid fa-check"></i> Lagre og fortsett
+  </button>
 </div>
 
 <script type="module">
@@ -280,46 +358,41 @@ const alleProfiler = [
     navn: "Tiger", 
     erPng: false, 
     farge: '#f4a261',
-    logoUrl: ''
+    logoUrl: 'https://static.wixstatic.com/media/d9ace9_95bbe3f5ff4b4aab9314a8d08804344e~mv2.png'
   },
   { 
     url: 'https://static.wixstatic.com/media/d9ace9_ca94b393665e49c98c8432e69a33e49f~mv2.jpg', 
     navn: "Robot", 
     erPng: false, 
     farge: '#00b4d8',
-    logoUrl: ''
+    logoUrl: 'https://static.wixstatic.com/media/d9ace9_95bbe3f5ff4b4aab9314a8d08804344e~mv2.png'
   },
   { 
     url: 'https://static.wixstatic.com/media/d9ace9_675337e8909c4b44aa606f634ad6a2ed~mv2.jpg', 
     navn: "Alien", 
     erPng: false, 
     farge: '#7209b7',
-    logoUrl: ''
+    logoUrl: 'https://static.wixstatic.com/media/d9ace9_95bbe3f5ff4b4aab9314a8d08804344e~mv2.png'
   },
   { 
     url: 'https://static.wixstatic.com/media/d9ace9_8d9b602d060d4b63a5d986882ebd59f3~mv2.png', 
     navn: "Detektiv Muffins", 
     erPng: false, 
     farge: '#e9c46a',
-    logoUrl: 'https://static.wixstatic.com/media/d9ace9_2eec6795b49942f798d3f0c616917900~mv2.png'
-  },
-
-    { 
-    url: 'https://static.wixstatic.com/media/d9ace9_8338459b9b79457a9317e53b294195d2~mv2.png', 
-    navn: "Herr Mashmellows", 
-    erPng: false, 
-    farge: '#46cee3',
-    logoUrl: 'https://static.wixstatic.com/media/d9ace9_2eec6795b49942f798d3f0c616917900~mv2.png'
+    logoUrl: 'https://static.wixstatic.com/media/d9ace9_95bbe3f5ff4b4aab9314a8d08804344e~mv2.png'
   }
 ];
 
 const sporEl = document.getElementById('karusell-spor');
+const pilVenstre = document.getElementById('pil-venstre');
+const pilHoyre = document.getElementById('pil-hoyre');
+
 let scrollPosisjon = 0;
 let valgtBilde = null;
 let profiler = [];
 let docRef = null;
 
-// Cache-håndtering
+// Les inn cache med en gang for å forhindre layout-hopp
 const cachedProfiles = localStorage.getItem("watch_nordic_profiles_cache");
 if (cachedProfiles) {
   try {
@@ -333,7 +406,6 @@ if (cachedProfiles) {
 }
 
 byggKarusell();
-oppdaterValgMarkering();
 
 function byggKarusell() {
   sporEl.innerHTML = "";
@@ -341,6 +413,7 @@ function byggKarusell() {
   alleProfiler.forEach(item => {
     const avatarItem = document.createElement('div');
     avatarItem.className = 'avatar-item';
+    avatarItem.dataset.url = item.url;
     
     if (item.farge) {
       avatarItem.style.setProperty('--active-color', item.farge);
@@ -352,16 +425,20 @@ function byggKarusell() {
     const bg = document.createElement('div');
     bg.className = 'avatar-bg';
 
+    const badge = document.createElement('div');
+    badge.className = 'valgt-badget';
+    badge.innerHTML = '<i class="fa-solid fa-check"></i>';
+
     const img = document.createElement('img');
     img.src = item.url;
     img.alt = item.navn;
     img.className = `avatar-bilde ${item.erPng ? 'png-karakter' : ''}`;
 
     wrap.appendChild(bg);
+    wrap.appendChild(badge);
     wrap.appendChild(img);
-    avatarItem.appendChild(wrap);
 
-    // Navn er fjernet, legger kun inn logo nederst på bunnen
+    // LOGO OPPSETT: Ligger midt på nederste bildekarm
     if (item.logoUrl) {
       const logoWrap = document.createElement('div');
       logoWrap.className = 'film-logo-wrap';
@@ -372,8 +449,16 @@ function byggKarusell() {
       logoImg.className = "film-logo";
 
       logoWrap.appendChild(logoImg);
-      avatarItem.appendChild(logoWrap);
+      wrap.appendChild(logoWrap);
     }
+
+    avatarItem.appendChild(wrap);
+
+    // Karakternavn under bildet
+    const navnEl = document.createElement('div');
+    navnEl.className = 'karakter-navn';
+    navnEl.textContent = item.navn;
+    avatarItem.appendChild(navnEl);
 
     avatarItem.addEventListener('click', () => {
       valgtBilde = item.url;
@@ -382,29 +467,100 @@ function byggKarusell() {
 
     sporEl.appendChild(avatarItem);
   });
+
+  oppdaterValgMarkering();
+
+  setTimeout(() => {
+    fokuserePaaValgtProfil();
+  }, 50);
+}
+
+function fokuserePaaValgtProfil() {
+  if (!valgtBilde) return;
+
+  const kortListe = Array.from(sporEl.querySelectorAll('.avatar-item'));
+  const valgtIndex = kortListe.findIndex(el => el.dataset.url === valgtBilde);
+
+  if (valgtIndex !== -1) {
+    const kort = kortListe[0];
+    if (!kort) return;
+
+    const kortBredde = kort.offsetWidth;
+    const gap = 50; 
+    const totalKortBredde = kortBredde + gap;
+    const viewportBredde = sporEl.parentElement.clientWidth;
+
+    let nyPosisjon = -(valgtIndex * totalKortBredde) + (viewportBredde / 2) - (kortBredde / 2);
+
+    const totalBredde = sporEl.scrollWidth;
+    const maksScroll = -(totalBredde - viewportBredde);
+
+    if (nyPosisjon < maksScroll) nyPosisjon = maksScroll;
+    if (nyPosisjon > 0) nyPosisjon = 0;
+
+    scrollPosisjon = nyPosisjon;
+    sporEl.style.transform = `translateX(${scrollPosisjon}px)`;
+    oppdaterPilSynlighet();
+  }
 }
 
 function flyttKarusell(retning) {
-  const skritt = 260; // 210px kortbredde + 50px gap
+  const kort = sporEl.querySelector('.avatar-item');
+  if (!kort) return;
+
+  const kortBredde = kort.offsetWidth + 50; 
   const viewportBredde = sporEl.parentElement.clientWidth;
   const totalBredde = sporEl.scrollWidth;
   const maksScroll = -(totalBredde - viewportBredde);
 
-  scrollPosisjon += retning * (skritt * -2); // Bla 2 bilder av gangen
+  scrollPosisjon += retning * (-kortBredde * 2);
 
   if (scrollPosisjon < maksScroll) scrollPosisjon = maksScroll;
   if (scrollPosisjon > 0) scrollPosisjon = 0;
 
   sporEl.style.transform = `translateX(${scrollPosisjon}px)`;
+  oppdaterPilSynlighet();
+}
+
+function oppdaterPilSynlighet() {
+  const viewportBredde = sporEl.parentElement.clientWidth;
+  const totalBredde = sporEl.scrollWidth;
+  const maksScroll = -(totalBredde - viewportBredde);
+
+  pilVenstre.disabled = scrollPosisjon >= 0;
+  pilHoyre.disabled = scrollPosisjon <= maksScroll || totalBredde <= viewportBredde;
 }
 
 function oppdaterValgMarkering() {
   document.querySelectorAll('.avatar-item').forEach(el => {
-    const imgEl = el.querySelector('.avatar-bilde');
-    const isSelected = imgEl && imgEl.src === valgtBilde;
+    const isSelected = el.dataset.url === valgtBilde;
     el.classList.toggle('selected', isSelected);
   });
 }
+
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'ArrowLeft') flyttKarusell(-1);
+  if (e.key === 'ArrowRight') flyttKarusell(1);
+  if (e.key === 'Enter') tilbakeTilKonto();
+});
+
+let startX = 0;
+const viewportEl = document.getElementById('viewport');
+
+viewportEl.addEventListener('touchstart', (e) => {
+  startX = e.touches[0].clientX;
+}, { passive: true });
+
+viewportEl.addEventListener('touchend', (e) => {
+  const diffX = startX - e.changedTouches[0].clientX;
+  if (Math.abs(diffX) > 40) {
+    flyttKarusell(diffX > 0 ? 1 : -1);
+  }
+}, { passive: true });
+
+window.addEventListener('resize', () => {
+  fokuserePaaValgtProfil();
+});
 
 onAuthStateChanged(auth, (user) => {
   if (user) {
@@ -424,10 +580,11 @@ async function hentProfilbildeFraDb() {
       if (profiler[aktivProfilIndex]) {
         valgtBilde = profiler[aktivProfilIndex].bilde || null;
         oppdaterValgMarkering();
+        fokuserePaaValgtProfil();
       }
     }
   } catch (err) {
-    console.error("Feil ved henting:", err);
+    console.error("Feil ved henting fra DB:", err);
   }
 }
 
