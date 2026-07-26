@@ -133,7 +133,7 @@ const serier = {
     imdb: "",
     skapere: "Watch Nordic Originals Studio",
     tilbakeUrl: "serie.html?navn=detektiv-muffins",
-    publishDate: "2026-07-24T00:00:00",
+    publishDate: "2027-06-10T18:00:00",
     expireDate: "2027-11-15T23:59:59",
     audioLanguages: [],
     subtitleLanguages: [],
