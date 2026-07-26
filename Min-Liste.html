@@ -2,205 +2,584 @@
 <html lang="no">
 <head>
   <meta charset="UTF-8">
-  <title>Min liste</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Min Liste  Watch Nordic</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <style>
-/* GLOBALT */
-* { box-sizing: border-box; margin: 0; padding: 0; }
-html, body { font-family: Arial, sans-serif; background: #091B1E; color: white; overflow-x: hidden; }
+/* ==========================================================================
+   1. GLOBALE TILBAKESTILLINGER & BASE STYLES
+   ========================================================================== */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
 
-/* NAVIGASJON TIL VENSTRE */
-.vertical-nav {
-  width: 70px;
-  height: 100vh;
-  background-color: transparent;
+html {
+  font-size: clamp(14px, 1vw + 10px, 18px);
+  scroll-behavior: smooth;
+}
+
+body {
+  background: #050F11;
+  color: #fff;
+  font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+  letter-spacing: .2px;
+  overflow-x: hidden;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+/* ==========================================================================
+   2. TOPPMENY (MATCHET FILMINFO)
+   ========================================================================== */
+.top-nav {
   position: fixed;
   top: 0;
   left: 0;
+  width: 100%;
+  height: 85px;
   display: flex;
-  flex-direction: column;
   align-items: center;
-  justify-content: center;
-  z-index: 100;
+  justify-content: space-between;
+  padding: 0 40px;
+  z-index: 9999;
+  background: linear-gradient(to bottom, 
+    rgba(5, 15, 17, 0.95) 0%, 
+    rgba(5, 15, 17, 0.75) 40%, 
+    rgba(5, 15, 17, 0.3) 75%, 
+    rgba(5, 15, 17, 0) 100%
+  );
+  transition: background 0.4s ease, box-shadow 0.4s ease, height 0.4s ease;
 }
 
-.nav-icons-wrapper {
+.top-nav.scrolled {
+  height: 70px;
+  background: rgba(5, 15, 17, 0.98);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 2px 15px rgba(0, 0, 0, 0.6);
+}
+
+.nav-left {
+  display: flex;
+  align-items: center;
+  gap: 40px;
+  flex-shrink: 0;
+}
+
+.watch-logo-svg {
+  height: 40px;
+  width: auto;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+}
+
+.watch-logo-svg img {
+  height: 100%;
+  width: auto;
+}
+
+.nav-links {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 30px;
+  white-space: nowrap;
+}
+
+.nav-links a {
+  color: #e0e0e0;
+  text-decoration: none;
+  font-size: 15px;
+  font-weight: 500;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.8);
+  transition: color 0.3s ease;
+}
+
+.nav-links a i {
+  margin-right: 6px;
+  font-size: 16px;
+}
+
+.nav-links a:hover {
+  color: #ffffff;
+}
+
+.nav-links a.active {
+  color: #00FFCC;
+  font-weight: 700;
+}
+
+.nav-right {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  flex-shrink: 0;
+}
+
+.nav-search {
+  color: #e0e0e0;
+  font-size: 18px;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.nav-search:hover {
+  color: #00FFCC;
+}
+
+/* PROFILMENY */
+.profilmeny {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.profil-avatar-wrap {
+  width: 44px;
+  height: 44px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  background-color: #1e2a2e;
+  transition: border-color 0.35s ease, background-color 0.35s ease;
+}
+
+.profil-avatar-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+  display: block;
+  transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.profilmeny:hover .profil-avatar-wrap {
+  background-color: #00FFCC;
+  border-color: #ffffff;
+}
+
+.profilmeny:hover .profil-avatar-img {
+  transform: scale(1.15);
+}
+
+/* ==========================================================================
+   3. INNHOLD OG MIN LISTE RUTENETT
+   ========================================================================== */
+.main-content {
+  flex: 1;
+  padding: 120px 50px 50px;
+  max-width: 1400px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.page-header {
+  margin-bottom: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  padding-bottom: 15px;
+}
+
+.page-header h1 {
+  font-size: 28px;
+  font-weight: 700;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.page-header h1 i {
+  color: #00FFCC;
+}
+
+.list-count {
+  font-size: 14px;
+  color: #8a8a8a;
+}
+
+/* RUTENETT (MATCHET .gallery FRA FILMINFO) */
+.gallery {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  width: 100%;
+}
+
+.movie-card {
+  width: 100%;
+  height: 220px;
+  border-radius: 6px;
+  overflow: hidden;
+  position: relative;
+  cursor: pointer;
+  background: #0c0c0c;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+.movie-card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.movie-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0, 255, 204, 0.2);
+  border-color: rgba(0, 255, 204, 0.4);
+}
+
+.movie-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.95) 0%, rgba(0, 0, 0, 0.3) 60%, transparent 100%);
+  opacity: 0;
+  transition: opacity .3s ease;
   display: flex;
   flex-direction: column;
-  align-items: center;
+  justify-content: flex-end;
+  padding: 16px;
+}
+
+.movie-card:hover .movie-overlay {
+  opacity: 1;
+}
+
+.movie-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 4px;
+}
+
+.movie-meta {
+  font-size: 12px;
+  color: #00FFCC;
+  display: flex;
   gap: 10px;
 }
 
-.profilmeny { cursor: pointer; margin-bottom: 20px; }
-.profilmeny img { 
-  width: 48px; height: 48px; 
-  border-radius: 50%; 
-  object-fit: cover; 
-  border: 2px solid white; 
-  transition: transform 0.2s ease; 
-}
-.profilmeny img:hover { transform: scale(1.1); }
-
-.nav-icon {
-  color: white; font-size: 22px; padding: 16px 0;
-  text-decoration: none; text-align: center; width: 100%;
-  transition: color 0.3s ease;
-  cursor: pointer; background: none; border: none;
+.empty-state {
+  text-align: center;
+  padding: 80px 20px;
+  color: #8a8a8a;
+  grid-column: 1 / -1;
 }
 
-.nav-icon:hover, .nav-icon.active { color: #00FFCC; }
-
-main { margin-left: 70px; padding: 20px; }
-
-.content-wrapper { max-width: 1200px; margin: 0 auto; }
-
-h1 { margin-bottom: 20px; color: #00FFCC; font-size: 28px; }
-
-/* FILM GRID */
-.film-grid { 
-  display: flex; 
-  flex-wrap: wrap; 
-  gap: 20px; 
+.empty-state i {
+  font-size: 48px;
+  color: rgba(255, 255, 255, 0.2);
+  margin-bottom: 15px;
 }
 
-.film-card {
-  width: 300px;             /* fast bredde */
-  aspect-ratio: 16 / 9;     /* holder horisontal form */
-  cursor: pointer; 
-  transition: transform 0.2s ease, box-shadow 0.3s ease;
-  border-radius: 10px; 
-  overflow: hidden; 
-  position: relative;
-  background: #111; 
+.empty-state p {
+  font-size: 18px;
+  margin-bottom: 20px;
 }
 
-.film-card img {
-  width: 100%; 
-  height: 100%; 
-  object-fit: cover; 
-  border-radius: 10px;
-  display: block;
+.browse-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 24px;
+  background: #ffffff;
+  color: #000000;
+  text-decoration: none;
+  font-weight: 600;
+  border-radius: 8px;
+  transition: background-color 0.2s ease;
 }
 
-.film-card:hover {
-  transform: scale(1.05);
-  box-shadow: 0 0 15px #00FFCC;
+.browse-btn:hover {
+  background: #00FFCC;
 }
 
-/* HERO EFFEKT FOR OVERSKRIFT */
-.hero-banner {
-  height: 200px; 
-  background: linear-gradient(90deg, #0f2a2d 0%, #091B1E 100%);
-  border-radius: 10px; 
-  margin-bottom: 30px; 
-  display: flex; 
-  align-items: center; 
-  justify-content: center;
-  color: #00FFCC; 
-  font-size: 24px; 
-  font-weight: bold; 
-  box-shadow: 0 0 15px #00FFCC50;
+/* ==========================================================================
+   4. FOOTER (EXACT MATCH FILMINFO)
+   ========================================================================== */
+.footer {
+  width: 100%;
+  padding: 70px 80px 35px;
+  margin-top: auto;
+  background: #050F11;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  color: #7d7d7d;
 }
 
-/* FOOTER */
-.footer { 
-  margin-top: 40px; 
-  padding: 20px; 
-  text-align: center; 
-  color: #515151; 
-  font-size: 14px; 
+.footer-socials {
+  display: flex;
+  gap: 22px;
+  margin-bottom: 35px;
 }
-.footer a { 
-  color: #b1b1b1; 
-  margin: 0 10px; 
-  text-decoration: none; 
-  transition: color 0.2s; 
+
+.footer-socials a {
+  color: #9b9b9b;
+  font-size: 20px;
+  transition: color 0.25s ease, transform 0.25s ease;
 }
-.footer a:hover { color: #00FFCC; }
 
+.footer-socials a:hover {
+  color: #ffffff;
+  transform: scale(1.08);
+}
 
-    /* HERO EFFEKT FOR OVERSKRIFT */
-    .hero-banner {
-      height: 200px; background: linear-gradient(90deg, #0f2a2d 0%, #091B1E 100%);
-      border-radius: 10px; margin-bottom: 30px; display: flex; align-items: center; justify-content: center;
-      color: #00FFCC; font-size: 24px; font-weight: bold; box-shadow: 0 0 15px #00FFCC50;
-    }
+.footer-links {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(140px, 1fr));
+  gap: 18px 50px;
+  margin-bottom: 35px;
+}
 
-    /* FOOTER */
-    .footer { margin-top: 40px; padding: 20px; text-align: center; color: #515151; font-size: 14px; }
-    .footer a { color: #b1b1b1; margin: 0 10px; text-decoration: none; transition: color 0.2s; }
-    .footer a:hover { color: #00FFCC; }
+.footer-links a {
+  color: #8a8a8a;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.5;
+  transition: color 0.2s ease;
+}
+
+.footer-links a:hover { color: #ffffff; }
+
+.footer-copy {
+  font-size: 13px;
+  color: #666;
+  margin-bottom: 8px;
+}
+
+.footer-bottom {
+  max-width: 700px;
+  font-size: 12px;
+  line-height: 1.6;
+  color: #555;
+}
+
+/* RESPONSIVITET FOR MOBIL */
+@media (max-width: 768px) {
+  .top-nav { padding: 0 20px; height: 70px; }
+  .nav-links { display: none; }
+  
+  body, .footer { background: rgb(9, 27, 30) !important; }
+
+  .main-content {
+    padding: 90px 20px 40px;
+  }
+
+  .gallery {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 12px !important;
+  }
+
+  .movie-card {
+    height: 120px !important;
+  }
+
+  .footer { padding: 40px 20px 20px !important; }
+  .footer-links { grid-template-columns: repeat(2, 1fr) !important; gap: 15px !important; }
+}
   </style>
 </head>
 <body>
 
-<div class="vertical-nav" id="verticalNav">
-  <div class="profilmeny">
-    <a href="Konto.html">
-      <img id="menyProfilbilde" src="https://via.placeholder.com/100" alt="Min profil" />
-    </a>
-  </div>
-  <div class="nav-icons-wrapper">
-    <a href="Søk.html" class="nav-icon"><i class="fas fa-search"></i></a>
-    <a href="Hovedside.html" class="nav-icon"><i class="fas fa-house"></i></a>
-    <a href="Film.html" class="nav-icon"><i class="fas fa-film"></i></a>
-    <a href="Serier.html" class="nav-icon"><i class="fas fa-tv"></i></a>
-    <a href="Min-Liste.html" class="nav-icon active"><i class="fas fa-bookmark"></i></a>
-  </div>
-</div>
+  <!-- TOPPMENY -->
+  <header class="top-nav" id="topNav">
+    <div class="nav-left">
+      <a href="Hovedside.html" class="watch-logo-svg">
+        <img src="https://static.wixstatic.com/media/d9ace9_081ea242211b45a2801873c3067e1205~mv2.png" alt="Watch Nordic">
+      </a>
+    </div>
 
-<main>
-    <h1>Dine filmer</h1>
-    <div id="filmGrid" class="film-grid"></div>
-</main>
+    <nav class="nav-links">
+      <a href="Hovedside.html"><i class="fas fa-house"></i> Hjem</a>
+      <a href="Serier.html"><i class="fas fa-tv"></i> Serier</a>
+      <a href="Film.html"><i class="fas fa-clapperboard"></i> Filmer</a>
+      <a href="Nyheter.html"><i class="fas fa-star"></i> Watch Originals</a>
+      <a href="Min-Liste.html" class="active"><i class="fas fa-bookmark"></i> Min Liste</a>
+    </nav>
 
-<footer class="footer">
-  <div class="footer-links">
-    <a href="#">Hjelp</a> | <a href="#">Kontakt</a> | <a href="#">Om</a>
-  </div>
-  <div class="footer-copy">&copy; 2025 Min Strømmetjeneste</div>
-</footer>
+    <div class="nav-right">
+      <a href="Søk.html" class="nav-search" aria-label="Søk">
+        <i class="fas fa-search"></i>
+      </a>
 
-<script src="Filmdata.js"></script>
-<script>
-  // Autentisering
-  const epost = localStorage.getItem("epost");
-  const passord = localStorage.getItem("passord");
-  if (!epost || !passord) window.location.href = "Startside.html";
+      <a href="hvem-ser-på.html" class="profilmeny" id="profilmenyLink">
+        <div class="profil-avatar-wrap">
+          <img id="menyProfilbilde" src="https://via.placeholder.com/100" alt="Profilbilde" class="profil-avatar-img" />
+        </div>
+      </a>
+    </div>
+  </header>
 
-  // Profilbilde
-  const lagretBilde = localStorage.getItem("profilbilde");
-  if (lagretBilde) document.getElementById("menyProfilbilde").src = lagretBilde;
+  <!-- HOVEDINNHOLD -->
+  <main class="main-content">
+    <div class="page-header">
+      <h1><i class="fas fa-bookmark"></i> Min Liste</h1>
+      <span class="list-count" id="listCount">0 titler</span>
+    </div>
 
-  // Vis filmer
-  const filmGrid = document.getElementById("filmGrid");
-  const minListe = JSON.parse(localStorage.getItem("minListe")) || [];
+    <div class="gallery" id="minListeGallery">
+      <!-- Dynamiske kort lastes inn her -->
+    </div>
+  </main>
 
-  if (minListe.length === 0) {
-    filmGrid.innerHTML = "<p>Du har ingen filmer i listen din.</p>";
-  } else {
-    if (typeof filmer === "undefined") {
-      filmGrid.innerHTML = "<p>Kunne ikke laste filmer (mangler filmdata.js).</p>";
-    } else {
-      minListe.forEach(filmNavn => {
-        const data = filmer[filmNavn];
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="footer-socials">
+      <a href="https://www.instagram.com/watchnordicoriginals"><i class="fab fa-instagram"></i></a>
+      <a href="https://www.tiktok.com/@watchnordicoriginals"><i class="fab fa-tiktok"></i></a>
+      <a href="#"><i class="fab fa-youtube"></i></a>
+    </div>
+
+    <div class="footer-links">
+      <a href="om.html">Om Watch Nordic</a>
+      <a href="kontakt.html">Kontakt oss</a>
+      <a href="personvern.html">Personvern</a>
+      <a href="hjelp.html">Hjelpesenter</a>
+      <a href="#">Jobber</a>
+      <a href="#">Investorinformasjon</a>
+      <a href="#">Vilkår</a>
+      <a href="#">Informasjonskapsler</a>
+      <a href="#">Juridisk informasjon</a>
+      <a href="#">Bedriftskonto</a>
+      <a href="#">Gavekort</a>
+      <a href="#">Enheter</a>
+    </div>
+
+    <div class="footer-copy">© 2026 Watch Nordic™</div>
+    <div class="footer-bottom">
+      Alle varemerker fra WATCH NORDIC™, WATCH NORDIC ORIGINALS™ og alle øvrige tilknyttede immaterielle rettigheter tilhører Watch Nordic Group. Alle rettigheter forbeholdt.
+    </div>
+  </footer>
+
+  <script src="Filmdata.js"></script>
+  <script src="Seriedata.js"></script>
+
+  <script type="module">
+    import { auth, db } from "./firebase-oppsett.js";
+    import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-auth.js";
+    import { doc, getDoc } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
+
+    const minListeGallery = document.getElementById("minListeGallery");
+    const listCountEl = document.getElementById("listCount");
+    const topNav = document.getElementById("topNav");
+
+    // Scroll-effekt for toppmeny
+    window.addEventListener("scroll", () => {
+      if (window.scrollY > 20) {
+        topNav.classList.add("scrolled");
+      } else {
+        topNav.classList.remove("scrolled");
+      }
+    });
+
+    // Profilbilde fra localStorage
+    const lagretBilde = localStorage.getItem("profilbilde");
+    if (lagretBilde) {
+      document.getElementById("menyProfilbilde").src = lagretBilde;
+    }
+
+    // Datakilder
+    const filmerData = typeof window.filmer !== "undefined" ? window.filmer : (typeof filmer !== "undefined" ? filmer : {});
+    const serierData = typeof window.serier !== "undefined" ? window.serier : (typeof serier !== "undefined" ? serier : {});
+
+    // Henting av brukerens liste via Firebase eller LocalStorage
+    onAuthStateChanged(auth, async (user) => {
+      let minListe = [];
+
+      if (user) {
+        const aktivProfilIndex = localStorage.getItem("aktivProfilIndex") || "0";
+        try {
+          const userDoc = await getDoc(doc(db, "brukere", user.uid));
+          if (userDoc.exists()) {
+            const data = userDoc.data();
+            const profiler = data.profiler || [];
+            if (profiler[aktivProfilIndex]) {
+              minListe = profiler[aktivProfilIndex].minListe || [];
+            }
+          }
+        } catch (e) {
+          console.error("Feil ved henting fra Firestore:", e);
+          minListe = JSON.parse(localStorage.getItem("minListe")) || [];
+        }
+      } else {
+        minListe = JSON.parse(localStorage.getItem("minListe")) || [];
+      }
+
+      visMinListe(minListe);
+    });
+
+    function visMinListe(liste) {
+      minListeGallery.innerHTML = "";
+      
+      if (!liste || liste.length === 0) {
+        listCountEl.textContent = "0 titler";
+        minListeGallery.innerHTML = `
+          <div class="empty-state">
+            <i class="fas fa-bookmark"></i>
+            <p>Du har ingen titler i listen din ennå.</p>
+            <a href="Hovedside.html" class="browse-btn"><i class="fas fa-play"></i> Utforsk innhold</a>
+          </div>
+        `;
+        return;
+      }
+
+      let funnetAntall = 0;
+
+      liste.forEach(tittelNavn => {
+        // Sjekker om tittelen finnes enten i filmdata eller seriedata
+        const data = filmerData[tittelNavn] || serierData[tittelNavn];
+        
         if (data) {
+          funnetAntall++;
           const card = document.createElement("div");
-          card.className = "film-card";
-          card.innerHTML = `<img src="${data.poster || 'default-poster.jpg'}" alt="${data.tittel}">`;
+          card.className = "movie-card";
+
+          const bildeSrc = data.poster || data.bakgrunn || "https://via.placeholder.com/300x169";
+          const rating = data.rating ? `⭐ ${data.rating}` : "";
+          const sjanger = data.metadata ? data.metadata[0] || "" : "";
+
+          card.innerHTML = `
+            <img src="${bildeSrc}" alt="${data.tittel || tittelNavn}" loading="lazy">
+            <div class="movie-overlay">
+              <div class="movie-title">${data.tittel || tittelNavn}</div>
+              <div class="movie-meta">
+                <span>${rating}</span>
+                <span>${sjanger}</span>
+              </div>
+            </div>
+          `;
+
           card.addEventListener("click", () => {
-            window.location.href = `film.html?navn=${filmNavn}`;
+            window.location.href = `filminfo.html?navn=${encodeURIComponent(tittelNavn)}`;
           });
-          filmGrid.appendChild(card);
+
+          minListeGallery.appendChild(card);
         }
       });
-    }
-  }
-</script>
 
+      listCountEl.textContent = `${funnetAntall} ${funnetAntall === 1 ? 'tittel' : 'titler'}`;
+    }
+  </script>
 </body>
 </html>
-
-
-
-
