@@ -157,6 +157,73 @@ main {
   transform: translateY(1px);
 }
 
+  /* ==========================================================================
+   PROFILMENY (3D POP-OUT EFFEKT)
+   ========================================================================== */
+.profilmeny {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+/* Beholder med overlappende ramme */
+.profil-avatar-wrap {
+  width: 44px;
+  height: 44px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: visible; /* Tillater at 3D-figuren stikker opp over sirkelen */
+}
+
+/* Sirkulær bakgrunn i samme mørkegrå farge som på profilvalg */
+.profil-avatar-bg {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background-color: #1e2a2e;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  transition: all 0.35s cubic-bezier(0.25, 1, 0.5, 1);
+  z-index: 1;
+}
+
+/* Selve bilde-elementet */
+.profil-avatar-img {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+  z-index: 2;
+  transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+  transform-origin: bottom center;
+}
+
+/* Transparent PNG-karakter som pop-out */
+.profil-avatar-img.png-karakter {
+  object-fit: contain;
+  border-radius: 0;
+  height: 145%;
+  bottom: 0;
+  transform: translateY(-4px) scale(1.05);
+}
+
+/* HOVER TILSTAND: Samme heving som på profilsiden */
+.profilmeny:hover .profil-avatar-bg {
+  background-color: var(--active-color, #00FFCC);
+  border-color: #ffffff;
+}
+
+.profilmeny:hover .profil-avatar-img.png-karakter {
+  transform: translateY(-10px) scale(1.25);
+}
+
+.profilmeny:hover .profil-avatar-img:not(.png-karakter) {
+  transform: scale(1.1);
+}
 /* ==========================================================================
    3. HERO BANNER (PC) - Clean & Stable Netflix Style
    ========================================================================== */
@@ -951,13 +1018,16 @@ main {
       <i class="fas fa-search"></i>
     </a>
 
-    <a href="hvem-ser-på.html" class="profilmeny">
-      <img id="menyProfilbilde" src="https://via.placeholder.com/100" alt="Profilbilde" />
+    <a href="hvem-ser-på.html" class="profilmeny" id="profilmenyLink">
+      <div class="profil-avatar-wrap">
+        <div class="profil-avatar-bg"></div>
+        <img id="menyProfilbilde" src="https://via.placeholder.com/100" alt="Profilbilde" class="profil-avatar-img" />
+      </div>
       <span id="profilNavn"></span>
     </a>
   </div>
 </header>
-  
+
 <main>
 
   <section class="hero-banner">
@@ -1147,6 +1217,36 @@ main {
   const aktivProfil = localStorage.getItem("aktivProfil") || "Hovedprofil";
   let heleProfilArrayet = [];
 
+  // Hjelpefunksjon for å oppdatere profilmeny i header med 3D pop-out støtte
+  function oppdaterMenyProfilVisning(bildeUrl, profilNavn, farge) {
+    const menyProfil = document.getElementById("menyProfilbilde");
+    const profilmenyLink = document.getElementById("profilmenyLink");
+    const navneEl = document.getElementById("profilNavn");
+
+    if (menyProfil && bildeUrl) {
+      menyProfil.src = bildeUrl;
+      // Legg til png-karakter klassen hvis det er en PNG-fil (3D pop-out)
+      if (bildeUrl.toLowerCase().endsWith('.png')) {
+        menyProfil.classList.add('png-karakter');
+      } else {
+        menyProfil.classList.remove('png-karakter');
+      }
+    }
+
+    if (navneEl && profilNavn) {
+      navneEl.textContent = profilNavn;
+    }
+
+    if (profilmenyLink && farge) {
+      profilmenyLink.style.setProperty('--active-color', farge);
+    }
+
+    const headerProfil = document.getElementById("headerProfilbilde");
+    if (headerProfil && bildeUrl) {
+      headerProfil.src = bildeUrl;
+    }
+  }
+
   // ==================== REIDREKTERINGSVAKT & PROFIL-CACHE ==================== //
   onAuthStateChanged(auth, async (user) => {
     if (!user) {
@@ -1188,17 +1288,13 @@ main {
       if (gjeldendeProfil) {
         const bildeUrl = gjeldendeProfil.bilde || "";
         const profilNavn = gjeldendeProfil.navn || "";
+        const farge = gjeldendeProfil.farge || "";
         const nyIsKids = gjeldendeProfil.isKids === true;
         const nyMaks = gjeldendeProfil.maksAldersgrense || "12";
 
-        if (bildeUrl) {
-          const menyProfil = document.getElementById("menyProfilbilde");
-          if (menyProfil) menyProfil.src = bildeUrl;
-          const headerProfil = document.getElementById("headerProfilbilde");
-          if (headerProfil) headerProfil.src = bildeUrl;
-          localStorage.setItem("profilbilde", bildeUrl);
-        }
+        oppdaterMenyProfilVisning(bildeUrl, profilNavn, farge);
 
+        if (bildeUrl) localStorage.setItem("profilbilde", bildeUrl);
         if (profilNavn) {
           localStorage.setItem("profilnavn", profilNavn);
           localStorage.setItem("aktivProfil", profilNavn);
@@ -1251,11 +1347,9 @@ main {
 
   // ==================== PROFILBILDE LOCAL FALLBACK ==================== //
   const lagretBilde = localStorage.getItem("profilbilde");
+  const lagretNavn = localStorage.getItem("profilnavn");
   if (lagretBilde) {
-    const menyProfil = document.getElementById("menyProfilbilde");
-    if (menyProfil) menyProfil.src = lagretBilde;
-    const headerProfil = document.getElementById("headerProfilbilde");
-    if (headerProfil) headerProfil.src = lagretBilde;
+    oppdaterMenyProfilVisning(lagretBilde, lagretNavn);
   }
 
   // ==================== HERO-BANNER ==================== //
@@ -1453,7 +1547,7 @@ main {
 
   window.addEventListener("resize", oppdaterAlleGalleripiler);
 
-  // ==================== DYNAMISK GALLERI GENERATOR (SIKKER MOT TOMME BILDER) ==================== //
+  // ==================== DYNAMISK GALLERI GENERATOR ==================== //
   function createGalleryItem(itemKey, item) {
     const link = document.createElement("a");
     link.href = `film.html?navn=${itemKey}`;
