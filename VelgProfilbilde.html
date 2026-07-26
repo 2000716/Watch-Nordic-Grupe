@@ -63,7 +63,6 @@
       align-items: center;
     }
 
-    /* Romslig padding på sidene, toppen og bunnen slik at ingenting blir kuttet */
     .karusell-viewport {
       width: 100%;
       overflow: hidden;
@@ -99,7 +98,7 @@
       overflow: visible; 
     }
 
-    /* Mørkegrå sirkelbakgrunn uten glow */
+    /* Mørkegrå sirkelbakgrunn */
     .avatar-bg {
       position: absolute;
       inset: 0;
@@ -130,7 +129,7 @@
       transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
     }
 
-    /* Karakterbilde */
+    /* Karakterbilde for vanlige runde bilder */
     .avatar-bilde {
       position: absolute;
       width: 100%;
@@ -142,12 +141,18 @@
       transform-origin: bottom center;
     }
 
+    /* POP-OUT PNG EFFEKT (Skjermet nederst i sirkelen, stikker ut øverst) */
     .avatar-bilde.png-karakter {
       object-fit: contain;
       border-radius: 0;
-      height: 155%; 
+      height: 140%; 
       bottom: 0;
-      transform: translateY(-20px) scale(1.1);
+      z-index: 3;
+      /* clip-path kutter alt under bunnen av sirkelen, men lar toppen være åpen */
+      clip-path: inset(-150px 0px 0px 0px);
+      border-bottom-left-radius: 50% 20px;
+      border-bottom-right-radius: 50% 20px;
+      transform: translateY(0) scale(1);
     }
 
     /* LOGO OPPSETT */
@@ -194,7 +199,7 @@
     }
 
     .avatar-item:hover .avatar-bilde.png-karakter {
-      transform: translateY(-45px) scale(1.25);
+      transform: translateY(-15px) scale(1.15);
     }
 
     .avatar-item:hover .avatar-bilde:not(.png-karakter) {
@@ -219,7 +224,7 @@
     }
 
     .avatar-item.selected .avatar-bilde.png-karakter {
-      transform: translateY(-40px) scale(1.22);
+      transform: translateY(-12px) scale(1.12);
     }
 
     .avatar-item.selected .avatar-bilde:not(.png-karakter) {
@@ -242,7 +247,7 @@
       transform: translateY(0);
     }
 
-    /* Navigasjonspiler uten glød - flyttet lenger ut */
+    /* Navigasjonspiler */
     .nav-pil {
       position: absolute;
       top: 50%;
@@ -276,11 +281,10 @@
       pointer-events: none;
     }
 
-    /* Flyttet lenger ut på sidene */
     .pil-venstre { left: -60px; }
     .pil-hoyre { right: -60px; }
 
-    /* Lagre-knapp helt ren uten glød/skygge */
+    /* Lagre-knapp */
     .bunn-seksjon {
       margin-top: 15px;
       text-align: center;
@@ -333,7 +337,7 @@
 </div>
 
 <div class="karusell-wrapper">
-  <button class="nav-pil pil-venstre" id="pil-venstre" onclick="flyttKarusell(-1)" aria-label="Forrige">
+  <button class="nav-pil pil-venstre" id="pil-venstre" aria-label="Forrige">
     <i class="fa-solid fa-chevron-left"></i>
   </button>
   
@@ -343,13 +347,13 @@
     </div>
   </div>
 
-  <button class="nav-pil pil-hoyre" id="pil-hoyre" onclick="flyttKarusell(1)" aria-label="Neste">
+  <button class="nav-pil pil-hoyre" id="pil-hoyre" aria-label="Neste">
     <i class="fa-solid fa-chevron-right"></i>
   </button>
 </div>
 
 <div class="bunn-seksjon">
-  <button class="lagre-knapp" onclick="tilbakeTilKonto()">
+  <button class="lagre-knapp" id="lagre-knapp">
     <i class="fa-solid fa-check"></i> Lagre og fortsett
   </button>
 </div>
@@ -387,14 +391,14 @@ const alleProfiler = [
   { 
     url: 'https://static.wixstatic.com/media/d9ace9_8d9b602d060d4b63a5d986882ebd59f3~mv2.png', 
     navn: "Detektiv Muffins", 
-    erPng: false, 
+    erPng: true, 
     farge: '#e9c46a',
     logoUrl: 'https://static.wixstatic.com/media/d9ace9_2eec6795b49942f798d3f0c616917900~mv2.png'
   },
   { 
     url: 'https://static.wixstatic.com/media/d9ace9_8338459b9b79457a9317e53b294195d2~mv2.png', 
     navn: "Herr Marshmellows", 
-    erPng: false, 
+    erPng: true, 
     farge: '#46cee3',
     logoUrl: 'https://static.wixstatic.com/media/d9ace9_2eec6795b49942f798d3f0c616917900~mv2.png'
   }
@@ -404,6 +408,7 @@ const sporEl = document.getElementById('karusell-spor');
 const viewportEl = document.getElementById('viewport');
 const pilVenstre = document.getElementById('pil-venstre');
 const pilHoyre = document.getElementById('pil-hoyre');
+const lagreKnapp = document.getElementById('lagre-knapp');
 
 let scrollPosisjon = 0;
 let valgtBilde = null;
@@ -422,6 +427,11 @@ if (cachedProfiles) {
     console.error("Feil ved lesing av cache:", e);
   }
 }
+
+// Event-lyttere for nav-knapper og lagre-knapp
+pilVenstre.addEventListener('click', () => flyttKarusell(-1));
+pilHoyre.addEventListener('click', () => flyttKarusell(1));
+lagreKnapp.addEventListener('click', tilbakeTilKonto);
 
 byggKarusell();
 
@@ -631,9 +641,6 @@ async function tilbakeTilKonto() {
   }
   window.location.href = `konto.html?index=${aktivProfilIndex}`;
 }
-
-window.flyttKarusell = flyttKarusell;
-window.tilbakeTilKonto = tilbakeTilKonto;
 </script>
 
 </body>
