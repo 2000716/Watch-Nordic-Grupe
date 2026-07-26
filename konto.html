@@ -84,84 +84,13 @@
       color: white;
     }
 
-    /* MAIN CONTAINER - ÉN SAMLET FLATE */
+    /* MAIN CONTAINER */
     .container {
       max-width: 850px;
       width: 100%;
       margin: 0 auto;
       padding: 40px 20px;
       flex: 1;
-    }
-
-    /* PROFIL HØYRESTILT MED BLYANTBOBLE */
-    .profile-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      background: var(--card-bg);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 24px 30px;
-      margin-bottom: 30px;
-    }
-
-    .profile-info h1 {
-      font-size: 24px;
-      font-weight: 700;
-      margin-bottom: 6px;
-    }
-
-    .profile-info p {
-      color: var(--muted);
-      font-size: 14px;
-    }
-
-    /* Avatar med blyantikon nede til høyre */
-    .avatar-wrapper {
-      position: relative;
-      width: 110px;
-      height: 110px;
-      cursor: pointer;
-      flex-shrink: 0;
-    }
-
-    .avatar-img {
-      width: 100%;
-      height: 100%;
-      border-radius: 50%;
-      object-fit: cover;
-      border: 2px solid var(--border);
-      transition: border-color 0.2s, transform 0.2s;
-    }
-
-    .avatar-wrapper:hover .avatar-img {
-      border-color: rgba(255, 255, 255, 0.5);
-      transform: scale(1.02);
-    }
-
-    /* Blyantboblen */
-    .edit-badge {
-      position: absolute;
-      bottom: 2px;
-      right: 2px;
-      background: rgba(9, 27, 30, 0.9);
-      border: 1px solid var(--border);
-      color: var(--text);
-      width: 32px;
-      height: 32px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 13px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.5);
-      transition: background 0.2s, transform 0.2s;
-    }
-
-    .avatar-wrapper:hover .edit-badge {
-      background: var(--text);
-      color: #091B1E;
-      transform: scale(1.1);
     }
 
     /* SEKSJONER */
@@ -230,7 +159,7 @@
 
     .hidden { display: none !important; }
 
-    /* INLINE ENDRING AV NAVN */
+    /* INLINE ENDRING AV NAVN OG PASSORD */
     .edit-box {
       display: flex;
       gap: 10px;
@@ -263,7 +192,7 @@
     .btn-save { background: white; color: black; }
     .btn-cancel { background: rgba(255,255,255,0.1); color: white; }
 
-    /* DANGER ZONE / SLETT PROFIL */
+    /* SLETT PROFIL */
     .delete-container {
       margin-top: 10px;
       text-align: right;
@@ -303,12 +232,6 @@
       header { padding: 12px 20px; }
       .logo-image { height: 26px; }
       header button span { display: none; }
-
-      .profile-header {
-        flex-direction: column-reverse;
-        text-align: center;
-        gap: 16px;
-      }
       
       .row { 
         flex-direction: column; 
@@ -335,20 +258,6 @@
   </header>
 
   <div class="container">
-    
-    <!-- TOPPKORT MED HØYRESTILT PROFILBILDE OG BLYANTBOBLE -->
-    <div class="profile-header">
-      <div class="profile-info">
-        <h1 id="navnDisplay">Laster...</h1>
-        <p>Aktiv profil</p>
-      </div>
-
-      <div class="avatar-wrapper" id="avatarContainer" title="Klikk for å endre profilbilde">
-        <img id="profilbilde" class="avatar-img" src="" alt="Profilbilde">
-        <div class="edit-badge"><i class="fa-solid fa-pencil"></i></div>
-      </div>
-    </div>
-
     <section class="content">
       <h2><i class="fa-solid fa-user"></i> Kontoinformasjon</h2>
       <div class="card">
@@ -363,6 +272,20 @@
             </div>
           </div>
           <button class="edit-trigger" id="endreNavnKnapp">Endre</button>
+        </div>
+
+        <!-- NY RAG MED PROFILPASSORD / PIN -->
+        <div class="row">
+          <div class="info-block">
+            <div class="label">Profil-PIN (Passord)</div>
+            <div class="value" id="pinView">Ingen PIN satt</div>
+            <div id="editPinBox" class="edit-box hidden">
+              <input type="password" id="nyPinInput" maxlength="6" placeholder="Angi PIN (f.eks. 1234)">
+              <button class="btn-save" id="lagrePinBtn">Lagre</button>
+              <button class="btn-cancel" id="avbrytPinBtn">Avbryt</button>
+            </div>
+          </div>
+          <button class="edit-trigger" id="endrePinKnapp">Endre PIN</button>
         </div>
         
         <div class="row">
@@ -400,8 +323,8 @@
     const urlParams = new URLSearchParams(window.location.search);
     let aktivProfilIndex = parseInt(urlParams.get('index')) || 0;
 
-    const navnDisplay = document.getElementById("navnDisplay");
     const navnView = document.getElementById("navnView");
+    const pinView = document.getElementById("pinView");
     const epostView = document.getElementById("epostView");
 
     // Navn-endring elementer
@@ -410,6 +333,13 @@
     const nyttNavnInput = document.getElementById("nyttNavnInput");
     const lagreNavnBtn = document.getElementById("lagreNavnBtn");
     const avbrytNavnBtn = document.getElementById("avbrytNavnBtn");
+
+    // PIN-endring elementer
+    const endrePinKnapp = document.getElementById("endrePinKnapp");
+    const editPinBox = document.getElementById("editPinBox");
+    const nyPinInput = document.getElementById("nyPinInput");
+    const lagrePinBtn = document.getElementById("lagrePinBtn");
+    const avbrytPinBtn = document.getElementById("avbrytPinBtn");
 
     let profiler = [];
     let globalEpost = ""; 
@@ -433,12 +363,6 @@
         window.location.href = "index.html";
       }
     });
-
-    const gaaTilVelgBilde = () => {
-      window.location.href = `VelgProfilbilde.html?index=${aktivProfilIndex}`;
-    };
-
-    document.getElementById("avatarContainer").addEventListener("click", gaaTilVelgBilde);
 
     document.getElementById("navHovedsideBtn").addEventListener("click", () => {
       window.location.href = `hvem-ser-på.html?index=${aktivProfilIndex}`;
@@ -473,6 +397,27 @@
       endreNavnKnapp.classList.remove("hidden");
     });
 
+    // Endre PIN Logikk
+    endrePinKnapp.addEventListener("click", () => {
+      nyPinInput.value = profiler[aktivProfilIndex].pin || "";
+      editPinBox.classList.remove("hidden");
+      endrePinKnapp.classList.add("hidden");
+    });
+
+    avbrytPinBtn.addEventListener("click", () => {
+      editPinBox.classList.add("hidden");
+      endrePinKnapp.classList.remove("hidden");
+    });
+
+    lagrePinBtn.addEventListener("click", async () => {
+      const nyPin = nyPinInput.value.trim();
+      profiler[aktivProfilIndex].pin = nyPin; // lagrer tom streng hvis fjernet
+      await oppdaterProfilData();
+      byggProfilgrensesnitt();
+      editPinBox.classList.add("hidden");
+      endrePinKnapp.classList.remove("hidden");
+    });
+
     async function hentKontodata() {
       try {
         const docSnap = await getDoc(docRef);
@@ -490,10 +435,14 @@
       const gjeldendeProfil = profiler[aktivProfilIndex];
       if (!gjeldendeProfil) return;
 
-      navnDisplay.innerText = gjeldendeProfil.navn;
       navnView.innerText = gjeldendeProfil.navn;
       epostView.innerText = globalEpost;
-      document.getElementById("profilbilde").src = gjeldendeProfil.bilde;
+
+      if (gjeldendeProfil.pin) {
+        pinView.innerText = "•••• (PIN er aktivert)";
+      } else {
+        pinView.innerText = "Ingen PIN satt";
+      }
 
       if (gjeldendeProfil.isKids) {
         endreNavnKnapp.classList.add("hidden");
