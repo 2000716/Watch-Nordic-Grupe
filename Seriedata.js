@@ -124,7 +124,7 @@ const serier = {
     banner: "", 
     bannerMobil: "",
     logo: "https://static.wixstatic.com/media/d9ace9_25116ad98fa044ca948df574d6a4e520~mv2.png",
-    poster: "https://static.wixstatic.com/media/d9ace9_c92f7c89b97c4f97accaea105a1b8af3~mv2.jpg",
+    poster: "https://static.wixstatic.com/media/d9ace9_f85efe1e9f9645f089db4e194acd05a0~mv2.jpg",
     posterVertikal: "https://static.wixstatic.com/media/d9ace9_a0668e8b11f5462b99dae6caa2a5d6d2~mv2.jpg",
     beskrivelse: "Heng med på et gøyalt mysterium sammen med Detektiv Muffins og Herr Marshmellows!",
     metadata: ["2026", "Alle", "Barn", "1 sesong"],
