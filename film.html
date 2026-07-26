@@ -1082,7 +1082,6 @@ img, video {
   const params = new URLSearchParams(window.location.search);
   const navn = params.get("navn");
 
-  // Hent data trygt fra globale skripts uten å krasje
   const filmerData = typeof window.filmer !== "undefined" ? window.filmer : (typeof filmer !== "undefined" ? filmer : {});
   const serierData = typeof window.serier !== "undefined" ? window.serier : (typeof serier !== "undefined" ? serier : {});
 
@@ -1094,18 +1093,16 @@ img, video {
     data = serierData[navn];
   }
 
-  // Avbryt om innholdet mangler fullstendig
   if (!data) {
     alert("Fant ikke filmen eller serien.");
     window.location.href = "Hovedside.html";
   }
 
-  // Sjekk tidsbegrensninger (utgått eller upublisert)
   const nå = new Date();
   const erUpublisert = data.publishDate && new Date(data.publishDate) > nå;
   const erUtgått = data.expireDate && nå > new Date(data.expireDate);
+  const erUtilgjengelig = erUpublisert || erUtgått;
 
-  // Globale elementreferanser (defineres etter DOM-load)
   let watchBtn, addToListBtn, bgImg;
 
   /* ==========================================
@@ -1121,7 +1118,6 @@ img, video {
     oppdaterBakgrunnsBilde();
     window.addEventListener("resize", oppdaterBakgrunnsBilde);
 
-    // Håndter logo eller tekst-tittel
     const fLogo = document.querySelector(".film-logo");
     const logoContainer = document.querySelector(".logo-container");
     if (fLogo) {
@@ -1138,7 +1134,6 @@ img, video {
       }
     }
 
-    // Beskrivelse og popup (Mer/Mindre)
     const descEl = document.querySelector(".description");
     if (descEl) {
       const fullText = data.beskrivelse || "";
@@ -1169,7 +1164,6 @@ img, video {
       }
     }
 
-    // Render metadata
     const metadataEl = document.querySelector(".metadata");
     if (metadataEl) {
       metadataEl.innerHTML = `
@@ -1179,7 +1173,6 @@ img, video {
       `;
     }
 
-    // Render medvirkende
     const castInfoEl = document.querySelector(".cast-info");
     if (castInfoEl) {
       const castLabel = type === "film" ? "Regissør" : "Skaper";
@@ -1194,17 +1187,11 @@ img, video {
       `;
     }
 
-    // Deaktiver knapper ved utgått/låst innhold (Flyttet trygt inn i init)
-    if (erUtgått || erUpublisert) {
-      [watchBtn, addToListBtn].forEach(btn => {
-        if (btn) {
-          btn.disabled = true;
-          btn.classList.add("locked");
-        }
-      });
+    // Tilpass avspillingsknapp ved utilgjengelig innhold
+    if (erUtilgjengelig && watchBtn) {
+      watchBtn.classList.add("locked");
     }
 
-    // Event Listeners for knapper
     if (watchBtn) {
       watchBtn.addEventListener("click", handterWatchClick);
     }
@@ -1212,12 +1199,13 @@ img, video {
       addToListBtn.addEventListener("click", handterListClick);
     }
 
-    // Håndter Trailer-video hvis den finnes
     initTrailer();
 
-    // Sjekk tilgjengelighetsinfo
     const availabilityEl = document.getElementById("availabilityInfo");
-    if (data.expireDate && availabilityEl) {
+    if (erUpublisert && availabilityEl) {
+      const pubDato = new Date(data.publishDate).toLocaleDateString("no-NO", { year: "numeric", month: "short", day: "numeric" });
+      availabilityEl.innerHTML = `<i class="far fa-clock"></i><span>Kommer den ${pubDato}</span>`;
+    } else if (data.expireDate && availabilityEl) {
       const expire = new Date(data.expireDate);
       const diff = expire - nå;
       if (diff > 365 * 24 * 60 * 60 * 1000) {
@@ -1228,12 +1216,10 @@ img, video {
       }
     }
 
-    // Profilbilde fra localStorage til menyen
     const lagretBilde = localStorage.getItem("profilbilde");
     const menyProfilbilde = document.getElementById("menyProfilbilde");
     if (lagretBilde && menyProfilbilde) menyProfilbilde.src = lagretBilde;
 
-    // Sjekk cache og synkroniser
     const cachedProfiles = localStorage.getItem("watch_nordic_profiles_cache");
     if (cachedProfiles) {
       try {
@@ -1272,8 +1258,13 @@ img, video {
 
     if (erUtgått) {
       icon.className = "fas fa-ban";
-      text.textContent = " Ikke tilgjengelig";
-      watchBtn.disabled = true;
+      text.textContent = " Utgått";
+      return;
+    }
+
+    if (erUpublisert) {
+      icon.className = "fas fa-lock";
+      text.textContent = " Kommer snart";
       return;
     }
 
@@ -1347,7 +1338,6 @@ img, video {
     }
   }
 
-  // Firebase Auth Lytter
   onAuthStateChanged(auth, async (user) => {
     if (user) {
       currentUser = user;
@@ -1372,7 +1362,15 @@ img, video {
      5. KLIKKHÅNDTERERE FOR KNAPPER
      ========================================== */
   async function handterWatchClick() {
-    if (erUpublisert || erUtgått) return;
+    if (erUpublisert) {
+      const pubDato = new Date(data.publishDate).toLocaleDateString("no-NO", { year: "numeric", month: "long", day: "numeric" });
+      alert(`"${data.tittel}" er ikke tilgjengelig enda.\nDen blir tilgjengelig fra ${pubDato}.`);
+      return;
+    }
+    if (erUtgått) {
+      alert(`"${data.tittel}" er dessverre ikke tilgjengelig lenger.`);
+      return;
+    }
 
     status = "påbegynt";
     oppdaterWatchKnapp(); 
@@ -1400,7 +1398,7 @@ img, video {
   }
 
   async function handterListClick() {
-    if (erUpublisert || !currentUser) return;
+    if (!currentUser) return;
     const key = `${type}:${navn}`;
     
     if (!minListe.includes(key)) {
@@ -1413,7 +1411,7 @@ img, video {
     await lagreProfilDataTilSkyen();
   }
 
- /* ==========================================
+  /* ==========================================
      6. GENERERING AV EPISODER & AVANSERTE ANBEFALINGER
      ========================================== */
   function visSesong(sesongNr) {
@@ -1462,6 +1460,11 @@ img, video {
           const returUrl = encodeURIComponent(window.location.href);
           window.location.href = `film-mal.html?navn=${encodeURIComponent(navn)}&sesong=${sesongNr}&episode=${epNr}&returUrl=${returUrl}`;
         });
+      } else {
+        epCard.addEventListener("click", () => {
+          const dato = new Date(ep.publishDate).toLocaleDateString("no-NO", { year: "numeric", month: "long", day: "numeric" });
+          alert(`Denne episoden er ikke tilgjengelig enda.\nDen publiseres ${dato}.`);
+        });
       }
       episodeGallery.appendChild(epCard);
     });
@@ -1472,7 +1475,6 @@ img, video {
     if (!recommendationsDiv) return;
 
     if (type === "serie" && data.sesonger) {
-      // Vis episodegalleri for serier
       if (document.getElementById("seasonButtons")) return;
 
       recommendationsDiv.innerHTML = `
@@ -1497,7 +1499,6 @@ img, video {
       if (sesongNumre.length > 0) visSesong(sesongNumre[0]);
 
     } else {
-      // Vis smarte anbefalinger for filmer basert på dine metadata-felt
       const gallery = document.getElementById("recommendationGallery");
       if (!gallery || gallery.children.length > 0) return;
 
@@ -1512,7 +1513,6 @@ img, video {
         return erIkkeGjeldende && erPublisert;
       });
 
-      // Beregn en "likhetsscore" tilpasset din datastruktur
       const anbefalingerMedScore = alleKandidatNøkler.map(nøkkel => {
         const kandidat = kilde[nøkkel];
         let score = 0;
@@ -1520,7 +1520,6 @@ img, video {
         const gjeldendeMeta = data.metadata || [];
         const kandidatMeta = kandidat.metadata || [];
 
-        // 1. FINN ALDERSGRENSE
         const finnAlder = (metaArray) => metaArray.find(m => m.toLowerCase().includes("år") || m.trim() === "A");
         const gjeldendeAlder = finnAlder(gjeldendeMeta);
         const kandidatAlder = finnAlder(kandidatMeta);
@@ -1529,7 +1528,6 @@ img, video {
           score += 3;
         }
 
-        // 2. FINN SJANGER
         const finnSjangere = (metaArray) => {
           return metaArray.filter(m => {
             const erAarstall = /^\d{4}$/.test(m.trim());
@@ -1548,12 +1546,10 @@ img, video {
           }
         });
 
-        // 3. REGISSØR-MATCH
         if (data.regissor && kandidat.regissor && data.regissor.toLowerCase() === kandidat.regissor.toLowerCase()) {
           score += 4;
         }
 
-        // 4. SKUESPILLER-MATCH
         if (data.skuespillere && kandidat.skuespillere) {
           const gjeldendeCast = data.skuespillere.split(",").map(s => s.trim().toLowerCase());
           const kandidatCast = kandidat.skuespillere.split(",").map(s => s.trim().toLowerCase());
@@ -1641,13 +1637,11 @@ img, video {
     }
   }
 
-  // Navigasjonsbar-effekt ved scrolling
   window.addEventListener("scroll", () => {
     const nav = document.querySelector(".top-nav");
     if (nav) window.scrollY > 50 ? nav.classList.add("scrolled") : nav.classList.remove("scrolled");
   });
 
-  // Start skriptet sikkert uavhengig av HTML-plassering
   if (document.readyState === "loading") {
     document.addEventListener("DOMContentLoaded", init);
   } else {
