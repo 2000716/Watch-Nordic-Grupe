@@ -63,11 +63,11 @@
       align-items: center;
     }
 
-    /* Utvidet padding slik at 3D pop-out figurer ikke kuttes */
+    /* Romslig padding på sidene, toppen og bunnen slik at ingenting blir kuttet */
     .karusell-viewport {
       width: 100%;
       overflow: hidden;
-      padding: 110px 10px 70px 10px;
+      padding: 110px 40px 70px 40px;
     }
 
     .karusell-spor {
@@ -150,7 +150,7 @@
       transform: translateY(-20px) scale(1.1);
     }
 
-    /* LOGO OPPSETT: Større og mer fremtredende */
+    /* LOGO OPPSETT */
     .film-logo-wrap {
       position: absolute;
       bottom: -18px;
@@ -242,7 +242,7 @@
       transform: translateY(0);
     }
 
-    /* Navigasjonspiler uten glød */
+    /* Navigasjonspiler uten glød - flyttet lenger ut */
     .nav-pil {
       position: absolute;
       top: 50%;
@@ -271,13 +271,14 @@
     }
 
     .nav-pil:disabled {
-      opacity: 0.2;
+      opacity: 0.15;
       cursor: not-allowed;
       pointer-events: none;
     }
 
-    .pil-venstre { left: -30px; }
-    .pil-hoyre { right: -30px; }
+    /* Flyttet lenger ut på sidene */
+    .pil-venstre { left: -60px; }
+    .pil-hoyre { right: -60px; }
 
     /* Lagre-knapp helt ren uten glød/skygge */
     .bunn-seksjon {
@@ -307,10 +308,16 @@
       box-shadow: none;
     }
 
+    @media (max-width: 1200px) {
+      .pil-venstre { left: -15px; }
+      .pil-hoyre { right: -15px; }
+    }
+
     @media (max-width: 850px) {
       .karusell-wrapper { max-width: 100%; }
-      .pil-venstre { left: 0px; }
-      .pil-hoyre { right: 0px; }
+      .karusell-viewport { padding-left: 20px; padding-right: 20px; }
+      .pil-venstre { left: -5px; }
+      .pil-hoyre { right: -5px; }
       .karusell-spor { gap: 30px; }
       .avatar-item { min-width: 170px; width: 170px; }
       .avatar-bilde-wrap { width: 170px; height: 170px; }
@@ -485,9 +492,13 @@ function byggKarusell() {
 }
 
 function hentMaksScroll() {
-  const viewportBredde = viewportEl.clientWidth;
+  const style = window.getComputedStyle(viewportEl);
+  const paddingLeft = parseFloat(style.paddingLeft) || 0;
+  const paddingRight = parseFloat(style.paddingRight) || 0;
+  
+  const synthViewportWidth = viewportEl.clientWidth - paddingLeft - paddingRight;
   const totalBredde = sporEl.scrollWidth;
-  const maks = -(totalBredde - viewportBredde);
+  const maks = -(totalBredde - synthViewportWidth);
   return maks > 0 ? 0 : maks;
 }
 
@@ -504,9 +515,13 @@ function fokuserePaaValgtProfil() {
     const kortBredde = kort.offsetWidth;
     const gap = 50; 
     const totalKortBredde = kortBredde + gap;
-    const viewportBredde = viewportEl.clientWidth;
+    
+    const style = window.getComputedStyle(viewportEl);
+    const paddingLeft = parseFloat(style.paddingLeft) || 0;
+    const paddingRight = parseFloat(style.paddingRight) || 0;
+    const synthViewportWidth = viewportEl.clientWidth - paddingLeft - paddingRight;
 
-    let nyPosisjon = -(valgtIndex * totalKortBredde) + (viewportBredde / 2) - (kortBredde / 2);
+    let nyPosisjon = -(valgtIndex * totalKortBredde) + (synthViewportWidth / 2) - (kortBredde / 2);
     const maksScroll = hentMaksScroll();
 
     if (nyPosisjon < maksScroll) nyPosisjon = maksScroll;
@@ -522,11 +537,9 @@ function flyttKarusell(retning) {
   const kort = sporEl.querySelector('.avatar-item');
   if (!kort) return;
 
-  // Flytt presist 1 kort om gangen (kortbredde + gap)
   const stegBredde = kort.offsetWidth + 50; 
   const maksScroll = hentMaksScroll();
 
-  // retning = -1 for venstre (bla mot høyre/forrige), 1 for høyre (bla mot venstre/neste)
   scrollPosisjon -= retning * stegBredde;
 
   if (scrollPosisjon < maksScroll) scrollPosisjon = maksScroll;
@@ -539,7 +552,6 @@ function flyttKarusell(retning) {
 function oppdaterPilSynlighet() {
   const maksScroll = hentMaksScroll();
   
-  // Tolererer små avrundingsavvik på 2px
   pilVenstre.disabled = scrollPosisjon >= -2;
   pilHoyre.disabled = scrollPosisjon <= (maksScroll + 2);
 }
