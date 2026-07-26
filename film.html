@@ -1094,7 +1094,6 @@ img, video {
   }
 
   if (!data) {
-    alert("Fant ikke filmen eller serien.");
     window.location.href = "Hovedside.html";
   }
 
@@ -1187,7 +1186,6 @@ img, video {
       `;
     }
 
-    // Tilpass avspillingsknapp ved utilgjengelig innhold
     if (erUtilgjengelig && watchBtn) {
       watchBtn.classList.add("locked");
     }
@@ -1362,15 +1360,8 @@ img, video {
      5. KLIKKHÅNDTERERE FOR KNAPPER
      ========================================== */
   async function handterWatchClick() {
-    if (erUpublisert) {
-      const pubDato = new Date(data.publishDate).toLocaleDateString("no-NO", { year: "numeric", month: "long", day: "numeric" });
-      alert(`"${data.tittel}" er ikke tilgjengelig enda.\nDen blir tilgjengelig fra ${pubDato}.`);
-      return;
-    }
-    if (erUtgått) {
-      alert(`"${data.tittel}" er dessverre ikke tilgjengelig lenger.`);
-      return;
-    }
+    // Avbryt avspilling hvis innholdet ikke er tilgjengelig, uten å vise feilmelding
+    if (erUpublisert || erUtgått) return;
 
     status = "påbegynt";
     oppdaterWatchKnapp(); 
@@ -1459,11 +1450,6 @@ img, video {
           localStorage.setItem(`${navn}-siste-episode`, JSON.stringify({ sesong: sesongNr, episode: epNr }));
           const returUrl = encodeURIComponent(window.location.href);
           window.location.href = `film-mal.html?navn=${encodeURIComponent(navn)}&sesong=${sesongNr}&episode=${epNr}&returUrl=${returUrl}`;
-        });
-      } else {
-        epCard.addEventListener("click", () => {
-          const dato = new Date(ep.publishDate).toLocaleDateString("no-NO", { year: "numeric", month: "long", day: "numeric" });
-          alert(`Denne episoden er ikke tilgjengelig enda.\nDen publiseres ${dato}.`);
         });
       }
       episodeGallery.appendChild(epCard);
