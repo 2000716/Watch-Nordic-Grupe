@@ -87,7 +87,7 @@
       flex-shrink: 0;
     }
 
-    /* 3D POP-OUT STRUKTUR */
+    /* 3D POP-OUT CONTAINER FOR PNG KARAKTERER */
     .avatar-bilde-wrap {
       width: 210px;
       height: 210px;
@@ -97,7 +97,7 @@
       justify-content: center;
     }
 
-    /* Mørkegrå sirkelbakgrunn */
+    /* Sirkelbakgrunn bak PNG-figuren */
     .avatar-bg {
       position: absolute;
       inset: 0;
@@ -106,7 +106,21 @@
       border: 3px solid rgba(255, 255, 255, 0.15);
       transition: all 0.35s cubic-bezier(0.25, 1, 0.5, 1);
       z-index: 1;
-      overflow: hidden; /* Holder bunnen av bildet inne i sirkelen */
+    }
+
+    /* PNG KARAKTER - Sentrert, stikker over sirkelkanten på toppen */
+    .avatar-bilde {
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 90%;
+      height: 125%; /* Høyere enn sirkelen slik at hode popper opp */
+      object-fit: contain;
+      object-position: bottom center;
+      z-index: 3;
+      pointer-events: none;
+      transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
     }
 
     /* Sjekkmerke-ikon ved valgt avatar */
@@ -127,32 +141,6 @@
       opacity: 0;
       transform: scale(0.5);
       transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-    }
-
-    /* Standard bilde (JPG) - Ligger inni sirkelen */
-    .avatar-bilde {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      border-radius: 50%;
-      z-index: 2;
-      transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
-    }
-
-    /* PNG POP-OUT EFFEKT - Plassert over sirkelen */
-    .avatar-bilde.png-karakter {
-      position: absolute;
-      bottom: 0;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 90%;
-      height: 125%; /* Gjør figuren høyere slik at hode stikker over kanten */
-      object-fit: contain;
-      object-position: bottom center;
-      border-radius: 0;
-      z-index: 3;
-      pointer-events: none;
-      transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
     }
 
     /* LOGO OPPSETT */
@@ -192,18 +180,15 @@
       text-align: center;
     }
 
-    /* HOVER TILSTAND */
+    /* --- HOVER TILSTAND --- */
     .avatar-item:hover .avatar-bg {
       background-color: var(--active-color, var(--accent));
       border-color: #ffffff;
+      box-shadow: 0 0 25px var(--active-color, var(--accent));
     }
 
-    .avatar-item:hover .avatar-bilde.png-karakter {
-      transform: translateX(-50%) scale(1.1);
-    }
-
-    .avatar-item:hover .avatar-bilde:not(.png-karakter) {
-      transform: scale(1.08);
+    .avatar-item:hover .avatar-bilde {
+      transform: translateX(-50%) scale(1.15); /* Karakteren popper ekstra ut */
     }
 
     .avatar-item:hover .film-logo {
@@ -217,18 +202,15 @@
       transform: translateY(0);
     }
 
-    /* FREMHEVET / VALGT TILSTAND */
+    /* --- FREMHEVET / VALGT TILSTAND --- */
     .avatar-item.selected .avatar-bg {
       background-color: var(--active-color, var(--accent));
       border-color: #ffffff;
+      box-shadow: 0 0 20px var(--active-color, var(--accent));
     }
 
-    .avatar-item.selected .avatar-bilde.png-karakter {
-      transform: translateX(-50%) scale(1.08);
-    }
-
-    .avatar-item.selected .avatar-bilde:not(.png-karakter) {
-      transform: scale(1.06);
+    .avatar-item.selected .avatar-bilde {
+      transform: translateX(-50%) scale(1.1);
     }
 
     .avatar-item.selected .film-logo {
@@ -303,13 +285,11 @@
       align-items: center;
       gap: 12px;
       transition: all 0.25s ease;
-      box-shadow: none;
     }
 
     .lagre-knapp:hover {
       background-color: #33ffd6;
       transform: translateY(-2px);
-      box-shadow: none;
     }
 
     @media (max-width: 1200px) {
@@ -366,39 +346,17 @@ import { doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/12.15.0/
 const urlParams = new URLSearchParams(window.location.search);
 const aktivProfilIndex = parseInt(urlParams.get('index')) || 0;
 
+// Rent oppsett tilpasset PNG-karakterer
 const alleProfiler = [
-  { 
-    url: 'https://static.wixstatic.com/media/d9ace9_f30eec65f0434128974f59e1bba6d30d~mv2.jpg', 
-    navn: "Tiger", 
-    erPng: false, 
-    farge: '#f4a261',
-    logoUrl: 'https://static.wixstatic.com/media/d9ace9_95bbe3f5ff4b4aab9314a8d08804344e~mv2.png'
-  },
-  { 
-    url: 'https://static.wixstatic.com/media/d9ace9_ca94b393665e49c98c8432e69a33e49f~mv2.jpg', 
-    navn: "Robot", 
-    erPng: false, 
-    farge: '#00b4d8',
-    logoUrl: 'https://static.wixstatic.com/media/d9ace9_95bbe3f5ff4b4aab9314a8d08804344e~mv2.png'
-  },
-  { 
-    url: 'https://static.wixstatic.com/media/d9ace9_675337e8909c4b44aa606f634ad6a2ed~mv2.jpg', 
-    navn: "Alien", 
-    erPng: false, 
-    farge: '#7209b7',
-    logoUrl: 'https://static.wixstatic.com/media/d9ace9_95bbe3f5ff4b4aab9314a8d08804344e~mv2.png'
-  },
   { 
     url: 'https://static.wixstatic.com/media/d9ace9_8d9b602d060d4b63a5d986882ebd59f3~mv2.png', 
     navn: "Detektiv Muffins", 
-    erPng: true, 
     farge: '#e9c46a',
     logoUrl: 'https://static.wixstatic.com/media/d9ace9_2eec6795b49942f798d3f0c616917900~mv2.png'
   },
   { 
     url: 'https://static.wixstatic.com/media/d9ace9_8338459b9b79457a9317e53b294195d2~mv2.png', 
     navn: "Herr Marshmellows", 
-    erPng: true, 
     farge: '#46cee3',
     logoUrl: 'https://static.wixstatic.com/media/d9ace9_2eec6795b49942f798d3f0c616917900~mv2.png'
   }
@@ -415,7 +373,6 @@ let valgtBilde = null;
 let profiler = [];
 let docRef = null;
 
-// Les inn cache med en gang for raskere innlasting
 const cachedProfiles = localStorage.getItem("watch_nordic_profiles_cache");
 if (cachedProfiles) {
   try {
@@ -428,7 +385,6 @@ if (cachedProfiles) {
   }
 }
 
-// Event-lyttere
 pilVenstre.addEventListener('click', () => flyttKarusell(-1));
 pilHoyre.addEventListener('click', () => flyttKarusell(1));
 lagreKnapp.addEventListener('click', tilbakeTilKonto);
@@ -460,18 +416,11 @@ function byggKarusell() {
     const img = document.createElement('img');
     img.src = item.url;
     img.alt = item.navn;
-    img.className = `avatar-bilde ${item.erPng ? 'png-karakter' : ''}`;
+    img.className = 'avatar-bilde';
 
-    if (item.erPng) {
-      // For PNG legger vi bakgrunnen først, og bildet over
-      wrap.appendChild(bg);
-      wrap.appendChild(img);
-    } else {
-      // For JPG legger vi bildet inni bakgrunnskonteksten
-      bg.appendChild(img);
-      wrap.appendChild(bg);
-    }
-
+    // Riktig rekkefølge: Bakgrunn -> PNG-karakter oppå -> Valgt-merke
+    wrap.appendChild(bg);
+    wrap.appendChild(img);
     wrap.appendChild(badge);
 
     if (item.logoUrl) {
