@@ -123,7 +123,7 @@ const serier = {
     bakgrunnMobil: "https://static.wixstatic.com/media/d9ace9_4148dac16a81424e9a08e544106c05e4~mv2.jpg",
     banner: "https://static.wixstatic.com/media/d9ace9_47861acfb17a4538904b582b2eb973ec~mv2.png", 
     bannerMobil: "https://static.wixstatic.com/media/d9ace9_4148dac16a81424e9a08e544106c05e4~mv2.jpg",
-    logo: "https://static.wixstatic.com/media/d9ace9_25116ad98fa044ca948df574d6a4e520~mv2.png",
+    logo: "https://static.wixstatic.com/media/d9ace9_9f7a6b0a079542e49c288ddeb81f16ce~mv2.png",
     poster: "https://static.wixstatic.com/media/d9ace9_f85efe1e9f9645f089db4e194acd05a0~mv2.jpg",
     posterVertikal: "https://static.wixstatic.com/media/d9ace9_a0668e8b11f5462b99dae6caa2a5d6d2~mv2.jpg",
     beskrivelse: "Heng med på et gøyalt mysterium sammen med Detektiv Muffins og Herr Marshmellows!",
