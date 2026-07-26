@@ -93,6 +93,77 @@
       flex: 1;
     }
 
+    /* PROFIL HØYRESTILT MED ENNDA STØRRE BILDESIRKEL */
+    .profile-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 30px 35px;
+      margin-bottom: 30px;
+    }
+
+    .profile-info h1 {
+      font-size: 28px;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+
+    .profile-info p {
+      color: var(--muted);
+      font-size: 15px;
+    }
+
+    /* Enda større avatar (økt fra 110px til 160px) */
+    .avatar-wrapper {
+      position: relative;
+      width: 160px;
+      height: 160px;
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+
+    .avatar-img {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 3px solid var(--border);
+      transition: border-color 0.2s, transform 0.2s;
+    }
+
+    .avatar-wrapper:hover .avatar-img {
+      border-color: rgba(255, 255, 255, 0.5);
+      transform: scale(1.02);
+    }
+
+    /* Blyantboblen (skalert opp til 42px) */
+    .edit-badge {
+      position: absolute;
+      bottom: 4px;
+      right: 4px;
+      background: rgba(9, 27, 30, 0.95);
+      border: 1px solid var(--border);
+      color: var(--text);
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.6);
+      transition: background 0.2s, transform 0.2s, color 0.2s;
+    }
+
+    .avatar-wrapper:hover .edit-badge {
+      background: var(--text);
+      color: #091B1E;
+      transform: scale(1.1);
+    }
+
     /* SEKSJONER */
     .content h2 {
       margin: 24px 0 14px;
@@ -232,6 +303,17 @@
       header { padding: 12px 20px; }
       .logo-image { height: 26px; }
       header button span { display: none; }
+
+      .profile-header {
+        flex-direction: column-reverse;
+        text-align: center;
+        gap: 20px;
+      }
+
+      .avatar-wrapper {
+        width: 130px;
+        height: 130px;
+      }
       
       .row { 
         flex-direction: column; 
@@ -258,6 +340,20 @@
   </header>
 
   <div class="container">
+    
+    <!-- TOPPKORT MED MEGET STØRRE BILDESIRKEL OG BLYANTBOBLE -->
+    <div class="profile-header">
+      <div class="profile-info">
+        <h1 id="navnDisplay">Laster...</h1>
+        <p>Aktiv profil</p>
+      </div>
+
+      <div class="avatar-wrapper" id="avatarContainer" title="Klikk for å endre profilbilde">
+        <img id="profilbilde" class="avatar-img" src="" alt="Profilbilde">
+        <div class="edit-badge"><i class="fa-solid fa-pencil"></i></div>
+      </div>
+    </div>
+
     <section class="content">
       <h2><i class="fa-solid fa-user"></i> Kontoinformasjon</h2>
       <div class="card">
@@ -309,6 +405,7 @@
     const urlParams = new URLSearchParams(window.location.search);
     let aktivProfilIndex = parseInt(urlParams.get('index')) || 0;
 
+    const navnDisplay = document.getElementById("navnDisplay");
     const navnView = document.getElementById("navnView");
     const epostView = document.getElementById("epostView");
 
@@ -341,6 +438,12 @@
         window.location.href = "index.html";
       }
     });
+
+    const gaaTilVelgBilde = () => {
+      window.location.href = `VelgProfilbilde.html?index=${aktivProfilIndex}`;
+    };
+
+    document.getElementById("avatarContainer").addEventListener("click", gaaTilVelgBilde);
 
     document.getElementById("navHovedsideBtn").addEventListener("click", () => {
       window.location.href = `hvem-ser-på.html?index=${aktivProfilIndex}`;
@@ -392,8 +495,10 @@
       const gjeldendeProfil = profiler[aktivProfilIndex];
       if (!gjeldendeProfil) return;
 
+      navnDisplay.innerText = gjeldendeProfil.navn;
       navnView.innerText = gjeldendeProfil.navn;
       epostView.innerText = globalEpost;
+      document.getElementById("profilbilde").src = gjeldendeProfil.bilde;
 
       if (gjeldendeProfil.isKids) {
         endreNavnKnapp.classList.add("hidden");
