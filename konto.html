@@ -133,22 +133,8 @@
       font-size: 11px;
       text-transform: uppercase;
       letter-spacing: 0.8px;
-      margin-bottom: 6px;
+      margin-bottom: 4px;
       font-weight: 600;
-    }
-
-    .profile-display-wrapper {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-
-    .profile-avatar-inline {
-      width: 40px;
-      height: 40px;
-      border-radius: 8px;
-      object-fit: cover;
-      border: 1px solid rgba(255, 255, 255, 0.2);
     }
 
     .value { font-size: 15px; font-weight: 500; }
@@ -173,7 +159,7 @@
 
     .hidden { display: none !important; }
 
-    /* INLINE ENDRING AV NAVN OG PASSORD */
+    /* INLINE ENDRING AV NAVN */
     .edit-box {
       display: flex;
       gap: 10px;
@@ -275,14 +261,10 @@
     <section class="content">
       <h2><i class="fa-solid fa-user"></i> Kontoinformasjon</h2>
       <div class="card">
-        <!-- PROFILNAVN & BILDE -->
         <div class="row">
           <div class="info-block">
             <div class="label">Profilnavn</div>
-            <div class="profile-display-wrapper">
-              <img id="profilAvatarView" class="profile-avatar-inline" src="https://static.wixstatic.com/media/fd2fb2_39376e4ee55b460ab7a3ebbfcf35fef7~mv2.png" alt="Profilbilde">
-              <div class="value" id="navnView">Laster...</div>
-            </div>
+            <div class="value" id="navnView">Laster...</div>
             <div id="editNavnBox" class="edit-box hidden">
               <input type="text" id="nyttNavnInput" placeholder="Nytt navn">
               <button class="btn-save" id="lagreNavnBtn">Lagre</button>
@@ -291,22 +273,7 @@
           </div>
           <button class="edit-trigger" id="endreNavnKnapp">Endre</button>
         </div>
-
-        <!-- PROFIL-PIN / PASSORD -->
-        <div class="row">
-          <div class="info-block">
-            <div class="label">Profil-PIN (Passord)</div>
-            <div class="value" id="pinView">Ingen PIN satt</div>
-            <div id="editPinBox" class="edit-box hidden">
-              <input type="password" id="nyPinInput" maxlength="4" pattern="[0-9]*" inputmode="numeric" placeholder="4 siffer (la stå tom for å fjerne)">
-              <button class="btn-save" id="lagrePinBtn">Lagre</button>
-              <button class="btn-cancel" id="avbrytPinBtn">Avbryt</button>
-            </div>
-          </div>
-          <button class="edit-trigger" id="endrePinKnapp">Endre PIN</button>
-        </div>
         
-        <!-- E-POST -->
         <div class="row">
           <div class="info-block">
             <div class="label">E-postadresse (Konto)</div>
@@ -343,8 +310,6 @@
     let aktivProfilIndex = parseInt(urlParams.get('index')) || 0;
 
     const navnView = document.getElementById("navnView");
-    const profilAvatarView = document.getElementById("profilAvatarView");
-    const pinView = document.getElementById("pinView");
     const epostView = document.getElementById("epostView");
 
     // Navn-endring elementer
@@ -354,18 +319,9 @@
     const lagreNavnBtn = document.getElementById("lagreNavnBtn");
     const avbrytNavnBtn = document.getElementById("avbrytNavnBtn");
 
-    // PIN-endring elementer
-    const endrePinKnapp = document.getElementById("endrePinKnapp");
-    const editPinBox = document.getElementById("editPinBox");
-    const nyPinInput = document.getElementById("nyPinInput");
-    const lagrePinBtn = document.getElementById("lagrePinBtn");
-    const avbrytPinBtn = document.getElementById("avbrytPinBtn");
-
     let profiler = [];
     let globalEpost = ""; 
     let docRef = null;
-
-    const standardBilde = "https://static.wixstatic.com/media/fd2fb2_39376e4ee55b460ab7a3ebbfcf35fef7~mv2.png";
 
     // Lokal-caching
     const cachedProfiles = localStorage.getItem("watch_nordic_profiles_cache");
@@ -419,38 +375,6 @@
       endreNavnKnapp.classList.remove("hidden");
     });
 
-    // Endre PIN Logikk
-    endrePinKnapp.addEventListener("click", () => {
-      nyPinInput.value = profiler[aktivProfilIndex].pin || "";
-      editPinBox.classList.remove("hidden");
-      endrePinKnapp.classList.add("hidden");
-    });
-
-    avbrytPinBtn.addEventListener("click", () => {
-      editPinBox.classList.add("hidden");
-      endrePinKnapp.classList.remove("hidden");
-    });
-
-    lagrePinBtn.addEventListener("click", async () => {
-      const nyPin = nyPinInput.value.trim();
-
-      if (nyPin === "") {
-        delete profiler[aktivProfilIndex].pin;
-      } else {
-        if (!/^\d{4}$/.test(nyPin)) {
-          alert("PIN-koden må bestå av nøyaktig 4 siffer (tall).");
-          return;
-        }
-        profiler[aktivProfilIndex].pin = nyPin;
-      }
-
-      await oppdaterProfilData();
-      byggProfilgrensesnitt();
-
-      editPinBox.classList.add("hidden");
-      endrePinKnapp.classList.remove("hidden");
-    });
-
     async function hentKontodata() {
       try {
         const docSnap = await getDoc(docRef);
@@ -470,16 +394,6 @@
 
       navnView.innerText = gjeldendeProfil.navn;
       epostView.innerText = globalEpost;
-
-      // Profilbilde
-      profilAvatarView.src = gjeldendeProfil.bilde || standardBilde;
-
-      // PIN Status
-      if (gjeldendeProfil.pin) {
-        pinView.innerText = "•••• (PIN er aktivert)";
-      } else {
-        pinView.innerText = "Ingen PIN satt";
-      }
 
       if (gjeldendeProfil.isKids) {
         endreNavnKnapp.classList.add("hidden");
