@@ -142,14 +142,12 @@
       transform-origin: bottom center;
     }
 
-    /* Spesifikt for PNG 3D Pop-Out Karakterer */
     .avatar-bilde.png-karakter {
       object-fit: contain;
       border-radius: 0;
       height: 155%; 
       bottom: 0;
-      left: 50%;
-      transform: translateX(-50%) translateY(-20px) scale(1.1);
+      transform: translateY(-20px) scale(1.1);
     }
 
     /* LOGO OPPSETT */
@@ -196,7 +194,7 @@
     }
 
     .avatar-item:hover .avatar-bilde.png-karakter {
-      transform: translateX(-50%) translateY(-45px) scale(1.25);
+      transform: translateY(-45px) scale(1.25);
     }
 
     .avatar-item:hover .avatar-bilde:not(.png-karakter) {
@@ -221,7 +219,7 @@
     }
 
     .avatar-item.selected .avatar-bilde.png-karakter {
-      transform: translateX(-50%) translateY(-40px) scale(1.22);
+      transform: translateY(-40px) scale(1.22);
     }
 
     .avatar-item.selected .avatar-bilde:not(.png-karakter) {
@@ -364,7 +362,6 @@ import { doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/12.15.0/
 const urlParams = new URLSearchParams(window.location.search);
 const aktivProfilIndex = parseInt(urlParams.get('index')) || 0;
 
-// `erPng: true` er aktivert på PNG-karakterene slik at 3D-pop-out-klassen trigges
 const alleProfiler = [
   { 
     url: 'https://static.wixstatic.com/media/d9ace9_f30eec65f0434128974f59e1bba6d30d~mv2.jpg', 
@@ -390,14 +387,14 @@ const alleProfiler = [
   { 
     url: 'https://static.wixstatic.com/media/d9ace9_8d9b602d060d4b63a5d986882ebd59f3~mv2.png', 
     navn: "Detektiv Muffins", 
-    erPng: true, 
+    erPng: false, 
     farge: '#e9c46a',
     logoUrl: 'https://static.wixstatic.com/media/d9ace9_2eec6795b49942f798d3f0c616917900~mv2.png'
   },
   { 
     url: 'https://static.wixstatic.com/media/d9ace9_8338459b9b79457a9317e53b294195d2~mv2.png', 
     navn: "Herr Marshmellows", 
-    erPng: true, 
+    erPng: false, 
     farge: '#46cee3',
     logoUrl: 'https://static.wixstatic.com/media/d9ace9_2eec6795b49942f798d3f0c616917900~mv2.png'
   }
