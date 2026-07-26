@@ -15,6 +15,7 @@
       --card-bg: rgba(255, 255, 255, 0.04);
       --border: rgba(255, 255, 255, 0.08);
       --kids-accent: #33b5ff;
+      --danger: #ff4d4d;
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -48,14 +49,29 @@
       align-items: center;
     }
 
-/* Styling for logo-bildet */
     .logo-image {
-      height: 35px; /* Juster høyden etter ønske */
-      width: auto;  /* Beholder bildeforholdet */
+      height: 35px;
+      width: auto;
       display: block;
     }
 
-    header .nav-btns { display: flex; gap: 10px; }
+    header .nav-btns { display: flex; gap: 10px; align-items: center; }
+
+    .lang-select {
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.2);
+      color: white;
+      padding: 8px 12px;
+      border-radius: 999px;
+      font-size: 14px;
+      cursor: pointer;
+      outline: none;
+    }
+
+    .lang-select option {
+      background: #091B1E;
+      color: white;
+    }
 
     header button {
       background: rgba(255,255,255,0.05);
@@ -79,11 +95,11 @@
 
     header button.logout-btn {
       border-color: rgba(255, 77, 77, 0.4);
-      color: #ff4d4d;
+      color: var(--danger);
     }
     header button.logout-btn:hover {
       background: rgba(255, 77, 77, 0.15);
-      border-color: #ff4d4d;
+      border-color: var(--danger);
     }
 
     .container {
@@ -155,12 +171,12 @@
 
     .profile-actions button.delete-btn {
       border-color: rgba(255, 77, 77, 0.2);
-      color: #ff4d4d;
+      color: var(--danger);
       margin-top: 15px;
     }
     .profile-actions button.delete-btn:hover {
       background: rgba(255, 77, 77, 0.15);
-      border-color: #ff4d4d;
+      border-color: var(--danger);
     }
 
     .content h2 {
@@ -208,7 +224,7 @@
 
     .value { font-size: 16px; font-weight: 500; word-break: break-all; }
 
-    .row button.edit-trigger {
+    .row button.edit-trigger, .btn-action {
       background: none;
       border: 1px solid rgba(255,255,255,0.15);
       color: white;
@@ -221,7 +237,7 @@
       white-space: nowrap;
     }
 
-    .row button.edit-trigger:hover {
+    .row button.edit-trigger:hover, .btn-action:hover {
       background: rgba(255,255,255,0.08);
       border-color: white;
     }
@@ -250,8 +266,38 @@
 
     .edit-field select option { background: #091B1E; color: white; }
 
-    .parent-lock-screen { text-align: center; padding: 30px 0; }
-    
+    /* Innebygd PIN / Låseskjerm */
+    .parent-lock-screen {
+      padding: 30px 20px;
+      text-align: center;
+      max-width: 400px;
+      margin: 0 auto;
+    }
+
+    .pin-input-group {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin: 20px 0;
+    }
+
+    .pin-input-group input {
+      width: 48px;
+      height: 56px;
+      text-align: center;
+      font-size: 24px;
+      font-weight: 700;
+      background: rgba(9, 27, 30, 0.9);
+      border: 1px solid rgba(255,255,255,0.2);
+      border-radius: 12px;
+      color: white;
+    }
+
+    .pin-input-group input:focus {
+      border-color: var(--kids-accent);
+      outline: none;
+    }
+
     .btn-parent-unlock {
       background: var(--kids-accent);
       color: #071214;
@@ -265,8 +311,31 @@
       align-items: center;
       gap: 8px;
       font-size: 15px;
+      width: 100%;
+      justify-content: center;
     }
     .btn-parent-unlock:hover { background: #2299dd; transform: translateY(-1px); }
+
+    .error-msg {
+      color: var(--danger);
+      font-size: 13px;
+      margin-top: 10px;
+    }
+
+    .success-msg {
+      color: var(--accent);
+      font-size: 13px;
+      margin-top: 10px;
+    }
+
+    .pin-actions-link {
+      margin-top: 15px;
+      display: block;
+      color: var(--muted);
+      font-size: 13px;
+      text-decoration: underline;
+      cursor: pointer;
+    }
 
     footer {
       border-top: 1px solid var(--border);
@@ -277,15 +346,11 @@
       text-align: center;
     }
 
-    /* RESPONSIVITET / MOBIL-OPPSETT */
     @media (max-width: 960px) {
       header { padding: 15px 20px; }
-      
-      /* Litt mindre logo på mobil */
       .logo-image { height: 28px; }
-
       header button { padding: 8px 12px; font-size: 13px; }
-      header button span { display: none; } /* Skjuler tekst på mini-mobiler, men ikon blir stående */
+      header button span { display: none; }
       
       .container { 
         grid-template-columns: 1fr; 
@@ -320,8 +385,14 @@
       <img src="https://static.wixstatic.com/media/d9ace9_081ea242211b45a2801873c3067e1205~mv2.png" alt="Watch Nordic Logo" class="logo-image">
     </div>
     <div class="nav-btns">
-      <button id="navHovedsideBtn"><i class="fa-solid fa-house"></i> <span>Hovedside</span></button>
-      <button class="logout-btn" id="navLoggUtBtn"><i class="fa-solid fa-right-from-bracket"></i> <span>Logg Ut</span></button>
+      <!-- Språkvelger -->
+      <select id="langSelect" class="lang-select">
+        <option value="no">🇳🇴 Norsk</option>
+        <option value="en">🇬🇧 English</option>
+      </select>
+
+      <button id="navHovedsideBtn"><i class="fa-solid fa-house"></i> <span data-i18n="home">Hovedside</span></button>
+      <button class="logout-btn" id="navLoggUtBtn"><i class="fa-solid fa-right-from-bracket"></i> <span data-i18n="logout">Logg Ut</span></button>
     </div>
   </header>
 
@@ -332,84 +403,249 @@
       </div>
       <div class="profile-name" id="navnDisplay">Laster...</div>
       <div class="profile-actions" id="sidebarActions">
-        <button id="endreBildeSideBtn"><i class="fa-solid fa-user-gear"></i> Endre bilde</button>
-        <button class="delete-btn" id="sletteKnapp"><i class="fa-solid fa-trash-can"></i> Slett profil permanent</button>
+        <button id="endreBildeSideBtn"><i class="fa-solid fa-user-gear"></i> <span data-i18n="changePic">Endre bilde</span></button>
+        <button class="delete-btn" id="sletteKnapp"><i class="fa-solid fa-trash-can"></i> <span data-i18n="deleteProfile">Slett profil permanent</span></button>
       </div>
     </aside>
 
     <section class="content">
-      <h2><i class="fa-solid fa-user"></i> Kontoinformasjon</h2>
+      <h2><i class="fa-solid fa-user"></i> <span data-i18n="accountInfo">Kontoinformasjon</span></h2>
       <div class="card">
+        <!-- Profilnavn -->
         <div class="row" id="navnRow">
           <div class="info-block">
-            <div class="label">Profilnavn</div>
+            <div class="label" data-i18n="profileName">Profilnavn</div>
             <div class="value" id="navnView">Laster...</div>
+            
+            <div id="editNavnForm" class="edit-field hidden">
+              <input type="text" id="navnInput" />
+              <div style="display: flex; gap: 10px; margin-top: 10px;">
+                <button class="btn-action" id="lagreNavnBtn" data-i18n="save">Lagre</button>
+                <button class="btn-action" id="avbrytNavnBtn" data-i18n="cancel">Avbryt</button>
+              </div>
+            </div>
           </div>
-          <button class="edit-trigger" id="endreNavnKnapp">Endre</button>
+          <button class="edit-trigger" id="endreNavnKnapp" data-i18n="edit">Endre</button>
         </div>
+
+        <!-- Alder -->
+        <div class="row" id="alderRow">
+          <div class="info-block">
+            <div class="label" data-i18n="age">Alder</div>
+            <div class="value" id="alderView">Laster...</div>
+
+            <div id="editAlderForm" class="edit-field hidden">
+              <input type="number" id="alderInput" min="0" max="120" />
+              <div style="display: flex; gap: 10px; margin-top: 10px;">
+                <button class="btn-action" id="lagreAlderBtn" data-i18n="save">Lagre</button>
+                <button class="btn-action" id="avbrytAlderBtn" data-i18n="cancel">Avbryt</button>
+              </div>
+            </div>
+          </div>
+          <button class="edit-trigger" id="endreAlderKnapp" data-i18n="edit">Endre</button>
+        </div>
+
+        <!-- E-post -->
         <div class="row" id="epostRow">
           <div class="info-block">
-            <div class="label">E-postadresse (Konto)</div>
+            <div class="label" data-i18n="email">E-postadresse (Konto)</div>
             <div class="value" id="epostView">Laster...</div>
           </div>
         </div>
       </div>
 
+      <!-- Foreldrekontroll -->
       <div id="foreldreKontrollSeksjon" class="hidden">
-        <h2><i class="fa-solid fa-shield-halved" style="color: var(--kids-accent);"></i> Foreldrekontroll</h2>
+        <h2><i class="fa-solid fa-shield-halved" style="color: var(--kids-accent);"></i> <span data-i18n="parentalControl">Foreldrekontroll</span></h2>
         <div class="card">
+          
+          <!-- LÅSESKJERM PIN -->
           <div id="parentLockPanel" class="parent-lock-screen">
-            <p style="margin-bottom: 20px; color: var(--muted);">Tjenestebegrensninger er låst. Foreldre kan låse opp med PIN.</p>
-            <button class="btn-parent-unlock" id="laasOppForeldreKontrollBtn"><i class="fa-solid fa-lock"></i> Lås opp foreldrekontroll</button>
+            <p style="margin-bottom: 15px; color: var(--muted);" data-i18n="pinPrompt">Tjenestebegrensninger er låst. Tast inn 4-sifret PIN:</p>
+            
+            <div class="pin-input-group" id="pinInputs">
+              <input type="password" maxlength="1" class="pin-digit" />
+              <input type="password" maxlength="1" class="pin-digit" />
+              <input type="password" maxlength="1" class="pin-digit" />
+              <input type="password" maxlength="1" class="pin-digit" />
+            </div>
+
+            <button class="btn-parent-unlock" id="laasOppForeldreKontrollBtn"><i class="fa-solid fa-lock-open"></i> <span data-i18n="unlock">Lås opp</span></button>
+            <div id="pinError" class="error-msg hidden" data-i18n="invalidPin">Feil PIN-kode! Vennligst prøv igjen.</div>
+
+            <span class="pin-actions-link" id="glemtPinBtn" data-i18n="forgotPin">Glemt eller resette PIN?</span>
           </div>
 
+          <!-- APENT INNSTILLINGSPANEL -->
           <div id="parentSettingsPanel" class="hidden" style="padding: 15px 0;">
             <div class="edit-field">
-              <label class="label">Velg profil du vil begrense:</label>
+              <label class="label" data-i18n="selectProfile">Velg profil du vil begrense:</label>
               <select id="profileSelect"></select>
             </div>
             
             <div class="edit-field">
-              <label class="label">Maks tillatt aldersgrense:</label>
+              <label class="label" data-i18n="maxAge">Maks tillatt aldersgrense:</label>
               <select id="ageRestrictionSelect">
-                <option value="A">Tillat kun innhold for alle (A)</option>
-                <option value="6">Maks 6 år</option>
-                <option value="9">Maks 9 år</option>
-                <option value="12">Maks 12 år</option>
-                <option value="18">Ingen restriksjoner (Voksen)</option>
+                <option value="A" data-i18n="allowAll">Tillat kun innhold for alle (A)</option>
+                <option value="6" data-i18n="max6">Maks 6 år</option>
+                <option value="9" data-i18n="max9">Maks 9 år</option>
+                <option value="12" data-i18n="max12">Maks 12 år</option>
+                <option value="18" data-i18n="noRestriction">Ingen restriksjoner (Voksen)</option>
               </select>
             </div>
+
+            <hr style="border: 0; border-top: 1px solid var(--border); margin: 25px 0;" />
+
+            <!-- ENDRE PIN SEKSJON -->
+            <h3 style="font-size: 16px; margin-bottom: 15px;" data-i18n="changePinTitle">Endre Foreldre-PIN</h3>
+            <div class="edit-field">
+              <label class="label" data-i18n="newPin">Ny 4-sifret PIN:</label>
+              <input type="password" id="nyPinInput" maxlength="4" placeholder="****" style="letter-spacing: 4px; font-size: 18px;" />
+              <button class="btn-action" id="lagreNyPinBtn" style="margin-top: 10px;" data-i18n="updatePin">Oppdater PIN</button>
+              <div id="pinChangeSuccess" class="success-msg hidden" data-i18n="pinUpdated">PIN-koden ble oppdatert!</div>
+            </div>
           </div>
+
         </div>
       </div>
     </section>
   </div>
 
-  <footer>© 2026 Watch Nordic Group AS. Alle rettigheter forbeholdt.</footer>
+  <footer>© 2026 Watch Nordic Group AS. <span data-i18n="rights">Alle rettigheter forbeholdt.</span></footer>
 
   <script type="module">
     import { auth, db } from "./firebase-oppsett.js";
-    import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-auth.js";
+    import { onAuthStateChanged, signOut, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-auth.js";
     import { doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
+
+    // Språkordbok (i18n)
+    const i18n = {
+      no: {
+        home: "Hovedside",
+        logout: "Logg Ut",
+        changePic: "Endre bilde",
+        deleteProfile: "Slett profil permanent",
+        accountInfo: "Kontoinformasjon",
+        profileName: "Profilnavn",
+        age: "Alder",
+        yearsOld: "år",
+        email: "E-postadresse (Konto)",
+        edit: "Endre",
+        save: "Lagre",
+        cancel: "Avbryt",
+        parentalControl: "Foreldrekontroll",
+        pinPrompt: "Tjenestebegrensninger er låst. Tast inn 4-sifret PIN:",
+        unlock: "Lås opp",
+        invalidPin: "Feil PIN-kode! Vennligst prøv igjen.",
+        forgotPin: "Glemt eller resette PIN?",
+        selectProfile: "Velg profil du vil begrense:",
+        maxAge: "Maks tillatt aldersgrense:",
+        allowAll: "Tillat kun innhold for alle (A)",
+        max6: "Maks 6 år",
+        max9: "Maks 9 år",
+        max12: "Maks 12 år",
+        noRestriction: "Ingen restriksjoner (Voksen)",
+        changePinTitle: "Endre Foreldre-PIN",
+        newPin: "Ny 4-sifret PIN:",
+        updatePin: "Oppdater PIN",
+        pinUpdated: "PIN-koden ble oppdatert!",
+        rights: "Alle rettigheter forbeholdt.",
+        resetPinMailSent: "E-post for tilbakestilling sendt! Følg instruksjonene i e-posten.",
+        confirmDelete: "Er du sikker på at du vil slette denne profilen permanent?"
+      },
+      en: {
+        home: "Home",
+        logout: "Log Out",
+        changePic: "Change Picture",
+        deleteProfile: "Delete profile permanently",
+        accountInfo: "Account Information",
+        profileName: "Profile Name",
+        age: "Age",
+        yearsOld: "years old",
+        email: "Email Address (Account)",
+        edit: "Edit",
+        save: "Save",
+        cancel: "Cancel",
+        parentalControl: "Parental Control",
+        pinPrompt: "Restrictions are locked. Enter 4-digit PIN:",
+        unlock: "Unlock",
+        invalidPin: "Incorrect PIN! Please try again.",
+        forgotPin: "Forgot or reset PIN?",
+        selectProfile: "Select profile to restrict:",
+        maxAge: "Max allowed age rating:",
+        allowAll: "Allow all content (A)",
+        max6: "Max 6 years",
+        max9: "Max 9 years",
+        max12: "Max 12 years",
+        noRestriction: "No restrictions (Adult)",
+        changePinTitle: "Change Parental PIN",
+        newPin: "New 4-digit PIN:",
+        updatePin: "Update PIN",
+        pinUpdated: "PIN code updated successfully!",
+        rights: "All rights reserved.",
+        resetPinMailSent: "Password reset email sent! Please check your inbox.",
+        confirmDelete: "Are you sure you want to permanently delete this profile?"
+      }
+    };
 
     const urlParams = new URLSearchParams(window.location.search);
     const aktivProfilIndex = parseInt(urlParams.get('index')) || 0;
-    const FORELDRE_PIN = "1234";
 
+    // DOM Elementer
+    const langSelect = document.getElementById("langSelect");
     const navnDisplay = document.getElementById("navnDisplay");
     const navnView = document.getElementById("navnView");
+    const alderView = document.getElementById("alderView");
     const epostView = document.getElementById("epostView");
+
+    const editNavnForm = document.getElementById("editNavnForm");
+    const navnInput = document.getElementById("navnInput");
+    const editAlderForm = document.getElementById("editAlderForm");
+    const alderInput = document.getElementById("alderInput");
+
     const foreldreKontrollSeksjon = document.getElementById("foreldreKontrollSeksjon");
     const parentLockPanel = document.getElementById("parentLockPanel");
     const parentSettingsPanel = document.getElementById("parentSettingsPanel");
     const profileSelect = document.getElementById("profileSelect");
     const ageRestrictionSelect = document.getElementById("ageRestrictionSelect");
+    
+    const pinInputs = document.querySelectorAll(".pin-digit");
+    const pinError = document.getElementById("pinError");
+    const nyPinInput = document.getElementById("nyPinInput");
+    const pinChangeSuccess = document.getElementById("pinChangeSuccess");
 
     let profiler = [];
     let globalEpost = ""; 
     let docRef = null;
+    let foreldrePin = "1234"; // Default fallback PIN
+    let naavaerendeSpraak = localStorage.getItem("watch_nordic_lang") || "no";
 
-    // Lokal-caching
+    // Tilpass språkvelger
+    langSelect.value = naavaerendeSpraak;
+    oppdaterSpraakGrensesnitt();
+
+    langSelect.addEventListener("change", (e) => {
+      naavaerendeSpraak = e.target.value;
+      localStorage.setItem("watch_nordic_lang", naavaerendeSpraak);
+      
+      // Lagre valgt språk på profilen også
+      if (profiler[aktivProfilIndex]) {
+        profiler[aktivProfilIndex].sprak = naavaerendeSpraak;
+        lagreProfilData();
+      }
+      oppdaterSpraakGrensesnitt();
+    });
+
+    function oppdaterSpraakGrensesnitt() {
+      const texts = i18n[naavaerendeSpraak];
+      document.querySelectorAll("[data-i18n]").forEach(el => {
+        const key = el.getAttribute("data-i18n");
+        if (texts[key]) el.innerText = texts[key];
+      });
+      if (profiler[aktivProfilIndex]) byggProfilgrensesnitt();
+    }
+
+    // Caching
     const cachedProfiles = localStorage.getItem("watch_nordic_profiles_cache");
     const cachedEmail = localStorage.getItem("watch_nordic_email_cache");
     if (cachedProfiles && cachedEmail) {
@@ -428,21 +664,6 @@
       }
     });
 
-    const gaaTilVelgBilde = () => {
-      window.location.href = `VelgProfilbilde.html?index=${aktivProfilIndex}`;
-    };
-
-    document.getElementById("avatarContainer").addEventListener("click", gaaTilVelgBilde);
-    document.getElementById("endreBildeSideBtn").addEventListener("click", gaaTilVelgBilde);
-
-    document.getElementById("navHovedsideBtn").addEventListener("click", () => {
-      window.location.href = `hvem-ser-på.html?index=${aktivProfilIndex}`;
-    });
-    document.getElementById("navLoggUtBtn").addEventListener("click", loggUt);
-    document.getElementById("laasOppForeldreKontrollBtn").addEventListener("click", laasOppForeldreKontroll);
-    profileSelect.addEventListener("change", oppdaterValgtProfilISekvens);
-    ageRestrictionSelect.addEventListener("change", lagreAldersgrenseGlobalt);
-
     async function hentKontodata() {
       try {
         const docSnap = await getDoc(docRef);
@@ -450,8 +671,18 @@
           const data = docSnap.data();
           profiler = data.profiler || [];
           globalEpost = data.epost || globalEpost;
+          foreldrePin = data.foreldrePin || "1234";
+
           localStorage.setItem("watch_nordic_profiles_cache", JSON.stringify(profiler));
           localStorage.setItem("watch_nordic_email_cache", globalEpost);
+
+          if (profiler[aktivProfilIndex] && profiler[aktivProfilIndex].sprak) {
+            naavaerendeSpraak = profiler[aktivProfilIndex].sprak;
+            langSelect.value = naavaerendeSpraak;
+            localStorage.setItem("watch_nordic_lang", naavaerendeSpraak);
+            oppdaterSpraakGrensesnitt();
+          }
+
           byggProfilgrensesnitt();
         }
       } catch (e) { console.error(e); }
@@ -461,8 +692,11 @@
       const gjeldendeProfil = profiler[aktivProfilIndex];
       if (!gjeldendeProfil) return;
 
+      const lang = i18n[naavaerendeSpraak];
+
       navnDisplay.innerText = gjeldendeProfil.navn;
       navnView.innerText = gjeldendeProfil.navn;
+      alderView.innerText = (gjeldendeProfil.alder || "Uoppgitt") + " " + (gjeldendeProfil.alder ? lang.yearsOld : "");
       epostView.innerText = globalEpost;
       document.getElementById("profilbilde").src = gjeldendeProfil.bilde;
 
@@ -470,12 +704,115 @@
         foreldreKontrollSeksjon.classList.add("hidden");
         document.getElementById("sidebarActions").classList.add("hidden");
         document.getElementById("endreNavnKnapp").classList.add("hidden");
+        document.getElementById("endreAlderKnapp").classList.add("hidden");
       } else {
         foreldreKontrollSeksjon.classList.remove("hidden");
         fyllProfilVelger();
       }
     }
 
+    // Navigasjon
+    const gaaTilVelgBilde = () => { window.location.href = `VelgProfilbilde.html?index=${aktivProfilIndex}`; };
+    document.getElementById("avatarContainer").addEventListener("click", gaaTilVelgBilde);
+    document.getElementById("endreBildeSideBtn").addEventListener("click", gaaTilVelgBilde);
+    document.getElementById("navHovedsideBtn").addEventListener("click", () => {
+      window.location.href = `hvem-ser-på.html?index=${aktivProfilIndex}`;
+    });
+    document.getElementById("navLoggUtBtn").addEventListener("click", loggUt);
+
+    // Endre Navn Logikk
+    document.getElementById("endreNavnKnapp").addEventListener("click", () => {
+      navnInput.value = profiler[aktivProfilIndex].navn;
+      editNavnForm.classList.remove("hidden");
+    });
+    document.getElementById("avbrytNavnBtn").addEventListener("click", () => editNavnForm.classList.add("hidden"));
+    document.getElementById("lagreNavnBtn").addEventListener("click", async () => {
+      if (!navnInput.value.trim()) return;
+      profiler[aktivProfilIndex].navn = navnInput.value.trim();
+      await lagreProfilData();
+      editNavnForm.classList.add("hidden");
+      byggProfilgrensesnitt();
+    });
+
+    // Endre Alder Logikk
+    document.getElementById("endreAlderKnapp").addEventListener("click", () => {
+      alderInput.value = profiler[aktivProfilIndex].alder || 18;
+      editAlderForm.classList.remove("hidden");
+    });
+    document.getElementById("avbrytAlderBtn").addEventListener("click", () => editAlderForm.classList.add("hidden"));
+    document.getElementById("lagreAlderBtn").addEventListener("click", async () => {
+      const nyAlder = parseInt(alderInput.value);
+      if (isNaN(nyAlder)) return;
+      profiler[aktivProfilIndex].alder = nyAlder;
+      await lagreProfilData();
+      editAlderForm.classList.add("hidden");
+      byggProfilgrensesnitt();
+    });
+
+    // Permanent sletting av profil
+    document.getElementById("sletteKnapp").addEventListener("click", async () => {
+      if (confirm(i18n[naavaerendeSpraak].confirmDelete)) {
+        profiler.splice(aktivProfilIndex, 1);
+        await lagreProfilData();
+        window.location.href = "hvem-ser-på.html";
+      }
+    });
+
+    // LÅSE OPP FORELDREKONTROLL (INNEBYGD PIN)
+    pinInputs.forEach((input, index) => {
+      input.addEventListener("input", (e) => {
+        if (e.target.value.length === 1 && index < pinInputs.length - 1) {
+          pinInputs[index + 1].focus();
+        }
+      });
+
+      input.addEventListener("keydown", (e) => {
+        if (e.key === "Backspace" && !e.target.value && index > 0) {
+          pinInputs[index - 1].focus();
+        }
+      });
+    });
+
+    document.getElementById("laasOppForeldreKontrollBtn").addEventListener("click", validerPin);
+
+    function validerPin() {
+      let inntastetPin = "";
+      pinInputs.forEach(i => inntastetPin += i.value);
+
+      if (inntastetPin === foreldrePin) {
+        parentLockPanel.classList.add("hidden");
+        parentSettingsPanel.classList.remove("hidden");
+        pinError.classList.add("hidden");
+      } else {
+        pinError.classList.remove("hidden");
+        pinInputs.forEach(i => i.value = "");
+        pinInputs[0].focus();
+      }
+    }
+
+    // Glemt / Resett PIN via E-post
+    document.getElementById("glemtPinBtn").addEventListener("click", async () => {
+      if (auth.currentUser && auth.currentUser.email) {
+        await sendPasswordResetEmail(auth, auth.currentUser.email);
+        alert(i18n[naavaerendeSpraak].resetPinMailSent);
+      }
+    });
+
+    // Oppdater PIN
+    document.getElementById("lagreNyPinBtn").addEventListener("click", async () => {
+      const nyPin = nyPinInput.value.trim();
+      if (nyPin.length === 4 && !isNaN(nyPin)) {
+        foreldrePin = nyPin;
+        await setDoc(docRef, { foreldrePin: foreldrePin }, { merge: true });
+        pinChangeSuccess.classList.remove("hidden");
+        setTimeout(() => pinChangeSuccess.classList.add("hidden"), 3000);
+        nyPinInput.value = "";
+      } else {
+        alert("PIN må bestå av 4 siffer.");
+      }
+    });
+
+    // Endre aldersgrense per profil
     function fyllProfilVelger() {
       profileSelect.innerHTML = "";
       profiler.forEach((prof, index) => {
@@ -488,18 +825,12 @@
       oppdaterValgtProfilISekvens();
     }
 
+    profileSelect.addEventListener("change", oppdaterValgtProfilISekvens);
+    ageRestrictionSelect.addEventListener("change", lagreAldersgrenseGlobalt);
+
     function oppdaterValgtProfilISekvens() {
       const targetIndex = profileSelect.value;
       ageRestrictionSelect.value = profiler[targetIndex].maksAldersgrense || "18";
-    }
-
-    function laasOppForeldreKontroll() {
-      if (prompt("Skriv inn foreldre-PIN:") === FORELDRE_PIN) {
-        parentLockPanel.classList.add("hidden");
-        parentSettingsPanel.classList.remove("hidden");
-      } else {
-        alert("Feil PIN!");
-      }
     }
 
     async function lagreAldersgrenseGlobalt() {
@@ -507,12 +838,13 @@
       const nyGrense = ageRestrictionSelect.value;
 
       if (profiler[targetIndex].maksAldersgrense === nyGrense) return;
-
       profiler[targetIndex].maksAldersgrense = nyGrense;
-      
+      await lagreProfilData();
+    }
+
+    async function lagreProfilData() {
       await setDoc(docRef, { profiler: profiler }, { merge: true });
       localStorage.setItem("watch_nordic_profiles_cache", JSON.stringify(profiler));
-      alert(`Aldersgrense for ${profiler[targetIndex].navn} ble oppdatert.`);
     }
 
     async function loggUt() {
