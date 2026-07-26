@@ -17,6 +17,7 @@
       --kids-accent: #33b5ff;
       --btn-gray: rgba(255, 255, 255, 0.1);
       --btn-gray-hover: rgba(255, 255, 255, 0.18);
+      --error: #ff4d4d;
     }
 
     * {
@@ -119,15 +120,21 @@
       transform: scale(1.08);
     }
 
-    .avatar {
+    .avatar-wrapper {
+      position: relative;
       width: 150px;
       height: 150px;
+      margin: 0 auto;
+    }
+
+    .avatar {
+      width: 100%;
+      height: 100%;
       border-radius: 50%;
       overflow: hidden;
       background: rgba(0, 0, 0, 0.3);
       border: 3px solid rgba(255,255,255,0.1);
       transition: all 0.3s ease;
-      margin: 0 auto;
     }
 
     .profile:hover .avatar {
@@ -144,6 +151,23 @@
       width: 100%;
       height: 100%;
       object-fit: cover;
+    }
+
+    .lock-icon {
+      position: absolute;
+      bottom: 5px;
+      right: 5px;
+      background: rgba(9, 27, 30, 0.9);
+      border: 1px solid var(--border);
+      color: var(--accent);
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.5);
     }
 
     .name {
@@ -199,7 +223,7 @@
 
     .edit-btn {
       top: 0;
-      right: 15px;
+      right: 0px;
       color: var(--accent);
     }
     .edit-btn:hover {
@@ -224,10 +248,11 @@
       background: rgba(0, 255, 204, 0.03);
     }
 
+    /* Modaler */
     .modal {
       position: fixed;
       inset: 0;
-      background: rgba(5, 14, 16, 0.8);
+      background: rgba(5, 14, 16, 0.85);
       backdrop-filter: blur(8px);
       display: flex;
       align-items: center;
@@ -262,7 +287,13 @@
 
     .modal h2 {
       font-size: 22px;
-      margin-bottom: 20px;
+      margin-bottom: 10px;
+    }
+
+    .modal p {
+      color: var(--muted);
+      font-size: 14px;
+      margin-bottom: 25px;
     }
 
     .modal input[type="text"] {
@@ -280,6 +311,42 @@
 
     .modal input[type="text"]:focus {
       border-color: var(--accent);
+    }
+
+    /* PIN Code Input Styling */
+    .pin-input-container {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .pin-field {
+      width: 50px;
+      height: 60px;
+      background: rgba(0,0,0,0.3);
+      border: 1px solid rgba(255,255,255,0.2);
+      border-radius: 12px;
+      color: var(--accent);
+      font-size: 24px;
+      font-weight: 700;
+      text-align: center;
+      outline: none;
+      transition: all 0.2s;
+    }
+
+    .pin-field:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 12px rgba(0,255,204,0.3);
+      background: rgba(0,255,204,0.05);
+    }
+
+    .error-msg {
+      color: var(--error);
+      font-size: 13px;
+      margin-top: -10px;
+      margin-bottom: 15px;
+      display: none;
     }
 
     .checkbox-container {
@@ -335,7 +402,7 @@
       h1 { font-size: 30px; margin-bottom: 40px; }
       .profiles { gap: 30px; }
       .profile { width: 130px; }
-      .avatar { width: 120px; height: 120px; }
+      .avatar-wrapper { width: 120px; height: 120px; }
       .action-btn { opacity: 1; transform: scale(1); }
     }
   </style>
@@ -354,6 +421,7 @@
     <div class="profiles" id="profiles"></div>
   </div>
 
+  <!-- Modal for å legge til profil -->
   <div class="modal" id="addProfileModal">
     <div class="modal-content">
       <h2>Opprett ny profil</h2>
@@ -371,6 +439,28 @@
     </div>
   </div>
 
+  <!-- Modal for PIN-kode -->
+  <div class="modal" id="pinModal">
+    <div class="modal-content">
+      <i class="fa-solid fa-lock" style="font-size: 32px; color: var(--accent); margin-bottom: 15px;"></i>
+      <h2 id="pinProfileName">Skriv inn PIN-kode</h2>
+      <p>Denne profilen er beskyttet av en PIN-kode.</p>
+      
+      <div class="pin-input-container">
+        <input type="password" maxlength="1" class="pin-field" pattern="[0-9]*" inputmode="numeric">
+        <input type="password" maxlength="1" class="pin-field" pattern="[0-9]*" inputmode="numeric">
+        <input type="password" maxlength="1" class="pin-field" pattern="[0-9]*" inputmode="numeric">
+        <input type="password" maxlength="1" class="pin-field" pattern="[0-9]*" inputmode="numeric">
+      </div>
+
+      <div class="error-msg" id="pinError">Feil PIN-kode. Prøv igjen.</div>
+
+      <div class="modal-actions">
+        <button class="btn-close" onclick="lukkPinModal()">Avbryt</button>
+      </div>
+    </div>
+  </div>
+
   <script type="module">
     import { auth, db } from "./firebase-oppsett.js";
     import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-auth.js";
@@ -379,6 +469,10 @@
     const MAX_PROFILER = 5;
     const container = document.getElementById("profiles");
     const modal = document.getElementById("addProfileModal");
+    const pinModal = document.getElementById("pinModal");
+    const pinProfileName = document.getElementById("pinProfileName");
+    const pinError = document.getElementById("pinError");
+    const pinInputs = document.querySelectorAll(".pin-field");
     const newProfileNameInput = document.getElementById("newProfileName");
     const isKidsProfileInput = document.getElementById("isKidsProfile");
     const kontoLink = document.getElementById("kontoLink");
@@ -388,6 +482,7 @@
 
     let profiler = [];
     let docRef = null;
+    let selectedProfileIndex = null;
 
     // LYNRAST OPPSTART (Mellomlagring)
     const cachedProfiles = localStorage.getItem("watch_nordic_profiles_cache");
@@ -463,11 +558,14 @@
         div.className = "profile" + (profil.isKids ? " kids-profile" : "");
 
         const kidsBadgeHtml = profil.isKids ? `<br><span class="kids-badge">Kids</span>` : '';
+        const lockIconHtml = profil.pin ? `<div class="lock-icon" title="Passordbeskyttet"><i class="fa-solid fa-lock"></i></div>` : '';
 
-        // Lagt tilbake ".edit-btn" (pennen) i HTML-strukturen
         div.innerHTML = `
-          <div class="avatar">
-            <img src="${profil.bilde || (profil.isKids ? barnBilde : standardBilde)}">
+          <div class="avatar-wrapper">
+            <div class="avatar">
+              <img src="${profil.bilde || (profil.isKids ? barnBilde : standardBilde)}">
+            </div>
+            ${lockIconHtml}
           </div>
           <div class="name">${profil.navn}${kidsBadgeHtml}</div>
           <div class="action-btn edit-btn" title="Endre navn og bilde">
@@ -479,9 +577,8 @@
           velgProfil(index);
         });
 
-        // Event listener for pennen som sender brukeren til konto.html med riktig profilindex
         div.querySelector(".edit-btn").addEventListener("click", (e) => {
-          e.stopPropagation(); // Hindrer at profilen velges når man trykker på pennen
+          e.stopPropagation();
           window.location.href = `konto.html?index=${index}`;
         });
 
@@ -492,7 +589,9 @@
         const addDiv = document.createElement("div");
         addDiv.className = "profile add-profile";
         addDiv.innerHTML = `
-          <div class="avatar"><i class="fa-solid fa-plus"></i></div>
+          <div class="avatar-wrapper">
+            <div class="avatar"><i class="fa-solid fa-plus"></i></div>
+          </div>
           <div class="name">Legg til profil</div>
         `;
         addDiv.addEventListener("click", åpneModal);
@@ -502,15 +601,17 @@
 
     function velgProfil(index) {
       const profil = profiler[index];
+      selectedProfileIndex = index;
 
       if (profil.pin) {
-        const input = prompt(`Skriv PIN-kode for ${profil.navn}:`);
-        if (input !== profil.pin) {
-          alert("Feil PIN-kode!");
-          return;
-        }
+        åpnePinModal(profil.navn);
+      } else {
+        fullførProfilvalg(index);
       }
+    }
 
+    function fullførProfilvalg(index) {
+      const profil = profiler[index];
       localStorage.setItem("aktivProfilIndex", index);
       localStorage.setItem("profilnavn", profil.navn || "");
       localStorage.setItem("aktivProfil", profil.navn || "");
@@ -524,6 +625,53 @@
       setTimeout(() => {
         window.location.href = `Hovedside.html?index=${index}`;
       }, 400);
+    }
+
+    /* PIN-modal logikk */
+    function åpnePinModal(navn) {
+      pinProfileName.textContent = `Lås opp ${navn}`;
+      pinError.style.display = "none";
+      pinInputs.forEach(i => i.value = "");
+      pinModal.classList.add("active");
+      setTimeout(() => pinInputs[0].focus(), 100);
+    }
+
+    function lukkPinModal() {
+      pinModal.classList.remove("active");
+      selectedProfileIndex = null;
+    }
+
+    // Automatisk flytting mellom PIN-feltene
+    pinInputs.forEach((input, idx) => {
+      input.addEventListener("input", (e) => {
+        if (e.target.value.length === 1) {
+          if (idx < pinInputs.length - 1) {
+            pinInputs[idx + 1].focus();
+          } else {
+            sjekkPin();
+          }
+        }
+      });
+
+      input.addEventListener("keydown", (e) => {
+        if (e.key === "Backspace" && !input.value && idx > 0) {
+          pinInputs[idx - 1].focus();
+        }
+      });
+    });
+
+    function sjekkPin() {
+      const inntastetPin = Array.from(pinInputs).map(i => i.value).join("");
+      const riktigPin = String(profiler[selectedProfileIndex].pin);
+
+      if (inntastetPin === riktigPin) {
+        lukkPinModal();
+        fullførProfilvalg(selectedProfileIndex);
+      } else {
+        pinError.style.display = "block";
+        pinInputs.forEach(i => i.value = "");
+        pinInputs[0].focus();
+      }
     }
 
     function åpneModal() {
@@ -562,6 +710,7 @@
     window.lagreNyProfil = lagreNyProfil;
     window.lukkModal = lukkModal;
     window.åpneModal = åpneModal;
+    window.lukkPinModal = lukkPinModal;
   </script>
 </body>
 </html>
