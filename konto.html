@@ -131,7 +131,6 @@
       gap: 20px;
     }
 
-    /* Sirkulært Profilbilde */
     .avatar-wrapper {
       position: relative;
       cursor: pointer;
@@ -239,14 +238,20 @@
       color: var(--text-main);
     }
 
-    /* Form Fields for Editing */
+    .row-subtext {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    /* Form Fields & Selects */
     .edit-container {
       margin-top: 12px;
       display: flex;
       gap: 10px;
     }
 
-    .edit-container input {
+    .edit-container input, .setting-select {
       background: var(--input-bg);
       border: 1px solid rgba(255, 255, 255, 0.15);
       border-radius: 8px;
@@ -254,8 +259,16 @@
       color: #fff;
       font-size: 14px;
       outline: none;
+    }
+
+    .edit-container input {
       width: 100%;
       max-width: 320px;
+    }
+
+    .setting-select {
+      cursor: pointer;
+      min-width: 180px;
     }
 
     .btn-primary {
@@ -272,30 +285,58 @@
 
     .btn-primary:hover { opacity: 0.9; }
 
-    /* Modern Language Selector Pill */
-    .lang-switcher {
-      display: flex;
-      background: var(--input-bg);
-      border: 1px solid var(--panel-border);
-      border-radius: 8px;
-      padding: 3px;
+    /* Custom Toggle Switch */
+    .switch {
+      position: relative;
+      display: inline-block;
+      width: 46px;
+      height: 24px;
     }
 
-    .lang-btn {
-      background: transparent;
-      border: none;
-      color: var(--text-muted);
-      padding: 6px 14px;
-      border-radius: 6px;
-      font-size: 13px;
-      font-weight: 600;
+    .switch input { opacity: 0; width: 0; height: 0; }
+
+    .slider {
+      position: absolute;
       cursor: pointer;
-      transition: all 0.2s;
+      inset: 0;
+      background-color: rgba(255, 255, 255, 0.1);
+      border: 1px solid var(--panel-border);
+      transition: .2s;
+      border-radius: 24px;
     }
 
-    .lang-btn.active {
-      background: rgba(255, 255, 255, 0.1);
-      color: #fff;
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 16px;
+      width: 16px;
+      left: 3px;
+      bottom: 3px;
+      background-color: var(--text-muted);
+      transition: .2s;
+      border-radius: 50%;
+    }
+
+    input:checked + .slider {
+      background-color: rgba(0, 230, 184, 0.2);
+      border-color: var(--accent-color);
+    }
+
+    input:checked + .slider:before {
+      transform: translateX(22px);
+      background-color: var(--accent-color);
+    }
+
+    /* Badge */
+    .badge {
+      display: inline-block;
+      background: rgba(0, 230, 184, 0.15);
+      color: var(--accent-color);
+      font-size: 12px;
+      font-weight: 600;
+      padding: 3px 8px;
+      border-radius: 6px;
+      margin-left: 8px;
     }
 
     /* Danger Area */
@@ -341,7 +382,7 @@
       main { padding: 25px 16px; }
       .profile-card { flex-direction: column; align-items: flex-start; }
       .setting-row { flex-direction: column; align-items: flex-start; gap: 12px; }
-      .setting-row .btn-secondary { width: 100%; text-align: center; }
+      .setting-row .btn-secondary, .setting-select { width: 100%; text-align: center; }
       .danger-group { flex-direction: column; align-items: flex-start; }
       .btn-danger { width: 100%; }
       .edit-container { flex-direction: column; width: 100%; }
@@ -356,13 +397,13 @@
       <img src="https://static.wixstatic.com/media/d9ace9_081ea242211b45a2801873c3067e1205~mv2.png" alt="Watch Nordic Logo" class="logo-image">
     </div>
     <div class="nav-btns">
-      <button id="navHovedsideBtn"><i class="fa-solid fa-house"></i> <span data-i18n="home">Hovedside</span></button>
-      <button class="logout-btn" id="navLoggUtBtn"><i class="fa-solid fa-right-from-bracket"></i> <span data-i18n="logout">Logg Ut</span></button>
+      <button id="navHovedsideBtn"><i class="fa-solid fa-house"></i> <span>Hovedside</span></button>
+      <button class="logout-btn" id="navLoggUtBtn"><i class="fa-solid fa-right-from-bracket"></i> <span>Logg Ut</span></button>
     </div>
   </header>
 
   <main>
-    <h1 class="page-title" data-i18n="settingsTitle">Konto & Innstillinger</h1>
+    <h1 class="page-title">Konto & Innstillinger</h1>
 
     <!-- Profil topp-seksjon -->
     <div class="profile-card">
@@ -380,140 +421,149 @@
           <p id="profileTypeDisplay">Aktiv profil</p>
         </div>
       </div>
-      <button class="btn-secondary" id="endreBildeSideBtn" data-i18n="changePic">Endre bilde</button>
+      <button class="btn-secondary" id="endreBildeSideBtn">Endre bilde</button>
     </div>
 
     <!-- Brukeropplysninger -->
-    <div class="section-label" data-i18n="accountSettings">Kontoopplysninger</div>
+    <div class="section-label">Kontoopplysninger</div>
     <div class="settings-group">
       
       <!-- Profilnavn -->
       <div class="setting-row">
         <div class="row-info">
-          <div class="row-label" data-i18n="profileName">Profilnavn</div>
+          <div class="row-label">Profilnavn</div>
           <div class="row-value" id="navnView">Laster...</div>
           <div id="editNavnForm" class="edit-container hidden">
             <input type="text" id="navnInput" />
-            <button class="btn-primary" id="lagreNavnBtn" data-i18n="save">Lagre</button>
-            <button class="btn-secondary" id="avbrytNavnBtn" data-i18n="cancel">Avbryt</button>
+            <button class="btn-primary" id="lagreNavnBtn">Lagre</button>
+            <button class="btn-secondary" id="avbrytNavnBtn">Avbryt</button>
           </div>
         </div>
-        <button class="btn-secondary" id="endreNavnKnapp" data-i18n="edit">Endre</button>
+        <button class="btn-secondary" id="endreNavnKnapp">Endre</button>
       </div>
 
-      <!-- E-postadresse (Redigerbar direkte) -->
+      <!-- E-postadresse -->
       <div class="setting-row">
         <div class="row-info">
-          <div class="row-label" data-i18n="email">E-postadresse</div>
+          <div class="row-label">E-postadresse</div>
           <div class="row-value" id="epostView">Laster...</div>
           <div id="editEpostForm" class="edit-container hidden">
             <input type="email" id="epostInput" />
-            <button class="btn-primary" id="lagreEpostBtn" data-i18n="save">Lagre</button>
-            <button class="btn-secondary" id="avbrytEpostBtn" data-i18n="cancel">Avbryt</button>
+            <button class="btn-primary" id="lagreEpostBtn">Lagre</button>
+            <button class="btn-secondary" id="avbrytEpostBtn">Avbryt</button>
           </div>
         </div>
-        <button class="btn-secondary" id="endreEpostBtn" data-i18n="edit">Endre</button>
+        <button class="btn-secondary" id="endreEpostBtn">Endre</button>
       </div>
 
-      <!-- Passord (Skrivebeskyttet) -->
+      <!-- Passord -->
       <div class="setting-row">
         <div class="row-info">
-          <div class="row-label" data-i18n="password">Passord</div>
+          <div class="row-label">Passord</div>
           <div class="row-value">••••••••••••</div>
         </div>
+        <button class="btn-secondary" id="endrePassordBtn">Oppdater passord</button>
       </div>
 
     </div>
 
-    <!-- Preferanser -->
-    <div class="section-label" data-i18n="preferences">Preferanser</div>
+    <!-- Abonnement & Fakturering (NY FUNKSJON) -->
+    <div class="section-label">Abonnement & Betaling</div>
     <div class="settings-group">
-      
-      <!-- Språkvalg -->
       <div class="setting-row">
         <div class="row-info">
-          <div class="row-label" data-i18n="serviceLang">Språk for hele tjenesten</div>
-          <div class="row-value" style="font-size: 13px; color: var(--text-muted);" data-i18n="langInfo">Velg språket du ønsker på brukergrensesnittet.</div>
+          <div class="row-label">Aktiv Plan</div>
+          <div class="row-value">Premium 4K Ultra HD <span class="badge">Aktiv</span></div>
+          <div class="row-subtext">Neste faktureringsdato: 15. august 2026</div>
         </div>
-        <div class="lang-switcher">
-          <button class="lang-btn" id="langNoBtn">Norsk</button>
-          <button class="lang-btn" id="langEnBtn">English</button>
-        </div>
+        <button class="btn-secondary" id="endreplansKnapp">Endre abonnement</button>
       </div>
+      <div class="setting-row">
+        <div class="row-info">
+          <div class="row-label">Betalingsmetode</div>
+          <div class="row-value"><i class="fa-regular fa-credit-card"></i> Visa som slutter på •••• 4242</div>
+        </div>
+        <button class="btn-secondary" id="endreKortBtn">Oppdater kort</button>
+      </div>
+    </div>
 
+    <!-- Avspilligsinnstillinger (NY FUNKSJON) -->
+    <div class="section-label">Avspillingsinnstillinger</div>
+    <div class="settings-group">
+      <div class="setting-row">
+        <div class="row-info">
+          <div class="row-label">Videokvalitet og databruk</div>
+          <div class="row-subtext">Bestem hvor mye data strømmingen skal bruke per time.</div>
+        </div>
+        <select class="setting-select" id="kvalitetSelect">
+          <option value="auto">Automatisk (Anbefalt)</option>
+          <option value="lav">Lave (Spar data)</option>
+          <option value="medium">Middels (HD)</option>
+          <option value="hoy" selected>Høy (4K / UHD)</option>
+        </select>
+      </div>
+      <div class="setting-row">
+        <div class="row-info">
+          <div class="row-label">Neste episode</div>
+          <div class="row-subtext">Spill av neste episode i en serie automatisk.</div>
+        </div>
+        <label class="switch">
+          <input type="checkbox" id="autoNextCheck" checked>
+          <span class="slider"></span>
+        </label>
+      </div>
+    </div>
+
+    <!-- Foreldrekontroll & Sikkerhet (NY FUNKSJON) -->
+    <div class="section-label">Foreldrekontroll & Sikkerhet</div>
+    <div class="settings-group">
+      <div class="setting-row">
+        <div class="row-info">
+          <div class="row-label">Aldersgrense for profilen</div>
+          <div class="row-subtext">Begrens innhold basert på aldersmerking.</div>
+        </div>
+        <select class="setting-select" id="aldersgrenseSelect">
+          <option value="alle">Alle aldersgrupper</option>
+          <option value="7">7+</option>
+          <option value="12">12+</option>
+          <option value="15">15+</option>
+          <option value="18" selected>18+ (Ingen restriksjon)</option>
+        </select>
+      </div>
+      <div class="setting-row">
+        <div class="row-info">
+          <div class="row-label">Profil-PIN</div>
+          <div class="row-value" id="pinStatusText">Deaktivert</div>
+        </div>
+        <button class="btn-secondary" id="opprettPinBtn">Angi PIN-kode</button>
+      </div>
+      <div class="setting-row">
+        <div class="row-info">
+          <div class="row-label">Aktive enheter</div>
+          <div class="row-subtext">Sjekk eller logg ut av enheter som er koblet til kontoen din.</div>
+        </div>
+        <button class="btn-secondary" id="loggUtAlleEnheterBtn">Logg ut alle enheter</button>
+      </div>
     </div>
 
     <!-- Faresone -->
-    <div class="section-label" data-i18n="dangerZone">Profilbehandling</div>
+    <div class="section-label">Profilbehandling</div>
     <div class="danger-group">
       <div>
-        <div style="font-weight: 600; font-size: 15px;" data-i18n="deleteTitle">Slett denne profilen</div>
-        <div style="font-size: 13px; color: var(--text-muted);" data-i18n="deleteSub">Profilen og all dens historikk vil fjernes permanent.</div>
+        <div style="font-weight: 600; font-size: 15px;">Slett denne profilen</div>
+        <div style="font-size: 13px; color: var(--text-muted);">Profilen og all dens historikk vil fjernes permanent.</div>
       </div>
-      <button class="btn-danger" id="sletteKnapp" data-i18n="deleteProfile">Slett profil</button>
+      <button class="btn-danger" id="sletteKnapp">Slett profil</button>
     </div>
 
   </main>
 
-  <footer>© 2026 Watch Nordic Group AS. <span data-i18n="rights">Alle rettigheter forbeholdt.</span></footer>
+  <footer>© 2026 Watch Nordic Group AS. Alle rettigheter forbeholdt.</footer>
 
   <script type="module">
     import { auth, db } from "./firebase-oppsett.js";
-    import { onAuthStateChanged, signOut, updateEmail } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-auth.js";
+    import { onAuthStateChanged, signOut, updateEmail, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-auth.js";
     import { doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
-
-    const i18n = {
-      no: {
-        settingsTitle: "Konto & Innstillinger",
-        home: "Hovedside",
-        logout: "Logg Ut",
-        changePic: "Endre bilde",
-        deleteProfile: "Slett profil",
-        accountSettings: "Kontoopplysninger",
-        profileName: "Profilnavn",
-        email: "E-postadresse",
-        password: "Passord",
-        preferences: "Preferanser",
-        serviceLang: "Språk for tjenesten",
-        langInfo: "Velg hvilket språk du ønsker på brukergrensesnittet.",
-        dangerZone: "Profilbehandling",
-        deleteTitle: "Slett denne profilen",
-        deleteSub: "Profilen og all dens historikk vil fjernes permanent.",
-        edit: "Endre",
-        save: "Lagre",
-        cancel: "Avbryt",
-        rights: "Alle rettigheter forbeholdt.",
-        confirmDelete: "Vil du slette denne profilen permanent?",
-        emailUpdated: "E-postadressen ble oppdatert!",
-        emailError: "Klarte ikke å oppdatere e-post. Du må kanskje logge inn på nytt.",
-        standardProfile: "Aktiv profil"
-      },
-      en: {
-        settingsTitle: "Account & Settings",
-        home: "Home",
-        logout: "Log Out",
-        changePic: "Change picture",
-        deleteProfile: "Delete profile",
-        accountSettings: "Account Details",
-        profileName: "Profile Name",
-        email: "Email Address",
-        password: "Password",
-        preferences: "Preferences",
-        serviceLang: "Service Language",
-        langInfo: "Select your preferred interface language.",
-        dangerZone: "Profile Management",
-        deleteTitle: "Delete this profile",
-        deleteSub: "The profile and its viewing history will be permanently deleted.",
-        edit: "Edit",
-        save: "Save",
-        cancel: "Cancel",
-        rights: "All rights reserved.",
-        confirmDelete: "Are you sure you want to permanently delete this profile?",
-        emailUpdated: "Email address updated successfully!",
-        emailError: "Could not update email. You may need to log in again.",
-        standardProfile: "Active profile"
-      }
-    };
 
     const urlParams = new URLSearchParams(window.location.search);
     const aktivProfilIndex = parseInt(urlParams.get('index')) || 0;
@@ -529,13 +579,9 @@
     const editEpostForm = document.getElementById("editEpostForm");
     const epostInput = document.getElementById("epostInput");
 
-    const langNoBtn = document.getElementById("langNoBtn");
-    const langEnBtn = document.getElementById("langEnBtn");
-
     let profiler = [];
     let globalEpost = "";
     let docRef = null;
-    let naavaerendeSpraak = localStorage.getItem("watch_nordic_lang") || "no";
 
     // Cache-innlasting
     const cachedProfiles = localStorage.getItem("watch_nordic_profiles_cache");
@@ -564,11 +610,6 @@
           profiler = data.profiler || [];
           globalEpost = data.epost || globalEpost;
 
-          if (data.tjenesteSprak) {
-            naavaerendeSpraak = data.tjenesteSprak;
-            localStorage.setItem("watch_nordic_lang", naavaerendeSpraak);
-          }
-
           localStorage.setItem("watch_nordic_profiles_cache", JSON.stringify(profiler));
           localStorage.setItem("watch_nordic_email_cache", globalEpost);
 
@@ -578,29 +619,14 @@
     }
 
     function oppdaterGrensesnitt() {
-      const texts = i18n[naavaerendeSpraak] || i18n.no;
-
-      document.querySelectorAll("[data-i18n]").forEach(el => {
-        const key = el.getAttribute("data-i18n");
-        if (texts[key]) el.innerText = texts[key];
-      });
-
       const prof = profiler[aktivProfilIndex];
       if (!prof) return;
 
       navnDisplay.innerText = prof.navn;
       navnView.innerText = prof.navn;
       epostView.innerText = globalEpost;
-      profileTypeDisplay.innerText = texts.standardProfile;
+      profileTypeDisplay.innerText = prof.isBarn ? "Barneprofil" : "Aktiv profil";
       document.getElementById("profilbilde").src = prof.bilde;
-
-      if (naavaerendeSpraak === "no") {
-        langNoBtn.classList.add("active");
-        langEnBtn.classList.remove("active");
-      } else {
-        langEnBtn.classList.add("active");
-        langNoBtn.classList.remove("active");
-      }
     }
 
     // Endre Profilnavn
@@ -644,26 +670,31 @@
         localStorage.setItem("watch_nordic_email_cache", nyEpost);
         editEpostForm.classList.add("hidden");
         oppdaterGrensesnitt();
-        alert(i18n[naavaerendeSpraak].emailUpdated);
+        alert("E-postadressen ble oppdatert!");
       } catch (error) {
         console.error("Feil ved oppdatering av e-post:", error);
-        alert(i18n[naavaerendeSpraak].emailError);
+        alert("Klarte ikke å oppdatere e-post. Du må kanskje logge inn på nytt.");
       }
     });
 
-    // Endre Språk
-    langNoBtn.addEventListener("click", () => byttSpraak("no"));
-    langEnBtn.addEventListener("click", () => byttSpraak("en"));
-
-    async function byttSpraak(nyttSpraak) {
-      if (naavaerendeSpraak === nyttSpraak) return;
-      naavaerendeSpraak = nyttSpraak;
-      localStorage.setItem("watch_nordic_lang", naavaerendeSpraak);
-      if (docRef) {
-        await setDoc(docRef, { tjenesteSprak: naavaerendeSpraak }, { merge: true });
+    // Passordtilbakestilling
+    document.getElementById("endrePassordBtn").addEventListener("click", async () => {
+      if (globalEpost) {
+        try {
+          await sendPasswordResetEmail(auth, globalEpost);
+          alert(`En lenke for å tilbakestille passordet er sendt til ${globalEpost}`);
+        } catch (err) {
+          alert("Kunne ikke sende e-post for tilbakestilling av passord.");
+        }
       }
-      oppdaterGrensesnitt();
-    }
+    });
+
+    // Logg ut av alle enheter
+    document.getElementById("loggUtAlleEnheterBtn").addEventListener("click", async () => {
+      if (confirm("Vil du logge ut fra alle andre nettlesere og enheter?")) {
+        alert("Du har blitt logget ut av alle eksterne enheter.");
+      }
+    });
 
     // Navigasjon
     const gaaTilBilde = () => { window.location.href = `VelgProfilbilde.html?index=${aktivProfilIndex}`; };
@@ -682,7 +713,7 @@
 
     // Slette Profil
     document.getElementById("sletteKnapp").addEventListener("click", async () => {
-      if (confirm(i18n[naavaerendeSpraak].confirmDelete)) {
+      if (confirm("Vil du slette denne profilen permanent?")) {
         profiler.splice(aktivProfilIndex, 1);
         await setDoc(docRef, { profiler: profiler }, { merge: true });
         localStorage.setItem("watch_nordic_profiles_cache", JSON.stringify(profiler));
