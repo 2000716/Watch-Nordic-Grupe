@@ -142,7 +142,7 @@ const serier = {
         episoder: {
           1: {
             episodeNummer: 1,
-            tittel: "Muffins",
+            tittel: "Diamanten er borte!",
             beskrivelse: "Etter mange mislykete forsøk, klarer dem å få Apollo 11 ut i atmosfæren.",
             varighet: "5 min",
             thumbnail: "https://static.wixstatic.com/media/d9ace9_4148dac16a81424e9a08e544106c05e4~mv2.jpg",
@@ -151,7 +151,7 @@ const serier = {
           },
           2: {
             episodeNummer: 2,
-            tittel: "Månelandingen",
+            tittel: "Her Annanas er kidnappet!",
             beskrivelse: "Månelandingen er satt i gang, men vil de komme tilbake?",
             varighet: "5 min",
             thumbnail: "https://static.wixstatic.com/media/d9ace9_4148dac16a81424e9a08e544106c05e4~mv2.jpg",
@@ -162,7 +162,7 @@ const serier = {
           },
           3: {
             episodeNummer: 3,
-            tittel: "Alt var fake!",
+            tittel: "Opera mysteriet",
             beskrivelse: "Teorier og spekulasjoner om at månelandingen er fake øker i avisene.",
             varighet: "5 min",
             thumbnail: "https://static.wixstatic.com/media/d9ace9_4148dac16a81424e9a08e544106c05e4~mv2.jpg",
