@@ -162,32 +162,4 @@ const filmer = {
     publishDate: "2026-06-25T00:00:00",
     expireDate: "2030-01-01T23:59:59",
   },
-  
-    "meridian": {
-    tittel: "Meridian",
-    rating: "6.1",
-    bakgrunn: "https://image.tmdb.org/t/p/original/aOhCtjYQMeeMTbvZnSafnGizvPX.jpg",
-    bakgrunnMobil: "https://image.tmdb.org/t/p/original/aOhCtjYQMeeMTbvZnSafnGizvPX.jpg",
-    logo: "https://occ-0-3668-41.1.nflxso.net/dnm/api/v6/S4oi7EPZbv2UEPaukW54OORa0S8/AAAABd3AiKG0uXGKEjVEfZNSd1ldNNs4hwv0xyhoBTOVhPwGYJOSVAvxt4JEpWOofBl88qG-aE1K1FO99ecB1hMcO4Iy8cpiaTPxvg.webp?r=f73",
-    trailer: "",
-    poster: "https://image.tmdb.org/t/p/original/oujMFkWtIimaXQ0g6Fu5F8HZ7EV.jpg",
-    posterVertikal: "https://image.tmdb.org/t/p/original/iluWXdeutaRpRmk7CYDXo8wYXdn.jpg",
-    beskrivelse: "I 1947 forsvinner tre menn sporløst på mystisk vis i Los Angeles. En uavhengig etterforsker blir dratt inn i et mørkt, overnaturlig mysterium i denne atmosfæriske spenningsfilmen.",
-    metadata: ["2016", "12 år", "Mysterium", "12 min"],
-    skuespillere: "Kevin Brand, Elyse Price, Reid Collums",
-    regissor: "Robbie Ryan",
-    lisens: "(CC) BY 4.0 | Netflix Open Content",
-    kilde: "https://netflix.com",
-    watchUrl: "film-mal.html?id=meridian",
-    videoUrl: "1xs_p9ED-NQpxSyLE6Gx1rAEE6OF6a4wL",
-    subtitleUrl: "",
-    tilbakeUrl: "film.html?navn=meridian",
-    audioLanguages: [{ code: "en", label: "Engelsk" }],
-    subtitleLanguages: [
-      { code: "no", label: "Norsk" },
-      { code: "off", label: "Av" }
-    ],
-    publishDate: "2026-07-11T00:00:00",
-    expireDate: "2035-01-01T23:59:59",
-  },
 };
