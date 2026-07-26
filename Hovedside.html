@@ -41,7 +41,7 @@
       padding: 0 20px;
     }
 
-    /* ==========================================================================
+/* ==========================================================================
        2. TOPPMENY (PC)
        ========================================================================== */
     .top-nav {
@@ -143,7 +143,7 @@
       color: #00FFCC;
     }
 
-    /* PROFILMENY & 3D POP-OUT EFFEKT */
+    /* PROFILMENY (MED BILDET SIKRET INNE I SIRKELEN) */
     .profilmeny {
       display: flex;
       align-items: center;
@@ -159,51 +159,39 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      overflow: visible;
-    }
-
-    .profil-avatar-bg {
-      position: absolute;
-      inset: 0;
-      border-radius: 50%;
-      background-color: #1e2a2e;
+      border-radius: 50%; /* Lager sirkelformen */
+      overflow: hidden;   /* KUTTER ALT som stikker ut på sidene/toppen */
       border: 2px solid rgba(255, 255, 255, 0.2);
-      transition: all 0.35s cubic-bezier(0.25, 1, 0.5, 1);
-      z-index: 1;
+      background-color: #1e2a2e;
+      transition: border-color 0.35s ease, background-color 0.35s ease;
     }
 
     .profil-avatar-img {
-      position: absolute;
       width: 100%;
       height: 100%;
-      object-fit: cover;
+      object-fit: cover;  /* Bevarer bildets proporsjoner uten at det blir skjevt */
       border-radius: 50%;
-      z-index: 2;
+      display: block;
       transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
-      transform-origin: bottom center;
     }
 
+    /* Sikrer at også PNG-karakterer holdes stramt inne i sirkelen */
     .profil-avatar-img.png-karakter {
-      object-fit: contain;
-      border-radius: 0;
-      height: 145%;
-      bottom: 0;
-      transform: translateY(-4px) scale(1.05);
+      object-fit: cover;
+      height: 100%;
+      position: static;
+      transform: none;
     }
 
-    .profilmeny:hover .profil-avatar-bg {
+    /* HOVER EFFEKT (Gjør bakgrunnen grønn og gir en fin zoom INNE i sirkelen) */
+    .profilmeny:hover .profil-avatar-wrap {
       background-color: var(--active-color, #00FFCC);
       border-color: #ffffff;
     }
 
-    .profilmeny:hover .profil-avatar-img.png-karakter {
-      transform: translateY(-10px) scale(1.25);
+    .profilmeny:hover .profil-avatar-img {
+      transform: scale(1.15); /* Bildet zoomer litt inn på hover, men kappingen holder det i sirkelen */
     }
-
-    .profilmeny:hover .profil-avatar-img:not(.png-karakter) {
-      transform: scale(1.1);
-    }
-
     /* ==========================================================================
        3. HERO BANNER (PC)
        ========================================================================== */
