@@ -1079,8 +1079,30 @@ img, video {
   let status = "ikke-påbegynt";
   let minListe = [];
 
+  // SIKKERHET: Rensing av input fra URL (DOMPurify/HTML-escape-prinsipp)
+  function sanitizeInput(str) {
+    if (!str) return "";
+    return String(str)
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#039;");
+  }
+
+  // SIKKERHET: Validering av eksterne og interne URL-er mot utrygge protokoller (f.eks. javascript:)
+  function erTryggUrl(url) {
+    if (!url) return false;
+    try {
+      const parsed = new URL(url, window.location.origin);
+      return parsed.protocol === "http:" || parsed.protocol === "https:";
+    } catch (e) {
+      return false;
+    }
+  }
+
   const params = new URLSearchParams(window.location.search);
-  const navn = params.get("navn");
+  const navn = sanitizeInput(params.get("navn"));
 
   const filmerData = typeof window.filmer !== "undefined" ? window.filmer : (typeof filmer !== "undefined" ? filmer : {});
   const serierData = typeof window.serier !== "undefined" ? window.serier : (typeof serier !== "undefined" ? serier : {});
@@ -1093,6 +1115,7 @@ img, video {
     data = serierData[navn];
   }
 
+  // Omdiriger hvis tittelen ikke eksisterer
   if (!data) {
     window.location.href = "Hovedside.html";
   }
@@ -1112,7 +1135,7 @@ img, video {
     addToListBtn = document.getElementById("addToListBtn");
     bgImg = document.getElementById("backgroundImage");
 
-    document.title = data.tittel || "Watch Nordic";
+    document.title = data.tittel ? `${data.tittel} - Watch Nordic` : "Watch Nordic";
 
     oppdaterBakgrunnsBilde();
     window.addEventListener("resize", oppdaterBakgrunnsBilde);
@@ -1120,14 +1143,14 @@ img, video {
     const fLogo = document.querySelector(".film-logo");
     const logoContainer = document.querySelector(".logo-container");
     if (fLogo) {
-      if (data.logo && data.logo.trim() !== "") {
+      if (data.logo && data.logo.trim() !== "" && erTryggUrl(data.logo)) {
         fLogo.src = data.logo;
       } else {
         fLogo.style.display = "none";
         if (logoContainer && !logoContainer.querySelector(".text-logo")) {
           const titleEl = document.createElement("div");
           titleEl.className = "text-logo";
-          titleEl.textContent = data.tittel;
+          titleEl.textContent = data.tittel || "";
           logoContainer.appendChild(titleEl);
         }
       }
@@ -1149,14 +1172,26 @@ img, video {
         moreBtn.addEventListener("click", () => {
           const overlay = document.createElement("div");
           overlay.className = "popup-overlay";
-          overlay.innerHTML = `
-            <div class="popup-box">
-              <button class="close-btn">&times;</button>
-              <p>${fullText}</p>
-            </div>
-          `;
+          
+          const popupBox = document.createElement("div");
+          popupBox.className = "popup-box";
+
+          const closeBtn = document.createElement("button");
+          closeBtn.className = "close-btn";
+          closeBtn.innerHTML = "&times;";
+
+          const textPara = document.createElement("p");
+          textPara.textContent = fullText;
+
+          popupBox.appendChild(closeBtn);
+          popupBox.appendChild(textPara);
+          overlay.appendChild(popupBox);
+          
           document.body.appendChild(overlay);
-          overlay.querySelector(".close-btn").addEventListener("click", () => overlay.remove());
+          closeBtn.addEventListener("click", () => overlay.remove());
+          overlay.addEventListener("click", (e) => {
+            if (e.target === overlay) overlay.remove();
+          });
         });
       } else {
         descEl.textContent = fullText;
@@ -1165,37 +1200,50 @@ img, video {
 
     const metadataEl = document.querySelector(".metadata");
     if (metadataEl) {
-      metadataEl.innerHTML = `
-        <span>⭐ ${data.rating || "-"}</span>
-        <span>•</span>
-        ${data.metadata ? data.metadata.map(m => `<span>${m}</span>`).join('<span>•</span>') : ''}
-      `;
+      metadataEl.innerHTML = ""; // Renser HTML for å hindre XSS
+      
+      const ratingSpan = document.createElement("span");
+      ratingSpan.textContent = `⭐ ${data.rating || "-"}`;
+      metadataEl.appendChild(ratingSpan);
+
+      if (data.metadata && Array.isArray(data.metadata)) {
+        data.metadata.forEach(m => {
+          const dot = document.createElement("span");
+          dot.textContent = "•";
+          const metaSpan = document.createElement("span");
+          metaSpan.textContent = m;
+          metadataEl.appendChild(dot);
+          metadataEl.appendChild(metaSpan);
+        });
+      }
     }
 
     const castInfoEl = document.querySelector(".cast-info");
     if (castInfoEl) {
+      castInfoEl.innerHTML = "";
       const castLabel = type === "film" ? "Regissør" : "Skaper";
-      let lisensHTML = (data.lisens && data.kilde) 
-        ? `<p><strong>Lisens:</strong> <a href="${data.kilde}" target="_blank" style="color:#aaa; text-decoration:none;">${data.lisens}</a></p>` 
-        : "";
 
-      castInfoEl.innerHTML = `
-        <p><strong>Medvirkende:</strong> ${data.skuespillere || "Ukjent"}</p>
-        <p><strong>${castLabel}:</strong> ${data.skapere || data.regissor || "Ukjent"}</p>
-        ${lisensHTML}
-      `;
+      const pCast = document.createElement("p");
+      pCast.innerHTML = `<strong>Medvirkende:</strong> ${sanitizeInput(data.skuespillere || "Ukjent")}`;
+      castInfoEl.appendChild(pCast);
+
+      const pCreator = document.createElement("p");
+      pCreator.innerHTML = `<strong>${castLabel}:</strong> ${sanitizeInput(data.skapere || data.regissor || "Ukjent")}`;
+      castInfoEl.appendChild(pCreator);
+
+      if (data.lisens && data.kilde && erTryggUrl(data.kilde)) {
+        const pLicence = document.createElement("p");
+        pLicence.innerHTML = `<strong>Lisens:</strong> <a href="${encodeURI(data.kilde)}" target="_blank" rel="noopener noreferrer" style="color:#aaa; text-decoration:none;">${sanitizeInput(data.lisens)}</a>`;
+        castInfoEl.appendChild(pLicence);
+      }
     }
 
     if (erUtilgjengelig && watchBtn) {
       watchBtn.classList.add("locked");
     }
 
-    if (watchBtn) {
-      watchBtn.addEventListener("click", handterWatchClick);
-    }
-    if (addToListBtn) {
-      addToListBtn.addEventListener("click", handterListClick);
-    }
+    if (watchBtn) watchBtn.addEventListener("click", handterWatchClick);
+    if (addToListBtn) addToListBtn.addEventListener("click", handterListClick);
 
     initTrailer();
 
@@ -1216,7 +1264,9 @@ img, video {
 
     const lagretBilde = localStorage.getItem("profilbilde");
     const menyProfilbilde = document.getElementById("menyProfilbilde");
-    if (lagretBilde && menyProfilbilde) menyProfilbilde.src = lagretBilde;
+    if (lagretBilde && menyProfilbilde && erTryggUrl(lagretBilde)) {
+      menyProfilbilde.src = lagretBilde;
+    }
 
     const cachedProfiles = localStorage.getItem("watch_nordic_profiles_cache");
     if (cachedProfiles) {
@@ -1237,10 +1287,9 @@ img, video {
   function oppdaterBakgrunnsBilde() {
     if (!bgImg) return;
     const erMobil = window.innerWidth <= 768;
-    if (erMobil && data.bakgrunnMobil) {
-      bgImg.src = data.bakgrunnMobil;
-    } else {
-      bgImg.src = data.bakgrunn || "";
+    const bildeUrl = (erMobil && data.bakgrunnMobil) ? data.bakgrunnMobil : (data.bakgrunn || "");
+    if (erTryggUrl(bildeUrl)) {
+      bgImg.src = bildeUrl;
     }
   }
 
@@ -1297,13 +1346,32 @@ img, video {
   }
 
   /* ==========================================
-     4. DATA-LUGGING & SYNKRONISERING (FIREBASE)
+     4. DATA-SYNKRONISERING OG SIKKERHETS-SJEKKER
      ========================================== */
+  function sjekkAldersgrense(profilData) {
+    if (!profilData || !profilData.aldersgrense) return true;
+    
+    const innholdAldersgrense = data.metadata ? data.metadata.find(m => m.toLowerCase().includes("år")) : null;
+    if (!innholdAldersgrense) return true;
+
+    const grensTallInnhold = parseInt(innholdAldersgrense) || 0;
+    const grensTallProfil = parseInt(profilData.aldersgrense) || 99;
+
+    return grensTallProfil >= grensTallInnhold;
+  }
+
   function synkroniserLokalData() {
     let indexId = parseInt(aktivProfilIndex);
     let profilData = heleProfilArrayet[indexId] || heleProfilArrayet.find(p => p.navn === aktivProfil);
     
     if (profilData) {
+      // Sikkerhetssjekk: Lås avspillingsknapp hvis profilen er under aldersgrensen
+      if (!sjekkAldersgrense(profilData) && watchBtn) {
+        watchBtn.classList.add("locked");
+        watchBtn.disabled = true;
+        watchBtn.title = "Denne profilen har ikke tilgang til dette innholdet på grunn av aldersgrense.";
+      }
+
       status = (profilData.historikk && profilData.historikk[navn]) ? profilData.historikk[navn] : "ikke-påbegynt";
       minListe = profilData.minListe || [];
       
@@ -1332,10 +1400,11 @@ img, video {
       const userDocRef = doc(db, "users", currentUser.uid);
       await setDoc(userDocRef, { profiler: heleProfilArrayet }, { merge: true });
     } catch (err) {
-      console.error("Kunne ikke lagre til Firestore:", err);
+      console.error("Feil ved lagring til skyen:", err);
     }
   }
 
+  // AUTENTISERING & BRUKER-SESJON
   onAuthStateChanged(auth, async (user) => {
     if (user) {
       currentUser = user;
@@ -1349,19 +1418,19 @@ img, video {
           synkroniserLokalData();
         }
       } catch (err) {
-        console.error("Feil ved henting av Firebase-data:", err);
+        console.error("Feil ved henting av brukerdata:", err);
       }
     } else {
+      // Omdiriger til innloggingssiden hvis økten har utløpt
       window.location.href = "index.html";
     }
   });
 
   /* ==========================================
-     5. KLIKKHÅNDTERERE FOR KNAPPER
+     5. KLIKKHÅNDTERERE OG SPILLER-RUTING
      ========================================== */
   async function handterWatchClick() {
-    // Avbryt avspilling hvis innholdet ikke er tilgjengelig, uten å vise feilmelding
-    if (erUpublisert || erUtgått) return;
+    if (erUpublisert || erUtgått || watchBtn.disabled) return;
 
     status = "påbegynt";
     oppdaterWatchKnapp(); 
@@ -1370,11 +1439,21 @@ img, video {
     const returUrl = encodeURIComponent(window.location.href);
 
     if (type === "film") {
+      if (!data.watchUrl || !erTryggUrl(data.watchUrl)) {
+        alert("Kunne ikke starte avspilling: Ugyldig kilde-URL.");
+        return;
+      }
       const separator = data.watchUrl.includes("?") ? "&" : "?";
       window.location.href = `${data.watchUrl}${separator}returUrl=${returUrl}`;
     } else if (type === "serie" && data.sesonger) {
       const sisteEpKey = `${navn}-siste-episode`;
-      let sisteEp = JSON.parse(localStorage.getItem(sisteEpKey));
+      let sisteEp = null;
+      try {
+        sisteEp = JSON.parse(localStorage.getItem(sisteEpKey));
+      } catch (e) {
+        console.warn("Kunne ikke lese avspillingsfremdrift.");
+      }
+
       let sesongNr, epNr;
 
       if (sisteEp && data.sesonger[sisteEp.sesong]?.episoder[sisteEp.episode]) {
@@ -1384,7 +1463,7 @@ img, video {
         sesongNr = Object.keys(data.sesonger)[0];
         epNr = Object.keys(data.sesonger[sesongNr].episoder)[0];
       }
-      window.location.href = `film-mal.html?navn=${encodeURIComponent(navn)}&sesong=${sesongNr}&episode=${epNr}&returUrl=${returUrl}`;
+      window.location.href = `film-mal.html?navn=${encodeURIComponent(navn)}&sesong=${encodeURIComponent(sesongNr)}&episode=${encodeURIComponent(epNr)}&returUrl=${returUrl}`;
     }
   }
 
@@ -1403,7 +1482,7 @@ img, video {
   }
 
   /* ==========================================
-     6. GENERERING AV EPISODER & AVANSERTE ANBEFALINGER
+     6. EPISODELISTING & SAMMEHENGSTILPASSEDE ANBEFALINGER
      ========================================== */
   function visSesong(sesongNr) {
     const seasonButtons = document.getElementById("seasonButtons");
@@ -1433,15 +1512,17 @@ img, video {
         overlayHTML = `<div class="lock-overlay"><i class="fas fa-clock"></i><span>${dato}</span></div>`;
       }
 
+      const epBilde = erTryggUrl(ep.thumbnail) ? ep.thumbnail : "";
+
       epCard.innerHTML = `
         <div class="episode-thumb">
-          <img src="${ep.thumbnail || ''}" alt="${ep.tittel || ''}">
+          <img src="${epBilde}" alt="${sanitizeInput(ep.tittel || '')}">
           ${overlayHTML}
         </div>
         <div class="episode-info">
-          <div class="episode-title">Episode ${epNr}: ${ep.tittel || ''}</div>
-          <div class="episode-meta">${ep.varighet || ''}</div>
-          <div class="episode-desc">${ep.beskrivelse || ""}</div>
+          <div class="episode-title">Episode ${sanitizeInput(epNr)}: ${sanitizeInput(ep.tittel || '')}</div>
+          <div class="episode-meta">${sanitizeInput(ep.varighet || '')}</div>
+          <div class="episode-desc">${sanitizeInput(ep.beskrivelse || '')}</div>
         </div>
       `;
 
@@ -1449,7 +1530,7 @@ img, video {
         epCard.addEventListener("click", () => {
           localStorage.setItem(`${navn}-siste-episode`, JSON.stringify({ sesong: sesongNr, episode: epNr }));
           const returUrl = encodeURIComponent(window.location.href);
-          window.location.href = `film-mal.html?navn=${encodeURIComponent(navn)}&sesong=${sesongNr}&episode=${epNr}&returUrl=${returUrl}`;
+          window.location.href = `film-mal.html?navn=${encodeURIComponent(navn)}&sesong=${encodeURIComponent(sesongNr)}&episode=${encodeURIComponent(epNr)}&returUrl=${returUrl}`;
         });
       }
       episodeGallery.appendChild(epCard);
@@ -1559,14 +1640,14 @@ img, video {
         const card = document.createElement("div");
         card.className = "movie-card";
         
-        const bildeUrl = item.poster || item.bakgrunn || '';
+        const bildeUrl = (erTryggUrl(item.poster) ? item.poster : (erTryggUrl(item.bakgrunn) ? item.bakgrunn : ''));
         
         card.innerHTML = `
-          <img src="${bildeUrl}" alt="${item.tittel || ''}">
-          <div class="movie-overlay"><div class="movie-title">${item.tittel || ''}</div></div>
+          <img src="${bildeUrl}" alt="${sanitizeInput(item.tittel || '')}">
+          <div class="movie-overlay"><div class="movie-title">${sanitizeInput(item.tittel || '')}</div></div>
         `;
         card.addEventListener("click", () => {
-          window.location.href = `film.html?navn=${anbefaling.nøkkel}`;
+          window.location.href = `film.html?navn=${encodeURIComponent(anbefaling.nøkkel)}`;
         });
         gallery.appendChild(card);
       });
@@ -1574,7 +1655,7 @@ img, video {
   }
 
   /* ==========================================
-     7. VIDEO/TRAILER & DYNAMISK STYLING
+     7. VIDEO/TRAILER, FEILHÅNDTERING & STYLING
      ========================================== */
   function initTrailer() {
     const trailerVideo = document.getElementById("trailerVideo");
@@ -1582,14 +1663,26 @@ img, video {
     const pauseBtn = document.getElementById("pauseBtn");
     const soundBtn = document.getElementById("soundBtn");
 
-    if (data.trailer && data.trailer.trim() !== "" && trailerVideo) {
+    if (data.trailer && data.trailer.trim() !== "" && erTryggUrl(data.trailer) && trailerVideo) {
       trailerVideo.src = data.trailer;
       trailerVideo.preload = "auto";
       
+      // Håndter potensielle nettverks- og avspillingsfeil
+      trailerVideo.addEventListener("error", () => {
+        console.warn("Trailer-feil. Viser bakgrunnsbilde isteden.");
+        if (trailerVideo) trailerVideo.style.display = "none";
+        if (videoControls) videoControls.style.display = "none";
+        if (bgImg) bgImg.style.opacity = "1";
+      });
+
       setTimeout(() => {
         if (bgImg) bgImg.style.opacity = "0";
         trailerVideo.style.opacity = "1";
-        trailerVideo.play().catch(() => {});
+        trailerVideo.play().catch(() => {
+          // Autoplay ble forhindret av nettleser-policy
+          if (bgImg) bgImg.style.opacity = "1";
+          trailerVideo.style.opacity = "0";
+        });
         if (videoControls) videoControls.style.opacity = "1";
       }, 10000);
 
@@ -1623,9 +1716,19 @@ img, video {
     }
   }
 
+  // Ytelsesoptimalisert scroll-lytter for navbaren (Throttled via RequestAnimationFrame)
+  let ticking = false;
   window.addEventListener("scroll", () => {
-    const nav = document.querySelector(".top-nav");
-    if (nav) window.scrollY > 50 ? nav.classList.add("scrolled") : nav.classList.remove("scrolled");
+    if (!ticking) {
+      window.requestAnimationFrame(() => {
+        const nav = document.querySelector(".top-nav");
+        if (nav) {
+          window.scrollY > 50 ? nav.classList.add("scrolled") : nav.classList.remove("scrolled");
+        }
+        ticking = false;
+      });
+      ticking = true;
+    }
   });
 
   if (document.readyState === "loading") {
