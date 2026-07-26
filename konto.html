@@ -7,6 +7,7 @@
 
   <link rel="icon" type="image/png" href="https://static.wixstatic.com/media/d9ace9_95bbe3f5ff4b4aab9314a8d08804344e~mv2.png" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  
   <style>
     :root {
       --bg: #091B1E;
@@ -22,14 +23,14 @@
 
     body {
       background: var(--bg);
-      color: white;
+      color: #ffffff;
       font-family: 'Inter', Arial, sans-serif;
       min-height: 100vh;
       display: flex;
       flex-direction: column;
     }
 
-    /* Max-stil toppmeny */
+    /* Toppmeny */
     header {
       padding: 18px 5%;
       background: rgba(9, 27, 30, 0.9);
@@ -55,13 +56,13 @@
     header button {
       background: rgba(255,255,255,0.05);
       border: 1px solid rgba(255,255,255,0.15);
-      color: white;
+      color: #ffffff;
       padding: 8px 18px;
       border-radius: 999px;
       font-weight: 600;
       font-size: 14px;
       cursor: pointer;
-      transition: 0.25s ease;
+      transition: all 0.25s ease;
       display: flex;
       align-items: center;
       gap: 8px;
@@ -69,19 +70,20 @@
 
     header button:hover { 
       background: rgba(255,255,255,0.12);
-      border-color: white;
+      border-color: #ffffff;
     }
 
     header button.logout-btn {
       border-color: rgba(255, 77, 77, 0.4);
       color: var(--danger);
     }
+    
     header button.logout-btn:hover {
       background: rgba(255, 77, 77, 0.15);
       border-color: var(--danger);
     }
 
-    /* Sentrert Max-layout uten sidepanel */
+    /* Hovedinnhold */
     main {
       flex: 1;
       width: 100%;
@@ -97,7 +99,6 @@
       letter-spacing: -0.5px;
     }
 
-    /* Hovedruten for innstillinger */
     .settings-card {
       background: var(--card-bg);
       backdrop-filter: blur(18px);
@@ -107,7 +108,7 @@
       border: 1px solid var(--border);
     }
 
-    /* Profil topp-seksjon i boksen */
+    /* Profiltopp */
     .profile-header {
       display: flex;
       align-items: center;
@@ -124,7 +125,7 @@
       overflow: hidden;
       cursor: pointer;
       border: 2px solid rgba(255,255,255,0.15);
-      transition: 0.3s ease;
+      transition: all 0.3s ease;
       flex-shrink: 0;
     }
 
@@ -186,7 +187,7 @@
     .btn-action, .edit-trigger {
       background: none;
       border: 1px solid rgba(255,255,255,0.15);
-      color: white;
+      color: #ffffff;
       padding: 8px 16px;
       border-radius: 8px;
       cursor: pointer;
@@ -198,7 +199,7 @@
 
     .btn-action:hover, .edit-trigger:hover {
       background: rgba(255,255,255,0.08);
-      border-color: white;
+      border-color: #ffffff;
     }
 
     .btn-primary {
@@ -219,16 +220,16 @@
       background: rgba(9, 27, 30, 0.8);
       border: 1px solid rgba(255, 255, 255, 0.15);
       border-radius: 10px;
-      color: white;
+      color: #ffffff;
       font-size: 15px;
       outline: none;
     }
 
-    .edit-field select option { background: #091B1E; color: white; }
+    .edit-field select option { background: #091B1E; color: #ffffff; }
 
     .flex-inputs { display: flex; gap: 10px; }
 
-    /* Foreldrekontroll PIN-lås */
+    /* Foreldrekontroll */
     .parent-lock-screen {
       padding: 20px 0;
       text-align: center;
@@ -252,7 +253,7 @@
       background: rgba(9, 27, 30, 0.9);
       border: 1px solid rgba(255,255,255,0.2);
       border-radius: 10px;
-      color: white;
+      color: #ffffff;
     }
 
     .btn-parent-unlock {
@@ -375,6 +376,15 @@
         </div>
       </div>
 
+      <!-- Passord -->
+      <div class="row">
+        <div class="info-block">
+          <div class="label" data-i18n="password">Passord</div>
+          <div class="value">••••••••</div>
+        </div>
+        <button class="edit-trigger" id="resetPassordBtn" data-i18n="changePassword">Endre passord</button>
+      </div>
+
       <!-- Tjenestespråk -->
       <div class="row">
         <div class="info-block">
@@ -392,43 +402,6 @@
           </div>
         </div>
         <button class="edit-trigger" id="endreSprakKnapp" data-i18n="edit">Endre</button>
-      </div>
-
-      <!-- FØDSELSINFORMASJON OG ALDER -->
-      <div class="section-title"><i class="fa-solid fa-cake-candles"></i> <span data-i18n="birthInfoTitle">Fødselsinformasjon & Alder</span></div>
-
-      <div class="row">
-        <div class="info-block">
-          <div class="label" data-i18n="birthDate">Fødselsmåned og fødselsår</div>
-          <div class="value" id="fodselsView">Laster...</div>
-          <div class="label" style="margin-top: 10px;" data-i18n="calculatedAge">Beregnet Alder</div>
-          <div class="value" id="alderView">Laster...</div>
-
-          <div id="editAlderForm" class="edit-field hidden">
-            <div class="flex-inputs">
-              <select id="fodselsMaanedInput">
-                <option value="1">Januar / January</option>
-                <option value="2">Februar / February</option>
-                <option value="3">Mars / March</option>
-                <option value="4">April</option>
-                <option value="5">Mai / May</option>
-                <option value="6">Juni / June</option>
-                <option value="7">Juli / July</option>
-                <option value="8">August</option>
-                <option value="9">September</option>
-                <option value="10">Oktober / October</option>
-                <option value="11">November</option>
-                <option value="12">Desember / December</option>
-              </select>
-              <input type="number" id="fodselsAarInput" placeholder="År (f.eks. 2012)" min="1900" max="2026" />
-            </div>
-            <div style="display: flex; gap: 10px; margin-top: 10px;">
-              <button class="btn-action btn-primary" id="lagreAlderBtn" data-i18n="save">Lagre</button>
-              <button class="btn-action" id="avbrytAlderBtn" data-i18n="cancel">Avbryt</button>
-            </div>
-          </div>
-        </div>
-        <button class="edit-trigger" id="endreAlderKnapp" data-i18n="edit">Endre</button>
       </div>
 
       <!-- FORELDREKONTROLL (Kun synlig på barnekonto) -->
@@ -497,12 +470,10 @@
         accountSettings: "Kontoopplysninger",
         profileName: "Profilnavn",
         email: "E-postadresse",
+        password: "Passord",
+        changePassword: "Endre passord",
         serviceLang: "Språk for hele tjenesten",
         applyServiceLang: "Oppdater hele tjenesten",
-        birthInfoTitle: "Fødselsinformasjon & Alder",
-        birthDate: "Fødselsmåned og fødselsår",
-        calculatedAge: "Beregnet Alder",
-        yearsOld: "år gammel",
         edit: "Endre",
         save: "Lagre",
         cancel: "Avbryt",
@@ -517,7 +488,7 @@
         updatePin: "Oppdater PIN",
         pinUpdated: "PIN-koden ble oppdatert!",
         rights: "Alle rettigheter forbeholdt.",
-        resetMailSent: "E-post for tilbakestilling sendt!",
+        resetMailSent: "E-post for tilbakestilling av passord er sendt til din e-postadresse!",
         confirmDelete: "Vil du slette denne profilen permanent?",
         childProfile: "Barnekonto",
         standardProfile: "Standard Profil"
@@ -531,12 +502,10 @@
         accountSettings: "Account Details",
         profileName: "Profile Name",
         email: "Email Address",
+        password: "Password",
+        changePassword: "Change password",
         serviceLang: "Service-wide Language",
         applyServiceLang: "Update Entire Service",
-        birthInfoTitle: "Birth Information & Age",
-        birthDate: "Birth Month & Year",
-        calculatedAge: "Calculated Age",
-        yearsOld: "years old",
         edit: "Edit",
         save: "Save",
         cancel: "Cancel",
@@ -551,7 +520,7 @@
         updatePin: "Update PIN",
         pinUpdated: "PIN updated successfully!",
         rights: "All rights reserved.",
-        resetMailSent: "Reset email sent to your inbox!",
+        resetMailSent: "Password reset email sent to your inbox!",
         confirmDelete: "Are you sure you want to permanently delete this profile?",
         childProfile: "Kids Profile",
         standardProfile: "Standard Profile"
@@ -567,16 +536,11 @@
     const navnView = document.getElementById("navnView");
     const epostView = document.getElementById("epostView");
     const sprakView = document.getElementById("sprakView");
-    const fodselsView = document.getElementById("fodselsView");
-    const alderView = document.getElementById("alderView");
 
     const editNavnForm = document.getElementById("editNavnForm");
     const navnInput = document.getElementById("navnInput");
     const editSprakForm = document.getElementById("editSprakForm");
     const sprakSelect = document.getElementById("sprakSelect");
-    const editAlderForm = document.getElementById("editAlderForm");
-    const fodselsMaanedInput = document.getElementById("fodselsMaanedInput");
-    const fodselsAarInput = document.getElementById("fodselsAarInput");
 
     const foreldreKontrollSeksjon = document.getElementById("foreldreKontrollSeksjon");
     const parentLockPanel = document.getElementById("parentLockPanel");
@@ -651,18 +615,6 @@
       profileTypeDisplay.innerText = prof.isKids ? texts.childProfile : texts.standardProfile;
       document.getElementById("profilbilde").src = prof.bilde;
 
-      // Fødselsdato og Alder
-      const mnd = prof.fodselsMaaned || 1;
-      const aar = prof.fodselsAar || 2010;
-      const beregnetAlder = regnUtAlder(aar, mnd);
-
-      const maanedNavn = naavaerendeSpraak === "no" 
-        ? ["Januar", "Februar", "Mars", "April", "Mai", "Juni", "Juli", "August", "September", "Oktober", "November", "Desember"]
-        : ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-
-      fodselsView.innerText = `${maanedNavn[mnd - 1]} ${aar}`;
-      alderView.innerText = `${beregnetAlder} ${texts.yearsOld}`;
-
       // Kun for barnekontoer
       if (prof.isKids) {
         foreldreKontrollSeksjon.classList.remove("hidden");
@@ -672,14 +624,17 @@
       }
     }
 
-    function regnUtAlder(aar, maaned) {
-      const iDag = new Date();
-      let alder = iDag.getFullYear() - aar;
-      if (iDag.getMonth() + 1 < maaned) {
-        alder--;
+    // Endre/Resett Passord
+    document.getElementById("resetPassordBtn").addEventListener("click", async () => {
+      if (auth.currentUser?.email) {
+        try {
+          await sendPasswordResetEmail(auth, auth.currentUser.email);
+          alert(i18n[naavaerendeSpraak].resetMailSent);
+        } catch (error) {
+          console.error("Feil ved sending av e-post:", error);
+        }
       }
-      return alder < 0 ? 0 : alder;
-    }
+    });
 
     // Språkvalg
     document.getElementById("endreSprakKnapp").addEventListener("click", () => {
@@ -706,25 +661,6 @@
       profiler[aktivProfilIndex].navn = navnInput.value.trim();
       await lagreProfiler();
       editNavnForm.classList.add("hidden");
-      oppdaterGrensesnitt();
-    });
-
-    // Fødselsdato
-    document.getElementById("endreAlderKnapp").addEventListener("click", () => {
-      fodselsMaanedInput.value = profiler[aktivProfilIndex].fodselsMaaned || 1;
-      fodselsAarInput.value = profiler[aktivProfilIndex].fodselsAar || 2010;
-      editAlderForm.classList.remove("hidden");
-    });
-    document.getElementById("avbrytAlderBtn").addEventListener("click", () => editAlderForm.classList.add("hidden"));
-    document.getElementById("lagreAlderBtn").addEventListener("click", async () => {
-      const mnd = parseInt(fodselsMaanedInput.value);
-      const aar = parseInt(fodselsAarInput.value);
-      if (aar < 1900 || aar > 2026) return;
-
-      profiler[aktivProfilIndex].fodselsMaaned = mnd;
-      profiler[aktivProfilIndex].fodselsAar = aar;
-      await lagreProfiler();
-      editAlderForm.classList.add("hidden");
       oppdaterGrensesnitt();
     });
 
