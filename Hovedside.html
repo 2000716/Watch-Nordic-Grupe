@@ -678,7 +678,7 @@
       color: #555;
     }
 
- /* ==========================================================================
+/* ==========================================================================
        9. HOVER EFFEKTER KUN FOR ENHETER MED MUS (PC / LAPTOP)
        ========================================================================== */
     @media (hover: hover) {
@@ -705,14 +705,14 @@
         opacity: 1;
       }
 
-      /* NAVIGASJONSPILER SKJØVET UT FRA GALLERIET */
+      /* STØRRE OG LENGRE FADE PÅ UTSIDEN AV GALLERIET */
       .scroll-button {
         display: flex;
         position: absolute;
         top: 0;
         bottom: 0;
         transform: none;
-        width: 80px; 
+        width: 130px; /* Gjør selve fade-området betydelig større/lengre */
         height: 100%;
         border-radius: 0;
         background: transparent;
@@ -729,27 +729,27 @@
         user-select: none;
       }
 
-      /* Skjøvet ut på utsiden av galleriet med en myk strømming-gradient */
+      /* Skjøvet enda lenger ut for å passe den større faden */
       .scroll-button.left { 
-        left: -60px; /* Skyver hele faden og pilen lenger ut til venstre */
-        justify-content: flex-end; /* Holder pilen litt inn mot kanten av faden */
-        padding-right: 15px;
+        left: -80px; 
+        justify-content: flex-end; /* Holder pilen på innsiden av den dype faden */
+        padding-right: 25px;
         background: linear-gradient(to right, 
-          rgba(5, 15, 17, 0.95) 0%, 
-          rgba(5, 15, 17, 0.75) 40%, 
-          rgba(5, 15, 17, 0.3) 75%, 
+          rgba(5, 15, 17, 0.98) 0%, 
+          rgba(5, 15, 17, 0.85) 35%, 
+          rgba(5, 15, 17, 0.4) 70%, 
           rgba(5, 15, 17, 0) 100%
         );
       }
       
       .scroll-button.right { 
-        right: -60px; /* Skyver hele faden og pilen lenger ut til høyre */
-        justify-content: flex-start; /* Holder pilen litt inn mot kanten av faden */
-        padding-left: 15px;
+        right: -80px; 
+        justify-content: flex-start; /* Holder pilen på innsiden av den dype faden */
+        padding-left: 25px;
         background: linear-gradient(to left, 
-          rgba(5, 15, 17, 0.95) 0%, 
-          rgba(5, 15, 17, 0.75) 40%, 
-          rgba(5, 15, 17, 0.3) 75%, 
+          rgba(5, 15, 17, 0.98) 0%, 
+          rgba(5, 15, 17, 0.85) 35%, 
+          rgba(5, 15, 17, 0.4) 70%, 
           rgba(5, 15, 17, 0) 100%
         );
       }
