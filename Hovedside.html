@@ -705,14 +705,14 @@
         opacity: 1;
       }
 
-      /* MEGET SYNLIG OGER STERK FADE MED HOVEDFARGEN (#050F11) */
+      /* MEGET SYNLIG OG STERK FADE MED HOVEDFARGEN (#050F11) */
       .scroll-button {
         display: flex;
         position: absolute;
         top: 0;
         bottom: 0;
         transform: none;
-        width: 90px; /* Gjør faden bredere for en tydeligere overgang */
+        width: 90px; 
         height: 100%;
         border-radius: 0;
         background: transparent;
@@ -730,7 +730,6 @@
         user-select: none;
       }
 
-      /* Helt mørk/dekkende (alpha 1) i starten slik at den skiller seg krystallklart ut */
       .scroll-button.left { 
         left: 0; 
         background: linear-gradient(to right, 
@@ -751,6 +750,16 @@
         );
       }
 
+      /* Flytter venstre pil lenger ut mot ytterkanten */
+      .scroll-button.left i {
+        margin-right: 25px;
+      }
+
+      /* Flytter høyre pil lenger ut mot ytterkanten */
+      .scroll-button.right i {
+        margin-left: 25px;
+      }
+
       /* Selve pil-ikonet med kontrastfarge og skygge */
       .scroll-button i {
         position: relative;
@@ -760,7 +769,7 @@
       }
 
       .scroll-button:hover i {
-        color: #00FFCC; /* Lyser opp i accent-fargen på hover */
+        color: #00FFCC; 
         transform: scale(1.25);
       }
 
