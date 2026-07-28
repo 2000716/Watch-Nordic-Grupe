@@ -705,14 +705,14 @@
         opacity: 1;
       }
 
-      /* STRØMMETJENESTE-LIKT DESIGN (NETFLIX / HBO STYLE) */
+      /* NAVIGASJONSPILER SKJØVET UT FRA GALLERIET */
       .scroll-button {
         display: flex;
         position: absolute;
         top: 0;
         bottom: 0;
         transform: none;
-        width: 75px; /* Perfekt bredde for myk fade */
+        width: 80px; 
         height: 100%;
         border-radius: 0;
         background: transparent;
@@ -729,25 +729,27 @@
         user-select: none;
       }
 
-      /* Plassert helt i kanten av wrapperen med en herlig, dyp strømming-gradient */
+      /* Skjøvet ut på utsiden av galleriet med en myk strømming-gradient */
       .scroll-button.left { 
-        left: 0; 
-        justify-content: center; /* Holder pilen midt i faden */
+        left: -60px; /* Skyver hele faden og pilen lenger ut til venstre */
+        justify-content: flex-end; /* Holder pilen litt inn mot kanten av faden */
+        padding-right: 15px;
         background: linear-gradient(to right, 
           rgba(5, 15, 17, 0.95) 0%, 
-          rgba(5, 15, 17, 0.75) 30%, 
-          rgba(5, 15, 17, 0.3) 65%, 
+          rgba(5, 15, 17, 0.75) 40%, 
+          rgba(5, 15, 17, 0.3) 75%, 
           rgba(5, 15, 17, 0) 100%
         );
       }
       
       .scroll-button.right { 
-        right: 0; 
-        justify-content: center; /* Holder pilen midt i faden */
+        right: -60px; /* Skyver hele faden og pilen lenger ut til høyre */
+        justify-content: flex-start; /* Holder pilen litt inn mot kanten av faden */
+        padding-left: 15px;
         background: linear-gradient(to left, 
           rgba(5, 15, 17, 0.95) 0%, 
-          rgba(5, 15, 17, 0.75) 30%, 
-          rgba(5, 15, 17, 0.3) 65%, 
+          rgba(5, 15, 17, 0.75) 40%, 
+          rgba(5, 15, 17, 0.3) 75%, 
           rgba(5, 15, 17, 0) 100%
         );
       }
