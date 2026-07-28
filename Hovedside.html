@@ -705,70 +705,64 @@
         opacity: 1;
       }
 
-      /* STERK OG LANG FADE SOM STARTER PÅ KANTEN AV GALLERIET */
+      /* NETFLIX-EKSAKT NAVIGASJONSPIL OG FADE */
       .scroll-button {
         display: flex;
         position: absolute;
         top: 0;
         bottom: 0;
         transform: none;
-        width: 140px; /* Svært bred og stor fade */
+        width: 60px; /* Eksakt Netflix-bredde for faden */
         height: 100%;
         border-radius: 0;
         background: transparent;
         border: none;
         color: #ffffff;
-        font-size: 28px;
+        font-size: 32px;
         cursor: pointer;
         z-index: 1001; 
         align-items: center;
+        justify-content: center;
         opacity: 0;
         pointer-events: none;
-        transition: opacity 0.3s ease;
+        transition: opacity 0.2s ease;
         backdrop-filter: none;
         user-select: none;
       }
 
-      /* Venstre fade starter nøyaktig på kanten av galleriet (tilpasset med -140px) */
+      /* Plassert presist på kanten av galleriet slik Netflix gjør det */
       .scroll-button.left { 
-        left: -140px; 
-        justify-content: flex-end; /* Skyver pilen litt utover i faden */
-        padding-right: 25px;
+        left: 0; 
         background: linear-gradient(to right, 
-          rgba(5, 15, 17, 1) 0%,       /* Heldekkende/sterk i starten */
-          rgba(5, 15, 17, 0.95) 30%, 
-          rgba(5, 15, 17, 0.6) 65%, 
-          rgba(5, 15, 17, 0) 100%
+          rgba(20, 20, 20, 0.7) 0%, 
+          rgba(20, 20, 20, 0.3) 50%, 
+          rgba(20, 20, 20, 0) 100%
         );
       }
       
-      /* Høyre fade starter nøyaktig på kanten av galleriet */
       .scroll-button.right { 
-        right: -140px; 
-        justify-content: flex-start; /* Skyver pilen litt utover i faden */
-        padding-left: 25px;
+        right: 0; 
         background: linear-gradient(to left, 
-          rgba(5, 15, 17, 1) 0%,       /* Heldekkende/sterk i starten */
-          rgba(5, 15, 17, 0.95) 30%, 
-          rgba(5, 15, 17, 0.6) 65%, 
-          rgba(5, 15, 17, 0) 100%
+          rgba(20, 20, 20, 0.7) 0%, 
+          rgba(20, 20, 20, 0.3) 50%, 
+          rgba(20, 20, 20, 0) 100%
         );
       }
 
-      /* Selve pilen, krystallklar med pen hover-effekt */
+      /* Selve pilen, klassisk minimalistisk Netflix-stil med sort konturskygge */
       .scroll-button i {
         position: relative;
         z-index: 2;
-        transition: transform 0.25s ease, color 0.25s ease;
-        text-shadow: 0 2px 10px rgba(0, 0, 0, 0.9);
+        transition: transform 0.2s ease, color 0.2s ease;
+        text-shadow: 0 0 10px rgba(0, 0, 0, 0.7);
       }
 
       .scroll-button:hover i {
-        color: #00FFCC;
+        color: #ffffff;
         transform: scale(1.25);
       }
 
-      /* Viser faden og pilen når du hovrer over galleriet */
+      /* Viser faden og pilen kun når du hovrer over galleriet */
       .gallery-wrapper:hover .scroll-button:not(.hidden),
       .continue-gallery-wrapper:hover .scroll-button:not(.hidden) {
         opacity: 1;
