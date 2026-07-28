@@ -705,14 +705,14 @@
         opacity: 1;
       }
 
-      /* NETFLIX-EKSAKT NAVIGASJONSPIL OG FADE */
+      /* MEGET SYNLIG OGER STERK FADE MED HOVEDFARGEN (#050F11) */
       .scroll-button {
         display: flex;
         position: absolute;
         top: 0;
         bottom: 0;
         transform: none;
-        width: 60px; /* Eksakt Netflix-bredde for faden */
+        width: 90px; /* Gjør faden bredere for en tydeligere overgang */
         height: 100%;
         border-radius: 0;
         background: transparent;
@@ -725,40 +725,42 @@
         justify-content: center;
         opacity: 0;
         pointer-events: none;
-        transition: opacity 0.2s ease;
+        transition: opacity 0.25s ease;
         backdrop-filter: none;
         user-select: none;
       }
 
-      /* Plassert presist på kanten av galleriet slik Netflix gjør det */
+      /* Helt mørk/dekkende (alpha 1) i starten slik at den skiller seg krystallklart ut */
       .scroll-button.left { 
         left: 0; 
         background: linear-gradient(to right, 
-          rgba(20, 20, 20, 0.7) 0%, 
-          rgba(20, 20, 20, 0.3) 50%, 
-          rgba(20, 20, 20, 0) 100%
+          rgba(5, 15, 17, 1) 0%, 
+          rgba(5, 15, 17, 0.85) 40%, 
+          rgba(5, 15, 17, 0.4) 75%, 
+          rgba(5, 15, 17, 0) 100%
         );
       }
       
       .scroll-button.right { 
         right: 0; 
         background: linear-gradient(to left, 
-          rgba(20, 20, 20, 0.7) 0%, 
-          rgba(20, 20, 20, 0.3) 50%, 
-          rgba(20, 20, 20, 0) 100%
+          rgba(5, 15, 17, 1) 0%, 
+          rgba(5, 15, 17, 0.85) 40%, 
+          rgba(5, 15, 17, 0.4) 75%, 
+          rgba(5, 15, 17, 0) 100%
         );
       }
 
-      /* Selve pilen, klassisk minimalistisk Netflix-stil med sort konturskygge */
+      /* Selve pil-ikonet med kontrastfarge og skygge */
       .scroll-button i {
         position: relative;
         z-index: 2;
         transition: transform 0.2s ease, color 0.2s ease;
-        text-shadow: 0 0 10px rgba(0, 0, 0, 0.7);
+        text-shadow: 0 2px 8px rgba(0, 0, 0, 0.9);
       }
 
       .scroll-button:hover i {
-        color: #ffffff;
+        color: #00FFCC; /* Lyser opp i accent-fargen på hover */
         transform: scale(1.25);
       }
 
