@@ -678,7 +678,7 @@
       color: #555;
     }
 
-   /* ==========================================================================
+  /* ==========================================================================
        9. HOVER EFFEKTER KUN FOR ENHETER MED MUS (PC / LAPTOP)
        ========================================================================== */
     @media (hover: hover) {
@@ -705,24 +705,23 @@
         opacity: 1;
       }
 
-      /* NAVIGASJONSPILER MED FADE-BAKGRUNN */
+      /* NAVIGASJONSPILER MED TYKKERE FADE UTENFOR BILDENE */
       .scroll-button {
         display: flex;
         position: absolute;
         top: 0;
         bottom: 0;
         transform: none;
-        width: 80px; /* Gjør dem bredere slik at faden blir fin og myk */
+        width: 110px; /* Gjør faden tykkere/bredere */
         height: 100%;
         border-radius: 0;
         background: transparent;
         border: none;
         color: #ffffff;
-        font-size: 24px;
+        font-size: 26px;
         cursor: pointer;
         z-index: 1001; 
         align-items: center;
-        justify-content: center;
         opacity: 0;
         pointer-events: none;
         transition: opacity 0.3s ease;
@@ -730,18 +729,22 @@
         user-select: none;
       }
 
-      /* Plassering og fade-gradient for venstre og høyre side */
+      /* Skyver venstre fade litt ut til venstre, og høyre litt ut til høyre */
       .scroll-button.left { 
-        left: 0; 
-        background: linear-gradient(to right, rgba(5, 15, 17, 0.9) 0%, rgba(5, 15, 17, 0) 100%);
+        left: -30px; /* Skyver den ut fra bildekanten */
+        justify-content: flex-end; /* Pilen trekkes litt inn mot midten av faden */
+        padding-right: 20px;
+        background: linear-gradient(to right, rgba(5, 15, 17, 0.95) 0%, rgba(5, 15, 17, 0.7) 50%, rgba(5, 15, 17, 0) 100%);
       }
       
       .scroll-button.right { 
-        right: 0; 
-        background: linear-gradient(to left, rgba(5, 15, 17, 0.9) 0%, rgba(5, 15, 17, 0) 100%);
+        right: -30px; /* Skyver den ut fra bildekanten */
+        justify-content: flex-start; /* Pilen trekkes litt inn mot midten av faden */
+        padding-left: 20px;
+        background: linear-gradient(to left, rgba(5, 15, 17, 0.95) 0%, rgba(5, 15, 17, 0.7) 50%, rgba(5, 15, 17, 0) 100%);
       }
 
-      /* Sørg for at selve pil-ikonet/teksten ligger over faden og er skarp */
+      /* Sørg for at selve pil-ikonet ligger over faden og er skarp */
       .scroll-button i {
         position: relative;
         z-index: 2;
@@ -761,7 +764,6 @@
         pointer-events: auto;
       }
     }
-
     /* ==========================================================================
        10. OPTIMALISERING FOR SKJERMER MELLOM 769px og 1200px (LAPTOPS)
        ========================================================================== */
