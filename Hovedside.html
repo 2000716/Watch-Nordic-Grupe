@@ -678,7 +678,7 @@
       color: #555;
     }
 
-    /* ==========================================================================
+   /* ==========================================================================
        9. HOVER EFFEKTER KUN FOR ENHETER MED MUS (PC / LAPTOP)
        ========================================================================== */
     @media (hover: hover) {
@@ -705,38 +705,56 @@
         opacity: 1;
       }
 
+      /* NAVIGASJONSPILER MED FADE-BAKGRUNN */
       .scroll-button {
         display: flex;
         position: absolute;
-        top: 50%;
-        transform: translateY(-50%);
-        width: 44px;
-        height: 44px;
-        border-radius: 50%;
-        background: rgba(5, 15, 17, 0.75);
-        border: 1px solid rgba(255, 255, 255, 0.25);
+        top: 0;
+        bottom: 0;
+        transform: none;
+        width: 80px; /* Gjør dem bredere slik at faden blir fin og myk */
+        height: 100%;
+        border-radius: 0;
+        background: transparent;
+        border: none;
         color: #ffffff;
-        font-size: 22px;
+        font-size: 24px;
         cursor: pointer;
         z-index: 1001; 
         align-items: center;
         justify-content: center;
         opacity: 0;
         pointer-events: none;
-        transition: opacity 0.25s ease, background 0.25s ease, transform 0.25s ease;
-        backdrop-filter: blur(6px);
+        transition: opacity 0.3s ease;
+        backdrop-filter: none;
         user-select: none;
       }
 
-      .scroll-button.left { left: 2px; }
-      .scroll-button.right { right: 2px; }
-
-      .scroll-button:hover {
-        background: rgba(0, 255, 204, 0.85);
-        color: #000000;
-        transform: translateY(-50%) scale(1.08);
+      /* Plassering og fade-gradient for venstre og høyre side */
+      .scroll-button.left { 
+        left: 0; 
+        background: linear-gradient(to right, rgba(5, 15, 17, 0.9) 0%, rgba(5, 15, 17, 0) 100%);
+      }
+      
+      .scroll-button.right { 
+        right: 0; 
+        background: linear-gradient(to left, rgba(5, 15, 17, 0.9) 0%, rgba(5, 15, 17, 0) 100%);
       }
 
+      /* Sørg for at selve pil-ikonet/teksten ligger over faden og er skarp */
+      .scroll-button i {
+        position: relative;
+        z-index: 2;
+        transition: transform 0.25s ease, color 0.25s ease;
+        text-shadow: 0 2px 8px rgba(0, 0, 0, 0.9);
+      }
+
+      .scroll-button:hover i {
+        color: #00FFCC;
+        transform: scale(1.2);
+      }
+
+      /* Viser faden og pilen når du hovrer over hele galleri-wrapperen */
       .gallery-wrapper:hover .scroll-button:not(.hidden),
       .continue-gallery-wrapper:hover .scroll-button:not(.hidden) {
         opacity: 1;
