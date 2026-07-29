@@ -119,9 +119,9 @@ const serier = {
     "detektiv-muffins": {
     tittel: "Detektiv Muffins",
     rating: "0.0",
-    bakgrunn: "https://static.wixstatic.com/media/d9ace9_4148dac16a81424e9a08e544106c05e4~mv2.jpg",
+    bakgrunn: "https://static.wixstatic.com/media/d9ace9_a82288441b2c4981b162e76d1458ea26~mv2.jpg",
     bakgrunnMobil: "https://static.wixstatic.com/media/d9ace9_4148dac16a81424e9a08e544106c05e4~mv2.jpg",
-    banner: "https://static.wixstatic.com/media/d9ace9_47861acfb17a4538904b582b2eb973ec~mv2.png", 
+    banner: "https://static.wixstatic.com/media/d9ace9_a82288441b2c4981b162e76d1458ea26~mv2.jpg", 
     bannerMobil: "https://static.wixstatic.com/media/d9ace9_4148dac16a81424e9a08e544106c05e4~mv2.jpg",
     logo: "https://static.wixstatic.com/media/d9ace9_9f7a6b0a079542e49c288ddeb81f16ce~mv2.png",
     poster: "https://static.wixstatic.com/media/d9ace9_f85efe1e9f9645f089db4e194acd05a0~mv2.jpg",
