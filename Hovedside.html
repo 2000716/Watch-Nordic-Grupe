@@ -1221,7 +1221,6 @@
 
     if (menyProfil && bildeUrl) {
       menyProfil.src = bildeUrl;
-      // Legg til png-karakter klassen hvis det er en PNG-fil (3D pop-out)
       if (bildeUrl.toLowerCase().endsWith('.png')) {
         menyProfil.classList.add('png-karakter');
       } else {
@@ -1686,6 +1685,28 @@
   }
 
   // ==================== SKYLAGRET (FIREBASE) FORTSETT Å SE ==================== //
+  // Hjelpefunksjon for å resirkulere/rense unødvendig fremdriftsdata
+  function ryddFremdriftData(fremdriftMap) {
+    if (!fremdriftMap) return {};
+    const rensetMap = {};
+    
+    Object.keys(fremdriftMap).forEach(key => {
+      const item = fremdriftMap[key];
+      const percent = typeof item === 'object' ? (item.percent || 0) : Number(item);
+      const status = typeof item === 'object' ? item.status : '';
+
+      // Behold bare filmer som ikke er ferdig eller har over 96% fremdrift
+      if (percent <= 96 && status !== 'ferdig') {
+        // Lagre KUN den essensielle dataen for å minimere Firebase-størrelsen
+        rensetMap[key] = {
+          percent: Math.round(percent),
+          time: item.time || 0
+        };
+      }
+    });
+    return rensetMap;
+  }
+
   async function renderContinueWatching() {
     const section = document.getElementById("fortsett-section");
     const gallery = document.getElementById("fortsett-galleri");
@@ -1703,9 +1724,12 @@
 
     Object.keys(profil.fremdrift).forEach((filmId) => {
       const dbData = profil.fremdrift[filmId];
-      const progressVerdi = dbData.percent || 0;
+      // Håndter enten objekt eller ren tallverdi for kompatibilitet
+      const progressVerdi = typeof dbData === "object" ? (dbData.percent || 0) : dbData;
+      const erFerdig = typeof dbData === "object" && dbData.status === "ferdig";
 
-      if (progressVerdi > 96 || dbData.status === "ferdig") {
+      // Resirkulering: Hopp over innhold som er ferdig eller nesten ferdig
+      if (progressVerdi > 96 || erFerdig) {
         return; 
       }
       
@@ -1728,6 +1752,7 @@
         }
       }
 
+      // Hvis filmen/serien ikke finnes i JS-filene eller er filtrert bort, rydd den unna
       if (!metadataMatch) return;
       if (erInnloggetSomBarn && (!erEgnetForBarn(metadataMatch) || !sjekkAldersgrense(metadataMatch))) return;
 
@@ -1736,27 +1761,28 @@
       let hrefUrl = `film.html?navn=${urlParamNavn}`;
       if (spillType === "serie") {
         const deler = filmId.split("-");
-        const s = deler[2].replace("s", "");
-        const e = deler[3].replace("e", "");
+        const s = deler[2] ? deler[2].replace("s", "") : "1";
+        const e = deler[3] ? deler[3].replace("e", "") : "1";
         hrefUrl = `film-mal.html?navn=${urlParamNavn}&sesong=${s}&episode=${e}&returUrl=${encodeURIComponent("Hovedside.html")}`;
       } else {
         hrefUrl = `film-mal.html?navn=${urlParamNavn}&returUrl=${encodeURIComponent("Hovedside.html")}`;
       }
 
+      // Hent alle tunge metadata (som poster) lokalt i stedet for fra Firebase
       const bildeKilde = metadataMatch.poster || metadataMatch.bilde || "";
 
       const link = document.createElement("a");
       link.href = hrefUrl;
       link.classList.add("gallery-item", "image-with-progress");
       link.innerHTML = `
-        ${bildeKilde ? `<img src="${bildeKilde}" alt="${dbData.tittel || metadataMatch.tittel}" loading="lazy">` : `<div style="width:100%; height:100%; background:#1a2629; display:flex; align-items:center; justify-content:center; padding:10px; text-align:center; font-size:12px; color:#fff;">${metadataMatch.tittel || 'Mangler bilde'}</div>`}
+        ${bildeKilde ? `<img src="${bildeKilde}" alt="${metadataMatch.tittel}" loading="lazy">` : `<div style="width:100%; height:100%; background:#1a2629; display:flex; align-items:center; justify-content:center; padding:10px; text-align:center; font-size:12px; color:#fff;">${metadataMatch.tittel || 'Mangler bilde'}</div>`}
         <div class="progress-container" style="background: rgba(255,255,255,0.2); width: 100%; height: 6px; position: absolute; bottom: 0; left: 0; z-index: 2;">
           <div class="progress-bar" style="width: ${progressVerdi}%; height: 100%; background: #00FFCC;"></div>
         </div>
         <div class="image-overlay">
           <div class="overlay-content">
             <div class="overlay-title">${metadataMatch.tittel}</div>
-            <div class="overlay-meta">${spillType === "serie" ? `S${filmId.split("-")[2].replace("s","")}E${filmId.split("-")[3].replace("e","")}` : ""}</div>
+            <div class="overlay-meta">${spillType === "serie" && filmId.includes("-s") ? `S${filmId.split("-")[2].replace("s","")}E${filmId.split("-")[3].replace("e","")}` : ""}</div>
           </div>
         </div>
       `;
