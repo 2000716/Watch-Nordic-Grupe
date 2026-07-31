@@ -468,6 +468,52 @@
       display: none;
       opacity: 0;
     }
+  /* ==================== FORTSETT Å SE STYLING ==================== */
+
+/* Container for hvert filmkort i "Fortsett å se" */
+.gallery-item.image-with-progress {
+  position: relative;
+  overflow: hidden;
+}
+
+/* Rund sletteknapp (søppelbøtte) nederst til venstre på kortet */
+.delete-progress-btn {
+  position: absolute;
+  bottom: 12px;
+  left: 12px;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background-color: rgba(0, 0, 0, 0.75);
+  border: 2px solid rgba(255, 255, 255, 0.8);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 10;
+  opacity: 0; /* Skjult som standard på PC */
+  transition: opacity 0.2s ease, transform 0.2s ease, background-color 0.2s ease;
+}
+
+/* Hover-effekt når du fører musa over sletteknappen */
+.delete-progress-btn:hover {
+  background-color: rgba(220, 20, 60, 0.95); /* Rød farge ved hover */
+  border-color: #ffffff;
+  transform: scale(1.1);
+}
+
+/* Gjør sletteknappen synlig når musepekeren hovrer over filmkortet på PC */
+.gallery-item.image-with-progress:hover .delete-progress-btn {
+  opacity: 1;
+}
+
+/* Alltid synlig sletteknapp på mobil og nettbrett (touch-skjermer) */
+@media (pointer: coarse) {
+  .delete-progress-btn {
+    opacity: 1 !important;
+  }
+}
 
     /* ==========================================================================
        5. TOP 10 GALLERI
@@ -1684,119 +1730,159 @@
     });
   }
 
-  // ==================== SKYLAGRET (FIREBASE) FORTSETT Å SE ==================== //
-  // Hjelpefunksjon for å resirkulere/rense unødvendig fremdriftsdata
-  function ryddFremdriftData(fremdriftMap) {
-    if (!fremdriftMap) return {};
-    const rensetMap = {};
-    
-    Object.keys(fremdriftMap).forEach(key => {
-      const item = fremdriftMap[key];
-      const percent = typeof item === 'object' ? (item.percent || 0) : Number(item);
-      const status = typeof item === 'object' ? item.status : '';
+// ==================== SKYLAGRET (FIREBASE) FORTSETT Å SE ==================== //
 
-      // Behold bare filmer som ikke er ferdig eller har over 96% fremdrift
-      if (percent <= 96 && status !== 'ferdig') {
-        // Lagre KUN den essensielle dataen for å minimere Firebase-størrelsen
-        rensetMap[key] = {
-          percent: Math.round(percent),
-          time: item.time || 0
-        };
-      }
-    });
-    return rensetMap;
+// Hjelpefunksjon for å resirkulere/rense unødvendig fremdriftsdata
+function ryddFremdriftData(fremdriftMap) {
+  if (!fremdriftMap) return {};
+  const rensetMap = {};
+  
+  Object.keys(fremdriftMap).forEach(key => {
+    const item = fremdriftMap[key];
+    const percent = typeof item === 'object' ? (item.percent || 0) : Number(item);
+    const status = typeof item === 'object' ? item.status : '';
+
+    // Behold bare filmer som ikke er ferdig eller har over 96% fremdrift
+    if (percent <= 96 && status !== 'ferdig') {
+      // Lagre KUN den essensielle dataen for å minimere Firebase-størrelsen
+      rensetMap[key] = {
+        percent: Math.round(percent),
+        time: item.time || 0
+      };
+    }
+  });
+  return rensetMap;
+}
+
+async function renderContinueWatching() {
+  const section = document.getElementById("fortsett-section");
+  const gallery = document.getElementById("fortsett-galleri");
+  if (!section || !gallery) return;
+  
+  gallery.innerHTML = "";
+
+  const profil = heleProfilArrayet.find(p => p.navn === aktivProfil);
+  if (!profil || !profil.fremdrift || Object.keys(profil.fremdrift).length === 0) {
+    section.style.display = "none";
+    return;
   }
 
-  async function renderContinueWatching() {
-    const section = document.getElementById("fortsett-section");
-    const gallery = document.getElementById("fortsett-galleri");
-    if (!section || !gallery) return;
-    
-    gallery.innerHTML = "";
+  let fantInnhold = false;
 
-    const profil = heleProfilArrayet.find(p => p.navn === aktivProfil);
-    if (!profil || !profil.fremdrift || Object.keys(profil.fremdrift).length === 0) {
-      section.style.display = "none";
-      return;
+  Object.keys(profil.fremdrift).forEach((filmId) => {
+    const dbData = profil.fremdrift[filmId];
+    // Håndter enten objekt eller ren tallverdi for kompatibilitet
+    const progressVerdi = typeof dbData === "object" ? (dbData.percent || 0) : dbData;
+    const erFerdig = typeof dbData === "object" && dbData.status === "ferdig";
+
+    // Resirkulering: Hopp over innhold som er ferdig eller nesten ferdig
+    if (progressVerdi > 96 || erFerdig) {
+      return; 
+    }
+    
+    let metadataMatch = null;
+    let urlParamNavn = "";
+    let spillType = "film";
+
+    if (filmId.startsWith("film-")) {
+      urlParamNavn = filmId.replace("film-", "");
+      if (typeof filmer !== "undefined" && filmer[urlParamNavn]) {
+        metadataMatch = filmer[urlParamNavn];
+        spillType = "film";
+      }
+    } else if (filmId.startsWith("serie-")) {
+      const deler = filmId.split("-"); 
+      urlParamNavn = deler[1];
+      if (typeof serier !== "undefined" && serier[urlParamNavn]) {
+        metadataMatch = serier[urlParamNavn];
+        spillType = "serie";
+      }
     }
 
-    let fantInnhold = false;
+    // Hvis filmen/serien ikke finnes i JS-filene eller er filtrert bort, rydd den unna
+    if (!metadataMatch) return;
+    if (erInnloggetSomBarn && (!erEgnetForBarn(metadataMatch) || !sjekkAldersgrense(metadataMatch))) return;
 
-    Object.keys(profil.fremdrift).forEach((filmId) => {
-      const dbData = profil.fremdrift[filmId];
-      // Håndter enten objekt eller ren tallverdi for kompatibilitet
-      const progressVerdi = typeof dbData === "object" ? (dbData.percent || 0) : dbData;
-      const erFerdig = typeof dbData === "object" && dbData.status === "ferdig";
+    fantInnhold = true;
 
-      // Resirkulering: Hopp over innhold som er ferdig eller nesten ferdig
-      if (progressVerdi > 96 || erFerdig) {
-        return; 
-      }
-      
-      let metadataMatch = null;
-      let urlParamNavn = "";
-      let spillType = "film";
-
-      if (filmId.startsWith("film-")) {
-        urlParamNavn = filmId.replace("film-", "");
-        if (typeof filmer !== "undefined" && filmer[urlParamNavn]) {
-          metadataMatch = filmer[urlParamNavn];
-          spillType = "film";
-        }
-      } else if (filmId.startsWith("serie-")) {
-        const deler = filmId.split("-"); 
-        urlParamNavn = deler[1];
-        if (typeof serier !== "undefined" && serier[urlParamNavn]) {
-          metadataMatch = serier[urlParamNavn];
-          spillType = "serie";
-        }
-      }
-
-      // Hvis filmen/serien ikke finnes i JS-filene eller er filtrert bort, rydd den unna
-      if (!metadataMatch) return;
-      if (erInnloggetSomBarn && (!erEgnetForBarn(metadataMatch) || !sjekkAldersgrense(metadataMatch))) return;
-
-      fantInnhold = true;
-
-      let hrefUrl = `film.html?navn=${urlParamNavn}`;
-      if (spillType === "serie") {
-        const deler = filmId.split("-");
-        const s = deler[2] ? deler[2].replace("s", "") : "1";
-        const e = deler[3] ? deler[3].replace("e", "") : "1";
-        hrefUrl = `film-mal.html?navn=${urlParamNavn}&sesong=${s}&episode=${e}&returUrl=${encodeURIComponent("Hovedside.html")}`;
-      } else {
-        hrefUrl = `film-mal.html?navn=${urlParamNavn}&returUrl=${encodeURIComponent("Hovedside.html")}`;
-      }
-
-      // Hent alle tunge metadata (som poster) lokalt i stedet for fra Firebase
-      const bildeKilde = metadataMatch.poster || metadataMatch.bilde || "";
-
-      const link = document.createElement("a");
-      link.href = hrefUrl;
-      link.classList.add("gallery-item", "image-with-progress");
-      link.innerHTML = `
-        ${bildeKilde ? `<img src="${bildeKilde}" alt="${metadataMatch.tittel}" loading="lazy">` : `<div style="width:100%; height:100%; background:#1a2629; display:flex; align-items:center; justify-content:center; padding:10px; text-align:center; font-size:12px; color:#fff;">${metadataMatch.tittel || 'Mangler bilde'}</div>`}
-        <div class="progress-container" style="background: rgba(255,255,255,0.2); width: 100%; height: 6px; position: absolute; bottom: 0; left: 0; z-index: 2;">
-          <div class="progress-bar" style="width: ${progressVerdi}%; height: 100%; background: #00FFCC;"></div>
-        </div>
-        <div class="image-overlay">
-          <div class="overlay-content">
-            <div class="overlay-title">${metadataMatch.tittel}</div>
-            <div class="overlay-meta">${spillType === "serie" && filmId.includes("-s") ? `S${filmId.split("-")[2].replace("s","")}E${filmId.split("-")[3].replace("e","")}` : ""}</div>
-          </div>
-        </div>
-      `;
-      gallery.appendChild(link);
-    });
-
-    if (fantInnhold) {
-      section.style.display = "block";
-      if (typeof oppdaterAlleGalleripiler === "function") oppdaterAlleGalleripiler();
+    let hrefUrl = `film.html?navn=${urlParamNavn}`;
+    if (spillType === "serie") {
+      const deler = filmId.split("-");
+      const s = deler[2] ? deler[2].replace("s", "") : "1";
+      const e = deler[3] ? deler[3].replace("e", "") : "1";
+      hrefUrl = `film-mal.html?navn=${urlParamNavn}&sesong=${s}&episode=${e}&returUrl=${encodeURIComponent("Hovedside.html")}`;
     } else {
-      section.style.display = "none";
+      hrefUrl = `film-mal.html?navn=${urlParamNavn}&returUrl=${encodeURIComponent("Hovedside.html")}`;
     }
-  }
 
+    // Hent alle tunge metadata (som poster) lokalt i stedet for fra Firebase
+    const bildeKilde = metadataMatch.poster || metadataMatch.bilde || "";
+
+    const link = document.createElement("a");
+    link.href = hrefUrl;
+    link.classList.add("gallery-item", "image-with-progress");
+    link.innerHTML = `
+      ${bildeKilde ? `<img src="${bildeKilde}" alt="${metadataMatch.tittel}" loading="lazy">` : `<div style="width:100%; height:100%; background:#1a2629; display:flex; align-items:center; justify-content:center; padding:10px; text-align:center; font-size:12px; color:#fff;">${metadataMatch.tittel || 'Mangler bilde'}</div>`}
+      <div class="progress-container" style="background: rgba(255,255,255,0.2); width: 100%; height: 6px; position: absolute; bottom: 0; left: 0; z-index: 2;">
+        <div class="progress-bar" style="width: ${progressVerdi}%; height: 100%; background: #00FFCC;"></div>
+      </div>
+      <div class="image-overlay">
+        <div class="overlay-content">
+          <div class="overlay-title">${metadataMatch.tittel}</div>
+          <div class="overlay-meta">${spillType === "serie" && filmId.includes("-s") ? `S${filmId.split("-")[2].replace("s","")}E${filmId.split("-")[3].replace("e","")}` : ""}</div>
+        </div>
+      </div>
+      <button class="delete-progress-btn" title="Fjern fra Fortsett og se" type="button">
+        <i class="fas fa-trash-alt"></i>
+      </button>
+    `;
+
+    // Håndter sletting av enkelt-elementer fra "Fortsett å se"
+    const deleteBtn = link.querySelector(".delete-progress-btn");
+    deleteBtn.addEventListener("click", async (e) => {
+      e.preventDefault();   // Hindrer at filmen åpnes når du klikker på sletteknappen
+      e.stopPropagation();  // Stopper eventet fra å koble seg til kortet
+
+      // Fjern elementet fra den nåværende profilen i minnet
+      delete profil.fremdrift[filmId];
+
+      // Oppdater databasen i Firebase og LocalStorage-cachen
+      if (registrertBruker) {
+        try {
+          const userDocRef = doc(db, "users", registrertBruker.uid);
+          await updateDoc(userDocRef, {
+            profiler: heleProfilArrayet
+          });
+          localStorage.setItem("watch_nordic_profiles_cache", JSON.stringify(heleProfilArrayet));
+        } catch (err) {
+          console.error("Feil ved sletting av fremdrift fra Firebase:", err);
+        }
+      }
+
+      // Glatt ut-animasjon før kortet fjernes fra visualiseringen
+      link.style.transition = "all 0.3s ease";
+      link.style.transform = "scale(0.8)";
+      link.style.opacity = "0";
+      setTimeout(() => {
+        link.remove();
+        if (gallery.children.length === 0) {
+          section.style.display = "none";
+        } else if (typeof oppdaterAlleGalleripiler === "function") {
+          oppdaterAlleGalleripiler();
+        }
+      }, 300);
+    });
+
+    gallery.appendChild(link);
+  });
+
+  if (fantInnhold) {
+    section.style.display = "block";
+    if (typeof oppdaterAlleGalleripiler === "function") oppdaterAlleGalleripiler();
+  } else {
+    section.style.display = "none";
+  }
+}
   // ==================== INIT ==================== //
   document.addEventListener("DOMContentLoaded", () => {
     if (typeof filmer === "undefined") {
