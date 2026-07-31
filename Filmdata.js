@@ -1,5 +1,5 @@
 const filmer = {
-  "house-on-haunted-hill": {
+   "house-on-haunted-hill": {
     tittel: "House on Haunted Hill",
     rating: "6.7",
     bakgrunn: "https://image.tmdb.org/t/p/original/tS2qaOAG1Yqepp0Hm9AJjH7Zg14.jpg",
@@ -19,12 +19,11 @@ const filmer = {
     tilbakeUrl: "film.html?navn=house-on-haunted-hill",
     audioLanguages: [{ code: "en", label: "Engelsk" }],
     subtitleLanguages: [
-      { code: "no", label: "Norsk" },
-      { code: "off", label: "Av" }
+      { code: "no", label: "Norsk" }
     ],
     publishDate: "2025-10-02T00:00:00",
     expireDate: "2027-11-15T23:59:59",
-  },
+},
 
   "haxan": {
     tittel: "Häxan",
@@ -45,10 +44,7 @@ const filmer = {
     subtitleUrl: "",
     tilbakeUrl: "film.html?navn=haxan",
     audioLanguages: [{ code: "sv", label: "Svensk" }],
-    subtitleLanguages: [
-      { code: "no", label: "Norsk" },
-      { code: "off", label: "Av" }
-    ],
+    subtitleLanguages: [],
     publishDate: "2025-10-02T00:00:00",
     expireDate: "2027-11-15T23:59:59",
   },
@@ -102,10 +98,7 @@ const filmer = {
     subtitleUrl: "",
     tilbakeUrl: "film.html?navn=wing-it",
     audioLanguages: [{ code: "en", label: "Engelsk" }],
-    subtitleLanguages: [
-      { code: "no", label: "Norsk" },
-      { code: "off", label: "Av" }
-    ],
+    subtitleLanguages: [],
     publishDate: "2026-04-30T00:00:00",
     expireDate: "2027-01-10T23:59:59",
   },
