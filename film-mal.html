@@ -1259,38 +1259,61 @@ if (audioTracksDiv) {
 const subtitleTracksDiv = document.getElementById("subtitleTracks");
 if (subtitleTracksDiv) {
   subtitleTracksDiv.innerHTML = "";
+
+  // 1. Legg til "Av"-knapp først i menyen
+  const offBtn = document.createElement("button");
+  offBtn.textContent = "Av";
+  offBtn.dataset.lang = "off";
+  if (globalSubtitleSetting === "off") {
+    offBtn.classList.add("active");
+  }
+
+  offBtn.addEventListener("click", () => {
+    globalSubtitleSetting = "off";
+    localStorage.setItem("global-subtitle-setting", "off");
+    subtitlesEnabled = false;
+
+    for (let i = 0; i < video.textTracks.length; i++) {
+      video.textTracks[i].mode = "disabled";
+    }
+    if (subtitleOverlay) subtitleOverlay.textContent = "";
+
+    updateSubtitleButtons("off");
+    if (captionMenu) captionMenu.style.display = "none";
+  });
+  subtitleTracksDiv.appendChild(offBtn);
+
+  // 2. Legg til tilgjengelige undertekster
   if (film.subtitleLanguages && film.subtitleLanguages.length > 0) {
     film.subtitleLanguages.forEach(sub => {
       const btn = document.createElement("button");
       btn.textContent = sub.label; 
       btn.dataset.lang = sub.code;
+
+      if (globalSubtitleSetting === sub.code) {
+        btn.classList.add("active");
+      }
       
       btn.addEventListener("click", () => {
         const selectedLang = sub.code; 
         globalSubtitleSetting = selectedLang; 
         localStorage.setItem("global-subtitle-setting", selectedLang);
         
-        if (selectedLang === "off") {
-          subtitlesEnabled = false; 
-          for (let i = 0; i < video.textTracks.length; i++) video.textTracks[i].mode = "disabled"; 
-          if (subtitleOverlay) subtitleOverlay.textContent = "";
-        } else {
-          subtitlesEnabled = true;
-          for (let i = 0; i < video.textTracks.length; i++) {
-            const track = video.textTracks[i];
-            if (track.language === selectedLang || track.label.toLowerCase() === selectedLang) {
-              track.mode = "hidden"; 
-              
-              track.oncuechange = () => {
-                if (!subtitlesEnabled) { if (subtitleOverlay) subtitleOverlay.textContent = ""; return; }
-                const cues = track.activeCues; 
-                if (subtitleOverlay) {
-                  subtitleOverlay.textContent = cues && cues.length > 0 ? cues[0].text : "";
-                }
-              };
-            } else {
-              track.mode = "disabled";
-            }
+        subtitlesEnabled = true;
+        for (let i = 0; i < video.textTracks.length; i++) {
+          const track = video.textTracks[i];
+          if (track.language === selectedLang || track.label.toLowerCase() === selectedLang) {
+            track.mode = "hidden"; 
+            
+            track.oncuechange = () => {
+              if (!subtitlesEnabled) { if (subtitleOverlay) subtitleOverlay.textContent = ""; return; }
+              const cues = track.activeCues; 
+              if (subtitleOverlay) {
+                subtitleOverlay.textContent = cues && cues.length > 0 ? cues[0].text : "";
+              }
+            };
+          } else {
+            track.mode = "disabled";
           }
         }
         updateSubtitleButtons(selectedLang); 
@@ -1298,7 +1321,15 @@ if (subtitleTracksDiv) {
       });
       subtitleTracksDiv.appendChild(btn);
     });
-  } else { subtitleTracksDiv.innerHTML = "<em style='color:gray;'>Ingen teksting tilgjengelig</em>"; }
+  } else { 
+    // Valgfritt: Vis melding om at det kun er "Av"-knappen hvis det ikke er noen eksterne filer
+    const infoEm = document.createElement("em");
+    infoEm.style.color = "gray";
+    infoEm.style.display = "block";
+    infoEm.style.padding = "5px";
+    infoEm.textContent = "Ingen ekstra teksting";
+    subtitleTracksDiv.appendChild(infoEm);
+  }
 }
 
 // Samlet metadata-lytter (Løser duplikat-konflikten)
@@ -1306,8 +1337,17 @@ video.addEventListener('loadedmetadata', () => {
   updateProgress();
   if (globalSubtitleSetting !== "off") {
     const aktivKnapp = document.querySelector(`#subtitleTracks button[data-lang="${globalSubtitleSetting}"]`);
-    if (aktivKnapp) aktivKnapp.click();
+    if (aktivKnapp) {
+      aktivKnapp.click();
+    } else {
+      subtitlesEnabled = false;
+      for (let i = 0; i < video.textTracks.length; i++) video.textTracks[i].mode = "disabled";
+      updateSubtitleButtons("off");
+    }
   } else {
+    subtitlesEnabled = false;
+    for (let i = 0; i < video.textTracks.length; i++) video.textTracks[i].mode = "disabled";
+    if (subtitleOverlay) subtitleOverlay.textContent = "";
     updateSubtitleButtons("off");
   }
 });
