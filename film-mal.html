@@ -1019,10 +1019,10 @@ video::cue {
 
   </div>
 </div>
-<script src="Filmdata.js"></script>
-<script src="Seriedata.js"></script>
+<script type="module" src="Filmdata.js"></script>
+<script type="module" src="Seriedata.js"></script>
 <script type="module">
-/* ================= ==========================================================
+/* ==========================================================================
    UNIVERSELL SPINNER & PLAYER – PREMIUM STRØMMETJENESTE-UTGAVE
    ========================================================================== */
 import { db, auth } from './firebase-oppsett.js';
@@ -1042,14 +1042,18 @@ let isSerie = false;
 let currentUser = null;
 let heleProfilArrayet = [];
 
+// Henter referanser til globale data (fra Filmdata.js / Seriedata.js)
+const filmerData = window.filmer || (typeof filmer !== "undefined" ? filmer : undefined);
+const serierData = window.serier || (typeof serier !== "undefined" ? serier : undefined);
+
 /* ================= 1. MEDIA RESOLVER ================= */
-if (navn && typeof filmer !== "undefined" && filmer?.[navn] && !sesong && !episode) {
-  film = filmer[navn];
+if (navn && typeof filmerData !== "undefined" && filmerData?.[navn] && !sesong && !episode) {
+  film = filmerData[navn];
   filmId = `film-${navn}`;
   if (!returUrlParam) tilbakeUrl = film.tilbakeUrl || `film.html?navn=${navn}`;
   isSerie = false;
-} else if (navn && typeof serier !== "undefined" && serier?.[navn] && sesong && episode && serier[navn].sesonger?.[sesong]?.episoder?.[episode]) {
-  const serie = serier[navn];
+} else if (navn && typeof serierData !== "undefined" && serierData?.[navn] && sesong && episode && serierData[navn].sesonger?.[sesong]?.episoder?.[episode]) {
+  const serie = serierData[navn];
   const ep = serie.sesonger[sesong].episoder[episode];
   film = {
     ...ep,
@@ -1138,10 +1142,10 @@ if (playBtn) playBtn.innerHTML = '<i class="fa-solid fa-play" style="color: #fff
 if (muteBtn) muteBtn.innerHTML = '<i class="fa-solid fa-volume-high" style="color: #ffffff; font-size: 22px;"></i>';
 
 function hentNesteEpisodeUrl() {
-  if (isSerie && navn && sesong && episode && typeof serier !== "undefined" && serier?.[navn]) {
+  if (isSerie && navn && sesong && episode && typeof serierData !== "undefined" && serierData?.[navn]) {
     const s = parseInt(sesong);
     const e = parseInt(episode);
-    const serie = serier[navn];
+    const serie = serierData[navn];
     const returParam = returUrlParam ? `&returUrl=${encodeURIComponent(returUrlParam)}` : '';
 
     if (serie.sesonger[s]?.episoder?.[e + 1]) {
@@ -1448,6 +1452,16 @@ function aktiverUndertekst(selectedLang) {
   updateSubtitleButtons(selectedLang);
 }
 
+function updateSubtitleButtons(activeLang) {
+  document.querySelectorAll("#subtitleTracks button").forEach(btn => {
+    if (btn.dataset.lang === activeLang) {
+      btn.classList.add("active");
+    } else {
+      btn.classList.remove("active");
+    }
+  });
+}
+
 const subtitleTracksDiv = document.getElementById("subtitleTracks");
 if (subtitleTracksDiv) {
   subtitleTracksDiv.innerHTML = "";
@@ -1483,20 +1497,9 @@ video.addEventListener('loadedmetadata', () => {
   aktiverUndertekst(globalSubtitleSetting);
 });
 
-function updateSubtitleButtons(activeLang) {
-  document.querySelectorAll("#subtitleTracks button").forEach(btn => {
-    if (btn.dataset.lang === activeLang) {
-      btn.classList.add("active");
-    } else {
-      btn.classList.remove("active");
-    }
-  });
-}
-
 // ================= AUTOMATISK SKJULING AV MUSEPEKER & KONTROLLER =================
 function showUI() {
   if (autoplayAktiv) {
-    // Sørger for at musepekeren tvinges til å være synlig under autoplay
     document.body.classList.remove('no-cursor');
     return; 
   }
@@ -1537,12 +1540,6 @@ video.addEventListener('ended', async () => {
   await ryddeOgNeste(); 
 });
 
-function updateSubtitleButtons(activeLang) {
-  document.querySelectorAll("#subtitleTracks button").forEach(btn => {
-    if (btn.dataset.lang === activeLang) { btn.classList.add("active"); } else { btn.classList.remove("active"); }
-  });
-}
-
 /* ================= 6. PREMIUM NETFLIX-FLYTT & AUTOPLAY ================= */
 const skipIntroBtn = document.getElementById("skipIntroBtn");
 const skipOutroBtn = document.getElementById("skipOutroBtn");
@@ -1558,7 +1555,6 @@ video.addEventListener("timeupdate", () => {
     }
   }
 
-  // Sikrer at video.duration har lastet og er et gyldig tall før utregning
   if (video.duration && !isNaN(video.duration)) {
     const triggerTid = film.outroStart != null ? film.outroStart : (video.duration - 15);
     if (isSerie && nesteEpisodeUrl && tid >= triggerTid && !autoplayTriggered && !video.paused) {
@@ -1574,12 +1570,10 @@ if (skipOutroBtn) { skipOutroBtn.addEventListener("click", () => { ryddeOgNeste(
 function startPremiumAutoplay() {
   if (!autoplayOverlay || !videoWrapper) return;
   
-  autoplayAktiv = true; // Markerer autoplay som aktiv
+  autoplayAktiv = true;
 
-  // Vis musepekeren med en gang
   document.body.classList.remove('no-cursor');
 
-  // Skjuler og deaktiverer kontroller
   if (ui) {
     ui.style.pointerEvents = "none";
     ui.style.display = "none";
@@ -1591,10 +1585,10 @@ function startPremiumAutoplay() {
   let nesteEpInfoText = "";
   let serieLogoUrl = "";
 
-  if (isSerie && navn && sesong && episode && typeof serier !== "undefined" && serier?.[navn]) {
+  if (isSerie && navn && sesong && episode && typeof serierData !== "undefined" && serierData?.[navn]) {
     const s = parseInt(sesong);
     const e = parseInt(episode);
-    const serie = serier[navn];
+    const serie = serierData[navn];
     
     serieLogoUrl = serie.logo || "";
 
@@ -1610,7 +1604,6 @@ function startPremiumAutoplay() {
     }
   }
 
-  // Bakgrunnsbilde uten mørkt slør
   if (container && nesteBildeUrl) {
     container.style.backgroundImage = `url('${nesteBildeUrl}')`;
     container.style.backgroundSize = "cover";
@@ -1647,7 +1640,6 @@ function startPremiumAutoplay() {
   document.getElementById("autoplayPlayNextBtn").addEventListener("click", () => { ryddeOgNeste(); });
   document.getElementById("autoplayCancelBtn").addEventListener("click", () => { avbrytAutoplay(); });
 
-  // Sørger for at fullskjerm-klassen fjernes før krympe-stiler blir satt, slik at krympingen kan animeres
   videoWrapper.classList.remove("video-fullscreen");
 
   videoWrapper.style.transform = "none";
@@ -1686,7 +1678,7 @@ function startPremiumAutoplay() {
 }
 
 function avbrytAutoplay() {
-  autoplayAktiv = false; // Nullstiller autoplay-flagget
+  autoplayAktiv = false;
   clearInterval(autoplayTimer);
   if (autoplayOverlay) autoplayOverlay.style.display = "none";
   
@@ -1694,14 +1686,12 @@ function avbrytAutoplay() {
     container.style.backgroundImage = "";
   }
   
-  // Bringer kontrollene tilbake til synlig og aktiv tilstand
   if (ui) {
     ui.style.pointerEvents = "auto";
     ui.style.display = ""; 
     showUI();
   }
   
-  // GJØR OVERGANGEN ULTRA-SMOOTH: Vi rydder vekk de faste inline-stilene og legger til klassen i stedet
   if (videoWrapper) {
     videoWrapper.classList.add("video-fullscreen");
     
@@ -1718,7 +1708,6 @@ function avbrytAutoplay() {
     videoWrapper.style.zIndex = "";
   }
   
-  // HIERARKISK KNAPP-ENDRING: Fjerner og skjuler knappen under avbrytelsen helt, i stedet for å sette den til 'block'
   if (skipOutroBtn) {
     skipOutroBtn.style.display = "none";
   }
