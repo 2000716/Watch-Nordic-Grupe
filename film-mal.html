@@ -1019,8 +1019,9 @@ video::cue {
 
   </div>
 </div>
-<script type="module" src="Filmdata.js"></script>
-<script type="module" src="Seriedata.js"></script>
+<script src="Filmdata.js"></script>
+<script src="Seriedata.js"></script>
+
 <script type="module">
 /* ==========================================================================
    UNIVERSELL SPINNER & PLAYER – PREMIUM STRØMMETJENESTE-UTGAVE
@@ -1042,18 +1043,14 @@ let isSerie = false;
 let currentUser = null;
 let heleProfilArrayet = [];
 
-// Henter referanser til globale data (fra Filmdata.js / Seriedata.js)
-const filmerData = window.filmer || (typeof filmer !== "undefined" ? filmer : undefined);
-const serierData = window.serier || (typeof serier !== "undefined" ? serier : undefined);
-
 /* ================= 1. MEDIA RESOLVER ================= */
-if (navn && typeof filmerData !== "undefined" && filmerData?.[navn] && !sesong && !episode) {
-  film = filmerData[navn];
+if (navn && typeof filmer !== "undefined" && filmer?.[navn] && !sesong && !episode) {
+  film = filmer[navn];
   filmId = `film-${navn}`;
   if (!returUrlParam) tilbakeUrl = film.tilbakeUrl || `film.html?navn=${navn}`;
   isSerie = false;
-} else if (navn && typeof serierData !== "undefined" && serierData?.[navn] && sesong && episode && serierData[navn].sesonger?.[sesong]?.episoder?.[episode]) {
-  const serie = serierData[navn];
+} else if (navn && typeof serier !== "undefined" && serier?.[navn] && sesong && episode && serier[navn].sesonger?.[sesong]?.episoder?.[episode]) {
+  const serie = serier[navn];
   const ep = serie.sesonger[sesong].episoder[episode];
   film = {
     ...ep,
@@ -1069,9 +1066,11 @@ if (navn && typeof filmerData !== "undefined" && filmerData?.[navn] && !sesong &
   window.location.href = "Hovedside.html";
 }
 
-document.title = film.tittel;
-const movieTitleEl = document.querySelector(".movie-title");
-if (movieTitleEl && film?.tittel) movieTitleEl.textContent = film.tittel;
+if (film?.tittel) {
+  document.title = film.tittel;
+  const movieTitleEl = document.querySelector(".movie-title");
+  if (movieTitleEl) movieTitleEl.textContent = film.tittel;
+}
 
 // Tilbakeknapp
 const backButton = document.getElementById("backButton");
@@ -1128,10 +1127,10 @@ let hideTimeout;
 let globalSubtitleSetting = localStorage.getItem("global-subtitle-setting") || "off";
 let subtitlesEnabled = globalSubtitleSetting !== "off";
 let autoplayTriggered = false;
-let autoplayAktiv = false; // Flag for å sjekke om autoplay-skjermen er åpen
+let autoplayAktiv = false;
 let lokalLagringsInterval;
 let autoplayTimer;
-let lastVolume = localStorage.getItem("video-last-volume") || 1;
+let lastVolume = parseFloat(localStorage.getItem("video-last-volume")) || 1;
 
 // Setter FontAwesome ikoner
 if (rewindBtn) rewindBtn.innerHTML = '<i class="fa-solid fa-rotate-left" style="color: #ffffff; font-size: 22px;"></i>';
@@ -1142,10 +1141,10 @@ if (playBtn) playBtn.innerHTML = '<i class="fa-solid fa-play" style="color: #fff
 if (muteBtn) muteBtn.innerHTML = '<i class="fa-solid fa-volume-high" style="color: #ffffff; font-size: 22px;"></i>';
 
 function hentNesteEpisodeUrl() {
-  if (isSerie && navn && sesong && episode && typeof serierData !== "undefined" && serierData?.[navn]) {
+  if (isSerie && navn && sesong && episode && typeof serier !== "undefined" && serier?.[navn]) {
     const s = parseInt(sesong);
     const e = parseInt(episode);
-    const serie = serierData[navn];
+    const serie = serier[navn];
     const returParam = returUrlParam ? `&returUrl=${encodeURIComponent(returUrlParam)}` : '';
 
     if (serie.sesonger[s]?.episoder?.[e + 1]) {
@@ -1183,7 +1182,7 @@ onAuthStateChanged(auth, async (user) => {
     currentUser = user;
     const cacheData = localStorage.getItem("watch_nordic_profiles_cache");
     if (cacheData) {
-      heleProfilArrayet = JSON.parse(cacheData);
+      try { heleProfilArrayet = JSON.parse(cacheData); } catch(e) {}
     }
     try {
       const userDocRef = doc(db, "users", user.uid);
@@ -1202,6 +1201,7 @@ onAuthStateChanged(auth, async (user) => {
 });
 
 function sjekkLagretFremdrift() {
+  if (!video) return;
   const profil = heleProfilArrayet.find(p => p.navn === aktivProfilNavn);
   if (!profil) {
     startVideoFraStart();
@@ -1220,6 +1220,7 @@ function sjekkLagretFremdrift() {
 }
 
 function startVideoFraStart() {
+  if (!video) return;
   video.currentTime = 0;
   video.play().catch(() => {});
   startLokalLagringsLoop();
@@ -1233,7 +1234,7 @@ function startLokalLagringsLoop() {
 }
 
 function oppdaterFremdriftILokalMatrise(status) {
-  if (isNaN(video.currentTime) || video.currentTime <= 0 || isNaN(video.duration)) return;
+  if (!video || isNaN(video.currentTime) || video.currentTime <= 0 || isNaN(video.duration)) return;
   
   const percent = parseFloat(((video.currentTime / video.duration) * 100).toFixed(1));
   let profilIdx = heleProfilArrayet.findIndex(p => p.navn === aktivProfilNavn);
@@ -1268,8 +1269,10 @@ function oppdaterFremdriftILokalMatrise(status) {
 
 async function lagreSistePosisjonEkspress() {
   clearInterval(lokalLagringsInterval);
-  const erFerdig = (video.currentTime / video.duration) > 0.96;
-  oppdaterFremdriftILokalMatrise(erFerdig ? "ferdig" : "paabegynt");
+  if (video) {
+    const erFerdig = (video.currentTime / video.duration) > 0.96;
+    oppdaterFremdriftILokalMatrise(erFerdig ? "ferdig" : "paabegynt");
+  }
   
   if (currentUser) {
     try {
@@ -1282,7 +1285,7 @@ async function lagreSistePosisjonEkspress() {
 }
 
 async function ryddeOgNeste() {
-  video.pause();
+  if (video) video.pause();
   clearInterval(lokalLagringsInterval);
   clearInterval(autoplayTimer);
   
@@ -1303,7 +1306,9 @@ async function ryddeOgNeste() {
 }
 
 window.addEventListener('beforeunload', () => {
-  oppdaterFremdriftILokalMatrise((video.currentTime / video.duration) > 0.96 ? "ferdig" : "paabegynt");
+  if (video) {
+    oppdaterFremdriftILokalMatrise((video.currentTime / video.duration) > 0.96 ? "ferdig" : "paabegynt");
+  }
   if (currentUser && navigator.sendBeacon) {
     const userDocRef = doc(db, "users", currentUser.uid);
     setDoc(userDocRef, { profiler: heleProfilArrayet }, { merge: true }).catch(() => {});
@@ -1312,6 +1317,7 @@ window.addEventListener('beforeunload', () => {
 
 /* ================= 4. MEDIEKONTROLLER OG UI-LOGIKK ================= */
 function updateProgress() {
+  if (!video) return;
   if (!isDragging && video.duration) {
     const percent = (video.currentTime / video.duration) * 100;
     if (progressFilled) progressFilled.style.width = percent + '%';
@@ -1322,30 +1328,41 @@ function updateProgress() {
   }
 }
 
-video.addEventListener('timeupdate', updateProgress);
-video.addEventListener('loadedmetadata', updateProgress);
+if (video) {
+  video.addEventListener('timeupdate', updateProgress);
+  video.addEventListener('loadedmetadata', updateProgress);
 
-playBtn.addEventListener('click', () => video.paused ? video.play() : video.pause());
-video.addEventListener('click', () => video.paused ? video.play() : video.pause());
+  if (playBtn) playBtn.addEventListener('click', () => video.paused ? video.play() : video.pause());
+  video.addEventListener('click', () => video.paused ? video.play() : video.pause());
+
+  video.addEventListener('play', () => { 
+    if (playBtn) playBtn.innerHTML = '<i class="fa-solid fa-pause" style="color: #ffffff; font-size: 26px;"></i>'; 
+    showUI(); 
+  });
+  video.addEventListener('pause', () => { 
+    if (playBtn) playBtn.innerHTML = '<i class="fa-solid fa-play" style="color: #ffffff; font-size: 26px;"></i>'; 
+    showUI(); 
+  });
+
+  video.addEventListener('loadedmetadata', () => {
+    aktiverUndertekst(globalSubtitleSetting);
+  });
+
+  video.addEventListener('ended', async () => { 
+    await ryddeOgNeste(); 
+  });
+}
 
 document.addEventListener('keydown', e => {
-  if (autoplayAktiv) return; // Blokkerer tastatursnarveier under nedtellingen
+  if (autoplayAktiv || !video) return;
   if (e.code === 'Space') { e.preventDefault(); video.paused ? video.play() : video.pause(); }
   if (e.key === 'ArrowRight') video.currentTime = Math.min(video.duration, video.currentTime + 10);
   if (e.key === 'ArrowLeft') video.currentTime = Math.max(0, video.currentTime - 10);
 });
 
-video.addEventListener('play', () => { 
-  if (playBtn) playBtn.innerHTML = '<i class="fa-solid fa-pause" style="color: #ffffff; font-size: 26px;"></i>'; 
-  showUI(); 
-});
-video.addEventListener('pause', () => { 
-  if (playBtn) playBtn.innerHTML = '<i class="fa-solid fa-play" style="color: #ffffff; font-size: 26px;"></i>'; 
-  showUI(); 
-});
-
 /* ================= PREMIUM INTERAKTIV VOLUMLOGIKK ================= */
 function oppdaterVolumIkon(vol, isMuted) {
+  if (!muteBtn) return;
   if (isMuted || vol === 0) {
     muteBtn.innerHTML = '<i class="fa-solid fa-volume-xmark" style="color: #ffffff; font-size: 22px;"></i>';
   } else if (vol < 0.4) {
@@ -1356,6 +1373,7 @@ function oppdaterVolumIkon(vol, isMuted) {
 }
 
 function settVolum(volVal) {
+  if (!video) return;
   const vol = parseFloat(volVal);
   video.volume = vol;
   video.muted = (vol === 0);
@@ -1372,19 +1390,22 @@ function settVolum(volVal) {
   oppdaterVolumIkon(vol, video.muted);
 }
 
-muteBtn.addEventListener('click', () => {
-  if (video.muted || video.volume === 0) {
-    video.muted = false;
-    settVolum(lastVolume > 0 ? lastVolume : 0.5);
-  } else {
-    video.muted = true;
-    if (volumeSlider) {
-      volumeSlider.value = 0;
-      volumeSlider.style.setProperty('--volume-percent', '0%');
+if (muteBtn) {
+  muteBtn.addEventListener('click', () => {
+    if (!video) return;
+    if (video.muted || video.volume === 0) {
+      video.muted = false;
+      settVolum(lastVolume > 0 ? lastVolume : 0.5);
+    } else {
+      video.muted = true;
+      if (volumeSlider) {
+        volumeSlider.value = 0;
+        volumeSlider.style.setProperty('--volume-percent', '0%');
+      }
+      oppdaterVolumIkon(0, true);
     }
-    oppdaterVolumIkon(0, true);
-  }
-});
+  });
+}
 
 if (volumeSlider) {
   settVolum(lastVolume);
@@ -1393,12 +1414,14 @@ if (volumeSlider) {
   });
 }
 
-rewindBtn.addEventListener('click', () => video.currentTime = Math.max(0, video.currentTime - 10));
-forwardBtn.addEventListener('click', () => video.currentTime = Math.min(video.duration, video.currentTime + 10));
+if (rewindBtn && video) rewindBtn.addEventListener('click', () => video.currentTime = Math.max(0, video.currentTime - 10));
+if (forwardBtn && video) forwardBtn.addEventListener('click', () => video.currentTime = Math.min(video.duration, video.currentTime + 10));
 
-captionsBtn.addEventListener('click', () => { 
-  if (captionMenu) captionMenu.style.display = captionMenu.style.display === 'block' ? 'none' : 'block'; 
-});
+if (captionsBtn) {
+  captionsBtn.addEventListener('click', () => { 
+    if (captionMenu) captionMenu.style.display = captionMenu.style.display === 'block' ? 'none' : 'block'; 
+  });
+}
 
 /* ================= 5. OPTIMALISERT UNDERTEKSTER & LYDVALG ================= */
 const audioTracksDiv = document.getElementById("audioTracks");
@@ -1414,7 +1437,18 @@ if (audioTracksDiv) {
   } else { audioTracksDiv.innerHTML = "<em style='color:gray;'>Standard lydspor</em>"; }
 }
 
+function updateSubtitleButtons(activeLang) {
+  document.querySelectorAll("#subtitleTracks button").forEach(btn => {
+    if (btn.dataset.lang === activeLang) { 
+      btn.classList.add("active"); 
+    } else { 
+      btn.classList.remove("active"); 
+    }
+  });
+}
+
 function aktiverUndertekst(selectedLang) {
+  if (!video) return;
   globalSubtitleSetting = selectedLang;
   localStorage.setItem("global-subtitle-setting", selectedLang);
 
@@ -1452,16 +1486,6 @@ function aktiverUndertekst(selectedLang) {
   updateSubtitleButtons(selectedLang);
 }
 
-function updateSubtitleButtons(activeLang) {
-  document.querySelectorAll("#subtitleTracks button").forEach(btn => {
-    if (btn.dataset.lang === activeLang) {
-      btn.classList.add("active");
-    } else {
-      btn.classList.remove("active");
-    }
-  });
-}
-
 const subtitleTracksDiv = document.getElementById("subtitleTracks");
 if (subtitleTracksDiv) {
   subtitleTracksDiv.innerHTML = "";
@@ -1493,11 +1517,7 @@ if (subtitleTracksDiv) {
   }
 }
 
-video.addEventListener('loadedmetadata', () => {
-  aktiverUndertekst(globalSubtitleSetting);
-});
-
-// ================= AUTOMATISK SKJULING AV MUSEPEKER & KONTROLLER =================
+/* ================= AUTOMATISK SKJULING AV MUSEPEKER & KONTROLLER ================= */
 function showUI() {
   if (autoplayAktiv) {
     document.body.classList.remove('no-cursor');
@@ -1510,7 +1530,7 @@ function showUI() {
   clearTimeout(hideTimeout);
   
   hideTimeout = setTimeout(() => { 
-    if (!video.paused && !isDragging) { 
+    if (video && !video.paused && !isDragging) { 
       if (ui) ui.classList.add('hidden'); 
       document.body.classList.add('no-cursor'); 
       if (subtitleOverlay) subtitleOverlay.classList.remove("subtitle-up"); 
@@ -1520,8 +1540,14 @@ function showUI() {
 document.addEventListener('mousemove', showUI);
 document.addEventListener('keydown', showUI);
 
-if (fullscreenBtn) {
-  fullscreenBtn.addEventListener('click', () => { if (!document.fullscreenElement) { container.requestFullscreen(); } else { document.exitFullscreen(); } });
+if (fullscreenBtn && container) {
+  fullscreenBtn.addEventListener('click', () => { 
+    if (!document.fullscreenElement) { 
+      container.requestFullscreen(); 
+    } else { 
+      document.exitFullscreen(); 
+    } 
+  });
 }
 document.addEventListener('fullscreenchange', () => {
   if (fullscreenBtn) {
@@ -1531,41 +1557,43 @@ document.addEventListener('fullscreenchange', () => {
   }
 });
 
-if (loadingSpinner) {
+if (loadingSpinner && video) {
   video.addEventListener('waiting', () => loadingSpinner.style.display = 'block');
   video.addEventListener('playing', () => loadingSpinner.style.display = 'none');
 }
-
-video.addEventListener('ended', async () => { 
-  await ryddeOgNeste(); 
-});
 
 /* ================= 6. PREMIUM NETFLIX-FLYTT & AUTOPLAY ================= */
 const skipIntroBtn = document.getElementById("skipIntroBtn");
 const skipOutroBtn = document.getElementById("skipOutroBtn");
 
-video.addEventListener("timeupdate", () => {
-  const tid = video.currentTime;
+if (video) {
+  video.addEventListener("timeupdate", () => {
+    const tid = video.currentTime;
 
-  if (isSerie && film.introStart != null && film.introEnd != null) {
-    if (tid >= film.introStart && tid <= film.introEnd) {
-      if (skipIntroBtn) skipIntroBtn.style.display = "block";
-    } else {
-      if (skipIntroBtn) skipIntroBtn.style.display = "none";
+    if (isSerie && film.introStart != null && film.introEnd != null) {
+      if (tid >= film.introStart && tid <= film.introEnd) {
+        if (skipIntroBtn) skipIntroBtn.style.display = "block";
+      } else {
+        if (skipIntroBtn) skipIntroBtn.style.display = "none";
+      }
     }
-  }
 
-  if (video.duration && !isNaN(video.duration)) {
-    const triggerTid = film.outroStart != null ? film.outroStart : (video.duration - 15);
-    if (isSerie && nesteEpisodeUrl && tid >= triggerTid && !autoplayTriggered && !video.paused) {
-      autoplayTriggered = true;
-      startPremiumAutoplay();
+    if (video.duration && !isNaN(video.duration)) {
+      const triggerTid = film.outroStart != null ? film.outroStart : (video.duration - 15);
+      if (isSerie && nesteEpisodeUrl && tid >= triggerTid && !autoplayTriggered && !video.paused) {
+        autoplayTriggered = true;
+        startPremiumAutoplay();
+      }
     }
-  }
-});
+  });
+}
 
-if (skipIntroBtn) { skipIntroBtn.addEventListener("click", () => { video.currentTime = film.introEnd; }); }
-if (skipOutroBtn) { skipOutroBtn.addEventListener("click", () => { ryddeOgNeste(); }); }
+if (skipIntroBtn && video) { 
+  skipIntroBtn.addEventListener("click", () => { video.currentTime = film.introEnd; }); 
+}
+if (skipOutroBtn) { 
+  skipOutroBtn.addEventListener("click", () => { ryddeOgNeste(); }); 
+}
 
 function startPremiumAutoplay() {
   if (!autoplayOverlay || !videoWrapper) return;
@@ -1585,10 +1613,10 @@ function startPremiumAutoplay() {
   let nesteEpInfoText = "";
   let serieLogoUrl = "";
 
-  if (isSerie && navn && sesong && episode && typeof serierData !== "undefined" && serierData?.[navn]) {
+  if (isSerie && navn && sesong && episode && typeof serier !== "undefined" && serier?.[navn]) {
     const s = parseInt(sesong);
     const e = parseInt(episode);
-    const serie = serierData[navn];
+    const serie = serier[navn];
     
     serieLogoUrl = serie.logo || "";
 
@@ -1637,8 +1665,8 @@ function startPremiumAutoplay() {
     </div>
   `;
 
-  document.getElementById("autoplayPlayNextBtn").addEventListener("click", () => { ryddeOgNeste(); });
-  document.getElementById("autoplayCancelBtn").addEventListener("click", () => { avbrytAutoplay(); });
+  document.getElementById("autoplayPlayNextBtn")?.addEventListener("click", () => { ryddeOgNeste(); });
+  document.getElementById("autoplayCancelBtn")?.addEventListener("click", () => { avbrytAutoplay(); });
 
   videoWrapper.classList.remove("video-fullscreen");
 
