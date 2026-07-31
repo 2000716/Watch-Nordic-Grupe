@@ -375,7 +375,7 @@ video::cue {
   position: absolute;
   bottom: 90px;
   right: 40px;
-  background: rgba(18, 18, 20, 0.88);
+  background: rgba(18, 18, 20, 0.92);
   border: 1px solid rgba(255, 255, 255, 0.12);
   backdrop-filter: blur(24px);
   -webkit-backdrop-filter: blur(24px);
@@ -387,6 +387,7 @@ video::cue {
   max-width: calc(100vw - 40px);
   z-index: 100;
   animation: menuFadeIn 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
 }
 
 @keyframes menuFadeIn {
@@ -476,9 +477,10 @@ video::cue {
   color: #ffffff;
 }
 
+/* Stilrent aktivt valg uten farger (Nøytral hvit/grå) */
 .caption-menu button.active {
-  background: rgba(15, 221, 203, 0.12);
-  color: #0fddcb;
+  background: rgba(255, 255, 255, 0.15);
+  color: #ffffff;
   font-weight: 600;
 }
 
@@ -1396,7 +1398,7 @@ captionsBtn.addEventListener('click', () => {
 
 /* ================= 5. OPTIMALISERT UNDERTEKSTER & LYDVALG ================= */
 
-// Lukk-knapp funksjonalitet i hjørnet av menyen
+// Lukk-knapp funksjonalitet
 const closeCaptionBtn = document.getElementById("closeCaptionMenuBtn");
 if (closeCaptionBtn) {
   closeCaptionBtn.addEventListener("click", () => {
@@ -1413,20 +1415,27 @@ if (audioTracksDiv) {
       const btn = document.createElement("button");
       btn.textContent = lang.label;
       
-      // Sett første lydspor som aktiv som standard hvis ingen annen logikk finnes
-      if (index === 0) btn.classList.add("active");
+      if (index === 0) {
+        btn.classList.add("active");
+        btn.innerHTML = `<span>${lang.label}</span> <i class="fa-solid fa-check"></i>`;
+      }
 
       btn.addEventListener("click", () => {
-        // Markér valgt lydspor
-        document.querySelectorAll("#audioTracks button").forEach(b => b.classList.remove("active"));
+        document.querySelectorAll("#audioTracks button").forEach(b => {
+          b.classList.remove("active");
+          const labelText = b.querySelector("span") ? b.querySelector("span").textContent : b.textContent;
+          b.innerHTML = `<span>${labelText}</span>`;
+        });
+        
         btn.classList.add("active");
+        btn.innerHTML = `<span>${lang.label}</span> <i class="fa-solid fa-check"></i>`;
 
         if (captionMenu) captionMenu.style.display = "none";
       });
       audioTracksDiv.appendChild(btn);
     });
   } else { 
-    audioTracksDiv.innerHTML = "<span style='color:rgba(255,255,255,0.4); font-size:13px; padding:6px 12px; display:block;'>Standard lydspor</span>"; 
+    audioTracksDiv.innerHTML = "<span style='color:rgba(255,255,255,0.4); font-size:13px; padding:8px 12px; display:block;'>Standard lydspor</span>"; 
   }
 }
 
@@ -1449,7 +1458,7 @@ function aktiverUndertekst(selectedLang) {
       const match = (track.language === selectedLang || track.label.toLowerCase() === selectedLang.toLowerCase());
 
       if (match) {
-        track.mode = "hidden"; // Bruker overlay i stedet for nettleserens standard
+        track.mode = "hidden";
         track.oncuechange = () => {
           if (!subtitlesEnabled) { 
             if (subtitleOverlay) subtitleOverlay.textContent = ""; 
@@ -1474,7 +1483,6 @@ const subtitleTracksDiv = document.getElementById("subtitleTracks");
 if (subtitleTracksDiv) {
   subtitleTracksDiv.innerHTML = "";
 
-  // Legg til tilgjengelige språk
   if (film.subtitleLanguages && film.subtitleLanguages.length > 0) {
     film.subtitleLanguages.forEach(sub => {
       const btn = document.createElement("button");
@@ -1489,7 +1497,6 @@ if (subtitleTracksDiv) {
     });
   }
 
-  // Legg til "Av"-knappen nederst i menyen
   const offBtn = document.createElement("button");
   offBtn.textContent = "Av";
   offBtn.dataset.lang = "off";
@@ -1504,11 +1511,11 @@ video.addEventListener('loadedmetadata', () => {
   aktiverUndertekst(globalSubtitleSetting);
 });
 
-// 4. Oppdater knapper med valgt stil og sjekkmerke (✓)
+// 4. Oppdater knapper (Stilren hvit hake)
 function updateSubtitleButtons(activeLang) {
   document.querySelectorAll("#subtitleTracks button").forEach(btn => {
     const originalText = btn.dataset.lang === "off" ? "Av" : 
-      (film.subtitleLanguages.find(s => s.code === btn.dataset.lang)?.label || btn.textContent);
+      (film.subtitleLanguages?.find(s => s.code === btn.dataset.lang)?.label || btn.textContent.trim());
 
     if (btn.dataset.lang === activeLang) {
       btn.classList.add("active");
