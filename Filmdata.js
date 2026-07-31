@@ -172,7 +172,7 @@ const filmer = {
     logo: "https://static.wixstatic.com/media/d9ace9_70b92619172648ef8fea01fa2126ec8c~mv2.png",
     trailer: "",
     poster: "https://static.wixstatic.com/media/d9ace9_8b10a46a0fa24aa5b5ef3591e6c98828~mv2.jpg",
-    posterVertikal: "https://image.tmdb.org/t/p/original/8qy3jRmaHR7f8VZh3iXCqCWfFsH.jpg",
+    posterVertikal: "https://static.wixstatic.com/media/d9ace9_a36a6491aa5a43c1a078693605427c8a~mv2.jpg",
     beskrivelse: "Bli med Detektiv Muffins og Herr Marshmallow når en koselig kveld foran skjermen raskt forvandles til et ekte Halloween-mysterium. Klarer de å finne ut hva som skjuler seg i skyggene før filmen er over?",
     metadata: ["2026", "Alle", "Barn", "5 min"],
     skuespillere: "",
