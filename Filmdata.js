@@ -162,4 +162,33 @@ const filmer = {
     publishDate: "2026-06-25T00:00:00",
     expireDate: "2030-01-01T23:59:59",
   },
+
+    "helloween-spesial-detectiv-muffin": {
+    tittel: "Detektiv Muffin: Halloween spesial",
+    rating: "0.0",
+    bakgrunn: "https://static.wixstatic.com/media/d9ace9_a82288441b2c4981b162e76d1458ea26~mv2.jpg",
+    bakgrunnMobil: "https://static.wixstatic.com/media/d9ace9_4148dac16a81424e9a08e544106c05e4~mv2.jpg",
+    banner: "https://static.wixstatic.com/media/d9ace9_a82288441b2c4981b162e76d1458ea26~mv2.jpg",
+    logo: "https://static.wixstatic.com/media/d9ace9_70b92619172648ef8fea01fa2126ec8c~mv2.png",
+    trailer: "",
+    poster: "https://static.wixstatic.com/media/d9ace9_8b10a46a0fa24aa5b5ef3591e6c98828~mv2.jpg",
+    posterVertikal: "https://image.tmdb.org/t/p/original/8qy3jRmaHR7f8VZh3iXCqCWfFsH.jpg",
+    beskrivelse: "Bli med Detektiv Muffins og Herr Marshmallow når en koselig kveld foran skjermen raskt forvandles til et ekte Halloween-mysterium. Klarer de å finne ut hva som skjuler seg i skyggene før filmen er over?",
+    metadata: ["2026", "Alle", "Barn", "5 min"],
+    skuespillere: "",
+    regissor: "Watch Nordic Originals Studio",
+    lisens: "",
+    kilde: "",
+    watchUrl: "film-mal.html?id=helloween-spesial-detectiv-muffin",
+    videoUrl: "",
+    subtitleUrl: "",
+    tilbakeUrl: "film.html?navn=helloween-spesial-detectiv-muffin",
+    audioLanguages: [{ code: "en", label: "Norsk" }],
+    subtitleLanguages: [
+      { code: "no", label: "Norsk" },
+      { code: "off", label: "Av" }
+    ],
+    publishDate: "2026-10-23T00:00:00",
+    expireDate: "2030-01-01T23:59:59",
+  },
 };
