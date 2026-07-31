@@ -857,9 +857,9 @@
 <script src="Filmdata.js"></script>
 <script src="Seriedata.js"></script>
 <script type="module">
-/* ================= ==========================================================
-   UNIVERSELL SPINNER & PLAYER – PREMIUM STRØMMETJENESTE-UTGAVE
-   ========================================================================== */
+/* ==========================================================================
+   UNIVERSELL SPINNER & PLAYER – PREMIUM STRØMMETJENESTE-UTGAVE
+   ========================================================================== */
 import { db, auth } from './firebase-oppsett.js';
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-auth.js";
 import { doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
@@ -879,25 +879,25 @@ let heleProfilArrayet = [];
 
 /* ================= 1. MEDIA RESOLVER ================= */
 if (navn && typeof filmer !== "undefined" && filmer?.[navn] && !sesong && !episode) {
-  film = filmer[navn];
-  filmId = `film-${navn}`;
-  if (!returUrlParam) tilbakeUrl = film.tilbakeUrl || `film.html?navn=${navn}`;
-  isSerie = false;
+  film = filmer[navn];
+  filmId = `film-${navn}`;
+  if (!returUrlParam) tilbakeUrl = film.tilbakeUrl || `film.html?navn=${navn}`;
+  isSerie = false;
 } else if (navn && typeof serier !== "undefined" && serier?.[navn] && sesong && episode && serier[navn].sesonger?.[sesong]?.episoder?.[episode]) {
-  const serie = serier[navn];
-  const ep = serie.sesonger[sesong].episoder[episode];
-  film = {
-    ...ep,
-    audioLanguages: serie.audioLanguages || [],
-    subtitleLanguages: serie.subtitleLanguages || [],
-    tittel: `${serie.tittel} – S${String(sesong).padStart(2, '0')}E${String(episode).padStart(2, '0')}: ${ep.tittel}`
-  };
-  filmId = `serie-${navn}-s${sesong}-e${episode}`;
-  if (!returUrlParam) tilbakeUrl = `film.html?navn=${navn}`; 
-  isSerie = true;
+  const serie = serier[navn];
+  const ep = serie.sesonger[sesong].episoder[episode];
+  film = {
+    ...ep,
+    audioLanguages: serie.audioLanguages || [],
+    subtitleLanguages: serie.subtitleLanguages || [],
+    tittel: `${serie.tittel} – S${String(sesong).padStart(2, '0')}E${String(episode).padStart(2, '0')}: ${ep.tittel}`
+  };
+  filmId = `serie-${navn}-s${sesong}-e${episode}`;
+  if (!returUrlParam) tilbakeUrl = `film.html?navn=${navn}`; 
+  isSerie = true;
 } else {
-  alert("Ugyldig innhold");
-  window.location.href = "Hovedside.html";
+  alert("Ugyldig innhold");
+  window.location.href = "Hovedside.html";
 }
 
 document.title = film.tittel;
@@ -907,23 +907,23 @@ if (movieTitleEl && film?.tittel) movieTitleEl.textContent = film.tittel;
 // Tilbakeknapp
 const backButton = document.getElementById("backButton");
 if (backButton) {
-  backButton.innerHTML = '<i class="fa-solid fa-xmark" style="color: #ffffff; font-size: 26px; padding: 5px;"></i>';
-  backButton.addEventListener("click", async (e) => {
-    e.preventDefault();
-    await lagreSistePosisjonEkspress();
-    window.location.href = tilbakeUrl;
-  });
+  backButton.innerHTML = '<i class="fa-solid fa-xmark" style="color: #ffffff; font-size: 26px; padding: 5px;"></i>';
+  backButton.addEventListener("click", async (e) => {
+    e.preventDefault();
+    await lagreSistePosisjonEkspress();
+    window.location.href = tilbakeUrl;
+  });
 }
 
 // Initialiserer videoelementet
 const video = document.getElementById("video");
 const videoWrapper = document.getElementById("videoWrapper");
 if (video) {
-  const sourceTag = video.querySelector("source");
-  if (sourceTag) sourceTag.src = film.videoUrl || film.video || film.src;
-  const trackTag = video.querySelector("track");
-  if (trackTag && film.subtitleUrl) trackTag.src = film.subtitleUrl;
-  video.load();
+  const sourceTag = video.querySelector("source");
+  if (sourceTag) sourceTag.src = film.videoUrl || film.video || film.src;
+  const trackTag = video.querySelector("track");
+  if (trackTag && film.subtitleUrl) trackTag.src = film.subtitleUrl;
+  video.load();
 }
 
 /* ================= 2. DOM-ELEMENTER ================= */
@@ -959,12 +959,12 @@ let hideTimeout;
 let globalSubtitleSetting = localStorage.getItem("global-subtitle-setting") || "off";
 let subtitlesEnabled = globalSubtitleSetting !== "off";
 let autoplayTriggered = false;
-let autoplayAktiv = false; // Flag for å sjekke om autoplay-skjermen er åpen
+let autoplayAktiv = false;
 let lokalLagringsInterval;
 let autoplayTimer;
 let lastVolume = localStorage.getItem("video-last-volume") || 1;
 
-// Setter FontAwesome ikoner
+// Setter FontAwesome ikoner trygt
 if (rewindBtn) rewindBtn.innerHTML = '<i class="fa-solid fa-rotate-left" style="color: #ffffff; font-size: 22px;"></i>';
 if (forwardBtn) forwardBtn.innerHTML = '<i class="fa-solid fa-rotate-right" style="color: #ffffff; font-size: 22px;"></i>';
 if (captionsBtn) captionsBtn.innerHTML = '<i class="fa-solid fa-closed-captioning" style="color: #ffffff; font-size: 22px;"></i>';
@@ -973,625 +973,626 @@ if (playBtn) playBtn.innerHTML = '<i class="fa-solid fa-play" style="color: #fff
 if (muteBtn) muteBtn.innerHTML = '<i class="fa-solid fa-volume-high" style="color: #ffffff; font-size: 22px;"></i>';
 
 function hentNesteEpisodeUrl() {
-  if (isSerie && navn && sesong && episode && typeof serier !== "undefined" && serier?.[navn]) {
-    const s = parseInt(sesong);
-    const e = parseInt(episode);
-    const serie = serier[navn];
-    const returParam = returUrlParam ? `&returUrl=${encodeURIComponent(returUrlParam)}` : '';
+  if (isSerie && navn && sesong && episode && typeof serier !== "undefined" && serier?.[navn]) {
+    const s = parseInt(sesong);
+    const e = parseInt(episode);
+    const serie = serier[navn];
+    const returParam = returUrlParam ? `&returUrl=${encodeURIComponent(returUrlParam)}` : '';
 
-    if (serie.sesonger[s]?.episoder?.[e + 1]) {
-      return `film-mal.html?navn=${navn}&sesong=${s}&episode=${e + 1}${returParam}`;
-    }
-    if (serie.sesonger[s + 1]?.episoder?.[1]) {
-      return `film-mal.html?navn=${navn}&sesong=${s + 1}&episode=1${returParam}`;
-    }
-  }
-  return null;
+    if (serie.sesonger[s]?.episoder?.[e + 1]) {
+      return `film-mal.html?navn=${navn}&sesong=${s}&episode=${e + 1}${returParam}`;
+    }
+    if (serie.sesonger[s + 1]?.episoder?.[1]) {
+      return `film-mal.html?navn=${navn}&sesong=${s + 1}&episode=1${returParam}`;
+    }
+  }
+  return null;
 }
 const nesteEpisodeUrl = hentNesteEpisodeUrl();
 
 if (nextEpisodeBtn) {
-  if (isSerie && nesteEpisodeUrl) {
-    nextEpisodeBtn.style.display = "inline-block";
-    nextEpisodeBtn.onclick = () => { ryddeOgNeste(); };
-  } else {
-    nextEpisodeBtn.style.display = "none";
-  }
+  if (isSerie && nesteEpisodeUrl) {
+    nextEpisodeBtn.style.display = "inline-block";
+    nextEpisodeBtn.onclick = () => { ryddeOgNeste(); };
+  } else {
+    nextEpisodeBtn.style.display = "none";
+  }
 }
 
 function formatTime(time) {
-  if (isNaN(time) || !isFinite(time)) return "00:00";
-  const m = Math.floor(time / 60);
-  const s = Math.floor(time % 60);
-  return `${m}:${s < 10 ? '0' + s : s}`;
+  if (isNaN(time) || !isFinite(time)) return "00:00";
+  const m = Math.floor(time / 60);
+  const s = Math.floor(time % 60);
+  return `${m}:${s < 10 ? '0' + s : s}`;
 }
 
 /* ================= 3. DB-LOGIKK (Firebase & LocalStorage) ================= */
 const aktivProfilNavn = localStorage.getItem("aktivProfil") || "Hovedprofil";
 
 onAuthStateChanged(auth, async (user) => {
-  if (user) {
-    currentUser = user;
-    const cacheData = localStorage.getItem("watch_nordic_profiles_cache");
-    if (cacheData) {
-      heleProfilArrayet = JSON.parse(cacheData);
-    }
-    try {
-      const userDocRef = doc(db, "users", user.uid);
-      const docSnap = await getDoc(userDocRef);
-      if (docSnap.exists()) {
-        heleProfilArrayet = docSnap.data().profiler || [];
-        localStorage.setItem("watch_nordic_profiles_cache", JSON.stringify(heleProfilArrayet));
-      }
-    } catch (err) {
-      console.error("Feil ved bakgrunnssynk:", err);
-    }
-    sjekkLagretFremdrift();
-  } else {
-    window.location.href = "index.html";
-  }
+  if (user) {
+    currentUser = user;
+    const cacheData = localStorage.getItem("watch_nordic_profiles_cache");
+    if (cacheData) {
+      heleProfilArrayet = JSON.parse(cacheData);
+    }
+    try {
+      const userDocRef = doc(db, "users", user.uid);
+      const docSnap = await getDoc(userDocRef);
+      if (docSnap.exists()) {
+        heleProfilArrayet = docSnap.data().profiler || [];
+        localStorage.setItem("watch_nordic_profiles_cache", JSON.stringify(heleProfilArrayet));
+      }
+    } catch (err) {
+      console.error("Feil ved bakgrunnssynk:", err);
+    }
+    sjekkLagretFremdrift();
+  } else {
+    window.location.href = "index.html";
+  }
 });
 
 function sjekkLagretFremdrift() {
-  const profil = heleProfilArrayet.find(p => p.navn === aktivProfilNavn);
-  if (!profil) {
-    startVideoFraStart();
-    return;
-  }
-  const fremdriftInfo = profil.fremdrift?.[filmId];
-  if (fremdriftInfo && fremdriftInfo.currentTime > 10 && fremdriftInfo.status !== "ferdig") {
-    video.currentTime = parseFloat(fremdriftInfo.currentTime);
-    if (resumeOverlay) resumeOverlay.style.display = "flex";
-    
-    if (continueBtn) continueBtn.onclick = () => { if(resumeOverlay) resumeOverlay.style.display = "none"; video.play().catch(()=>{}); startLokalLagringsLoop(); };
-    if (restartBtn) restartBtn.onclick = () => { video.currentTime = 0; if(resumeOverlay) resumeOverlay.style.display = "none"; video.play().catch(()=>{}); startLokalLagringsLoop(); };
-  } else {
-    startVideoFraStart();
-  }
+  const profil = heleProfilArrayet.find(p => p.navn === aktivProfilNavn);
+  if (!profil) {
+    startVideoFraStart();
+    return;
+  }
+  const fremdriftInfo = profil.fremdrift?.[filmId];
+  if (fremdriftInfo && fremdriftInfo.currentTime > 10 && fremdriftInfo.status !== "ferdig") {
+    video.currentTime = parseFloat(fremdriftInfo.currentTime);
+    if (resumeOverlay) resumeOverlay.style.display = "flex";
+    
+    if (continueBtn) continueBtn.onclick = () => { if(resumeOverlay) resumeOverlay.style.display = "none"; video.play().catch(()=>{}); startLokalLagringsLoop(); };
+    if (restartBtn) restartBtn.onclick = () => { video.currentTime = 0; if(resumeOverlay) resumeOverlay.style.display = "none"; video.play().catch(()=>{}); startLokalLagringsLoop(); };
+  } else {
+    startVideoFraStart();
+  }
 }
 
 function startVideoFraStart() {
-  video.currentTime = 0;
-  video.play().catch(() => {});
-  startLokalLagringsLoop();
+  video.currentTime = 0;
+  video.play().catch(() => {});
+  startLokalLagringsLoop();
 }
 
 function startLokalLagringsLoop() {
-  clearInterval(lokalLagringsInterval);
-  lokalLagringsInterval = setInterval(() => {
-    oppdaterFremdriftILokalMatrise("paabegynt");
-  }, 5000);
+  clearInterval(lokalLagringsInterval);
+  lokalLagringsInterval = setInterval(() => {
+    oppdaterFremdriftILokalMatrise("paabegynt");
+  }, 5000);
 }
 
 function oppdaterFremdriftILokalMatrise(status) {
-  if (isNaN(video.currentTime) || video.currentTime <= 0 || isNaN(video.duration)) return;
-  
-  const percent = parseFloat(((video.currentTime / video.duration) * 100).toFixed(1));
-  let profilIdx = heleProfilArrayet.findIndex(p => p.navn === aktivProfilNavn);
-  if (profilIdx === -1) return;
+  if (isNaN(video.currentTime) || video.currentTime <= 0 || isNaN(video.duration)) return;
+  
+  const percent = parseFloat(((video.currentTime / video.duration) * 100).toFixed(1));
+  let profilIdx = heleProfilArrayet.findIndex(p => p.navn === aktivProfilNavn);
+  if (profilIdx === -1) return;
 
-  if (!heleProfilArrayet[profilIdx].fremdrift) heleProfilArrayet[profilIdx].fremdrift = {};
-  if (!heleProfilArrayet[profilIdx].historikk) heleProfilArrayet[profilIdx].historikk = {};
+  if (!heleProfilArrayet[profilIdx].fremdrift) heleProfilArrayet[profilIdx].fremdrift = {};
+  if (!heleProfilArrayet[profilIdx].historikk) heleProfilArrayet[profilIdx].historikk = {};
 
-  if (status === "ferdig" || percent > 96) {
-    delete heleProfilArrayet[profilIdx].fremdrift[filmId];
-    heleProfilArrayet[profilIdx].historikk[navn] = "ferdig";
-    
-    localStorage.removeItem("progress_" + filmId);
-    localStorage.removeItem("progress_" + navn);
-    localStorage.removeItem(`${filmId}-lastPosition`);
-  } else {
-    heleProfilArrayet[profilIdx].fremdrift[filmId] = {
-      currentTime: video.currentTime,
-      percent: percent,
-      status: "paabegynt",
-      sistOppdatert: new Date().toISOString(),
-      tittel: film.tittel,
-      id: filmId,
-      navn: navn,
-      sesong: sesong || null,
-      episode: episode || null
-    };
-    heleProfilArrayet[profilIdx].historikk[navn] = "påbegynt";
-  }
-  localStorage.setItem("watch_nordic_profiles_cache", JSON.stringify(heleProfilArrayet));
+  if (status === "ferdig" || percent > 96) {
+    delete heleProfilArrayet[profilIdx].fremdrift[filmId];
+    heleProfilArrayet[profilIdx].historikk[navn] = "ferdig";
+    
+    localStorage.removeItem("progress_" + filmId);
+    localStorage.removeItem("progress_" + navn);
+    localStorage.removeItem(`${filmId}-lastPosition`);
+  } else {
+    heleProfilArrayet[profilIdx].fremdrift[filmId] = {
+      currentTime: video.currentTime,
+      percent: percent,
+      status: "paabegynt",
+      sistOppdatert: new Date().toISOString(),
+      tittel: film.tittel,
+      id: filmId,
+      navn: navn,
+      sesong: sesong || null,
+      episode: episode || null
+    };
+    heleProfilArrayet[profilIdx].historikk[navn] = "påbegynt";
+  }
+  localStorage.setItem("watch_nordic_profiles_cache", JSON.stringify(heleProfilArrayet));
 }
 
 async function lagreSistePosisjonEkspress() {
-  clearInterval(lokalLagringsInterval);
-  const erFerdig = (video.currentTime / video.duration) > 0.96;
-  oppdaterFremdriftILokalMatrise(erFerdig ? "ferdig" : "paabegynt");
-  
-  if (currentUser) {
-    try {
-      const userDocRef = doc(db, "users", currentUser.uid);
-      await setDoc(userDocRef, { profiler: heleProfilArrayet }, { merge: true });
-    } catch (err) {
-      console.error("Feil ved ekspresslagring til skyen:", err);
-    }
-  }
+  clearInterval(lokalLagringsInterval);
+  const erFerdig = (video.currentTime / video.duration) > 0.96;
+  oppdaterFremdriftILokalMatrise(erFerdig ? "ferdig" : "paabegynt");
+  
+  if (currentUser) {
+    try {
+      const userDocRef = doc(db, "users", currentUser.uid);
+      await setDoc(userDocRef, { profiler: heleProfilArrayet }, { merge: true });
+    } catch (err) {
+      console.error("Feil ved ekspresslagring til skyen:", err);
+    }
+  }
 }
 
 async function ryddeOgNeste() {
-  video.pause();
-  clearInterval(lokalLagringsInterval);
-  clearInterval(autoplayTimer);
-  
-  oppdaterFremdriftILokalMatrise("ferdig");
-  
-  if (currentUser) {
-    try {
-      const userDocRef = doc(db, "users", currentUser.uid);
-      await setDoc(userDocRef, { profiler: heleProfilArrayet }, { merge: true });
-    } catch (e) { console.error("Feil ved lagring før navigering:", e); }
-  }
-  
-  if (isSerie && nesteEpisodeUrl) {
-    window.location.href = nesteEpisodeUrl;
-  } else {
-    window.location.href = tilbakeUrl;
-  }
+  video.pause();
+  clearInterval(lokalLagringsInterval);
+  clearInterval(autoplayTimer);
+  
+  oppdaterFremdriftILokalMatrise("ferdig");
+  
+  if (currentUser) {
+    try {
+      const userDocRef = doc(db, "users", currentUser.uid);
+      await setDoc(userDocRef, { profiler: heleProfilArrayet }, { merge: true });
+    } catch (e) { console.error("Feil ved lagring før navigering:", e); }
+  }
+  
+  if (isSerie && nesteEpisodeUrl) {
+    window.location.href = nesteEpisodeUrl;
+  } else {
+    window.location.href = tilbakeUrl;
+  }
 }
 
 window.addEventListener('beforeunload', () => {
-  oppdaterFremdriftILokalMatrise((video.currentTime / video.duration) > 0.96 ? "ferdig" : "paabegynt");
-  if (currentUser && navigator.sendBeacon) {
-    const userDocRef = doc(db, "users", currentUser.uid);
-    setDoc(userDocRef, { profiler: heleProfilArrayet }, { merge: true }).catch(() => {});
-  }
+  oppdaterFremdriftILokalMatrise((video.currentTime / video.duration) > 0.96 ? "ferdig" : "paabegynt");
+  if (currentUser && navigator.sendBeacon) {
+    const userDocRef = doc(db, "users", currentUser.uid);
+    setDoc(userDocRef, { profiler: heleProfilArrayet }, { merge: true }).catch(() => {});
+  }
 });
 
 /* ================= 4. MEDIEKONTROLLER OG UI-LOGIKK ================= */
 function updateProgress() {
-  if (!isDragging && video.duration) {
-    const percent = (video.currentTime / video.duration) * 100;
-    if (progressFilled) progressFilled.style.width = percent + '%';
-    if (thumb) thumb.style.left = percent + '%';
-  }
-  if (timeDisplay) {
-    timeDisplay.textContent = `${formatTime(video.currentTime)} / ${formatTime(video.duration)}`;
-  }
+  if (!isDragging && video.duration) {
+    const percent = (video.currentTime / video.duration) * 100;
+    if (progressFilled) progressFilled.style.width = percent + '%';
+    if (thumb) thumb.style.left = percent + '%';
+  }
+  if (timeDisplay) {
+    timeDisplay.textContent = `${formatTime(video.currentTime)} / ${formatTime(video.duration)}`;
+  }
 }
 
 video.addEventListener('timeupdate', updateProgress);
-video.addEventListener('loadedmetadata', updateProgress);
 
-playBtn.addEventListener('click', () => video.paused ? video.play() : video.pause());
+if (playBtn) playBtn.addEventListener('click', () => video.paused ? video.play() : video.pause());
 video.addEventListener('click', () => video.paused ? video.play() : video.pause());
 
 document.addEventListener('keydown', e => {
-  if (autoplayAktiv) return; // Blokkerer tastatursnarveier under nedtellingen
-  if (e.code === 'Space') { e.preventDefault(); video.paused ? video.play() : video.pause(); }
-  if (e.key === 'ArrowRight') video.currentTime = Math.min(video.duration, video.currentTime + 10);
-  if (e.key === 'ArrowLeft') video.currentTime = Math.max(0, video.currentTime - 10);
+  if (["INPUT", "TEXTAREA", "SELECT"].includes(document.activeElement.tagName)) return;
+  if (autoplayAktiv) return;
+  if (e.code === 'Space') { e.preventDefault(); video.paused ? video.play() : video.pause(); }
+  if (e.key === 'ArrowRight') video.currentTime = Math.min(video.duration, video.currentTime + 10);
+  if (e.key === 'ArrowLeft') video.currentTime = Math.max(0, video.currentTime - 10);
 });
 
-video.addEventListener('play', () => { 
-  if (playBtn) playBtn.innerHTML = '<i class="fa-solid fa-pause" style="color: #ffffff; font-size: 26px;"></i>'; 
-  showUI(); 
+video.addEventListener('play', () => { 
+  if (playBtn) playBtn.innerHTML = '<i class="fa-solid fa-pause" style="color: #ffffff; font-size: 26px;"></i>'; 
+  showUI(); 
 });
-video.addEventListener('pause', () => { 
-  if (playBtn) playBtn.innerHTML = '<i class="fa-solid fa-play" style="color: #ffffff; font-size: 26px;"></i>'; 
-  showUI(); 
+video.addEventListener('pause', () => { 
+  if (playBtn) playBtn.innerHTML = '<i class="fa-solid fa-play" style="color: #ffffff; font-size: 26px;"></i>'; 
+  showUI(); 
 });
 
 /* ================= PREMIUM INTERAKTIV VOLUMLOGIKK ================= */
 function oppdaterVolumIkon(vol, isMuted) {
-  if (isMuted || vol === 0) {
-    muteBtn.innerHTML = '<i class="fa-solid fa-volume-xmark" style="color: #ffffff; font-size: 22px;"></i>';
-  } else if (vol < 0.4) {
-    muteBtn.innerHTML = '<i class="fa-solid fa-volume-low" style="color: #ffffff; font-size: 22px;"></i>';
-  } else {
-    muteBtn.innerHTML = '<i class="fa-solid fa-volume-high" style="color: #ffffff; font-size: 22px;"></i>';
-  }
+  if (!muteBtn) return;
+  if (isMuted || vol === 0) {
+    muteBtn.innerHTML = '<i class="fa-solid fa-volume-xmark" style="color: #ffffff; font-size: 22px;"></i>';
+  } else if (vol < 0.4) {
+    muteBtn.innerHTML = '<i class="fa-solid fa-volume-low" style="color: #ffffff; font-size: 22px;"></i>';
+  } else {
+    muteBtn.innerHTML = '<i class="fa-solid fa-volume-high" style="color: #ffffff; font-size: 22px;"></i>';
+  }
 }
 
 function settVolum(volVal) {
-  const vol = parseFloat(volVal);
-  video.volume = vol;
-  video.muted = (vol === 0);
-  
-  if (vol > 0) {
-    lastVolume = vol;
-    localStorage.setItem("video-last-volume", vol);
-  }
-  
-  if (volumeSlider) {
-    volumeSlider.value = vol;
-    volumeSlider.style.setProperty('--volume-percent', `${vol * 100}%`);
-  }
-  oppdaterVolumIkon(vol, video.muted);
+  const vol = parseFloat(volVal);
+  video.volume = vol;
+  video.muted = (vol === 0);
+  
+  if (vol > 0) {
+    lastVolume = vol;
+    localStorage.setItem("video-last-volume", vol);
+  }
+  
+  if (volumeSlider) {
+    volumeSlider.value = vol;
+    volumeSlider.style.setProperty('--volume-percent', `${vol * 100}%`);
+  }
+  oppdaterVolumIkon(vol, video.muted);
 }
 
-muteBtn.addEventListener('click', () => {
-  if (video.muted || video.volume === 0) {
-    video.muted = false;
-    settVolum(lastVolume > 0 ? lastVolume : 0.5);
-  } else {
-    video.muted = true;
-    if (volumeSlider) {
-      volumeSlider.value = 0;
-      volumeSlider.style.setProperty('--volume-percent', '0%');
-    }
-    oppdaterVolumIkon(0, true);
-  }
-});
+if (muteBtn) {
+  muteBtn.addEventListener('click', () => {
+    if (video.muted || video.volume === 0) {
+      video.muted = false;
+      settVolum(lastVolume > 0 ? lastVolume : 0.5);
+    } else {
+      video.muted = true;
+      if (volumeSlider) {
+        volumeSlider.value = 0;
+        volumeSlider.style.setProperty('--volume-percent', '0%');
+      }
+      oppdaterVolumIkon(0, true);
+    }
+  });
+}
 
 if (volumeSlider) {
-  settVolum(lastVolume);
-  volumeSlider.addEventListener('input', (e) => {
-    settVolum(e.target.value);
-  });
+  settVolum(lastVolume);
+  volumeSlider.addEventListener('input', (e) => {
+    settVolum(e.target.value);
+  });
 }
 
-rewindBtn.addEventListener('click', () => video.currentTime = Math.max(0, video.currentTime - 10));
-forwardBtn.addEventListener('click', () => video.currentTime = Math.min(video.duration, video.currentTime + 10));
+if (rewindBtn) rewindBtn.addEventListener('click', () => video.currentTime = Math.max(0, video.currentTime - 10));
+if (forwardBtn) forwardBtn.addEventListener('click', () => video.currentTime = Math.min(video.duration, video.currentTime + 10));
 
-captionsBtn.addEventListener('click', () => { 
-  if (captionMenu) captionMenu.style.display = captionMenu.style.display === 'block' ? 'none' : 'block'; 
-});
+if (captionsBtn) {
+  captionsBtn.addEventListener('click', () => { 
+    if (captionMenu) captionMenu.style.display = captionMenu.style.display === 'block' ? 'none' : 'block'; 
+  });
+}
 
 /* ================= 5. UNDERTEKSTER & LYDVALG ================= */
+function updateSubtitleButtons(activeLang) {
+  document.querySelectorAll("#subtitleTracks button").forEach(btn => {
+    if (btn.dataset.lang === activeLang) { btn.classList.add("active"); } else { btn.classList.remove("active"); }
+  });
+}
+
 const audioTracksDiv = document.getElementById("audioTracks");
 if (audioTracksDiv) {
-  audioTracksDiv.innerHTML = "";
-  if (film.audioLanguages && film.audioLanguages.length > 0) {
-    film.audioLanguages.forEach(lang => {
-      const btn = document.createElement("button");
-      btn.textContent = lang.label;
-      btn.addEventListener("click", () => { if (captionMenu) captionMenu.style.display = "none"; });
-      audioTracksDiv.appendChild(btn);
-    });
-  } else { audioTracksDiv.innerHTML = "<em style='color:gray;'>Standard lydspor</em>"; }
+  audioTracksDiv.innerHTML = "";
+  if (film.audioLanguages && film.audioLanguages.length > 0) {
+    film.audioLanguages.forEach(lang => {
+      const btn = document.createElement("button");
+      btn.textContent = lang.label;
+      btn.addEventListener("click", () => { if (captionMenu) captionMenu.style.display = "none"; });
+      audioTracksDiv.appendChild(btn);
+    });
+  } else { audioTracksDiv.innerHTML = "<em style='color:gray;'>Standard lydspor</em>"; }
 }
 
 const subtitleTracksDiv = document.getElementById("subtitleTracks");
 if (subtitleTracksDiv) {
-  subtitleTracksDiv.innerHTML = "";
-  if (film.subtitleLanguages && film.subtitleLanguages.length > 0) {
-    film.subtitleLanguages.forEach(sub => {
-      const btn = document.createElement("button");
-      btn.textContent = sub.label; 
-      btn.dataset.lang = sub.code;
-      
-      btn.addEventListener("click", () => {
-        const selectedLang = sub.code; 
-        globalSubtitleSetting = selectedLang; 
-        localStorage.setItem("global-subtitle-setting", selectedLang);
-        
-        if (selectedLang === "off") {
-          subtitlesEnabled = false; 
-          for (let i = 0; i < video.textTracks.length; i++) video.textTracks[i].mode = "disabled"; 
-          if (subtitleOverlay) subtitleOverlay.textContent = "";
-        } else {
-          subtitlesEnabled = true;
-          for (let i = 0; i < video.textTracks.length; i++) {
-            const track = video.textTracks[i];
-            if (track.language === selectedLang || track.label.toLowerCase() === selectedLang) {
-              track.mode = "hidden"; 
-              
-              track.oncuechange = () => {
-                if (!subtitlesEnabled) { if (subtitleOverlay) subtitleOverlay.textContent = ""; return; }
-                const cues = track.activeCues; 
-                if (subtitleOverlay) {
-                  subtitleOverlay.textContent = cues && cues.length > 0 ? cues[0].text : "";
-                }
-              };
-            } else {
-              track.mode = "disabled";
-            }
-          }
-        }
-        updateSubtitleButtons(selectedLang); 
-        if (captionMenu) captionMenu.style.display = "none";
-      });
-      subtitleTracksDiv.appendChild(btn);
-    });
-  } else { subtitleTracksDiv.innerHTML = "<em style='color:gray;'>Ingen teksting tilgjengelig</em>"; }
+  subtitleTracksDiv.innerHTML = "";
+  if (film.subtitleLanguages && film.subtitleLanguages.length > 0) {
+    film.subtitleLanguages.forEach(sub => {
+      const btn = document.createElement("button");
+      btn.textContent = sub.label; 
+      btn.dataset.lang = sub.code;
+      
+      btn.addEventListener("click", () => {
+        const selectedLang = sub.code; 
+        globalSubtitleSetting = selectedLang; 
+        localStorage.setItem("global-subtitle-setting", selectedLang);
+        
+        if (selectedLang === "off") {
+          subtitlesEnabled = false; 
+          for (let i = 0; i < video.textTracks.length; i++) video.textTracks[i].mode = "disabled"; 
+          if (subtitleOverlay) subtitleOverlay.textContent = "";
+        } else {
+          subtitlesEnabled = true;
+          for (let i = 0; i < video.textTracks.length; i++) {
+            const track = video.textTracks[i];
+            if (track.language === selectedLang || track.label.toLowerCase() === selectedLang) {
+              track.mode = "hidden"; 
+              
+              track.oncuechange = () => {
+                if (!subtitlesEnabled) { if (subtitleOverlay) subtitleOverlay.textContent = ""; return; }
+                const cues = track.activeCues; 
+                if (subtitleOverlay) {
+                  subtitleOverlay.textContent = cues && cues.length > 0 ? cues[0].text : "";
+                }
+              };
+            } else {
+              track.mode = "disabled";
+            }
+          }
+        }
+        updateSubtitleButtons(selectedLang); 
+        if (captionMenu) captionMenu.style.display = "none";
+      });
+      subtitleTracksDiv.appendChild(btn);
+    });
+  } else { subtitleTracksDiv.innerHTML = "<em style='color:gray;'>Ingen teksting tilgjengelig</em>"; }
 }
 
+// Samlet metadata-lytter (Løser duplikat-konflikten)
 video.addEventListener('loadedmetadata', () => {
-  if (globalSubtitleSetting !== "off") {
-    const aktivKnapp = document.querySelector(`#subtitleTracks button[data-lang="${globalSubtitleSetting}"]`);
-    if (aktivKnapp) aktivKnapp.click();
-  } else {
-    updateSubtitleButtons("off");
-  }
+  updateProgress();
+  if (globalSubtitleSetting !== "off") {
+    const aktivKnapp = document.querySelector(`#subtitleTracks button[data-lang="${globalSubtitleSetting}"]`);
+    if (aktivKnapp) aktivKnapp.click();
+  } else {
+    updateSubtitleButtons("off");
+  }
 });
 
 function scrubTo(e) {
-  if (!video.duration) return 0;
-  const rect = progress.getBoundingClientRect();
-  const x = e.clientX - rect.left;
-  const percent = Math.min(Math.max(0, x / rect.width), 1);
-  if (progressFilled) progressFilled.style.width = percent * 100 + '%';
-  if (thumb) thumb.style.left = percent * 100 + '%';
-  return percent;
+  if (!video.duration || !progress) return 0;
+  const rect = progress.getBoundingClientRect();
+  const x = e.clientX - rect.left;
+  const percent = Math.min(Math.max(0, x / rect.width), 1);
+  if (progressFilled) progressFilled.style.width = percent * 100 + '%';
+  if (thumb) thumb.style.left = percent * 100 + '%';
+  return percent;
 }
 
 if (progress) {
-  progress.addEventListener('mousedown', e => { isDragging = true; scrubTo(e); });
+  progress.addEventListener('mousedown', e => { isDragging = true; scrubTo(e); });
 }
-document.addEventListener('mouseup', e => { 
-  if (isDragging) { 
-    const percent = scrubTo(e); 
-    video.currentTime = percent * video.duration; 
-    isDragging = false; 
-    hidePreview(); 
-  } 
+document.addEventListener('mouseup', e => { 
+  if (isDragging) { 
+    const percent = scrubTo(e); 
+    video.currentTime = percent * video.duration; 
+    isDragging = false; 
+    hidePreview(); 
+  } 
 });
-document.addEventListener('mousemove', e => { 
-  if (isDragging) { 
-    const percent = scrubTo(e); 
-    video.currentTime = percent * video.duration; 
-    showPreview(e); 
-  } 
+document.addEventListener('mousemove', e => { 
+  if (isDragging) { 
+    const percent = scrubTo(e); 
+    video.currentTime = percent * video.duration; 
+    showPreview(e); 
+  } 
 });
 
 const hiddenVideo = document.createElement("video");
-hiddenVideo.src = film.videoUrl || film.video || film.src; 
-hiddenVideo.muted = true; 
+hiddenVideo.src = film.videoUrl || film.video || film.src; 
+hiddenVideo.muted = true; 
 hiddenVideo.crossOrigin = "anonymous";
 hiddenVideo.preload = "auto";
 
-const canvas = document.createElement("canvas"); 
+const canvas = document.createElement("canvas"); 
 const ctx = canvas.getContext("2d");
-canvas.width = 240; 
+canvas.width = 240; 
 canvas.height = 135;
 
 hiddenVideo.addEventListener("seeked", () => {
-  ctx.drawImage(hiddenVideo, 0, 0, canvas.width, canvas.height);
-  if (previewImage) previewImage.src = canvas.toDataURL("image/jpeg");
+  try {
+    ctx.drawImage(hiddenVideo, 0, 0, canvas.width, canvas.height);
+    if (previewImage) previewImage.src = canvas.toDataURL("image/jpeg");
+  } catch (err) {
+    // Fanger opp eventuelle CORS/Tainted Canvas feil uten å krasje appen
+  }
 });
 
 function showPreview(e) {
-  if (!video.duration || !previewBox) return;
-  const rect = progress.getBoundingClientRect();
-  const x = e.clientX - rect.left;
-  const percent = Math.min(Math.max(0, x / rect.width), 1);
-  const time = percent * video.duration;
-  
-  previewBox.style.left = `${x - 120}px`; 
-  previewBox.style.display = "block"; 
-  if (previewTime) previewTime.textContent = formatTime(time);
-  
-  hiddenVideo.currentTime = time;
+  if (!video.duration || !previewBox || !progress) return;
+  const rect = progress.getBoundingClientRect();
+  const x = e.clientX - rect.left;
+  const percent = Math.min(Math.max(0, x / rect.width), 1);
+  const time = percent * video.duration;
+  
+  previewBox.style.left = `${x - 120}px`; 
+  previewBox.style.display = "block"; 
+  if (previewTime) previewTime.textContent = formatTime(time);
+  
+  hiddenVideo.currentTime = time;
 }
 function hidePreview() { if (previewBox) previewBox.style.display = "none"; }
 if (progress) {
-  progress.addEventListener("mousemove", showPreview);
-  progress.addEventListener("mouseleave", hidePreview);
+  progress.addEventListener("mousemove", showPreview);
+  progress.addEventListener("mouseleave", hidePreview);
 }
 
 // ================= AUTOMATISK SKJULING AV MUSEPEKER & KONTROLLER =================
 function showUI() {
-  if (autoplayAktiv) {
-    // Sørger for at musepekeren tvinges til å være synlig under autoplay
-    document.body.classList.remove('no-cursor');
-    return; 
-  }
+  if (autoplayAktiv) {
+    document.body.classList.remove('no-cursor');
+    return; 
+  }
 
-  if (ui) ui.classList.remove('hidden'); 
-  document.body.classList.remove('no-cursor'); 
-  if (subtitleOverlay) subtitleOverlay.classList.add("subtitle-up"); 
-  clearTimeout(hideTimeout);
-  
-  hideTimeout = setTimeout(() => { 
-    if (!video.paused && !isDragging) { 
-      if (ui) ui.classList.add('hidden'); 
-      document.body.classList.add('no-cursor'); 
-      if (subtitleOverlay) subtitleOverlay.classList.remove("subtitle-up"); 
-    } 
-  }, 3000); 
+  if (ui) ui.classList.remove('hidden'); 
+  document.body.classList.remove('no-cursor'); 
+  if (subtitleOverlay) subtitleOverlay.classList.add("subtitle-up"); 
+  clearTimeout(hideTimeout);
+  
+  hideTimeout = setTimeout(() => { 
+    if (!video.paused && !isDragging) { 
+      if (ui) ui.classList.add('hidden'); 
+      document.body.classList.add('no-cursor'); 
+      if (subtitleOverlay) subtitleOverlay.classList.remove("subtitle-up"); 
+    } 
+  }, 3000); 
 }
 document.addEventListener('mousemove', showUI);
 document.addEventListener('keydown', showUI);
 
 if (fullscreenBtn) {
-  fullscreenBtn.addEventListener('click', () => { if (!document.fullscreenElement) { container.requestFullscreen(); } else { document.exitFullscreen(); } });
+  fullscreenBtn.addEventListener('click', () => { if (!document.fullscreenElement) { container.requestFullscreen(); } else { document.exitFullscreen(); } });
 }
 document.addEventListener('fullscreenchange', () => {
-  if (fullscreenBtn) {
-    fullscreenBtn.innerHTML = document.fullscreenElement 
-      ? '<i class="fa-solid fa-compress" style="color: #ffffff; font-size: 22px;"></i>' 
-      : '<i class="fa-solid fa-expand" style="color: #ffffff; font-size: 22px;"></i>';
-  }
+  if (fullscreenBtn) {
+    fullscreenBtn.innerHTML = document.fullscreenElement 
+      ? '<i class="fa-solid fa-compress" style="color: #ffffff; font-size: 22px;"></i>' 
+      : '<i class="fa-solid fa-expand" style="color: #ffffff; font-size: 22px;"></i>';
+  }
 });
 
 if (loadingSpinner) {
-  video.addEventListener('waiting', () => loadingSpinner.style.display = 'block');
-  video.addEventListener('playing', () => loadingSpinner.style.display = 'none');
+  video.addEventListener('waiting', () => loadingSpinner.style.display = 'block');
+  video.addEventListener('playing', () => loadingSpinner.style.display = 'none');
 }
 
-video.addEventListener('ended', async () => { 
-  await ryddeOgNeste(); 
+video.addEventListener('ended', async () => { 
+  await ryddeOgNeste(); 
 });
-
-function updateSubtitleButtons(activeLang) {
-  document.querySelectorAll("#subtitleTracks button").forEach(btn => {
-    if (btn.dataset.lang === activeLang) { btn.classList.add("active"); } else { btn.classList.remove("active"); }
-  });
-}
 
 /* ================= 6. PREMIUM NETFLIX-FLYTT & AUTOPLAY ================= */
 const skipIntroBtn = document.getElementById("skipIntroBtn");
 const skipOutroBtn = document.getElementById("skipOutroBtn");
 
 video.addEventListener("timeupdate", () => {
-  const tid = video.currentTime;
+  const tid = video.currentTime;
 
-  if (isSerie && film.introStart != null && film.introEnd != null) {
-    if (tid >= film.introStart && tid <= film.introEnd) {
-      if (skipIntroBtn) skipIntroBtn.style.display = "block";
-    } else {
-      if (skipIntroBtn) skipIntroBtn.style.display = "none";
-    }
-  }
+  if (isSerie && film.introStart != null && film.introEnd != null) {
+    if (tid >= film.introStart && tid <= film.introEnd) {
+      if (skipIntroBtn) skipIntroBtn.style.display = "block";
+    } else {
+      if (skipIntroBtn) skipIntroBtn.style.display = "none";
+    }
+  }
 
-  // Sikrer at video.duration har lastet og er et gyldig tall før utregning
-  if (video.duration && !isNaN(video.duration)) {
-    const triggerTid = film.outroStart != null ? film.outroStart : (video.duration - 15);
-    if (isSerie && nesteEpisodeUrl && tid >= triggerTid && !autoplayTriggered && !video.paused) {
-      autoplayTriggered = true;
-      startPremiumAutoplay();
-    }
-  }
+  if (video.duration && !isNaN(video.duration)) {
+    const triggerTid = film.outroStart != null ? film.outroStart : (video.duration - 15);
+    if (isSerie && nesteEpisodeUrl && tid >= triggerTid && !autoplayTriggered && !video.paused) {
+      autoplayTriggered = true;
+      startPremiumAutoplay();
+    }
+  }
 });
 
 if (skipIntroBtn) { skipIntroBtn.addEventListener("click", () => { video.currentTime = film.introEnd; }); }
 if (skipOutroBtn) { skipOutroBtn.addEventListener("click", () => { ryddeOgNeste(); }); }
 
 function startPremiumAutoplay() {
-  if (!autoplayOverlay || !videoWrapper) return;
-  
-  autoplayAktiv = true; // Markerer autoplay som aktiv
+  if (!autoplayOverlay || !videoWrapper) return;
+  
+  autoplayAktiv = true;
+  document.body.classList.remove('no-cursor');
 
-  // Vis musepekeren med en gang
-  document.body.classList.remove('no-cursor');
+  if (ui) {
+    ui.style.pointerEvents = "none";
+    ui.style.display = "none";
+  }
+  
+  let nesteBildeUrl = "";
+  let nesteTittel = "Neste episode";
+  let nesteBeskrivelse = "";
+  let nesteEpInfoText = "";
+  let serieLogoUrl = "";
 
-  // Skjuler og deaktiverer kontroller
-  if (ui) {
-    ui.style.pointerEvents = "none";
-    ui.style.display = "none";
-  }
-  
-  let nesteBildeUrl = "";
-  let nesteTittel = "Neste episode";
-  let nesteBeskrivelse = "";
-  let nesteEpInfoText = "";
-  let serieLogoUrl = "";
+  if (isSerie && navn && sesong && episode && typeof serier !== "undefined" && serier?.[navn]) {
+    const s = parseInt(sesong);
+    const e = parseInt(episode);
+    const serie = serier[navn];
+    
+    serieLogoUrl = serie.logo || "";
 
-  if (isSerie && navn && sesong && episode && typeof serier !== "undefined" && serier?.[navn]) {
-    const s = parseInt(sesong);
-    const e = parseInt(episode);
-    const serie = serier[navn];
-    
-    serieLogoUrl = serie.logo || "";
+    let nesteEpData = serie.sesonger[s]?.episoder?.[e + 1] || serie.sesonger[s + 1]?.episoder?.[1];
+    let nesteSNum = serie.sesonger[s]?.episoder?.[e + 1] ? s : s + 1;
+    let nesteENum = serie.sesonger[s]?.episoder?.[e + 1] ? (e + 1) : 1;
 
-    let nesteEpData = serie.sesonger[s]?.episoder?.[e + 1] || serie.sesonger[s + 1]?.episoder?.[1];
-    let nesteSNum = serie.sesonger[s]?.episoder?.[e + 1] ? s : s + 1;
-    let nesteENum = serie.sesonger[s]?.episoder?.[e + 1] ? (e + 1) : 1;
+    if (nesteEpData) {
+      nesteBildeUrl = nesteEpData.thumbnail || nesteEpData.bildeUrl || serie.bakgrunnsbilde || serie.bakgrunns || "";
+      nesteTittel = nesteEpData.tittel || "Neste episode";
+      nesteBeskrivelse = nesteEpData.beskrivelse || "";
+      nesteEpInfoText = `S${nesteSNum}:E${nesteENum}`;
+    }
+  }
 
-    if (nesteEpData) {
-      nesteBildeUrl = nesteEpData.thumbnail || nesteEpData.bildeUrl || serie.bakgrunnsbilde || serie.bakgrunns || "";
-      nesteTittel = nesteEpData.tittel || "Neste episode";
-      nesteBeskrivelse = nesteEpData.beskrivelse || "";
-      nesteEpInfoText = `S${nesteSNum}:E${nesteENum}`;
-    }
-  }
+  if (container && nesteBildeUrl) {
+    container.style.backgroundImage = `url('${nesteBildeUrl}')`;
+    container.style.backgroundSize = "cover";
+    container.style.backgroundPosition = "center";
+    container.style.backgroundRepeat = "no-repeat";
+  }
 
-  // Bakgrunnsbilde uten mørkt slør
-  if (container && nesteBildeUrl) {
-    container.style.backgroundImage = `url('${nesteBildeUrl}')`;
-    container.style.backgroundSize = "cover";
-    container.style.backgroundPosition = "center";
-    container.style.backgroundRepeat = "no-repeat";
-  }
+  autoplayOverlay.innerHTML = `
+    <div class="autoplay-content">
+      ${serieLogoUrl ? `<img src="${serieLogoUrl}" class="autoplay-serie-logo" alt="Serie Logo">` : ''}
+      <div class="autoplay-episode-meta">
+        <span class="autoplay-ep-tag">${nesteEpInfoText}</span>
+        <span class="autoplay-ep-title">${nesteTittel}</span>
+      </div>
+      <p class="autoplay-ep-desc">${nesteBeskrivelse}</p>
+      
+      <div class="autoplay-action-row">
+        <button id="autoplayPlayNextBtn" class="autoplay-btn">
+          <i class="fa-solid fa-play"></i> Spill neste
+        </button>
+        <button id="autoplayCancelBtn" class="autoplay-btn">Avbryt</button>
+        
+        <div class="autoplay-circle-timer">
+          <svg class="timer-svg" viewBox="0 0 36 36">
+            <path class="timer-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+            <path id="timerProgress" class="timer-progress" stroke-dasharray="100, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+          </svg>
+          <div id="autoplayCountdown" class="timer-number">8</div>
+        </div>
+      </div>
+    </div>
+  `;
 
-  autoplayOverlay.innerHTML = `
-    <div class="autoplay-content">
-      ${serieLogoUrl ? `<img src="${serieLogoUrl}" class="autoplay-serie-logo" alt="Serie Logo">` : ''}
-      <div class="autoplay-episode-meta">
-        <span class="autoplay-ep-tag">${nesteEpInfoText}</span>
-        <span class="autoplay-ep-title">${nesteTittel}</span>
-      </div>
-      <p class="autoplay-ep-desc">${nesteBeskrivelse}</p>
-      
-      <div class="autoplay-action-row">
-        <button id="autoplayPlayNextBtn" class="autoplay-btn">
-          <i class="fa-solid fa-play"></i> Spill neste
-        </button>
-        <button id="autoplayCancelBtn" class="autoplay-btn">Avbryt</button>
-        
-        <div class="autoplay-circle-timer">
-          <svg class="timer-svg" viewBox="0 0 36 36">
-            <path class="timer-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
-            <path id="timerProgress" class="timer-progress" stroke-dasharray="100, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
-          </svg>
-          <div id="autoplayCountdown" class="timer-number">8</div>
-        </div>
-      </div>
-    </div>
-  `;
+  document.getElementById("autoplayPlayNextBtn").addEventListener("click", () => { ryddeOgNeste(); });
+  document.getElementById("autoplayCancelBtn").addEventListener("click", () => { avbrytAutoplay(); });
 
-  document.getElementById("autoplayPlayNextBtn").addEventListener("click", () => { ryddeOgNeste(); });
-  document.getElementById("autoplayCancelBtn").addEventListener("click", () => { avbrytAutoplay(); });
+  videoWrapper.classList.remove("video-fullscreen");
 
-  // Sørger for at fullskjerm-klassen fjernes før krympe-stiler blir satt, slik at krympingen kan animeres
-  videoWrapper.classList.remove("video-fullscreen");
+  videoWrapper.style.transform = "none";
+  videoWrapper.style.position = "absolute";
+  videoWrapper.style.top = "110px";
+  videoWrapper.style.bottom = "auto";
+  videoWrapper.style.left = "auto";
+  videoWrapper.style.right = "80px";
+  videoWrapper.style.width = "420px";
+  videoWrapper.style.height = "236px";
+  videoWrapper.style.border = "3px solid #ffffff";
+  videoWrapper.style.borderRadius = "4px";
+  videoWrapper.style.zIndex = "9999";
+  
+  autoplayOverlay.style.display = "flex";
+  
+  let teller = 8; 
+  const totalTid = 8;
+  const countdownEl = document.getElementById("autoplayCountdown");
+  const progressPath = document.getElementById("timerProgress");
 
-  videoWrapper.style.transform = "none";
-  videoWrapper.style.position = "absolute";
-  videoWrapper.style.top = "110px";
-  videoWrapper.style.bottom = "auto";
-  videoWrapper.style.left = "auto";
-  videoWrapper.style.right = "80px";
-  videoWrapper.style.width = "420px";
-  videoWrapper.style.height = "236px";
-  videoWrapper.style.border = "3px solid #ffffff";
-  videoWrapper.style.borderRadius = "4px";
-  videoWrapper.style.zIndex = "9999";
-  
-  autoplayOverlay.style.display = "flex";
-  
-  let teller = 8; 
-  const totalTid = 8;
-  const countdownEl = document.getElementById("autoplayCountdown");
-  const progressPath = document.getElementById("timerProgress");
+  autoplayTimer = setInterval(() => {
+    teller--;
+    if (countdownEl) countdownEl.textContent = teller;
+    
+    if (progressPath) {
+      const prosent = (teller / totalTid) * 100;
+      progressPath.style.strokeDasharray = `${prosent}, 100`;
+    }
 
-  autoplayTimer = setInterval(() => {
-    teller--;
-    if (countdownEl) countdownEl.textContent = teller;
-    
-    if (progressPath) {
-      const prosent = (teller / totalTid) * 100;
-      progressPath.style.strokeDasharray = `${prosent}, 100`;
-    }
-
-    if (teller <= 0) {
-      clearInterval(autoplayTimer);
-      ryddeOgNeste();
-    }
-  }, 1000);
+    if (teller <= 0) {
+      clearInterval(autoplayTimer);
+      ryddeOgNeste();
+    }
+  }, 1000);
 }
 
 function avbrytAutoplay() {
-  autoplayAktiv = false; // Nullstiller autoplay-flagget
-  clearInterval(autoplayTimer);
-  if (autoplayOverlay) autoplayOverlay.style.display = "none";
-  
-  if (container) {
-    container.style.backgroundImage = "";
-  }
-  
-  // Bringer kontrollene tilbake til synlig og aktiv tilstand
-  if (ui) {
-    ui.style.pointerEvents = "auto";
-    ui.style.display = ""; 
-    showUI();
-  }
-  
-  // GJØR OVERGANGEN ULTRA-SMOOTH: Vi rydder vekk de faste inline-stilene og legger til klassen i stedet
-  if (videoWrapper) {
-    videoWrapper.classList.add("video-fullscreen");
-    
-    videoWrapper.style.transform = "";
-    videoWrapper.style.position = "";
-    videoWrapper.style.top = "";
-    videoWrapper.style.left = "";
-    videoWrapper.style.width = "";
-    videoWrapper.style.height = "";
-    videoWrapper.style.right = "";
-    videoWrapper.style.bottom = "";
-    videoWrapper.style.border = "";
-    videoWrapper.style.borderRadius = "";
-    videoWrapper.style.zIndex = "";
-  }
-  
-  // HIERARKISK KNAPP-ENDRING: Fjerner og skjuler knappen under avbrytelsen helt, i stedet for å sette den til 'block'
-  if (skipOutroBtn) {
-    skipOutroBtn.style.display = "none";
-  }
+  autoplayAktiv = false;
+  clearInterval(autoplayTimer);
+  if (autoplayOverlay) autoplayOverlay.style.display = "none";
+  
+  if (container) {
+    container.style.backgroundImage = "";
+  }
+  
+  if (ui) {
+    ui.style.pointerEvents = "auto";
+    ui.style.display = ""; 
+    showUI();
+  }
+  
+  if (videoWrapper) {
+    videoWrapper.classList.add("video-fullscreen");
+    
+    videoWrapper.style.transform = "";
+    videoWrapper.style.position = "";
+    videoWrapper.style.top = "";
+    videoWrapper.style.left = "";
+    videoWrapper.style.width = "";
+    videoWrapper.style.height = "";
+    videoWrapper.style.right = "";
+    videoWrapper.style.bottom = "";
+    videoWrapper.style.border = "";
+    videoWrapper.style.borderRadius = "";
+    videoWrapper.style.zIndex = "";
+  }
+  
+  if (skipOutroBtn) {
+    skipOutroBtn.style.display = "none";
+  }
 }
 
 document.addEventListener("contextmenu", e => e.preventDefault());
