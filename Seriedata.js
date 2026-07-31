@@ -13,7 +13,7 @@ const serier = {
     imdb: "",
     skapere: "Watch Nordic Originals Studio",
     tilbakeUrl: "serie.html?navn=the-titanic-archive",
-    publishDate: "2027-05-01T00:00:00",
+    publishDate: "2026-05-01T00:00:00",
     expireDate: "2027-11-15T23:59:59",
     audioLanguages: [],
     subtitleLanguages: [],
