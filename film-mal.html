@@ -1423,17 +1423,8 @@ function aktiverUndertekst(selectedLang) {
 const subtitleTracksDiv = document.getElementById("subtitleTracks");
 if (subtitleTracksDiv) {
   subtitleTracksDiv.innerHTML = "";
-  
-  // Legg til "Av"-knapp eksplisitt
-  const offBtn = document.createElement("button");
-  offBtn.textContent = "Av";
-  offBtn.dataset.lang = "off";
-  offBtn.addEventListener("click", () => {
-    aktiverUndertekst("off");
-    if (captionMenu) captionMenu.style.display = "none";
-  });
-  subtitleTracksDiv.appendChild(offBtn);
 
+  // 1. Legg til alle tilgjengelige språk først
   if (film.subtitleLanguages && film.subtitleLanguages.length > 0) {
     film.subtitleLanguages.forEach(sub => {
       const btn = document.createElement("button");
@@ -1447,6 +1438,16 @@ if (subtitleTracksDiv) {
       subtitleTracksDiv.appendChild(btn);
     });
   }
+
+  // 2. Legg til "Av"-knappen nederst i menyen
+  const offBtn = document.createElement("button");
+  offBtn.textContent = "Av";
+  offBtn.dataset.lang = "off";
+  offBtn.addEventListener("click", () => {
+    aktiverUndertekst("off");
+    if (captionMenu) captionMenu.style.display = "none";
+  });
+  subtitleTracksDiv.appendChild(offBtn);
 }
 
 video.addEventListener('loadedmetadata', () => {
