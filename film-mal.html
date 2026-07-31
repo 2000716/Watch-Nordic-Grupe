@@ -1260,30 +1260,7 @@ const subtitleTracksDiv = document.getElementById("subtitleTracks");
 if (subtitleTracksDiv) {
   subtitleTracksDiv.innerHTML = "";
 
-  // 1. Legg til "Av"-knapp først i menyen
-  const offBtn = document.createElement("button");
-  offBtn.textContent = "Av";
-  offBtn.dataset.lang = "off";
-  if (globalSubtitleSetting === "off") {
-    offBtn.classList.add("active");
-  }
-
-  offBtn.addEventListener("click", () => {
-    globalSubtitleSetting = "off";
-    localStorage.setItem("global-subtitle-setting", "off");
-    subtitlesEnabled = false;
-
-    for (let i = 0; i < video.textTracks.length; i++) {
-      video.textTracks[i].mode = "disabled";
-    }
-    if (subtitleOverlay) subtitleOverlay.textContent = "";
-
-    updateSubtitleButtons("off");
-    if (captionMenu) captionMenu.style.display = "none";
-  });
-  subtitleTracksDiv.appendChild(offBtn);
-
-  // 2. Legg til tilgjengelige undertekster
+  // 1. Legg til tilgjengelige undertekster først
   if (film.subtitleLanguages && film.subtitleLanguages.length > 0) {
     film.subtitleLanguages.forEach(sub => {
       const btn = document.createElement("button");
@@ -1321,15 +1298,30 @@ if (subtitleTracksDiv) {
       });
       subtitleTracksDiv.appendChild(btn);
     });
-  } else { 
-    // Valgfritt: Vis melding om at det kun er "Av"-knappen hvis det ikke er noen eksterne filer
-    const infoEm = document.createElement("em");
-    infoEm.style.color = "gray";
-    infoEm.style.display = "block";
-    infoEm.style.padding = "5px";
-    infoEm.textContent = "Ingen ekstra teksting";
-    subtitleTracksDiv.appendChild(infoEm);
   }
+
+  // 2. Legg til "Av"-knapp nederst i menyen
+  const offBtn = document.createElement("button");
+  offBtn.textContent = "Av";
+  offBtn.dataset.lang = "off";
+  if (globalSubtitleSetting === "off") {
+    offBtn.classList.add("active");
+  }
+
+  offBtn.addEventListener("click", () => {
+    globalSubtitleSetting = "off";
+    localStorage.setItem("global-subtitle-setting", "off");
+    subtitlesEnabled = false;
+
+    for (let i = 0; i < video.textTracks.length; i++) {
+      video.textTracks[i].mode = "disabled";
+    }
+    if (subtitleOverlay) subtitleOverlay.textContent = "";
+
+    updateSubtitleButtons("off");
+    if (captionMenu) captionMenu.style.display = "none";
+  });
+  subtitleTracksDiv.appendChild(offBtn);
 }
 
 // Samlet metadata-lytter (Løser duplikat-konflikten)
@@ -1419,7 +1411,6 @@ if (progress) {
   progress.addEventListener("mousemove", showPreview);
   progress.addEventListener("mouseleave", hidePreview);
 }
-
 // ================= AUTOMATISK SKJULING AV MUSEPEKER & KONTROLLER =================
 function showUI() {
   if (autoplayAktiv) {
