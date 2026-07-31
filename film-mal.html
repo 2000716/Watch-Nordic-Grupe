@@ -994,7 +994,7 @@ video::cue {
 <script src="Filmdata.js"></script>
 <script src="Seriedata.js"></script>
 <script type="module">
-/* ================= ==========================================================
+/* ==========================================================================
    UNIVERSELL SPINNER & PLAYER – PREMIUM STRØMMETJENESTE-UTGAVE
    ========================================================================== */
 import { db, auth } from './firebase-oppsett.js';
@@ -1096,7 +1096,7 @@ let hideTimeout;
 let globalSubtitleSetting = localStorage.getItem("global-subtitle-setting") || "off";
 let subtitlesEnabled = globalSubtitleSetting !== "off";
 let autoplayTriggered = false;
-let autoplayAktiv = false; // Flag for å sjekke om autoplay-skjermen er åpen
+let autoplayAktiv = false;
 let lokalLagringsInterval;
 let autoplayTimer;
 let lastVolume = localStorage.getItem("video-last-volume") || 1;
@@ -1297,7 +1297,7 @@ playBtn.addEventListener('click', () => video.paused ? video.play() : video.paus
 video.addEventListener('click', () => video.paused ? video.play() : video.pause());
 
 document.addEventListener('keydown', e => {
-  if (autoplayAktiv) return; // Blokkerer tastatursnarveier under nedtellingen
+  if (autoplayAktiv) return;
   if (e.code === 'Space') { e.preventDefault(); video.paused ? video.play() : video.pause(); }
   if (e.key === 'ArrowRight') video.currentTime = Math.min(video.duration, video.currentTime + 10);
   if (e.key === 'ArrowLeft') video.currentTime = Math.max(0, video.currentTime - 10);
@@ -1312,7 +1312,7 @@ video.addEventListener('pause', () => {
   showUI(); 
 });
 
-/* ================= PREMIUM INTERAKTIV VOLUMLOGIKK ================= */
+/* ================= VOLUMLOGIKK ================= */
 function oppdaterVolumIkon(vol, isMuted) {
   if (isMuted || vol === 0) {
     muteBtn.innerHTML = '<i class="fa-solid fa-volume-xmark" style="color: #ffffff; font-size: 22px;"></i>';
@@ -1368,7 +1368,7 @@ captionsBtn.addEventListener('click', () => {
   if (captionMenu) captionMenu.style.display = captionMenu.style.display === 'block' ? 'none' : 'block'; 
 });
 
-/* ================= 5. UNDERTEKSTER & LYDVALG ================= */
+/* ================= 5. OPTIMALISERT UNDERTEKSTER & LYDVALG ================= */
 const audioTracksDiv = document.getElementById("audioTracks");
 if (audioTracksDiv) {
   audioTracksDiv.innerHTML = "";
@@ -1382,9 +1382,58 @@ if (audioTracksDiv) {
   } else { audioTracksDiv.innerHTML = "<em style='color:gray;'>Standard lydspor</em>"; }
 }
 
+function aktiverUndertekst(selectedLang) {
+  globalSubtitleSetting = selectedLang;
+  localStorage.setItem("global-subtitle-setting", selectedLang);
+
+  if (selectedLang === "off") {
+    subtitlesEnabled = false;
+    for (let i = 0; i < video.textTracks.length; i++) {
+      video.textTracks[i].mode = "disabled";
+      video.textTracks[i].oncuechange = null;
+    }
+    if (subtitleOverlay) subtitleOverlay.textContent = "";
+  } else {
+    subtitlesEnabled = true;
+    for (let i = 0; i < video.textTracks.length; i++) {
+      const track = video.textTracks[i];
+      const match = (track.language === selectedLang || track.label.toLowerCase() === selectedLang.toLowerCase());
+
+      if (match) {
+        track.mode = "hidden"; // Bruker overlay i stedet for nettleserens standard
+        track.oncuechange = () => {
+          if (!subtitlesEnabled) { 
+            if (subtitleOverlay) subtitleOverlay.textContent = ""; 
+            return; 
+          }
+          const cues = track.activeCues; 
+          if (subtitleOverlay) {
+            subtitleOverlay.textContent = (cues && cues.length > 0) ? cues[0].text : "";
+          }
+        };
+      } else {
+        track.mode = "disabled";
+        track.oncuechange = null;
+      }
+    }
+  }
+  updateSubtitleButtons(selectedLang);
+}
+
 const subtitleTracksDiv = document.getElementById("subtitleTracks");
 if (subtitleTracksDiv) {
   subtitleTracksDiv.innerHTML = "";
+  
+  // Legg til "Av"-knapp eksplisitt
+  const offBtn = document.createElement("button");
+  offBtn.textContent = "Av";
+  offBtn.dataset.lang = "off";
+  offBtn.addEventListener("click", () => {
+    aktiverUndertekst("off");
+    if (captionMenu) captionMenu.style.display = "none";
+  });
+  subtitleTracksDiv.appendChild(offBtn);
+
   if (film.subtitleLanguages && film.subtitleLanguages.length > 0) {
     film.subtitleLanguages.forEach(sub => {
       const btn = document.createElement("button");
@@ -1392,50 +1441,29 @@ if (subtitleTracksDiv) {
       btn.dataset.lang = sub.code;
       
       btn.addEventListener("click", () => {
-        const selectedLang = sub.code; 
-        globalSubtitleSetting = selectedLang; 
-        localStorage.setItem("global-subtitle-setting", selectedLang);
-        
-        if (selectedLang === "off") {
-          subtitlesEnabled = false; 
-          for (let i = 0; i < video.textTracks.length; i++) video.textTracks[i].mode = "disabled"; 
-          if (subtitleOverlay) subtitleOverlay.textContent = "";
-        } else {
-          subtitlesEnabled = true;
-          for (let i = 0; i < video.textTracks.length; i++) {
-            const track = video.textTracks[i];
-            if (track.language === selectedLang || track.label.toLowerCase() === selectedLang) {
-              track.mode = "hidden"; 
-              
-              track.oncuechange = () => {
-                if (!subtitlesEnabled) { if (subtitleOverlay) subtitleOverlay.textContent = ""; return; }
-                const cues = track.activeCues; 
-                if (subtitleOverlay) {
-                  subtitleOverlay.textContent = cues && cues.length > 0 ? cues[0].text : "";
-                }
-              };
-            } else {
-              track.mode = "disabled";
-            }
-          }
-        }
-        updateSubtitleButtons(selectedLang); 
+        aktiverUndertekst(sub.code);
         if (captionMenu) captionMenu.style.display = "none";
       });
       subtitleTracksDiv.appendChild(btn);
     });
-  } else { subtitleTracksDiv.innerHTML = "<em style='color:gray;'>Ingen teksting tilgjengelig</em>"; }
+  }
 }
 
 video.addEventListener('loadedmetadata', () => {
-  if (globalSubtitleSetting !== "off") {
-    const aktivKnapp = document.querySelector(`#subtitleTracks button[data-lang="${globalSubtitleSetting}"]`);
-    if (aktivKnapp) aktivKnapp.click();
-  } else {
-    updateSubtitleButtons("off");
-  }
+  aktiverUndertekst(globalSubtitleSetting);
 });
 
+function updateSubtitleButtons(activeLang) {
+  document.querySelectorAll("#subtitleTracks button").forEach(btn => {
+    if (btn.dataset.lang === activeLang) {
+      btn.classList.add("active");
+    } else {
+      btn.classList.remove("active");
+    }
+  });
+}
+
+/* ================= SEEK & PREVIEW ================= */
 function scrubTo(e) {
   if (!video.duration) return 0;
   const rect = progress.getBoundingClientRect();
@@ -1500,10 +1528,9 @@ if (progress) {
   progress.addEventListener("mouseleave", hidePreview);
 }
 
-// ================= AUTOMATISK SKJULING AV MUSEPEKER & KONTROLLER =================
+/* ================= AUTOMATISK SKJULING AV KONTROLLER ================= */
 function showUI() {
   if (autoplayAktiv) {
-    // Sørger for at musepekeren tvinges til å være synlig under autoplay
     document.body.classList.remove('no-cursor');
     return; 
   }
@@ -1525,7 +1552,9 @@ document.addEventListener('mousemove', showUI);
 document.addEventListener('keydown', showUI);
 
 if (fullscreenBtn) {
-  fullscreenBtn.addEventListener('click', () => { if (!document.fullscreenElement) { container.requestFullscreen(); } else { document.exitFullscreen(); } });
+  fullscreenBtn.addEventListener('click', () => { 
+    if (!document.fullscreenElement) { container.requestFullscreen(); } else { document.exitFullscreen(); } 
+  });
 }
 document.addEventListener('fullscreenchange', () => {
   if (fullscreenBtn) {
@@ -1544,13 +1573,7 @@ video.addEventListener('ended', async () => {
   await ryddeOgNeste(); 
 });
 
-function updateSubtitleButtons(activeLang) {
-  document.querySelectorAll("#subtitleTracks button").forEach(btn => {
-    if (btn.dataset.lang === activeLang) { btn.classList.add("active"); } else { btn.classList.remove("active"); }
-  });
-}
-
-/* ================= 6. PREMIUM NETFLIX-FLYTT & AUTOPLAY ================= */
+/* ================= 6. AUTOPLAY & NETFLIX-FLYTT ================= */
 const skipIntroBtn = document.getElementById("skipIntroBtn");
 const skipOutroBtn = document.getElementById("skipOutroBtn");
 
@@ -1565,7 +1588,6 @@ video.addEventListener("timeupdate", () => {
     }
   }
 
-  // Sikrer at video.duration har lastet og er et gyldig tall før utregning
   if (video.duration && !isNaN(video.duration)) {
     const triggerTid = film.outroStart != null ? film.outroStart : (video.duration - 15);
     if (isSerie && nesteEpisodeUrl && tid >= triggerTid && !autoplayTriggered && !video.paused) {
@@ -1581,12 +1603,9 @@ if (skipOutroBtn) { skipOutroBtn.addEventListener("click", () => { ryddeOgNeste(
 function startPremiumAutoplay() {
   if (!autoplayOverlay || !videoWrapper) return;
   
-  autoplayAktiv = true; // Markerer autoplay som aktiv
-
-  // Vis musepekeren med en gang
+  autoplayAktiv = true;
   document.body.classList.remove('no-cursor');
 
-  // Skjuler og deaktiverer kontroller
   if (ui) {
     ui.style.pointerEvents = "none";
     ui.style.display = "none";
@@ -1617,7 +1636,6 @@ function startPremiumAutoplay() {
     }
   }
 
-  // Bakgrunnsbilde uten mørkt slør
   if (container && nesteBildeUrl) {
     container.style.backgroundImage = `url('${nesteBildeUrl}')`;
     container.style.backgroundSize = "cover";
@@ -1654,9 +1672,7 @@ function startPremiumAutoplay() {
   document.getElementById("autoplayPlayNextBtn").addEventListener("click", () => { ryddeOgNeste(); });
   document.getElementById("autoplayCancelBtn").addEventListener("click", () => { avbrytAutoplay(); });
 
-  // Sørger for at fullskjerm-klassen fjernes før krympe-stiler blir satt, slik at krympingen kan animeres
   videoWrapper.classList.remove("video-fullscreen");
-
   videoWrapper.style.transform = "none";
   videoWrapper.style.position = "absolute";
   videoWrapper.style.top = "110px";
@@ -1693,7 +1709,7 @@ function startPremiumAutoplay() {
 }
 
 function avbrytAutoplay() {
-  autoplayAktiv = false; // Nullstiller autoplay-flagget
+  autoplayAktiv = false;
   clearInterval(autoplayTimer);
   if (autoplayOverlay) autoplayOverlay.style.display = "none";
   
@@ -1701,17 +1717,14 @@ function avbrytAutoplay() {
     container.style.backgroundImage = "";
   }
   
-  // Bringer kontrollene tilbake til synlig og aktiv tilstand
   if (ui) {
     ui.style.pointerEvents = "auto";
     ui.style.display = ""; 
     showUI();
   }
   
-  // GJØR OVERGANGEN ULTRA-SMOOTH: Vi rydder vekk de faste inline-stilene og legger til klassen i stedet
   if (videoWrapper) {
     videoWrapper.classList.add("video-fullscreen");
-    
     videoWrapper.style.transform = "";
     videoWrapper.style.position = "";
     videoWrapper.style.top = "";
@@ -1725,7 +1738,6 @@ function avbrytAutoplay() {
     videoWrapper.style.zIndex = "";
   }
   
-  // HIERARKISK KNAPP-ENDRING: Fjerner og skjuler knappen under avbrytelsen helt, i stedet for å sette den til 'block'
   if (skipOutroBtn) {
     skipOutroBtn.style.display = "none";
   }
