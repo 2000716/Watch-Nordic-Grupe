@@ -135,7 +135,7 @@ const filmer = {
     expireDate: "2027-01-10T23:59:59",
   },
 
-  "tears-of-steel": {
+"tears-of-steel": {
     tittel: "Tears of Steel",
     rating: "5.5",
     bakgrunn: "https://m.media-amazon.com/images/M/MV5BODc0MDgzZDAtOWM5YS00ZTg0LTlhMDEtMjljNmJiZDg5MmExXkEyXkFqcGc@._V1_.jpg",
@@ -156,12 +156,11 @@ const filmer = {
     tilbakeUrl: "film.html?navn=tears-of-steel",
     audioLanguages: [{ code: "en", label: "Engelsk" }],
     subtitleLanguages: [
-      { code: "no", label: "Norsk" },
-      { code: "off", label: "Av" }
+      { code: "no", label: "Norsk" }
     ],
     publishDate: "2026-06-25T00:00:00",
     expireDate: "2030-01-01T23:59:59",
-  },
+},
 
 "halloween-spesial-detective-muffin": {
     tittel: "Detektiv Muffin: Halloween-spesial",
