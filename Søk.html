@@ -7,7 +7,7 @@
 
   <link rel="icon" type="image/png" href="https://static.wixstatic.com/media/fd2fb2_39376e4ee55b460ab7a3ebbfcf35fef7~mv2.png" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
- <style>
+  <style>
 
 /* =========================
    RESET
@@ -144,6 +144,11 @@ body{
   border:2px solid white;
 }
 
+.profilmeny img.png-karakter {
+  object-fit: contain;
+  background: rgba(255, 255, 255, 0.05);
+}
+
 /* =========================
    MAIN
 ========================= */
@@ -154,6 +159,7 @@ body{
   margin:auto;
   padding-top:130px;
   min-height:100vh;
+  padding-bottom: 80px;
 }
 
 /* =========================
@@ -334,7 +340,8 @@ body{
 }
 
 /* =========================
-   /* ===== PREMIUM STREAMING FOOTER ===== */
+   PREMIUM STREAMING FOOTER
+========================= */
 
 .footer {
   width: 100%;
@@ -350,7 +357,6 @@ body{
   color: #7d7d7d;
 }
 
-/* Sosiale ikoner */
 .footer-socials {
   display: flex;
   gap: 22px;
@@ -368,26 +374,20 @@ body{
   transform: scale(1.08);
 }
 
-/* Link-grid */
 .footer-links {
   width: 100%;
-
   display: grid;
   grid-template-columns: repeat(4, minmax(140px, 1fr));
-
   gap: 18px 50px;
-
   margin-bottom: 35px;
 }
 
 .footer-links a {
   color: #8a8a8a;
   text-decoration: none;
-
   font-size: 14px;
   font-weight: 400;
   line-height: 1.5;
-
   transition: color 0.2s ease;
 }
 
@@ -395,117 +395,69 @@ body{
   color: #ffffff;
 }
 
-/* Språk/service-knapp */
-.footer-service-btn {
-  margin-bottom: 28px;
-
-  padding: 10px 18px;
-
-  border: 1px solid rgba(255,255,255,0.2);
-  border-radius: 4px;
-
-  background: transparent;
-  color: #a0a0a0;
-
-  font-size: 13px;
-  cursor: pointer;
-
-  transition: all 0.25s ease;
-}
-
-.footer-service-btn:hover {
-  border-color: rgba(255,255,255,0.45);
-  color: #fff;
-}
-
-/* Copyright */
 .footer-copy {
   font-size: 13px;
   color: #666;
   margin-bottom: 8px;
 }
 
-/* Nederste tekst */
 .footer-bottom {
   max-width: 700px;
-
   font-size: 12px;
   line-height: 1.6;
-
   color: #555;
 }
 
-/* ===== MOBIL ===== */
-
 @media (max-width: 768px) {
-
   .footer {
     padding: 45px 22px 30px;
   }
-
   .footer-links {
     grid-template-columns: repeat(2, 1fr);
     gap: 16px 20px;
   }
-
   .footer-links a {
     font-size: 13px;
   }
-
   .footer-socials {
     gap: 18px;
     margin-bottom: 28px;
   }
-
   .footer-socials a {
     font-size: 18px;
   }
 }
 
-
-/* =========================
-   MOBIL
-========================= */
-
 @media(max-width:768px){
-
   .top-nav{
     padding:0 20px;
   }
-
   .nav-links{
     display:none;
   }
-
   .watch-logo-text{
     font-size:22px;
   }
-
   .search-page{
     padding-top:110px;
   }
-
   .search-title{
     font-size:30px;
   }
-
   .search-box input{
     height:60px;
     font-size:17px;
   }
-
   .results-grid{
     justify-content:center;
   }
-
   .result-card{
     width:280px;
     height:150px;
   }
-
 }
 
-</style>
+  </style>
 </head>
 
 <body>
@@ -517,54 +469,41 @@ body{
 <header class="top-nav">
 
   <div class="nav-left">
-
-    <div class="watch-logo-text"
-         onclick="window.location.href='Hovedside.html'">
+    <div class="watch-logo-text" onclick="window.location.href='Hovedside.html'">
       WATCH
     </div>
-
   </div>
 
   <nav class="nav-links">
-
     <a href="Hovedside.html">
       <i class="fas fa-house"></i>
       STARTSIDE
     </a>
-
     <a href="Serier.html">
       <i class="fas fa-tv"></i>
       SERIER
     </a>
-
     <a href="Film.html">
       <i class="fas fa-clapperboard"></i>
       FILMER
     </a>
-
     <a href="Nyheter.html">
       <i class="fas fa-star"></i>
       WATCH ORIGINALS
     </a>
-
     <a href="Min-Liste.html">
       <i class="fas fa-bookmark"></i>
       MIN LISTE
     </a>
-
   </nav>
 
   <div class="nav-right">
-
-    <a href="Søk.html" class="nav-search">
+    <a href="Søk.html" class="nav-search active">
       <i class="fas fa-search"></i>
     </a>
-
-    <a href="hvem-ser-på.html" class="profilmeny">
-      <img id="menyProfilbilde"
-           src="https://via.placeholder.com/100"/>
+    <a href="hvem-ser-på.html" class="profilmeny" id="profilmenyLink">
+      <img id="menyProfilbilde" src="https://via.placeholder.com/100" alt="Profilbilde"/>
     </a>
-
   </div>
 
 </header>
@@ -581,15 +520,12 @@ body{
 
   <!-- SEARCH -->
   <div class="search-box">
-
     <input
       type="text"
       id="searchInput"
       placeholder="Søk etter filmer, serier, sjangere..."
     />
-
     <i class="fas fa-search"></i>
-
   </div>
 
   <!-- RESULTATER -->
@@ -599,7 +535,6 @@ body{
 
 <footer class="footer">
 
-  <!-- Sosiale medier -->
   <div class="footer-socials">
     <a href="#"><i class="fab fa-instagram"></i></a>
     <a href="#"><i class="fab fa-facebook-f"></i></a>
@@ -607,7 +542,6 @@ body{
     <a href="#"><i class="fab fa-x-twitter"></i></a>
   </div>
 
-  <!-- Linker -->
   <div class="footer-links">
     <a href="om.html">Om Watch Nordic</a>
     <a href="kontakt.html">Kontakt oss</a>
@@ -625,13 +559,12 @@ body{
     <a href="#">Enheter</a>
   </div>
 
-  <!-- Copyright -->
   <div class="footer-copy">
     © 2026 Watch Nordic™
   </div>
 
   <div class="footer-bottom">
-     Alle varemerker fra WATCH NORDIC™, WATCH NORDIC ORIGINALS™ og alle øvrige tilknyttede immaterielle rettigheter tilhører Watch Nordic Group og brukes under lisens av Watch Nordic™. Alle varemerker, logoer, filmer, serier, bilder, design og øvrige tilknyttede immaterielle rettigheter tilhører sine respektive eiere. Alt innhold er beskyttet av opphavsrett og internasjonale varemerkelover. Alle rettigheter forbeholdt.
+      Alle varemerker fra WATCH NORDIC™, WATCH NORDIC ORIGINALS™ og alle øvrige tilknyttede immaterielle rettigheter tilhører Watch Nordic Group og brukes under lisens av Watch Nordic™. Alle varemerker, logoer, filmer, serier, bilder, design og øvrige tilknyttede immaterielle rettigheter tilhører sine respektive eiere. Alt innhold er beskyttet av opphavsrett og internasjonale varemerkelover. Alle rettigheter forbeholdt.
   </div>
 
 </footer>
@@ -639,223 +572,194 @@ body{
 <script src="Filmdata.js"></script>
 <script src="Seriedata.js"></script>
 
-<script>
+<script type="module">
+  // ==================== FIREBASE IMPORT FRA FELLES OPPSETT ==================== //
+  import { auth, db } from "./firebase-oppsett.js";
+  import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-auth.js";
+  import { doc, getDoc } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
 
-/* =========================
-   PROFILBILDE
-========================= */
+  // Hjelpefunksjon for å oppdatere profilmeny i header
+  function oppdaterMenyProfilVisning(bildeUrl, profilNavn, farge) {
+    const menyProfil = document.getElementById("menyProfilbilde");
+    const profilmenyLink = document.getElementById("profilmenyLink");
 
-const lagretBilde =
-  localStorage.getItem("profilbilde");
+    if (menyProfil && bildeUrl) {
+      menyProfil.src = bildeUrl;
+      if (bildeUrl.toLowerCase().endsWith('.png')) {
+        menyProfil.classList.add('png-karakter');
+      } else {
+        menyProfil.classList.remove('png-karakter');
+      }
+    }
 
-if(lagretBilde){
-
-  document.getElementById(
-    "menyProfilbilde"
-  ).src = lagretBilde;
-
-}
-
-/* =========================
-   AUTH
-========================= */
-
-const epost =
-  localStorage.getItem("epost");
-
-const passord =
-  localStorage.getItem("passord");
-
-if(!epost || !passord){
-
-  window.location.href =
-    "Starts side.html";
-
-}
-
-/* =========================
-   SCROLL NAV
-========================= */
-
-window.addEventListener("scroll", () => {
-
-  const nav =
-    document.querySelector(".top-nav");
-
-  if(window.scrollY > 50){
-
-    nav.classList.add("scrolled");
-
-  }else{
-
-    nav.classList.remove("scrolled");
-
+    if (profilmenyLink && farge) {
+      profilmenyLink.style.setProperty('--active-color', farge);
+    }
   }
 
-});
+  // ==================== REDIREKTERINGSVAKT & PROFIL-CACHE ==================== //
+  onAuthStateChanged(auth, async (user) => {
+    if (!user) {
+      const gjeldendeSide = window.location.pathname.split("/").pop();
+      if (gjeldendeSide !== "index.html" && gjeldendeSide !== "") {
+        window.location.href = "index.html";
+      }
+    } else {
+      const cachedeProfilerRaw = localStorage.getItem("watch_nordic_profiles_cache");
+      let profiler = [];
 
-/* =========================
-   SEARCH ENGINE
-========================= */
+      if (cachedeProfilerRaw) {
+        try {
+          profiler = JSON.parse(cachedeProfilerRaw);
+        } catch(e) {
+          console.error("Feil ved parsing av profil-cache");
+        }
+      }
 
-const input =
-  document.getElementById("searchInput");
+      try {
+        const docRef = doc(db, "users", user.uid);
+        const docSnap = await getDoc(docRef);
+        if (docSnap.exists()) {
+          profiler = docSnap.data().profiler || [];
+          localStorage.setItem("watch_nordic_profiles_cache", JSON.stringify(profiler));
+        }
+      } catch (error) {
+        console.error("Feil ved henting av profiler:", error);
+      }
 
-const resultsGrid =
-  document.getElementById("resultsGrid");
+      const aktivProfilIndex = parseInt(localStorage.getItem("aktivProfilIndex")) || 0;
+      const gjeldendeProfil = profiler[aktivProfilIndex];
+      if (gjeldendeProfil) {
+        const bildeUrl = gjeldendeProfil.bilde || "";
+        const profilNavn = gjeldendeProfil.navn || "";
+        const farge = gjeldendeProfil.farge || "";
 
-/* =========================
-   SAMLE ALT INNHOLD
-========================= */
+        oppdaterMenyProfilVisning(bildeUrl, profilNavn, farge);
 
-let allContent = [];
-
-/* ===== FILMER ===== */
-
-Object.keys(filmer).forEach(key => {
-
-  allContent.push({
-
-    type:"Film",
-    key:key,
-
-    ...filmer[key]
-
+        if (bildeUrl) localStorage.setItem("profilbilde", bildeUrl);
+        if (profilNavn) {
+          localStorage.setItem("profilnavn", profilNavn);
+          localStorage.setItem("aktivProfil", profilNavn);
+        }
+      }
+    }
   });
 
-});
+  // Lokale fallback-verdier for profilbilde
+  const lagretBilde = localStorage.getItem("profilbilde");
+  const lagretNavn = localStorage.getItem("profilnavn");
+  if (lagretBilde) {
+    oppdaterMenyProfilVisning(lagretBilde, lagretNavn);
+  }
 
-/* ===== SERIER ===== */
+  // ==================== SCROLL NAV ==================== //
+  window.addEventListener("scroll", () => {
+    const nav = document.querySelector(".top-nav");
+    if(!nav) return;
+    if(window.scrollY > 50){
+      nav.classList.add("scrolled");
+    }else{
+      nav.classList.remove("scrolled");
+    }
+  });
 
-if(typeof serier !== "undefined"){
+  // ==================== SEARCH ENGINE ==================== //
+  const input = document.getElementById("searchInput");
+  const resultsGrid = document.getElementById("resultsGrid");
 
-  Object.keys(serier).forEach(key => {
+  let allContent = [];
 
-    allContent.push({
+  // ===== FILMER ===== //
+  if (typeof filmer !== "undefined") {
+    Object.keys(filmer).forEach(key => {
+      allContent.push({
+        type: "Film",
+        key: key,
+        ...filmer[key]
+      });
+    });
+  }
 
-      type:"Serie",
-      key:key,
+  // ===== SERIER ===== //
+  if (typeof serier !== "undefined") {
+    Object.keys(serier).forEach(key => {
+      allContent.push({
+        type: "Serie",
+        key: key,
+        ...serier[key]
+      });
+    });
+  }
 
-      ...serier[key]
+  // =========================
+  // RENDER RESULTATER
+  // =========================
+  function renderResults(searchTerm = ""){
+    resultsGrid.innerHTML = "";
 
+    const filtered = allContent.filter(item => {
+      const title = item.tittel?.toLowerCase() || "";
+      const metadata = (item.metadata || []).join(" ").toLowerCase();
+      const term = searchTerm.toLowerCase();
+
+      return title.includes(term) || metadata.includes(term);
     });
 
-  });
+    // ===== INGEN RESULTATER ===== //
+    if(filtered.length === 0){
+      resultsGrid.innerHTML = `
+        <div class="no-results">
+          Ingen resultater funnet.
+        </div>
+      `;
+      return;
+    }
 
-}
+    // ===== LAG KORT ===== //
+    filtered.forEach(item => {
+      const card = document.createElement("a");
+      card.classList.add("result-card");
+      
+      const targetPage = item.type === "Serie" ? "serie.html" : "film.html";
+      card.href = `${targetPage}?navn=${item.key}`;
 
-/* =========================
-   RENDER RESULTATER
-========================= */
+      card.innerHTML = `
+        <img
+          src="${item.poster || item.bilde || ''}"
+          alt="${item.tittel}"
+        >
 
-function renderResults(searchTerm = ""){
-
-  resultsGrid.innerHTML = "";
-
-  const filtered = allContent.filter(item => {
-
-    const title =
-      item.tittel?.toLowerCase() || "";
-
-    const metadata =
-      (item.metadata || [])
-      .join(" ")
-      .toLowerCase();
-
-    return (
-
-      title.includes(
-        searchTerm.toLowerCase()
-      )
-
-      ||
-
-      metadata.includes(
-        searchTerm.toLowerCase()
-      )
-
-    );
-
-  });
-
-  /* ===== INGEN RESULTATER ===== */
-
-  if(filtered.length === 0){
-
-    resultsGrid.innerHTML = `
-
-      <div class="no-results">
-        Ingen resultater funnet.
-      </div>
-
-    `;
-
-    return;
-  }
-
-  /* ===== LAG KORT ===== */
-
-  filtered.forEach(item => {
-
-    const card =
-      document.createElement("a");
-
-    card.classList.add("result-card");
-
-    card.href =
-      `film.html?navn=${item.key}`;
-
-    card.innerHTML = `
-
-      <img
-        src="${item.poster}"
-        alt="${item.tittel}"
-      >
-
-      <div class="result-overlay">
-
-        <div class="overlay-content">
-
-          <div class="overlay-title">
-            ${item.tittel}
+        <div class="result-overlay">
+          <div class="overlay-content">
+            <div class="overlay-title">
+              ${item.tittel}
+            </div>
+            <div class="overlay-meta">
+              ${(item.metadata || []).join(" • ")}
+            </div>
           </div>
-
-          <div class="overlay-meta">
-            ${(item.metadata || []).join(" • ")}
-          </div>
-
         </div>
 
-      </div>
+        <div class="result-type">
+          ${item.type}
+        </div>
+      `;
 
-      <div class="result-type">
-        ${item.type}
-      </div>
+      resultsGrid.appendChild(card);
+    });
+  }
 
-    `;
-
-    resultsGrid.appendChild(card);
-
+  // =========================
+  // LIVE SEARCH
+  // =========================
+  input.addEventListener("input", e => {
+    renderResults(e.target.value);
   });
 
-}
-
-/* =========================
-   LIVE SEARCH
-========================= */
-
-input.addEventListener("input", e => {
-
-  renderResults(e.target.value);
-
-});
-
-/* =========================
-   START
-========================= */
-
-renderResults();
-
+  // =========================
+  // START
+  // =========================
+  renderResults();
 </script>
 
 </body>
