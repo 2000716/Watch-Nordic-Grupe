@@ -14,7 +14,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
 
-  <style>
+<style>
     /* ================= SYSTEM RESET & GRUNNOPPSETT ================= */
     * { 
       margin: 0; 
@@ -555,58 +555,91 @@
       pointer-events: none;
     }
 
-    /* ================= AUTOPLAY OVERLAY ================= */
+    /* ================= AUTOPLAY OVERLAY (UTBEDRET NEDTELLING) ================= */
     #autoplayOverlay {
       position: absolute;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
+      inset: 0;
       display: none;
       flex-direction: column;
       justify-content: center;
       align-items: flex-start;
       padding-left: 8%;
-      background: linear-gradient(to right, rgba(0,0,0,0.95) 45%, rgba(0,0,0,0.6) 100%);
-      z-index: 10;
+      padding-right: 8%;
+      background: linear-gradient(90deg, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.85) 50%, rgba(0,0,0,0.4) 100%);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      z-index: 50; /* Legges over øvrige kontroll-lag */
       color: #ffffff;
       pointer-events: auto;
     }
 
     .autoplay-subtitle {
       text-transform: uppercase;
-      color: #aaa;
-      font-size: 13px;
-      font-weight: 600;
+      color: #0fddcb;
+      font-size: 14px;
+      font-weight: 700;
       letter-spacing: 2px;
+      margin-bottom: 8px;
+    }
+
+    .autoplay-title {
+      font-size: 28px;
+      font-weight: 600;
+      color: #ffffff;
+      margin-bottom: 12px;
+      max-width: 600px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
     .autoplay-countdown {
       font-size: 96px;
       font-weight: 800;
       color: #fff;
-      margin: 5px 0;
+      margin: 10px 0;
       line-height: 1;
+      font-variant-numeric: tabular-nums;
+      text-shadow: 0 4px 20px rgba(0,0,0,0.5);
     }
 
     .autoplay-actions {
-      margin-top: 20px;
+      margin-top: 25px;
       display: flex;
       gap: 15px;
+      align-items: center;
     }
 
     .autoplay-btn {
-      padding: 14px 35px;
-      border-radius: 4px;
+      padding: 14px 32px;
+      border-radius: 6px;
       font-size: 15px;
-      font-weight: bold;
+      font-weight: 700;
       cursor: pointer;
       border: none;
-      transition: all 0.2s;
+      transition: transform 0.2s ease, background-color 0.2s ease, opacity 0.2s ease;
+      outline: none;
+    }
+    .autoplay-btn:active {
+      transform: scale(0.96);
     }
 
-    #autoplayPlayNextBtn { background: #fff; color: #000; }
-    #autoplayPlayNextBtn:hover { opacity: 0.8; }
-    #autoplayCancelBtn { background: rgba(255,255,255,0.1); color: white; border: 1px solid rgba(255,255,255,0.3); }
-    #autoplayCancelBtn:hover { background: rgba(255,255,255,0.2); }
+    #autoplayPlayNextBtn { 
+      background: #ffffff; 
+      color: #000000; 
+    }
+    #autoplayPlayNextBtn:hover { 
+      background: #0fddcb; 
+    }
+
+    #autoplayCancelBtn { 
+      background: rgba(255, 255, 255, 0.12); 
+      color: #ffffff; 
+      border: 1px solid rgba(255, 255, 255, 0.25); 
+    }
+    #autoplayCancelBtn:hover { 
+      background: rgba(255, 255, 255, 0.25); 
+    }
 
     /* ================= RESPONSIVITET ================= */
     @media (max-width: 768px) {
@@ -681,7 +714,33 @@
         .caption-menu { bottom: 145px; right: 20px; left: 20px; min-width: calc(100% - 40px); }
         .preview-box { bottom: 120px; }
 
-        #autoplayOverlay { padding-left: 20px; padding-right: 20px; justify-content: flex-start; padding-top: 25%; }
+        #autoplayOverlay { 
+          padding: 30px 24px; 
+          justify-content: center; 
+          align-items: center;
+          text-align: center;
+          background: rgba(0, 0, 0, 0.92);
+        }
+
+        .autoplay-title {
+          font-size: 20px;
+          max-width: 100%;
+        }
+
+        .autoplay-countdown {
+          font-size: 72px;
+        }
+
+        .autoplay-actions {
+          flex-direction: column;
+          width: 100%;
+          max-width: 280px;
+        }
+
+        .autoplay-btn {
+          width: 100%;
+          padding: 14px;
+        }
       }
 
       /* Landskapsmodus */
@@ -699,6 +758,18 @@
         .subtitle-overlay.subtitle-up { bottom: 22%; }
         .caption-menu { bottom: 85px; right: 20px; min-width: 160px; padding: 12px; }
         .preview-box { bottom: 90px; }
+
+        #autoplayOverlay {
+          padding-left: 6%;
+        }
+
+        .autoplay-countdown {
+          font-size: 64px;
+        }
+
+        .autoplay-title {
+          font-size: 22px;
+        }
       }
     }
 
