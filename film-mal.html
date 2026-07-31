@@ -1109,6 +1109,14 @@ const restartBtn = document.getElementById("restartBtn");
 const nextEpisodeBtn = document.getElementById("nextEpisodeBtn");
 const autoplayOverlay = document.getElementById("autoplayOverlay");
 
+// Elementer i det faste autoplay-overlayet
+const autoplayLogo = document.getElementById("autoplayLogo");
+const autoplayEpTag = document.getElementById("autoplayEpTag");
+const autoplayEpTitle = document.getElementById("autoplayEpTitle");
+const autoplayEpDesc = document.getElementById("autoplayEpDesc");
+const autoplayPlayNextBtn = document.getElementById("autoplayPlayNextBtn");
+const autoplayCancelBtn = document.getElementById("autoplayCancelBtn");
+
 // Globale tilstandsvariabler
 let isDragging = false;
 let hideTimeout;
@@ -1416,7 +1424,6 @@ const subtitleTracksDiv = document.getElementById("subtitleTracks");
 if (subtitleTracksDiv) {
   subtitleTracksDiv.innerHTML = "";
 
-  // 1. Legg til tilgjengelige undertekster først
   if (film.subtitleLanguages && film.subtitleLanguages.length > 0) {
     film.subtitleLanguages.forEach(sub => {
       const btn = document.createElement("button");
@@ -1456,7 +1463,6 @@ if (subtitleTracksDiv) {
     });
   }
 
-  // 2. Legg til "Av"-knapp nederst i menyen
   const offBtn = document.createElement("button");
   offBtn.textContent = "Av";
   offBtn.dataset.lang = "off";
@@ -1480,7 +1486,6 @@ if (subtitleTracksDiv) {
   subtitleTracksDiv.appendChild(offBtn);
 }
 
-// Samlet metadata-lytter (Løser duplikat-konflikten)
 video.addEventListener('loadedmetadata', () => {
   updateProgress();
   if (globalSubtitleSetting !== "off") {
@@ -1544,9 +1549,7 @@ hiddenVideo.addEventListener("seeked", () => {
   try {
     ctx.drawImage(hiddenVideo, 0, 0, canvas.width, canvas.height);
     if (previewImage) previewImage.src = canvas.toDataURL("image/jpeg");
-  } catch (err) {
-    // Fanger opp eventuelle CORS/Tainted Canvas feil uten å krasje appen
-  }
+  } catch (err) {}
 });
 
 function showPreview(e) {
@@ -1567,6 +1570,7 @@ if (progress) {
   progress.addEventListener("mousemove", showPreview);
   progress.addEventListener("mouseleave", hidePreview);
 }
+
 // ================= AUTOMATISK SKJULING AV MUSEPEKER & KONTROLLER =================
 function showUI() {
   if (autoplayAktiv) {
@@ -1610,7 +1614,7 @@ video.addEventListener('ended', async () => {
   await ryddeOgNeste(); 
 });
 
-/* ================= 6. PREMIUM NETFLIX-FLYTT & AUTOPLAY ================= */
+/* ================= 6. AUTOPLAY METODE (STABIL OG REN) ================= */
 const skipIntroBtn = document.getElementById("skipIntroBtn");
 const skipOutroBtn = document.getElementById("skipOutroBtn");
 
@@ -1680,55 +1684,34 @@ function startPremiumAutoplay() {
     container.style.backgroundRepeat = "no-repeat";
   }
 
-  autoplayOverlay.innerHTML = `
-    <div class="autoplay-content">
-      ${serieLogoUrl ? `<img src="${serieLogoUrl}" class="autoplay-serie-logo" alt="Serie Logo">` : ''}
-      <div class="autoplay-episode-meta">
-        <span class="autoplay-ep-tag">${nesteEpInfoText}</span>
-        <span class="autoplay-ep-title">${nesteTittel}</span>
-      </div>
-      <p class="autoplay-ep-desc">${nesteBeskrivelse}</p>
-      
-      <div class="autoplay-action-row">
-        <button id="autoplayPlayNextBtn" class="autoplay-btn">
-          <i class="fa-solid fa-play"></i> Spill neste
-        </button>
-        <button id="autoplayCancelBtn" class="autoplay-btn">Avbryt</button>
-        
-        <div class="autoplay-circle-timer">
-          <svg class="timer-svg" viewBox="0 0 36 36">
-            <path class="timer-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
-            <path id="timerProgress" class="timer-progress" stroke-dasharray="100, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
-          </svg>
-          <div id="autoplayCountdown" class="timer-number">8</div>
-        </div>
-      </div>
-    </div>
-  `;
+  // Fyll ut eksisterende elementer i HTML i stedet for å erstatte innerHTML
+  if (autoplayLogo) {
+    if (serieLogoUrl) {
+      autoplayLogo.src = serieLogoUrl;
+      autoplayLogo.style.display = "block";
+    } else {
+      autoplayLogo.style.display = "none";
+    }
+  }
+  if (autoplayEpTag) autoplayEpTag.textContent = nesteEpInfoText;
+  if (autoplayEpTitle) autoplayEpTitle.textContent = nesteTittel;
+  if (autoplayEpDesc) autoplayEpDesc.textContent = nesteBeskrivelse;
 
-  document.getElementById("autoplayPlayNextBtn").addEventListener("click", () => { ryddeOgNeste(); });
-  document.getElementById("autoplayCancelBtn").addEventListener("click", () => { avbrytAutoplay(); });
+  // Lyttere for knappene
+  if (autoplayPlayNextBtn) autoplayPlayNextBtn.onclick = () => ryddeOgNeste();
+  if (autoplayCancelBtn) autoplayCancelBtn.onclick = () => avbrytAutoplay();
 
-  videoWrapper.classList.remove("video-fullscreen");
-
-  videoWrapper.style.transform = "none";
-  videoWrapper.style.position = "absolute";
-  videoWrapper.style.top = "110px";
-  videoWrapper.style.bottom = "auto";
-  videoWrapper.style.left = "auto";
-  videoWrapper.style.right = "80px";
-  videoWrapper.style.width = "420px";
-  videoWrapper.style.height = "236px";
-  videoWrapper.style.border = "3px solid #ffffff";
-  videoWrapper.style.borderRadius = "4px";
-  videoWrapper.style.zIndex = "9999";
-  
+  // Aktiver minimeringsklasse på videospiller via CSS-klasse
+  container.classList.add("autoplay-active");
   autoplayOverlay.style.display = "flex";
   
   let teller = 8; 
   const totalTid = 8;
   const countdownEl = document.getElementById("autoplayCountdown");
   const progressPath = document.getElementById("timerProgress");
+
+  if (countdownEl) countdownEl.textContent = teller;
+  if (progressPath) progressPath.style.strokeDasharray = "100, 100";
 
   autoplayTimer = setInterval(() => {
     teller--;
@@ -1753,28 +1736,13 @@ function avbrytAutoplay() {
   
   if (container) {
     container.style.backgroundImage = "";
+    container.classList.remove("autoplay-active");
   }
   
   if (ui) {
     ui.style.pointerEvents = "auto";
     ui.style.display = ""; 
     showUI();
-  }
-  
-  if (videoWrapper) {
-    videoWrapper.classList.add("video-fullscreen");
-    
-    videoWrapper.style.transform = "";
-    videoWrapper.style.position = "";
-    videoWrapper.style.top = "";
-    videoWrapper.style.left = "";
-    videoWrapper.style.width = "";
-    videoWrapper.style.height = "";
-    videoWrapper.style.right = "";
-    videoWrapper.style.bottom = "";
-    videoWrapper.style.border = "";
-    videoWrapper.style.borderRadius = "";
-    videoWrapper.style.zIndex = "";
   }
   
   if (skipOutroBtn) {
