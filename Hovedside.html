@@ -367,116 +367,136 @@
       transform: scale(1.05);
     }
 
-    /* ==========================================================================
-       4. STANDARD GALLERIER & SEKSJONER (PC)
-       ========================================================================== */
-    .gallery-section, .continue-watching-section {
-      margin: 0 auto 30px;
-      position: relative;
-      z-index: 2;
-      width: 100%;
-      max-width: 1400px; 
-      overflow: visible;
-    }
-
-    .gallery-section h2, .continue-watching-section h2 {
-      font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
-      font-size: 18px;
-      font-weight: 600;
-      letter-spacing: 0.3px;
-      color: #00FFCC;
-      margin-bottom: 10px;
-      margin-left: 10px; 
-    }
-
-    .gallery-wrapper, .continue-gallery-wrapper {
-      position: relative;
-      display: flex;
-      align-items: center;
-      overflow: visible;
-    }
-
-    .image-gallery, .continue-image-gallery {
-      flex: 1;
-      display: flex;
-      overflow-x: auto;
-      overflow-y: visible;
-      gap: 16px;
-      padding: 15px 10px; 
-      scroll-behavior: smooth;
-      -ms-overflow-style: none;
-      scrollbar-width: none;
-    }
-
-    .image-gallery::-webkit-scrollbar, .continue-image-gallery::-webkit-scrollbar {
-      display: none;
-    }
-
-    .image-gallery a, .continue-image-gallery a, .gallery-item {
-      display: inline-block;
-      position: relative;
-      border-radius: 5px;
-      background: transparent;
-      border: 2px solid transparent;
-      transition: border 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
-      overflow: hidden !important;
-      flex-shrink: 0 !important;    
-    }
-
-    .image-gallery a img, .continue-image-gallery a img, .gallery-item img {
-      width: 330px !important;
-      height: 175px !important;
-      aspect-ratio: 2.2 / 1;
-      object-fit: cover;
-      border-radius: 5px;
-      display: block;
-      transition: transform 0.3s ease;
-    }
-
-    /* FORTSETT Å SE */
-    .continue-image-gallery a .progress-bar {
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      height: 4px;
-      width: 100%;
-      background-color: rgba(255, 255, 255, 0.3);
-      z-index: 4;
-      border-bottom-left-radius: 5px;
-      border-bottom-right-radius: 5px;
-    }
-
-    .continue-image-gallery a .progress-bar::after {
-      content: '';
-      position: absolute;
-      height: 100%;
-      left: 0;
-      top: 0;
-      background-color: #00FFCC;
-      width: var(--progress, 0%);
-      transition: width 0.3s ease;
-      border-bottom-left-radius: 5px;
-    }
-
-    .continue-image-gallery .image-overlay {
-      display: none !important;
-      opacity: 0 !important;
-      visibility: hidden !important;
-    }
-
-    .scroll-button {
-      display: none;
-      opacity: 0;
-    }
-  /* ==================== FORTSETT Å SE STYLING ==================== */
-
-/* Container for hvert filmkort i "Fortsett å se" */
-.gallery-item.image-with-progress {
+/* ==========================================================================
+   4. FORTSETT Å SE & GALLERIER (PC)
+   ========================================================================== */
+.gallery-section, .continue-watching-section {
+  margin: 0 auto 30px;
   position: relative;
+  z-index: 2;
+  width: 100%;
+  max-width: 1400px; 
+  overflow: visible;
+}
+
+.gallery-section h2, .continue-watching-section h2 {
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+  font-size: 18px;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+  color: #00FFCC;
+  margin-bottom: 10px;
+  margin-left: 10px; 
+}
+
+.gallery-wrapper, .continue-gallery-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  overflow: visible;
+}
+
+.image-gallery, .continue-image-gallery {
+  flex: 1;
+  display: flex;
+  overflow-x: auto;
+  overflow-y: visible;
+  gap: 16px;
+  padding: 15px 10px; 
+  scroll-behavior: smooth;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.image-gallery::-webkit-scrollbar, .continue-image-gallery::-webkit-scrollbar {
+  display: none;
+}
+
+.image-gallery a, .gallery-item {
+  display: inline-block;
+  position: relative;
+  border-radius: 5px;
+  background: transparent;
+  border: 2px solid transparent;
+  transition: border 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
+  overflow: hidden !important;
+  flex-shrink: 0 !important;    
+}
+
+.image-gallery a img, .gallery-item img {
+  width: 330px !important;
+  height: 175px !important;
+  aspect-ratio: 2.2 / 1;
+  object-fit: cover;
+  border-radius: 5px;
+  display: block;
+  transition: transform 0.3s ease;
+}
+
+/* ==================== FORTSETT Å SE OPPSETT ==================== */
+
+/* Kortet for Fortsett å se (Bilde øverst, strek og tekst under) */
+.continue-image-gallery .continue-item {
+  display: flex;
+  flex-direction: column;
+  width: 330px;
+  flex-shrink: 0 !important;
+  text-decoration: none;
+  position: relative;
+}
+
+/* Beholder for selve bildet */
+.continue-media-wrap {
+  position: relative;
+  width: 100%;
+  height: 175px;
+  border-radius: 5px;
   overflow: hidden;
 }
 
-/* Rund sletteknapp (søppelbøtte) nederst til venstre på kortet */
+.continue-media-wrap img {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover;
+  display: block;
+}
+
+/* Grønn framdriftslinje helt nederst på bildet */
+.continue-media-wrap .progress-bar {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 4px;
+  width: 100%;
+  background-color: rgba(255, 255, 255, 0.3);
+  z-index: 4;
+}
+
+.continue-media-wrap .progress-bar::after {
+  content: '';
+  position: absolute;
+  height: 100%;
+  left: 0;
+  top: 0;
+  background-color: #00FFCC;
+  width: var(--progress, 0%);
+  transition: width 0.3s ease;
+}
+
+/* Filmnavn under framdriftslinjen */
+.continue-title {
+  margin-top: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #ffffff;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding-left: 2px;
+}
+
+/* ==================== STYLET SLETTEKNAPP (UTEN RAMME) ==================== */
+
 .delete-progress-btn {
   position: absolute;
   bottom: 12px;
@@ -484,37 +504,43 @@
   width: 36px;
   height: 36px;
   border-radius: 50%;
-  background-color: rgba(0, 0, 0, 0.75);
-  border: 2px solid rgba(255, 255, 255, 0.8);
-  color: #fff;
+  
+  /* Semi-transparent mørk bakgrunn (synlig, men dempet) */
+  background-color: rgba(5, 15, 17, 0.7); 
+  border: none; /* Ingen ramme */
+  outline: none;
+  
+  color: #ffffff;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
   z-index: 10;
-  opacity: 0; /* Skjult som standard på PC */
-  transition: opacity 0.2s ease, transform 0.2s ease, background-color 0.2s ease;
+  opacity: 0; /* Skjult til kortet hovres */
+  transition: opacity 0.25s ease, transform 0.2s ease, background-color 0.25s ease, color 0.25s ease;
+  backdrop-filter: blur(4px);
 }
 
-/* Hover-effekt når du fører musa over sletteknappen */
+/* Hover-effekt på sletteknappen (Klassisk Watch-grønn uten ramme) */
 .delete-progress-btn:hover {
-  background-color: rgba(220, 20, 60, 0.95); /* Rød farge ved hover */
-  border-color: #ffffff;
+  background-color: #00FFCC; /* Grønn bakgrunn ved hover */
+  border: none;
+  color: #050F11; /* Mørkt ikon for god kontrast */
   transform: scale(1.1);
 }
 
-/* Gjør sletteknappen synlig når musepekeren hovrer over filmkortet på PC */
-.gallery-item.image-with-progress:hover .delete-progress-btn {
+/* Synlig når musepekeren hovrer over elementet */
+.continue-item:hover .delete-progress-btn {
   opacity: 1;
 }
 
-/* Alltid synlig sletteknapp på mobil og nettbrett (touch-skjermer) */
+/* På mobil/touch er knappen alltid synlig */
 @media (pointer: coarse) {
   .delete-progress-btn {
     opacity: 1 !important;
+    background-color: rgba(5, 15, 17, 0.85);
   }
 }
-
     /* ==========================================================================
        5. TOP 10 GALLERI
        ========================================================================== */
@@ -1110,11 +1136,12 @@
   <h2>Fortsett å se</h2>
   <div class="continue-gallery-wrapper">
     <div class="fade-left"></div>
-    <button class="scroll-button left">❮</button>
+    <button class="scroll-button left" aria-label="Rull til venstre">❮</button>
     
+    <!-- JavaScript fyller inn kortene dynamisk her -->
     <div class="continue-image-gallery" id="fortsett-galleri"></div>
     
-    <button class="scroll-button right">❯</button>
+    <button class="scroll-button right" aria-label="Rull til høyre">❯</button>
     <div class="fade-right"></div>
   </div>
 </section>
@@ -1818,30 +1845,35 @@ async function renderContinueWatching() {
     // Hent alle tunge metadata (som poster) lokalt i stedet for fra Firebase
     const bildeKilde = metadataMatch.poster || metadataMatch.bilde || "";
 
+    // Bygg kort-elementet (A-taggen)
     const link = document.createElement("a");
     link.href = hrefUrl;
-    link.classList.add("gallery-item", "image-with-progress");
+    link.classList.add("continue-item");
+
+    // Formater tekst dersom det er en episode (f.eks. "Tittel • S1E3")
+    const episodeTekst = spillType === "serie" && filmId.includes("-s") 
+      ? ` • S${filmId.split("-")[2].replace("s","")}E${filmId.split("-")[3].replace("e","")}` 
+      : "";
+
     link.innerHTML = `
-      ${bildeKilde ? `<img src="${bildeKilde}" alt="${metadataMatch.tittel}" loading="lazy">` : `<div style="width:100%; height:100%; background:#1a2629; display:flex; align-items:center; justify-content:center; padding:10px; text-align:center; font-size:12px; color:#fff;">${metadataMatch.tittel || 'Mangler bilde'}</div>`}
-      <div class="progress-container" style="background: rgba(255,255,255,0.2); width: 100%; height: 6px; position: absolute; bottom: 0; left: 0; z-index: 2;">
-        <div class="progress-bar" style="width: ${progressVerdi}%; height: 100%; background: #00FFCC;"></div>
+      <div class="continue-media-wrap">
+        ${bildeKilde 
+          ? `<img src="${bildeKilde}" alt="${metadataMatch.tittel}" loading="lazy">` 
+          : `<div style="width:100%; height:100%; background:#1a2629; display:flex; align-items:center; justify-content:center; padding:10px; text-align:center; font-size:12px; color:#fff;">${metadataMatch.tittel || 'Mangler bilde'}</div>`
+        }
+        <button class="delete-progress-btn" title="Fjern fra Fortsett å se" type="button" aria-label="Slett framgang">
+          <i class="fas fa-trash-alt"></i>
+        </button>
+        <div class="progress-bar" style="--progress: ${progressVerdi}%;"></div>
       </div>
-      <div class="image-overlay">
-        <div class="overlay-content">
-          <div class="overlay-title">${metadataMatch.tittel}</div>
-          <div class="overlay-meta">${spillType === "serie" && filmId.includes("-s") ? `S${filmId.split("-")[2].replace("s","")}E${filmId.split("-")[3].replace("e","")}` : ""}</div>
-        </div>
-      </div>
-      <button class="delete-progress-btn" title="Fjern fra Fortsett og se" type="button">
-        <i class="fas fa-trash-alt"></i>
-      </button>
+      <span class="continue-title">${metadataMatch.tittel}${episodeTekst}</span>
     `;
 
     // Håndter sletting av enkelt-elementer fra "Fortsett å se"
     const deleteBtn = link.querySelector(".delete-progress-btn");
     deleteBtn.addEventListener("click", async (e) => {
-      e.preventDefault();   // Hindrer at filmen åpnes når du klikker på sletteknappen
-      e.stopPropagation();  // Stopper eventet fra å koble seg til kortet
+      e.preventDefault();   // Hindrer at navigeringslenken åpnes ved klikk
+      e.stopPropagation(); // Stopper event-bobling til foreldre-elementet
 
       // Fjern elementet fra den nåværende profilen i minnet
       delete profil.fremdrift[filmId];
@@ -1859,7 +1891,7 @@ async function renderContinueWatching() {
         }
       }
 
-      // Glatt ut-animasjon før kortet fjernes fra visualiseringen
+      // Animert utfasing før elementet fjernes helt fra DOM-en
       link.style.transition = "all 0.3s ease";
       link.style.transform = "scale(0.8)";
       link.style.opacity = "0";
