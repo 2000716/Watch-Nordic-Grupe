@@ -3,24 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Watch Nordic – Admin Panel</title>
+    <title>Watch Nordic – Admin Dashboard</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
-            --bg-color: #f4f6f8;
-            --card-bg: #ffffff;
-            --text-main: #2c3e50;
-            --text-muted: #6c757d;
-            --border-color: #e2e8f0;
-            --primary: #0066cc;
-            --primary-hover: #0052a3;
-            --danger: #dc3545;
-            --danger-hover: #bb2d3b;
-            --success: #198754;
+            --bg-color: #141414;
+            --card-bg: #1f1f1f;
+            --text-main: #ffffff;
+            --text-muted: #b3b3b3;
+            --border-color: #333333;
+            --primary: #e50914; /* Netflix rød */
+            --primary-hover: #b20710;
+            --danger: #e50914;
+            --danger-hover: #b20710;
+            --success: #46d369;
         }
 
         body { 
-            font-family: "Segoe UI", system-ui, -apple-system, sans-serif; 
+            font-family: "Netflix Sans", "Segoe UI", system-ui, sans-serif; 
             background-color: var(--bg-color); 
             color: var(--text-main); 
             margin: 0; 
@@ -31,12 +31,12 @@
         .hidden { display: none !important; }
 
         .login-box, .admin-container { 
-            max-width: 1000px; 
+            max-width: 1100px; 
             margin: 30px auto; 
             background: var(--card-bg); 
             padding: 40px; 
             border-radius: 12px; 
-            box-shadow: 0 10px 25px rgba(0,0,0,0.05); 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5); 
             border: 1px solid var(--border-color);
         }
 
@@ -54,10 +54,10 @@
             width: 100%; 
             padding: 12px 14px; 
             margin: 8px 0 16px 0; 
-            background: #fdfdfd; 
+            background: #2b2b2b; 
             border: 1px solid var(--border-color); 
             color: var(--text-main); 
-            border-radius: 8px; 
+            border-radius: 6px; 
             box-sizing: border-box; 
             font-size: 14px;
             transition: all 0.2s ease;
@@ -66,8 +66,8 @@
         input:focus, select:focus, textarea:focus { 
             outline: none; 
             border-color: var(--primary); 
-            box-shadow: 0 0 0 3px rgba(0, 102, 204, 0.1);
-            background: #fff;
+            box-shadow: 0 0 0 3px rgba(229, 9, 20, 0.2);
+            background: #333;
         }
 
         textarea { 
@@ -77,7 +77,7 @@
 
         label { 
             font-size: 13px; 
-            color: #495057; 
+            color: var(--text-muted); 
             display: block; 
             margin-top: 12px; 
             font-weight: 600;
@@ -90,7 +90,7 @@
             padding: 10px 20px; 
             font-size: 14px; 
             font-weight: 600;
-            border-radius: 8px; 
+            border-radius: 6px; 
             cursor: pointer; 
             margin-right: 10px; 
             transition: background 0.2s;
@@ -104,20 +104,20 @@
         }
 
         .back-btn { 
-            background: #e9ecef; 
-            color: #495057; 
+            background: #2b2b2b; 
+            color: var(--text-main); 
             margin-bottom: 25px; 
             border: 1px solid var(--border-color);
         }
         .back-btn:hover { 
-            background: #dde2e6; 
+            background: #3a3a3a; 
         }
 
         table { 
             width: 100%; 
             border-collapse: collapse; 
             margin-top: 20px; 
-            background: #fff;
+            background: var(--card-bg);
             border-radius: 8px;
             overflow: hidden;
             border: 1px solid var(--border-color);
@@ -131,14 +131,13 @@
         }
 
         th { 
-            background: #f8f9fa; 
-            color: #343a40; 
+            background: #1a1a1a; 
+            color: var(--text-muted); 
             font-weight: 600; 
         }
 
-        tr:last-child td {
-            border-bottom: none;
-        }
+        tr:hover { background: #222; }
+        tr:last-child td { border-bottom: none; }
 
         .action-btns button { 
             padding: 6px 12px; 
@@ -146,16 +145,8 @@
             margin-right: 5px; 
         }
 
-        .delete-btn { 
-            background: var(--danger); 
-        }
-        .delete-btn:hover { 
-            background: var(--danger-hover); 
-        }
-
-        .tab-content { 
-            margin-top: 25px; 
-        }
+        .delete-btn { background: #dc3545; }
+        .delete-btn:hover { background: #bb2d3b; }
 
         .nav-tabs { 
             display: flex; 
@@ -183,29 +174,27 @@
             gap: 20px; 
         }
 
-        .form-full { 
-            grid-column: span 2; 
+        .form-full { grid-column: span 2; }
+
+        /* Sesong- og episodebygger boks */
+        .builder-box {
+            background: #181818;
+            border: 1px solid var(--border-color);
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 15px;
         }
 
-        /* Diskrete varsler istedenfor nettleser-alerts */
         .app-notification {
             padding: 12px 18px;
-            border-radius: 8px;
+            border-radius: 6px;
             margin: 15px 0;
             font-size: 14px;
             font-weight: 500;
             display: none;
         }
-        .app-notification.success {
-            background: #d1e7dd;
-            color: #0f5132;
-            border: 1px solid #badbcc;
-        }
-        .app-notification.error {
-            background: #f8d7da;
-            color: #842029;
-            border: 1px solid #f5c2c7;
-        }
+        .app-notification.success { background: rgba(70, 211, 105, 0.15); color: var(--success); border: 1px solid var(--success); }
+        .app-notification.error { background: rgba(229, 9, 20, 0.15); color: #ff6b6b; border: 1px solid var(--danger); }
     </style>
 </head>
 <body>
@@ -216,36 +205,43 @@
         <p>Logg inn med din ansatt-e-post og passord:</p>
         <input type="email" id="emailInput" placeholder="E-postadresse...">
         <input type="password" id="passwordInput" placeholder="Passord...">
-        <button id="loginBtn"><i class="fas fa-sign-in-alt"></i> Logg inn som ansatt</button>
+        <button id="loginBtn"><i class="fas fa-sign-in-alt"></i> Logg inn</button>
         <div id="loginErrorMsg" class="app-notification error"></div>
     </div>
 
     <!-- 2. SELVE ADMIN-PANELET -->
     <div id="adminSection" class="admin-container hidden">
         <button class="back-btn" onclick="window.location.href='Hovedside.html'"><i class="fas fa-arrow-left"></i> Tilbake til Hovedside</button>
-        <h1><i class="fas fa-tools" style="color: var(--primary);"></i> Watch Nordic – Admin Panel</h1>
+        <h1><i class="fas fa-play-circle" style="color: var(--primary);"></i> Watch Nordic – Admin Dashboard</h1>
         
         <div id="globalNotif" class="app-notification"></div>
 
         <div class="nav-tabs">
             <button id="tabBtnInnhold" class="active" onclick="byttTab('innhold')"><i class="fas fa-film"></i> Filmer & Serier</button>
-            <button id="tabBtnHistorikk" onclick="byttTab('historikk')"><i class="fas fa-history"></i> Historikk & Logg</button>
+            <button id="tabBtnHistorikk" onclick="byttTab('historikk')"><i class="fas fa-history"></i> Brukerhistorikk</button>
         </div>
 
         <!-- TAB 1: FILMER OG SERIER -->
         <div id="tabInnhold" class="tab-content">
-            <h2>Administrer Innhold</h2>
-            <button onclick="visLeggTilSkjema()"><i class="fas fa-plus"></i> Legg til ny film/serie</button>
-            
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                <h2>Innholdsbibliotek</h2>
+                <button onclick="visLeggTilSkjema()"><i class="fas fa-plus"></i> Legg til ny tittel</button>
+            </div>
+
             <!-- SKJEMA FOR Å LEGGE TIL/REDIGERE -->
-            <div id="redigeringsSkjema" class="hidden" style="background: #f8f9fa; padding: 30px; margin-top: 20px; border-radius: 10px; border: 1px solid var(--border-color);">
-                <h3 id="skjemaTittel" style="margin-top:0;"><i class="fas fa-edit"></i> Legg til ny tittel</h3>
+            <div id="redigeringsSkjema" class="hidden" style="background: #1a1a1a; padding: 30px; margin-bottom: 30px; border-radius: 10px; border: 1px solid var(--border-color);">
+                <h3 id="skjemaTittel" style="margin-top:0;"><i class="fas fa-film"></i> Ny tittel</h3>
                 
                 <div class="form-grid">
                     <div>
-                        <label>Unik ID (f.eks. the-titanic-archive):</label>
-                        <input type="text" id="inpId" placeholder="the-titanic-archive">
+                        <label>Tittel:</label>
+                        <input type="text" id="inpTittel" placeholder="F.eks. Stranger Things" oninput="genererID()">
                     </div>
+                    <div>
+                        <label>Unik ID (Genereres automatisk):</label>
+                        <input type="text" id="inpId" placeholder="stranger-things" readonly style="background: #222; color: #777;">
+                    </div>
+
                     <div>
                         <label>Type innhold:</label>
                         <select id="inpType" onchange="byttInnholdsType()">
@@ -253,117 +249,74 @@
                             <option value="serier">Serie</option>
                         </select>
                     </div>
-
-                    <div>
-                        <label>Tittel:</label>
-                        <input type="text" id="inpTittel" placeholder="The Titanic Archive">
-                    </div>
                     <div>
                         <label>Rating:</label>
-                        <input type="text" id="inpRating" placeholder="0.0">
+                        <input type="text" id="inpRating" placeholder="4.8 / 98% Match">
                     </div>
 
                     <div class="form-full">
                         <label>Beskrivelse:</label>
-                        <textarea id="inpBeskrivelse" placeholder="I denne dokumentaren..."></textarea>
+                        <textarea id="inpBeskrivelse" placeholder="Kort handlingsreferat..."></textarea>
                     </div>
 
                     <div>
-                        <label>Bakgrunn (Desktop URL):</label>
+                        <label>Bakgrunn URL (Desktop):</label>
                         <input type="text" id="inpBakgrunn" placeholder="https://...">
                     </div>
                     <div>
-                        <label>Bakgrunn (Mobil URL - valgfri):</label>
-                        <input type="text" id="inpBakgrunnMobil" placeholder="">
+                        <label>Poster / Miniatyrbilde URL:</label>
+                        <input type="text" id="inpPoster" placeholder="https://...">
                     </div>
 
                     <div>
-                        <label>Banner URL:</label>
-                        <input type="text" id="inpBanner" placeholder="">
-                    </div>
-                    <div>
-                        <label>Banner Mobil URL:</label>
-                        <input type="text" id="inpBannerMobil" placeholder="">
-                    </div>
-
-                    <div>
-                        <label>Logo URL:</label>
+                        <label>Logo URL (Tekstbilde):</label>
                         <input type="text" id="inpLogo" placeholder="https://...">
                     </div>
                     <div>
                         <label>Trailer URL:</label>
-                        <input type="text" id="inpTrailer" placeholder="">
+                        <input type="text" id="inpTrailer" placeholder="https://...">
                     </div>
 
                     <div>
-                        <label>Poster URL:</label>
-                        <input type="text" id="inpPoster" placeholder="https://...">
-                    </div>
-                    <div>
-                        <label>Poster Vertikal URL:</label>
-                        <input type="text" id="inpPosterVertikal" placeholder="https://...">
-                    </div>
-
-                    <div>
-                        <label>Metadata (Kommaseparert: År, Aldersgrense, Sjanger, Format):</label>
-                        <input type="text" id="inpMetadata" placeholder="2026, 10 år, Dokumentar, 1 sesong">
+                        <label>Metadata (År, Aldersgrense, Sjanger):</label>
+                        <input type="text" id="inpMetadata" placeholder="2026, 12 år, Sci-Fi, Action">
                     </div>
                     <div>
                         <label id="lblSkaperRegissor">Regissør / Skapere:</label>
-                        <input type="text" id="inpSkaperRegissor" placeholder="Watch Nordic Originals Studio">
+                        <input type="text" id="inpSkaperRegissor" placeholder="Navn på skaper">
                     </div>
 
-                    <!-- FELTEKST FOR FILM -->
+                    <!-- FELT FOR FILM -->
                     <div id="filmSpesifikkeFelt" class="form-full form-grid" style="grid-column: span 2; margin:0; padding:0;">
                         <div>
-                            <label>Video URL:</label>
-                            <input type="text" id="inpVideoUrl" placeholder="https://...mp4">
+                            <label>Video URL (.mp4):</label>
+                            <input type="text" id="inpVideoUrl" placeholder="https://...">
                         </div>
                         <div>
-                            <label>Undertekst fil (Subtitle URL):</label>
-                            <input type="text" id="inpSubtitleUrl" placeholder="fil.VTT">
+                            <label>Undertekst URL (.vtt):</label>
+                            <input type="text" id="inpSubtitleUrl" placeholder="https://...">
                         </div>
                     </div>
 
-                    <!-- FELTEKST FOR SERIE -->
+                    <!-- AUTOMATISK SERIE- OG EPISODEBYGGER (ERSTATTER ROTETE JSON) -->
                     <div id="serieSpesifikkeFelt" class="form-full hidden">
-                        <label style="color:var(--text-main); font-weight:bold; font-size:15px; margin-top:15px;">Sesonger og Episoder (JSON-format):</label>
-                        <p style="font-size: 13px; color: var(--text-muted); margin-top: 0;">Du kan lime inn standard JSON-struktur for sesonger og episoder her:</p>
-                        <textarea id="inpSesongerJson" style="height: 150px; font-family: monospace; font-size: 12px;" placeholder='{
-  "1": {
-    "sesongNummer": 1,
-    "beskrivelse": "Sesong 1",
-    "episoder": {
-      "1": {
-        "episodeNummer": 1,
-        "tittel": "Titanic",
-        "beskrivelse": "Beskrivelse...",
-        "varighet": "5 min",
-        "thumbnail": "https://...",
-        "videoUrl": "https://..."
-      }
-    }
-  }
-}'></textarea>
-                    </div>
-
-                    <div>
-                        <label>Lydspråk (Koder, f.eks. en:Engelsk):</label>
-                        <input type="text" id="inpAudio" value="">
-                    </div>
-                    <div>
-                        <label>Undertekst-språk (Koder, f.eks. no:Norsk):</label>
-                        <input type="text" id="inpSubs" value="">
+                        <label style="font-size:15px; color:var(--text-main);">Sesonger og Episoder:</label>
+                        <div class="builder-box">
+                            <div id="sesongContainer"></div>
+                            <button type="button" onclick="leggTilSesong()" style="background: #2b2b2b; border:1px solid var(--border-color); margin-top: 10px;"><i class="fas fa-plus"></i> Legg til ny sesong</button>
+                        </div>
                     </div>
                 </div>
 
                 <div style="margin-top: 25px;">
-                    <button onclick="lagreInnhold()"><i class="fas fa-save"></i> Lagre til Firebase</button>
-                    <button style="background:#6c757d;" onclick="lukkSkjema()"><i class="fas fa-times"></i> Avbryt</button>
+                    <button onclick="lagreInnhold()"><i class="fas fa-save"></i> Lagre tittel</button>
+                    <button style="background:#333;" onclick="lukkSkjema()"><i class="fas fa-times"></i> Avbryt</button>
                 </div>
             </div>
 
-            <h3 style="margin-top: 35px;"><i class="fas fa-database"></i> Oversikt over elementer i Firebase:</h3>
+            <!-- Søkefelt for bibliotek -->
+            <input type="text" id="sokFelt" placeholder="Søk i biblioteket..." oninput="filterTabell()" style="max-width: 300px; margin-bottom: 15px;">
+
             <table>
                 <thead>
                     <tr>
@@ -381,12 +334,12 @@
 
         <!-- TAB 2: HISTORIKK -->
         <div id="tabHistorikk" class="tab-content hidden">
-            <h2><i class="fas fa-stream"></i> Systemhistorikk & Brukeraktivitet</h2>
+            <h2><i class="fas fa-stream"></i> Brukeraktivitet & Avspillingshistorikk</h2>
             <table>
                 <thead>
                     <tr>
                         <th>Bruker / Profil</th>
-                        <th>Aktivitet / Film-ID</th>
+                        <th>Aktivitet / Tittel</th>
                         <th>Status</th>
                         <th>Sist oppdatert</th>
                     </tr>
@@ -419,7 +372,7 @@
             errorMsg.style.display = "none";
 
             if (!email || !password) {
-                errorMsg.textContent = "Vennligst fyll ut både e-post og passord.";
+                errorMsg.textContent = "Vennligst fyll ut e-post og passord.";
                 errorMsg.style.display = "block";
                 return;
             }
@@ -427,21 +380,18 @@
             try {
                 const userCredential = await signInWithEmailAndPassword(auth, email, password);
                 const user = userCredential.user;
-
-                const ansattRef = doc(db, "ansatte", user.uid);
-                const ansattSnap = await getDoc(ansattRef);
+                const ansattSnap = await getDoc(doc(db, "ansatte", user.uid));
 
                 if (ansattSnap.exists()) {
                     document.getElementById("loginSection").classList.add("hidden");
                     document.getElementById("adminSection").classList.remove("hidden");
                     lastInnAltData();
                 } else {
-                    errorMsg.textContent = "Du har ikke ansatt-tilgang til dette systemet.";
+                    errorMsg.textContent = "Ingen ansatt-tilgang funnet.";
                     errorMsg.style.display = "block";
                 }
             } catch (err) {
-                console.error("Innloggingsfeil:", err);
-                errorMsg.textContent = "Feil e-post eller passord.";
+                errorMsg.textContent = "Feil ved innlogging.";
                 errorMsg.style.display = "block";
             }
         });
@@ -463,34 +413,71 @@
 
         window.byttInnholdsType = function() {
             const type = document.getElementById("inpType").value;
-            const filmFelt = document.getElementById("filmSpesifikkeFelt");
-            const serieFelt = document.getElementById("serieSpesifikkeFelt");
-
             if (type === "serier") {
-                filmFelt.classList.add("hidden");
-                serieFelt.classList.remove("hidden");
+                document.getElementById("filmSpesifikkeFelt").classList.add("hidden");
+                document.getElementById("serieSpesifikkeFelt").classList.remove("hidden");
+                document.getElementById("lblSkaperRegissor").textContent = "Skapere:";
             } else {
-                filmFelt.classList.remove("hidden");
-                serieFelt.classList.add("hidden");
+                document.getElementById("filmSpesifikkeFelt").classList.remove("hidden");
+                document.getElementById("serieSpesifikkeFelt").classList.add("hidden");
+                document.getElementById("lblSkaperRegissor").textContent = "Regissør:";
             }
+        }
+
+        window.genererID = function() {
+            const tittel = document.getElementById("inpTittel").value;
+            const id = tittel.toLowerCase().replace(/[^a-z0-9]/g, "-").replace(/-+/g, "-");
+            document.getElementById("inpId").value = id;
+        }
+
+        // Automatisk sesong- og episodebygger funksjoner
+        window.leggTilSesong = function() {
+            const container = document.getElementById("sesongContainer");
+            const sesongNr = container.children.length + 1;
+            
+            const div = document.createElement("div");
+            div.className = "sesong-item";
+            div.style.cssText = "background: #111; padding: 15px; border-radius: 6px; margin-bottom: 10px; border: 1px solid #333;";
+            div.innerHTML = `
+                <div style="display:flex; justify-content:space-between; align-items:center;">
+                    <strong>Sesong ${sesongNr}</strong>
+                    <button type="button" onclick="this.parentElement.parentElement.remove()" style="background:#dc3545; padding:4px 8px; font-size:11px;">Fjern sesong</button>
+                </div>
+                <input type="text" class="sesong-beskrivelse" placeholder="Beskrivelse for sesongen..." style="margin-top:10px;">
+                <div class="episoder-container" style="margin-top:10px;"></div>
+                <button type="button" onclick="leggTilEpisodTilSesong(this)" style="background:#2b2b2b; font-size:12px; margin-top:5px;"><i class="fas fa-plus"></i> Legg til episode</button>
+            `;
+            container.appendChild(div);
+        }
+
+        window.leggTilEpisodTilSesong = function(btn) {
+            const epiContainer = btn.previousElementSibling;
+            const epiNr = epiContainer.children.length + 1;
+
+            const div = document.createElement("div");
+            div.className = "episode-item";
+            div.style.cssText = "background: #181818; padding: 10px; border-radius: 4px; margin-top: 8px; border: 1px solid #282828;";
+            div.innerHTML = `
+                <div style="display:flex; gap:10px;">
+                    <input type="text" class="epi-tittel" placeholder="Episode ${epiNr} tittel" style="margin:0;">
+                    <input type="text" class="epi-video" placeholder="Video URL (.mp4)" style="margin:0;">
+                </div>
+                <input type="text" class="epi-thumb" placeholder="Thumbnail URL" style="margin:5px 0 0 0;">
+            `;
+            epiContainer.appendChild(div);
         }
 
         window.lastInnAltData = async function() {
             const tbody = document.getElementById("dataTableBody");
             tbody.innerHTML = "";
-
             try {
                 const filmSnap = await getDocs(collection(db, "filmer"));
-                filmSnap.forEach((d) => {
-                    leggTilTabellRad("Film", "filmer", d.id, d.data().tittel || d.id);
-                });
+                filmSnap.forEach((d) => leggTilTabellRad("Film", "filmer", d.id, d.data().tittel || d.id));
 
                 const serieSnap = await getDocs(collection(db, "serier"));
-                serieSnap.forEach((d) => {
-                    leggTilTabellRad("Serie", "serier", d.id, d.data().tittel || d.id);
-                });
+                serieSnap.forEach((d) => leggTilTabellRad("Serie", "serier", d.id, d.data().tittel || d.id));
             } catch (err) {
-                console.error("Feil ved henting:", err);
+                console.error("Feil ved lasting:", err);
             }
         }
 
@@ -505,29 +492,24 @@
                     <button class="delete-btn btn-slett" data-samling="${samling}" data-id="${id}"><i class="fas fa-trash"></i> Slett</button>
                 </td>
             `;
-            
-            // Sikker eventlistener for sletting uten nettleser-alert
             tr.querySelector(".btn-slett").addEventListener("click", async function() {
-                const targetSamling = this.getAttribute("data-samling");
-                const targetId = this.getAttribute("data-id");
-
                 try {
-                    await deleteDoc(doc(db, targetSamling, targetId));
-                    visMelding(`Tittelen "${targetId}" ble slettet fra databasen.`, "success");
+                    await deleteDoc(doc(db, this.getAttribute("data-samling"), this.getAttribute("data-id")));
+                    visMelding("Tittelen ble slettet.", "success");
                     lastInnAltData();
                 } catch (err) {
-                    visMelding("Feil ved sletting: " + err.message, "error");
+                    visMelding("Feil ved sletting.", "error");
                 }
             });
-
             tbody.appendChild(tr);
         }
 
         window.visLeggTilSkjema = function() {
             document.getElementById("redigeringsSkjema").classList.remove("hidden");
             document.querySelectorAll("#redigeringsSkjema input, #redigeringsSkjema textarea").forEach(el => {
-                if(el.id !== 'inpAudio' && el.id !== 'inpSubs' && el.id !== 'inpType') el.value = "";
+                if(el.id !== 'inpType') el.value = "";
             });
+            document.getElementById("sesongContainer").innerHTML = "";
             byttInnholdsType();
         }
 
@@ -541,72 +523,58 @@
             const tittel = document.getElementById("inpTittel").value.trim();
 
             if (!id || !tittel) {
-                visMelding("Unik ID og Tittel må fylles ut!", "error");
+                visMelding("Tittel må fylles ut!", "error");
                 return;
             }
 
-            const metaRaw = document.getElementById("inpMetadata").value;
-            const metadataArray = metaRaw ? metaRaw.split(",").map(s => s.trim()) : [];
-
-            const audioVal = document.getElementById("inpAudio").value.trim();
-            const subVal = document.getElementById("inpSubs").value.trim();
-
-            const audioLanguages = audioVal ? audioVal.split(",").map(item => {
-                const parts = item.split(":");
-                return { code: parts[0]?.trim(), label: parts[1]?.trim() };
-            }) : [];
-
-            const subtitleLanguages = subVal ? subVal.split(",").map(item => {
-                const parts = item.split(":");
-                return { code: parts[0]?.trim(), label: parts[1]?.trim() };
-            }) : [];
-
-            let fellesObjekt = {
+            let obj = {
                 tittel: tittel,
                 rating: document.getElementById("inpRating").value.trim(),
                 bakgrunn: document.getElementById("inpBakgrunn").value.trim(),
-                bakgrunnMobil: document.getElementById("inpBakgrunnMobil").value.trim(),
-                banner: document.getElementById("inpBanner").value.trim(),
-                bannerMobil: document.getElementById("inpBannerMobil").value.trim(),
+                poster: document.getElementById("inpPoster").value.trim(),
                 logo: document.getElementById("inpLogo").value.trim(),
                 trailer: document.getElementById("inpTrailer").value.trim(),
-                poster: document.getElementById("inpPoster").value.trim(),
-                posterVertikal: document.getElementById("inpPosterVertikal").value.trim(),
                 beskrivelse: document.getElementById("inpBeskrivelse").value.trim(),
-                metadata: metadataArray,
-                publishDate: new Date().toISOString(),
-                expireDate: "2027-11-15T23:59:59",
-                audioLanguages: audioLanguages,
-                subtitleLanguages: subtitleLanguages
+                metadata: document.getElementById("inpMetadata").value.split(",").map(s => s.trim()),
+                publishDate: new Date().toISOString()
             };
 
             if (samling === "filmer") {
-                fellesObjekt.regissor = document.getElementById("inpSkaperRegissor").value.trim();
-                fellesObjekt.watchUrl = `film-mal.html?id=${id}`;
-                fellesObjekt.videoUrl = document.getElementById("inpVideoUrl").value.trim();
-                fellesObjekt.subtitleUrl = document.getElementById("inpSubtitleUrl").value.trim();
-                fellesObjekt.tilbakeUrl = `film.html?navn=${id}`;
+                obj.regissor = document.getElementById("inpSkaperRegissor").value.trim();
+                obj.videoUrl = document.getElementById("inpVideoUrl").value.trim();
+                obj.subtitleUrl = document.getElementById("inpSubtitleUrl").value.trim();
+                obj.watchUrl = `film-mal.html?id=${id}`;
             } else {
-                fellesObjekt.skapere = document.getElementById("inpSkaperRegissor").value.trim();
-                fellesObjekt.tilbakeUrl = `serie.html?navn=${id}`;
-                fellesObjekt.imdb = "";
+                obj.skapere = document.getElementById("inpSkaperRegissor").value.trim();
+                obj.sesonger = {};
+                
+                const sesongDivs = document.querySelectorAll("#sesongContainer .sesong-item");
+                sesongDivs.forEach((sesDiv, sIndex) => {
+                    const sNummer = sIndex + 1;
+                    const sBesk = sesDiv.querySelector(".sesong-beskrivelse").value;
+                    const episoder = {};
 
-                const jsonText = document.getElementById("inpSesongerJson").value.trim();
-                if (jsonText) {
-                    try {
-                        fellesObjekt.sesonger = JSON.parse(jsonText);
-                    } catch (e) {
-                        visMelding("Ugyldig JSON-format i sesonger/episoder-feltet: " + e.message, "error");
-                        return;
-                    }
-                } else {
-                    fellesObjekt.sesonger = {};
-                }
+                    sesDiv.querySelectorAll(".episode-item").forEach((epiDiv, eIndex) => {
+                        const eNummer = eIndex + 1;
+                        episoder[eNummer] = {
+                            episodeNummer: eNummer,
+                            tittel: epiDiv.querySelector(".epi-tittel").value,
+                            videoUrl: epiDiv.querySelector(".epi-video").value,
+                            thumbnail: epiDiv.querySelector(".epi-thumb").value
+                        };
+                    });
+
+                    obj.sesonger[sNummer] = {
+                        sesongNummer: sNummer,
+                        beskrivelse: sBesk,
+                        episoder: episoder
+                    };
+                });
             }
 
             try {
-                await setDoc(doc(db, samling, id), fellesObjekt);
-                visMelding(`Innholdet "${tittel}" ble lagret til Firebase!`, "success");
+                await setDoc(doc(db, samling, id), obj);
+                visMelding(`"${tittel}" ble lagret!`, "success");
                 lukkSkjema();
                 lastInnAltData();
             } catch (err) {
@@ -614,10 +582,18 @@
             }
         }
 
+        window.filterTabell = function() {
+            const query = document.getElementById("sokFelt").value.toLowerCase();
+            const rows = document.querySelectorAll("#dataTableBody tr");
+            rows.forEach(row => {
+                const text = row.innerText.toLowerCase();
+                row.style.display = text.includes(query) ? "" : "none";
+            });
+        }
+
         async function lastInnHistorikk() {
             const historyBody = document.getElementById("historyTableBody");
             historyBody.innerHTML = "";
-
             try {
                 const brukereSnap = await getDocs(collection(db, "users"));
                 brukereSnap.forEach((userDoc) => {
@@ -628,10 +604,10 @@
                                 Object.entries(profil.fremdrift).forEach(([filmId, info]) => {
                                     const tr = document.createElement("tr");
                                     tr.innerHTML = `
-                                        <td>${profil.navn || 'Ukjent profil'}</td>
+                                        <td>${profil.navn || 'Profil'}</td>
                                         <td>${info.tittel || filmId}</td>
                                         <td>${info.status || 'påbegynt'} (${info.percent || 0}%)</td>
-                                        <td>${new Date(info.sistOppdatert).toLocaleString('no-NO') || 'Ukjent'}</td>
+                                        <td>${new Date(info.sistOppdatert).toLocaleString('no-NO') || '-'}</td>
                                     `;
                                     historyBody.appendChild(tr);
                                 });
@@ -640,7 +616,7 @@
                     }
                 });
             } catch (err) {
-                console.error("Feil ved henting av historikk:", err);
+                console.error("Feil ved historikk:", err);
             }
         }
     </script>
