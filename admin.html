@@ -11,9 +11,41 @@
   <link rel="icon" type="image/png" href="https://static.wixstatic.com/media/d9ace9_95bbe3f5ff4b4aab9314a8d08804344e~mv2.png" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
     <style>
+        /* ==========================================================================
+           1. GLOBALE STILER & RESETS
+           ========================================================================== */
+        * {
+          box-sizing: border-box;
+          margin: 0;
+          padding: 0;
+        }
+
+        html, body {
+          font-family: Arial, sans-serif;
+          background: #050F11;
+          color: #ffffff;
+          overflow-x: hidden;
+        }
+
+        main {
+          width: 100%;
+          min-height: 100vh;
+          display: flex;
+          flex-direction: column;
+        }
+
+        .content-wrapper {
+          width: 100%; 
+          max-width: 1400px;
+          margin: 0 auto;
+          padding: 0 20px;
+        }
+
+        /* ==========================================================================
+           2. ADMIN INNHOLD & KOMPONENTER (UTEN NEON)
+           ========================================================================== */
         :root {
-            --bg-color: #141414;
-            --card-bg: #1f1f1f;
+            --card-bg: #141414;
             --text-main: #ffffff;
             --text-muted: #b3b3b3;
             --border-color: #333333;
@@ -23,20 +55,15 @@
             --danger: #dc3545;
         }
 
-        body { 
-            font-family: "Netflix Sans", "Segoe UI", system-ui, sans-serif; 
-            background-color: var(--bg-color); 
-            color: var(--text-main); 
-            margin: 0; 
-            padding: 30px; 
-            line-height: 1.5;
-        }
-
         .hidden { display: none !important; }
 
+        .main-container {
+            max-width: 1200px;
+            margin: 60px auto 40px auto;
+            padding: 0 20px;
+        }
+
         .login-box, .admin-container { 
-            max-width: 1100px; 
-            margin: 30px auto; 
             background: var(--card-bg); 
             padding: 40px; 
             border-radius: 12px; 
@@ -57,13 +84,12 @@
             border-radius: 6px; 
             box-sizing: border-box; 
             font-size: 14px;
-            transition: all 0.2s ease;
+            transition: border-color 0.2s ease, background 0.2s ease;
         }
 
         input:focus, select:focus, textarea:focus { 
             outline: none; 
             border-color: var(--primary); 
-            box-shadow: 0 0 0 3px rgba(229, 9, 20, 0.2);
             background: #333;
         }
 
@@ -141,206 +167,210 @@
 </head>
 <body>
 
-    <!-- INNLOGGING -->
-    <div id="loginSection" class="login-box">
-        <h2><i class="fas fa-lock"></i> Ansattpålogging</h2>
-        <p>Logg inn med din ansatt-e-post og passord:</p>
-        <input type="email" id="emailInput" placeholder="E-postadresse...">
-        <input type="password" id="passwordInput" placeholder="Passord...">
-        <button id="loginBtn"><i class="fas fa-sign-in-alt"></i> Logg inn</button>
-        <div id="loginErrorMsg" class="app-notification error"></div>
-    </div>
-
-    <!-- ADMIN-PANEL -->
-    <div id="adminSection" class="admin-container hidden">
-        <button class="back-btn" onclick="window.location.href='Hovedside.html'"><i class="fas fa-arrow-left"></i> Tilbake til Hovedside</button>
-        <h1><i class="fas fa-play-circle" style="color: var(--primary);"></i> Watch Nordic – Admin Dashboard</h1>
-        
-        <div id="globalNotif" class="app-notification"></div>
-
-        <div class="nav-tabs">
-            <button id="tabBtnInnhold" class="active" onclick="byttTab('innhold')"><i class="fas fa-film"></i> Filmer & Serier</button>
-            <button id="tabBtnHistorikk" onclick="byttTab('historikk')"><i class="fas fa-history"></i> Brukerhistorikk</button>
-        </div>
-
-        <!-- TAB 1: INNHOLD -->
-        <div id="tabInnhold" class="tab-content">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-                <h2>Innholdsbibliotek</h2>
-                <button onclick="visLeggTilSkjema()"><i class="fas fa-plus"></i> Legg til ny tittel</button>
+    <main>
+        <div class="main-container">
+            <!-- INNLOGGING -->
+            <div id="loginSection" class="login-box">
+                <h2><i class="fas fa-lock"></i> Ansattpålogging</h2>
+                <p>Logg inn med din eWatch ansatt-e-post og passord:</p>
+                <input type="email" id="emailInput" placeholder="E-postadresse...">
+                <input type="password" id="passwordInput" placeholder="Passord...">
+                <button id="loginBtn"><i class="fas fa-sign-in-alt"></i> Logg inn</button>
+                <div id="loginErrorMsg" class="app-notification error"></div>
             </div>
 
-            <!-- SKJEMA -->
-            <div id="redigeringsSkjema" class="hidden" style="background: #1a1a1a; padding: 30px; margin-bottom: 30px; border-radius: 10px; border: 1px solid var(--border-color);">
-                <h3 id="skjemaTittel" style="margin-top:0;"><i class="fas fa-film"></i> Ny tittel</h3>
+            <!-- ADMIN-PANEL -->
+            <div id="adminSection" class="admin-container hidden">
+                <button class="back-btn" onclick="window.location.href='Hovedside.html'"><i class="fas fa-arrow-left"></i> Tilbake til Hovedside</button>
+                <h1><i class="fas fa-play-circle" style="color: var(--primary);"></i> eWatch Nordic – Admin Dashboard</h1>
                 
-                <div class="form-grid">
-                    <div>
-                        <label>Tittel:</label>
-                        <input type="text" id="inpTittel" placeholder="F.eks. House on Haunted Hill" oninput="genererIDogAutomater()">
-                    </div>
-                    <div>
-                        <label>Unik ID (Genereres automatisk):</label>
-                        <input type="text" id="inpId" placeholder="house-on-haunted-hill" readonly style="background: #222; color: #777;">
-                    </div>
+                <div id="globalNotif" class="app-notification"></div>
 
-                    <div>
-                        <label>Type innhold:</label>
-                        <select id="inpType" onchange="byttInnholdsType()">
-                            <option value="filmer">Film</option>
-                            <option value="serier">Serie</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label>Rating (F.eks. 6.7):</label>
-                        <input type="text" id="inpRating" placeholder="6.7">
-                    </div>
-
-                    <div class="form-full">
-                        <label>Beskrivelse:</label>
-                        <textarea id="inpBeskrivelse" placeholder="Kort handlingsreferat..."></textarea>
-                    </div>
-
-                    <!-- METADATA (Fast rekkefølge: År, Aldersgrense, Sjanger, Varighet) -->
-                    <div class="form-full" style="background: #151515; padding: 15px; border-radius: 6px; border: 1px solid #2a2a2a;">
-                        <label style="color:var(--text-main); font-size:14px; margin-top:0;">Metadata (Fast struktur):</label>
-                        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 10px; margin-top: 10px;">
-                            <div>
-                                <label style="font-size:11px;">Utgivelsesår:</label>
-                                <input type="text" id="metaAar" placeholder="1959" style="margin:0;">
-                            </div>
-                            <div>
-                                <label style="font-size:11px;">Aldersgrense:</label>
-                                <input type="text" id="metaAldersgrense" placeholder="16 år" style="margin:0;">
-                            </div>
-                            <div>
-                                <label style="font-size:11px;">Hovedsjanger:</label>
-                                <input type="text" id="metaSjanger" placeholder="Grøsser" style="margin:0;">
-                            </div>
-                            <div>
-                                <label style="font-size:11px;">Varighet / Info:</label>
-                                <input type="text" id="metaVarighet" placeholder="1 t 15 min" style="margin:0;">
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- KREATIVT PERSONELL -->
-                    <div>
-                        <label>Regissør / Skapere:</label>
-                        <input type="text" id="inpRegissor" placeholder="William Castle">
-                    </div>
-                    <div>
-                        <label>Skuespillere (Medvirkende):</label>
-                        <input type="text" id="inpSkuespillere" placeholder="Vincent Price, Carol Ohmart">
-                    </div>
-
-                    <!-- BILDER OG GRAFIKK -->
-                    <div>
-                        <label>Bakgrunn URL (Desktop):</label>
-                        <input type="text" id="inpBakgrunn" placeholder="https://image.tmdb.org/...">
-                    </div>
-                    <div>
-                        <label>Bakgrunn URL (Mobil):</label>
-                        <input type="text" id="inpBakgrunnMobil" placeholder="https://image.tmdb.org/...">
-                    </div>
-
-                    <div>
-                        <label>Poster (Horisontal):</label>
-                        <input type="text" id="inpPoster" placeholder="https://image.tmdb.org/...">
-                    </div>
-                    <div>
-                        <label>Poster (Vertikal):</label>
-                        <input type="text" id="inpPosterVertikal" placeholder="https://image.tmdb.org/...">
-                    </div>
-
-                    <div>
-                        <label>Logo URL (Tekstbilde):</label>
-                        <input type="text" id="inpLogo" placeholder="https://image.tmdb.org/...">
-                    </div>
-                    <div>
-                        <label>Banner URL (Valgfri):</label>
-                        <input type="text" id="inpBanner" placeholder="https://...">
-                    </div>
-
-                    <div>
-                        <label>Trailer URL:</label>
-                        <input type="text" id="inpTrailer" placeholder="https://...">
-                    </div>
-
-                    <!-- DATOER (Standard automatiske verdier) -->
-                    <div style="background: #151515; padding: 15px; border-radius: 6px; border: 1px solid #2a2a2a; grid-column: span 2;">
-                        <label style="color:var(--text-main); font-size:14px; margin-top:0;">Publisering og Tilgjengelighet:</label>
-                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 10px;">
-                            <div>
-                                <label style="font-size:11px;">Publiseringsdato:</label>
-                                <input type="datetime-local" id="inpPublishDate" style="margin:0;">
-                            </div>
-                            <div>
-                                <label style="font-size:11px;">Utløpsdato (Expire):</label>
-                                <input type="datetime-local" id="inpExpireDate" style="margin:0;">
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- FILM-SPESIFIKKE FELT (AUTOMATISK FYLT UT) -->
-                    <div id="filmSpesifikkeFelt" class="form-full form-grid" style="grid-column: span 2; margin:0; padding:0;">
-                        <div>
-                            <label>Video URL (.mp4):</label>
-                            <input type="text" id="inpVideoUrl" placeholder="https://...mp4">
-                        </div>
-                        <div>
-                            <label>Undertekstfil (.VTT filnavn - genereres automatisk):</label>
-                            <input type="text" id="inpSubtitleUrl" placeholder="navn.VTT" style="background:#222; color:#777;">
-                        </div>
-                    </div>
-
-                    <!-- SERIE- OG EPISODEBYGGER -->
-                    <div id="serieSpesifikkeFelt" class="form-full hidden">
-                        <label style="font-size:15px; color:var(--text-main);">Sesonger og Episoder:</label>
-                        <div class="builder-box">
-                            <div id="sesongContainer"></div>
-                            <button type="button" onclick="leggTilSesong()" style="background: #2b2b2b; border:1px solid var(--border-color); margin-top: 10px;"><i class="fas fa-plus"></i> Legg til ny sesong</button>
-                        </div>
-                    </div>
+                <div class="nav-tabs">
+                    <button id="tabBtnInnhold" class="active" onclick="byttTab('innhold')"><i class="fas fa-film"></i> Filmer & Serier</button>
+                    <button id="tabBtnHistorikk" onclick="byttTab('historikk')"><i class="fas fa-history"></i> Brukerhistorikk</button>
                 </div>
 
-                <div style="margin-top: 25px;">
-                    <button onclick="lagreInnhold()"><i class="fas fa-save"></i> Lagre tittel</button>
-                    <button style="background:#333;" onclick="lukkSkjema()"><i class="fas fa-times"></i> Avbryt</button>
+                <!-- TAB 1: INNHOLD -->
+                <div id="tabInnhold" class="tab-content">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                        <h2>Innholdsbibliotek</h2>
+                        <button onclick="visLeggTilSkjema()"><i class="fas fa-plus"></i> Legg til ny tittel</button>
+                    </div>
+
+                    <!-- SKJEMA -->
+                    <div id="redigeringsSkjema" class="hidden" style="background: #1a1a1a; padding: 30px; margin-bottom: 30px; border-radius: 10px; border: 1px solid var(--border-color);">
+                        <h3 id="skjemaTittel" style="margin-top:0;"><i class="fas fa-film"></i> Ny tittel</h3>
+                        
+                        <div class="form-grid">
+                            <div>
+                                <label>Tittel:</label>
+                                <input type="text" id="inpTittel" placeholder="F.eks. House on Haunted Hill" oninput="genererIDogAutomater()">
+                            </div>
+                            <div>
+                                <label>Unik ID (Genereres automatisk):</label>
+                                <input type="text" id="inpId" placeholder="house-on-haunted-hill" readonly style="background: #222; color: #777;">
+                            </div>
+
+                            <div>
+                                <label>Type innhold:</label>
+                                <select id="inpType" onchange="byttInnholdsType()">
+                                    <option value="filmer">Film</option>
+                                    <option value="serier">Serie</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label>Rating (F.eks. 6.7):</label>
+                                <input type="text" id="inpRating" placeholder="6.7">
+                            </div>
+
+                            <div class="form-full">
+                                <label>Beskrivelse:</label>
+                                <textarea id="inpBeskrivelse" placeholder="Kort handlingsreferat..."></textarea>
+                            </div>
+
+                            <!-- METADATA -->
+                            <div class="form-full" style="background: #151515; padding: 15px; border-radius: 6px; border: 1px solid #2a2a2a;">
+                                <label style="color:var(--text-main); font-size:14px; margin-top:0;">Metadata (Fast struktur):</label>
+                                <div style="display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 10px; margin-top: 10px;">
+                                    <div>
+                                        <label style="font-size:11px;">Utgivelsesår:</label>
+                                        <input type="text" id="metaAar" placeholder="1959" style="margin:0;">
+                                    </div>
+                                    <div>
+                                        <label style="font-size:11px;">Aldersgrense:</label>
+                                        <input type="text" id="metaAldersgrense" placeholder="16 år" style="margin:0;">
+                                    </div>
+                                    <div>
+                                        <label style="font-size:11px;">Hovedsjanger:</label>
+                                        <input type="text" id="metaSjanger" placeholder="Grøsser" style="margin:0;">
+                                    </div>
+                                    <div>
+                                        <label style="font-size:11px;">Varighet / Info:</label>
+                                        <input type="text" id="metaVarighet" placeholder="1 t 15 min" style="margin:0;">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- KREATIVT PERSONELL -->
+                            <div>
+                                <label>Regissør / Skapere:</label>
+                                <input type="text" id="inpRegissor" placeholder="William Castle">
+                            </div>
+                            <div>
+                                <label>Skuespillere (Medvirkende):</label>
+                                <input type="text" id="inpSkuespillere" placeholder="Vincent Price, Carol Ohmart">
+                            </div>
+
+                            <!-- BILDER OG GRAFIKK -->
+                            <div>
+                                <label>Bakgrunn URL (Desktop):</label>
+                                <input type="text" id="inpBakgrunn" placeholder="https://image.tmdb.org/...">
+                            </div>
+                            <div>
+                                <label>Bakgrunn URL (Mobil):</label>
+                                <input type="text" id="inpBakgrunnMobil" placeholder="https://image.tmdb.org/...">
+                            </div>
+
+                            <div>
+                                <label>Poster (Horisontal):</label>
+                                <input type="text" id="inpPoster" placeholder="https://image.tmdb.org/...">
+                            </div>
+                            <div>
+                                <label>Poster (Vertikal):</label>
+                                <input type="text" id="inpPosterVertikal" placeholder="https://image.tmdb.org/...">
+                            </div>
+
+                            <div>
+                                <label>Logo URL (Tekstbilde):</label>
+                                <input type="text" id="inpLogo" placeholder="https://image.tmdb.org/...">
+                            </div>
+                            <div>
+                                <label>Banner URL (Valgfri):</label>
+                                <input type="text" id="inpBanner" placeholder="https://...">
+                            </div>
+
+                            <div>
+                                <label>Trailer URL:</label>
+                                <input type="text" id="inpTrailer" placeholder="https://...">
+                            </div>
+
+                            <!-- DATOER -->
+                            <div style="background: #151515; padding: 15px; border-radius: 6px; border: 1px solid #2a2a2a; grid-column: span 2;">
+                                <label style="color:var(--text-main); font-size:14px; margin-top:0;">Publisering og Tilgjengelighet:</label>
+                                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 10px;">
+                                    <div>
+                                        <label style="font-size:11px;">Publiseringsdato:</label>
+                                        <input type="datetime-local" id="inpPublishDate" style="margin:0;">
+                                    </div>
+                                    <div>
+                                        <label style="font-size:11px;">Utløpsdato (Expire):</label>
+                                        <input type="datetime-local" id="inpExpireDate" style="margin:0;">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- FILM-SPESIFIKKE FELT -->
+                            <div id="filmSpesifikkeFelt" class="form-full form-grid" style="grid-column: span 2; margin:0; padding:0;">
+                                <div>
+                                    <label>Video URL (.mp4):</label>
+                                    <input type="text" id="inpVideoUrl" placeholder="https://...mp4">
+                                </div>
+                                <div>
+                                    <label>Undertekstfil (.VTT filnavn):</label>
+                                    <input type="text" id="inpSubtitleUrl" placeholder="navn.VTT" style="background:#222; color:#777;">
+                                </div>
+                            </div>
+
+                            <!-- SERIE- OG EPISODEBYGGER -->
+                            <div id="serieSpesifikkeFelt" class="form-full hidden">
+                                <label style="font-size:15px; color:var(--text-main);">Sesonger og Episoder:</label>
+                                <div class="builder-box">
+                                    <div id="sesongContainer"></div>
+                                    <button type="button" onclick="leggTilSesong()" style="background: #2b2b2b; border:1px solid var(--border-color); margin-top: 10px;"><i class="fas fa-plus"></i> Legg til ny sesong</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div style="margin-top: 25px;">
+                            <button onclick="lagreInnhold()"><i class="fas fa-save"></i> Lagre tittel</button>
+                            <button style="background:#333;" onclick="lukkSkjema()"><i class="fas fa-times"></i> Avbryt</button>
+                        </div>
+                    </div>
+
+                    <input type="text" id="sokFelt" placeholder="Søk i biblioteket..." oninput="filterTabell()" style="max-width: 300px; margin-bottom: 15px;">
+
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Type</th>
+                                <th>ID</th>
+                                <th>Tittel</th>
+                                <th>Handlinger</th>
+                            </tr>
+                        </thead>
+                        <tbody id="dataTableBody"></tbody>
+                    </table>
+                </div>
+
+                <!-- TAB 2: HISTORIKK -->
+                <div id="tabHistorikk" class="tab-content hidden">
+                    <h2><i class="fas fa-stream"></i> Brukeraktivitet & Avspillingshistorikk</h2>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Bruker / Profil</th>
+                                <th>Aktivitet / Tittel</th>
+                                <th>Status</th>
+                                <th>Sist oppdatert</th>
+                            </tr>
+                        </thead>
+                        <tbody id="historyTableBody"></tbody>
+                    </table>
                 </div>
             </div>
-
-            <input type="text" id="sokFelt" placeholder="Søk i biblioteket..." oninput="filterTabell()" style="max-width: 300px; margin-bottom: 15px;">
-
-            <table>
-                <thead>
-                    <tr>
-                        <th>Type</th>
-                        <th>ID</th>
-                        <th>Tittel</th>
-                        <th>Handlinger</th>
-                    </tr>
-                </thead>
-                <tbody id="dataTableBody"></tbody>
-            </table>
         </div>
-
-        <!-- TAB 2: HISTORIKK -->
-        <div id="tabHistorikk" class="tab-content hidden">
-            <h2><i class="fas fa-stream"></i> Brukeraktivitet & Avspillingshistorikk</h2>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Bruker / Profil</th>
-                        <th>Aktivitet / Tittel</th>
-                        <th>Status</th>
-                        <th>Sist oppdatert</th>
-                    </tr>
-                </thead>
-                <tbody id="historyTableBody"></tbody>
-            </table>
-        </div>
-    </div>
+    </main>
 
     <!-- FIREBASE LOGIKK -->
     <script type="module">
@@ -405,7 +435,6 @@
             }
         }
 
-        // Automatisk generering av ID, subtitleUrl, watchUrl og tilbakeUrl
         window.genererIDogAutomater = function() {
             const tittel = document.getElementById("inpTittel").value;
             const id = tittel.toLowerCase().replace(/[^a-z0-9]/g, "-").replace(/-+/g, "-");
@@ -485,7 +514,6 @@
             });
             document.getElementById("sesongContainer").innerHTML = "";
 
-            // Sett automatiske standardverdier for datoer (f.eks. i dag til 2 år frem i tid)
             const now = new Date();
             const future = new Date();
             future.setFullYear(now.getFullYear() + 2);
@@ -510,7 +538,6 @@
                 return;
             }
 
-            // Hent metadata i fast rekkefølge
             const metadataArray = [
                 document.getElementById("metaAar").value.trim(),
                 document.getElementById("metaAldersgrense").value.trim(),
