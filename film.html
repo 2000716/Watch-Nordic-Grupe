@@ -1093,13 +1093,10 @@ img, video {
   </div>
 </footer>
 
-<script src="Filmdata.js"></script>
-<script src="Seriedata.js"></script>
-
 <script type="module">
   import { auth, db } from "./firebase-oppsett.js";
   import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-auth.js";
-  import { doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
+  import { doc, getDoc, setDoc, collection, getDocs } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
 
   /* ==========================================
      1. GLOBALE TILSTANDER & DATAHENTING
@@ -1110,6 +1107,19 @@ img, video {
   let heleProfilArrayet = [];
   let status = "ikke-påbegynt";
   let minListe = [];
+
+  // Databeholdere for filmer og serier
+  let filmerData = {};
+  let serierData = {};
+  let data = null;
+  let type = "film";
+  let navn = "";
+  let nå = new Date();
+  let erUpublisert = false;
+  let erUtgått = false;
+  let erUtilgjengelig = false;
+
+  let watchBtn, addToListBtn, bgImg;
 
   // SIKKERHET: Rensing av input fra URL (DOMPurify/HTML-escape-prinsipp)
   function sanitizeInput(str) {
@@ -1122,7 +1132,7 @@ img, video {
       .replace(/'/g, "&#039;");
   }
 
-  // SIKKERHET: Validering av eksterne og interne URL-er mot utrygge protokoller (f.eks. javascript:)
+  // SIKKERHET: Validering av eksterne og interne URL-er
   function erTryggUrl(url) {
     if (!url) return false;
     try {
@@ -1133,36 +1143,65 @@ img, video {
     }
   }
 
-  const params = new URLSearchParams(window.location.search);
-  const navn = sanitizeInput(params.get("navn"));
+  // Hent alle filmer og serier fra Firestore
+  async function lastDataFraFirebase() {
+    try {
+      // Sjekk om data finnes i vinduet fra før (f.eks. om det er cached på hovedsiden)
+      if (window.filmerData && window.serierData) {
+        filmerData = window.filmerData;
+        serierData = window.serierData;
+      } else {
+        const [filmerSnap, serierSnap] = await Promise.all([
+          getDocs(collection(db, "filmer")),
+          getDocs(collection(db, "serier"))
+        ]);
 
-  const filmerData = typeof window.filmer !== "undefined" ? window.filmer : (typeof filmer !== "undefined" ? filmer : {});
-  const serierData = typeof window.serier !== "undefined" ? window.serier : (typeof serier !== "undefined" ? serier : {});
+        filmerSnap.forEach(doc => {
+          filmerData[doc.id] = doc.data();
+        });
 
-  let type = "film";
-  let data = filmerData[navn] || null;
+        serierSnap.forEach(doc => {
+          serierData[doc.id] = doc.data();
+        });
 
-  if (!data && serierData[navn]) {
-    type = "serie";
-    data = serierData[navn];
+        window.filmerData = filmerData;
+        window.serierData = serierData;
+      }
+
+      // Les URL-parametere etter at dataene er hentet
+      const params = new URLSearchParams(window.location.search);
+      navn = sanitizeInput(params.get("navn"));
+
+      data = filmerData[navn] || null;
+      if (!data && serierData[navn]) {
+        type = "serie";
+        data = serierData[navn];
+      }
+
+      // Omdiriger hvis tittelen ikke eksisterer
+      if (!data) {
+        window.location.href = "Hovedside.html";
+        return;
+      }
+
+       nå = new Date();
+       erUpublisert = data.publishDate && new Date(data.publishDate) > nå;
+       erUtgått = data.expireDate && nå > new Date(data.expireDate);
+       erUtilgjengelig = erUpublisert || erUtgått;
+
+    } catch (err) {
+      console.error("Feil ved henting av mediedata fra Firebase:", err);
+    }
   }
-
-  // Omdiriger hvis tittelen ikke eksisterer
-  if (!data) {
-    window.location.href = "Hovedside.html";
-  }
-
-  const nå = new Date();
-  const erUpublisert = data.publishDate && new Date(data.publishDate) > nå;
-  const erUtgått = data.expireDate && nå > new Date(data.expireDate);
-  const erUtilgjengelig = erUpublisert || erUtgått;
-
-  let watchBtn, addToListBtn, bgImg;
 
   /* ==========================================
-     2. HOVEDFUNKSJON (KJØRES NÅR DOM ER KLAR)
+     2. HOVEDFUNKSJON (KJØRES NÅR DATA OG DOM ER KLAR)
      ========================================== */
-  function init() {
+  async function init() {
+    await lastDataFraFirebase();
+
+    if (!data) return; // Forhindrer feil dersom omdirigering skjer
+
     watchBtn = document.getElementById("watchBtn");
     addToListBtn = document.getElementById("addToListBtn");
     bgImg = document.getElementById("backgroundImage");
@@ -1232,7 +1271,7 @@ img, video {
 
     const metadataEl = document.querySelector(".metadata");
     if (metadataEl) {
-      metadataEl.innerHTML = ""; // Renser HTML for å hindre XSS
+      metadataEl.innerHTML = ""; 
       
       const ratingSpan = document.createElement("span");
       ratingSpan.textContent = `⭐ ${data.rating || "-"}`;
@@ -1317,7 +1356,7 @@ img, video {
      3. DYNAMISKE UI-OPPDATERINGSFUNKSJONER
      ========================================== */
   function oppdaterBakgrunnsBilde() {
-    if (!bgImg) return;
+    if (!bgImg || !data) return;
     const erMobil = window.innerWidth <= 768;
     const bildeUrl = (erMobil && data.bakgrunnMobil) ? data.bakgrunnMobil : (data.bakgrunn || "");
     if (erTryggUrl(bildeUrl)) {
@@ -1381,7 +1420,7 @@ img, video {
      4. DATA-SYNKRONISERING OG SIKKERHETS-SJEKKER
      ========================================== */
   function sjekkAldersgrense(profilData) {
-    if (!profilData || !profilData.aldersgrense) return true;
+    if (!profilData || !profilData.aldersgrense || !data) return true;
     
     const innholdAldersgrense = data.metadata ? data.metadata.find(m => m.toLowerCase().includes("år")) : null;
     if (!innholdAldersgrense) return true;
@@ -1397,7 +1436,6 @@ img, video {
     let profilData = heleProfilArrayet[indexId] || heleProfilArrayet.find(p => p.navn === aktivProfil);
     
     if (profilData) {
-      // Sikkerhetssjekk: Lås avspillingsknapp hvis profilen er under aldersgrensen
       if (!sjekkAldersgrense(profilData) && watchBtn) {
         watchBtn.classList.add("locked");
         watchBtn.disabled = true;
@@ -1453,7 +1491,6 @@ img, video {
         console.error("Feil ved henting av brukerdata:", err);
       }
     } else {
-      // Omdiriger til innloggingssiden hvis økten har utløpt
       window.location.href = "index.html";
     }
   });
@@ -1514,7 +1551,7 @@ img, video {
   }
 
   /* ==========================================
-     6. EPISODELISTING & SAMMEHENGSTILPASSEDE ANBEFALINGER
+     6. EPISODELISTING & SAMMENHENGSTILPASSEDE ANBEFALINGER
      ========================================== */
   function visSesong(sesongNr) {
     const seasonButtons = document.getElementById("seasonButtons");
@@ -1571,7 +1608,7 @@ img, video {
 
   function byggAnbefalingerEllerEpisoder() {
     const recommendationsDiv = document.querySelector(".recommendations");
-    if (!recommendationsDiv) return;
+    if (!recommendationsDiv || !data) return;
 
     if (type === "serie" && data.sesonger) {
       if (document.getElementById("seasonButtons")) return;
@@ -1690,6 +1727,7 @@ img, video {
      7. VIDEO/TRAILER, FEILHÅNDTERING & STYLING
      ========================================== */
   function initTrailer() {
+    if (!data) return;
     const trailerVideo = document.getElementById("trailerVideo");
     const videoControls = document.getElementById("videoControls");
     const pauseBtn = document.getElementById("pauseBtn");
@@ -1699,7 +1737,6 @@ img, video {
       trailerVideo.src = data.trailer;
       trailerVideo.preload = "auto";
       
-      // Håndter potensielle nettverks- og avspillingsfeil
       trailerVideo.addEventListener("error", () => {
         console.warn("Trailer-feil. Viser bakgrunnsbilde isteden.");
         if (trailerVideo) trailerVideo.style.display = "none";
@@ -1711,7 +1748,6 @@ img, video {
         if (bgImg) bgImg.style.opacity = "0";
         trailerVideo.style.opacity = "1";
         trailerVideo.play().catch(() => {
-          // Autoplay ble forhindret av nettleser-policy
           if (bgImg) bgImg.style.opacity = "1";
           trailerVideo.style.opacity = "0";
         });
@@ -1748,7 +1784,7 @@ img, video {
     }
   }
 
-  // Ytelsesoptimalisert scroll-lytter for navbaren (Throttled via RequestAnimationFrame)
+  // Scroll-lytter for navbaren
   let ticking = false;
   window.addEventListener("scroll", () => {
     if (!ticking) {
