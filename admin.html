@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+    <meta charset="UTF-8">
+    <title>Watch Nordic – Admin Panel</title>
+    <style>
+        body { font-family: sans-serif; background-color: #141414; color: #ffffff; margin: 0; padding: 20px; }
+        .hidden { display: none !important; }
+        .login-box, .admin-container { max-width: 800px; margin: 40px auto; background: #1f1f1f; padding: 30px; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.5); }
+        input, select, textarea { width: 100%; padding: 10px; margin: 10px 0 20px 0; background: #333; border: 1px solid #444; color: #fff; border-radius: 4px; box-sizing: border-box; }
+        button { background: #e50914; color: white; border: none; padding: 10px 20px; font-size: 16px; border-radius: 4px; cursor: pointer; margin-right: 10px; }
+        button:hover { background: #f40612; }
+        .back-btn { background: #333; margin-bottom: 20px; }
+        .back-btn:hover { background: #444; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { padding: 12px; text-align: left; border-bottom: 1px solid #333; }
+        th { background: #222; }
+        .action-btns button { padding: 5px 10px; font-size: 14px; margin-right: 5px; }
+        .delete-btn { background: #b20710; }
+        .delete-btn:hover { background: #e50914; }
+        .tab-content { margin-top: 20px; }
+        .nav-tabs { display: flex; gap: 10px; margin-bottom: 20px; }
+    </style>
+</head>
+<body>
+
+    <!-- 1. FIREBASE-BASERT INNLOGGING FOR ANSATTE -->
+    <div id="loginSection" class="login-box">
+        <h2>Ansattpålogging</h2>
+        <p>Logg inn med din ansatt-e-post og passord:</p>
+        <input type="email" id="emailInput" placeholder="E-postadresse...">
+        <input type="password" id="passwordInput" placeholder="Passord...">
+        <button id="loginBtn">Logg inn som ansatt</button>
+        <p id="errorMsg" style="color: #e50914; display: none; margin-top: 10px;"></p>
+    </div>
+
+    <!-- 2. SELVE ADMIN-PANELET -->
+    <div id="adminSection" class="admin-container hidden">
+        <button class="back-btn" onclick="window.location.href='Hovedside.html'">← Tilbake til Hovedside</button>
+        <h1>🛠️ Watch Nordic – Admin Panel</h1>
+        
+        <div class="nav-tabs">
+            <button onclick="byttTab('innhold')">Filmer & Serier</button>
+            <button onclick="byttTab('historikk')">Historikk & Logg</button>
+        </div>
+
+        <!-- TAB 1: FILMER OG SERIER -->
+        <div id="tabInnhold" class="tab-content">
+            <h2>Administrer Innhold</h2>
+            <button onclick="visLeggTilSkjema()">+ Legg til ny film/serie</button>
+            
+            <div id="redigeringsSkjema" class="hidden" style="background: #2a2a2a; padding: 20px; margin-top: 20px; border-radius: 6px;">
+                <h3 id="skjemaTittel">Legg til / Rediger</h3>
+                <input type="text" id="inpId" placeholder="Unik ID (f.eks. interstellar)">
+                <select id="inpType">
+                    <option value="filmer">Film</option>
+                    <option value="serier">Serie</option>
+                </select>
+                <input type="text" id="inpTittel" placeholder="Tittel">
+                <input type="text" id="inpVideoUrl" placeholder="Video URL">
+                <input type="text" id="inpBilde" placeholder="Bakgrunnsbilde / Thumbnail URL">
+                <button onclick="lagreInnhold()">Lagre til Firebase</button>
+                <button style="background:#555" onclick="lukkSkjema()">Avbryt</button>
+            </div>
+
+            <h3 style="margin-top: 30px;">Oversikt over elementer i Firebase:</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Type</th>
+                        <th>ID</th>
+                        <th>Tittel</th>
+                        <th>Handlinger</th>
+                    </tr>
+                </thead>
+                <tbody id="dataTableBody">
+                    <!-- Fylles dynamisk -->
+                </tbody>
+            </table>
+        </div>
+
+        <!-- TAB 2: HISTORIKK -->
+        <div id="tabHistorikk" class="tab-content hidden">
+            <h2>Systemhistorikk & Brukeraktivitet</h2>
+            <p>Her kan du se oversikt over hva brukere har sett på eller gjort i systemet.</p>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Bruker / Profil</th>
+                        <th>Aktivitet / Film-ID</th>
+                        <th>Status</th>
+                        <th>Sist oppdatert</th>
+                    </tr>
+                </thead>
+                <tbody id="historyTableBody">
+                    <!-- Fylles dynamisk -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- FIREBASE OPPDATERING / LOGIKK -->
+    <script type="module">
+        import { db, auth } from "./firebase-oppsett.js";
+        import { signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-auth.js";
+        import { collection, getDocs, doc, getDoc, setDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
+
+        document.getElementById("loginBtn").addEventListener("click", async () => {
+            const email = document.getElementById("emailInput").value.trim();
+            const password = document.getElementById("passwordInput").value;
+            const errorMsg = document.getElementById("errorMsg");
+            errorMsg.style.display = "none";
+
+            if (!email || !password) {
+                errorMsg.textContent = "Vennligst fyll ut både e-post og passord.";
+                errorMsg.style.display = "block";
+                return;
+            }
+
+            try {
+                // 1. Logg inn via Firebase Auth
+                const userCredential = await signInWithEmailAndPassword(auth, email, password);
+                const user = userCredential.user;
+
+                // 2. Sjekk i Firebase Firestore om denne brukeren faktisk er registrert som ansatt
+                // (Vi sjekker f.eks. om det finnes et dokument i samlingen "ansatte" med brukerens UID)
+                const ansattRef = doc(db, "ansatte", user.uid);
+                const ansattSnap = await getDoc(ansattRef);
+
+                if (ansattSnap.exists()) {
+                    // Brukeren er godkjent ansatt!
+                    document.getElementById("loginSection").classList.add("hidden");
+                    document.getElementById("adminSection").classList.remove("hidden");
+                    lastInnAltData();
+                } else {
+                    errorMsg.textContent = "Du har ikke ansatt-tilgang til dette systemet.";
+                    errorMsg.style.display = "block";
+                }
+
+            } catch (err) {
+                console.error("Innloggingsfeil:", err);
+                errorMsg.textContent = "Feil e-post eller passord.";
+                errorMsg.style.display = "block";
+            }
+        });
+
+        window.byttTab = function(tab) {
+            if (tab === 'innhold') {
+                document.getElementById("tabInnhold").classList.remove("hidden");
+                document.getElementById("tabHistorikk").classList.add("hidden");
+            } else {
+                document.getElementById("tabInnhold").classList.add("hidden");
+                document.getElementById("tabHistorikk").classList.remove("hidden");
+                lastInnHistorikk();
+            }
+        }
+
+        // Hent filmer og serier fra Firebase
+        window.lastInnAltData = async function() {
+            const tbody = document.getElementById("dataTableBody");
+            tbody.innerHTML = "";
+
+            try {
+                const filmSnap = await getDocs(collection(db, "filmer"));
+                filmSnap.forEach((d) => {
+                    leggTilTabellRad("Film", d.id, d.data().tittel || d.id);
+                });
+
+                const serieSnap = await getDocs(collection(db, "serier"));
+                serieSnap.forEach((d) => {
+                    leggTilTabellRad("Serie", d.id, d.data().tittel || d.id);
+                });
+            } catch (err) {
+                console.error("Feil ved henting:", err);
+            }
+        }
+
+        function leggTilTabellRad(type, id, tittel) {
+            const tbody = document.getElementById("dataTableBody");
+            const tr = document.createElement("tr");
+            tr.innerHTML = `
+                <td>${type}</td>
+                <td>${id}</td>
+                <td>${tittel}</td>
+                <td class="action-btns">
+                    <button onclick='slettElement("${type.toLowerCase() === "film" ? "filmer" : "serier"}", "${id}")' class="delete-btn">Slett</button>
+                </td>
+            `;
+            tbody.appendChild(tr);
+        }
+
+        window.slettElement = async function(samling, id) {
+            if (confirm(`Er du sikker på at du vil slette "${id}" fra Firebase?`)) {
+                try {
+                    await deleteDoc(doc(db, samling, id));
+                    alert("Slettet!");
+                    lastInnAltData();
+                } catch (err) {
+                    alert("Feil ved sletting: " + err.message);
+                }
+            }
+        }
+
+        window.visLeggTilSkjema = function() {
+            document.getElementById("redigeringsSkjema").classList.remove("hidden");
+            document.getElementById("inpId").value = "";
+            document.getElementById("inpTittel").value = "";
+            document.getElementById("inpVideoUrl").value = "";
+            document.getElementById("inpBilde").value = "";
+        }
+
+        window.lukkSkjema = function() {
+            document.getElementById("redigeringsSkjema").classList.add("hidden");
+        }
+
+        window.lagreInnhold = async function() {
+            const id = document.getElementById("inpId").value.trim();
+            const samling = document.getElementById("inpType").value;
+            const tittel = document.getElementById("inpTittel").value;
+            const videoUrl = document.getElementById("inpVideoUrl").value;
+            const bilde = document.getElementById("inpBilde").value;
+
+            if (!id || !tittel) {
+                alert("ID og Tittel må fylles ut!");
+                return;
+            }
+
+            try {
+                await setDoc(doc(db, samling, id), {
+                    tittel: tittel,
+                    videoUrl: videoUrl,
+                    bakgrunnsbilde: bilde
+                }, { merge: true });
+
+                alert("Lagret vellykket til Firebase!");
+                lukkSkjema();
+                lastInnAltData();
+            } catch (err) {
+                alert("Feil ved lagring: " + err.message);
+            }
+        }
+
+        async function lastInnHistorikk() {
+            const historyBody = document.getElementById("historyTableBody");
+            historyBody.innerHTML = "";
+
+            try {
+                const brukereSnap = await getDocs(collection(db, "users"));
+                brukereSnap.forEach((userDoc) => {
+                    const userData = userDoc.data();
+                    if (userData.profiler && Array.isArray(userData.profiler)) {
+                        userData.profiler.forEach(profil => {
+                            if (profil.fremdrift) {
+                                Object.entries(profil.fremdrift).forEach(([filmId, info]) => {
+                                    const tr = document.createElement("tr");
+                                    tr.innerHTML = `
+                                        <td>${profil.navn || 'Ukjent profil'}</td>
+                                        <td>${info.tittel || filmId}</td>
+                                        <td>${info.status || 'påbegynt'} (${info.percent || 0}%)</td>
+                                        <td>${new Date(info.sistOppdatert).toLocaleString('no-NO') || 'Ukjent'}</td>
+                                    `;
+                                    historyBody.appendChild(tr);
+                                });
+                            }
+                        });
+                    }
+                });
+            } catch (err) {
+                console.error("Feil ved henting av historikk:", err);
+            }
+        }
+    </script>
+</body>
+</html>
