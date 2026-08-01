@@ -507,477 +507,487 @@
         </div>
     </main>
 <!-- FIREBASE LOGIKK -->
-    <script type="module">
-        import { db, auth } from "./firebase-oppsett.js";
-        import { signInWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-auth.js";
-        import { collection, getDocs, doc, getDoc, setDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
+<script type="module">
+    import { db, auth } from "./firebase-oppsett.js";
+    import { signInWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-auth.js";
+    import { collection, getDocs, doc, getDoc, setDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
 
-        function visMelding(tekst, type = "success") {
-            const notif = document.getElementById("globalNotif");
-            notif.className = `app-notification ${type}`;
-            notif.innerHTML = `<i class="fas fa-${type === 'success' ? 'check-circle' : 'exclamation-circle'}"></i> ${tekst}`;
-            notif.style.display = "block";
-            setTimeout(() => { notif.style.display = "none"; }, 4000);
-        }
+    function visMelding(tekst, type = "success") {
+        const notif = document.getElementById("globalNotif");
+        notif.className = `app-notification ${type}`;
+        notif.innerHTML = `<i class="fas fa-${type === 'success' ? 'check-circle' : 'exclamation-circle'}"></i> ${tekst}`;
+        notif.style.display = "block";
+        setTimeout(() => { notif.style.display = "none"; }, 4000);
+    }
 
-        // --- AUTOMATISK INNSJEKKING VED OPPDATERING (PERSISTENS) ---
-        onAuthStateChanged(auth, async (user) => {
-            if (user) {
-                // Brukeren er logget inn, sjekk om vedkommende fremdeles er ansatt
-                try {
-                    const ansattSnap = await getDoc(doc(db, "ansatte", user.uid));
-                    if (ansattSnap.exists()) {
-                        document.getElementById("loginSection").classList.add("hidden");
-                        document.getElementById("adminSection").classList.remove("hidden");
-                        lastInnAltData();
-                    } else {
-                        document.getElementById("loginSection").classList.remove("hidden");
-                        document.getElementById("adminSection").classList.add("hidden");
-                    }
-                } catch (err) {
-                    document.getElementById("loginSection").classList.remove("hidden");
-                    document.getElementById("adminSection").classList.add("hidden");
-                }
-            } else {
-                document.getElementById("loginSection").classList.remove("hidden");
-                document.getElementById("adminSection").classList.add("hidden");
-            }
-        });
-
-        document.getElementById("loginBtn").addEventListener("click", async () => {
-            const email = document.getElementById("emailInput").value.trim();
-            const password = document.getElementById("passwordInput").value;
-            const errorMsg = document.getElementById("loginErrorMsg");
-            errorMsg.style.display = "none";
-
+    // --- AUTOMATISK INNSJEKKING VED OPPDATERING (PERSISTENS) ---
+    // Sparer ressurs: onAuthStateChanged håndterer hele innloggingen og sjekker ansatt-status KUN ÉN GANG.
+    onAuthStateChanged(auth, async (user) => {
+        if (user) {
             try {
-                const userCredential = await signInWithEmailAndPassword(auth, email, password);
-                const ansattSnap = await getDoc(doc(db, "ansatte", userCredential.user.uid));
+                const ansattSnap = await getDoc(doc(db, "ansatte", user.uid));
                 if (ansattSnap.exists()) {
                     document.getElementById("loginSection").classList.add("hidden");
                     document.getElementById("adminSection").classList.remove("hidden");
                     lastInnAltData();
                 } else {
-                    errorMsg.textContent = "Ingen ansatt-tilgang funnet.";
-                    errorMsg.style.display = "block";
+                    visLoginSkjema();
                 }
             } catch (err) {
-                errorMsg.textContent = "Feil ved innlogging.";
-                errorMsg.style.display = "block";
+                visLoginSkjema();
+            }
+        } else {
+            visLoginSkjema();
+        }
+    });
+
+    function visLoginSkjema() {
+        document.getElementById("loginSection").classList.remove("hidden");
+        document.getElementById("adminSection").classList.add("hidden");
+    }
+
+    // Sparer ressurs: loginBtn trigget tidligere en EKSTRA getDoc på ansatte. 
+    // Nå trigger den kun Auth, og onAuthStateChanged overtar sjekken automatisk.
+    document.getElementById("loginBtn").addEventListener("click", async () => {
+        const email = document.getElementById("emailInput").value.trim();
+        const password = document.getElementById("passwordInput").value;
+        const errorMsg = document.getElementById("loginErrorMsg");
+        errorMsg.style.display = "none";
+
+        try {
+            await signInWithEmailAndPassword(auth, email, password);
+            // Ingenting mer trengs her - onAuthStateChanged fanger det opp!
+        } catch (err) {
+            errorMsg.textContent = "Feil ved innlogging (ugyldig e-post/passord).";
+            errorMsg.style.display = "block";
+        }
+    });
+
+    window.byttTab = function(tab) {
+        const tabs = ['oversikt', 'filmer', 'serier', 'leggTil'];
+        tabs.forEach(t => {
+            const contentEl = document.getElementById(`tab${t.charAt(0).toUpperCase() + t.slice(1)}`);
+            const btnEl = document.getElementById(`tabBtn${t.charAt(0).toUpperCase() + t.slice(1)}`);
+            if (t === tab) {
+                if (contentEl) contentEl.classList.remove("hidden");
+                if (btnEl) btnEl.classList.add("active");
+            } else {
+                if (contentEl) contentEl.classList.add("hidden");
+                if (btnEl) btnEl.classList.remove("active");
             }
         });
 
-        window.byttTab = function(tab) {
-            // "historikk" er fjernet herfra siden den er slettet fra HTML
-            const tabs = ['oversikt', 'filmer', 'serier', 'leggTil'];
-            tabs.forEach(t => {
-                const contentEl = document.getElementById(`tab${t.charAt(0).toUpperCase() + t.slice(1)}`);
-                const btnEl = document.getElementById(`tabBtn${t.charAt(0).toUpperCase() + t.slice(1)}`);
-                if (t === tab) {
-                    if (contentEl) contentEl.classList.remove("hidden");
-                    if (btnEl) btnEl.classList.add("active");
-                } else {
-                    if (contentEl) contentEl.classList.add("hidden");
-                    if (btnEl) btnEl.classList.remove("active");
-                }
-            });
-
-            if (tab === 'leggTil' && !document.getElementById("inpId").getAttribute("data-redigerer")) {
-                nullstillSkjema();
-            }
+        if (tab === 'leggTil' && !document.getElementById("inpId").getAttribute("data-redigerer")) {
+            nullstillSkjema();
         }
+    }
 
-        window.byttInnholdsType = function() {
-            const type = document.getElementById("inpType").value;
-            if (type === "serier") {
-                document.getElementById("filmSpesifikkeFelt").classList.add("hidden");
-                document.getElementById("serieSpesifikkeFelt").classList.remove("hidden");
-            } else {
-                document.getElementById("filmSpesifikkeFelt").classList.remove("hidden");
-                document.getElementById("serieSpesifikkeFelt").classList.add("hidden");
-            }
+    window.byttInnholdsType = function() {
+        const type = document.getElementById("inpType").value;
+        if (type === "serier") {
+            document.getElementById("filmSpesifikkeFelt").classList.add("hidden");
+            document.getElementById("serieSpesifikkeFelt").classList.remove("hidden");
+        } else {
+            document.getElementById("filmSpesifikkeFelt").classList.remove("hidden");
+            document.getElementById("serieSpesifikkeFelt").classList.add("hidden");
         }
+    }
 
-        window.genererIDogAutomater = function() {
-            if (!document.getElementById("inpId").getAttribute("data-redigerer")) {
-                const tittel = document.getElementById("inpTittel").value;
-                const id = tittel.toLowerCase().replace(/[^a-z0-9]/g, "-").replace(/-+/g, "-");
-                document.getElementById("inpId").value = id;
-                document.getElementById("inpSubtitleUrl").value = id ? `${id}.VTT` : "";
-            }
-        }
-
-        window.leggTilSesong = function(dataSesong = null) {
-            const container = document.getElementById("sesongContainer");
-            const sesongNr = container.children.length + 1;
-            
-            const div = document.createElement("div");
-            div.className = "sesong-item";
-            div.style.cssText = "background: #050F11; padding: 15px; border-radius: 6px; margin-bottom: 10px; border: 1px solid var(--border-color);";
-            div.innerHTML = `
-                <div style="display:flex; justify-content:space-between; align-items:center;">
-                    <strong>Sesong ${sesongNr}</strong>
-                    <button type="button" onclick="this.parentElement.parentElement.remove()" style="background:#FF5252; color:#fff; padding:4px 8px; font-size:11px;">Fjern sesong</button>
-                </div>
-                <input type="text" class="sesong-beskrivelse" placeholder="Beskrivelse for sesongen..." value="${dataSesong ? (dataSesong.beskrivelse || '') : ''}" style="margin-top:10px;">
-                <div class="episoder-container" style="margin-top:10px;"></div>
-                <button type="button" onclick="leggTilEpisodTilSesong(this)" style="background:#0D2328; color:var(--text-main); border:1px solid var(--border-color); font-size:12px; margin-top:5px;"><i class="fas fa-plus"></i> Legg til episode</button>
-            `;
-            container.appendChild(div);
-
-            if (dataSesong && dataSesong.episoder) {
-                const epiContainer = div.querySelector(".episoder-container");
-                Object.values(dataSesong.episoder).forEach(epi => {
-                    leggTilEpisodTilSesong(epiContainer, epi);
-                });
-            }
-        }
-
-        window.leggTilEpisodTilSesong = function(target, epiData = null) {
-            let epiContainer;
-            if (target.nodeName === 'BUTTON') {
-                epiContainer = target.previousElementSibling;
-            } else {
-                epiContainer = target;
-            }
-            const epiNr = epiContainer.children.length + 1;
-
-            let formattedDate = "";
-            if (epiData && epiData.publishDate) {
-                formattedDate = epiData.publishDate.slice(0, 16);
-            }
-
-            const div = document.createElement("div");
-            div.className = "episode-item";
-            div.style.cssText = "background: #0D2328; padding: 15px; border-radius: 6px; margin-top: 10px; border: 1px solid var(--border-color);";
-            div.innerHTML = `
-                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
-                    <strong style="font-size:13px; color:var(--primary);">Episode ${epiNr}</strong>
-                    <button type="button" onclick="this.parentElement.parentElement.remove()" style="background:#FF5252; color:#fff; padding:3px 6px; font-size:10px;">Fjern episode</button>
-                </div>
-                <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 10px;">
-                    <input type="text" class="epi-tittel" placeholder="Episode tittel..." value="${epiData ? (epiData.tittel || '') : ''}" style="margin:0 0 10px 0;">
-                    <input type="text" class="epi-varighet" placeholder="Varighet..." value="${epiData ? (epiData.varighet || '') : ''}" style="margin:0 0 10px 0;">
-                </div>
-                <textarea class="epi-beskrivelse" placeholder="Episodebeskrivelse..." style="margin:0 0 10px 0; height:60px;">${epiData ? (epiData.beskrivelse || '') : ''}</textarea>
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
-                    <input type="text" class="epi-video" placeholder="Video URL (.mp4)" value="${epiData ? (epiData.videoUrl || '') : ''}" style="margin:0 0 10px 0;">
-                    <input type="text" class="epi-thumb" placeholder="Thumbnail URL" value="${epiData ? (epiData.thumbnail || '') : ''}" style="margin:0 0 10px 0;">
-                </div>
-                <div>
-                    <label style="font-size:11px; margin-top:0;">Publiseringsdato:</label>
-                    <input type="datetime-local" class="epi-pubdate" value="${formattedDate}" style="margin:2px 0 0 0;">
-                </div>
-            `;
-            epiContainer.appendChild(div);
-        }
-
-        function forberedSkjemaDatoer() {
-            const now = new Date();
-            const future = new Date();
-            future.setFullYear(now.getFullYear() + 2);
-            if(!document.getElementById("inpPublishDate").value) {
-                document.getElementById("inpPublishDate").value = now.toISOString().slice(0, 16);
-                document.getElementById("inpExpireDate").value = future.toISOString().slice(0, 16);
-            }
-        }
-
-        window.nullstillSkjema = function() {
-            document.getElementById("skjemaTittelHeading").textContent = "Legg til ny tittel";
-            document.getElementById("skjemaUnderTekst").textContent = "Fyll ut skjemaet for å publisere en film eller serie.";
-            document.getElementById("inpId").removeAttribute("data-redigerer");
-            document.getElementById("inpId").removeAttribute("readonly");
-            document.getElementById("inpId").style.background = "#050F11";
-            document.getElementById("inpId").style.color = "#ffffff";
-
-            const inputs = document.querySelectorAll("#tabLeggTil input, #tabLeggTil textarea, #tabLeggTil select");
-            inputs.forEach(input => {
-                if(input.id !== 'inpType') input.value = "";
-            });
-            document.getElementById("sesongContainer").innerHTML = "";
-            forberedSkjemaDatoer();
-            byttInnholdsType();
-        }
-
-        // --- RESSURSBEPARET INNHENTING MED SESSIONSTORAGE CACHE ---
-        window.lastInnAltData = async function(tvingOppdatering = false) {
-            const filmBody = document.getElementById("filmTableBody");
-            const serieBody = document.getElementById("serieTableBody");
-            if (filmBody) filmBody.innerHTML = "";
-            if (serieBody) serieBody.innerHTML = "";
-
-            let filmerData = [];
-            let serierData = [];
-            let brukereData = [];
-
-            const cachedData = sessionStorage.getItem("adminCache");
-            const cacheTid = sessionStorage.getItem("adminCacheTid");
-            const erCacheGyldig = cacheTid && (new Date().getTime() - cacheTid < 10 * 60 * 1000);
-
-            if (!tvingOppdatering && erCacheGyldig && cachedData) {
-                const parsed = JSON.parse(cachedData);
-                filmerData = parsed.filmer;
-                serierData = parsed.serier;
-                brukereData = parsed.brukere;
-            } else {
-                const [filmSnap, serieSnap, brukereSnap] = await Promise.all([
-                    getDocs(collection(db, "filmer")),
-                    getDocs(collection(db, "serier")),
-                    getDocs(collection(db, "users"))
-                ]);
-
-                filmSnap.forEach(d => filmerData.push({ id: d.id, ...d.data() }));
-                serieSnap.forEach(d => serierData.push({ id: d.id, ...d.data() }));
-                brukereSnap.forEach(d => brukereData.push(d.data()));
-
-                sessionStorage.setItem("adminCache", JSON.stringify({ filmer: filmerData, serier: serierData, brukere: brukereData }));
-                sessionStorage.setItem("adminCacheTid", new Date().getTime());
-            }
-
-            filmerData.forEach(item => leggTilTabellRad("filmer", item.id, item));
-            serierData.forEach(item => leggTilTabellRad("serier", item.id, item));
-
-            document.getElementById("statTotaltInnhold").textContent = filmerData.length + serierData.length;
-            document.getElementById("statAbonnenter").textContent = brukereData.length;
-
-            let aktiveSiste24t = 0;
-            const enDognSiden = new Date().getTime() - (24 * 60 * 60 * 1000);
-            const dagerNavn = ["Søn", "Man", "Tir", "Ons", "Tor", "Fre", "Lør"];
-            const dagerTeller = { "Man": 0, "Tir": 0, "Ons": 0, "Tor": 0, "Fre": 0, "Lør": 0, "Søn": 0 };
-
-            brukereData.forEach((data) => {
-                const aktivTidStr = data.sistAktiv || data.sistInnlogget || data.opprettetDato;
-                if (aktivTidStr) {
-                    const aktivDato = new Date(aktivTidStr);
-                    const tidMs = aktivDato.getTime();
-                    if (tidMs > enDognSiden) aktiveSiste24t++;
-                    const dagTekst = dagerNavn[aktivDato.getDay()];
-                    if (dagerTeller[dagTekst] !== undefined) dagerTeller[dagTekst]++;
-                }
-            });
-
-            document.getElementById("statInnlogget").textContent = aktiveSiste24t;
-            oppdaterSoyleDiagram(dagerTeller);
-        }
-
-        function oppdaterSoyleDiagram(dagerTeller) {
-            const chartContainer = document.getElementById("chartBarsContainer");
-            chartContainer.innerHTML = "";
-            const ukesRekkefolge = ["Man", "Tir", "Ons", "Tor", "Fre", "Lør", "Søn"];
-            const verdier = Object.values(dagerTeller);
-            const maksVerdi = Math.max(...verdier, 1);
-
-            ukesRekkefolge.forEach(dag => {
-                const antall = dagerTeller[dag] || 0;
-                const prosent = Math.round((antall / maksVerdi) * 100);
-                const tilpassetProsent = antall > 0 ? Math.max(prosent, 12) : 5;
-
-                const wrap = document.createElement("div");
-                wrap.className = "chart-bar-wrap";
-                wrap.innerHTML = `
-                    <div style="font-size: 10px; color: var(--text-muted); margin-bottom: 4px;">${antall}</div>
-                    <div class="chart-bar" style="height: ${tilpassetProsent}%;"></div>
-                    <span class="chart-label">${dag}</span>
-                `;
-                chartContainer.appendChild(wrap);
-            });
-        }
-
-        function leggTilTabellRad(samling, id, data) {
-            const tr = document.createElement("tr");
-            tr.className = "clickable-row";
-            const tittel = data.tittel || id;
-            
-            if (samling === "filmer") {
-                const sjangerInfo = (data.metadata && data.metadata[2]) ? data.metadata[2] : "-";
-                tr.innerHTML = `
-                    <td>${id}</td>
-                    <td><strong>${tittel}</strong></td>
-                    <td>${sjangerInfo}</td>
-                    <td>
-                        <button class="btn-slett" data-samling="${samling}" data-id="${id}" style="background:#FF5252; color:#fff; padding:6px 12px; font-size:13px;" onclick="event.stopPropagation();"><i class="fas fa-trash"></i> Slett</button>
-                    </td>
-                `;
-                document.getElementById("filmTableBody").appendChild(tr);
-            } else {
-                const antSesonger = data.sesonger ? Object.keys(data.sesonger).length : 0;
-                tr.innerHTML = `
-                    <td>${id}</td>
-                    <td><strong>${tittel}</strong></td>
-                    <td>${antSesonger} sesong(er)</td>
-                    <td>
-                        <button class="btn-slett" data-samling="${samling}" data-id="${id}" style="background:#FF5252; color:#fff; padding:6px 12px; font-size:13px;" onclick="event.stopPropagation();"><i class="fas fa-trash"></i> Slett</button>
-                    </td>
-                `;
-                document.getElementById("serieTableBody").appendChild(tr);
-            }
-
-            tr.addEventListener("click", () => {
-                apneRedigering(samling, id, data);
-            });
-
-            tr.querySelector(".btn-slett").addEventListener("click", async function() {
-                if(confirm(`Er du sikker på at du vil slette "${tittel}"?`)) {
-                    await deleteDoc(doc(db, this.getAttribute("data-samling"), this.getAttribute("data-id")));
-                    sessionStorage.removeItem("adminCache");
-                    visMelding("Tittelen ble slettet.", "success");
-                    lastInnAltData(true);
-                }
-            });
-        }
-
-        window.apneRedigering = function(samling, id, data) {
-            byttTab('leggTil');
-            document.getElementById("skjemaTittelHeading").textContent = `Redigerer: ${data.tittel || id}`;
-            document.getElementById("skjemaUnderTekst").textContent = `Endre oppsettet for denne tittelen nedenfor. ID kan ikke endres.`;
-            
+    window.genererIDogAutomater = function() {
+        if (!document.getElementById("inpId").getAttribute("data-redigerer")) {
+            const tittel = document.getElementById("inpTittel").value;
+            const id = tittel.toLowerCase().replace(/[^a-z0-9]/g, "-").replace(/-+/g, "-");
             document.getElementById("inpId").value = id;
-            document.getElementById("inpId").setAttribute("data-redigerer", "true");
-            document.getElementById("inpId").setAttribute("readonly", "true");
-            document.getElementById("inpId").style.background = "#050F11";
-            document.getElementById("inpId").style.color = "#777";
+            document.getElementById("inpSubtitleUrl").value = id ? `${id}.VTT` : "";
+        }
+    }
 
-            document.getElementById("inpType").value = samling;
-            byttInnholdsType();
+    window.leggTilSesong = function(dataSesong = null) {
+        const container = document.getElementById("sesongContainer");
+        const sesongNr = container.children.length + 1;
+        
+        const div = document.createElement("div");
+        div.className = "sesong-item";
+        div.style.cssText = "background: #050F11; padding: 15px; border-radius: 6px; margin-bottom: 10px; border: 1px solid var(--border-color);";
+        div.innerHTML = `
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+                <strong>Sesong ${sesongNr}</strong>
+                <button type="button" onclick="this.parentElement.parentElement.remove()" style="background:#FF5252; color:#fff; padding:4px 8px; font-size:11px;">Fjern sesong</button>
+            </div>
+            <input type="text" class="sesong-beskrivelse" placeholder="Beskrivelse for sesongen..." value="${dataSesong ? (dataSesong.beskrivelse || '') : ''}" style="margin-top:10px;">
+            <div class="episoder-container" style="margin-top:10px;"></div>
+            <button type="button" onclick="leggTilEpisodTilSesong(this)" style="background:#0D2328; color:var(--text-main); border:1px solid var(--border-color); font-size:12px; margin-top:5px;"><i class="fas fa-plus"></i> Legg til episode</button>
+        `;
+        container.appendChild(div);
 
-            document.getElementById("inpTittel").value = data.tittel || "";
-            document.getElementById("inpRating").value = data.rating || "";
-            document.getElementById("inpBeskrivelse").value = data.beskrivelse || "";
-            document.getElementById("inpRegissor").value = data.regissor || "";
-            document.getElementById("inpSkuespillere").value = data.skuespillere || "";
-            document.getElementById("inpLisens").value = data.lisens || "";
+        if (dataSesong && dataSesong.episoder) {
+            const epiContainer = div.querySelector(".episoder-container");
+            Object.values(dataSesong.episoder).forEach(epi => {
+                leggTilEpisodTilSesong(epiContainer, epi);
+            });
+        }
+    }
 
-            if (data.metadata && Array.isArray(data.metadata)) {
-                document.getElementById("metaAar").value = data.metadata[0] || "";
-                document.getElementById("metaAldersgrense").value = data.metadata[1] || "";
-                document.getElementById("metaSjanger").value = data.metadata[2] || "";
-                document.getElementById("metaVarighet").value = data.metadata[3] || "";
-            }
+    window.leggTilEpisodTilSesong = function(target, epiData = null) {
+        let epiContainer = (target.nodeName === 'BUTTON') ? target.previousElementSibling : target;
+        const epiNr = epiContainer.children.length + 1;
 
-            document.getElementById("inpBakgrunn").value = data.bakgrunn || "";
-            document.getElementById("inpBakgrunnMobil").value = data.bakgrunnMobil || "";
-            document.getElementById("inpBanner").value = data.banner || "";
-            document.getElementById("inpBannerMobil").value = data.bannerMobil || "";
-            document.getElementById("inpPoster").value = data.poster || "";
-            document.getElementById("inpPosterVertikal").value = data.posterVertikal || "";
-            document.getElementById("inpLogo").value = data.logo || "";
-            document.getElementById("inpTrailer").value = data.trailer || "";
-
-            if (data.publishDate) {
-                document.getElementById("inpPublishDate").value = new Date(data.publishDate).toISOString().slice(0, 16);
-            }
-            if (data.expireDate) {
-                document.getElementById("inpExpireDate").value = new Date(data.expireDate).toISOString().slice(0, 16);
-            }
-
-            if (samling === "filmer") {
-                document.getElementById("inpVideoUrl").value = data.videoUrl || "";
-                document.getElementById("inpSubtitleUrl").value = data.subtitleUrl || "";
-            } else if (samling === "serier" && data.sesonger) {
-                document.getElementById("sesongContainer").innerHTML = "";
-                Object.values(data.sesonger).forEach(ses => {
-                    leggTilSesong(ses);
-                });
-            }
+        let formattedDate = "";
+        if (epiData && epiData.publishDate) {
+            formattedDate = epiData.publishDate.slice(0, 16);
         }
 
-        window.lagreInnhold = async function() {
-            const id = document.getElementById("inpId").value.trim();
-            const samling = document.getElementById("inpType").value;
-            const tittel = document.getElementById("inpTittel").value.trim();
+        const div = document.createElement("div");
+        div.className = "episode-item";
+        div.style.cssText = "background: #0D2328; padding: 15px; border-radius: 6px; margin-top: 10px; border: 1px solid var(--border-color);";
+        div.innerHTML = `
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+                <strong style="font-size:13px; color:var(--primary);">Episode ${epiNr}</strong>
+                <button type="button" onclick="this.parentElement.parentElement.remove()" style="background:#FF5252; color:#fff; padding:3px 6px; font-size:10px;">Fjern episode</button>
+            </div>
+            <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 10px;">
+                <input type="text" class="epi-tittel" placeholder="Episode tittel..." value="${epiData ? (epiData.tittel || '') : ''}" style="margin:0 0 10px 0;">
+                <input type="text" class="epi-varighet" placeholder="Varighet..." value="${epiData ? (epiData.varighet || '') : ''}" style="margin:0 0 10px 0;">
+            </div>
+            <textarea class="epi-beskrivelse" placeholder="Episodebeskrivelse..." style="margin:0 0 10px 0; height:60px;">${epiData ? (epiData.beskrivelse || '') : ''}</textarea>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                <input type="text" class="epi-video" placeholder="Video URL (.mp4)" value="${epiData ? (epiData.videoUrl || '') : ''}" style="margin:0 0 10px 0;">
+                <input type="text" class="epi-thumb" placeholder="Thumbnail URL" value="${epiData ? (epiData.thumbnail || '') : ''}" style="margin:0 0 10px 0;">
+            </div>
+            <div>
+                <label style="font-size:11px; margin-top:0;">Publiseringsdato:</label>
+                <input type="datetime-local" class="epi-pubdate" value="${formattedDate}" style="margin:2px 0 0 0;">
+            </div>
+        `;
+        epiContainer.appendChild(div);
+    }
 
-            if (!id || !tittel) {
-                visMelding("Tittel må fylles ut!", "error");
-                return;
+    function forberedSkjemaDatoer() {
+        const now = new Date();
+        const future = new Date();
+        future.setFullYear(now.getFullYear() + 2);
+        if(!document.getElementById("inpPublishDate").value) {
+            document.getElementById("inpPublishDate").value = now.toISOString().slice(0, 16);
+            document.getElementById("inpExpireDate").value = future.toISOString().slice(0, 16);
+        }
+    }
+
+    window.nullstillSkjema = function() {
+        document.getElementById("skjemaTittelHeading").textContent = "Legg til ny tittel";
+        document.getElementById("skjemaUnderTekst").textContent = "Fyll ut skjemaet for å publisere en film eller serie.";
+        document.getElementById("inpId").removeAttribute("data-redigerer");
+        document.getElementById("inpId").removeAttribute("readonly");
+        document.getElementById("inpId").style.background = "#050F11";
+        document.getElementById("inpId").style.color = "#ffffff";
+
+        const inputs = document.querySelectorAll("#tabLeggTil input, #tabLeggTil textarea, #tabLeggTil select");
+        inputs.forEach(input => {
+            if(input.id !== 'inpType') input.value = "";
+        });
+        document.getElementById("sesongContainer").innerHTML = "";
+        forberedSkjemaDatoer();
+        byttInnholdsType();
+    }
+
+    // --- RESSURSBEPARET INNHENTING MED SESSIONSTORAGE CACHE ---
+    window.lastInnAltData = async function(tvingOppdatering = false) {
+        const filmBody = document.getElementById("filmTableBody");
+        const serieBody = document.getElementById("serieTableBody");
+        if (filmBody) filmBody.innerHTML = "";
+        if (serieBody) serieBody.innerHTML = "";
+
+        let filmerData = [];
+        let serierData = [];
+        let brukereData = [];
+
+        const cachedData = sessionStorage.getItem("adminCache");
+        const cacheTid = sessionStorage.getItem("adminCacheTid");
+        // Utvidet cache-varighet til 15 minutter for å spare enda flere Firestore reads
+        const erCacheGyldig = cacheTid && (new Date().getTime() - cacheTid < 15 * 60 * 1000);
+
+        if (!tvingOppdatering && erCacheGyldig && cachedData) {
+            const parsed = JSON.parse(cachedData);
+            filmerData = parsed.filmer;
+            serierData = parsed.serier;
+            brukereData = parsed.brukere;
+        } else {
+            // Henter alt parallelt når cachen må fornyes
+            const [filmSnap, serieSnap, brukereSnap] = await Promise.all([
+                getDocs(collection(db, "filmer")),
+                getDocs(collection(db, "serier")),
+                getDocs(collection(db, "users"))
+            ]);
+
+            filmSnap.forEach(d => filmerData.push({ id: d.id, ...d.data() }));
+            serieSnap.forEach(d => serierData.push({ id: d.id, ...d.data() }));
+            brukereSnap.forEach(d => brukereData.push(d.data()));
+
+            sessionStorage.setItem("adminCache", JSON.stringify({ filmer: filmerData, serier: serierData, brukere: brukereData }));
+            sessionStorage.setItem("adminCacheTid", new Date().getTime());
+        }
+
+        filmerData.forEach(item => leggTilTabellRad("filmer", item.id, item));
+        serierData.forEach(item => leggTilTabellRad("serier", item.id, item));
+
+        document.getElementById("statTotaltInnhold").textContent = filmerData.length + serierData.length;
+        document.getElementById("statAbonnenter").textContent = brukereData.length;
+
+        let aktiveSiste24t = 0;
+        const enDognSiden = new Date().getTime() - (24 * 60 * 60 * 1000);
+        const dagerNavn = ["Søn", "Man", "Tir", "Ons", "Tor", "Fre", "Lør"];
+        const dagerTeller = { "Man": 0, "Tir": 0, "Ons": 0, "Tor": 0, "Fre": 0, "Lør": 0, "Søn": 0 };
+
+        brukereData.forEach((data) => {
+            const aktivTidStr = data.sistAktiv || data.sistInnlogget || data.opprettetDato;
+            if (aktivTidStr) {
+                const aktivDato = new Date(aktivTidStr);
+                const tidMs = aktivDato.getTime();
+                if (tidMs > enDognSiden) aktiveSiste24t++;
+                const dagTekst = dagerNavn[aktivDato.getDay()];
+                if (dagerTeller[dagTekst] !== undefined) dagerTeller[dagTekst]++;
             }
+        });
 
-            const metadataArray = [
-                document.getElementById("metaAar").value.trim(),
-                document.getElementById("metaAldersgrense").value.trim(),
-                document.getElementById("metaSjanger").value.trim(),
-                document.getElementById("metaVarighet").value.trim()
-            ].filter(Boolean);
+        document.getElementById("statInnlogget").textContent = aktiveSiste24t;
+        oppdaterSoyleDiagram(dagerTeller);
+    }
 
-            const pubDateVal = document.getElementById("inpPublishDate").value;
-            const expDateVal = document.getElementById("inpExpireDate").value;
+    function oppdaterSoyleDiagram(dagerTeller) {
+        const chartContainer = document.getElementById("chartBarsContainer");
+        chartContainer.innerHTML = "";
+        const ukesRekkefolge = ["Man", "Tir", "Ons", "Tor", "Fre", "Lør", "Søn"];
+        const verdier = Object.values(dagerTeller);
+        const maksVerdi = Math.max(...verdier, 1);
 
-            let obj = {
-                tittel: tittel,
-                rating: document.getElementById("inpRating").value.trim(),
-                bakgrunn: document.getElementById("inpBakgrunn").value.trim(),
-                bakgrunnMobil: document.getElementById("inpBakgrunnMobil").value.trim(),
-                banner: document.getElementById("inpBanner").value.trim(),
-                bannerMobil: document.getElementById("inpBannerMobil").value.trim(),
-                logo: document.getElementById("inpLogo").value.trim(),
-                trailer: document.getElementById("inpTrailer").value.trim(),
-                poster: document.getElementById("inpPoster").value.trim(),
-                posterVertikal: document.getElementById("inpPosterVertikal").value.trim(),
-                beskrivelse: document.getElementById("inpBeskrivelse").value.trim(),
-                metadata: metadataArray,
-                skuespillere: document.getElementById("inpSkuespillere").value.trim(),
-                regissor: document.getElementById("inpRegissor").value.trim(),
-                lisens: document.getElementById("inpLisens").value.trim(),
-                audioLanguages: [{ code: "en", label: "Engelsk" }],
-                subtitleLanguages: [{ code: "no", label: "Norsk" }],
-                publishDate: pubDateVal ? new Date(pubDateVal).toISOString() : new Date().toISOString(),
-                expireDate: expDateVal ? new Date(expDateVal).toISOString() : null
-            };
+        ukesRekkefolge.forEach(dag => {
+            const antall = dagerTeller[dag] || 0;
+            const prosent = Math.round((antall / maksVerdi) * 100);
+            const tilpassetProsent = antall > 0 ? Math.max(prosent, 12) : 5;
 
-            if (samling === "filmer") {
-                obj.videoUrl = document.getElementById("inpVideoUrl").value.trim();
-                obj.subtitleUrl = document.getElementById("inpSubtitleUrl").value.trim();
-                obj.watchUrl = `film-mal.html?id=${id}`;
-                obj.tilbakeUrl = `film.html?navn=${id}`;
-            } else {
-                obj.tilbakeUrl = `serie.html?navn=${id}`;
-                obj.sesonger = {};
-                const sesongDivs = document.querySelectorAll("#sesongContainer .sesong-item");
-                sesongDivs.forEach((sesDiv, sIndex) => {
-                    const sNummer = sIndex + 1;
-                    const sBesk = sesDiv.querySelector(".sesong-beskrivelse").value;
-                    const episoder = {};
+            const wrap = document.createElement("div");
+            wrap.className = "chart-bar-wrap";
+            wrap.innerHTML = `
+                <div style="font-size: 10px; color: var(--text-muted); margin-bottom: 4px;">${antall}</div>
+                <div class="chart-bar" style="height: ${tilpassetProsent}%;"></div>
+                <span class="chart-label">${dag}</span>
+            `;
+            chartContainer.appendChild(wrap);
+        });
+    }
 
-                    sesDiv.querySelectorAll(".episode-item").forEach((epiDiv, eIndex) => {
-                        const eNummer = eIndex + 1;
-                        const epiPubDate = epiDiv.querySelector(".epi-pubdate").value;
-                        episoder[eNummer] = {
-                            episodeNummer: eNummer,
-                            tittel: epiDiv.querySelector(".epi-tittel").value.trim(),
-                            beskrivelse: epiDiv.querySelector(".epi-beskrivelse").value.trim(),
-                            varighet: epiDiv.querySelector(".epi-varighet").value.trim(),
-                            thumbnail: epiDiv.querySelector(".epi-thumb").value.trim(),
-                            publishDate: epiPubDate ? new Date(epiPubDate).toISOString().slice(0, 19) : "",
-                            videoUrl: epiDiv.querySelector(".epi-video").value.trim()
-                        };
-                    });
+    function leggTilTabellRad(samling, id, data) {
+        const tr = document.createElement("tr");
+        tr.className = "clickable-row";
+        tr.id = `rad-${samling}-${id}`;
+        const tittel = data.tittel || id;
+        
+        if (samling === "filmer") {
+            const sjangerInfo = (data.metadata && data.metadata[2]) ? data.metadata[2] : "-";
+            tr.innerHTML = `
+                <td>${id}</td>
+                <td><strong>${tittel}</strong></td>
+                <td>${sjangerInfo}</td>
+                <td>
+                    <button class="btn-slett" data-samling="${samling}" data-id="${id}" style="background:#FF5252; color:#fff; padding:6px 12px; font-size:13px;" onclick="event.stopPropagation();"><i class="fas fa-trash"></i> Slett</button>
+                </td>
+            `;
+            document.getElementById("filmTableBody").appendChild(tr);
+        } else {
+            const antSesonger = data.sesonger ? Object.keys(data.sesonger).length : 0;
+            tr.innerHTML = `
+                <td>${id}</td>
+                <td><strong>${tittel}</strong></td>
+                <td>${antSesonger} sesong(er)</td>
+                <td>
+                    <button class="btn-slett" data-samling="${samling}" data-id="${id}" style="background:#FF5252; color:#fff; padding:6px 12px; font-size:13px;" onclick="event.stopPropagation();"><i class="fas fa-trash"></i> Slett</button>
+                </td>
+            `;
+            document.getElementById("serieTableBody").appendChild(tr);
+        }
 
-                    obj.sesonger[sNummer] = {
-                        sesongNummer: sNummer,
-                        beskrivelse: sBesk,
-                        episoder: episoder
+        tr.addEventListener("click", () => {
+            apneRedigering(samling, id, data);
+        });
+
+        // Sparer ressurs: Ved sletting fjernes raden direkte i UI + lokal cache. 
+        // Man slipper da å refetche heile databasen fra Firestore!
+        tr.querySelector(".btn-slett").addEventListener("click", async function() {
+            if(confirm(`Er du sikker på at du vil slette "${tittel}"?`)) {
+                try {
+                    await deleteDoc(doc(db, samling, id));
+                    
+                    // Fjern fra UI umiddelbart
+                    tr.remove();
+
+                    // Oppdater lokal sessionStorage uten ny Firestore-spørring
+                    const cachedData = sessionStorage.getItem("adminCache");
+                    if (cachedData) {
+                        const parsed = JSON.parse(cachedData);
+                        parsed[samling] = parsed[samling].filter(item => item.id !== id);
+                        sessionStorage.setItem("adminCache", JSON.stringify(parsed));
+                    }
+
+                    visMelding("Tittelen ble slettet.", "success");
+                } catch(err) {
+                    visMelding("Feil ved sletting: " + err.message, "error");
+                }
+            }
+        });
+    }
+
+    window.apneRedigering = function(samling, id, data) {
+        byttTab('leggTil');
+        document.getElementById("skjemaTittelHeading").textContent = `Redigerer: ${data.tittel || id}`;
+        document.getElementById("skjemaUnderTekst").textContent = `Endre oppsettet for denne tittelen nedenfor. ID kan ikke endres.`;
+        
+        document.getElementById("inpId").value = id;
+        document.getElementById("inpId").setAttribute("data-redigerer", "true");
+        document.getElementById("inpId").setAttribute("readonly", "true");
+        document.getElementById("inpId").style.background = "#050F11";
+        document.getElementById("inpId").style.color = "#777";
+
+        document.getElementById("inpType").value = samling;
+        byttInnholdsType();
+
+        document.getElementById("inpTittel").value = data.tittel || "";
+        document.getElementById("inpRating").value = data.rating || "";
+        document.getElementById("inpBeskrivelse").value = data.beskrivelse || "";
+        document.getElementById("inpRegissor").value = data.regissor || "";
+        document.getElementById("inpSkuespillere").value = data.skuespillere || "";
+        document.getElementById("inpLisens").value = data.lisens || "";
+
+        if (data.metadata && Array.isArray(data.metadata)) {
+            document.getElementById("metaAar").value = data.metadata[0] || "";
+            document.getElementById("metaAldersgrense").value = data.metadata[1] || "";
+            document.getElementById("metaSjanger").value = data.metadata[2] || "";
+            document.getElementById("metaVarighet").value = data.metadata[3] || "";
+        }
+
+        document.getElementById("inpBakgrunn").value = data.bakgrunn || "";
+        document.getElementById("inpBakgrunnMobil").value = data.bakgrunnMobil || "";
+        document.getElementById("inpBanner").value = data.banner || "";
+        document.getElementById("inpBannerMobil").value = data.bannerMobil || "";
+        document.getElementById("inpPoster").value = data.poster || "";
+        document.getElementById("inpPosterVertikal").value = data.posterVertikal || "";
+        document.getElementById("inpLogo").value = data.logo || "";
+        document.getElementById("inpTrailer").value = data.trailer || "";
+
+        if (data.publishDate) {
+            document.getElementById("inpPublishDate").value = new Date(data.publishDate).toISOString().slice(0, 16);
+        }
+        if (data.expireDate) {
+            document.getElementById("inpExpireDate").value = new Date(data.expireDate).toISOString().slice(0, 16);
+        }
+
+        if (samling === "filmer") {
+            document.getElementById("inpVideoUrl").value = data.videoUrl || "";
+            document.getElementById("inpSubtitleUrl").value = data.subtitleUrl || "";
+        } else if (samling === "serier" && data.sesonger) {
+            document.getElementById("sesongContainer").innerHTML = "";
+            Object.values(data.sesonger).forEach(ses => {
+                leggTilSesong(ses);
+            });
+        }
+    }
+
+    window.lagreInnhold = async function() {
+        const id = document.getElementById("inpId").value.trim();
+        const samling = document.getElementById("inpType").value;
+        const tittel = document.getElementById("inpTittel").value.trim();
+
+        if (!id || !tittel) {
+            visMelding("Tittel må fylles ut!", "error");
+            return;
+        }
+
+        const metadataArray = [
+            document.getElementById("metaAar").value.trim(),
+            document.getElementById("metaAldersgrense").value.trim(),
+            document.getElementById("metaSjanger").value.trim(),
+            document.getElementById("metaVarighet").value.trim()
+        ].filter(Boolean);
+
+        const pubDateVal = document.getElementById("inpPublishDate").value;
+        const expDateVal = document.getElementById("inpExpireDate").value;
+
+        let obj = {
+            tittel: tittel,
+            rating: document.getElementById("inpRating").value.trim(),
+            bakgrunn: document.getElementById("inpBakgrunn").value.trim(),
+            bakgrunnMobil: document.getElementById("inpBakgrunnMobil").value.trim(),
+            banner: document.getElementById("inpBanner").value.trim(),
+            bannerMobil: document.getElementById("inpBannerMobil").value.trim(),
+            logo: document.getElementById("inpLogo").value.trim(),
+            trailer: document.getElementById("inpTrailer").value.trim(),
+            poster: document.getElementById("inpPoster").value.trim(),
+            posterVertikal: document.getElementById("inpPosterVertikal").value.trim(),
+            beskrivelse: document.getElementById("inpBeskrivelse").value.trim(),
+            metadata: metadataArray,
+            skuespillere: document.getElementById("inpSkuespillere").value.trim(),
+            regissor: document.getElementById("inpRegissor").value.trim(),
+            lisens: document.getElementById("inpLisens").value.trim(),
+            audioLanguages: [{ code: "en", label: "Engelsk" }],
+            subtitleLanguages: [{ code: "no", label: "Norsk" }],
+            publishDate: pubDateVal ? new Date(pubDateVal).toISOString() : new Date().toISOString(),
+            expireDate: expDateVal ? new Date(expDateVal).toISOString() : null
+        };
+
+        if (samling === "filmer") {
+            obj.videoUrl = document.getElementById("inpVideoUrl").value.trim();
+            obj.subtitleUrl = document.getElementById("inpSubtitleUrl").value.trim();
+            obj.watchUrl = `film-mal.html?id=${id}`;
+            obj.tilbakeUrl = `film.html?navn=${id}`;
+        } else {
+            obj.tilbakeUrl = `serie.html?navn=${id}`;
+            obj.sesonger = {};
+            const sesongDivs = document.querySelectorAll("#sesongContainer .sesong-item");
+            sesongDivs.forEach((sesDiv, sIndex) => {
+                const sNummer = sIndex + 1;
+                const sBesk = sesDiv.querySelector(".sesong-beskrivelse").value;
+                const episoder = {};
+
+                sesDiv.querySelectorAll(".episode-item").forEach((epiDiv, eIndex) => {
+                    const eNummer = eIndex + 1;
+                    const epiPubDate = epiDiv.querySelector(".epi-pubdate").value;
+                    episoder[eNummer] = {
+                        episodeNummer: eNummer,
+                        tittel: epiDiv.querySelector(".epi-tittel").value.trim(),
+                        beskrivelse: epiDiv.querySelector(".epi-beskrivelse").value.trim(),
+                        varighet: epiDiv.querySelector(".epi-varighet").value.trim(),
+                        thumbnail: epiDiv.querySelector(".epi-thumb").value.trim(),
+                        publishDate: epiPubDate ? new Date(epiPubDate).toISOString().slice(0, 19) : "",
+                        videoUrl: epiDiv.querySelector(".epi-video").value.trim()
                     };
                 });
-            }
 
-            try {
-                await setDoc(doc(db, samling, id), obj);
-                sessionStorage.removeItem("adminCache");
-                visMelding(`"${tittel}" ble oppdatert og lagret!`, "success");
-                lastInnAltData(true);
-                byttTab(samling);
-                nullstillSkjema();
-            } catch (err) {
-                visMelding("Feil ved lagring: " + err.message, "error");
-            }
-        }
-
-        window.filterTabell = function(type) {
-            const query = document.getElementById(type === 'filmer' ? 'sokFilmer' : 'sokSerier').value.toLowerCase();
-            const rows = document.querySelectorAll(type === 'filmer' ? '#filmTableBody tr' : '#serieTableBody tr');
-            rows.forEach(row => {
-                row.style.display = row.innerText.toLowerCase().includes(query) ? "" : "none";
+                obj.sesonger[sNummer] = {
+                    sesongNummer: sNummer,
+                    beskrivelse: sBesk,
+                    episoder: episoder
+                };
             });
         }
-    </script>
-</body>
-</html>
+
+        try {
+            await setDoc(doc(db, samling, id), obj);
+            // Sletter cache slik at neste sidelasting refetcher nyeste endringer
+            sessionStorage.removeItem("adminCache");
+            visMelding(`"${tittel}" ble oppdatert og lagret!`, "success");
+            
+            // Refetcher med tvingOppdatering for å vise den nye datastrukturen
+            lastInnAltData(true);
+            byttTab(samling);
+            nullstillSkjema();
+        } catch (err) {
+            visMelding("Feil ved lagring: " + err.message, "error");
+        }
+    }
+
+    window.filterTabell = function(type) {
+        const query = document.getElementById(type === 'filmer' ? 'sokFilmer' : 'sokSerier').value.toLowerCase();
+        const rows = document.querySelectorAll(type === 'filmer' ? '#filmTableBody tr' : '#serieTableBody tr');
+        rows.forEach(row => {
+            row.style.display = row.innerText.toLowerCase().includes(query) ? "" : "none";
+        });
+    }
+</script>
