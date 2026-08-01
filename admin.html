@@ -506,7 +506,7 @@
 <!-- FIREBASE LOGIKK -->
     <script type="module">
         import { db, auth } from "./firebase-oppsett.js";
-        import { signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-auth.js";
+        import { signInWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-auth.js";
         import { collection, getDocs, doc, getDoc, setDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
 
         function visMelding(tekst, type = "success") {
@@ -516,6 +516,28 @@
             notif.style.display = "block";
             setTimeout(() => { notif.style.display = "none"; }, 4000);
         }
+
+        // --- AUTOMATISK INNSJEKKING VED OPPDATERING (PERSISTENS) ---
+        onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                // Brukeren er alt logget inn, sjekk om vedkommende fremdeles er ansatt
+                try {
+                    const ansattSnap = await getDoc(doc(db, "ansatte", user.uid));
+                    if (ansattSnap.exists()) {
+                        document.getElementById("loginSection").classList.add("hidden");
+                        document.getElementById("adminSection").classList.remove("hidden");
+                        lastInnAltData();
+                    } else {
+                        // Ikke ansatt lenger, logg ut eller vis feil
+                        document.getElementById("loginSection").classList.remove("hidden");
+                        document.getElementById("adminSection").classList.add("hidden");
+                    }
+                } else {
+                    document.getElementById("loginSection").classList.remove("hidden");
+                    document.getElementById("adminSection").classList.add("hidden");
+                }
+            }
+        });
 
         document.getElementById("loginBtn").addEventListener("click", async () => {
             const email = document.getElementById("emailInput").value.trim();
