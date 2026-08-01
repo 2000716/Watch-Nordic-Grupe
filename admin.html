@@ -164,18 +164,18 @@
                 <button onclick="visLeggTilSkjema()"><i class="fas fa-plus"></i> Legg til ny tittel</button>
             </div>
 
-            <!-- SKJEMA MED FAST STRUKTUR -->
+            <!-- SKJEMA -->
             <div id="redigeringsSkjema" class="hidden" style="background: #1a1a1a; padding: 30px; margin-bottom: 30px; border-radius: 10px; border: 1px solid var(--border-color);">
                 <h3 id="skjemaTittel" style="margin-top:0;"><i class="fas fa-film"></i> Ny tittel</h3>
                 
                 <div class="form-grid">
                     <div>
                         <label>Tittel:</label>
-                        <input type="text" id="inpTittel" placeholder="F.eks. Interstellar" oninput="genererID()">
+                        <input type="text" id="inpTittel" placeholder="F.eks. House on Haunted Hill" oninput="genererIDogAutomater()">
                     </div>
                     <div>
                         <label>Unik ID (Genereres automatisk):</label>
-                        <input type="text" id="inpId" placeholder="interstellar" readonly style="background: #222; color: #777;">
+                        <input type="text" id="inpId" placeholder="house-on-haunted-hill" readonly style="background: #222; color: #777;">
                     </div>
 
                     <div>
@@ -186,8 +186,8 @@
                         </select>
                     </div>
                     <div>
-                        <label>Rating (Match % / Stjerner):</label>
-                        <input type="text" id="inpRating" placeholder="98% Match">
+                        <label>Rating (F.eks. 6.7):</label>
+                        <input type="text" id="inpRating" placeholder="6.7">
                     </div>
 
                     <div class="form-full">
@@ -195,66 +195,96 @@
                         <textarea id="inpBeskrivelse" placeholder="Kort handlingsreferat..."></textarea>
                     </div>
 
-                    <!-- STRUKTURERT METADATA (Låst rekkefølge: År -> Aldersgrense -> Sjanger -> Varighet) -->
+                    <!-- METADATA (Fast rekkefølge: År, Aldersgrense, Sjanger, Varighet) -->
                     <div class="form-full" style="background: #151515; padding: 15px; border-radius: 6px; border: 1px solid #2a2a2a;">
-                        <label style="color:var(--text-main); font-size:14px; margin-top:0;">Metadata (Format: År • Aldersgrense • Sjanger • Varighet):</label>
+                        <label style="color:var(--text-main); font-size:14px; margin-top:0;">Metadata (Fast struktur):</label>
                         <div style="display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 10px; margin-top: 10px;">
                             <div>
                                 <label style="font-size:11px;">Utgivelsesår:</label>
-                                <input type="text" id="metaAar" placeholder="2026" style="margin:0;">
+                                <input type="text" id="metaAar" placeholder="1959" style="margin:0;">
                             </div>
                             <div>
                                 <label style="font-size:11px;">Aldersgrense:</label>
-                                <input type="text" id="metaAldersgrense" placeholder="12 år" style="margin:0;">
+                                <input type="text" id="metaAldersgrense" placeholder="16 år" style="margin:0;">
                             </div>
                             <div>
                                 <label style="font-size:11px;">Hovedsjanger:</label>
-                                <input type="text" id="metaSjanger" placeholder="Sci-Fi / Drama" style="margin:0;">
+                                <input type="text" id="metaSjanger" placeholder="Grøsser" style="margin:0;">
                             </div>
                             <div>
                                 <label style="font-size:11px;">Varighet / Info:</label>
-                                <input type="text" id="metaVarighet" placeholder="2t 45m" style="margin:0;">
+                                <input type="text" id="metaVarighet" placeholder="1 t 15 min" style="margin:0;">
                             </div>
                         </div>
                     </div>
 
-                    <!-- MEDVIRKENDE OG SKAPER (Faste felt) -->
+                    <!-- KREATIVT PERSONELL -->
                     <div>
-                        <label>Skapere / Regissør:</label>
-                        <input type="text" id="inpSkapere" placeholder="F.eks. Christopher Nolan">
+                        <label>Regissør / Skapere:</label>
+                        <input type="text" id="inpRegissor" placeholder="William Castle">
                     </div>
                     <div>
-                        <label>Medvirkende (Skuespillere):</label>
-                        <input type="text" id="inpMedvirkende" placeholder="F.eks. Matthew McConaughey, Anne Hathaway">
+                        <label>Skuespillere (Medvirkende):</label>
+                        <input type="text" id="inpSkuespillere" placeholder="Vincent Price, Carol Ohmart">
+                    </div>
+
+                    <!-- BILDER OG GRAFIKK -->
+                    <div>
+                        <label>Bakgrunn URL (Desktop):</label>
+                        <input type="text" id="inpBakgrunn" placeholder="https://image.tmdb.org/...">
+                    </div>
+                    <div>
+                        <label>Bakgrunn URL (Mobil):</label>
+                        <input type="text" id="inpBakgrunnMobil" placeholder="https://image.tmdb.org/...">
                     </div>
 
                     <div>
-                        <label>Bakgrunn URL (Desktop):</label>
-                        <input type="text" id="inpBakgrunn" placeholder="https://...">
+                        <label>Poster (Horisontal):</label>
+                        <input type="text" id="inpPoster" placeholder="https://image.tmdb.org/...">
                     </div>
                     <div>
-                        <label>Poster / Miniatyrbilde URL:</label>
-                        <input type="text" id="inpPoster" placeholder="https://...">
+                        <label>Poster (Vertikal):</label>
+                        <input type="text" id="inpPosterVertikal" placeholder="https://image.tmdb.org/...">
                     </div>
 
                     <div>
                         <label>Logo URL (Tekstbilde):</label>
-                        <input type="text" id="inpLogo" placeholder="https://...">
+                        <input type="text" id="inpLogo" placeholder="https://image.tmdb.org/...">
                     </div>
+                    <div>
+                        <label>Banner URL (Valgfri):</label>
+                        <input type="text" id="inpBanner" placeholder="https://...">
+                    </div>
+
                     <div>
                         <label>Trailer URL:</label>
                         <input type="text" id="inpTrailer" placeholder="https://...">
                     </div>
 
-                    <!-- FELT FOR FILM -->
+                    <!-- DATOER (Standard automatiske verdier) -->
+                    <div style="background: #151515; padding: 15px; border-radius: 6px; border: 1px solid #2a2a2a; grid-column: span 2;">
+                        <label style="color:var(--text-main); font-size:14px; margin-top:0;">Publisering og Tilgjengelighet:</label>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 10px;">
+                            <div>
+                                <label style="font-size:11px;">Publiseringsdato:</label>
+                                <input type="datetime-local" id="inpPublishDate" style="margin:0;">
+                            </div>
+                            <div>
+                                <label style="font-size:11px;">Utløpsdato (Expire):</label>
+                                <input type="datetime-local" id="inpExpireDate" style="margin:0;">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- FILM-SPESIFIKKE FELT (AUTOMATISK FYLT UT) -->
                     <div id="filmSpesifikkeFelt" class="form-full form-grid" style="grid-column: span 2; margin:0; padding:0;">
                         <div>
                             <label>Video URL (.mp4):</label>
-                            <input type="text" id="inpVideoUrl" placeholder="https://...">
+                            <input type="text" id="inpVideoUrl" placeholder="https://...mp4">
                         </div>
                         <div>
-                            <label>Undertekst URL (.vtt):</label>
-                            <input type="text" id="inpSubtitleUrl" placeholder="https://...">
+                            <label>Undertekstfil (.VTT filnavn - genereres automatisk):</label>
+                            <input type="text" id="inpSubtitleUrl" placeholder="navn.VTT" style="background:#222; color:#777;">
                         </div>
                     </div>
 
@@ -369,10 +399,12 @@
             }
         }
 
-        window.genererID = function() {
+        // Automatisk generering av ID, subtitleUrl, watchUrl og tilbakeUrl
+        window.genererIDogAutomater = function() {
             const tittel = document.getElementById("inpTittel").value;
             const id = tittel.toLowerCase().replace(/[^a-z0-9]/g, "-").replace(/-+/g, "-");
             document.getElementById("inpId").value = id;
+            document.getElementById("inpSubtitleUrl").value = id ? `${id}.VTT` : "";
         }
 
         window.leggTilSesong = function() {
@@ -446,6 +478,15 @@
                 if(el.id !== 'inpType') el.value = "";
             });
             document.getElementById("sesongContainer").innerHTML = "";
+
+            // Sett automatiske standardverdier for datoer (f.eks. i dag til 2 år frem i tid)
+            const now = new Date();
+            const future = new Date();
+            future.setFullYear(now.getFullYear() + 2);
+            
+            document.getElementById("inpPublishDate").value = now.toISOString().slice(0, 16);
+            document.getElementById("inpExpireDate").value = future.toISOString().slice(0, 16);
+
             byttInnholdsType();
         }
 
@@ -463,33 +504,44 @@
                 return;
             }
 
-            // TVUNGET FAST FORMAT PÅ METADATA: [År] • [Aldersgrense] • [Sjanger] • [Varighet]
-            const aar = document.getElementById("metaAar").value.trim();
-            const aldersgrense = document.getElementById("metaAldersgrense").value.trim();
-            const sjanger = document.getElementById("metaSjanger").value.trim();
-            const varighet = document.getElementById("metaVarighet").value.trim();
-            
-            const metadataArray = [aar, aldersgrense, sjanger, varighet].filter(Boolean);
+            // Hent metadata i fast rekkefølge
+            const metadataArray = [
+                document.getElementById("metaAar").value.trim(),
+                document.getElementById("metaAldersgrense").value.trim(),
+                document.getElementById("metaSjanger").value.trim(),
+                document.getElementById("metaVarighet").value.trim()
+            ].filter(Boolean);
+
+            const pubDateVal = document.getElementById("inpPublishDate").value;
+            const expDateVal = document.getElementById("inpExpireDate").value;
 
             let obj = {
                 tittel: tittel,
                 rating: document.getElementById("inpRating").value.trim(),
                 bakgrunn: document.getElementById("inpBakgrunn").value.trim(),
-                poster: document.getElementById("inpPoster").value.trim(),
+                bakgrunnMobil: document.getElementById("inpBakgrunnMobil").value.trim(),
+                banner: document.getElementById("inpBanner").value.trim(),
                 logo: document.getElementById("inpLogo").value.trim(),
                 trailer: document.getElementById("inpTrailer").value.trim(),
+                poster: document.getElementById("inpPoster").value.trim(),
+                posterVertikal: document.getElementById("inpPosterVertikal").value.trim(),
                 beskrivelse: document.getElementById("inpBeskrivelse").value.trim(),
                 metadata: metadataArray,
-                skapere: document.getElementById("inpSkapere").value.trim(),
-                medvirkende: document.getElementById("inpMedvirkende").value.trim(),
-                publishDate: new Date().toISOString()
+                skuespillere: document.getElementById("inpSkuespillere").value.trim(),
+                regissor: document.getElementById("inpRegissor").value.trim(),
+                audioLanguages: [{ code: "en", label: "Engelsk" }],
+                subtitleLanguages: [{ code: "no", label: "Norsk" }],
+                publishDate: pubDateVal ? new Date(pubDateVal).toISOString() : new Date().toISOString(),
+                expireDate: expDateVal ? new Date(expDateVal).toISOString() : null
             };
 
             if (samling === "filmer") {
                 obj.videoUrl = document.getElementById("inpVideoUrl").value.trim();
                 obj.subtitleUrl = document.getElementById("inpSubtitleUrl").value.trim();
                 obj.watchUrl = `film-mal.html?id=${id}`;
+                obj.tilbakeUrl = `film.html?navn=${id}`;
             } else {
+                obj.tilbakeUrl = `serie.html?navn=${id}`;
                 obj.sesonger = {};
                 const sesongDivs = document.querySelectorAll("#sesongContainer .sesong-item");
                 sesongDivs.forEach((sesDiv, sIndex) => {
@@ -517,7 +569,7 @@
 
             try {
                 await setDoc(doc(db, samling, id), obj);
-                visMelding(`"${tittel}" ble lagret med riktig struktur!`, "success");
+                visMelding(`"${tittel}" ble lagret med komplette data!`, "success");
                 lukkSkjema();
                 lastInnAltData();
             } catch (err) {
