@@ -1096,7 +1096,7 @@ img, video {
 <script type="module">
   import { auth, db } from "./firebase-oppsett.js";
   import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-auth.js";
-  import { doc, getDoc, setDoc, collection, getDocs } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
+  import { doc, getDoc, setDoc, collection, query, limit, getDocs } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
 
   /* ==========================================
      1. GLOBALE TILSTANDER & DATAHENTING
@@ -1108,9 +1108,6 @@ img, video {
   let status = "ikke-påbegynt";
   let minListe = [];
 
-  // Databeholdere for filmer og serier
-  let filmerData = {};
-  let serierData = {};
   let data = null;
   let type = "film";
   let navn = "";
@@ -1121,7 +1118,7 @@ img, video {
 
   let watchBtn, addToListBtn, bgImg;
 
-  // SIKKERHET: Rensing av input fra URL (DOMPurify/HTML-escape-prinsipp)
+  // SIKKERHET: Rensing av input fra URL
   function sanitizeInput(str) {
     if (!str) return "";
     return String(str)
@@ -1132,7 +1129,7 @@ img, video {
       .replace(/'/g, "&#039;");
   }
 
-  // SIKKERHET: Validering av eksterne og interne URL-er
+  // SIKKERHET: Validering av URL-er
   function erTryggUrl(url) {
     if (!url) return false;
     try {
@@ -1143,51 +1140,46 @@ img, video {
     }
   }
 
-  // Hent alle filmer og serier fra Firestore
+  /* OPTIMALISERT DATAHENTING:
+     Henter KUN det enkelte dokumentet basert på tittel/ID fra URL.
+     Reduserer Firestore-forbruket fra N dokumentlesinger til 1-2. */
   async function lastDataFraFirebase() {
     try {
-      // Sjekk om data finnes i vinduet fra før (f.eks. om det er cached på hovedsiden)
-      if (window.filmerData && window.serierData) {
-        filmerData = window.filmerData;
-        serierData = window.serierData;
-      } else {
-        const [filmerSnap, serierSnap] = await Promise.all([
-          getDocs(collection(db, "filmer")),
-          getDocs(collection(db, "serier"))
-        ]);
-
-        filmerSnap.forEach(doc => {
-          filmerData[doc.id] = doc.data();
-        });
-
-        serierSnap.forEach(doc => {
-          serierData[doc.id] = doc.data();
-        });
-
-        window.filmerData = filmerData;
-        window.serierData = serierData;
-      }
-
-      // Les URL-parametere etter at dataene er hentet
       const params = new URLSearchParams(window.location.search);
       navn = sanitizeInput(params.get("navn"));
 
-      data = filmerData[navn] || null;
-      if (!data && serierData[navn]) {
-        type = "serie";
-        data = serierData[navn];
+      if (!navn) {
+        window.location.href = "Hovedside.html";
+        return;
       }
 
-      // Omdiriger hvis tittelen ikke eksisterer
+      // Sjekk først 'filmer'-samlingen
+      let docRef = doc(db, "filmer", navn);
+      let docSnap = await getDoc(docRef);
+
+      if (docSnap.exists()) {
+        type = "film";
+        data = docSnap.data();
+      } else {
+        // Hvis ikke funnet i filmer, sjekk 'serier'
+        docRef = doc(db, "serier", navn);
+        docSnap = await getDoc(docRef);
+        if (docSnap.exists()) {
+          type = "serie";
+          data = docSnap.data();
+        }
+      }
+
+      // Omdiriger hvis tittelen ikke finnes i verken filmer eller serier
       if (!data) {
         window.location.href = "Hovedside.html";
         return;
       }
 
-       nå = new Date();
-       erUpublisert = data.publishDate && new Date(data.publishDate) > nå;
-       erUtgått = data.expireDate && nå > new Date(data.expireDate);
-       erUtilgjengelig = erUpublisert || erUtgått;
+      nå = new Date();
+      erUpublisert = data.publishDate && new Date(data.publishDate) > nå;
+      erUtgått = data.expireDate && nå > new Date(data.expireDate);
+      erUtilgjengelig = erUpublisert || erUtgått;
 
     } catch (err) {
       console.error("Feil ved henting av mediedata fra Firebase:", err);
@@ -1195,12 +1187,12 @@ img, video {
   }
 
   /* ==========================================
-     2. HOVEDFUNKSJON (KJØRES NÅR DATA OG DOM ER KLAR)
+     2. HOVEDFUNKSJON
      ========================================== */
   async function init() {
     await lastDataFraFirebase();
 
-    if (!data) return; // Forhindrer feil dersom omdirigering skjer
+    if (!data) return;
 
     watchBtn = document.getElementById("watchBtn");
     addToListBtn = document.getElementById("addToListBtn");
@@ -1551,7 +1543,7 @@ img, video {
   }
 
   /* ==========================================
-     6. EPISODELISTING & SAMMENHENGSTILPASSEDE ANBEFALINGER
+     6. EPISODELISTING & OPTIMALISERTE ANBEFALINGER
      ========================================== */
   function visSesong(sesongNr) {
     const seasonButtons = document.getElementById("seasonButtons");
@@ -1606,7 +1598,10 @@ img, video {
     });
   }
 
-  function byggAnbefalingerEllerEpisoder() {
+  /* OPTIMALISERT ANBEFALINGSHENTING:
+     I stedet for getDocs() på hele filmer-databasen, henter vi kun de 10 nyeste/første 
+     filmene med limit(10) for å spare ressurser. */
+  async function byggAnbefalingerEllerEpisoder() {
     const recommendationsDiv = document.querySelector(".recommendations");
     if (!recommendationsDiv || !data) return;
 
@@ -1641,85 +1636,39 @@ img, video {
       const tittelEl = document.querySelector(".recommendations h2");
       if (tittelEl) tittelEl.textContent = "Filmer du kanskje vil like";
 
-      const kilde = filmerData;
-      const alleKandidatNøkler = Object.keys(kilde).filter(k => {
-        const item = kilde[k];
-        const erIkkeGjeldende = k !== navn;
-        const erPublisert = !item.publishDate || new Date(item.publishDate) <= nå;
-        return erIkkeGjeldende && erPublisert;
-      });
+      try {
+        // Begrens spørringen til maks 10 dokumenter i stedet for hele databasen!
+        const q = query(collection(db, "filmer"), limit(10));
+        const filmerSnap = await getDocs(q);
 
-      const anbefalingerMedScore = alleKandidatNøkler.map(nøkkel => {
-        const kandidat = kilde[nøkkel];
-        let score = 0;
+        let antallVist = 0;
+        filmerSnap.forEach(docSnap => {
+          const nøkkel = docSnap.id;
+          const item = docSnap.data();
 
-        const gjeldendeMeta = data.metadata || [];
-        const kandidatMeta = kandidat.metadata || [];
+          const erGjeldende = nøkkel === navn;
+          const erPublisert = !item.publishDate || new Date(item.publishDate) <= nå;
 
-        const finnAlder = (metaArray) => metaArray.find(m => m.toLowerCase().includes("år") || m.trim() === "A");
-        const gjeldendeAlder = finnAlder(gjeldendeMeta);
-        const kandidatAlder = finnAlder(kandidatMeta);
-
-        if (gjeldendeAlder && kandidatAlder && gjeldendeAlder === kandidatAlder) {
-          score += 3;
-        }
-
-        const finnSjangere = (metaArray) => {
-          return metaArray.filter(m => {
-            const erAarstall = /^\d{4}$/.test(m.trim());
-            const erAlder = m.toLowerCase().includes("år") || m.trim() === "A";
-            const erVarighet = m.toLowerCase().includes("min") || m.toLowerCase().includes("t");
-            return !erAarstall && !erAlder && !erVarighet;
-          });
-        };
-
-        const gjeldendeSjangere = finnSjangere(gjeldendeMeta);
-        const kandidatSjangere = finnSjangere(kandidatMeta);
-
-        gjeldendeSjangere.forEach(sj => {
-          if (kandidatSjangere.includes(sj)) {
-            score += 6;
+          if (!erGjeldende && erPublisert && antallVist < 6) {
+            const card = document.createElement("div");
+            card.className = "movie-card";
+            
+            const bildeUrl = (erTryggUrl(item.poster) ? item.poster : (erTryggUrl(item.bakgrunn) ? item.bakgrunn : ''));
+            
+            card.innerHTML = `
+              <img src="${bildeUrl}" alt="${sanitizeInput(item.tittel || '')}">
+              <div class="movie-overlay"><div class="movie-title">${sanitizeInput(item.tittel || '')}</div></div>
+            `;
+            card.addEventListener("click", () => {
+              window.location.href = `film.html?navn=${encodeURIComponent(nøkkel)}`;
+            });
+            gallery.appendChild(card);
+            antallVist++;
           }
         });
-
-        if (data.regissor && kandidat.regissor && data.regissor.toLowerCase() === kandidat.regissor.toLowerCase()) {
-          score += 4;
-        }
-
-        if (data.skuespillere && kandidat.skuespillere) {
-          const gjeldendeCast = data.skuespillere.split(",").map(s => s.trim().toLowerCase());
-          const kandidatCast = kandidat.skuespillere.split(",").map(s => s.trim().toLowerCase());
-          
-          gjeldendeCast.forEach(skuespiller => {
-            if (kandidatCast.includes(skuespiller)) {
-              score += 2;
-            }
-          });
-        }
-
-        score += Math.random();
-        return { nøkkel, score };
-      });
-
-      anbefalingerMedScore.sort((a, b) => b.score - a.score);
-      const utvalgteAnbefalinger = anbefalingerMedScore.slice(0, 6);
-
-      utvalgteAnbefalinger.forEach(anbefaling => {
-        const item = kilde[anbefaling.nøkkel];
-        const card = document.createElement("div");
-        card.className = "movie-card";
-        
-        const bildeUrl = (erTryggUrl(item.poster) ? item.poster : (erTryggUrl(item.bakgrunn) ? item.bakgrunn : ''));
-        
-        card.innerHTML = `
-          <img src="${bildeUrl}" alt="${sanitizeInput(item.tittel || '')}">
-          <div class="movie-overlay"><div class="movie-title">${sanitizeInput(item.tittel || '')}</div></div>
-        `;
-        card.addEventListener("click", () => {
-          window.location.href = `film.html?navn=${encodeURIComponent(anbefaling.nøkkel)}`;
-        });
-        gallery.appendChild(card);
-      });
+      } catch (e) {
+        console.error("Feil ved henting av anbefalinger:", e);
+      }
     }
   }
 
@@ -1805,5 +1754,3 @@ img, video {
     init();
   }
 </script>
-</body>
-</html>
