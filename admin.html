@@ -254,7 +254,7 @@
 </head>
 <body>
 
-    <main>
+<main>
         <div class="main-container">
             <!-- INNLOGGING -->
             <div id="loginSection" class="login-box">
@@ -468,6 +468,12 @@
                                 </div>
                             </div>
 
+                            <!-- LOVPÅLAGT LISENS -->
+                            <div class="form-full" style="background: #07171A; padding: 15px; border-radius: 6px; border: 1px solid var(--border-color);">
+                                <label style="color:var(--text-main); font-size:14px; margin-top:0;"><i class="fas fa-file-contract"></i> Lovpålagt Lisens / Rettigheter:</label>
+                                <input type="text" id="inpLisens" placeholder="F.eks. Lisensiert av Nordisk Film AS (Gjelder til 2030)" style="margin-top: 8px; margin-bottom: 0;">
+                            </div>
+
                             <!-- FILM-SPESIFIKKE FELT -->
                             <div id="filmSpesifikkeFelt" class="form-full form-grid" style="grid-column: span 2; margin:0; padding:0;">
                                 <div>
@@ -497,12 +503,9 @@
                     </div>
                 </div>
 
-
-                </div>
             </div>
         </div>
     </main>
-
 <!-- FIREBASE LOGIKK -->
     <script type="module">
         import { db, auth } from "./firebase-oppsett.js";
@@ -842,6 +845,7 @@
             document.getElementById("inpBeskrivelse").value = data.beskrivelse || "";
             document.getElementById("inpRegissor").value = data.regissor || "";
             document.getElementById("inpSkuespillere").value = data.skuespillere || "";
+            document.getElementById("inpLisens").value = data.lisens || "";
 
             if (data.metadata && Array.isArray(data.metadata)) {
                 document.getElementById("metaAar").value = data.metadata[0] || "";
@@ -912,6 +916,7 @@
                 metadata: metadataArray,
                 skuespillere: document.getElementById("inpSkuespillere").value.trim(),
                 regissor: document.getElementById("inpRegissor").value.trim(),
+                lisens: document.getElementById("inpLisens").value.trim(),
                 audioLanguages: [{ code: "en", label: "Engelsk" }],
                 subtitleLanguages: [{ code: "no", label: "Norsk" }],
                 publishDate: pubDateVal ? new Date(pubDateVal).toISOString() : new Date().toISOString(),
