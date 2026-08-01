@@ -6,8 +6,10 @@
     <style>
         body { font-family: sans-serif; background-color: #141414; color: #ffffff; margin: 0; padding: 20px; }
         .hidden { display: none !important; }
-        .login-box, .admin-container { max-width: 800px; margin: 40px auto; background: #1f1f1f; padding: 30px; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.5); }
-        input, select, textarea { width: 100%; padding: 10px; margin: 10px 0 20px 0; background: #333; border: 1px solid #444; color: #fff; border-radius: 4px; box-sizing: border-box; }
+        .login-box, .admin-container { max-width: 950px; margin: 40px auto; background: #1f1f1f; padding: 30px; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.5); }
+        input, select, textarea { width: 100%; padding: 10px; margin: 8px 0 15px 0; background: #333; border: 1px solid #444; color: #fff; border-radius: 4px; box-sizing: border-box; }
+        textarea { resize: vertical; height: 80px; }
+        label { font-size: 14px; color: #aaa; display: block; margin-top: 10px; }
         button { background: #e50914; color: white; border: none; padding: 10px 20px; font-size: 16px; border-radius: 4px; cursor: pointer; margin-right: 10px; }
         button:hover { background: #f40612; }
         .back-btn { background: #333; margin-bottom: 20px; }
@@ -20,6 +22,9 @@
         .delete-btn:hover { background: #e50914; }
         .tab-content { margin-top: 20px; }
         .nav-tabs { display: flex; gap: 10px; margin-bottom: 20px; }
+        .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        .form-full { grid-column: span 2; }
+        .episodes-box { background: #252525; padding: 15px; border-radius: 6px; margin-top: 10px; border: 1px dashed #555; }
     </style>
 </head>
 <body>
@@ -49,18 +54,130 @@
             <h2>Administrer Innhold</h2>
             <button onclick="visLeggTilSkjema()">+ Legg til ny film/serie</button>
             
-            <div id="redigeringsSkjema" class="hidden" style="background: #2a2a2a; padding: 20px; margin-top: 20px; border-radius: 6px;">
-                <h3 id="skjemaTittel">Legg til / Rediger</h3>
-                <input type="text" id="inpId" placeholder="Unik ID (f.eks. interstellar)">
-                <select id="inpType">
-                    <option value="filmer">Film</option>
-                    <option value="serier">Serie</option>
-                </select>
-                <input type="text" id="inpTittel" placeholder="Tittel">
-                <input type="text" id="inpVideoUrl" placeholder="Video URL">
-                <input type="text" id="inpBilde" placeholder="Bakgrunnsbilde / Thumbnail URL">
-                <button onclick="lagreInnhold()">Lagre til Firebase</button>
-                <button style="background:#555" onclick="lukkSkjema()">Avbryt</button>
+            <!-- SKJEMA FOR Å LEGGE TIL/REDIGERE -->
+            <div id="redigeringsSkjema" class="hidden" style="background: #2a2a2a; padding: 25px; margin-top: 20px; border-radius: 6px;">
+                <h3 id="skjemaTittel" style="margin-top:0;">Legg til ny tittel</h3>
+                
+                <div class="form-grid">
+                    <div>
+                        <label>Unik ID (f.eks. the-titanic-archive):</label>
+                        <input type="text" id="inpId" placeholder="the-titanic-archive">
+                    </div>
+                    <div>
+                        <label>Type innhold:</label>
+                        <select id="inpType" onchange="byttInnholdsType()">
+                            <option value="filmer">Film</option>
+                            <option value="serier">Serie</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label>Tittel:</label>
+                        <input type="text" id="inpTittel" placeholder="The Titanic Archive">
+                    </div>
+                    <div>
+                        <label>Rating:</label>
+                        <input type="text" id="inpRating" placeholder="0.0">
+                    </div>
+
+                    <div class="form-full">
+                        <label>Beskrivelse:</label>
+                        <textarea id="inpBeskrivelse" placeholder="I denne dokumentaren..."></textarea>
+                    </div>
+
+                    <div>
+                        <label>Bakgrunn (Desktop URL):</label>
+                        <input type="text" id="inpBakgrunn" placeholder="https://...">
+                    </div>
+                    <div>
+                        <label>Bakgrunn (Mobil URL - valgfri):</label>
+                        <input type="text" id="inpBakgrunnMobil" placeholder="">
+                    </div>
+
+                    <div>
+                        <label>Banner URL:</label>
+                        <input type="text" id="inpBanner" placeholder="">
+                    </div>
+                    <div>
+                        <label>Banner Mobil URL:</label>
+                        <input type="text" id="inpBannerMobil" placeholder="">
+                    </div>
+
+                    <div>
+                        <label>Logo URL:</label>
+                        <input type="text" id="inpLogo" placeholder="https://...">
+                    </div>
+                    <div>
+                        <label>Trailer URL:</label>
+                        <input type="text" id="inpTrailer" placeholder="">
+                    </div>
+
+                    <div>
+                        <label>Poster URL:</label>
+                        <input type="text" id="inpPoster" placeholder="https://...">
+                    </div>
+                    <div>
+                        <label>Poster Vertikal URL:</label>
+                        <input type="text" id="inpPosterVertikal" placeholder="https://...">
+                    </div>
+
+                    <div>
+                        <label>Metadata (Kommaseparert: År, Aldersgrense, Sjanger, Format):</label>
+                        <input type="text" id="inpMetadata" placeholder="2026, 10 år, Dokumentar, 1 sesong">
+                    </div>
+                    <div>
+                        <label id="lblSkaperRegissor">Regissør / Skapere:</label>
+                        <input type="text" id="inpSkaperRegissor" placeholder="Watch Nordic Originals Studio">
+                    </div>
+
+                    <!-- FELTEKST FOR FILM -->
+                    <div id="filmSpesifikkeFelt" class="form-full form-grid" style="grid-column: span 2; margin:0; padding:0;">
+                        <div>
+                            <label>Video URL:</label>
+                            <input type="text" id="inpVideoUrl" placeholder="https://...mp4">
+                        </div>
+                        <div>
+                            <label>Undertekst fil (Subtitle URL):</label>
+                            <input type="text" id="inpSubtitleUrl" placeholder="fil.VTT">
+                        </div>
+                    </div>
+
+                    <!-- FELTEKST FOR SERIE (SESONGER OG EPISODER) -->
+                    <div id="serieSpesifikkeFelt" class="form-full hidden">
+                        <label style="color:#fff; font-weight:bold; font-size:16px; margin-top:15px;">Sesonger og Episoder (JSON-format):</label>
+                        <p style="font-size: 13px; color: #aaa; margin-top: 0;">Du kan lime inn standard JSON-struktur for sesonger og episoder her:</p>
+                        <textarea id="inpSesongerJson" style="height: 150px; font-family: monospace; font-size: 12px;" placeholder='{
+  "1": {
+    "sesongNummer": 1,
+    "beskrivelse": "Sesong 1",
+    "episoder": {
+      "1": {
+        "episodeNummer": 1,
+        "tittel": "Titanic",
+        "beskrivelse": "Beskrivelse...",
+        "varighet": "5 min",
+        "thumbnail": "https://...",
+        "videoUrl": "https://..."
+      }
+    }
+  }
+}'></textarea>
+                    </div>
+
+                    <div>
+                        <label>Lydspråk (Koder, f.eks. en:Engelsk):</label>
+                        <input type="text" id="inpAudio" value="">
+                    </div>
+                    <div>
+                        <label>Undertekst-språk (Koder, f.eks. no:Norsk):</label>
+                        <input type="text" id="inpSubs" value="">
+                    </div>
+                </div>
+
+                <div style="margin-top: 20px;">
+                    <button onclick="lagreInnhold()">Lagre til Firebase</button>
+                    <button style="background:#555" onclick="lukkSkjema()">Avbryt</button>
+                </div>
             </div>
 
             <h3 style="margin-top: 30px;">Oversikt over elementer i Firebase:</h3>
@@ -82,7 +199,6 @@
         <!-- TAB 2: HISTORIKK -->
         <div id="tabHistorikk" class="tab-content hidden">
             <h2>Systemhistorikk & Brukeraktivitet</h2>
-            <p>Her kan du se oversikt over hva brukere har sett på eller gjort i systemet.</p>
             <table>
                 <thead>
                     <tr>
@@ -99,7 +215,7 @@
         </div>
     </div>
 
-    <!-- FIREBASE OPPDATERING / LOGIKK -->
+    <!-- FIREBASE LOGIKK -->
     <script type="module">
         import { db, auth } from "./firebase-oppsett.js";
         import { signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-auth.js";
@@ -118,17 +234,13 @@
             }
 
             try {
-                // 1. Logg inn via Firebase Auth
                 const userCredential = await signInWithEmailAndPassword(auth, email, password);
                 const user = userCredential.user;
 
-                // 2. Sjekk i Firebase Firestore om denne brukeren faktisk er registrert som ansatt
-                // (Vi sjekker f.eks. om det finnes et dokument i samlingen "ansatte" med brukerens UID)
                 const ansattRef = doc(db, "ansatte", user.uid);
                 const ansattSnap = await getDoc(ansattRef);
 
                 if (ansattSnap.exists()) {
-                    // Brukeren er godkjent ansatt!
                     document.getElementById("loginSection").classList.add("hidden");
                     document.getElementById("adminSection").classList.remove("hidden");
                     lastInnAltData();
@@ -136,7 +248,6 @@
                     errorMsg.textContent = "Du har ikke ansatt-tilgang til dette systemet.";
                     errorMsg.style.display = "block";
                 }
-
             } catch (err) {
                 console.error("Innloggingsfeil:", err);
                 errorMsg.textContent = "Feil e-post eller passord.";
@@ -155,7 +266,20 @@
             }
         }
 
-        // Hent filmer og serier fra Firebase
+        window.byttInnholdsType = function() {
+            const type = document.getElementById("inpType").value;
+            const filmFelt = document.getElementById("filmSpesifikkeFelt");
+            const serieFelt = document.getElementById("serieSpesifikkeFelt");
+
+            if (type === "serier") {
+                filmFelt.classList.add("hidden");
+                serieFelt.classList.remove("hidden");
+            } else {
+                filmFelt.classList.remove("hidden");
+                serieFelt.classList.add("hidden");
+            }
+        }
+
         window.lastInnAltData = async function() {
             const tbody = document.getElementById("dataTableBody");
             tbody.innerHTML = "";
@@ -203,10 +327,10 @@
 
         window.visLeggTilSkjema = function() {
             document.getElementById("redigeringsSkjema").classList.remove("hidden");
-            document.getElementById("inpId").value = "";
-            document.getElementById("inpTittel").value = "";
-            document.getElementById("inpVideoUrl").value = "";
-            document.getElementById("inpBilde").value = "";
+            document.querySelectorAll("#redigeringsSkjema input, #redigeringsSkjema textarea").forEach(el => {
+                if(el.id !== 'inpAudio' && el.id !== 'inpSubs' && el.id !== 'inpType') el.value = "";
+            });
+            byttInnholdsType();
         }
 
         window.lukkSkjema = function() {
@@ -216,22 +340,75 @@
         window.lagreInnhold = async function() {
             const id = document.getElementById("inpId").value.trim();
             const samling = document.getElementById("inpType").value;
-            const tittel = document.getElementById("inpTittel").value;
-            const videoUrl = document.getElementById("inpVideoUrl").value;
-            const bilde = document.getElementById("inpBilde").value;
+            const tittel = document.getElementById("inpTittel").value.trim();
 
             if (!id || !tittel) {
-                alert("ID og Tittel må fylles ut!");
+                alert("Unik ID og Tittel må fylles ut!");
                 return;
             }
 
-            try {
-                await setDoc(doc(db, samling, id), {
-                    tittel: tittel,
-                    videoUrl: videoUrl,
-                    bakgrunnsbilde: bilde
-                }, { merge: true });
+            const metaRaw = document.getElementById("inpMetadata").value;
+            const metadataArray = metaRaw ? metaRaw.split(",").map(s => s.trim()) : [];
 
+            const audioVal = document.getElementById("inpAudio").value.trim();
+            const subVal = document.getElementById("inpSubs").value.trim();
+
+            const audioLanguages = audioVal ? audioVal.split(",").map(item => {
+                const parts = item.split(":");
+                return { code: parts[0]?.trim(), label: parts[1]?.trim() };
+            }) : [];
+
+            const subtitleLanguages = subVal ? subVal.split(",").map(item => {
+                const parts = item.split(":");
+                return { code: parts[0]?.trim(), label: parts[1]?.trim() };
+            }) : [];
+
+            let fellesObjekt = {
+                tittel: tittel,
+                rating: document.getElementById("inpRating").value.trim(),
+                bakgrunn: document.getElementById("inpBakgrunn").value.trim(),
+                bakgrunnMobil: document.getElementById("inpBakgrunnMobil").value.trim(),
+                banner: document.getElementById("inpBanner").value.trim(),
+                bannerMobil: document.getElementById("inpBannerMobil").value.trim(),
+                logo: document.getElementById("inpLogo").value.trim(),
+                trailer: document.getElementById("inpTrailer").value.trim(),
+                poster: document.getElementById("inpPoster").value.trim(),
+                posterVertikal: document.getElementById("inpPosterVertikal").value.trim(),
+                beskrivelse: document.getElementById("inpBeskrivelse").value.trim(),
+                metadata: metadataArray,
+                publishDate: new Date().toISOString(),
+                expireDate: "2027-11-15T23:59:59",
+                audioLanguages: audioLanguages,
+                subtitleLanguages: subtitleLanguages
+            };
+
+            if (samling === "filmer") {
+                fellesObjekt.regissor = document.getElementById("inpSkaperRegissor").value.trim();
+                fellesObjekt.watchUrl = `film-mal.html?id=${id}`;
+                fellesObjekt.videoUrl = document.getElementById("inpVideoUrl").value.trim();
+                fellesObjekt.subtitleUrl = document.getElementById("inpSubtitleUrl").value.trim();
+                fellesObjekt.tilbakeUrl = `film.html?navn=${id}`;
+            } else {
+                fellesObjekt.skapere = document.getElementById("inpSkaperRegissor").value.trim();
+                fellesObjekt.tilbakeUrl = `serie.html?navn=${id}`;
+                fellesObjekt.imdb = "";
+
+                // Hent og parse JSON for sesonger
+                const jsonText = document.getElementById("inpSesongerJson").value.trim();
+                if (jsonText) {
+                    try {
+                        fellesObjekt.sesonger = JSON.parse(jsonText);
+                    } catch (e) {
+                        alert("Ugyldig JSON-format i sesonger/episoder-feltet: " + e.message);
+                        return;
+                    }
+                } else {
+                    fellesObjekt.sesonger = {};
+                }
+            }
+
+            try {
+                await setDoc(doc(db, samling, id), fellesObjekt);
                 alert("Lagret vellykket til Firebase!");
                 lukkSkjema();
                 lastInnAltData();
