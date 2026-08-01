@@ -425,6 +425,15 @@
                             </div>
 
                             <div>
+                                <label>Banner URL (Desktop):</label>
+                                <input type="text" id="inpBanner" placeholder="https://image.tmdb.org/...">
+                            </div>
+                            <div>
+                                <label>Banner URL (Mobil):</label>
+                                <input type="text" id="inpBannerMobil" placeholder="https://image.tmdb.org/...">
+                            </div>
+
+                            <div>
                                 <label>Poster (Horisontal):</label>
                                 <input type="text" id="inpPoster" placeholder="https://image.tmdb.org/...">
                             </div>
@@ -433,13 +442,9 @@
                                 <input type="text" id="inpPosterVertikal" placeholder="https://image.tmdb.org/...">
                             </div>
 
-                            <div>
+                            <div class="form-full">
                                 <label>Logo URL (Tekstbilde):</label>
                                 <input type="text" id="inpLogo" placeholder="https://image.tmdb.org/...">
-                            </div>
-                            <div>
-                                <label>Banner URL (Valgfri):</label>
-                                <input type="text" id="inpBanner" placeholder="https://...">
                             </div>
 
                             <div class="form-full">
@@ -579,7 +584,6 @@
         }
 
         window.genererIDogAutomater = function() {
-            // Generer ID automatisk kun hvis vi IKKE er i redigeringsmodus
             if (!document.getElementById("inpId").getAttribute("data-redigerer")) {
                 const tittel = document.getElementById("inpTittel").value;
                 const id = tittel.toLowerCase().replace(/[^a-z0-9]/g, "-").replace(/-+/g, "-");
@@ -619,7 +623,7 @@
             if (target.nodeName === 'BUTTON') {
                 epiContainer = target.previousElementSibling;
             } else {
-                epiContainer = target; // Direkte element sendt fra loopen
+                epiContainer = target;
             }
             const epiNr = epiContainer.children.length + 1;
 
@@ -654,7 +658,6 @@
             document.getElementById("inpId").style.background = "#0D2328";
             document.getElementById("inpId").style.color = "#ffffff";
 
-            // Tøm felt
             const inputs = document.querySelectorAll("#tabLeggTil input, #tabLeggTil textarea, #tabLeggTil select");
             inputs.forEach(input => {
                 if(input.id !== 'inpType') input.value = "";
@@ -764,7 +767,6 @@
                 document.getElementById("serieTableBody").appendChild(tr);
             }
 
-            // KLIKK PÅ RADEN FOR Å REDIGERE
             tr.addEventListener("click", () => {
                 apneRedigering(samling, id, data);
             });
@@ -807,10 +809,11 @@
 
             document.getElementById("inpBakgrunn").value = data.bakgrunn || "";
             document.getElementById("inpBakgrunnMobil").value = data.bakgrunnMobil || "";
+            document.getElementById("inpBanner").value = data.banner || "";
+            document.getElementById("inpBannerMobil").value = data.bannerMobil || "";
             document.getElementById("inpPoster").value = data.poster || "";
             document.getElementById("inpPosterVertikal").value = data.posterVertikal || "";
             document.getElementById("inpLogo").value = data.logo || "";
-            document.getElementById("inpBanner").value = data.banner || "";
             document.getElementById("inpTrailer").value = data.trailer || "";
 
             if (data.publishDate) {
@@ -857,6 +860,7 @@
                 bakgrunn: document.getElementById("inpBakgrunn").value.trim(),
                 bakgrunnMobil: document.getElementById("inpBakgrunnMobil").value.trim(),
                 banner: document.getElementById("inpBanner").value.trim(),
+                bannerMobil: document.getElementById("inpBannerMobil").value.trim(),
                 logo: document.getElementById("inpLogo").value.trim(),
                 trailer: document.getElementById("inpTrailer").value.trim(),
                 poster: document.getElementById("inpPoster").value.trim(),
