@@ -279,50 +279,23 @@
                     <div class="stats-grid">
                         <div class="stat-card">
                             <span class="stat-title">Antall abonnenter</span>
-                            <span class="stat-value" id="statAbonnenter">1 245</span>
+                            <span class="stat-value" id="statAbonnenter">Henter...</span>
                         </div>
                         <div class="stat-card">
                             <span class="stat-title">Innlogget nå (Siste 24t)</span>
-                            <span class="stat-value" id="statInnlogget">312</span>
+                            <span class="stat-value" id="statInnlogget">Henter...</span>
                         </div>
                         <div class="stat-card">
                             <span class="stat-title">Totalt innhold</span>
-                            <span class="stat-value" id="statTotaltInnhold">0</span>
+                            <span class="stat-value" id="statTotaltInnhold">Henter...</span>
                         </div>
                     </div>
 
                     <div class="chart-section">
                         <h3>Aktivitet / Besøkende per dag</h3>
-                        <p>Viser antall unike innlogginger siste uke</p>
-                        <div class="chart-bars">
-                            <div class="chart-bar-wrap">
-                                <div class="chart-bar" style="height: 45%;"></div>
-                                <span class="chart-label">Man</span>
-                            </div>
-                            <div class="chart-bar-wrap">
-                                <div class="chart-bar" style="height: 60%;"></div>
-                                <span class="chart-label">Tir</span>
-                            </div>
-                            <div class="chart-bar-wrap">
-                                <div class="chart-bar" style="height: 55%;"></div>
-                                <span class="chart-label">Ons</span>
-                            </div>
-                            <div class="chart-bar-wrap">
-                                <div class="chart-bar" style="height: 80%;"></div>
-                                <span class="chart-label">Tor</span>
-                            </div>
-                            <div class="chart-bar-wrap">
-                                <div class="chart-bar" style="height: 95%;"></div>
-                                <span class="chart-label">Fre</span>
-                            </div>
-                            <div class="chart-bar-wrap">
-                                <div class="chart-bar" style="height: 100%;"></div>
-                                <span class="chart-label">Lør</span>
-                            </div>
-                            <div class="chart-bar-wrap">
-                                <div class="chart-bar" style="height: 70%;"></div>
-                                <span class="chart-label">Søn</span>
-                            </div>
+                        <p>Viser faktiske unike innlogginger siste uke</p>
+                        <div class="chart-bars" id="chartBarsContainer">
+                            <!-- Genereres dynamisk fra Firestore -->
                         </div>
                     </div>
                 </div>
@@ -654,6 +627,7 @@
             let antallFilmer = 0;
             let antallSerier = 0;
 
+            // 1. Hent filmer og serier fra Firestore
             const filmSnap = await getDocs(collection(db, "filmer"));
             filmSnap.forEach((d) => {
                 antallFilmer++;
@@ -667,6 +641,73 @@
             });
 
             document.getElementById("statTotaltInnhold").textContent = antallFilmer + antallSerier;
+
+            // 2. Hent ekte abonnenter fra "users"-samlingen
+            const brukereSnap = await getDocs(collection(db, "users"));
+            const antallAbonnenter = brukereSnap.size;
+            document.getElementById("statAbonnenter").textContent = antallAbonnenter;
+
+            // 3. Regn ut unike innlogginger siste 24 timer (basert på sistAktiv / sistInnlogget felt på brukerne)
+            let aktiveSiste24t = 0;
+            const enDognSiden = new Date().getTime() - (24 * 60 * 60 * 1000);
+            
+            // For søylediagrammet (Man - Søn)
+            const dagerNavn = ["Søn", "Man", "Tir", "Ons", "Tor", "Fre", "Lør"];
+            const dagerTeller = { "Man": 0, "Tir": 0, "Ons": 0, "Tor": 0, "Fre": 0, "Lør": 0, "Søn": 0 };
+
+            brukereSnap.forEach((doc) => {
+                const data = doc.data();
+                const aktivTidStr = data.sistAktiv || data.sistInnlogget || data.opprettetDato;
+                
+                if (aktivTidStr) {
+                    const aktivDato = new Date(aktivTidStr);
+                    const tidMs = aktivDato.getTime();
+
+                    // Sjekk om aktiv siste 24t
+                    if (tidMs > enDognSiden) {
+                        aktiveSiste24t++;
+                    }
+
+                    // Fordel på ukedag for søylediagrammet
+                    const dagTekst = dagerNavn[aktivDato.getDay()];
+                    if (dagerTeller[dagTekst] !== undefined) {
+                        dagerTeller[dagTekst]++;
+                    }
+                }
+            });
+
+            document.getElementById("statInnlogget").textContent = aktiveSiste24t;
+
+            // 4. Generer søylediagrammet dynamisk basert på ekte data
+            oppdaterSoyleDiagram(dagerTeller);
+        }
+
+        function oppdaterSoyleDiagram(dagerTeller) {
+            const chartContainer = document.getElementById("chartBarsContainer");
+            chartContainer.innerHTML = "";
+
+            // Rekkefølge på ukedager i diagrammet
+            const ukesRekkefolge = ["Man", "Tir", "Ons", "Tor", "Fre", "Lør", "Søn"];
+            
+            // Finn høyeste verdi for å skalere stolpene relativt (maks 100% høyde)
+            const verdier = Object.values(dagerTeller);
+            const maksVerdi = Math.max(...verdier, 1); // Unngå deling på null
+
+            ukesRekkefolge.forEach(dag => {
+                const antall = dagerTeller[dag] || 0;
+                const prosent = Math.round((antall / maksVerdi) * 100);
+                // Sikre at stolpen har litt synlighet (f.eks minst 8%) selv ved 0, eller 0% om tom. 
+                const tilpassetProsent = antall > 0 ? Math.max(prosent, 12) : 5;
+
+                const wrap = document.createElement("div");
+                wrap.className = "chart-bar-wrap";
+                wrap.innerHTML = `
+                    <div style="font-size: 10px; color: var(--text-muted); margin-bottom: 4px;">${antall}</div>
+                    <div class="chart-bar" style="height: ${tilpassetProsent}%;"></div>
+                    <span class="chart-label">${dag}</span>
+                `;
+                chartContainer.appendChild(wrap);
+            });
         }
 
         function leggTilTabellRad(samling, id, data) {
