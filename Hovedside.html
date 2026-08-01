@@ -1313,7 +1313,7 @@
   import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-auth.js";
   import { doc, getDoc, updateDoc, collection, getDocs } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
 
-  // Globale objekter for filmer og serier hentet fra Firestore
+  // Globale objekter for filmer og serier hentet fra Firestore eller cache
   let filmer = {};
   let serier = {};
 
@@ -1952,24 +1952,50 @@
     }
   });
 
-  // ==================== FIRESTORE DATAHENTING & INIT ==================== //
+  // ==================== FIRESTORE DATAHENTING MED CACHE ==================== //
   async function hentDataFraFirestore() {
+    const cacheKeyFilmer = "watch_nordic_filmer_cache";
+    const cacheKeySerier = "watch_nordic_serier_cache";
+
+    // 1. Sjekk om det finnes lagret data lokalt for UMILDDELBAR visning
+    const lagredeFilmer = localStorage.getItem(cacheKeyFilmer);
+    const lagredeSerier = localStorage.getItem(cacheKeySerier);
+
+    if (lagredeFilmer && lagredeSerier) {
+      try {
+        filmer = JSON.parse(lagredeFilmer);
+        serier = JSON.parse(lagredeSerier);
+        console.log("⚡ Lastet filmer og serier fra lokal cache!");
+        // Tegner siden med én gang slik at brukeren slipper hvit/tom skjerm
+        byggSiden();
+      } catch (e) {
+        console.error("Feil ved parsing av lokal media-cache");
+      }
+    }
+
+    // 2. Hent oppdaterte data fra Firestore i bakgrunnen
     try {
-      // Henter alle filmer
+      const nyeFilmer = {};
       const filmerSnap = await getDocs(collection(db, "filmer"));
       filmerSnap.forEach(docSnap => {
-        filmer[docSnap.id] = docSnap.data();
+        nyeFilmer[docSnap.id] = docSnap.data();
       });
 
-      // Henter alle serier
+      const nyeSerier = {};
       const serierSnap = await getDocs(collection(db, "serier"));
       serierSnap.forEach(docSnap => {
-        serier[docSnap.id] = docSnap.data();
+        nyeSerier[docSnap.id] = docSnap.data();
       });
 
-      console.log("✅ Hentet filmer og serier fra Firestore!");
+      // Oppdater cachen i localStorage
+      localStorage.setItem(cacheKeyFilmer, JSON.stringify(nyeFilmer));
+      localStorage.setItem(cacheKeySerier, JSON.stringify(nyeSerier));
 
-      // Rendrer siden med de ferske dataene fra Firestore
+      // Oppdater globale variabler og bygg siden på nytt hvis data har endret seg
+      filmer = nyeFilmer;
+      serier = nyeSerier;
+      
+      console.log("✅ Hentet/oppdatert filmer og serier fra Firestore!");
       byggSiden();
 
     } catch (feil) {
