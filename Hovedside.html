@@ -1766,28 +1766,37 @@
     
     gallery.innerHTML = "";
 
+    // Hent fersk profil-cache
+    const cacheData = localStorage.getItem("watch_nordic_profiles_cache");
+    if (cacheData) {
+      try { heleProfilArrayet = JSON.parse(cacheData); } catch(e) {}
+    }
+
     const profil = heleProfilArrayet.find(p => p.navn === aktivProfil);
     if (!profil || !profil.fremdrift || Object.keys(profil.fremdrift).length === 0) {
       section.style.display = "none";
       return;
     }
 
-    // Hent listen over titler som er skjult fra hovedsiden
     const skjulteTitler = profil.skjultFortsett || [];
-
     let fantInnhold = false;
 
     Object.keys(profil.fremdrift).forEach((filmId) => {
-      // 1. Hopp over dersom filmen er merket som skjult fra Hovedsiden
-      if (skjulteTitler.includes(filmId)) {
-        return;
-      }
-
       const dbData = profil.fremdrift[filmId];
       const progressVerdi = typeof dbData === "object" ? (dbData.percent || 0) : dbData;
       const erFerdig = typeof dbData === "object" && dbData.status === "ferdig";
 
-      // 2. Hopp over innhold som er ferdig eller nesten ferdig (> 96%)
+      // Hvis brukeren har trykket "Fortsett" eller "Start på nytt", fjerner vi den fra den skjulte listen
+      if (skjulteTitler.includes(filmId)) {
+        if (typeof dbData === "object" && dbData.status === "paabegynt") {
+          profil.skjultFortsett = profil.skjultFortsett.filter(id => id !== filmId);
+          localStorage.setItem("watch_nordic_profiles_cache", JSON.stringify(heleProfilArrayet));
+        } else {
+          return; // Fortsatt skjult
+        }
+      }
+
+      // Hopp over innhold som er ferdig eller > 96%
       if (progressVerdi > 96 || erFerdig) {
         return; 
       }
@@ -1916,6 +1925,13 @@
       section.style.display = "none";
     }
   }
+
+  // Lytter på sanntids-oppdateringer fra spilleren i andre faner/vinduer
+  window.addEventListener("storage", (e) => {
+    if (e.key === "watch_nordic_profiles_cache") {
+      renderContinueWatching();
+    }
+  });
 
   // ==================== INIT ==================== //
   document.addEventListener("DOMContentLoaded", () => {
