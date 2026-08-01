@@ -1280,7 +1280,7 @@
   // ==================== FIREBASE IMPORT FRA FELLES OPPSETT ==================== //
   import { auth, db } from "./firebase-oppsett.js";
   import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-auth.js";
-  import { doc, getDoc } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
+  import { doc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
 
   let registrertBruker = null;
   const aktivProfil = localStorage.getItem("aktivProfil") || "Hovedprofil";
@@ -1757,7 +1757,7 @@
     });
   }
 
-// ==================== SKYLAGRET (FIREBASE) FORTSETT Å SE ==================== //
+  // ==================== SKYLAGRET (FIREBASE) FORTSETT Å SE ==================== //
 
   async function renderContinueWatching() {
     const section = document.getElementById("fortsett-section");
@@ -1920,6 +1920,7 @@
       section.style.display = "none";
     }
   }
+
   // ==================== INIT ==================== //
   document.addEventListener("DOMContentLoaded", () => {
     if (typeof filmer === "undefined") {
