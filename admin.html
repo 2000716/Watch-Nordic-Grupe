@@ -12,10 +12,8 @@
             --text-main: #ffffff;
             --text-muted: #b3b3b3;
             --border-color: #333333;
-            --primary: #e50914; /* Netflix rød */
+            --primary: #e50914;
             --primary-hover: #b20710;
-            --danger: #e50914;
-            --danger-hover: #b20710;
             --success: #46d369;
         }
 
@@ -40,15 +38,8 @@
             border: 1px solid var(--border-color);
         }
 
-        h1, h2, h3 { 
-            color: var(--text-main); 
-            font-weight: 600;
-        }
-
-        p { 
-            color: var(--text-muted); 
-            font-size: 14px; 
-        }
+        h1, h2, h3 { color: var(--text-main); font-weight: 600; }
+        p { color: var(--text-muted); font-size: 14px; }
 
         input, select, textarea { 
             width: 100%; 
@@ -70,18 +61,8 @@
             background: #333;
         }
 
-        textarea { 
-            resize: vertical; 
-            height: 90px; 
-        }
-
-        label { 
-            font-size: 13px; 
-            color: var(--text-muted); 
-            display: block; 
-            margin-top: 12px; 
-            font-weight: 600;
-        }
+        textarea { resize: vertical; height: 90px; }
+        label { font-size: 13px; color: var(--text-muted); display: block; margin-top: 12px; font-weight: 600; }
 
         button { 
             background: var(--primary); 
@@ -99,19 +80,10 @@
             gap: 8px;
         }
 
-        button:hover { 
-            background: var(--primary-hover); 
-        }
+        button:hover { background: var(--primary-hover); }
 
-        .back-btn { 
-            background: #2b2b2b; 
-            color: var(--text-main); 
-            margin-bottom: 25px; 
-            border: 1px solid var(--border-color);
-        }
-        .back-btn:hover { 
-            background: #3a3a3a; 
-        }
+        .back-btn { background: #2b2b2b; color: var(--text-main); margin-bottom: 25px; border: 1px solid var(--border-color); }
+        .back-btn:hover { background: #3a3a3a; }
 
         table { 
             width: 100%; 
@@ -123,30 +95,9 @@
             border: 1px solid var(--border-color);
         }
 
-        th, td { 
-            padding: 14px 16px; 
-            text-align: left; 
-            border-bottom: 1px solid var(--border-color); 
-            font-size: 14px;
-        }
-
-        th { 
-            background: #1a1a1a; 
-            color: var(--text-muted); 
-            font-weight: 600; 
-        }
-
+        th, td { padding: 14px 16px; text-align: left; border-bottom: 1px solid var(--border-color); font-size: 14px; }
+        th { background: #1a1a1a; color: var(--text-muted); font-weight: 600; }
         tr:hover { background: #222; }
-        tr:last-child td { border-bottom: none; }
-
-        .action-btns button { 
-            padding: 6px 12px; 
-            font-size: 13px; 
-            margin-right: 5px; 
-        }
-
-        .delete-btn { background: #dc3545; }
-        .delete-btn:hover { background: #bb2d3b; }
 
         .nav-tabs { 
             display: flex; 
@@ -156,27 +107,12 @@
             padding-bottom: 15px;
         }
 
-        .nav-tabs button {
-            background: transparent;
-            color: var(--text-muted);
-            border: 1px solid var(--border-color);
-        }
+        .nav-tabs button { background: transparent; color: var(--text-muted); border: 1px solid var(--border-color); }
+        .nav-tabs button.active { background: var(--primary); color: white; border-color: var(--primary); }
 
-        .nav-tabs button:hover, .nav-tabs button.active {
-            background: var(--primary);
-            color: white;
-            border-color: var(--primary);
-        }
-
-        .form-grid { 
-            display: grid; 
-            grid-template-columns: 1fr 1fr; 
-            gap: 20px; 
-        }
-
+        .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
         .form-full { grid-column: span 2; }
 
-        /* Sesong- og episodebygger boks */
         .builder-box {
             background: #181818;
             border: 1px solid var(--border-color);
@@ -199,7 +135,7 @@
 </head>
 <body>
 
-    <!-- 1. INNLOGGING FOR ANSATTE -->
+    <!-- INNLOGGING -->
     <div id="loginSection" class="login-box">
         <h2><i class="fas fa-lock"></i> Ansattpålogging</h2>
         <p>Logg inn med din ansatt-e-post og passord:</p>
@@ -209,7 +145,7 @@
         <div id="loginErrorMsg" class="app-notification error"></div>
     </div>
 
-    <!-- 2. SELVE ADMIN-PANELET -->
+    <!-- ADMIN-PANEL -->
     <div id="adminSection" class="admin-container hidden">
         <button class="back-btn" onclick="window.location.href='Hovedside.html'"><i class="fas fa-arrow-left"></i> Tilbake til Hovedside</button>
         <h1><i class="fas fa-play-circle" style="color: var(--primary);"></i> Watch Nordic – Admin Dashboard</h1>
@@ -221,25 +157,25 @@
             <button id="tabBtnHistorikk" onclick="byttTab('historikk')"><i class="fas fa-history"></i> Brukerhistorikk</button>
         </div>
 
-        <!-- TAB 1: FILMER OG SERIER -->
+        <!-- TAB 1: INNHOLD -->
         <div id="tabInnhold" class="tab-content">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
                 <h2>Innholdsbibliotek</h2>
                 <button onclick="visLeggTilSkjema()"><i class="fas fa-plus"></i> Legg til ny tittel</button>
             </div>
 
-            <!-- SKJEMA FOR Å LEGGE TIL/REDIGERE -->
+            <!-- SKJEMA MED FAST STRUKTUR -->
             <div id="redigeringsSkjema" class="hidden" style="background: #1a1a1a; padding: 30px; margin-bottom: 30px; border-radius: 10px; border: 1px solid var(--border-color);">
                 <h3 id="skjemaTittel" style="margin-top:0;"><i class="fas fa-film"></i> Ny tittel</h3>
                 
                 <div class="form-grid">
                     <div>
                         <label>Tittel:</label>
-                        <input type="text" id="inpTittel" placeholder="F.eks. Stranger Things" oninput="genererID()">
+                        <input type="text" id="inpTittel" placeholder="F.eks. Interstellar" oninput="genererID()">
                     </div>
                     <div>
                         <label>Unik ID (Genereres automatisk):</label>
-                        <input type="text" id="inpId" placeholder="stranger-things" readonly style="background: #222; color: #777;">
+                        <input type="text" id="inpId" placeholder="interstellar" readonly style="background: #222; color: #777;">
                     </div>
 
                     <div>
@@ -250,13 +186,46 @@
                         </select>
                     </div>
                     <div>
-                        <label>Rating:</label>
-                        <input type="text" id="inpRating" placeholder="4.8 / 98% Match">
+                        <label>Rating (Match % / Stjerner):</label>
+                        <input type="text" id="inpRating" placeholder="98% Match">
                     </div>
 
                     <div class="form-full">
                         <label>Beskrivelse:</label>
                         <textarea id="inpBeskrivelse" placeholder="Kort handlingsreferat..."></textarea>
+                    </div>
+
+                    <!-- STRUKTURERT METADATA (Låst rekkefølge: År -> Aldersgrense -> Sjanger -> Varighet) -->
+                    <div class="form-full" style="background: #151515; padding: 15px; border-radius: 6px; border: 1px solid #2a2a2a;">
+                        <label style="color:var(--text-main); font-size:14px; margin-top:0;">Metadata (Format: År • Aldersgrense • Sjanger • Varighet):</label>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 10px; margin-top: 10px;">
+                            <div>
+                                <label style="font-size:11px;">Utgivelsesår:</label>
+                                <input type="text" id="metaAar" placeholder="2026" style="margin:0;">
+                            </div>
+                            <div>
+                                <label style="font-size:11px;">Aldersgrense:</label>
+                                <input type="text" id="metaAldersgrense" placeholder="12 år" style="margin:0;">
+                            </div>
+                            <div>
+                                <label style="font-size:11px;">Hovedsjanger:</label>
+                                <input type="text" id="metaSjanger" placeholder="Sci-Fi / Drama" style="margin:0;">
+                            </div>
+                            <div>
+                                <label style="font-size:11px;">Varighet / Info:</label>
+                                <input type="text" id="metaVarighet" placeholder="2t 45m" style="margin:0;">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- MEDVIRKENDE OG SKAPER (Faste felt) -->
+                    <div>
+                        <label>Skapere / Regissør:</label>
+                        <input type="text" id="inpSkapere" placeholder="F.eks. Christopher Nolan">
+                    </div>
+                    <div>
+                        <label>Medvirkende (Skuespillere):</label>
+                        <input type="text" id="inpMedvirkende" placeholder="F.eks. Matthew McConaughey, Anne Hathaway">
                     </div>
 
                     <div>
@@ -277,15 +246,6 @@
                         <input type="text" id="inpTrailer" placeholder="https://...">
                     </div>
 
-                    <div>
-                        <label>Metadata (År, Aldersgrense, Sjanger):</label>
-                        <input type="text" id="inpMetadata" placeholder="2026, 12 år, Sci-Fi, Action">
-                    </div>
-                    <div>
-                        <label id="lblSkaperRegissor">Regissør / Skapere:</label>
-                        <input type="text" id="inpSkaperRegissor" placeholder="Navn på skaper">
-                    </div>
-
                     <!-- FELT FOR FILM -->
                     <div id="filmSpesifikkeFelt" class="form-full form-grid" style="grid-column: span 2; margin:0; padding:0;">
                         <div>
@@ -298,7 +258,7 @@
                         </div>
                     </div>
 
-                    <!-- AUTOMATISK SERIE- OG EPISODEBYGGER (ERSTATTER ROTETE JSON) -->
+                    <!-- SERIE- OG EPISODEBYGGER -->
                     <div id="serieSpesifikkeFelt" class="form-full hidden">
                         <label style="font-size:15px; color:var(--text-main);">Sesonger og Episoder:</label>
                         <div class="builder-box">
@@ -314,7 +274,6 @@
                 </div>
             </div>
 
-            <!-- Søkefelt for bibliotek -->
             <input type="text" id="sokFelt" placeholder="Søk i biblioteket..." oninput="filterTabell()" style="max-width: 300px; margin-bottom: 15px;">
 
             <table>
@@ -326,9 +285,7 @@
                         <th>Handlinger</th>
                     </tr>
                 </thead>
-                <tbody id="dataTableBody">
-                    <!-- Fylles dynamisk -->
-                </tbody>
+                <tbody id="dataTableBody"></tbody>
             </table>
         </div>
 
@@ -344,9 +301,7 @@
                         <th>Sist oppdatert</th>
                     </tr>
                 </thead>
-                <tbody id="historyTableBody">
-                    <!-- Fylles dynamisk -->
-                </tbody>
+                <tbody id="historyTableBody"></tbody>
             </table>
         </div>
     </div>
@@ -371,17 +326,9 @@
             const errorMsg = document.getElementById("loginErrorMsg");
             errorMsg.style.display = "none";
 
-            if (!email || !password) {
-                errorMsg.textContent = "Vennligst fyll ut e-post og passord.";
-                errorMsg.style.display = "block";
-                return;
-            }
-
             try {
                 const userCredential = await signInWithEmailAndPassword(auth, email, password);
-                const user = userCredential.user;
-                const ansattSnap = await getDoc(doc(db, "ansatte", user.uid));
-
+                const ansattSnap = await getDoc(doc(db, "ansatte", userCredential.user.uid));
                 if (ansattSnap.exists()) {
                     document.getElementById("loginSection").classList.add("hidden");
                     document.getElementById("adminSection").classList.remove("hidden");
@@ -416,11 +363,9 @@
             if (type === "serier") {
                 document.getElementById("filmSpesifikkeFelt").classList.add("hidden");
                 document.getElementById("serieSpesifikkeFelt").classList.remove("hidden");
-                document.getElementById("lblSkaperRegissor").textContent = "Skapere:";
             } else {
                 document.getElementById("filmSpesifikkeFelt").classList.remove("hidden");
                 document.getElementById("serieSpesifikkeFelt").classList.add("hidden");
-                document.getElementById("lblSkaperRegissor").textContent = "Regissør:";
             }
         }
 
@@ -430,7 +375,6 @@
             document.getElementById("inpId").value = id;
         }
 
-        // Automatisk sesong- og episodebygger funksjoner
         window.leggTilSesong = function() {
             const container = document.getElementById("sesongContainer");
             const sesongNr = container.children.length + 1;
@@ -470,15 +414,11 @@
         window.lastInnAltData = async function() {
             const tbody = document.getElementById("dataTableBody");
             tbody.innerHTML = "";
-            try {
-                const filmSnap = await getDocs(collection(db, "filmer"));
-                filmSnap.forEach((d) => leggTilTabellRad("Film", "filmer", d.id, d.data().tittel || d.id));
+            const filmSnap = await getDocs(collection(db, "filmer"));
+            filmSnap.forEach((d) => leggTilTabellRad("Film", "filmer", d.id, d.data().tittel || d.id));
 
-                const serieSnap = await getDocs(collection(db, "serier"));
-                serieSnap.forEach((d) => leggTilTabellRad("Serie", "serier", d.id, d.data().tittel || d.id));
-            } catch (err) {
-                console.error("Feil ved lasting:", err);
-            }
+            const serieSnap = await getDocs(collection(db, "serier"));
+            serieSnap.forEach((d) => leggTilTabellRad("Serie", "serier", d.id, d.data().tittel || d.id));
         }
 
         function leggTilTabellRad(typeVisning, samling, id, tittel) {
@@ -489,17 +429,13 @@
                 <td>${id}</td>
                 <td>${tittel}</td>
                 <td class="action-btns">
-                    <button class="delete-btn btn-slett" data-samling="${samling}" data-id="${id}"><i class="fas fa-trash"></i> Slett</button>
+                    <button class="delete-btn btn-slett" data-samling="${samling}" data-id="${id}" style="background:#dc3545; padding:6px 12px; font-size:13px;"><i class="fas fa-trash"></i> Slett</button>
                 </td>
             `;
             tr.querySelector(".btn-slett").addEventListener("click", async function() {
-                try {
-                    await deleteDoc(doc(db, this.getAttribute("data-samling"), this.getAttribute("data-id")));
-                    visMelding("Tittelen ble slettet.", "success");
-                    lastInnAltData();
-                } catch (err) {
-                    visMelding("Feil ved sletting.", "error");
-                }
+                await deleteDoc(doc(db, this.getAttribute("data-samling"), this.getAttribute("data-id")));
+                visMelding("Tittelen ble slettet.", "success");
+                lastInnAltData();
             });
             tbody.appendChild(tr);
         }
@@ -527,6 +463,14 @@
                 return;
             }
 
+            // TVUNGET FAST FORMAT PÅ METADATA: [År] • [Aldersgrense] • [Sjanger] • [Varighet]
+            const aar = document.getElementById("metaAar").value.trim();
+            const aldersgrense = document.getElementById("metaAldersgrense").value.trim();
+            const sjanger = document.getElementById("metaSjanger").value.trim();
+            const varighet = document.getElementById("metaVarighet").value.trim();
+            
+            const metadataArray = [aar, aldersgrense, sjanger, varighet].filter(Boolean);
+
             let obj = {
                 tittel: tittel,
                 rating: document.getElementById("inpRating").value.trim(),
@@ -535,19 +479,18 @@
                 logo: document.getElementById("inpLogo").value.trim(),
                 trailer: document.getElementById("inpTrailer").value.trim(),
                 beskrivelse: document.getElementById("inpBeskrivelse").value.trim(),
-                metadata: document.getElementById("inpMetadata").value.split(",").map(s => s.trim()),
+                metadata: metadataArray,
+                skapere: document.getElementById("inpSkapere").value.trim(),
+                medvirkende: document.getElementById("inpMedvirkende").value.trim(),
                 publishDate: new Date().toISOString()
             };
 
             if (samling === "filmer") {
-                obj.regissor = document.getElementById("inpSkaperRegissor").value.trim();
                 obj.videoUrl = document.getElementById("inpVideoUrl").value.trim();
                 obj.subtitleUrl = document.getElementById("inpSubtitleUrl").value.trim();
                 obj.watchUrl = `film-mal.html?id=${id}`;
             } else {
-                obj.skapere = document.getElementById("inpSkaperRegissor").value.trim();
                 obj.sesonger = {};
-                
                 const sesongDivs = document.querySelectorAll("#sesongContainer .sesong-item");
                 sesongDivs.forEach((sesDiv, sIndex) => {
                     const sNummer = sIndex + 1;
@@ -574,7 +517,7 @@
 
             try {
                 await setDoc(doc(db, samling, id), obj);
-                visMelding(`"${tittel}" ble lagret!`, "success");
+                visMelding(`"${tittel}" ble lagret med riktig struktur!`, "success");
                 lukkSkjema();
                 lastInnAltData();
             } catch (err) {
@@ -586,38 +529,33 @@
             const query = document.getElementById("sokFelt").value.toLowerCase();
             const rows = document.querySelectorAll("#dataTableBody tr");
             rows.forEach(row => {
-                const text = row.innerText.toLowerCase();
-                row.style.display = text.includes(query) ? "" : "none";
+                row.style.display = row.innerText.toLowerCase().includes(query) ? "" : "none";
             });
         }
 
         async function lastInnHistorikk() {
             const historyBody = document.getElementById("historyTableBody");
             historyBody.innerHTML = "";
-            try {
-                const brukereSnap = await getDocs(collection(db, "users"));
-                brukereSnap.forEach((userDoc) => {
-                    const userData = userDoc.data();
-                    if (userData.profiler && Array.isArray(userData.profiler)) {
-                        userData.profiler.forEach(profil => {
-                            if (profil.fremdrift) {
-                                Object.entries(profil.fremdrift).forEach(([filmId, info]) => {
-                                    const tr = document.createElement("tr");
-                                    tr.innerHTML = `
-                                        <td>${profil.navn || 'Profil'}</td>
-                                        <td>${info.tittel || filmId}</td>
-                                        <td>${info.status || 'påbegynt'} (${info.percent || 0}%)</td>
-                                        <td>${new Date(info.sistOppdatert).toLocaleString('no-NO') || '-'}</td>
-                                    `;
-                                    historyBody.appendChild(tr);
-                                });
-                            }
-                        });
-                    }
-                });
-            } catch (err) {
-                console.error("Feil ved historikk:", err);
-            }
+            const brukereSnap = await getDocs(collection(db, "users"));
+            brukereSnap.forEach((userDoc) => {
+                const userData = userDoc.data();
+                if (userData.profiler && Array.isArray(userData.profiler)) {
+                    userData.profiler.forEach(profil => {
+                        if (profil.fremdrift) {
+                            Object.entries(profil.fremdrift).forEach(([filmId, info]) => {
+                                const tr = document.createElement("tr");
+                                tr.innerHTML = `
+                                    <td>${profil.navn || 'Profil'}</td>
+                                    <td>${info.tittel || filmId}</td>
+                                    <td>${info.status || 'påbegynt'} (${info.percent || 0}%)</td>
+                                    <td>${new Date(info.sistOppdatert).toLocaleString('no-NO') || '-'}</td>
+                                `;
+                                historyBody.appendChild(tr);
+                            });
+                        }
+                    });
+                }
+            });
         }
     </script>
 </body>
