@@ -42,24 +42,24 @@
         }
 
         /* ==========================================================================
-           2. ADMIN INNHOLD & KOMPONENTER (UTEN NEON)
+           2. WATCH NORDIC FARGEPALETT & KOMPONENTER
            ========================================================================== */
         :root {
-            --card-bg: #141414;
+            --card-bg: #0A1B1E;
             --text-main: #ffffff;
-            --text-muted: #b3b3b3;
-            --border-color: #333333;
-            --primary: #e50914;
-            --primary-hover: #b20710;
-            --success: #46d369;
-            --danger: #dc3545;
+            --text-muted: #8FA8AC;
+            --border-color: #173338;
+            --primary: #00E676;       /* Watch Nordic Grønn */
+            --primary-hover: #00C853;  /* Mørkere grønn ved hover */
+            --success: #00E676;
+            --danger: #FF5252;
         }
 
         .hidden { display: none !important; }
 
         .main-container {
             max-width: 1200px;
-            margin: 60px auto 40px auto;
+            margin: 40px auto 40px auto;
             padding: 0 20px;
         }
 
@@ -67,7 +67,7 @@
             background: var(--card-bg); 
             padding: 40px; 
             border-radius: 12px; 
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5); 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.6); 
             border: 1px solid var(--border-color);
         }
 
@@ -78,7 +78,7 @@
             width: 100%; 
             padding: 12px 14px; 
             margin: 8px 0 16px 0; 
-            background: #2b2b2b; 
+            background: #0D2328; 
             border: 1px solid var(--border-color); 
             color: var(--text-main); 
             border-radius: 6px; 
@@ -90,7 +90,7 @@
         input:focus, select:focus, textarea:focus { 
             outline: none; 
             border-color: var(--primary); 
-            background: #333;
+            background: #122C32;
         }
 
         textarea { resize: vertical; height: 90px; }
@@ -98,11 +98,11 @@
 
         button { 
             background: var(--primary); 
-            color: white; 
+            color: #050F11; 
             border: none; 
             padding: 10px 20px; 
             font-size: 14px; 
-            font-weight: 600;
+            font-weight: 700;
             border-radius: 6px; 
             cursor: pointer; 
             margin-right: 10px; 
@@ -114,8 +114,8 @@
 
         button:hover { background: var(--primary-hover); }
 
-        .back-btn { background: #2b2b2b; color: var(--text-main); margin-bottom: 25px; border: 1px solid var(--border-color); }
-        .back-btn:hover { background: #3a3a3a; }
+        .back-btn { background: #0D2328; color: var(--text-main); margin-bottom: 25px; border: 1px solid var(--border-color); }
+        .back-btn:hover { background: #173338; }
 
         table { 
             width: 100%; 
@@ -128,8 +128,8 @@
         }
 
         th, td { padding: 14px 16px; text-align: left; border-bottom: 1px solid var(--border-color); font-size: 14px; }
-        th { background: #1a1a1a; color: var(--text-muted); font-weight: 600; }
-        tr:hover { background: #222; }
+        th { background: #07171A; color: var(--text-muted); font-weight: 600; }
+        tr:hover { background: #0D2328; }
 
         .nav-tabs { 
             display: flex; 
@@ -137,16 +137,94 @@
             margin-bottom: 25px; 
             border-bottom: 2px solid var(--border-color);
             padding-bottom: 15px;
+            flex-wrap: wrap;
         }
 
-        .nav-tabs button { background: transparent; color: var(--text-muted); border: 1px solid var(--border-color); }
-        .nav-tabs button.active { background: var(--primary); color: white; border-color: var(--primary); }
+        .nav-tabs button { background: transparent; color: var(--text-muted); border: 1px solid var(--border-color); font-weight: 600; }
+        .nav-tabs button.active { background: var(--primary); color: #050F11; border-color: var(--primary); }
+
+        /* STATISTIKK / DASHBOARD STATS */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: #0D2328;
+            border: 1px solid var(--border-color);
+            padding: 20px;
+            border-radius: 8px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .stat-card .stat-title {
+            font-size: 13px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .stat-card .stat-value {
+            font-size: 26px;
+            font-weight: 700;
+            color: var(--text-main);
+        }
+
+        .chart-section {
+            background: #0D2328;
+            border: 1px solid var(--border-color);
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+        }
+
+        .chart-bars {
+            display: flex;
+            align-items: flex-end;
+            gap: 15px;
+            height: 180px;
+            margin-top: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .chart-bar-wrap {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            height: 100%;
+            justify-content: flex-end;
+        }
+
+        .chart-bar {
+            width: 100%;
+            background: var(--primary);
+            border-radius: 4px 4px 0 0;
+            transition: height 0.4s ease;
+            position: relative;
+        }
+
+        .chart-bar:hover {
+            background: var(--primary-hover);
+        }
+
+        .chart-label {
+            font-size: 11px;
+            color: var(--text-muted);
+            margin-top: 8px;
+            text-align: center;
+        }
 
         .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
         .form-full { grid-column: span 2; }
 
         .builder-box {
-            background: #181818;
+            background: #07171A;
             border: 1px solid var(--border-color);
             padding: 20px;
             border-radius: 8px;
@@ -161,8 +239,8 @@
             font-weight: 500;
             display: none;
         }
-        .app-notification.success { background: rgba(70, 211, 105, 0.15); color: var(--success); border: 1px solid var(--success); }
-        .app-notification.error { background: rgba(229, 9, 20, 0.15); color: #ff6b6b; border: 1px solid var(--danger); }
+        .app-notification.success { background: rgba(0, 230, 118, 0.15); color: var(--success); border: 1px solid var(--success); }
+        .app-notification.error { background: rgba(255, 82, 82, 0.15); color: var(--danger); border: 1px solid var(--danger); }
     </style>
 </head>
 <body>
@@ -171,8 +249,8 @@
         <div class="main-container">
             <!-- INNLOGGING -->
             <div id="loginSection" class="login-box">
-                <h2><i class="fas fa-lock"></i> Ansattpålogging</h2>
-                <p>Logg inn med din eWatch ansatt-e-post og passord:</p>
+                <h2><i class="fas fa-lock" style="color: var(--primary);"></i> Ansattpålogging</h2>
+                <p>Logg inn med din Watch Nordic ansatt-e-post og passord:</p>
                 <input type="email" id="emailInput" placeholder="E-postadresse...">
                 <input type="password" id="passwordInput" placeholder="Passord...">
                 <button id="loginBtn"><i class="fas fa-sign-in-alt"></i> Logg inn</button>
@@ -182,26 +260,117 @@
             <!-- ADMIN-PANEL -->
             <div id="adminSection" class="admin-container hidden">
                 <button class="back-btn" onclick="window.location.href='Hovedside.html'"><i class="fas fa-arrow-left"></i> Tilbake til Hovedside</button>
-                <h1><i class="fas fa-play-circle" style="color: var(--primary);"></i> eWatch Nordic – Admin Dashboard</h1>
+                <h1><i class="fas fa-play-circle" style="color: var(--primary);"></i> Watch Nordic – Admin Dashboard</h1>
                 
                 <div id="globalNotif" class="app-notification"></div>
 
-                <div class="nav-tabs">
-                    <button id="tabBtnInnhold" class="active" onclick="byttTab('innhold')"><i class="fas fa-film"></i> Filmer & Serier</button>
+                <!-- FLIKER / SEKSJONER -->
+                <div class="nav-tabs" style="margin-top: 25px;">
+                    <button id="tabBtnOversikt" class="active" onclick="byttTab('oversikt')"><i class="fas fa-chart-line"></i> Oversikt & Statistikk</button>
+                    <button id="tabBtnFilmer" onclick="byttTab('filmer')"><i class="fas fa-film"></i> Filmliste</button>
+                    <button id="tabBtnSerier" onclick="byttTab('serier')"><i class="fas fa-tv"></i> Serieliste</button>
+                    <button id="tabBtnLeggTil" onclick="byttTab('leggTil')"><i class="fas fa-plus-circle"></i> Legg til Film / Serie</button>
                     <button id="tabBtnHistorikk" onclick="byttTab('historikk')"><i class="fas fa-history"></i> Brukerhistorikk</button>
                 </div>
 
-                <!-- TAB 1: INNHOLD -->
-                <div id="tabInnhold" class="tab-content">
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-                        <h2>Innholdsbibliotek</h2>
-                        <button onclick="visLeggTilSkjema()"><i class="fas fa-plus"></i> Legg til ny tittel</button>
+                <!-- TAB 1: OVERSIKT & STATISTIKK -->
+                <div id="tabOversikt" class="tab-content">
+                    <h2>Nøkkeltall</h2>
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <span class="stat-title">Antall abonnenter</span>
+                            <span class="stat-value" id="statAbonnenter">1 245</span>
+                        </div>
+                        <div class="stat-card">
+                            <span class="stat-title">Innlogget nå (Siste 24t)</span>
+                            <span class="stat-value" id="statInnlogget">312</span>
+                        </div>
+                        <div class="stat-card">
+                            <span class="stat-title">Totalt innhold</span>
+                            <span class="stat-value" id="statTotaltInnhold">0</span>
+                        </div>
                     </div>
 
-                    <!-- SKJEMA -->
-                    <div id="redigeringsSkjema" class="hidden" style="background: #1a1a1a; padding: 30px; margin-bottom: 30px; border-radius: 10px; border: 1px solid var(--border-color);">
-                        <h3 id="skjemaTittel" style="margin-top:0;"><i class="fas fa-film"></i> Ny tittel</h3>
-                        
+                    <div class="chart-section">
+                        <h3>Aktivitet / Besøkende per dag</h3>
+                        <p>Viser antall unike innlogginger siste uke</p>
+                        <div class="chart-bars">
+                            <div class="chart-bar-wrap">
+                                <div class="chart-bar" style="height: 45%;"></div>
+                                <span class="chart-label">Man</span>
+                            </div>
+                            <div class="chart-bar-wrap">
+                                <div class="chart-bar" style="height: 60%;"></div>
+                                <span class="chart-label">Tir</span>
+                            </div>
+                            <div class="chart-bar-wrap">
+                                <div class="chart-bar" style="height: 55%;"></div>
+                                <span class="chart-label">Ons</span>
+                            </div>
+                            <div class="chart-bar-wrap">
+                                <div class="chart-bar" style="height: 80%;"></div>
+                                <span class="chart-label">Tor</span>
+                            </div>
+                            <div class="chart-bar-wrap">
+                                <div class="chart-bar" style="height: 95%;"></div>
+                                <span class="chart-label">Fre</span>
+                            </div>
+                            <div class="chart-bar-wrap">
+                                <div class="chart-bar" style="height: 100%;"></div>
+                                <span class="chart-label">Lør</span>
+                            </div>
+                            <div class="chart-bar-wrap">
+                                <div class="chart-bar" style="height: 70%;"></div>
+                                <span class="chart-label">Søn</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TAB 2: FILMLISTE -->
+                <div id="tabFilmer" class="tab-content hidden">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 10px;">
+                        <h2>Filmoversikt</h2>
+                        <input type="text" id="sokFilmer" placeholder="Søk i filmer..." oninput="filterTabell('filmer')" style="max-width: 250px; margin: 0;">
+                    </div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Tittel</th>
+                                <th>Sjanger / År</th>
+                                <th>Handlinger</th>
+                            </tr>
+                        </thead>
+                        <tbody id="filmTableBody"></tbody>
+                    </table>
+                </div>
+
+                <!-- TAB 3: SERIELISTE -->
+                <div id="tabSerier" class="tab-content hidden">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 10px;">
+                        <h2>Serieoversikt</h2>
+                        <input type="text" id="sokSerier" placeholder="Søk i serier..." oninput="filterTabell('serier')" style="max-width: 250px; margin: 0;">
+                    </div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Tittel</th>
+                                <th>Sesonger</th>
+                                <th>Handlinger</th>
+                            </tr>
+                        </thead>
+                        <tbody id="serieTableBody"></tbody>
+                    </table>
+                </div>
+
+                <!-- TAB 4: LEGG TIL INNHOLD -->
+                <div id="tabLeggTil" class="tab-content hidden">
+                    <h2>Legg til ny tittel</h2>
+                    <p>Fyll ut skjemaet for å publisere en film eller serie.</p>
+
+                    <div style="background: #0D2328; padding: 30px; margin-top: 20px; border-radius: 10px; border: 1px solid var(--border-color);">
                         <div class="form-grid">
                             <div>
                                 <label>Tittel:</label>
@@ -209,7 +378,7 @@
                             </div>
                             <div>
                                 <label>Unik ID (Genereres automatisk):</label>
-                                <input type="text" id="inpId" placeholder="house-on-haunted-hill" readonly style="background: #222; color: #777;">
+                                <input type="text" id="inpId" placeholder="house-on-haunted-hill" readonly style="background: #050F11; color: #777;">
                             </div>
 
                             <div>
@@ -230,8 +399,8 @@
                             </div>
 
                             <!-- METADATA -->
-                            <div class="form-full" style="background: #151515; padding: 15px; border-radius: 6px; border: 1px solid #2a2a2a;">
-                                <label style="color:var(--text-main); font-size:14px; margin-top:0;">Metadata (Fast struktur):</label>
+                            <div class="form-full" style="background: #07171A; padding: 15px; border-radius: 6px; border: 1px solid var(--border-color);">
+                                <label style="color:var(--text-main); font-size:14px; margin-top:0;">Metadata:</label>
                                 <div style="display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 10px; margin-top: 10px;">
                                     <div>
                                         <label style="font-size:11px;">Utgivelsesår:</label>
@@ -290,13 +459,13 @@
                                 <input type="text" id="inpBanner" placeholder="https://...">
                             </div>
 
-                            <div>
+                            <div class="form-full">
                                 <label>Trailer URL:</label>
                                 <input type="text" id="inpTrailer" placeholder="https://...">
                             </div>
 
                             <!-- DATOER -->
-                            <div style="background: #151515; padding: 15px; border-radius: 6px; border: 1px solid #2a2a2a; grid-column: span 2;">
+                            <div style="background: #07171A; padding: 15px; border-radius: 6px; border: 1px solid var(--border-color); grid-column: span 2;">
                                 <label style="color:var(--text-main); font-size:14px; margin-top:0;">Publisering og Tilgjengelighet:</label>
                                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 10px;">
                                     <div>
@@ -318,7 +487,7 @@
                                 </div>
                                 <div>
                                     <label>Undertekstfil (.VTT filnavn):</label>
-                                    <input type="text" id="inpSubtitleUrl" placeholder="navn.VTT" style="background:#222; color:#777;">
+                                    <input type="text" id="inpSubtitleUrl" placeholder="navn.VTT" style="background:#050F11; color:#777;">
                                 </div>
                             </div>
 
@@ -327,35 +496,20 @@
                                 <label style="font-size:15px; color:var(--text-main);">Sesonger og Episoder:</label>
                                 <div class="builder-box">
                                     <div id="sesongContainer"></div>
-                                    <button type="button" onclick="leggTilSesong()" style="background: #2b2b2b; border:1px solid var(--border-color); margin-top: 10px;"><i class="fas fa-plus"></i> Legg til ny sesong</button>
+                                    <button type="button" onclick="leggTilSesong()" style="background: #0D2328; border:1px solid var(--border-color); color:var(--text-main); margin-top: 10px;"><i class="fas fa-plus"></i> Legg til ny sesong</button>
                                 </div>
                             </div>
                         </div>
 
                         <div style="margin-top: 25px;">
-                            <button onclick="lagreInnhold()"><i class="fas fa-save"></i> Lagre tittel</button>
-                            <button style="background:#333;" onclick="lukkSkjema()"><i class="fas fa-times"></i> Avbryt</button>
+                            <button onclick="lagreInnhold()"><i class="fas fa-save"></i> Lagre og publiser</button>
                         </div>
                     </div>
-
-                    <input type="text" id="sokFelt" placeholder="Søk i biblioteket..." oninput="filterTabell()" style="max-width: 300px; margin-bottom: 15px;">
-
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Type</th>
-                                <th>ID</th>
-                                <th>Tittel</th>
-                                <th>Handlinger</th>
-                            </tr>
-                        </thead>
-                        <tbody id="dataTableBody"></tbody>
-                    </table>
                 </div>
 
-                <!-- TAB 2: HISTORIKK -->
+                <!-- TAB 5: HISTORIKK -->
                 <div id="tabHistorikk" class="tab-content hidden">
-                    <h2><i class="fas fa-stream"></i> Brukeraktivitet & Avspillingshistorikk</h2>
+                    <h2><i class="fas fa-stream" style="color: var(--primary);"></i> Brukeraktivitet & Avspillingshistorikk</h2>
                     <table>
                         <thead>
                             <tr>
@@ -410,18 +564,21 @@
         });
 
         window.byttTab = function(tab) {
-            if (tab === 'innhold') {
-                document.getElementById("tabInnhold").classList.remove("hidden");
-                document.getElementById("tabHistorikk").classList.add("hidden");
-                document.getElementById("tabBtnInnhold").classList.add("active");
-                document.getElementById("tabBtnHistorikk").classList.remove("active");
-            } else {
-                document.getElementById("tabInnhold").classList.add("hidden");
-                document.getElementById("tabHistorikk").classList.remove("hidden");
-                document.getElementById("tabBtnInnhold").classList.remove("active");
-                document.getElementById("tabBtnHistorikk").classList.add("active");
-                lastInnHistorikk();
-            }
+            const tabs = ['oversikt', 'filmer', 'serier', 'leggTil', 'historikk'];
+            tabs.forEach(t => {
+                const contentEl = document.getElementById(`tab${t.charAt(0).toUpperCase() + t.slice(1)}`);
+                const btnEl = document.getElementById(`tabBtn${t.charAt(0).toUpperCase() + t.slice(1)}`);
+                if (t === tab) {
+                    contentEl.classList.remove("hidden");
+                    btnEl.classList.add("active");
+                } else {
+                    contentEl.classList.add("hidden");
+                    btnEl.classList.remove("active");
+                }
+            });
+
+            if (tab === 'historikk') lastInnHistorikk();
+            if (tab === 'leggTil') forberedSkjemaDatoer();
         }
 
         window.byttInnholdsType = function() {
@@ -448,15 +605,15 @@
             
             const div = document.createElement("div");
             div.className = "sesong-item";
-            div.style.cssText = "background: #111; padding: 15px; border-radius: 6px; margin-bottom: 10px; border: 1px solid #333;";
+            div.style.cssText = "background: #050F11; padding: 15px; border-radius: 6px; margin-bottom: 10px; border: 1px solid var(--border-color);";
             div.innerHTML = `
                 <div style="display:flex; justify-content:space-between; align-items:center;">
                     <strong>Sesong ${sesongNr}</strong>
-                    <button type="button" onclick="this.parentElement.parentElement.remove()" style="background:#dc3545; padding:4px 8px; font-size:11px;">Fjern sesong</button>
+                    <button type="button" onclick="this.parentElement.parentElement.remove()" style="background:#FF5252; color:#fff; padding:4px 8px; font-size:11px;">Fjern sesong</button>
                 </div>
                 <input type="text" class="sesong-beskrivelse" placeholder="Beskrivelse for sesongen..." style="margin-top:10px;">
                 <div class="episoder-container" style="margin-top:10px;"></div>
-                <button type="button" onclick="leggTilEpisodTilSesong(this)" style="background:#2b2b2b; font-size:12px; margin-top:5px;"><i class="fas fa-plus"></i> Legg til episode</button>
+                <button type="button" onclick="leggTilEpisodTilSesong(this)" style="background:#0D2328; color:var(--text-main); border:1px solid var(--border-color); font-size:12px; margin-top:5px;"><i class="fas fa-plus"></i> Legg til episode</button>
             `;
             container.appendChild(div);
         }
@@ -467,7 +624,7 @@
 
             const div = document.createElement("div");
             div.className = "episode-item";
-            div.style.cssText = "background: #181818; padding: 10px; border-radius: 4px; margin-top: 8px; border: 1px solid #282828;";
+            div.style.cssText = "background: #0D2328; padding: 10px; border-radius: 4px; margin-top: 8px; border: 1px solid var(--border-color);";
             div.innerHTML = `
                 <div style="display:flex; gap:10px;">
                     <input type="text" class="epi-tittel" placeholder="Episode ${epiNr} tittel" style="margin:0;">
@@ -478,54 +635,73 @@
             epiContainer.appendChild(div);
         }
 
-        window.lastInnAltData = async function() {
-            const tbody = document.getElementById("dataTableBody");
-            tbody.innerHTML = "";
-            const filmSnap = await getDocs(collection(db, "filmer"));
-            filmSnap.forEach((d) => leggTilTabellRad("Film", "filmer", d.id, d.data().tittel || d.id));
-
-            const serieSnap = await getDocs(collection(db, "serier"));
-            serieSnap.forEach((d) => leggTilTabellRad("Serie", "serier", d.id, d.data().tittel || d.id));
+        function forberedSkjemaDatoer() {
+            const now = new Date();
+            const future = new Date();
+            future.setFullYear(now.getFullYear() + 2);
+            if(!document.getElementById("inpPublishDate").value) {
+                document.getElementById("inpPublishDate").value = now.toISOString().slice(0, 16);
+                document.getElementById("inpExpireDate").value = future.toISOString().slice(0, 16);
+            }
         }
 
-        function leggTilTabellRad(typeVisning, samling, id, tittel) {
-            const tbody = document.getElementById("dataTableBody");
+        window.lastInnAltData = async function() {
+            const filmBody = document.getElementById("filmTableBody");
+            const serieBody = document.getElementById("serieTableBody");
+            filmBody.innerHTML = "";
+            serieBody.innerHTML = "";
+
+            let antallFilmer = 0;
+            let antallSerier = 0;
+
+            const filmSnap = await getDocs(collection(db, "filmer"));
+            filmSnap.forEach((d) => {
+                antallFilmer++;
+                leggTilTabellRad("filmer", d.id, d.data());
+            });
+
+            const serieSnap = await getDocs(collection(db, "serier"));
+            serieSnap.forEach((d) => {
+                antallSerier++;
+                leggTilTabellRad("serier", d.id, d.data());
+            });
+
+            document.getElementById("statTotaltInnhold").textContent = antallFilmer + antallSerier;
+        }
+
+        function leggTilTabellRad(samling, id, data) {
             const tr = document.createElement("tr");
-            tr.innerHTML = `
-                <td>${typeVisning}</td>
-                <td>${id}</td>
-                <td>${tittel}</td>
-                <td class="action-btns">
-                    <button class="delete-btn btn-slett" data-samling="${samling}" data-id="${id}" style="background:#dc3545; padding:6px 12px; font-size:13px;"><i class="fas fa-trash"></i> Slett</button>
-                </td>
-            `;
+            const tittel = data.tittel || id;
+            
+            if (samling === "filmer") {
+                const sjangerInfo = (data.metadata && data.metadata[2]) ? data.metadata[2] : "-";
+                tr.innerHTML = `
+                    <td>${id}</td>
+                    <td>${tittel}</td>
+                    <td>${sjangerInfo}</td>
+                    <td>
+                        <button class="btn-slett" data-samling="${samling}" data-id="${id}" style="background:#FF5252; color:#fff; padding:6px 12px; font-size:13px;"><i class="fas fa-trash"></i> Slett</button>
+                    </td>
+                `;
+                document.getElementById("filmTableBody").appendChild(tr);
+            } else {
+                const antSesonger = data.sesonger ? Object.keys(data.sesonger).length : 0;
+                tr.innerHTML = `
+                    <td>${id}</td>
+                    <td>${tittel}</td>
+                    <td>${antSesonger} sesong(er)</td>
+                    <td>
+                        <button class="btn-slett" data-samling="${samling}" data-id="${id}" style="background:#FF5252; color:#fff; padding:6px 12px; font-size:13px;"><i class="fas fa-trash"></i> Slett</button>
+                    </td>
+                `;
+                document.getElementById("serieTableBody").appendChild(tr);
+            }
+
             tr.querySelector(".btn-slett").addEventListener("click", async function() {
                 await deleteDoc(doc(db, this.getAttribute("data-samling"), this.getAttribute("data-id")));
                 visMelding("Tittelen ble slettet.", "success");
                 lastInnAltData();
             });
-            tbody.appendChild(tr);
-        }
-
-        window.visLeggTilSkjema = function() {
-            document.getElementById("redigeringsSkjema").classList.remove("hidden");
-            document.querySelectorAll("#redigeringsSkjema input, #redigeringsSkjema textarea").forEach(el => {
-                if(el.id !== 'inpType') el.value = "";
-            });
-            document.getElementById("sesongContainer").innerHTML = "";
-
-            const now = new Date();
-            const future = new Date();
-            future.setFullYear(now.getFullYear() + 2);
-            
-            document.getElementById("inpPublishDate").value = now.toISOString().slice(0, 16);
-            document.getElementById("inpExpireDate").value = future.toISOString().slice(0, 16);
-
-            byttInnholdsType();
-        }
-
-        window.lukkSkjema = function() {
-            document.getElementById("redigeringsSkjema").classList.add("hidden");
         }
 
         window.lagreInnhold = async function() {
@@ -603,16 +779,16 @@
             try {
                 await setDoc(doc(db, samling, id), obj);
                 visMelding(`"${tittel}" ble lagret med komplette data!`, "success");
-                lukkSkjema();
                 lastInnAltData();
+                byttTab(samling);
             } catch (err) {
                 visMelding("Feil ved lagring: " + err.message, "error");
             }
         }
 
-        window.filterTabell = function() {
-            const query = document.getElementById("sokFelt").value.toLowerCase();
-            const rows = document.querySelectorAll("#dataTableBody tr");
+        window.filterTabell = function(type) {
+            const query = document.getElementById(type === 'filmer' ? 'sokFilmer' : 'sokSerier').value.toLowerCase();
+            const rows = document.querySelectorAll(type === 'filmer' ? '#filmTableBody tr' : '#serieTableBody tr');
             rows.forEach(row => {
                 row.style.display = row.innerText.toLowerCase().includes(query) ? "" : "none";
             });
