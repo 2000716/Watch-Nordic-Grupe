@@ -1872,20 +1872,16 @@
         e.preventDefault();
         e.stopPropagation();
 
-        // Klargjør skjultFortsett-array dersom det mangler
         if (!profil.skjultFortsett) {
           profil.skjultFortsett = [];
         }
 
-        // Legg til filmId i skjult-listen uten å slette fra fremdrift
         if (!profil.skjultFortsett.includes(filmId)) {
           profil.skjultFortsett.push(filmId);
         }
 
-        // Oppdater LocalStorage-cache
         localStorage.setItem("watch_nordic_profiles_cache", JSON.stringify(heleProfilArrayet));
 
-        // Oppdater Firebase Firestore
         if (typeof registrertBruker !== "undefined" && registrertBruker) {
           try {
             const userDocRef = doc(db, "users", registrertBruker.uid);
@@ -1897,7 +1893,6 @@
           }
         }
 
-        // Animasjon før fjerning fra galleriet
         link.style.transition = "all 0.3s ease";
         link.style.transform = "scale(0.8)";
         link.style.opacity = "0";
