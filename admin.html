@@ -497,26 +497,13 @@
                     </div>
                 </div>
 
-                <!-- TAB 5: HISTORIKK -->
-                <div id="tabHistorikk" class="tab-content hidden">
-                    <h2><i class="fas fa-stream" style="color: var(--primary);"></i> Brukeraktivitet & Avspillingshistorikk</h2>
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Bruker / Profil</th>
-                                <th>Aktivitet / Tittel</th>
-                                <th>Status</th>
-                                <th>Sist oppdatert</th>
-                            </tr>
-                        </thead>
-                        <tbody id="historyTableBody"></tbody>
-                    </table>
+
                 </div>
             </div>
         </div>
     </main>
 
-    <!-- FIREBASE LOGIKK -->
+<!-- FIREBASE LOGIKK -->
     <script type="module">
         import { db, auth } from "./firebase-oppsett.js";
         import { signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-auth.js";
@@ -554,7 +541,7 @@
         });
 
         window.byttTab = function(tab) {
-            const tabs = ['oversikt', 'filmer', 'serier', 'leggTil', 'historikk'];
+            const tabs = ['oversikt', 'filmer', 'serier', 'leggTil'];
             tabs.forEach(t => {
                 const contentEl = document.getElementById(`tab${t.charAt(0).toUpperCase() + t.slice(1)}`);
                 const btnEl = document.getElementById(`tabBtn${t.charAt(0).toUpperCase() + t.slice(1)}`);
@@ -567,7 +554,6 @@
                 }
             });
 
-            if (tab === 'historikk') lastInnHistorikk();
             if (tab === 'leggTil' && !document.getElementById("inpId").getAttribute("data-redigerer")) {
                 nullstillSkjema();
             }
@@ -628,7 +614,6 @@
             }
             const epiNr = epiContainer.children.length + 1;
 
-            // Formater dato for datetime-local (YYYY-MM-DDTHH:mm) hvis den finnes
             let formattedDate = "";
             if (epiData && epiData.publishDate) {
                 formattedDate = epiData.publishDate.slice(0, 16);
@@ -686,40 +671,56 @@
             byttInnholdsType();
         }
 
-        window.lastInnAltData = async function() {
+        // --- RESSURSBEPARET INNHENTING MED SESSIONSTORAGE CACHE ---
+        window.lastInnAltData = async function(tvingOppdatering = false) {
             const filmBody = document.getElementById("filmTableBody");
             const serieBody = document.getElementById("serieTableBody");
             filmBody.innerHTML = "";
             serieBody.innerHTML = "";
 
-            let antallFilmer = 0;
-            let antallSerier = 0;
+            let filmerData = [];
+            let serierData = [];
+            let brukereData = [];
 
-            const filmSnap = await getDocs(collection(db, "filmer"));
-            filmSnap.forEach((d) => {
-                antallFilmer++;
-                leggTilTabellRad("filmer", d.id, d.data());
-            });
+            const cachedData = sessionStorage.getItem("adminCache");
+            const cacheTid = sessionStorage.getItem("adminCacheTid");
+            const erCacheGyldig = cacheTid && (new Date().getTime() - cacheTid < 10 * 60 * 1000); // 10 minutter gyldighet
 
-            const serieSnap = await getDocs(collection(db, "serier"));
-            serieSnap.forEach((d) => {
-                antallSerier++;
-                leggTilTabellRad("serier", d.id, d.data());
-            });
+            if (!tvingOppdatering && erCacheGyldig && cachedData) {
+                const parsed = JSON.parse(cachedData);
+                filmerData = parsed.filmer;
+                serierData = parsed.serier;
+                brukereData = parsed.brukere;
+            } else {
+                // Hent fra Firebase hvis cache ikke finnes eller tvinges
+                const [filmSnap, serieSnap, brukereSnap] = await Promise.all([
+                    getDocs(collection(db, "filmer")),
+                    getDocs(collection(db, "serier")),
+                    getDocs(collection(db, "users"))
+                ]);
 
-            document.getElementById("statTotaltInnhold").textContent = antallFilmer + antallSerier;
+                filmSnap.forEach(d => filmerData.push({ id: d.id, ...d.data() }));
+                serieSnap.forEach(d => serierData.push({ id: d.id, ...d.data() }));
+                brukereSnap.forEach(d => brukereData.push(d.data()));
 
-            const brukereSnap = await getDocs(collection(db, "users"));
-            const antallAbonnenter = brukereSnap.size;
-            document.getElementById("statAbonnenter").textContent = antallAbonnenter;
+                sessionStorage.setItem("adminCache", JSON.stringify({ filmer: filmerData, serier: serierData, brukere: brukereData }));
+                sessionStorage.setItem("adminCacheTid", new Date().getTime());
+            }
+
+            // Fyll filmer
+            filmerData.forEach(item => leggTilTabellRad("filmer", item.id, item));
+            // Fyll serier
+            serierData.forEach(item => leggTilTabellRad("serier", item.id, item));
+
+            document.getElementById("statTotaltInnhold").textContent = filmerData.length + serierData.length;
+            document.getElementById("statAbonnenter").textContent = brukereData.length;
 
             let aktiveSiste24t = 0;
             const enDognSiden = new Date().getTime() - (24 * 60 * 60 * 1000);
             const dagerNavn = ["Søn", "Man", "Tir", "Ons", "Tor", "Fre", "Lør"];
             const dagerTeller = { "Man": 0, "Tir": 0, "Ons": 0, "Tor": 0, "Fre": 0, "Lør": 0, "Søn": 0 };
 
-            brukereSnap.forEach((doc) => {
-                const data = doc.data();
+            brukereData.forEach((data) => {
                 const aktivTidStr = data.sistAktiv || data.sistInnlogget || data.opprettetDato;
                 if (aktivTidStr) {
                     const aktivDato = new Date(aktivTidStr);
@@ -793,8 +794,9 @@
             tr.querySelector(".btn-slett").addEventListener("click", async function() {
                 if(confirm(`Er du sikker på at du vil slette "${tittel}"?`)) {
                     await deleteDoc(doc(db, this.getAttribute("data-samling"), this.getAttribute("data-id")));
+                    sessionStorage.removeItem("adminCache"); // Nullstill cache ved endring
                     visMelding("Tittelen ble slettet.", "success");
-                    lastInnAltData();
+                    lastInnAltData(true);
                 }
             });
         }
@@ -932,8 +934,9 @@
 
             try {
                 await setDoc(doc(db, samling, id), obj);
+                sessionStorage.removeItem("adminCache"); // Tøm cache ved endringer
                 visMelding(`"${tittel}" ble oppdatert og lagret!`, "success");
-                lastInnAltData();
+                lastInnAltData(true);
                 byttTab(samling);
                 nullstillSkjema();
             } catch (err) {
@@ -946,31 +949,6 @@
             const rows = document.querySelectorAll(type === 'filmer' ? '#filmTableBody tr' : '#serieTableBody tr');
             rows.forEach(row => {
                 row.style.display = row.innerText.toLowerCase().includes(query) ? "" : "none";
-            });
-        }
-
-        async function lastInnHistorikk() {
-            const historyBody = document.getElementById("historyTableBody");
-            historyBody.innerHTML = "";
-            const brukereSnap = await getDocs(collection(db, "users"));
-            brukereSnap.forEach((userDoc) => {
-                const userData = userDoc.data();
-                if (userData.profiler && Array.isArray(userData.profiler)) {
-                    userData.profiler.forEach(profil => {
-                        if (profil.fremdrift) {
-                            Object.entries(profil.fremdrift).forEach(([filmId, info]) => {
-                                const tr = document.createElement("tr");
-                                tr.innerHTML = `
-                                    <td>${profil.navn || 'Profil'}</td>
-                                    <td>${info.tittel || filmId}</td>
-                                    <td>${info.status || 'påbegynt'} (${info.percent || 0}%)</td>
-                                    <td>${new Date(info.sistOppdatert).toLocaleString('no-NO') || '-'}</td>
-                                `;
-                                historyBody.appendChild(tr);
-                            });
-                        }
-                    });
-                }
             });
         }
     </script>
