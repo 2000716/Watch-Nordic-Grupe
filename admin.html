@@ -520,7 +520,7 @@
         // --- AUTOMATISK INNSJEKKING VED OPPDATERING (PERSISTENS) ---
         onAuthStateChanged(auth, async (user) => {
             if (user) {
-                // Brukeren er alt logget inn, sjekk om vedkommende fremdeles er ansatt
+                // Brukeren er logget inn, sjekk om vedkommende fremdeles er ansatt
                 try {
                     const ansattSnap = await getDoc(doc(db, "ansatte", user.uid));
                     if (ansattSnap.exists()) {
@@ -528,14 +528,16 @@
                         document.getElementById("adminSection").classList.remove("hidden");
                         lastInnAltData();
                     } else {
-                        // Ikke ansatt lenger, logg ut eller vis feil
                         document.getElementById("loginSection").classList.remove("hidden");
                         document.getElementById("adminSection").classList.add("hidden");
                     }
-                } else {
+                } catch (err) {
                     document.getElementById("loginSection").classList.remove("hidden");
                     document.getElementById("adminSection").classList.add("hidden");
                 }
+            } else {
+                document.getElementById("loginSection").classList.remove("hidden");
+                document.getElementById("adminSection").classList.add("hidden");
             }
         });
 
@@ -563,16 +565,17 @@
         });
 
         window.byttTab = function(tab) {
+            // "historikk" er fjernet herfra siden den er slettet fra HTML
             const tabs = ['oversikt', 'filmer', 'serier', 'leggTil'];
             tabs.forEach(t => {
                 const contentEl = document.getElementById(`tab${t.charAt(0).toUpperCase() + t.slice(1)}`);
                 const btnEl = document.getElementById(`tabBtn${t.charAt(0).toUpperCase() + t.slice(1)}`);
                 if (t === tab) {
-                    contentEl.classList.remove("hidden");
-                    btnEl.classList.add("active");
+                    if (contentEl) contentEl.classList.remove("hidden");
+                    if (btnEl) btnEl.classList.add("active");
                 } else {
-                    contentEl.classList.add("hidden");
-                    btnEl.classList.remove("active");
+                    if (contentEl) contentEl.classList.add("hidden");
+                    if (btnEl) btnEl.classList.remove("active");
                 }
             });
 
@@ -650,8 +653,8 @@
                     <button type="button" onclick="this.parentElement.parentElement.remove()" style="background:#FF5252; color:#fff; padding:3px 6px; font-size:10px;">Fjern episode</button>
                 </div>
                 <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 10px;">
-                    <input type="text" class="epi-tittel" placeholder="Episode tittel (f.eks. Titanic)" value="${epiData ? (epiData.tittel || '') : ''}" style="margin:0 0 10px 0;">
-                    <input type="text" class="epi-varighet" placeholder="Varighet (f.eks. 5 min)" value="${epiData ? (epiData.varighet || '') : ''}" style="margin:0 0 10px 0;">
+                    <input type="text" class="epi-tittel" placeholder="Episode tittel..." value="${epiData ? (epiData.tittel || '') : ''}" style="margin:0 0 10px 0;">
+                    <input type="text" class="epi-varighet" placeholder="Varighet..." value="${epiData ? (epiData.varighet || '') : ''}" style="margin:0 0 10px 0;">
                 </div>
                 <textarea class="epi-beskrivelse" placeholder="Episodebeskrivelse..." style="margin:0 0 10px 0; height:60px;">${epiData ? (epiData.beskrivelse || '') : ''}</textarea>
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
@@ -681,7 +684,7 @@
             document.getElementById("skjemaUnderTekst").textContent = "Fyll ut skjemaet for å publisere en film eller serie.";
             document.getElementById("inpId").removeAttribute("data-redigerer");
             document.getElementById("inpId").removeAttribute("readonly");
-            document.getElementById("inpId").style.background = "#0D2328";
+            document.getElementById("inpId").style.background = "#050F11";
             document.getElementById("inpId").style.color = "#ffffff";
 
             const inputs = document.querySelectorAll("#tabLeggTil input, #tabLeggTil textarea, #tabLeggTil select");
@@ -697,8 +700,8 @@
         window.lastInnAltData = async function(tvingOppdatering = false) {
             const filmBody = document.getElementById("filmTableBody");
             const serieBody = document.getElementById("serieTableBody");
-            filmBody.innerHTML = "";
-            serieBody.innerHTML = "";
+            if (filmBody) filmBody.innerHTML = "";
+            if (serieBody) serieBody.innerHTML = "";
 
             let filmerData = [];
             let serierData = [];
@@ -706,7 +709,7 @@
 
             const cachedData = sessionStorage.getItem("adminCache");
             const cacheTid = sessionStorage.getItem("adminCacheTid");
-            const erCacheGyldig = cacheTid && (new Date().getTime() - cacheTid < 10 * 60 * 1000); // 10 minutter gyldighet
+            const erCacheGyldig = cacheTid && (new Date().getTime() - cacheTid < 10 * 60 * 1000);
 
             if (!tvingOppdatering && erCacheGyldig && cachedData) {
                 const parsed = JSON.parse(cachedData);
@@ -714,7 +717,6 @@
                 serierData = parsed.serier;
                 brukereData = parsed.brukere;
             } else {
-                // Hent fra Firebase hvis cache ikke finnes eller tvinges
                 const [filmSnap, serieSnap, brukereSnap] = await Promise.all([
                     getDocs(collection(db, "filmer")),
                     getDocs(collection(db, "serier")),
@@ -729,9 +731,7 @@
                 sessionStorage.setItem("adminCacheTid", new Date().getTime());
             }
 
-            // Fyll filmer
             filmerData.forEach(item => leggTilTabellRad("filmer", item.id, item));
-            // Fyll serier
             serierData.forEach(item => leggTilTabellRad("serier", item.id, item));
 
             document.getElementById("statTotaltInnhold").textContent = filmerData.length + serierData.length;
@@ -816,7 +816,7 @@
             tr.querySelector(".btn-slett").addEventListener("click", async function() {
                 if(confirm(`Er du sikker på at du vil slette "${tittel}"?`)) {
                     await deleteDoc(doc(db, this.getAttribute("data-samling"), this.getAttribute("data-id")));
-                    sessionStorage.removeItem("adminCache"); // Nullstill cache ved endring
+                    sessionStorage.removeItem("adminCache");
                     visMelding("Tittelen ble slettet.", "success");
                     lastInnAltData(true);
                 }
@@ -956,7 +956,7 @@
 
             try {
                 await setDoc(doc(db, samling, id), obj);
-                sessionStorage.removeItem("adminCache"); // Tøm cache ved endringer
+                sessionStorage.removeItem("adminCache");
                 visMelding(`"${tittel}" ble oppdatert og lagret!`, "success");
                 lastInnAltData(true);
                 byttTab(samling);
