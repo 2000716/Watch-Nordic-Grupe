@@ -1542,7 +1542,7 @@ img, video {
     await lagreProfilDataTilSkyen();
   }
 
-  /* ==========================================
+/* ==========================================
      6. EPISODELISTING & OPTIMALISERTE ANBEFALINGER
      ========================================== */
   function visSesong(sesongNr) {
@@ -1598,9 +1598,6 @@ img, video {
     });
   }
 
-  /* OPTIMALISERT ANBEFALINGSHENTING:
-     I stedet for getDocs() på hele filmer-databasen, henter vi kun de 10 nyeste/første 
-     filmene med limit(10) for å spare ressurser. */
   async function byggAnbefalingerEllerEpisoder() {
     const recommendationsDiv = document.querySelector(".recommendations");
     if (!recommendationsDiv || !data) return;
@@ -1631,13 +1628,15 @@ img, video {
 
     } else {
       const gallery = document.getElementById("recommendationGallery");
-      if (!gallery || gallery.children.length > 0) return;
+      
+      // SJEKK & SETT LÅS (Hindrer dobbelkjøring når async-spørring pågår)
+      if (!gallery || gallery.children.length > 0 || gallery.dataset.laster === "true") return;
+      gallery.dataset.laster = "true"; // Låser umiddelbart før await
 
       const tittelEl = document.querySelector(".recommendations h2");
       if (tittelEl) tittelEl.textContent = "Filmer du kanskje vil like";
 
       try {
-        // Begrens spørringen til maks 10 dokumenter i stedet for hele databasen!
         const q = query(collection(db, "filmer"), limit(10));
         const filmerSnap = await getDocs(q);
 
@@ -1668,10 +1667,10 @@ img, video {
         });
       } catch (e) {
         console.error("Feil ved henting av anbefalinger:", e);
+        gallery.dataset.laster = "false"; // Åpne for nytt forsøk ved feil
       }
     }
   }
-
   /* ==========================================
      7. VIDEO/TRAILER, FEILHÅNDTERING & STYLING
      ========================================== */
