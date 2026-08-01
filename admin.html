@@ -10,6 +10,7 @@
 
   <link rel="icon" type="image/png" href="https://static.wixstatic.com/media/d9ace9_95bbe3f5ff4b4aab9314a8d08804344e~mv2.png" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+
     <style>
         /* ==========================================================================
            1. GLOBALE STILER & RESETS
@@ -627,15 +628,33 @@
             }
             const epiNr = epiContainer.children.length + 1;
 
+            // Formater dato for datetime-local (YYYY-MM-DDTHH:mm) hvis den finnes
+            let formattedDate = "";
+            if (epiData && epiData.publishDate) {
+                formattedDate = epiData.publishDate.slice(0, 16);
+            }
+
             const div = document.createElement("div");
             div.className = "episode-item";
-            div.style.cssText = "background: #0D2328; padding: 10px; border-radius: 4px; margin-top: 8px; border: 1px solid var(--border-color);";
+            div.style.cssText = "background: #0D2328; padding: 15px; border-radius: 6px; margin-top: 10px; border: 1px solid var(--border-color);";
             div.innerHTML = `
-                <div style="display:flex; gap:10px;">
-                    <input type="text" class="epi-tittel" placeholder="Episode ${epiNr} tittel" value="${epiData ? (epiData.tittel || '') : ''}" style="margin:0;">
-                    <input type="text" class="epi-video" placeholder="Video URL (.mp4)" value="${epiData ? (epiData.videoUrl || '') : ''}" style="margin:0;">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+                    <strong style="font-size:13px; color:var(--primary);">Episode ${epiNr}</strong>
+                    <button type="button" onclick="this.parentElement.parentElement.remove()" style="background:#FF5252; color:#fff; padding:3px 6px; font-size:10px;">Fjern episode</button>
                 </div>
-                <input type="text" class="epi-thumb" placeholder="Thumbnail URL" value="${epiData ? (epiData.thumbnail || '') : ''}" style="margin:5px 0 0 0;">
+                <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 10px;">
+                    <input type="text" class="epi-tittel" placeholder="Episode tittel (f.eks. Titanic)" value="${epiData ? (epiData.tittel || '') : ''}" style="margin:0 0 10px 0;">
+                    <input type="text" class="epi-varighet" placeholder="Varighet (f.eks. 5 min)" value="${epiData ? (epiData.varighet || '') : ''}" style="margin:0 0 10px 0;">
+                </div>
+                <textarea class="epi-beskrivelse" placeholder="Episodebeskrivelse..." style="margin:0 0 10px 0; height:60px;">${epiData ? (epiData.beskrivelse || '') : ''}</textarea>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                    <input type="text" class="epi-video" placeholder="Video URL (.mp4)" value="${epiData ? (epiData.videoUrl || '') : ''}" style="margin:0 0 10px 0;">
+                    <input type="text" class="epi-thumb" placeholder="Thumbnail URL" value="${epiData ? (epiData.thumbnail || '') : ''}" style="margin:0 0 10px 0;">
+                </div>
+                <div>
+                    <label style="font-size:11px; margin-top:0;">Publiseringsdato:</label>
+                    <input type="datetime-local" class="epi-pubdate" value="${formattedDate}" style="margin:2px 0 0 0;">
+                </div>
             `;
             epiContainer.appendChild(div);
         }
@@ -891,11 +910,15 @@
 
                     sesDiv.querySelectorAll(".episode-item").forEach((epiDiv, eIndex) => {
                         const eNummer = eIndex + 1;
+                        const epiPubDate = epiDiv.querySelector(".epi-pubdate").value;
                         episoder[eNummer] = {
                             episodeNummer: eNummer,
-                            tittel: epiDiv.querySelector(".epi-tittel").value,
-                            videoUrl: epiDiv.querySelector(".epi-video").value,
-                            thumbnail: epiDiv.querySelector(".epi-thumb").value
+                            tittel: epiDiv.querySelector(".epi-tittel").value.trim(),
+                            beskrivelse: epiDiv.querySelector(".epi-beskrivelse").value.trim(),
+                            varighet: epiDiv.querySelector(".epi-varighet").value.trim(),
+                            thumbnail: epiDiv.querySelector(".epi-thumb").value.trim(),
+                            publishDate: epiPubDate ? new Date(epiPubDate).toISOString().slice(0, 19) : "",
+                            videoUrl: epiDiv.querySelector(".epi-video").value.trim()
                         };
                     });
 
