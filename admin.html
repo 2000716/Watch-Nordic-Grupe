@@ -131,6 +131,14 @@
         th { background: #07171A; color: var(--text-muted); font-weight: 600; }
         tr:hover { background: #0D2328; }
 
+        .clickable-row {
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .clickable-row:hover {
+            background: #122C32 !important;
+        }
+
         .nav-tabs { 
             display: flex; 
             gap: 10px; 
@@ -306,6 +314,7 @@
                         <h2>Filmoversikt</h2>
                         <input type="text" id="sokFilmer" placeholder="Søk i filmer..." oninput="filterTabell('filmer')" style="max-width: 250px; margin: 0;">
                     </div>
+                    <p style="margin-bottom: 15px; font-style: italic;"><i class="fas fa-info-circle" style="color: var(--primary);"></i> Klikk på en filmrad i tabellen for å redigere dens oppsett.</p>
                     <table>
                         <thead>
                             <tr>
@@ -325,6 +334,7 @@
                         <h2>Serieoversikt</h2>
                         <input type="text" id="sokSerier" placeholder="Søk i serier..." oninput="filterTabell('serier')" style="max-width: 250px; margin: 0;">
                     </div>
+                    <p style="margin-bottom: 15px; font-style: italic;"><i class="fas fa-info-circle" style="color: var(--primary);"></i> Klikk på en serierad i tabellen for å redigere dens oppsett.</p>
                     <table>
                         <thead>
                             <tr>
@@ -338,10 +348,10 @@
                     </table>
                 </div>
 
-                <!-- TAB 4: LEGG TIL INNHOLD -->
+                <!-- TAB 4: LEGG TIL / REDIGER INNHOLD -->
                 <div id="tabLeggTil" class="tab-content hidden">
-                    <h2>Legg til ny tittel</h2>
-                    <p>Fyll ut skjemaet for å publisere en film eller serie.</p>
+                    <h2 id="skjemaTittelHeading">Legg til ny tittel</h2>
+                    <p id="skjemaUnderTekst">Fyll ut skjemaet for å publisere en film eller serie.</p>
 
                     <div style="background: #0D2328; padding: 30px; margin-top: 20px; border-radius: 10px; border: 1px solid var(--border-color);">
                         <div class="form-grid">
@@ -350,8 +360,8 @@
                                 <input type="text" id="inpTittel" placeholder="F.eks. House on Haunted Hill" oninput="genererIDogAutomater()">
                             </div>
                             <div>
-                                <label>Unik ID (Genereres automatisk):</label>
-                                <input type="text" id="inpId" placeholder="house-on-haunted-hill" readonly style="background: #050F11; color: #777;">
+                                <label>Unik ID (Låst ved redigering):</label>
+                                <input type="text" id="inpId" placeholder="house-on-haunted-hill" style="background: #050F11; color: #777;">
                             </div>
 
                             <div>
@@ -474,8 +484,9 @@
                             </div>
                         </div>
 
-                        <div style="margin-top: 25px;">
-                            <button onclick="lagreInnhold()"><i class="fas fa-save"></i> Lagre og publiser</button>
+                        <div style="margin-top: 25px; display: flex; gap: 10px;">
+                            <button onclick="lagreInnhold()"><i class="fas fa-save"></i> Lagre endringer</button>
+                            <button type="button" onclick="nullstillSkjema()" style="background: #0D2328; color: var(--text-main); border: 1px solid var(--border-color);"><i class="fas fa-undo"></i> Avbryt / Ny</button>
                         </div>
                     </div>
                 </div>
@@ -551,7 +562,9 @@
             });
 
             if (tab === 'historikk') lastInnHistorikk();
-            if (tab === 'leggTil') forberedSkjemaDatoer();
+            if (tab === 'leggTil' && !document.getElementById("inpId").getAttribute("data-redigerer")) {
+                nullstillSkjema();
+            }
         }
 
         window.byttInnholdsType = function() {
@@ -566,13 +579,16 @@
         }
 
         window.genererIDogAutomater = function() {
-            const tittel = document.getElementById("inpTittel").value;
-            const id = tittel.toLowerCase().replace(/[^a-z0-9]/g, "-").replace(/-+/g, "-");
-            document.getElementById("inpId").value = id;
-            document.getElementById("inpSubtitleUrl").value = id ? `${id}.VTT` : "";
+            // Generer ID automatisk kun hvis vi IKKE er i redigeringsmodus
+            if (!document.getElementById("inpId").getAttribute("data-redigerer")) {
+                const tittel = document.getElementById("inpTittel").value;
+                const id = tittel.toLowerCase().replace(/[^a-z0-9]/g, "-").replace(/-+/g, "-");
+                document.getElementById("inpId").value = id;
+                document.getElementById("inpSubtitleUrl").value = id ? `${id}.VTT` : "";
+            }
         }
 
-        window.leggTilSesong = function() {
+        window.leggTilSesong = function(dataSesong = null) {
             const container = document.getElementById("sesongContainer");
             const sesongNr = container.children.length + 1;
             
@@ -584,15 +600,27 @@
                     <strong>Sesong ${sesongNr}</strong>
                     <button type="button" onclick="this.parentElement.parentElement.remove()" style="background:#FF5252; color:#fff; padding:4px 8px; font-size:11px;">Fjern sesong</button>
                 </div>
-                <input type="text" class="sesong-beskrivelse" placeholder="Beskrivelse for sesongen..." style="margin-top:10px;">
+                <input type="text" class="sesong-beskrivelse" placeholder="Beskrivelse for sesongen..." value="${dataSesong ? (dataSesong.beskrivelse || '') : ''}" style="margin-top:10px;">
                 <div class="episoder-container" style="margin-top:10px;"></div>
                 <button type="button" onclick="leggTilEpisodTilSesong(this)" style="background:#0D2328; color:var(--text-main); border:1px solid var(--border-color); font-size:12px; margin-top:5px;"><i class="fas fa-plus"></i> Legg til episode</button>
             `;
             container.appendChild(div);
+
+            if (dataSesong && dataSesong.episoder) {
+                const epiContainer = div.querySelector(".episoder-container");
+                Object.values(dataSesong.episoder).forEach(epi => {
+                    leggTilEpisodTilSesong(epiContainer, epi);
+                });
+            }
         }
 
-        window.leggTilEpisodTilSesong = function(btn) {
-            const epiContainer = btn.previousElementSibling;
+        window.leggTilEpisodTilSesong = function(target, epiData = null) {
+            let epiContainer;
+            if (target.nodeName === 'BUTTON') {
+                epiContainer = target.previousElementSibling;
+            } else {
+                epiContainer = target; // Direkte element sendt fra loopen
+            }
             const epiNr = epiContainer.children.length + 1;
 
             const div = document.createElement("div");
@@ -600,10 +628,10 @@
             div.style.cssText = "background: #0D2328; padding: 10px; border-radius: 4px; margin-top: 8px; border: 1px solid var(--border-color);";
             div.innerHTML = `
                 <div style="display:flex; gap:10px;">
-                    <input type="text" class="epi-tittel" placeholder="Episode ${epiNr} tittel" style="margin:0;">
-                    <input type="text" class="epi-video" placeholder="Video URL (.mp4)" style="margin:0;">
+                    <input type="text" class="epi-tittel" placeholder="Episode ${epiNr} tittel" value="${epiData ? (epiData.tittel || '') : ''}" style="margin:0;">
+                    <input type="text" class="epi-video" placeholder="Video URL (.mp4)" value="${epiData ? (epiData.videoUrl || '') : ''}" style="margin:0;">
                 </div>
-                <input type="text" class="epi-thumb" placeholder="Thumbnail URL" style="margin:5px 0 0 0;">
+                <input type="text" class="epi-thumb" placeholder="Thumbnail URL" value="${epiData ? (epiData.thumbnail || '') : ''}" style="margin:5px 0 0 0;">
             `;
             epiContainer.appendChild(div);
         }
@@ -618,6 +646,24 @@
             }
         }
 
+        window.nullstillSkjema = function() {
+            document.getElementById("skjemaTittelHeading").textContent = "Legg til ny tittel";
+            document.getElementById("skjemaUnderTekst").textContent = "Fyll ut skjemaet for å publisere en film eller serie.";
+            document.getElementById("inpId").removeAttribute("data-redigerer");
+            document.getElementById("inpId").removeAttribute("readonly");
+            document.getElementById("inpId").style.background = "#0D2328";
+            document.getElementById("inpId").style.color = "#ffffff";
+
+            // Tøm felt
+            const inputs = document.querySelectorAll("#tabLeggTil input, #tabLeggTil textarea, #tabLeggTil select");
+            inputs.forEach(input => {
+                if(input.id !== 'inpType') input.value = "";
+            });
+            document.getElementById("sesongContainer").innerHTML = "";
+            forberedSkjemaDatoer();
+            byttInnholdsType();
+        }
+
         window.lastInnAltData = async function() {
             const filmBody = document.getElementById("filmTableBody");
             const serieBody = document.getElementById("serieTableBody");
@@ -627,7 +673,6 @@
             let antallFilmer = 0;
             let antallSerier = 0;
 
-            // 1. Hent filmer og serier fra Firestore
             const filmSnap = await getDocs(collection(db, "filmer"));
             filmSnap.forEach((d) => {
                 antallFilmer++;
@@ -642,61 +687,41 @@
 
             document.getElementById("statTotaltInnhold").textContent = antallFilmer + antallSerier;
 
-            // 2. Hent ekte abonnenter fra "users"-samlingen
             const brukereSnap = await getDocs(collection(db, "users"));
             const antallAbonnenter = brukereSnap.size;
             document.getElementById("statAbonnenter").textContent = antallAbonnenter;
 
-            // 3. Regn ut unike innlogginger siste 24 timer (basert på sistAktiv / sistInnlogget felt på brukerne)
             let aktiveSiste24t = 0;
             const enDognSiden = new Date().getTime() - (24 * 60 * 60 * 1000);
-            
-            // For søylediagrammet (Man - Søn)
             const dagerNavn = ["Søn", "Man", "Tir", "Ons", "Tor", "Fre", "Lør"];
             const dagerTeller = { "Man": 0, "Tir": 0, "Ons": 0, "Tor": 0, "Fre": 0, "Lør": 0, "Søn": 0 };
 
             brukereSnap.forEach((doc) => {
                 const data = doc.data();
                 const aktivTidStr = data.sistAktiv || data.sistInnlogget || data.opprettetDato;
-                
                 if (aktivTidStr) {
                     const aktivDato = new Date(aktivTidStr);
                     const tidMs = aktivDato.getTime();
-
-                    // Sjekk om aktiv siste 24t
-                    if (tidMs > enDognSiden) {
-                        aktiveSiste24t++;
-                    }
-
-                    // Fordel på ukedag for søylediagrammet
+                    if (tidMs > enDognSiden) aktiveSiste24t++;
                     const dagTekst = dagerNavn[aktivDato.getDay()];
-                    if (dagerTeller[dagTekst] !== undefined) {
-                        dagerTeller[dagTekst]++;
-                    }
+                    if (dagerTeller[dagTekst] !== undefined) dagerTeller[dagTekst]++;
                 }
             });
 
             document.getElementById("statInnlogget").textContent = aktiveSiste24t;
-
-            // 4. Generer søylediagrammet dynamisk basert på ekte data
             oppdaterSoyleDiagram(dagerTeller);
         }
 
         function oppdaterSoyleDiagram(dagerTeller) {
             const chartContainer = document.getElementById("chartBarsContainer");
             chartContainer.innerHTML = "";
-
-            // Rekkefølge på ukedager i diagrammet
             const ukesRekkefolge = ["Man", "Tir", "Ons", "Tor", "Fre", "Lør", "Søn"];
-            
-            // Finn høyeste verdi for å skalere stolpene relativt (maks 100% høyde)
             const verdier = Object.values(dagerTeller);
-            const maksVerdi = Math.max(...verdier, 1); // Unngå deling på null
+            const maksVerdi = Math.max(...verdier, 1);
 
             ukesRekkefolge.forEach(dag => {
                 const antall = dagerTeller[dag] || 0;
                 const prosent = Math.round((antall / maksVerdi) * 100);
-                // Sikre at stolpen har litt synlighet (f.eks minst 8%) selv ved 0, eller 0% om tom. 
                 const tilpassetProsent = antall > 0 ? Math.max(prosent, 12) : 5;
 
                 const wrap = document.createElement("div");
@@ -712,16 +737,17 @@
 
         function leggTilTabellRad(samling, id, data) {
             const tr = document.createElement("tr");
+            tr.className = "clickable-row";
             const tittel = data.tittel || id;
             
             if (samling === "filmer") {
                 const sjangerInfo = (data.metadata && data.metadata[2]) ? data.metadata[2] : "-";
                 tr.innerHTML = `
                     <td>${id}</td>
-                    <td>${tittel}</td>
+                    <td><strong>${tittel}</strong></td>
                     <td>${sjangerInfo}</td>
                     <td>
-                        <button class="btn-slett" data-samling="${samling}" data-id="${id}" style="background:#FF5252; color:#fff; padding:6px 12px; font-size:13px;"><i class="fas fa-trash"></i> Slett</button>
+                        <button class="btn-slett" data-samling="${samling}" data-id="${id}" style="background:#FF5252; color:#fff; padding:6px 12px; font-size:13px;" onclick="event.stopPropagation();"><i class="fas fa-trash"></i> Slett</button>
                     </td>
                 `;
                 document.getElementById("filmTableBody").appendChild(tr);
@@ -729,20 +755,80 @@
                 const antSesonger = data.sesonger ? Object.keys(data.sesonger).length : 0;
                 tr.innerHTML = `
                     <td>${id}</td>
-                    <td>${tittel}</td>
+                    <td><strong>${tittel}</strong></td>
                     <td>${antSesonger} sesong(er)</td>
                     <td>
-                        <button class="btn-slett" data-samling="${samling}" data-id="${id}" style="background:#FF5252; color:#fff; padding:6px 12px; font-size:13px;"><i class="fas fa-trash"></i> Slett</button>
+                        <button class="btn-slett" data-samling="${samling}" data-id="${id}" style="background:#FF5252; color:#fff; padding:6px 12px; font-size:13px;" onclick="event.stopPropagation();"><i class="fas fa-trash"></i> Slett</button>
                     </td>
                 `;
                 document.getElementById("serieTableBody").appendChild(tr);
             }
 
-            tr.querySelector(".btn-slett").addEventListener("click", async function() {
-                await deleteDoc(doc(db, this.getAttribute("data-samling"), this.getAttribute("data-id")));
-                visMelding("Tittelen ble slettet.", "success");
-                lastInnAltData();
+            // KLIKK PÅ RADEN FOR Å REDIGERE
+            tr.addEventListener("click", () => {
+                apneRedigering(samling, id, data);
             });
+
+            tr.querySelector(".btn-slett").addEventListener("click", async function() {
+                if(confirm(`Er du sikker på at du vil slette "${tittel}"?`)) {
+                    await deleteDoc(doc(db, this.getAttribute("data-samling"), this.getAttribute("data-id")));
+                    visMelding("Tittelen ble slettet.", "success");
+                    lastInnAltData();
+                }
+            });
+        }
+
+        window.apneRedigering = function(samling, id, data) {
+            byttTab('leggTil');
+            document.getElementById("skjemaTittelHeading").textContent = `Redigerer: ${data.tittel || id}`;
+            document.getElementById("skjemaUnderTekst").textContent = `Endre oppsettet for denne tittelen nedenfor. ID kan ikke endres.`;
+            
+            document.getElementById("inpId").value = id;
+            document.getElementById("inpId").setAttribute("data-redigerer", "true");
+            document.getElementById("inpId").setAttribute("readonly", "true");
+            document.getElementById("inpId").style.background = "#050F11";
+            document.getElementById("inpId").style.color = "#777";
+
+            document.getElementById("inpType").value = samling;
+            byttInnholdsType();
+
+            document.getElementById("inpTittel").value = data.tittel || "";
+            document.getElementById("inpRating").value = data.rating || "";
+            document.getElementById("inpBeskrivelse").value = data.beskrivelse || "";
+            document.getElementById("inpRegissor").value = data.regissor || "";
+            document.getElementById("inpSkuespillere").value = data.skuespillere || "";
+
+            if (data.metadata && Array.isArray(data.metadata)) {
+                document.getElementById("metaAar").value = data.metadata[0] || "";
+                document.getElementById("metaAldersgrense").value = data.metadata[1] || "";
+                document.getElementById("metaSjanger").value = data.metadata[2] || "";
+                document.getElementById("metaVarighet").value = data.metadata[3] || "";
+            }
+
+            document.getElementById("inpBakgrunn").value = data.bakgrunn || "";
+            document.getElementById("inpBakgrunnMobil").value = data.bakgrunnMobil || "";
+            document.getElementById("inpPoster").value = data.poster || "";
+            document.getElementById("inpPosterVertikal").value = data.posterVertikal || "";
+            document.getElementById("inpLogo").value = data.logo || "";
+            document.getElementById("inpBanner").value = data.banner || "";
+            document.getElementById("inpTrailer").value = data.trailer || "";
+
+            if (data.publishDate) {
+                document.getElementById("inpPublishDate").value = new Date(data.publishDate).toISOString().slice(0, 16);
+            }
+            if (data.expireDate) {
+                document.getElementById("inpExpireDate").value = new Date(data.expireDate).toISOString().slice(0, 16);
+            }
+
+            if (samling === "filmer") {
+                document.getElementById("inpVideoUrl").value = data.videoUrl || "";
+                document.getElementById("inpSubtitleUrl").value = data.subtitleUrl || "";
+            } else if (samling === "serier" && data.sesonger) {
+                document.getElementById("sesongContainer").innerHTML = "";
+                Object.values(data.sesonger).forEach(ses => {
+                    leggTilSesong(ses);
+                });
+            }
         }
 
         window.lagreInnhold = async function() {
@@ -819,9 +905,10 @@
 
             try {
                 await setDoc(doc(db, samling, id), obj);
-                visMelding(`"${tittel}" ble lagret med komplette data!`, "success");
+                visMelding(`"${tittel}" ble oppdatert og lagret!`, "success");
                 lastInnAltData();
                 byttTab(samling);
+                nullstillSkjema();
             } catch (err) {
                 visMelding("Feil ved lagring: " + err.message, "error");
             }
