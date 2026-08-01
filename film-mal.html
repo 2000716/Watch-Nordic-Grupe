@@ -1202,13 +1202,31 @@ function sjekkLagretFremdrift() {
     startVideoFraStart();
     return;
   }
+  
   const fremdriftInfo = profil.fremdrift?.[filmId];
-  if (fremdriftInfo && fremdriftInfo.currentTime > 10 && fremdriftInfo.status !== "ferdig") {
-    video.currentTime = parseFloat(fremdriftInfo.currentTime);
+  const lagretTid = fremdriftInfo?.currentTime ? parseFloat(fremdriftInfo.currentTime) : 0;
+  
+  if (fremdriftInfo && lagretTid > 5 && fremdriftInfo.status !== "ferdig") {
     if (resumeOverlay) resumeOverlay.style.display = "flex";
+
+    if (continueBtn) {
+      continueBtn.onclick = () => {
+        if (resumeOverlay) resumeOverlay.style.display = "none";
+        video.currentTime = lagretTid;
+        video.play().catch(() => {});
+        
+        // EKSPRESSLAGRING: Legg direkte inn i "Fortsett å se" med en gang
+        oppdaterFremdriftILokalMatrise("paabegynt");
+        startLokalLagringsLoop();
+      };
+    }
     
-    if (continueBtn) continueBtn.onclick = () => { if(resumeOverlay) resumeOverlay.style.display = "none"; video.play().catch(()=>{}); startLokalLagringsLoop(); };
-    if (restartBtn) restartBtn.onclick = () => { video.currentTime = 0; if(resumeOverlay) resumeOverlay.style.display = "none"; video.play().catch(()=>{}); startLokalLagringsLoop(); };
+    if (restartBtn) {
+      restartBtn.onclick = () => {
+        if (resumeOverlay) resumeOverlay.style.display = "none";
+        startVideoFraStart();
+      };
+    }
   } else {
     startVideoFraStart();
   }
@@ -1217,6 +1235,12 @@ function sjekkLagretFremdrift() {
 function startVideoFraStart() {
   video.currentTime = 0;
   video.play().catch(() => {});
+  
+  // Sørger for at den registreres direkte som påbegynt fra sekund 0
+  setTimeout(() => {
+    oppdaterFremdriftILokalMatrise("paabegynt");
+  }, 200);
+
   startLokalLagringsLoop();
 }
 
@@ -1228,7 +1252,8 @@ function startLokalLagringsLoop() {
 }
 
 function oppdaterFremdriftILokalMatrise(status) {
-  if (isNaN(video.currentTime) || video.currentTime <= 0 || isNaN(video.duration)) return;
+  // Tillater lagring selv om video.currentTime er 0, så lenge video.duration finnes
+  if (isNaN(video.currentTime) || isNaN(video.duration) || video.duration <= 0) return;
   
   const percent = parseFloat(((video.currentTime / video.duration) * 100).toFixed(1));
   let profilIdx = heleProfilArrayet.findIndex(p => p.navn === aktivProfilNavn);
@@ -1258,22 +1283,23 @@ function oppdaterFremdriftILokalMatrise(status) {
     };
     heleProfilArrayet[profilIdx].historikk[navn] = "påbegynt";
   }
+
+  // Lagres umiddelbart til LocalStorage slik at Hovedsiden ser det med én gang
   localStorage.setItem("watch_nordic_profiles_cache", JSON.stringify(heleProfilArrayet));
+
+  // Lagres også i bakgrunnen mot Firebase
+  if (currentUser) {
+    const userDocRef = doc(db, "users", currentUser.uid);
+    setDoc(userDocRef, { profiler: heleProfilArrayet }, { merge: true }).catch(err => {
+      console.error("Feil ved bakgrunnssynk:", err);
+    });
+  }
 }
 
 async function lagreSistePosisjonEkspress() {
   clearInterval(lokalLagringsInterval);
   const erFerdig = (video.currentTime / video.duration) > 0.96;
   oppdaterFremdriftILokalMatrise(erFerdig ? "ferdig" : "paabegynt");
-  
-  if (currentUser) {
-    try {
-      const userDocRef = doc(db, "users", currentUser.uid);
-      await setDoc(userDocRef, { profiler: heleProfilArrayet }, { merge: true });
-    } catch (err) {
-      console.error("Feil ved ekspresslagring til skyen:", err);
-    }
-  }
 }
 
 async function ryddeOgNeste() {
@@ -1282,13 +1308,6 @@ async function ryddeOgNeste() {
   clearInterval(autoplayTimer);
   
   oppdaterFremdriftILokalMatrise("ferdig");
-  
-  if (currentUser) {
-    try {
-      const userDocRef = doc(db, "users", currentUser.uid);
-      await setDoc(userDocRef, { profiler: heleProfilArrayet }, { merge: true });
-    } catch (e) { console.error("Feil ved lagring før navigering:", e); }
-  }
   
   if (isSerie && nesteEpisodeUrl) {
     window.location.href = nesteEpisodeUrl;
@@ -1684,7 +1703,6 @@ function startPremiumAutoplay() {
     container.style.backgroundRepeat = "no-repeat";
   }
 
-  // Fyll ut eksisterende elementer i HTML i stedet for å erstatte innerHTML
   if (autoplayLogo) {
     if (serieLogoUrl) {
       autoplayLogo.src = serieLogoUrl;
@@ -1697,11 +1715,9 @@ function startPremiumAutoplay() {
   if (autoplayEpTitle) autoplayEpTitle.textContent = nesteTittel;
   if (autoplayEpDesc) autoplayEpDesc.textContent = nesteBeskrivelse;
 
-  // Lyttere for knappene
   if (autoplayPlayNextBtn) autoplayPlayNextBtn.onclick = () => ryddeOgNeste();
   if (autoplayCancelBtn) autoplayCancelBtn.onclick = () => avbrytAutoplay();
 
-  // Aktiver minimeringsklasse på videospiller via CSS-klasse
   container.classList.add("autoplay-active");
   autoplayOverlay.style.display = "flex";
   
