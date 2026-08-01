@@ -1320,6 +1320,7 @@
   let registrertBruker = null;
   const aktivProfil = localStorage.getItem("aktivProfil") || "Hovedprofil";
   let heleProfilArrayet = [];
+  let updateFirebaseTimeout = null;
 
   // Hjelpefunksjon for å oppdatere profilmeny i header
   function oppdaterMenyProfilVisning(bildeUrl, profilNavn, farge) {
@@ -1350,7 +1351,7 @@
     }
   }
 
-  // ==================== REIDREKTERINGSVAKT & PROFIL-CACHE ==================== //
+  // ==================== OPTIMALISERT BRUKERSJEKK (SPARER READS) ==================== //
   onAuthStateChanged(auth, async (user) => {
     if (!user) {
       const gjeldendeSide = window.location.pathname.split("/").pop();
@@ -1372,16 +1373,19 @@
         }
       }
 
-      try {
-        const docRef = doc(db, "users", user.uid);
-        const docSnap = await getDoc(docRef);
-        if (docSnap.exists()) {
-          profiler = docSnap.data().profiler || [];
-          heleProfilArrayet = profiler;
-          localStorage.setItem("watch_nordic_profiles_cache", JSON.stringify(profiler));
+      // SPARER FIRESTORE READ: Henter kun fra server hvis vi ikkje har cache
+      if (profiler.length === 0) {
+        try {
+          const docRef = doc(db, "users", user.uid);
+          const docSnap = await getDoc(docRef);
+          if (docSnap.exists()) {
+            profiler = docSnap.data().profiler || [];
+            heleProfilArrayet = profiler;
+            localStorage.setItem("watch_nordic_profiles_cache", JSON.stringify(profiler));
+          }
+        } catch (error) {
+          console.error("Feil ved henting av profiler:", error);
         }
-      } catch (error) {
-        console.error("Feil ved henting av profiler:", error);
       }
 
       renderContinueWatching();
@@ -1786,7 +1790,7 @@
     });
   }
 
-  // ==================== SKYLAGRET (FIREBASE) FORTSETT Å SE ==================== //
+  // ==================== SKYLAGRET FORTSETT Å SE (BATCHET WRITES) ==================== //
 
   async function renderContinueWatching() {
     const section = document.getElementById("fortsett-section");
@@ -1911,15 +1915,17 @@
 
         localStorage.setItem("watch_nordic_profiles_cache", JSON.stringify(heleProfilArrayet));
 
+        // SPARER FIRESTORE WRITES (Debounce: Venter 1.5 sekunder før Firestore kalles, samler trykk)
         if (registrertBruker) {
-          try {
-            const userDocRef = doc(db, "users", registrertBruker.uid);
-            await updateDoc(userDocRef, {
-              profiler: heleProfilArrayet
-            });
-          } catch (err) {
-            console.error("Feil ved skjuling av tittel i Firebase:", err);
-          }
+          clearTimeout(updateFirebaseTimeout);
+          updateFirebaseTimeout = setTimeout(async () => {
+            try {
+              const userDocRef = doc(db, "users", registrertBruker.uid);
+              await updateDoc(userDocRef, { profiler: heleProfilArrayet });
+            } catch (err) {
+              console.error("Feil ved skjuling av tittel i Firebase:", err);
+            }
+          }, 1500);
         }
 
         link.style.transition = "all 0.3s ease";
@@ -1952,28 +1958,41 @@
     }
   });
 
-  // ==================== FIRESTORE DATAHENTING MED CACHE ==================== //
+  // ==================== OPTIMALISERT FIRESTORE DATAHENTING ==================== //
   async function hentDataFraFirestore() {
     const cacheKeyFilmer = "watch_nordic_filmer_cache";
     const cacheKeySerier = "watch_nordic_serier_cache";
+    const cacheKeyTime = "watch_nordic_last_fetch_time";
+    
+    // Sett cache gyldighetstid (F.eks: 3600000 ms = 1 time)
+    const CACHE_TIMEOUT = 60 * 60 * 1000; 
 
-    // 1. Sjekk om det finnes lagret data lokalt for UMILDDELBAR visning
     const lagredeFilmer = localStorage.getItem(cacheKeyFilmer);
     const lagredeSerier = localStorage.getItem(cacheKeySerier);
+    const sistHentet = localStorage.getItem(cacheKeyTime);
+    const nå = Date.now();
 
+    let harLokalCache = false;
+
+    // 1. Vis lokal cache med en gang hvis den finnes
     if (lagredeFilmer && lagredeSerier) {
       try {
         filmer = JSON.parse(lagredeFilmer);
         serier = JSON.parse(lagredeSerier);
-        console.log("⚡ Lastet filmer og serier fra lokal cache!");
-        // Tegner siden med én gang slik at brukeren slipper hvit/tom skjerm
+        harLokalCache = true;
         byggSiden();
       } catch (e) {
         console.error("Feil ved parsing av lokal media-cache");
       }
     }
 
-    // 2. Hent oppdaterte data fra Firestore i bakgrunnen
+    // SPARER FIRESTORE READS: Hvis vi har gyldig cache og tiden ikke har utløpt, stop her!
+    if (harLokalCache && sistHentet && (nå - parseInt(sistHentet, 10) < CACHE_TIMEOUT)) {
+      console.log("⚡ Bruker 100% cache! (Sparet Firebase Firestore lese-kall)");
+      return;
+    }
+
+    // 2. Hent kun fra Firestore hvis cachen er for gammel eller mangler
     try {
       const nyeFilmer = {};
       const filmerSnap = await getDocs(collection(db, "filmer"));
@@ -1987,15 +2006,15 @@
         nyeSerier[docSnap.id] = docSnap.data();
       });
 
-      // Oppdater cachen i localStorage
+      // Oppdater cachen og tidsstempel
       localStorage.setItem(cacheKeyFilmer, JSON.stringify(nyeFilmer));
       localStorage.setItem(cacheKeySerier, JSON.stringify(nyeSerier));
+      localStorage.setItem(cacheKeyTime, nå.toString());
 
-      // Oppdater globale variabler og bygg siden på nytt hvis data har endret seg
       filmer = nyeFilmer;
       serier = nyeSerier;
       
-      console.log("✅ Hentet/oppdatert filmer og serier fra Firestore!");
+      console.log("✅ Hentet ny data fra Firestore (Cache var utgått/manglet).");
       byggSiden();
 
     } catch (feil) {
