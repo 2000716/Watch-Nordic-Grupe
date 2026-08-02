@@ -6,7 +6,6 @@
   <title>Innlogging / Registrering | Watch Nordic™</title>
   
   <link rel="icon" type="image/png" href="https://static.wixstatic.com/media/d9ace9_95bbe3f5ff4b4aab9314a8d08804344e~mv2.png" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
 
   <style>
     /* ================= RESET & BASE ================= */
@@ -17,7 +16,7 @@
     }
 
     body {
-      background: #091B1E;
+      background-color: #091B1E;
       font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
       display: flex;
       align-items: center;
@@ -28,65 +27,13 @@
       position: relative;
     }
 
-    /* Fallback bakgrunn hvis poster-vegg ikke laster */
-    .bg-fallback {
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(rgba(9, 27, 30, 0.85), rgba(9, 27, 30, 0.85)),
-                  url('https://static.wixstatic.com/media/fd2fb2_cb01bba1adf84bf1aa5ef6ec7cb2f055~mv2.png') no-repeat center center;
-      background-size: cover;
-      z-index: 1;
-    }
-
-    /* Overleggsgradient for dybde og lesbarhet */
-    .overlay {
-      position: absolute;
-      inset: 0;
-      background: radial-gradient(circle, rgba(9,27,30,0.5) 0%, rgba(9,27,30,0.95) 100%);
-      z-index: 2;
-    }
-
-    /* ================= 3D POSTER VEGG ================= */
-    .hero-wall {
-      position: absolute;
-      inset: 0;
-      overflow: hidden;
-      z-index: 1;
-      transform: perspective(2000px) rotateY(-18deg) rotateX(4deg) scale(1.2);
-      transform-origin: right center;
-      opacity: 0.22;
-    }
-
-    .wall-row {
-      display: flex;
-      gap: 16px;
-      width: max-content;
-      margin-bottom: 16px;
-    }
-
-    .wall-row img {
-      width: 240px;
-      height: 135px;
-      object-fit: cover;
-      border-radius: 8px;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.5);
-    }
-
-    .row1 { margin-left: -100px; }
-    .row2 { margin-left: -250px; }
-    .row3 { margin-left: -50px; }
-    .row4 { margin-left: -180px; }
-
-    /* ================= SKJEMA CONTAINER ================= */
+    /* ================= SKJEMA CONTAINER (NETFLIX STIL) ================= */
     .container {
-      background: rgba(12, 34, 38, 0.65);
-      padding: 48px 40px;
-      border-radius: 28px;
-      border: 1px solid rgba(0, 255, 204, 0.15);
-      backdrop-filter: blur(25px);
-      -webkit-backdrop-filter: blur(25px);
-      box-shadow: 0 30px 60px rgba(0, 0, 0, 0.6),
-                  0 0 40px rgba(0, 255, 204, 0.05);
+      background: rgba(12, 34, 38, 0.85);
+      padding: 50px 48px;
+      border-radius: 12px;
+      border: none;
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.5);
       max-width: 440px;
       width: 100%;
       text-align: center;
@@ -95,7 +42,7 @@
       transition: all 0.3s ease;
     }
 
-    /* Normal Watch Logo */
+    /* Watch Logo */
     .site-logo {
       height: 42px;
       width: auto;
@@ -137,27 +84,18 @@
 
     .input-wrapper {
       position: relative;
-      display: flex;
-      align-items: center;
-    }
-
-    .input-wrapper i {
-      position: absolute;
-      left: 16px;
-      color: #587376;
-      font-size: 15px;
-      transition: color 0.3s ease;
+      width: 100%;
     }
 
     input { 
       width: 100%; 
-      padding: 14px 16px 14px 44px; 
-      border: 1px solid rgba(255, 255, 255, 0.08); 
-      border-radius: 12px; 
-      background: rgba(6, 18, 20, 0.6);
+      padding: 14px 16px; 
+      border: 1px solid rgba(255, 255, 255, 0.1); 
+      border-radius: 8px; 
+      background: rgba(6, 18, 20, 0.7);
       color: #FFFFFF;
       font-size: 15px;
-      transition: all 0.3s ease;
+      transition: all 0.2s ease;
     }
 
     input::placeholder {
@@ -167,12 +105,8 @@
     input:focus {
       outline: none;
       border-color: #00FFCC;
-      background: rgba(6, 18, 20, 0.85);
-      box-shadow: 0 0 15px rgba(0, 255, 204, 0.15);
-    }
-
-    input:focus + i, .input-wrapper:focus-within i {
-      color: #00FFCC;
+      background: rgba(6, 18, 20, 0.95);
+      box-shadow: 0 0 10px rgba(0, 255, 204, 0.2);
     }
 
     button.submit-btn {
@@ -181,19 +115,19 @@
       background: linear-gradient(135deg, #00FFCC 0%, #00D6AB 100%);
       color: #041012; 
       border: none; 
-      border-radius: 12px;
+      border-radius: 8px;
       cursor: pointer; 
       font-size: 16px; 
       font-weight: 800;
       letter-spacing: 0.5px;
       margin-top: 10px;
       transition: all 0.3s ease;
-      box-shadow: 0 8px 20px rgba(0, 255, 204, 0.2);
+      box-shadow: 0 6px 16px rgba(0, 255, 204, 0.2);
     }
     
     button.submit-btn:hover { 
-      transform: translateY(-2px);
-      box-shadow: 0 12px 28px rgba(0, 255, 204, 0.35);
+      transform: translateY(-1px);
+      box-shadow: 0 10px 24px rgba(0, 255, 204, 0.35);
       background: linear-gradient(135deg, #1AFFD1 0%, #00E6B8 100%);
     }
 
@@ -216,7 +150,7 @@
     }
     
     .forgot-text {
-      margin-top: 14px;
+      margin-top: 10px;
       text-align: right;
     }
 
@@ -233,32 +167,15 @@
       text-decoration: underline;
     }
 
-    @media (max-width: 768px) {
-      .hero-wall {
-        opacity: 0.15;
-        transform: perspective(1000px) rotateY(-10deg) scale(1.3);
-      }
-      .wall-row img {
-        width: 150px;
-        height: 85px;
-      }
+    @media (max-width: 480px) {
       .container {
         padding: 36px 24px;
+        margin: 16px;
       }
     }
   </style>
 </head>
 <body>
-
-  <div class="bg-fallback"></div>
-  <div class="overlay"></div>
-
-  <div class="hero-wall">
-    <div class="wall-row row1"></div>
-    <div class="wall-row row2"></div>
-    <div class="wall-row row3"></div>
-    <div class="wall-row row4"></div>
-  </div>
 
   <div class="container">
     <!-- Watch logo -->
@@ -272,7 +189,6 @@
         <label for="navn">Navn</label>
         <div class="input-wrapper">
           <input type="text" id="navn" placeholder="Ditt fulle navn" autocomplete="name" />
-          <i class="fa-solid fa-user"></i>
         </div>
       </div>
 
@@ -280,7 +196,6 @@
         <label for="epost">E-postadresse</label>
         <div class="input-wrapper">
           <input type="email" id="epost" placeholder="navn@domene.no" autocomplete="email" required />
-          <i class="fa-solid fa-envelope"></i>
         </div>
       </div>
 
@@ -288,7 +203,6 @@
         <label for="passord">Passord</label>
         <div class="input-wrapper">
           <input type="password" id="passord" placeholder="••••••••" autocomplete="current-password" required />
-          <i class="fa-solid fa-lock"></i>
         </div>
         <div class="forgot-text" id="forgotContainer">
           <a href="Passordfeil.html">Glemt passord?</a>
@@ -310,7 +224,7 @@
 
     // 2. Hent funksjonene denne siden trenger fra de offisielle CDN-lenkene (v12.15.0)
     import { signInWithEmailAndPassword, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-auth.js";
-    import { doc, setDoc, getDoc, collection, getDocs, limit, query } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
+    import { doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
 
     let registreringsmodus = false;
 
@@ -412,88 +326,6 @@
 
     window.visRegistrering = visRegistrering;
     window.visInnlogging = visInnlogging;
-
-    /* ================= 3D GENERATOR MED FIREBASE-SPARING ================= */
-    const rows = [
-      document.querySelector(".row1"),
-      document.querySelector(".row2"),
-      document.querySelector(".row3"),
-      document.querySelector(".row4")
-    ];
-
-    async function hentPostereMedSparing() {
-      const CACHE_KEY = "watch_poster_cache";
-      const TIME_KEY = "watch_poster_cache_time";
-      const ETT_DØGN = 24 * 60 * 60 * 1000; // 24 timer i millisekunder
-
-      const sistLagret = localStorage.getItem(TIME_KEY);
-      const lagredePostere = localStorage.getItem(CACHE_KEY);
-
-      // 1. Sjekk om vi har en gyldig cache i localStorage for å unngå Firestore-kall
-      if (lagredePostere && sistLagret && (Date.now() - sistLagret < ETT_DØGN)) {
-        return JSON.parse(lagredePostere);
-      }
-
-      // 2. Hvis cachen mangler eller er eldre enn 24 timer, hente kun et lite utvalg fra Firestore
-      let posterMiks = [];
-      try {
-        // Hent maks 15 filmer og 15 serier for å spare lesekall
-        const filmQuery = query(collection(db, "filmer"), limit(15));
-        const serieQuery = query(collection(db, "serier"), limit(15));
-
-        const [filmSnap, serieSnap] = await Promise.all([
-          getDocs(filmQuery),
-          getDocs(serieQuery)
-        ]);
-
-        filmSnap.forEach(doc => {
-          const data = doc.data();
-          if (data.poster) posterMiks.push(data.poster);
-        });
-
-        serieSnap.forEach(doc => {
-          const data = doc.data();
-          if (data.poster) posterMiks.push(data.poster);
-        });
-
-        // 3. Lagre i cache til neste besøk om vi fant noen postere
-        if (posterMiks.length > 0) {
-          localStorage.setItem(CACHE_KEY, JSON.stringify(posterMiks));
-          localStorage.setItem(TIME_KEY, Date.now().toString());
-        }
-      } catch (err) {
-        console.warn("Kunne ikke hente postere fra Firestore, bruker fallback om tilgjengelig:", err);
-      }
-
-      return posterMiks;
-    }
-
-    // Bygg 3D-veggen
-    async function byggPosterVegg() {
-      const posters = await hentPostereMedSparing();
-
-      if (posters && posters.length > 0) {
-        // Stokke posterne tilfeldig
-        posters.sort(() => Math.random() - 0.5);
-
-        document.querySelector(".bg-fallback").style.background = "#091B1E";
-        rows.forEach(row => {
-          if (row) {
-            for (let i = 0; i < 3; i++) { 
-              posters.forEach(src => {
-                const img = document.createElement("img");
-                img.src = src;
-                img.loading = "lazy";
-                row.appendChild(img);
-              });
-            }
-          }
-        });
-      }
-    }
-
-    // Start oppbyggingen av veggen
-    byggPosterVegg();
   </script>
 </body>
 </html>
