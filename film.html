@@ -5,1045 +5,887 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Forsiden | Watch Nordic™</title>
 
- <link rel="icon" type="image/png" href="https://static.wixstatic.com/media/d9ace9_95bbe3f5ff4b4aab9314a8d08804344e~mv2.png" />
+  <link rel="icon" type="image/png" href="https://static.wixstatic.com/media/d9ace9_95bbe3f5ff4b4aab9314a8d08804344e~mv2.png" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
-<style>
-    
-/* ==========================================================================
-   1. GLOBALE TILBAKESTILLINGER & BASE STYLES
-   ========================================================================== */
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
-
-html {
-  font-size: clamp(14px, 1vw + 10px, 18px);
-  scroll-behavior: smooth;
-}
-
-body {
-  background: #050F11; /* PC: Mørk cyan-sort bakgrunn */
-  color: #fff;
-  font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
-  letter-spacing: .2px;
-  opacity: 0;
-  transition: opacity 1s ease;
-  overflow-x: hidden;
-}
-
-body.loaded {
-  opacity: 1;
-}
-
-img, video {
-  max-width: 100%;
-  height: auto;
-}
-
-/* ==========================================================================
-   2. TOPPMENY (PC)
-   ========================================================================== */
-.top-nav {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 85px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 40px;
-  z-index: 9999;
-  background: linear-gradient(to bottom, 
-    rgba(5, 15, 17, 0.95) 0%, 
-    rgba(5, 15, 17, 0.75) 40%, 
-    rgba(5, 15, 17, 0.3) 75%, 
-    rgba(5, 15, 17, 0) 100%
-  );
-  transition: background 0.4s ease, box-shadow 0.4s ease, height 0.4s ease;
-}
-
-.top-nav.scrolled {
-  height: 70px;
-  background: rgba(5, 15, 17, 0.98);
-  backdrop-filter: blur(10px);
-  box-shadow: 0 2px 15px rgba(0, 0, 0, 0.6);
-}
-
-.nav-left {
-  display: flex;
-  align-items: center;
-  gap: 40px;
-  flex-shrink: 0;
-}
-
-.watch-logo-svg {
-  height: 40px;
-  width: auto;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-}
-
-.watch-logo-svg img {
-  height: 100%;
-  width: auto;
-}
-
-.nav-links {
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
-  display: flex;
-  gap: 30px;
-  white-space: nowrap;
-  transition: gap 0.3s ease;
-}
-
-.nav-links a {
-  color: #e0e0e0;
-  text-decoration: none;
-  font-size: 15px;
-  font-weight: 500;
-  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.8), 0 2px 8px rgba(0, 0, 0, 0.8);
-  transition: color 0.3s ease, font-size 0.3s ease;
-}
-
-.nav-links a i {
-  margin-right: 6px;
-  font-size: 16px;
-}
-
-.nav-links a:hover {
-  color: #ffffff;
-}
-
-.nav-links a.active {
-  color: #00FFCC;
-  font-weight: 700;
-}
-
-.nav-right {
-  display: flex;
-  align-items: center;
-  gap: 15px;
-  flex-shrink: 0;
-}
-
-.nav-search {
-  color: #e0e0e0;
-  font-size: 18px;
-  text-decoration: none;
-  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.8);
-  transition: color 0.3s ease;
-}
-
-.nav-search:hover {
-  color: #00FFCC;
-}
-
-/* PROFILMENY */
-.profilmeny {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  text-decoration: none;
-  cursor: pointer;
-}
-
-.profil-avatar-wrap {
-  width: 44px;
-  height: 44px;
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 50%;
-  overflow: hidden;
-  border: 2px solid rgba(255, 255, 255, 0.2);
-  background-color: #1e2a2e;
-  transition: border-color 0.35s ease, background-color 0.35s ease;
-}
-
-.profil-avatar-img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  border-radius: 50%;
-  display: block;
-  transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
-}
-
-.profil-avatar-img.png-karakter {
-  object-fit: cover;
-  height: 100%;
-  position: static;
-  transform: none;
-}
-
-.profilmeny:hover .profil-avatar-wrap {
-  background-color: var(--active-color, #00FFCC);
-  border-color: #ffffff;
-}
-
-.profilmeny:hover .profil-avatar-img {
-  transform: scale(1.15);
-}
-
-/* ==========================================================================
-   3. HERO-SEKSJON OG BAKGRUNNSMEDIA
-   ========================================================================== */
-.hero {
-  position: relative;
-  width: 100vw;
-  height: 100vh;
-  overflow: hidden;
-}
-
-.background-image,
-.background-video {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transition: opacity 1s ease;
-  z-index: 0;
-}
-
-.background-video {
-  opacity: 0;
-  filter: brightness(.8);
-}
-
-.overlay {
-  position: absolute;
-  inset: 0;
-  background:
-    linear-gradient(to top, rgba(0,0,0,.9) 0%, rgba(0,0,0,.4) 40%, transparent 75%),
-    linear-gradient(to right, rgba(0,0,0,.6) 0%, transparent 50%);
-  z-index: 1;
-}
-
-.bottom-fade {
-  position: absolute;
-  bottom: 0;
-  width: 100%;
-  height: 200px;
-  background: linear-gradient(to top, #050F11, transparent);
-  z-index: 1;
-}
-
-/* ==========================================================================
-   4. INNHOLD OG GLASS PANEL
-   ========================================================================== */
-.content-wrapper {
-  position: absolute;
-  bottom: 5%;
-  left: 0;
-  right: 0;
-  z-index: 2;
-  width: 90%;
-  max-width: 1400px;
-  margin: 0 auto;
-}
-
-.logo-container {
-  width: 100%;
-  max-width: 1100px; 
-  margin-bottom: 20px;
-  display: flex;
-  justify-content: flex-start;
-}
-
-.film-logo {
-  max-width: 70%;
-  max-height: 120px;
-  object-fit: contain;
-}
-
-.text-logo {
-  font-size: clamp(2rem, 3vw, 2.8rem);
-  font-weight: 700;
-  line-height: 1.2;
-}
-
-.left-content {
-  display: flex;
-  flex-direction: column;
-}
-
-.text-button-container {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  gap: 40px;
-  background: rgba(30, 30, 30, 0.65);
-  backdrop-filter: blur(30px); 
-  -webkit-backdrop-filter: blur(30px);
-  border-radius: 16px; 
-  padding: 40px;
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  box-shadow: none;
-  width: 100%;
-}
-
-.text-container {
-  flex: 1;
-  max-width: 65%;
-}
-
-.description {
-  font-size: 16px;
-  line-height: 1.6;
-  margin-bottom: 10px;
-  color: #fff; 
-}
-
-.more-btn {
-  background: none;
-  border: none;
-  color: #e0e0e0;
-  font-size: 14px;
-  font-weight: 600;
-  cursor: pointer;
-  padding: 0 4px;
-  text-decoration: underline;
-  text-underline-offset: 3px;
-  transition: color 0.2s ease;
-}
-
-.more-btn:hover {
-  color: #ffffff;
-}
-
-.metadata {
-  margin-top: 12px;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  font-size: 13px;
-  color: #ddd;
-  align-items: center;
-}
-
-.metadata span:nth-child(even) {
-  font-weight: bold;
-  font-size: 16px;
-}
-
-.cast-info {
-  flex: 0 0 280px;
-  max-width: 280px;
-  font-size: 13px;
-  color: #ddd;
-  line-height: 1.6;
-}
-
-.cast-info strong {
-  color: #fff;
-}
-
-.cast-info a {
-  color: #ddd;
-  text-decoration: none;
-  transition: .25s;
-}
-
-.cast-info a:hover {
-  color: #fff;
-}
-
-.availability-info {
-  margin-top: 15px;
-  font-size: 12px;
-  color: #fff;
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  background: rgba(255, 255, 255, 0.15);
-  padding: 6px 12px;
-  border-radius: 6px;
-}
-
-/* ==========================================================================
-   5. STRØMMETJENESTE-KNAPPER
-   ========================================================================== */
-.buttons-column {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  min-width: 260px;
-}
-
-.watch-button,
-.watch-button.paabegynt,
-#addToListBtn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 12px;
-  width: 100%;
-  padding: 14px 28px;
-  background: #ffffff !important;
-  color: #000000 !important;      
-  font-size: 16px;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: .5px;
-  border: none !important;
-  border-radius: 12px;
-  cursor: pointer;
-  box-shadow: none;
-  transition: background-color 0.2s ease;
-}
-
-.watch-button i,
-.watch-button.paabegynt i,
-#addToListBtn i {
-  font-size: 18px;
-}
-
-.watch-button:hover,
-.watch-button.paabegynt:hover,
-#addToListBtn:hover {
-  background: #e6e6e6 !important;
-  color: #000000 !important;
-  transform: none;
-  box-shadow: none;
-}
-
-.watch-button.locked,
-.watch-button[disabled] {
-  background: rgba(255, 255, 255, 0.1) !important;
-  color: rgba(255, 255, 255, 0.3) !important;
-  border: none !important;
-  box-shadow: none !important;
-  cursor: not-allowed;
-  transform: none !important;
-}
-
-/* ==========================================================================
-   6. ANBEFALINGER & PRO STRØMME-EPISODER (SYMMETRISK BREDDE MED CONTENT-WRAPPER)
-   ========================================================================== */
-.recommendations {
-  margin: 40px auto 0;
-  padding: 0 0 50px 0; /* Fjernet side-padding slik at innholdet fyller nøyaktig samme bredde */
-  width: 90%;          /* Matcher .content-wrapper */
-  max-width: 1400px;   /* Matcher .content-wrapper */
-  background: #050F11;
-  position: relative;
-  z-index: 5;
-}
-
-.recommendations h2 {
-  font-size: 24px;
-  font-weight: 600;
-  margin-bottom: 20px;
-}
-
-/* ANBEFALINGER: Grid */
-.gallery {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 24px;
-  width: 100%;
-}
-
-.movie-card {
-  width: 100%;
-  height: 220px;
-  border-radius: 8px;
-  overflow: hidden;
-  position: relative;
-  cursor: pointer;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.movie-card img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.movie-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 10px 20px rgba(0, 255, 204, 0.15);
-}
-
-.movie-overlay {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(to top, rgba(0, 0, 0, 0.9) 0%, rgba(0, 0, 0, 0.2) 100%);
-  opacity: 0;
-  transition: opacity .3s ease;
-  display: flex;
-  align-items: flex-end;
-  padding: 16px;
-}
-
-.movie-card:hover .movie-overlay {
-  opacity: 1;
-}
-
-.movie-title {
-  font-size: 15px;
-  font-weight: 700;
-  color: #fff;
-}
-
-/* --------------------------------------------------------------------------
-   EPISODES - STRØMMEDESIGN
-   -------------------------------------------------------------------------- */
-.season-buttons {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  margin-top: 60px;
-  margin-bottom: 25px;
-  overflow-x: auto;
-  padding-bottom: 8px;
-}
-
-.season-btn {
-  background: rgba(255, 255, 255, 0.06);
-  color: #a0a0a0;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  padding: 10px 22px;
-  border-radius: 20px;
-  cursor: pointer;
-  font-size: 14px;
-  font-weight: 500;
-  white-space: nowrap;
-  flex-shrink: 0;
-  transition: all 0.25s ease;
-}
-
-.season-btn:hover {
-  background: rgba(255, 255, 255, 0.15);
-  color: #fff;
-}
-
-.season-btn.active {
-  background: #ffffff;
-  color: #050F11;
-  border-color: #ffffff;
-  font-weight: 700;
-}
-
-/* EPISODEGALLERI: Fyller bredden perfekt */
-.episode-gallery {
-  display: flex;
-  flex-direction: column;
-  gap: 18px;
-  width: 100%;
-}
-
-.episode-card {
-  display: flex;
-  align-items: center;
-  background: rgba(18, 28, 32, 0.5);
-  backdrop-filter: blur(10px);
-  border-radius: 12px;
-  overflow: hidden;
-  cursor: pointer;
-  border: 1px solid rgba(255, 255, 255, 0.05);
-  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), 
-              border-color 0.3s ease, 
-              background-color 0.3s ease,
-              box-shadow 0.3s ease;
-  position: relative;
-  padding: 12px;
-  gap: 20px;
-  width: 100%;
-}
-
-.episode-card:hover {
-  transform: translateX(6px);
-  background: rgba(26, 40, 46, 0.8);
-  border-color: rgba(0, 255, 204, 0.4);
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5);
-}
-
-.episode-number {
-  font-size: 20px;
-  font-weight: 800;
-  color: #00FFCC;
-  min-width: 35px;
-  text-align: center;
-  opacity: 0.8;
-}
-
-.episode-thumb {
-  position: relative;
-  width: 240px;
-  height: 135px;
-  flex-shrink: 0;
-  border-radius: 8px;
-  overflow: hidden;
-  background: #000;
-}
-
-.episode-thumb img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transition: transform 0.4s ease;
-}
-
-.episode-card:hover .episode-thumb img {
-  transform: scale(1.06);
-}
-
-.play-overlay {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: rgba(0, 0, 0, 0.35);
-  opacity: 0;
-  transition: opacity 0.25s ease, background 0.25s ease;
-}
-
-.play-icon-circle {
-  width: 48px;
-  height: 48px;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.9);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #000;
-  font-size: 18px;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.5);
-  transform: scale(0.85);
-  transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
-}
-
-.episode-card:hover .play-overlay {
-  opacity: 1;
-}
-
-.episode-card:hover .play-icon-circle {
-  transform: scale(1);
-  background: #00FFCC;
-}
-
-.episode-progress {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  height: 3px;
-  background: #00FFCC;
-  z-index: 2;
-  box-shadow: 0 0 8px #00FFCC;
-}
-
-.episode-info {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  padding-right: 15px;
-}
-
-.episode-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 6px;
-}
-
-.episode-title {
-  font-size: 17px;
-  font-weight: 700;
-  color: #ffffff;
-  letter-spacing: .3px;
-}
-
-.episode-meta {
-  font-size: 13px;
-  color: #00FFCC;
-  font-weight: 600;
-}
-
-.episode-desc {
-  font-size: 14px;
-  color: #a0a0a0;
-  line-height: 1.5;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-}
-
-.episode-card.locked {
-  opacity: 0.4;
-  cursor: not-allowed;
-  filter: grayscale(80%);
-}
-
-.episode-card.locked:hover {
-  transform: none;
-  border-color: rgba(255, 255, 255, 0.05);
-}
-
-.lock-overlay {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: rgba(0,0,0,0.6);
-  z-index: 3;
-}
-
-.lock-overlay i {
-  font-size: 24px;
-  color: #fff;
-}
-
-/* ==========================================================================
-   7. FOOTER OG SKJERM-POPUPS
-   ========================================================================== */
-.footer {
-  width: 100%;
-  padding: 70px 80px 35px;
-  margin-top: 100px;
-  background: #050F11;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  color: #7d7d7d;
-}
-
-.footer-socials {
-  display: flex;
-  gap: 22px;
-  margin-bottom: 35px;
-}
-
-.footer-socials a {
-  color: #9b9b9b;
-  font-size: 20px;
-  transition: color 0.25s ease, transform 0.25s ease;
-}
-
-.footer-socials a:hover {
-  color: #ffffff;
-  transform: scale(1.08);
-}
-
-.footer-links {
-  width: 100%;
-  display: grid;
-  grid-template-columns: repeat(4, minmax(140px, 1fr));
-  gap: 18px 50px;
-  margin-bottom: 35px;
-}
-
-.footer-links a {
-  color: #8a8a8a;
-  text-decoration: none;
-  font-size: 14px;
-  font-weight: 400;
-  line-height: 1.5;
-  transition: color 0.2s ease;
-}
-
-.footer-links a:hover { color: #ffffff; }
-
-.footer-service-btn {
-  margin-bottom: 28px;
-  padding: 10px 18px;
-  border: 1px solid rgba(255,255,255,0.2);
-  border-radius: 4px;
-  background: transparent;
-  color: #a0a0a0;
-  font-size: 13px;
-  cursor: pointer;
-  transition: all 0.25s ease;
-}
-
-.footer-service-btn:hover {
-  border-color: rgba(255,255,255,0.45);
-  color: #fff;
-}
-
-.footer-copy {
-  font-size: 13px;
-  color: #666;
-  margin-bottom: 8px;
-}
-
-.footer-bottom {
-  max-width: 700px;
-  font-size: 12px;
-  line-height: 1.6;
-  color: #555;
-}
-
-.popup-overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,.8);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 99999;
-  padding: 20px;
-}
-
-.popup-box {
-  background: #111;
-  color: #fff;
-  max-width: 600px;
-  width: 100%;
-  max-height: 80vh;
-  overflow-y: auto;
-  padding: 30px;
-  border-radius: 8px;
-  position: relative;
-  border: 1px solid rgba(255,255,255,0.1);
-}
-
-.close-btn {
-  position: absolute;
-  top: 15px;
-  right: 15px;
-  font-size: 24px;
-  background: none;
-  border: none;
-  color: #fff;
-  cursor: pointer;
-}
-
-#expiredOverlay {
-  position: fixed;
-  inset: 0;
-  background: #141414;
-  display: none;
-  align-items: center;
-  justify-content: center;
-  z-index: 999999;
-}
-
-#expiredOverlay.active {
-  display: flex;
-}
-
-/* ==========================================================================
-   8. MEDIA QUERIES (MOBIL-OPTIMALISERING - 768px og mindre)
-   ========================================================================== */
-@media(max-width: 768px) {
-  .top-nav {
-    padding: 0 20px;
-    height: 70px;
-  }
   
-  .nav-links {
-    display: none;
-  }
+  <!-- 🛑 HENTER INN TOPPMENYEN FRA EKSTERN FIL: -->
+  <link rel="stylesheet" href="meny.css">
 
-  body, .hero {
-    background: rgb(9, 27, 30) !important; 
-    position: relative; 
-    height: auto;
-    min-height: auto;
-    display: flex;
-    flex-direction: column;
-  }
+  <style>
+    /* ==========================================================================
+       1. GLOBALE TILBAKESTILLINGER & BASE STYLES
+       ========================================================================== */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
-  .background-image,
-  .background-video {
-    position: absolute !important;
-    top: 0;
-    left: 0;
-    height: 65vh !important; 
-    width: 100% !important;
-    z-index: 1 !important;
-    object-fit: cover;
-  }
+    html {
+      font-size: clamp(14px, 1vw + 10px, 18px);
+      scroll-behavior: smooth;
+    }
 
-  .overlay {
-    display: block !important;
-    position: absolute !important;
-    top: 0;
-    left: 0;
-    width: 100% !important;
-    height: 65vh !important;
-    background: linear-gradient(to bottom, transparent 30%, rgb(9, 27, 30) 100%) !important;
-    z-index: 2 !important;
-  }
+    body {
+      background: #050F11; /* PC: Mørk cyan-sort bakgrunn */
+      color: #fff;
+      font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+      letter-spacing: .2px;
+      opacity: 0;
+      transition: opacity 1s ease;
+      overflow-x: hidden;
+    }
 
-  .bottom-fade {
-    display: none !important;
-  }
+    body.loaded {
+      opacity: 1;
+    }
 
-  .content-wrapper {
-    position: relative !important;
-    inset: auto !important;
-    width: 100% !important;
-    padding: 20px;
-    padding-top: 53vh !important; 
-    margin-top: -35px !important; 
-    background: transparent !important;
-    z-index: 3 !important; 
-    display: flex !important;
-    flex-direction: column !important;
-  }
+    img, video {
+      max-width: 100%;
+      height: auto;
+    }
 
-  .logo-container {
-    display: flex !important;
-    justify-content: center !important;
-    margin-bottom: 15px !important;
-    order: 1 !important;
-  }
+    /* ==========================================================================
+       3. HERO-SEKSJON OG BAKGRUNNSMEDIA
+       ========================================================================== */
+    .hero {
+      position: relative;
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+    }
 
-  .film-logo {
-    max-width: 60% !important;
-    max-height: 80px !important;
-    height: auto !important;
-  }
+    .background-image,
+    .background-video {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: opacity 1s ease;
+      z-index: 0;
+    }
 
-  .left-content {
-    order: 2 !important;
-    width: 100% !important;
-  }
+    .background-video {
+      opacity: 0;
+      filter: brightness(.8);
+    }
 
-  .text-button-container {
-    background: transparent !important;
-    backdrop-filter: none !important;
-    -webkit-backdrop-filter: none !important;
-    border: none !important;
-    box-shadow: none !important;
-    padding: 0 !important;
-    gap: 15px !important;
-    display: flex !important;
-    flex-direction: column !important;
-  }
+    .overlay {
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(to top, rgba(0,0,0,.9) 0%, rgba(0,0,0,.4) 40%, transparent 75%),
+        linear-gradient(to right, rgba(0,0,0,.6) 0%, transparent 50%);
+      z-index: 1;
+    }
 
-  .text-container {
-    display: contents !important;
-  }
+    .bottom-fade {
+      position: absolute;
+      bottom: 0;
+      width: 100%;
+      height: 200px;
+      background: linear-gradient(to top, #050F11, transparent);
+      z-index: 1;
+    }
 
-  .metadata {
-    order: 2 !important;
-    margin: 5px 0 10px 0 !important;
-    display: flex !important;
-    justify-content: center !important;
-    width: 100% !important;
-  }
+    /* ==========================================================================
+       4. INNHOLD OG GLASS PANEL
+       ========================================================================== */
+    .content-wrapper {
+      position: absolute;
+      bottom: 5%;
+      left: 0;
+      right: 0;
+      z-index: 2;
+      width: 90%;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
 
-  .buttons-column {
-    width: 100% !important;
-    order: 3 !important;
-    display: flex !important;
-    flex-direction: column !important;
-    gap: 10px !important;
-  }
+    .logo-container {
+      width: 100%;
+      max-width: 1100px; 
+      margin-bottom: 20px;
+      display: flex;
+      justify-content: flex-start;
+    }
 
-  .watch-button {
-    width: 100% !important;
-    padding: 16px !important;
-    font-size: 16px !important;
-  }
+    .film-logo {
+      max-width: 70%;
+      max-height: 120px;
+      object-fit: contain;
+    }
 
-  #addToListBtn {
-    background: rgba(255, 255, 255, 0.25) !important;
-    color: #ffffff !important;
-    border: 1px solid rgba(255, 255, 255, 0.2) !important;
-  }
-  #addToListBtn:hover {
-    background: rgba(255, 255, 255, 0.35) !important;
-  }
+    .text-logo {
+      font-size: clamp(2rem, 3vw, 2.8rem);
+      font-weight: 700;
+      line-height: 1.2;
+    }
 
-  .cast-info {
-    width: 100% !important;
-    max-width: 100% !important;
-    flex: none !important;
-    order: 4 !important;
-    margin: 10px 0 !important;
-    padding: 10px 0 !important;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-  }
+    .left-content {
+      display: flex;
+      flex-direction: column;
+    }
 
-  .description {
-    order: 5 !important;
-    margin-bottom: 10px !important;
-    width: 100% !important;
-  }
-  
-  .availability-info {
-    order: 6 !important;
-    align-self: flex-start !important;
-  }
+    .text-button-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 40px;
+      background: rgba(30, 30, 30, 0.65);
+      backdrop-filter: blur(30px); 
+      -webkit-backdrop-filter: blur(30px);
+      border-radius: 16px; 
+      padding: 40px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      box-shadow: none;
+      width: 100%;
+    }
 
-  /* MOBIL: Tilpasninger */
-  .recommendations {
-    width: 100% !important;
-    margin: 30px 0 0 !important;
-    padding: 0 20px 40px !important;
-    background: rgb(9, 27, 30) !important;
-    position: relative;
-    z-index: 3;
-  }
+    .text-container {
+      flex: 1;
+      max-width: 65%;
+    }
 
-  .recommendations h2 {
-    font-size: 20px !important;
-  }
+    .description {
+      font-size: 16px;
+      line-height: 1.6;
+      margin-bottom: 10px;
+      color: #fff; 
+    }
 
-  .gallery {
-    grid-template-columns: repeat(2, 1fr) !important;
-    gap: 12px !important;
-  }
+    .more-btn {
+      background: none;
+      border: none;
+      color: #e0e0e0;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      padding: 0 4px;
+      text-decoration: underline;
+      text-underline-offset: 3px;
+      transition: color 0.2s ease;
+    }
 
-  .movie-card {
-    height: 110px !important;
-    border-radius: 4px !important;
-  }
+    .more-btn:hover {
+      color: #ffffff;
+    }
 
-  /* MOBIL EPISODE DESIGN */
-  .episode-card {
-    flex-direction: column;
-    align-items: flex-start;
-    padding: 10px;
-    gap: 12px;
-  }
+    .metadata {
+      margin-top: 12px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      font-size: 13px;
+      color: #ddd;
+      align-items: center;
+    }
 
-  .episode-number {
-    display: none;
-  }
+    .metadata span:nth-child(even) {
+      font-weight: bold;
+      font-size: 16px;
+    }
 
-  .episode-thumb {
-    width: 100%;
-    height: 180px;
-  }
+    .cast-info {
+      flex: 0 0 280px;
+      max-width: 280px;
+      font-size: 13px;
+      color: #ddd;
+      line-height: 1.6;
+    }
 
-  .episode-info {
-    padding-right: 0;
-    width: 100%;
-  }
+    .cast-info strong {
+      color: #fff;
+    }
 
-  .footer {
-    padding: 40px 20px 20px !important;
-    background: rgb(9, 27, 30) !important;
-    position: relative;
-    z-index: 3;
-  }
+    .cast-info a {
+      color: #ddd;
+      text-decoration: none;
+      transition: .25s;
+    }
 
-  .footer-links {
-    grid-template-columns: repeat(2, 1fr) !important;
-    gap: 15px !important;
-  }
-}
-</style>
+    .cast-info a:hover {
+      color: #fff;
+    }
+
+    .availability-info {
+      margin-top: 15px;
+      font-size: 12px;
+      color: #fff;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(255, 255, 255, 0.15);
+      padding: 6px 12px;
+      border-radius: 6px;
+    }
+
+    /* ==========================================================================
+       5. STRØMMETJENESTE-KNAPPER
+       ========================================================================== */
+    .buttons-column {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      min-width: 260px;
+    }
+
+    .watch-button,
+    .watch-button.paabegynt,
+    #addToListBtn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      width: 100%;
+      padding: 14px 28px;
+      background: #ffffff !important;
+      color: #000000 !important;       
+      font-size: 16px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: .5px;
+      border: none !important;
+      border-radius: 12px;
+      cursor: pointer;
+      box-shadow: none;
+      transition: background-color 0.2s ease;
+    }
+
+    .watch-button i,
+    .watch-button.paabegynt i,
+    #addToListBtn i {
+      font-size: 18px;
+    }
+
+    .watch-button:hover,
+    .watch-button.paabegynt:hover,
+    #addToListBtn:hover {
+      background: #e6e6e6 !important;
+      color: #000000 !important;
+      transform: none;
+      box-shadow: none;
+    }
+
+    .watch-button.locked,
+    .watch-button[disabled] {
+      background: rgba(255, 255, 255, 0.1) !important;
+      color: rgba(255, 255, 255, 0.3) !important;
+      border: none !important;
+      box-shadow: none !important;
+      cursor: not-allowed;
+      transform: none !important;
+    }
+
+    /* ==========================================================================
+       6. ANBEFALINGER & PRO STRØMME-EPISODER (SYMMETRISK BREDDE MED CONTENT-WRAPPER)
+       ========================================================================== */
+    .recommendations {
+      margin: 40px auto 0;
+      padding: 0 0 50px 0;
+      width: 90%;          
+      max-width: 1400px;   
+      background: #050F11;
+      position: relative;
+      z-index: 5;
+    }
+
+    .recommendations h2 {
+      font-size: 24px;
+      font-weight: 600;
+      margin-bottom: 20px;
+    }
+
+    /* ANBEFALINGER: Grid */
+    .gallery {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+      width: 100%;
+    }
+
+    .movie-card {
+      width: 100%;
+      height: 220px;
+      border-radius: 8px;
+      overflow: hidden;
+      position: relative;
+      cursor: pointer;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .movie-card img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .movie-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 20px rgba(0, 255, 204, 0.15);
+    }
+
+    .movie-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(0, 0, 0, 0.9) 0%, rgba(0, 0, 0, 0.2) 100%);
+      opacity: 0;
+      transition: opacity .3s ease;
+      display: flex;
+      align-items: flex-end;
+      padding: 16px;
+    }
+
+    .movie-card:hover .movie-overlay {
+      opacity: 1;
+    }
+
+    .movie-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    /* --------------------------------------------------------------------------
+       EPISODES - STRØMMEDESIGN
+       -------------------------------------------------------------------------- */
+    .season-buttons {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-top: 60px;
+      margin-bottom: 25px;
+      overflow-x: auto;
+      padding-bottom: 8px;
+    }
+
+    .season-btn {
+      background: rgba(255, 255, 255, 0.06);
+      color: #a0a0a0;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      padding: 10px 22px;
+      border-radius: 20px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 500;
+      white-space: nowrap;
+      flex-shrink: 0;
+      transition: all 0.25s ease;
+    }
+
+    .season-btn:hover {
+      background: rgba(255, 255, 255, 0.15);
+      color: #fff;
+    }
+
+    .season-btn.active {
+      background: #ffffff;
+      color: #050F11;
+      border-color: #ffffff;
+      font-weight: 700;
+    }
+
+    .episode-gallery {
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+      width: 100%;
+    }
+
+    .episode-card {
+      display: flex;
+      align-items: center;
+      background: rgba(18, 28, 32, 0.5);
+      backdrop-filter: blur(10px);
+      border-radius: 12px;
+      overflow: hidden;
+      cursor: pointer;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), 
+                  border-color 0.3s ease, 
+                  background-color 0.3s ease,
+                  box-shadow 0.3s ease;
+      position: relative;
+      padding: 12px;
+      gap: 20px;
+      width: 100%;
+    }
+
+    .episode-card:hover {
+      transform: translateX(6px);
+      background: rgba(26, 40, 46, 0.8);
+      border-color: rgba(0, 255, 204, 0.4);
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5);
+    }
+
+    .episode-number {
+      font-size: 20px;
+      font-weight: 800;
+      color: #00FFCC;
+      min-width: 35px;
+      text-align: center;
+      opacity: 0.8;
+    }
+
+    .episode-thumb {
+      position: relative;
+      width: 240px;
+      height: 135px;
+      flex-shrink: 0;
+      border-radius: 8px;
+      overflow: hidden;
+      background: #000;
+    }
+
+    .episode-thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.4s ease;
+    }
+
+    .episode-card:hover .episode-thumb img {
+      transform: scale(1.06);
+    }
+
+    .play-overlay {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(0, 0, 0, 0.35);
+      opacity: 0;
+      transition: opacity 0.25s ease, background 0.25s ease;
+    }
+
+    .play-icon-circle {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.9);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #000;
+      font-size: 18px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+      transform: scale(0.85);
+      transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .episode-card:hover .play-overlay {
+      opacity: 1;
+    }
+
+    .episode-card:hover .play-icon-circle {
+      transform: scale(1);
+      background: #00FFCC;
+    }
+
+    .episode-progress {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      height: 3px;
+      background: #00FFCC;
+      z-index: 2;
+      box-shadow: 0 0 8px #00FFCC;
+    }
+
+    .episode-info {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding-right: 15px;
+    }
+
+    .episode-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 6px;
+    }
+
+    .episode-title {
+      font-size: 17px;
+      font-weight: 700;
+      color: #ffffff;
+      letter-spacing: .3px;
+    }
+
+    .episode-meta {
+      font-size: 13px;
+      color: #00FFCC;
+      font-weight: 600;
+    }
+
+    .episode-desc {
+      font-size: 14px;
+      color: #a0a0a0;
+      line-height: 1.5;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .episode-card.locked {
+      opacity: 0.4;
+      cursor: not-allowed;
+      filter: grayscale(80%);
+    }
+
+    .episode-card.locked:hover {
+      transform: none;
+      border-color: rgba(255, 255, 255, 0.05);
+    }
+
+    .lock-overlay {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(0,0,0,0.6);
+      z-index: 3;
+    }
+
+    .lock-overlay i {
+      font-size: 24px;
+      color: #fff;
+    }
+
+    /* ==========================================================================
+       7. FOOTER OG SKJERM-POPUPS
+       ========================================================================== */
+    .footer {
+      width: 100%;
+      padding: 70px 80px 35px;
+      margin-top: 100px;
+      background: #050F11;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      color: #7d7d7d;
+    }
+
+    .footer-socials {
+      display: flex;
+      gap: 22px;
+      margin-bottom: 35px;
+    }
+
+    .footer-socials a {
+      color: #9b9b9b;
+      font-size: 20px;
+      transition: color 0.25s ease, transform 0.25s ease;
+    }
+
+    .footer-socials a:hover {
+      color: #ffffff;
+      transform: scale(1.08);
+    }
+
+    .footer-links {
+      width: 100%;
+      display: grid;
+      grid-template-columns: repeat(4, minmax(140px, 1fr));
+      gap: 18px 50px;
+      margin-bottom: 35px;
+    }
+
+    .footer-links a {
+      color: #8a8a8a;
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 400;
+      line-height: 1.5;
+      transition: color 0.2s ease;
+    }
+
+    .footer-links a:hover { color: #ffffff; }
+
+    .footer-service-btn {
+      margin-bottom: 28px;
+      padding: 10px 18px;
+      border: 1px solid rgba(255,255,255,0.2);
+      border-radius: 4px;
+      background: transparent;
+      color: #a0a0a0;
+      font-size: 13px;
+      cursor: pointer;
+      transition: all 0.25s ease;
+    }
+
+    .footer-service-btn:hover {
+      border-color: rgba(255,255,255,0.45);
+      color: #fff;
+    }
+
+    .footer-copy {
+      font-size: 13px;
+      color: #666;
+      margin-bottom: 8px;
+    }
+
+    .footer-bottom {
+      max-width: 700px;
+      font-size: 12px;
+      line-height: 1.6;
+      color: #555;
+    }
+
+    .popup-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,.8);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 99999;
+      padding: 20px;
+    }
+
+    .popup-box {
+      background: #111;
+      color: #fff;
+      max-width: 600px;
+      width: 100%;
+      max-height: 80vh;
+      overflow-y: auto;
+      padding: 30px;
+      border-radius: 8px;
+      position: relative;
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .close-btn {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      font-size: 24px;
+      background: none;
+      border: none;
+      color: #fff;
+      cursor: pointer;
+    }
+
+    #expiredOverlay {
+      position: fixed;
+      inset: 0;
+      background: #141414;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 999999;
+    }
+
+    #expiredOverlay.active {
+      display: flex;
+    }
+
+    /* ==========================================================================
+       8. MEDIA QUERIES (MOBIL-OPTIMALISERING - 768px og mindre)
+       ========================================================================== */
+    @media(max-width: 768px) {
+      body, .hero {
+        background: rgb(9, 27, 30) !important; 
+        position: relative; 
+        height: auto;
+        min-height: auto;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .background-image,
+      .background-video {
+        position: absolute !important;
+        top: 0;
+        left: 0;
+        height: 65vh !important; 
+        width: 100% !important;
+        z-index: 1 !important;
+        object-fit: cover;
+      }
+
+      .overlay {
+        display: block !important;
+        position: absolute !important;
+        top: 0;
+        left: 0;
+        width: 100% !important;
+        height: 65vh !important;
+        background: linear-gradient(to bottom, transparent 30%, rgb(9, 27, 30) 100%) !important;
+        z-index: 2 !important;
+      }
+
+      .bottom-fade {
+        display: none !important;
+      }
+
+      .content-wrapper {
+        position: relative !important;
+        inset: auto !important;
+        width: 100% !important;
+        padding: 20px;
+        padding-top: 53vh !important; 
+        margin-top: -35px !important; 
+        background: transparent !important;
+        z-index: 3 !important; 
+        display: flex !important;
+        flex-direction: column !important;
+      }
+
+      .logo-container {
+        display: flex !important;
+        justify-content: center !important;
+        margin-bottom: 15px !important;
+        order: 1 !important;
+      }
+
+      .film-logo {
+        max-width: 60% !important;
+        max-height: 80px !important;
+        height: auto !important;
+      }
+
+      .left-content {
+        order: 2 !important;
+        width: 100% !important;
+      }
+
+      .text-button-container {
+        background: transparent !important;
+        backdrop-filter: none !important;
+        -webkit-backdrop-filter: none !important;
+        border: none !important;
+        box-shadow: none !important;
+        padding: 0 !important;
+        gap: 15px !important;
+        display: flex !important;
+        flex-direction: column !important;
+      }
+
+      .text-container {
+        display: contents !important;
+      }
+
+      .metadata {
+        order: 2 !important;
+        margin: 5px 0 10px 0 !important;
+        display: flex !important;
+        justify-content: center !important;
+        width: 100% !important;
+      }
+
+      .buttons-column {
+        width: 100% !important;
+        order: 3 !important;
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 10px !important;
+      }
+
+      .watch-button {
+        width: 100% !important;
+        padding: 16px !important;
+        font-size: 16px !important;
+      }
+
+      #addToListBtn {
+        background: rgba(255, 255, 255, 0.25) !important;
+        color: #ffffff !important;
+        border: 1px solid rgba(255, 255, 255, 0.2) !important;
+      }
+      #addToListBtn:hover {
+        background: rgba(255, 255, 255, 0.35) !important;
+      }
+
+      .cast-info {
+        width: 100% !important;
+        max-width: 100% !important;
+        flex: none !important;
+        order: 4 !important;
+        margin: 10px 0 !important;
+        padding: 10px 0 !important;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      }
+
+      .description {
+        order: 5 !important;
+        margin-bottom: 10px !important;
+        width: 100% !important;
+      }
+      
+      .availability-info {
+        order: 6 !important;
+        align-self: flex-start !important;
+      }
+
+      /* MOBIL: Tilpasninger */
+      .recommendations {
+        width: 100% !important;
+        margin: 30px 0 0 !important;
+        padding: 0 20px 40px !important;
+        background: rgb(9, 27, 30) !important;
+        position: relative;
+        z-index: 3;
+      }
+
+      .recommendations h2 {
+        font-size: 20px !important;
+      }
+
+      .gallery {
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 12px !important;
+      }
+
+      .movie-card {
+        height: 110px !important;
+        border-radius: 4px !important;
+      }
+
+      /* MOBIL EPISODE DESIGN */
+      .episode-card {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 10px;
+        gap: 12px;
+      }
+
+      .episode-number {
+        display: none;
+      }
+
+      .episode-thumb {
+        width: 100%;
+        height: 180px;
+      }
+
+      .episode-info {
+        padding-right: 0;
+        width: 100%;
+      }
+
+      .footer {
+        padding: 40px 20px 20px !important;
+        background: rgb(9, 27, 30) !important;
+        position: relative;
+        z-index: 3;
+      }
+
+      .footer-links {
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 15px !important;
+      }
+    }
+  </style>
 </head>
 <body>
-
   <header class="top-nav">
     <div class="nav-left">
       <a href="Hovedside.html" class="watch-logo-svg">
