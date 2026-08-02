@@ -4,22 +4,16 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
   
-  <!-- Endre tittelen slik at den passer til undersiden (f.eks. "Filmer | Watch Nordic™") -->
   <title>Velkommen | Watch Nordic™</title>
 
   <link rel="manifest" href="manifest.json">
   <link rel="icon" type="image/png" href="https://static.wixstatic.com/media/d9ace9_95bbe3f5ff4b4aab9314a8d08804344e~mv2.png" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
   
-  <!-- 🛑 FELLES MENY-STIL (Inneholder all styling for toppmenyen og logoen) -->
+  <!-- 🛑 FELLES MENY-STIL -->
   <link rel="stylesheet" href="meny.css">
 
   <style>
-    /* --------------------------------------------------
-        Lokal CSS for DENNE undersiden.
-        Alt som hadde med .header, .navbar eller .top-menu
-        å gjøre er fjernet herfra siden det styres av meny.css!
-        -------------------------------------------------- */
     * {
       box-sizing: border-box;
       margin: 0;
@@ -547,7 +541,7 @@
 </head>
 
 <body>
-  <!-- 🛑 TOPPMENY SOM HENTER STIL OG OPPRETTES FRA meny.css -->
+  <!-- 🛑 TOPPMENY SOM HENTER KLASSESTRUKTUR OG STIL FRA meny.css -->
   <header class="top-menu">
     <div class="nav-left">
       <a href="Hovedside.html" class="watch-logo-svg">
@@ -555,61 +549,63 @@
       </a>
     </div>
     <div class="nav-buttons">
-      <a href="Innlogging.html" class="login">Logg inn</a>
-      <a href="Innlogging.html" class="signup">Registrer</a>
+      <a href="Innlogging.html" class="login-btn">Logg inn</a>
+      <a href="Innlogging.html" class="register-btn">Registrer</a>
     </div>
   </header>
 
-  <section class="hero">
-    <div class="hero-wall">
-      <div class="wall-row row1"></div>
-      <div class="wall-row row2"></div>
-      <div class="wall-row row3"></div>
-      <div class="wall-row row4"></div>
-    </div>
-    
-    <div class="hero-content">
-      <h1>Filmer og serier.<br>På neste nivå.</h1>
+  <main>
+    <section class="hero">
+      <div class="hero-wall">
+        <div class="wall-row row1"></div>
+        <div class="wall-row row2"></div>
+        <div class="wall-row row3"></div>
+        <div class="wall-row row4"></div>
+      </div>
+      
+      <div class="hero-content">
+        <h1>Filmer og serier.<br>På neste nivå.</h1>
 
-      <p>
-        Stream tusenvis av filmer, serier og eksklusive titler
-        med en moderne kino-opplevelse hjemme.
-      </p>
+        <p>
+          Stream tusenvis av filmer, serier og eksklusive titler
+          med en moderne kino-opplevelse hjemme.
+        </p>
 
-      <div class="hero-buttons">
-        <a href="Innlogging.html" class="primary-btn">Begynn å se</a>
+        <div class="hero-buttons">
+          <a href="Innlogging.html" class="primary-btn">Begynn å se</a>
+        </div>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <section class="section">
-    <div class="section-header">
-      <h2>Se hvor som helst</h2>
-    </div>
+    <section class="section">
+      <div class="section-header">
+        <h2>Se hvor som helst</h2>
+      </div>
 
-    <div class="devices">
-      <div class="device">
-        <i class="fas fa-tv"></i>
-        <h3>Smart-TV</h3>
-        <p>Stream direkte på din TV med AirPlay eller Chromecast.</p>
+      <div class="devices">
+        <div class="device">
+          <i class="fas fa-tv"></i>
+          <h3>Smart-TV</h3>
+          <p>Stream direkte på din TV med AirPlay eller Chromecast.</p>
+        </div>
+        <div class="device">
+          <i class="fas fa-laptop"></i>
+          <h3>PC / Mac</h3>
+          <p>Perfekt opplevelse på desktop og laptop.</p>
+        </div>
+        <div class="device">
+          <i class="fas fa-mobile-alt"></i>
+          <h3>Mobil</h3>
+          <p>Ta med underholdningen hvor som helst.</p>
+        </div>
+        <div class="device">
+          <i class="fas fa-tablet-alt"></i>
+          <h3>Nettbrett</h3>
+          <p>Optimalisert for alle skjermstørrelser.</p>
+        </div>
       </div>
-      <div class="device">
-        <i class="fas fa-laptop"></i>
-        <h3>PC / Mac</h3>
-        <p>Perfekt opplevelse på desktop og laptop.</p>
-      </div>
-      <div class="device">
-        <i class="fas fa-mobile-alt"></i>
-        <h3>Mobil</h3>
-        <p>Ta med underholdningen hvor som helst.</p>
-      </div>
-      <div class="device">
-        <i class="fas fa-tablet-alt"></i>
-        <h3>Nettbrett</h3>
-        <p>Optimalisert for alle skjermstørrelser.</p>
-      </div>
-    </div>
-  </section>
+    </section>
+  </main>
 
   <div class="cookie-banner" id="cookieBanner">
     <div class="cookie-container">
@@ -646,38 +642,38 @@
     </div>
   </div>
 
-<footer class="footer">
-<div class="footer-socials">
-  <a href="https://www.instagram.com/watchnordicoriginals?igsh=aWRvcTJmMWl1NGRp&utm_source=qr"><i class="fab fa-instagram"></i></a>
-  <a href="www.tiktok.com/@watchnordicoriginals"><i class="fab fa-tiktok"></i></a>
-  <a href="#"><i class="fab fa-youtube"></i></a>
-</div>
+  <footer class="footer">
+    <div class="footer-socials">
+      <a href="https://www.instagram.com/watchnordicoriginals?igsh=aWRvcTJmMWl1NGRp&utm_source=qr"><i class="fab fa-instagram"></i></a>
+      <a href="www.tiktok.com/@watchnordicoriginals"><i class="fab fa-tiktok"></i></a>
+      <a href="#"><i class="fab fa-youtube"></i></a>
+    </div>
 
-  <div class="footer-links">
-    <a href="om.html">Om Watch Nordic</a>
-    <a href="kontakt.html">Contact oss</a>
-    <a href="personvern.html">Personvern</a>
-    <a href="hjelp.html">Hjelpesenter</a>
-    <a href="#">Jobber</a>
-    <a href="#">Investorinformasjon</a>
-    <a href="#">Vilkår</a>
-    <a href="#">Informasjonskapsler</a>
-    <a href="#">Juridisk informasjon</a>
-    <a href="#">Bedriftskonto</a>
-    <a href="#">Gavekort</a>
-    <a href="#">Enheter</a>
-  </div>
+    <div class="footer-links">
+      <a href="om.html">Om Watch Nordic</a>
+      <a href="kontakt.html">Contact oss</a>
+      <a href="personvern.html">Personvern</a>
+      <a href="hjelp.html">Hjelpesenter</a>
+      <a href="#">Jobber</a>
+      <a href="#">Investorinformasjon</a>
+      <a href="#">Vilkår</a>
+      <a href="#">Informasjonskapsler</a>
+      <a href="#">Juridisk informasjon</a>
+      <a href="#">Bedriftskonto</a>
+      <a href="#">Gavekort</a>
+      <a href="#">Enheter</a>
+    </div>
 
-  <div class="footer-copy">
-    © 2026 Watch Nordic™
-  </div>
+    <div class="footer-copy">
+      © 2026 Watch Nordic™
+    </div>
 
-  <div class="footer-bottom">
-      Alle varemerker fra WATCH NORDIC™, WATCH NORDIC ORIGINALS™ og alle øvrige tilknyttede immaterielle rettigheter tilhører Watch Nordic Group og brukes under lisens av Watch Nordic™. Alle varemerker, logoer, filmer, serier, bilder, design og øvrige tilknyttede immaterielle rettigheter tilhører sine respektive eiere. Alt innhold er beskyttet av opphavsrett og internasjonale varemerkelover. Alle rettigheter forbeholdt.
-  </div>
-</footer>
+    <div class="footer-bottom">
+        Alle varemerker fra WATCH NORDIC™, WATCH NORDIC ORIGINALS™ og alle øvrige tilknyttede immaterielle rettigheter tilhører Watch Nordic Group og brukes under lisens av Watch Nordic™. Alle varemerker, logoer, filmer, serier, bilder, design og øvrige tilknyttede immaterielle rettigheter tilhører sine respektive eiere. Alt innhold er beskyttet av opphavsrett og internasjonale varemerkelover. Alle rettigheter forbeholdt.
+    </div>
+  </footer>
 
-  <!-- HENT BILDER FRA FIREBASE MED LOKAL CACHING (SPARER FIREBASE-LESINGER) -->
+  <!-- HENT BILDER FRA FIREBASE MED LOKAL CACHING -->
   <script type="module">
     import { db } from "./firebase-oppsett.js";
     import { collection, getDocs } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
@@ -691,7 +687,7 @@
 
     const CACHE_KEY = "watch_nordic_poster_wall_cache";
     const CACHE_TIME_KEY = "watch_nordic_poster_wall_time";
-    const ONE_DAY_MS = 24 * 60 * 60 * 1000; // 24 timer i millisekunder
+    const ONE_DAY_MS = 24 * 60 * 60 * 1000;
 
     async function lastInnPosters() {
       let basePosters = [];
@@ -699,7 +695,6 @@
       const cachedTime = localStorage.getItem(CACHE_TIME_KEY);
       const now = Date.now();
 
-      // 1. Sjekk om vi har gyldig data i minnet som er under 24 timer gammel
       if (cachedData && cachedTime && (now - Number(cachedTime) < ONE_DAY_MS)) {
         try {
           basePosters = JSON.parse(cachedData);
@@ -708,10 +703,8 @@
         }
       }
 
-      // 2. Hvis vi IKKE hadde data i minnet (eller det var for gammelt), hent fra Firebase
       if (basePosters.length === 0) {
         try {
-          // Hent fra "filmer"
           const filmerSnap = await getDocs(collection(db, "filmer"));
           filmerSnap.forEach(doc => {
             const data = doc.data();
@@ -719,7 +712,6 @@
             else if (data.bakgrunn) basePosters.push(data.bakgrunn);
           });
 
-          // Hent fra "serier"
           const serierSnap = await getDocs(collection(db, "serier"));
           serierSnap.forEach(doc => {
             const data = doc.data();
@@ -727,7 +719,6 @@
             else if (data.bakgrunn) basePosters.push(data.bakgrunn);
           });
 
-          // Lagre i nettleserens minne hvis vi fant noe
           if (basePosters.length > 0) {
             localStorage.setItem(CACHE_KEY, JSON.stringify(basePosters));
             localStorage.setItem(CACHE_TIME_KEY, now.toString());
@@ -737,7 +728,6 @@
         }
       }
 
-      // 3. Generer plakater på skjermen
       if (basePosters.length > 0) {
         rows.forEach(row => {
           if (row) {
