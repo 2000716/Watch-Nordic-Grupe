@@ -1,0 +1,172 @@
+/* ==========================================================================
+   STANDARD TOPPMENY (Felles for alle sider)
+   ========================================================================== */
+
+/* Resett kun for menyen */
+.top-nav * {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* Selve toppmenyen */
+.top-nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 85px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 40px;
+  z-index: 9999;
+  background: linear-gradient(to bottom, 
+    rgba(5, 15, 17, 0.95) 0%, 
+    rgba(5, 15, 17, 0.75) 40%, 
+    rgba(5, 15, 17, 0.3) 75%, 
+    rgba(5, 15, 17, 0) 100%
+  );
+  transition: background 0.4s ease, box-shadow 0.4s ease, height 0.4s ease;
+}
+
+.top-nav.scrolled {
+  height: 70px;
+  background: rgba(5, 15, 17, 0.98);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 2px 15px rgba(0, 0, 0, 0.6);
+}
+
+/* Venstre side (Logo) */
+.nav-left {
+  display: flex;
+  align-items: center;
+  gap: 40px;
+  flex-shrink: 0;
+}
+
+.watch-logo-svg {
+  height: 40px;
+  width: auto;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+}
+
+.watch-logo-svg img {
+  height: 100%;
+  width: auto;
+}
+
+/* Menylenker i midten */
+.nav-links {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 30px;
+  white-space: nowrap;
+  transition: gap 0.3s ease;
+}
+
+.nav-links a {
+  color: #e0e0e0;
+  text-decoration: none;
+  font-size: 15px;
+  font-weight: 500;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.8), 0 2px 8px rgba(0, 0, 0, 0.8);
+  transition: color 0.3s ease, font-size 0.3s ease;
+}
+
+.nav-links a i {
+  margin-right: 6px;
+  font-size: 16px;
+}
+
+.nav-links a:hover {
+  color: #ffffff;
+}
+
+.nav-links a.active {
+  color: #00FFCC;
+  font-weight: 700;
+}
+
+/* Høyre side (Søk + Profil) */
+.nav-right {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  flex-shrink: 0;
+}
+
+.nav-search {
+  color: #e0e0e0;
+  font-size: 18px;
+  text-decoration: none;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.8);
+  transition: color 0.3s ease;
+}
+
+.nav-search:hover {
+  color: #00FFCC;
+}
+
+/* Profilknapp og avatar-sirkel */
+.profilmeny {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.profil-avatar-wrap {
+  width: 44px;
+  height: 44px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  background-color: #1e2a2e;
+  transition: border-color 0.35s ease, background-color 0.35s ease;
+}
+
+.profil-avatar-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+  display: block;
+  transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.profilmeny:hover .profil-avatar-wrap {
+  background-color: #00FFCC;
+  border-color: #ffffff;
+}
+
+.profilmeny:hover .profil-avatar-img {
+  transform: scale(1.15);
+}
+
+/* Tilpassing for mobil (skjuler lenkene på små skjermer) */
+@media (max-width: 768px) {
+  .top-nav {
+    padding: 0 20px;
+    height: 70px;
+    background: linear-gradient(to bottom, 
+      rgba(9, 27, 30, 0.95) 0%, 
+      rgba(9, 27, 30, 0.75) 40%, 
+      rgba(9, 27, 30, 0.3) 75%, 
+      rgba(9, 27, 30, 0) 100%
+    );
+  }
+
+  .nav-links {
+    display: none;
+  }
+}
