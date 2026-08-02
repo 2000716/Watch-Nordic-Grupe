@@ -1167,6 +1167,11 @@
   let heleProfilArrayet = [];
   let unsubscribeProfileListener = null;
 
+  // Hjelpefunksjon for å sjekke om enheten er mobil/smal skjerm
+  function sjekkErMobil() {
+    return window.matchMedia("(max-width: 768px)").matches;
+  }
+
   // Hjelpefunksjon for å oppdatere profilmeny i header
   function oppdaterMenyProfilVisning(bildeUrl, profilNavn, farge) {
     const menyProfil = document.getElementById("menyProfilbilde");
@@ -1325,7 +1330,7 @@
     }
 
     const film = innhold[new Date().getHours() % innhold.length];
-    const erMobil = window.innerWidth <= 768;
+    const erMobil = sjekkErMobil();
 
     const bilde = document.getElementById("banner-bilde");
     const video = document.getElementById("banner-video");
@@ -1476,7 +1481,7 @@
     link.href = `film.html?navn=${itemKey}`;
     link.classList.add("gallery-item");
     
-    const erMobil = window.innerWidth <= 768;
+    const erMobil = sjekkErMobil();
     const bildeKilde = erMobil 
       ? (item.posterVertikal || item.poster || item.bilde || "")
       : (item.poster || item.bilde || "");
@@ -1791,7 +1796,11 @@
       try {
         filmer = JSON.parse(lagredeFilmer);
         serier = JSON.parse(lagredeSerier);
-        byggSiden();
+        
+        // Vent til nettleseren har beregnet dimensjonene korrekt
+        requestAnimationFrame(() => {
+          byggSiden();
+        });
       } catch (e) {
         console.error("Feil ved parsing av lokal media-cache", e);
       }
@@ -1861,6 +1870,13 @@
 
   document.addEventListener("DOMContentLoaded", () => {
     hentDataFraFirestore();
+  });
+
+  // Dersom mobilsynsvinkelen endres eller telefonen roteres/våkner fra dvale
+  window.addEventListener("resize", () => {
+    if (Object.keys(filmer).length > 0 || Object.keys(serier).length > 0) {
+      byggSiden();
+    }
   });
 
   // ==================== NAV SCROLL EFFECT ==================== //
