@@ -686,8 +686,8 @@
     }
 
 /* ==========================================================================
-       10. MOBIL-OPTIMALISERING (VERTIKALE GALLERIER OG HORISONTALT "FORTSETT Å SE")
-       ========================================================================== */
+   10. MOBIL-OPTIMALISERING (VERTIKALE GALLERIER OG HORISONTALT "FORTSETT Å SE")
+   ========================================================================== */
 @media (max-width: 768px) {
   html, body {
     background: #091B1E !important;
@@ -776,35 +776,48 @@
   .scroll-button { display: none !important; }
 
   /* --------------------------------------------------------------------------
-     A) STANDARD GALLERIER: VERTIKAL (STÅENDE) VISNING PÅ MOBIL
+     A) ALLE STANDARD GALLERIER: VERTIKALT GRID (2 I BREDDEN)
      -------------------------------------------------------------------------- */
-  .gallery-section .image-gallery {
+  .gallery-section .image-gallery,
+  .gallery-section .coming-movies-gallery,
+  .gallery-section .top10-gallery {
     display: grid !important;
-    grid-template-columns: repeat(2, 1fr) !important; /* 2 i bredden, stående under hverandre */
+    grid-template-columns: repeat(2, 1fr) !important; /* 2 stående postere i bredden */
     gap: 12px !important;
     overflow-x: visible !important;
     padding: 0 !important;
   }
 
   .gallery-section .image-gallery a, 
-  .gallery-section .gallery-item {
+  .gallery-section .gallery-item,
+  .gallery-section .top10-item {
     width: 100% !important;
     flex-shrink: unset !important;
     scroll-snap-align: none !important;
+    position: relative !important;
   }
 
   .gallery-section .image-gallery a img, 
   .gallery-section .gallery-item img, 
-  .gallery-section .image-gallery img {
+  .gallery-section .image-gallery img,
+  .gallery-section .top10-item img {
     width: 100% !important;
     height: auto !important;
-    aspect-ratio: 16 / 9 !important;
+    aspect-ratio: 2 / 3 !important; /* Stående/vertikalt plakat-format */
     object-fit: cover !important;
     border-radius: 8px !important;
   }
 
+  /* Tilpasning av tall for Top 10 i grid-visning */
+  .top10-number {
+    font-size: 36px !important;
+    left: 4px !important;
+    bottom: 4px !important;
+    -webkit-text-stroke: 1.5px rgba(0, 255, 204, 0.8) !important;
+  }
+
   /* --------------------------------------------------------------------------
-     B) "FORTSETT Å SE": FORBLIR HORISONTALT PÅ MOBIL
+     B) "FORTSETT Å SE": HORISONTAL RULLING
      -------------------------------------------------------------------------- */
   .continue-watching-section .continue-image-gallery {
     display: flex !important;
@@ -853,31 +866,7 @@
 
   .image-overlay { display: none !important; }
 
-  /* TOP 10 GALLERI (FORBLIR OGSÅ HORISONTALT ELLER TILPASSET) */
-  .top10-gallery {
-    margin-left: 0 !important;
-    margin-right: 0 !important;
-    gap: 16px !important;
-    padding: 4px 0 12px 0 !important;
-    display: flex !important;
-    overflow-x: auto !important;
-  }
-  
-  .top10-item img {
-    width: 110px !important; 
-    height: 165px !important;
-    aspect-ratio: 2 / 3 !important; 
-    object-fit: cover !important;
-    border-radius: 12px !important;
-  }
-
-  .top10-number {
-    font-size: 48px !important;
-    left: -8px !important;
-    bottom: -6px !important;
-    -webkit-text-stroke: 2px rgba(0, 255, 204, 0.8) !important;
-  }
-
+  /* EKSTRA SEKSJONER */
   .kids-banner {
     height: 120px !important;
     margin: 20px 16px !important; 
@@ -1120,22 +1109,15 @@
   // ==================== CSS INJEKSJON FOR VIAPLAY-LÅSING ==================== //
   const style = document.createElement('style');
   if (window.matchMedia("(pointer: coarse)").matches) {
-    // ENKELT MENT FOR MOBIL/TOUCH: Gir fri scrolling og forhindrer berøringslåsing
     style.textContent = `
       .image-gallery, .coming-movies-gallery, .top10-gallery, .continue-image-gallery {
         overflow-x: auto !important; 
         scroll-behavior: smooth !important;
         display: flex !important;
         -webkit-overflow-scrolling: touch !important;
-        touch-action: pan-x pan-y !important;
-        overscroll-behavior-x: contain !important;
-      }
-      .scroll-button, .fade-left, .fade-right {
-        display: none !important; /* Skjuler piler og fades på touch for ren berøring */
       }
     `;
   } else {
-    // BEHOLDT UENDRET FOR PC
     style.textContent = `
       .image-gallery, .coming-movies-gallery, .top10-gallery, .continue-image-gallery {
         overflow-x: hidden !important; 
@@ -1158,6 +1140,29 @@
   let registrertBruker = null;
   const aktivProfil = localStorage.getItem("aktivProfil") || "Hovedprofil";
   let heleProfilArrayet = [];
+
+  // Hjelpefunksjon for å sjekke om enheten er mobil/touch
+  function erMobilEnhet() {
+    return window.matchMedia("(pointer: coarse)").matches || window.innerWidth <= 768;
+  }
+
+  // Hjelpefunksjon for å velge riktig poster basert på enhet og innstillinger
+  function hentPosterBilde(item, tvangHorisontal = false) {
+    if (!item) return null;
+    
+    // Hvis det er mobil og IKKE skal tvinges til horisontal ("Fortsett å se")
+    if (erMobilEnhet() && !tvangHorisontal) {
+      return item.posterVertikal || item.poster || item.bilde || null;
+    }
+    
+    // For PC eller horisontal visning (f.eks. Fortsett å se)
+    return item.poster || item.bilde || item.posterVertikal || null;
+  }
+
+  // Hjelpefunksjon for å generere HTML for den grå boksen
+  function lagGraaBoksHTML(tittel) {
+    return `<div style="width:100%; height:100%; min-height:100%; background:#2a2a2a; color:#e0e0e0; display:flex; align-items:center; justify-content:center; text-align:center; padding:12px; font-weight:bold; font-size:14px; box-sizing:border-box; word-break:break-word;">${tittel || 'Uten tittel'}</div>`;
+  }
 
   // Hjelpefunksjon for å oppdatere profilmeny i header
   function oppdaterMenyProfilVisning(bildeUrl, profilNavn, farge) {
@@ -1324,7 +1329,7 @@
   }
 
   function oppdaterBanner() {
-    const erMobil = window.innerWidth <= 768;
+    const erMobil = erMobilEnhet();
     const film = erMobil ? hentMobilBanner() : hentDesktopBanner();
 
     if (!film) {
@@ -1428,7 +1433,6 @@
 
   // ==================== GALLERIPILER LOGIKK ==================== //
   function oppdaterAlleGalleripiler() {
-    // Hopp over oppdateringer dersom det er en mobil-/touch-skjerm
     if (window.matchMedia("(pointer: coarse)").matches) return;
 
     document.querySelectorAll(".gallery-wrapper, .continue-gallery-wrapper").forEach(wrapper => {
@@ -1491,13 +1495,18 @@
     link.href = `film.html?navn=${itemKey}`;
     link.classList.add("gallery-item");
     
-    const bildeKilde = item.poster || item.bilde || "";
+    const bildeKilde = hentPosterBilde(item, false);
+    const tittel = item.tittel || itemKey;
+
+    const bildeHTML = bildeKilde 
+      ? `<img src="${bildeKilde}" alt="${tittel}" loading="lazy" onerror="this.onerror=null; this.outerHTML=\`${lagGraaBoksHTML(tittel)}\`;">`
+      : lagGraaBoksHTML(tittel);
 
     link.innerHTML = `
-      ${bildeKilde ? `<img src="${bildeKilde}" alt="${item.tittel || 'Film'}" loading="lazy">` : `<div style="width:100%; height:100%; background:#1a2629; display:flex; align-items:center; justify-content:center; padding:10px; text-align:center; font-size:12px; color:#fff;">${item.tittel || 'Mangler bilde'}</div>`}
+      ${bildeHTML}
       <div class="image-overlay">
         <div class="overlay-content">
-          <div class="overlay-title">${item.tittel || ""}</div>
+          <div class="overlay-title">${tittel}</div>
           <div class="overlay-meta">${(item.metadata || []).join(" • ")}</div>
         </div>
       </div>
@@ -1592,20 +1601,28 @@
       wrapper.href = `film.html?navn=${key}`;
       wrapper.classList.add("top10-item");
 
-      const bildeKilde = film.posterVertikal || film.poster || "";
+      const bildeKilde = hentPosterBilde(film, false);
+      const tittel = film.tittel || key;
 
-      const img = document.createElement("img");
       if (bildeKilde) {
+        const img = document.createElement("img");
         img.src = bildeKilde;
         img.loading = "lazy";
+        img.alt = tittel;
+        img.onerror = function() {
+          this.outerHTML = lagGraaBoksHTML(tittel);
+        };
+        wrapper.appendChild(img);
+      } else {
+        const div = document.createElement("div");
+        div.innerHTML = lagGraaBoksHTML(tittel);
+        wrapper.appendChild(div.firstChild);
       }
-      img.alt = film.tittel || "Topp 10";
 
       const number = document.createElement("div");
       number.classList.add("top10-number");
       number.textContent = index + 1;
 
-      wrapper.appendChild(img);
       wrapper.appendChild(number);
       gallery.appendChild(wrapper);
     });
@@ -1705,7 +1722,7 @@
         hrefUrl = `film-mal.html?navn=${urlParamNavn}&returUrl=${encodeURIComponent("Hovedside.html")}`;
       }
 
-      let bildeKilde = metadataMatch.poster || metadataMatch.bilde || "";
+      let bildeKilde = hentPosterBilde(metadataMatch, true);
       if (spillType === "serie" && metadataMatch.sesonger && metadataMatch.sesonger[sesongNr]) {
         const epInfo = metadataMatch.sesonger[sesongNr].find(e => String(e.episode) === String(episodeNr));
         if (epInfo && epInfo.bilde) {
@@ -1721,18 +1738,21 @@
         ? ` • S${sesongNr}E${episodeNr}` 
         : "";
 
+      const tittel = metadataMatch.tittel || urlParamNavn;
+
+      const continueBildeHTML = bildeKilde 
+        ? `<img src="${bildeKilde}" alt="${tittel}" loading="lazy" onerror="this.onerror=null; this.outerHTML=\`${lagGraaBoksHTML(tittel)}\`;">`
+        : lagGraaBoksHTML(tittel);
+
       link.innerHTML = `
         <div class="continue-media-wrap">
-          ${bildeKilde 
-            ? `<img src="${bildeKilde}" alt="${metadataMatch.tittel}" loading="lazy">` 
-            : `<div style="width:100%; height:100%; background:#1a2629; display:flex; align-items:center; justify-content:center; padding:10px; text-align:center; font-size:12px; color:#fff;">${metadataMatch.tittel || 'Mangler bilde'}</div>`
-          }
+          ${continueBildeHTML}
           <button class="delete-progress-btn" title="Skjul fra Fortsett å se" type="button" aria-label="Skjul fra visning">
             <i class="fas fa-trash-alt"></i>
           </button>
           <div class="progress-bar" style="--progress: ${progressVerdi}%;"></div>
         </div>
-        <span class="continue-title">${metadataMatch.tittel}${episodeTekst}</span>
+        <span class="continue-title">${tittel}${episodeTekst}</span>
       `;
 
       const deleteBtn = link.querySelector(".delete-progress-btn");
@@ -1796,7 +1816,6 @@
     const cacheKeyFilmer = "watch_nordic_filmer_cache";
     const cacheKeySerier = "watch_nordic_serier_cache";
 
-    // 1. Sjekk om det finnes lagret data lokalt for UMIDDELBAR visning
     const lagredeFilmer = localStorage.getItem(cacheKeyFilmer);
     const lagredeSerier = localStorage.getItem(cacheKeySerier);
 
@@ -1805,14 +1824,12 @@
         filmer = JSON.parse(lagredeFilmer);
         serier = JSON.parse(lagredeSerier);
         console.log("⚡ Lastet filmer og serier fra lokal cache!");
-        // Tegner siden med én gang slik at brukeren slipper hvit/tom skjerm
         byggSiden();
       } catch (e) {
         console.error("Feil ved parsing av lokal media-cache");
       }
     }
 
-    // 2. Hent oppdaterte data fra Firestore i bakgrunnen
     try {
       const nyeFilmer = {};
       const filmerSnap = await getDocs(collection(db, "filmer"));
@@ -1826,11 +1843,9 @@
         nyeSerier[docSnap.id] = docSnap.data();
       });
 
-      // Oppdater cachen i localStorage
       localStorage.setItem(cacheKeyFilmer, JSON.stringify(nyeFilmer));
       localStorage.setItem(cacheKeySerier, JSON.stringify(nyeSerier));
 
-      // Oppdater globale variabler og bygg siden på nytt hvis data har endret seg
       filmer = nyeFilmer;
       serier = nyeSerier;
       
