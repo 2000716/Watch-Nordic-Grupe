@@ -791,33 +791,38 @@
         transform: none !important;
         transition: none !important;
         flex-shrink: 0 !important;
+        border-radius: 12px !important; /* Sikrer myke kanter på selve lenkeelementene i galleriene */
       }
 
-      /* MYKERE / RUNDERE KANTER FOR BILDER */
-      .image-gallery a img, .gallery-item img {
+      /* MYKERE / RUNDERE KANTER FOR ALLE BILDER I HOVEDGALLERIENE */
+      .image-gallery a img, 
+      .gallery-item img, 
+      .image-gallery img {
         width: 260px !important;  
         height: 146px !important; 
         aspect-ratio: 16 / 9 !important; 
         object-fit: cover !important; 
-        border-radius: 12px !important; /* Økt til 12px for rundere kanter */
+        border-radius: 12px !important; /* Mykere kanter på alle bilder */
       }
 
       .continue-image-gallery .continue-item {
         width: 260px !important;
         flex-shrink: 0 !important;
+        border-radius: 12px !important;
       }
 
       .continue-media-wrap {
         width: 100% !important;
         height: 146px !important;
-        border-radius: 12px !important; /* Økt til 12px for rundere kanter */
-        overflow: hidden !important; /* Sikrer at evt. elementer holdes innenfor de runde kantene */
+        border-radius: 12px !important; /* Myke kanter på 'Fortsett å se' */
+        overflow: hidden !important; 
       }
 
       .continue-media-wrap img {
         width: 100% !important;
         height: 100% !important;
         object-fit: cover !important;
+        border-radius: 12px !important;
       }
 
       .continue-title {
@@ -839,7 +844,7 @@
         height: 165px !important;
         aspect-ratio: 2 / 3 !important; 
         object-fit: cover !important;
-        border-radius: 12px !important; /* Økt til 12px for rundere kanter på Topp 10 */
+        border-radius: 12px !important; /* Myke kanter på Topp 10 */
       }
 
       .top10-number {
@@ -853,12 +858,13 @@
         height: 120px !important;
         margin: 20px 16px !important; 
         width: calc(100% - 32px) !important;
-        border-radius: 12px !important; /* Også gjort barnebannere litt rundere */
+        border-radius: 12px !important;
       }
       
       .kids-overlay { 
         padding-left: 20px !important; 
         background: linear-gradient(to right, rgba(9,27,30,0.9), rgba(9,27,30,0.2)) !important;
+        border-radius: 12px !important;
       }
       .kids-overlay h2 { font-size: 18px !important; margin-bottom: 2px; }
       .kids-overlay p { font-size: 12px !important; }
