@@ -87,10 +87,9 @@
     .signup{
       background:#00FFCC;
       color:#071214;
-      box-shadow: none; /* Fjernet neon-glød */
+      box-shadow: none;
     }
 
-    /* FIKSET: La til manglende lukkeparentes etter -2px */
     .signup:hover{
       transform:translateY(-2px) scale(1.03);
     }
@@ -112,7 +111,7 @@
       background:
         linear-gradient(
           to right,
-          rgba(7,18,20,1) 25%,      
+          rgba(7,18,20,1) 25%,     
           rgba(7,18,20,0.5) 60%,
           rgba(7,18,20,0.05) 100%
         );
@@ -174,7 +173,7 @@
       color:#071214;
       padding:16px 34px;
       border-radius:999px;
-      box-shadow: none; /* Fjernet neon-glød */
+      box-shadow: none;
     }
 
     .primary-btn:hover{
@@ -344,7 +343,7 @@
     .row3{margin-left:-120px;}
     .row4{margin-left:-180px;}
 
-    /* ================= MODERN COOKIE BANNER STYLE ================= */
+    /* ================= COOKIE BANNER ================= */
     .cookie-banner {
       position: fixed;
       bottom: -100%;
@@ -439,7 +438,7 @@
     .cookie-btn.accept {
       background: #00FFCC;
       color: #071214;
-      box-shadow: none; /* Fjernet neon-glød */
+      box-shadow: none;
     }
 
     .cookie-btn.accept:hover {
@@ -466,7 +465,7 @@
       color: white;
     }
 
-    /* ================= RESPONSIVE / MEDIA QUERIES ================= */
+    /* ================= RESPONSIVE ================= */
     @media (max-width: 768px) {
       .hero {
         height: auto;
@@ -740,10 +739,11 @@
     </div>
   </footer>
 
-  <script src="Filmdata.js"></script>
-  <script src="Seriedata.js"></script>
+  <!-- HENT BILDER FRA FIREBASE MED LOKAL CACHING (SPARER FIREBASE-LESINGER) -->
+  <script type="module">
+    import { db } from "./firebase-oppsett.js";
+    import { collection, getDocs } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
 
-  <script>
     const rows = [
       document.querySelector(".row1"),
       document.querySelector(".row2"),
@@ -751,45 +751,80 @@
       document.querySelector(".row4")
     ];
 
-    let basePosters = [];
+    const CACHE_KEY = "watch_nordic_poster_wall_cache";
+    const CACHE_TIME_KEY = "watch_nordic_poster_wall_time";
+    const ONE_DAY_MS = 24 * 60 * 60 * 1000; // 24 timer i millisekunder
 
-    if(typeof filmer !== "undefined"){
-      Object.values(filmer).forEach(film => {
-        if(film.poster){
-          basePosters.push(film.poster);
+    async function lastInnPosters() {
+      let basePosters = [];
+      const cachedData = localStorage.getItem(CACHE_KEY);
+      const cachedTime = localStorage.getItem(CACHE_TIME_KEY);
+      const now = Date.now();
+
+      // 1. Sjekk om vi har gyldig data i minnet som er under 24 timer gammel
+      if (cachedData && cachedTime && (now - Number(cachedTime) < ONE_DAY_MS)) {
+        try {
+          basePosters = JSON.parse(cachedData);
+        } catch (e) {
+          console.warn("Mellomlager kunne ikke leses, henter fra Firebase i stedet.");
         }
-      });
-    }
+      }
 
-    if(typeof serier !== "undefined"){
-      Object.values(serier).forEach(serie => {
-        if(serie.poster){
-          basePosters.push(serie.poster);
-        }
-      });
-    }
+      // 2. Hvis vi IKKE hadde data i minnet (eller det var for gammelt), hent fra Firebase
+      if (basePosters.length === 0) {
+        try {
+          // Hent fra "filmer"
+          const filmerSnap = await getDocs(collection(db, "filmer"));
+          filmerSnap.forEach(doc => {
+            const data = doc.data();
+            if (data.poster) basePosters.push(data.poster);
+            else if (data.bakgrunn) basePosters.push(data.bakgrunn);
+          });
 
-    if(basePosters.length > 0) {
-      rows.forEach(row => {
-        if(row) {
-          let rowPosters = [...basePosters];
-          const rowFragment = document.createDocumentFragment();
-          
-          for(let i = 0; i < 4; i++){
-            rowPosters.sort(() => Math.random() - 0.5);
-            
-            rowPosters.forEach(src => {
-              const img = document.createElement("img");
-              img.src = src;
-              img.loading = "lazy";
-              rowFragment.appendChild(img);
-            });
+          // Hent fra "serier"
+          const serierSnap = await getDocs(collection(db, "serier"));
+          serierSnap.forEach(doc => {
+            const data = doc.data();
+            if (data.poster) basePosters.push(data.poster);
+            else if (data.bakgrunn) basePosters.push(data.bakgrunn);
+          });
+
+          // Lagre i nettleserens minne hvis vi fant noe
+          if (basePosters.length > 0) {
+            localStorage.setItem(CACHE_KEY, JSON.stringify(basePosters));
+            localStorage.setItem(CACHE_TIME_KEY, now.toString());
           }
-          row.appendChild(rowFragment);
+        } catch (err) {
+          console.error("Feil ved henting av posters fra Firebase:", err);
         }
-      });
+      }
+
+      // 3. Generer plakater på skjermen
+      if (basePosters.length > 0) {
+        rows.forEach(row => {
+          if (row) {
+            let rowPosters = [...basePosters];
+            const rowFragment = document.createDocumentFragment();
+
+            for (let i = 0; i < 4; i++) {
+              rowPosters.sort(() => Math.random() - 0.5);
+
+              rowPosters.forEach(src => {
+                const img = document.createElement("img");
+                img.src = src;
+                img.loading = "lazy";
+                rowFragment.appendChild(img);
+              });
+            }
+            row.appendChild(rowFragment);
+          }
+        });
+      }
     }
 
+    lastInnPosters();
+
+    // --- COOKIE LOGIKK ---
     const cookieBanner = document.getElementById("cookieBanner");
     const cookieOptions = document.getElementById("cookieOptions");
     const btnAccept = document.getElementById("btnAccept");
