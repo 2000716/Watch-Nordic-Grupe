@@ -24,7 +24,7 @@ html {
 }
 
 body {
-  background: #050F11; /* PC: Ny mørkere farge */
+  background: #050F11; /* PC: Mørk cyan-sort bakgrunn */
   color: #fff;
   font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
   letter-spacing: .2px;
@@ -43,165 +43,153 @@ img, video {
 }
 
 /* ==========================================================================
-       2. TOPPMENY (PC)
-       ========================================================================== */
-    .top-nav {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 85px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 40px;
-      z-index: 9999;
-      background: linear-gradient(to bottom, 
-        rgba(5, 15, 17, 0.95) 0%, 
-        rgba(5, 15, 17, 0.75) 40%, 
-        rgba(5, 15, 17, 0.3) 75%, 
-        rgba(5, 15, 17, 0) 100%
-      );
-      transition: background 0.4s ease, box-shadow 0.4s ease, height 0.4s ease;
-    }
-
-    .top-nav.scrolled {
-      height: 70px;
-      background: rgba(5, 15, 17, 0.98);
-      backdrop-filter: blur(10px);
-      box-shadow: 0 2px 15px rgba(0, 0, 0, 0.6);
-    }
-
-    .nav-left {
-      display: flex;
-      align-items: center;
-      gap: 40px;
-      flex-shrink: 0;
-    }
-
-    .watch-logo-svg {
-      height: 40px;
-      width: auto;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-    }
-
-    .watch-logo-svg img {
-      height: 100%;
-      width: auto;
-    }
-
-    .nav-links {
-      position: absolute;
-      left: 50%;
-      transform: translateX(-50%);
-      display: flex;
-      gap: 30px;
-      white-space: nowrap;
-      transition: gap 0.3s ease;
-    }
-
-    .nav-links a {
-      color: #e0e0e0;
-      text-decoration: none;
-      font-size: 15px;
-      font-weight: 500;
-      text-shadow: 0 1px 4px rgba(0, 0, 0, 0.8), 0 2px 8px rgba(0, 0, 0, 0.8);
-      transition: color 0.3s ease, font-size 0.3s ease;
-    }
-
-    .nav-links a i {
-      margin-right: 6px;
-      font-size: 16px;
-    }
-
-    .nav-links a:hover {
-      color: #ffffff;
-    }
-
-    .nav-links a.active {
-      color: #00FFCC;
-      font-weight: 700;
-    }
-
-    .nav-right {
-      display: flex;
-      align-items: center;
-      gap: 15px;
-      flex-shrink: 0;
-    }
-
-    .nav-search {
-      color: #e0e0e0;
-      font-size: 18px;
-      text-decoration: none;
-      text-shadow: 0 1px 4px rgba(0, 0, 0, 0.8);
-      transition: color 0.3s ease;
-    }
-
-    .nav-search:hover {
-      color: #00FFCC;
-    }
-
-    /* PROFILMENY (MED BILDET SIKRET INNE I SIRKELEN) */
-    .profilmeny {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      text-decoration: none;
-      cursor: pointer;
-    }
-
-    .profil-avatar-wrap {
-      width: 44px;
-      height: 44px;
-      position: relative;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border-radius: 50%; /* Lager sirkelformen */
-      overflow: hidden;   /* KUTTER ALT som stikker ut på sidene/toppen */
-      border: 2px solid rgba(255, 255, 255, 0.2);
-      background-color: #1e2a2e;
-      transition: border-color 0.35s ease, background-color 0.35s ease;
-    }
-
-    .profil-avatar-img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;  /* Bevarer bildets proporsjoner uten at det blir skjevt */
-      border-radius: 50%;
-      display: block;
-      transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
-    }
-
-    /* Sikrer at også PNG-karakterer holdes stramt inne i sirkelen */
-    .profil-avatar-img.png-karakter {
-      object-fit: cover;
-      height: 100%;
-      position: static;
-      transform: none;
-    }
-
-    /* HOVER EFFEKT (Gjør bakgrunnen grønn og gir en fin zoom INNE i sirkelen) */
-    .profilmeny:hover .profil-avatar-wrap {
-      background-color: var(--active-color, #00FFCC);
-      border-color: #ffffff;
-    }
-
-    .profilmeny:hover .profil-avatar-img {
-      transform: scale(1.15); /* Bildet zoomer litt inn på hover, men kappingen holder det i sirkelen */
-    }
-/* ==========================================================================
-   3. OPTIMALISERING FOR SMÅ/MELLOMSTORE PC-SKJERMER & LAPTOPS
+   2. TOPPMENY (PC)
    ========================================================================== */
-@media (max-width: 1200px) and (min-width: 769px) {
-  .top-nav { padding: 0 20px; }
-  .nav-left { gap: 20px; }
-  .nav-links { gap: 15px; }
-  .nav-links a { font-size: 14px; }
-  .watch-logo-svg { height: 30px; }
+.top-nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 85px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 40px;
+  z-index: 9999;
+  background: linear-gradient(to bottom, 
+    rgba(5, 15, 17, 0.95) 0%, 
+    rgba(5, 15, 17, 0.75) 40%, 
+    rgba(5, 15, 17, 0.3) 75%, 
+    rgba(5, 15, 17, 0) 100%
+  );
+  transition: background 0.4s ease, box-shadow 0.4s ease, height 0.4s ease;
+}
+
+.top-nav.scrolled {
+  height: 70px;
+  background: rgba(5, 15, 17, 0.98);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 2px 15px rgba(0, 0, 0, 0.6);
+}
+
+.nav-left {
+  display: flex;
+  align-items: center;
+  gap: 40px;
+  flex-shrink: 0;
+}
+
+.watch-logo-svg {
+  height: 40px;
+  width: auto;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+}
+
+.watch-logo-svg img {
+  height: 100%;
+  width: auto;
+}
+
+.nav-links {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 30px;
+  white-space: nowrap;
+  transition: gap 0.3s ease;
+}
+
+.nav-links a {
+  color: #e0e0e0;
+  text-decoration: none;
+  font-size: 15px;
+  font-weight: 500;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.8), 0 2px 8px rgba(0, 0, 0, 0.8);
+  transition: color 0.3s ease, font-size 0.3s ease;
+}
+
+.nav-links a i {
+  margin-right: 6px;
+  font-size: 16px;
+}
+
+.nav-links a:hover {
+  color: #ffffff;
+}
+
+.nav-links a.active {
+  color: #00FFCC;
+  font-weight: 700;
+}
+
+.nav-right {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  flex-shrink: 0;
+}
+
+.nav-search {
+  color: #e0e0e0;
+  font-size: 18px;
+  text-decoration: none;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.8);
+  transition: color 0.3s ease;
+}
+
+.nav-search:hover {
+  color: #00FFCC;
+}
+
+/* PROFILMENY */
+.profilmeny {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.profil-avatar-wrap {
+  width: 44px;
+  height: 44px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  background-color: #1e2a2e;
+  transition: border-color 0.35s ease, background-color 0.35s ease;
+}
+
+.profil-avatar-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+  display: block;
+  transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.profil-avatar-img.png-karakter {
+  object-fit: cover;
+  height: 100%;
+  position: static;
+  transform: none;
+}
+
+.profilmeny:hover .profil-avatar-wrap {
+  background-color: var(--active-color, #00FFCC);
+  border-color: #ffffff;
+}
+
+.profilmeny:hover .profil-avatar-img {
+  transform: scale(1.15);
 }
 
 /* ==========================================================================
@@ -244,7 +232,7 @@ img, video {
   bottom: 0;
   width: 100%;
   height: 200px;
-  background: linear-gradient(to top, #050F11, transparent); /* PC: Ny mørkere farge */
+  background: linear-gradient(to top, #050F11, transparent);
   z-index: 1;
 }
 
@@ -437,12 +425,12 @@ img, video {
 }
 
 /* ==========================================================================
-   6. ANBEFALINGER & EPISODER (KUN VERTIKALT DESIGN - INGEN SCROLLING)
+   6. ANBEFALINGER & PRO STRØMME-EPISODER
    ========================================================================== */
 .recommendations {
   margin: 40px auto 0;
   padding: 0 50px 50px;
-  background: #050F11; /* PC: Ny mørkere farge */
+  background: #050F11;
   position: relative;
   z-index: 5;
   max-width: 1400px;
@@ -454,19 +442,18 @@ img, video {
   margin-bottom: 20px;
 }
 
-/* ANBEFALINGER: Fast rutenett med nøyaktig 3 store filmplakater i bredden */
+/* ANBEFALINGER: Grid */
 .gallery {
   display: grid;
-  grid-template-columns: repeat(3, 1fr); /* 3 kolonner som går nedover */
+  grid-template-columns: repeat(3, 1fr);
   gap: 24px;
   width: 100%;
 }
 
-/* Filmplakatene i rutenettet */
 .movie-card {
-  width: 100%;                /* Fyller kolonnen sin */
-  height: 220px;              /* Kino-høyde */
-  border-radius: 6px;
+  width: 100%;
+  height: 220px;
+  border-radius: 8px;
   overflow: hidden;
   position: relative;
   cursor: pointer;
@@ -481,7 +468,7 @@ img, video {
 
 .movie-card:hover {
   transform: translateY(-5px);
-  box-shadow: 0 10px 20px rgba(0, 255, 204, 0.2);
+  box-shadow: 0 10px 20px rgba(0, 255, 204, 0.15);
 }
 
 .movie-overlay {
@@ -505,72 +492,108 @@ img, video {
   color: #fff;
 }
 
-/* ==========================================================================
-   EPISODER SYSTEM (Nå som et grid som går nedover)
-   ========================================================================== */
+/* --------------------------------------------------------------------------
+   EPISODES - NYTT PRO STRØMMEDESIGN (Horizontal Card Layout)
+   -------------------------------------------------------------------------- */
 .season-buttons {
   display: flex;
+  align-items: center;
   gap: 12px;
-  margin-top: 50px; /* Avstand mellom filmene og episodene */
-  margin-bottom: 20px;
+  margin-top: 60px;
+  margin-bottom: 25px;
   overflow-x: auto;
   padding-bottom: 8px;
-  -ms-overflow-style: none;
-}
-.season-buttons::-webkit-scrollbar {
-  display: none;
 }
 
 .season-btn {
-  background: rgba(255,255,255,.08);
-  color: #ccc;
-  border: none;
-  padding: 10px 24px;
-  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.06);
+  color: #a0a0a0;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 10px 22px;
+  border-radius: 20px;
   cursor: pointer;
   font-size: 14px;
+  font-weight: 500;
   white-space: nowrap;
   flex-shrink: 0;
+  transition: all 0.25s ease;
+}
+
+.season-btn:hover {
+  background: rgba(255, 255, 255, 0.15);
+  color: #fff;
 }
 
 .season-btn.active {
   background: #ffffff;
-  color: #000;
+  color: #050F11;
+  border-color: #ffffff;
   font-weight: 700;
 }
 
-/* EPISODEGALLERI: Endret til et rutenett med 3 i bredden som stables nedover */
+/* EPISODEGALLERI: 1 eller 2 per rad med bred, profesjonell strømme-layout */
 .episode-gallery {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr); /* 3 episoder i bredden på PC */
-  gap: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
   width: 100%;
 }
 
 .episode-card {
-  width: 100%;                /* Fyller kolonnen sin i rutenettet */
-  background: #0c0c0c;
-  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  background: rgba(18, 28, 32, 0.5);
+  backdrop-filter: blur(10px);
+  border-radius: 12px;
   overflow: hidden;
   cursor: pointer;
-  transition: border-color .2s ease, transform 0.2s ease;
-  border: 1px solid rgba(255,255,255,.05);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), 
+              border-color 0.3s ease, 
+              background-color 0.3s ease,
+              box-shadow 0.3s ease;
+  position: relative;
+  padding: 12px;
+  gap: 20px;
 }
 
 .episode-card:hover {
-  transform: translateY(-3px);
-  border: 1px solid rgba(255,255,255,.5);
+  transform: translateX(6px);
+  background: rgba(26, 40, 46, 0.8);
+  border-color: rgba(0, 255, 204, 0.4);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5);
 }
 
+/* Episodenummer til venstre */
+.episode-number {
+  font-size: 20px;
+  font-weight: 800;
+  color: #00FFCC;
+  min-width: 35px;
+  text-align: center;
+  opacity: 0.8;
+}
+
+/* Thumbnail med Play-knapp og Progress-bar */
 .episode-thumb {
   position: relative;
-  height: 180px;
+  width: 240px;
+  height: 135px; /* Perfekt 16:9 format */
+  flex-shrink: 0;
+  border-radius: 8px;
+  overflow: hidden;
+  background: #000;
 }
 
 .episode-thumb img {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  transition: transform 0.4s ease;
+}
+
+.episode-card:hover .episode-thumb img {
+  transform: scale(1.06);
 }
 
 .play-overlay {
@@ -579,99 +602,112 @@ img, video {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(0,0,0,.4);
+  background: rgba(0, 0, 0, 0.35);
   opacity: 0;
-  transition: opacity .2s;
+  transition: opacity 0.25s ease, background 0.25s ease;
+}
+
+.play-icon-circle {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.9);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #000;
+  font-size: 18px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+  transform: scale(0.85);
+  transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 .episode-card:hover .play-overlay {
   opacity: 1;
 }
 
-.play-overlay i {
-  font-size: 36px;
-  color: #ffffff;
+.episode-card:hover .play-icon-circle {
+  transform: scale(1);
+  background: #00FFCC;
 }
 
+/* Valgfri Progress Bar nederst på thumbnail */
+.episode-progress {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 3px;
+  background: #00FFCC;
+  z-index: 2;
+  box-shadow: 0 0 8px #00FFCC;
+}
+
+/* Informasjonstekst til høyre */
 .episode-info {
-  padding: 16px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding-right: 15px;
+}
+
+.episode-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 6px;
 }
 
 .episode-title {
-  font-size: 15px;
-  font-weight: 600;
-  margin-bottom: 4px;
+  font-size: 17px;
+  font-weight: 700;
+  color: #ffffff;
+  letter-spacing: .3px;
 }
 
 .episode-meta {
-  font-size: 12px;
-  color: #888;
-  margin-bottom: 8px;
+  font-size: 13px;
+  color: #00FFCC;
+  font-weight: 600;
 }
 
 .episode-desc {
-  font-size: 13px;
-  color: #bbb;
+  font-size: 14px;
+  color: #a0a0a0;
   line-height: 1.5;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
+/* Låst episode style */
 .episode-card.locked {
-  opacity: 0.5;
-  pointer-events: none;
+  opacity: 0.4;
+  cursor: not-allowed;
+  filter: grayscale(80%);
+}
+
+.episode-card.locked:hover {
+  transform: none;
+  border-color: rgba(255, 255, 255, 0.05);
 }
 
 .lock-overlay {
   position: absolute;
   inset: 0;
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
-  background: rgba(0,0,0,0.7);
-  gap: 8px;
+  background: rgba(0,0,0,0.6);
+  z-index: 3;
 }
 
-/* ==========================================================================
-   MOBIL-TILPASSING FOR DENNE SEKSJONEN
-   ========================================================================== */
-@media (max-width: 768px) {
-  .recommendations {
-    padding: 0 32px 30px;
-  }
-  
-  .recommendations h2 {
-    font-size: 18px;
-    margin-bottom: 12px;
-  }
-
-  /* Filmer blir til 2 i bredden på mobil */
-  .gallery {
-    grid-template-columns: repeat(2, 1fr); 
-    gap: 12px;
-  }
-
-  .movie-card {
-    height: 120px; 
-  }
-
-  .movie-overlay {
-    padding: 10px;
-  }
-
-  .movie-title {
-    font-size: 12px;
-  }
-
-  /* Episoder stables til 1 i bredden på mobil for å beholde leservennlig tekst */
-  .episode-gallery {
-    grid-template-columns: 1fr;
-    gap: 16px;
-  }
-
-  .episode-thumb {
-    height: 180px; /* God størrelse på mobilskjermer */
-  }
+.lock-overlay i {
+  font-size: 24px;
+  color: #fff;
 }
+
 /* ==========================================================================
    7. FOOTER OG SKJERM-POPUPS
    ========================================================================== */
@@ -679,7 +715,7 @@ img, video {
   width: 100%;
   padding: 70px 80px 35px;
   margin-top: 100px;
-  background: #050F11; /* PC: Ny mørkere farge */
+  background: #050F11;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -814,7 +850,6 @@ img, video {
     display: none;
   }
 
-  /* MOBIL: Bakgrunnsfargen beholder den opprinnelige rgb(9, 27, 30) / #091B1E */
   body, .hero {
     background: rgb(9, 27, 30) !important; 
     position: relative; 
@@ -824,7 +859,6 @@ img, video {
     flex-direction: column;
   }
 
-  /* Mobilbakgrunn for bilde/video */
   .background-image,
   .background-video {
     position: absolute !important;
@@ -836,7 +870,6 @@ img, video {
     object-fit: cover;
   }
 
-  /* Mørk fade over bildet som toner ut i den originale mobilbakgrunnen */
   .overlay {
     display: block !important;
     position: absolute !important;
@@ -852,7 +885,6 @@ img, video {
     display: none !important;
   }
 
-  /* Flytter innholdet opp mot faden */
   .content-wrapper {
     position: relative !important;
     inset: auto !important;
@@ -952,7 +984,7 @@ img, video {
     align-self: flex-start !important;
   }
 
-  /* MOBIL: Anbefalinger beholder original farge */
+  /* MOBIL: Episoder stabling */
   .recommendations {
     margin: 30px 0 0 !important;
     padding: 0 20px 40px !important;
@@ -975,7 +1007,28 @@ img, video {
     border-radius: 4px !important;
   }
 
-  /* MOBIL: Footer beholder original farge */
+  /* MOBIL EPISODE DESIGN */
+  .episode-card {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 10px;
+    gap: 12px;
+  }
+
+  .episode-number {
+    display: none; /* Skjul tall på venstre side på mobil for mer plass */
+  }
+
+  .episode-thumb {
+    width: 100%;
+    height: 180px;
+  }
+
+  .episode-info {
+    padding-right: 0;
+    width: 100%;
+  }
+
   .footer {
     padding: 40px 20px 20px !important;
     background: rgb(9, 27, 30) !important;
