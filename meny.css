@@ -27,7 +27,7 @@
     rgba(5, 15, 17, 0.3) 75%, 
     rgba(5, 15, 17, 0) 100%
   );
-  transition: background 0.4s ease, box-shadow 0.4s ease; /* Fjernet transition på height */
+  transition: background 0.4s ease, box-shadow 0.4s ease;
 }
 
 /* Når siden scroller - beholder nøyaktig samme høyde */
@@ -73,7 +73,7 @@
   color: #e0e0e0;
   text-decoration: none;
   font-size: 15px;
-  font-weight: 500; /* Fast vekt på alle lenker */
+  font-weight: 500;
   text-shadow: 0 1px 4px rgba(0, 0, 0, 0.8), 0 2px 8px rgba(0, 0, 0, 0.8);
   transition: color 0.3s ease;
 }
@@ -87,10 +87,10 @@
   color: #ffffff;
 }
 
-/* Aktiv fane - bruker text-shadow i stedet for font-weight for å unngå at teksten bredder seg */
+/* Aktiv fane */
 .nav-links a.active {
   color: #00FFCC;
-  font-weight: 500; /* Beholder 500 så ordstørrelsen ikke endres */
+  font-weight: 500;
   text-shadow: 0 0 1px #00FFCC, 0 1px 4px rgba(0, 0, 0, 0.8);
 }
 
