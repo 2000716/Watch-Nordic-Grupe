@@ -1700,7 +1700,7 @@
     });
   }
 
-  function renderFilmGallery(galleryId, filterFunction, sortByPublishDate = false, limit = null) {
+  function renderFilmGallery(galleryId, filterFunction, sortByPublishDate = true, limit = null) {
     const gallery = document.getElementById(galleryId);
     if (!gallery) return;
     gallery.innerHTML = "";
@@ -1712,8 +1712,10 @@
     });
 
     if (filterFunction) filmKeys = filmKeys.filter(filterFunction);
+    
+    // OPPDATERT: Sorterer slik at nyeste publishDate kommer FØRST
     if (sortByPublishDate) {
-      filmKeys.sort((a, b) => new Date(filmer[a].publishDate || 0) - new Date(filmer[b].publishDate || 0));
+      filmKeys.sort((a, b) => new Date(filmer[b].publishDate || 0) - new Date(filmer[a].publishDate || 0));
     }
     if (limit) filmKeys = filmKeys.slice(0, limit);
 
@@ -1726,10 +1728,18 @@
     const gallery = document.getElementById(galleryId);
     if (!gallery) return;
     gallery.innerHTML = "";
-    Object.keys(serier).forEach((key) => {
+
+    let serieKeys = Object.keys(serier).filter(key => {
       const serie = serier[key];
-      if (erInnloggetSomBarn && (!erEgnetForBarn(serie) || !sjekkAldersgrense(serie))) return;
-      gallery.appendChild(createGalleryItem(key, serie));
+      if (erInnloggetSomBarn && (!erEgnetForBarn(serie) || !sjekkAldersgrense(serie))) return false;
+      return true;
+    });
+
+    // OPPDATERT: Sorterer serier med nyeste publishDate først
+    serieKeys.sort((a, b) => new Date(serier[b].publishDate || 0) - new Date(serier[a].publishDate || 0));
+
+    serieKeys.forEach((key) => {
+      gallery.appendChild(createGalleryItem(key, serier[key]));
     });
   }
 
@@ -1780,13 +1790,18 @@
     const gallery = document.getElementById(galleryId);
     if (!gallery) return;
     gallery.innerHTML = "";
-    Object.keys(serier).forEach((key) => {
+
+    let dokuKeys = Object.keys(serier).filter(key => {
       const serie = serier[key];
-      if (erInnloggetSomBarn && (!erEgnetForBarn(serie) || !sjekkAldersgrense(serie))) return;
-      const erDokumentar = serie.metadata?.some(meta => meta.toLowerCase().includes("dokumentar"));
-      if (erDokumentar) {
-        gallery.appendChild(createGalleryItem(key, serie));
-      }
+      if (erInnloggetSomBarn && (!erEgnetForBarn(serie) || !sjekkAldersgrense(serie))) return false;
+      return serie.metadata?.some(meta => meta.toLowerCase().includes("dokumentar"));
+    });
+
+    // OPPDATERT: Sorterer dokumentarer med nyeste publishDate først
+    dokuKeys.sort((a, b) => new Date(serier[b].publishDate || 0) - new Date(serier[a].publishDate || 0));
+
+    dokuKeys.forEach((key) => {
+      gallery.appendChild(createGalleryItem(key, serier[key]));
     });
   }
 
@@ -2031,7 +2046,7 @@
       });
       const barnSeksjon = document.getElementById("barn-seksjon");
       if (barnSeksjon) barnSeksjon.style.display = "block";
-      renderFilmGallery("barn-galleri", (key) => erEgnetForBarn(filmer[key]) && sjekkAldersgrense(filmer[key]));
+      renderFilmGallery("barn-galleri", (key) => erEgnetForBarn(filmer[key]) && sjekkAldersgrense(filmer[key]), true);
     } else {
       const seksjoner = ["nye-filmer-seksjon", "alle-filmer-seksjon", "serier-seksjon", "topp10-seksjon", "dokumentar-seksjon"];
       seksjoner.forEach(id => {
@@ -2047,7 +2062,7 @@
       
       const barnSeksjon = document.getElementById("barn-seksjon");
       if (barnSeksjon) barnSeksjon.style.display = "block";
-      renderFilmGallery("barn-galleri", (key) => erEgnetForBarn(filmer[key]));
+      renderFilmGallery("barn-galleri", (key) => erEgnetForBarn(filmer[key]), true);
     }
 
     renderContinueWatching();
