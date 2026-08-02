@@ -1141,29 +1141,6 @@
   const aktivProfil = localStorage.getItem("aktivProfil") || "Hovedprofil";
   let heleProfilArrayet = [];
 
-  // Hjelpefunksjon for å sjekke om enheten er mobil/touch
-  function erMobilEnhet() {
-    return window.matchMedia("(pointer: coarse)").matches || window.innerWidth <= 768;
-  }
-
-  // Hjelpefunksjon for å velge riktig poster basert på enhet og innstillinger
-  function hentPosterBilde(item, tvangHorisontal = false) {
-    if (!item) return null;
-    
-    // Hvis det er mobil og IKKE skal tvinges til horisontal ("Fortsett å se")
-    if (erMobilEnhet() && !tvangHorisontal) {
-      return item.posterVertikal || item.poster || item.bilde || null;
-    }
-    
-    // For PC eller horisontal visning (f.eks. Fortsett å se)
-    return item.poster || item.bilde || item.posterVertikal || null;
-  }
-
-  // Hjelpefunksjon for å generere HTML for den grå boksen
-  function lagGraaBoksHTML(tittel) {
-    return `<div style="width:100%; height:100%; min-height:100%; background:#2a2a2a; color:#e0e0e0; display:flex; align-items:center; justify-content:center; text-align:center; padding:12px; font-weight:bold; font-size:14px; box-sizing:border-box; word-break:break-word;">${tittel || 'Uten tittel'}</div>`;
-  }
-
   // Hjelpefunksjon for å oppdatere profilmeny i header
   function oppdaterMenyProfilVisning(bildeUrl, profilNavn, farge) {
     const menyProfil = document.getElementById("menyProfilbilde");
@@ -1329,7 +1306,7 @@
   }
 
   function oppdaterBanner() {
-    const erMobil = erMobilEnhet();
+    const erMobil = window.innerWidth <= 768;
     const film = erMobil ? hentMobilBanner() : hentDesktopBanner();
 
     if (!film) {
@@ -1495,18 +1472,19 @@
     link.href = `film.html?navn=${itemKey}`;
     link.classList.add("gallery-item");
     
-    const bildeKilde = hentPosterBilde(item, false);
-    const tittel = item.tittel || itemKey;
+    // Sjekker om brukeren har mobil-skjermbredde (768px eller smalere)
+    const erMobil = window.innerWidth <= 768;
 
-    const bildeHTML = bildeKilde 
-      ? `<img src="${bildeKilde}" alt="${tittel}" loading="lazy" onerror="this.onerror=null; this.outerHTML=\`${lagGraaBoksHTML(tittel)}\`;">`
-      : lagGraaBoksHTML(tittel);
+    // Henter posterVertikal dersom mobil, ellers vanlig poster/bilde
+    const bildeKilde = erMobil 
+      ? (item.posterVertikal || item.poster || item.bilde || "")
+      : (item.poster || item.bilde || "");
 
     link.innerHTML = `
-      ${bildeHTML}
+      ${bildeKilde ? `<img src="${bildeKilde}" alt="${item.tittel || 'Film'}" loading="lazy">` : `<div style="width:100%; height:100%; background:#1a2629; display:flex; align-items:center; justify-content:center; padding:10px; text-align:center; font-size:12px; color:#fff;">${item.tittel || 'Mangler bilde'}</div>`}
       <div class="image-overlay">
         <div class="overlay-content">
-          <div class="overlay-title">${tittel}</div>
+          <div class="overlay-title">${item.tittel || ""}</div>
           <div class="overlay-meta">${(item.metadata || []).join(" • ")}</div>
         </div>
       </div>
@@ -1601,28 +1579,20 @@
       wrapper.href = `film.html?navn=${key}`;
       wrapper.classList.add("top10-item");
 
-      const bildeKilde = hentPosterBilde(film, false);
-      const tittel = film.tittel || key;
+      const bildeKilde = film.posterVertikal || film.poster || "";
 
+      const img = document.createElement("img");
       if (bildeKilde) {
-        const img = document.createElement("img");
         img.src = bildeKilde;
         img.loading = "lazy";
-        img.alt = tittel;
-        img.onerror = function() {
-          this.outerHTML = lagGraaBoksHTML(tittel);
-        };
-        wrapper.appendChild(img);
-      } else {
-        const div = document.createElement("div");
-        div.innerHTML = lagGraaBoksHTML(tittel);
-        wrapper.appendChild(div.firstChild);
       }
+      img.alt = film.tittel || "Topp 10";
 
       const number = document.createElement("div");
       number.classList.add("top10-number");
       number.textContent = index + 1;
 
+      wrapper.appendChild(img);
       wrapper.appendChild(number);
       gallery.appendChild(wrapper);
     });
@@ -1722,7 +1692,8 @@
         hrefUrl = `film-mal.html?navn=${urlParamNavn}&returUrl=${encodeURIComponent("Hovedside.html")}`;
       }
 
-      let bildeKilde = hentPosterBilde(metadataMatch, true);
+      // Fortsett å se beholder vanlig poster/bilde fra Firebase
+      let bildeKilde = metadataMatch.poster || metadataMatch.bilde || "";
       if (spillType === "serie" && metadataMatch.sesonger && metadataMatch.sesonger[sesongNr]) {
         const epInfo = metadataMatch.sesonger[sesongNr].find(e => String(e.episode) === String(episodeNr));
         if (epInfo && epInfo.bilde) {
@@ -1738,21 +1709,18 @@
         ? ` • S${sesongNr}E${episodeNr}` 
         : "";
 
-      const tittel = metadataMatch.tittel || urlParamNavn;
-
-      const continueBildeHTML = bildeKilde 
-        ? `<img src="${bildeKilde}" alt="${tittel}" loading="lazy" onerror="this.onerror=null; this.outerHTML=\`${lagGraaBoksHTML(tittel)}\`;">`
-        : lagGraaBoksHTML(tittel);
-
       link.innerHTML = `
         <div class="continue-media-wrap">
-          ${continueBildeHTML}
+          ${bildeKilde 
+            ? `<img src="${bildeKilde}" alt="${metadataMatch.tittel}" loading="lazy">` 
+            : `<div style="width:100%; height:100%; background:#1a2629; display:flex; align-items:center; justify-content:center; padding:10px; text-align:center; font-size:12px; color:#fff;">${metadataMatch.tittel || 'Mangler bilde'}</div>`
+          }
           <button class="delete-progress-btn" title="Skjul fra Fortsett å se" type="button" aria-label="Skjul fra visning">
             <i class="fas fa-trash-alt"></i>
           </button>
           <div class="progress-bar" style="--progress: ${progressVerdi}%;"></div>
         </div>
-        <span class="continue-title">${tittel}${episodeTekst}</span>
+        <span class="continue-title">${metadataMatch.tittel}${episodeTekst}</span>
       `;
 
       const deleteBtn = link.querySelector(".delete-progress-btn");
@@ -1816,6 +1784,7 @@
     const cacheKeyFilmer = "watch_nordic_filmer_cache";
     const cacheKeySerier = "watch_nordic_serier_cache";
 
+    // 1. Sjekk om det finnes lagret data lokalt for UMIDDELBAR visning
     const lagredeFilmer = localStorage.getItem(cacheKeyFilmer);
     const lagredeSerier = localStorage.getItem(cacheKeySerier);
 
@@ -1824,12 +1793,14 @@
         filmer = JSON.parse(lagredeFilmer);
         serier = JSON.parse(lagredeSerier);
         console.log("⚡ Lastet filmer og serier fra lokal cache!");
+        // Tegner siden med én gang slik at brukeren slipper hvit/tom skjerm
         byggSiden();
       } catch (e) {
         console.error("Feil ved parsing av lokal media-cache");
       }
     }
 
+    // 2. Hent oppdaterte data fra Firestore i bakgrunnen
     try {
       const nyeFilmer = {};
       const filmerSnap = await getDocs(collection(db, "filmer"));
@@ -1843,9 +1814,11 @@
         nyeSerier[docSnap.id] = docSnap.data();
       });
 
+      // Oppdater cachen i localStorage
       localStorage.setItem(cacheKeyFilmer, JSON.stringify(nyeFilmer));
       localStorage.setItem(cacheKeySerier, JSON.stringify(nyeSerier));
 
+      // Oppdater globale variabler og bygg siden på nytt hvis data har endret seg
       filmer = nyeFilmer;
       serier = nyeSerier;
       
