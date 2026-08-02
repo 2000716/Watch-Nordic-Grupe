@@ -168,10 +168,10 @@
     );
   }
 
-  /* Når siden scrollers på mobil: Fast farge uten glasseffekt / blur */
+  /* Når siden scrollers på mobil: Helt solid, ugjennomsiktig farge uten glasseffekt */
   .top-nav.scrolled {
     height: 70px !important;
-    background: rgba(9, 27, 30, 0.98);
+    background: #091b1e;
     backdrop-filter: none;
     -webkit-backdrop-filter: none;
     box-shadow: 0 2px 15px rgba(0, 0, 0, 0.6);
