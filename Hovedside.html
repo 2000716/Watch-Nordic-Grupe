@@ -1415,8 +1415,6 @@
     }, 5000);
   }
 
-  window.addEventListener("resize", oppdaterBanner);
-
   // ==================== GALLERIPILER LOGIKK ==================== //
   function oppdaterAlleGalleripiler() {
     if (window.matchMedia("(pointer: coarse)").matches) return;
@@ -1473,21 +1471,19 @@
     gallery.addEventListener("scroll", oppdaterAlleGalleripiler, { passive: true });
   });
 
-  window.addEventListener("resize", oppdaterAlleGalleripiler);
-
-  // ==================== DYNAMISK GALLERI GENERATOR ==================== //
+  // ==================== DYNAMISK GALLERI GENERATOR (FLIMMERFRI) ==================== //
   function createGalleryItem(itemKey, item) {
     const link = document.createElement("a");
     link.href = `film.html?navn=${itemKey}`;
     link.classList.add("gallery-item");
     
-    const erMobil = sjekkErMobil();
-    const bildeKilde = erMobil 
-      ? (item.posterVertikal || item.poster || item.bilde || "")
-      : (item.poster || item.bilde || "");
+    const bildePC = item.poster || item.bilde || "";
+    const bildeMobil = item.posterVertikal || bildePC;
 
     link.innerHTML = `
-      ${bildeKilde ? `<img src="${bildeKilde}" alt="${item.tittel || 'Film'}" loading="lazy">` : `<div style="width:100%; height:100%; background:#1a2629; display:flex; align-items:center; justify-content:center; padding:10px; text-align:center; font-size:12px; color:#fff;">${item.tittel || 'Mangler bilde'}</div>`}
+      ${bildePC ? `<img src="${bildePC}" alt="${item.tittel || 'Film'}" class="img-pc" loading="lazy">` : ''}
+      ${bildeMobil ? `<img src="${bildeMobil}" alt="${item.tittel || 'Film'}" class="img-mobil" loading="lazy">` : ''}
+      ${!bildePC && !bildeMobil ? `<div style="width:100%; height:100%; background:#1a2629; display:flex; align-items:center; justify-content:center; padding:10px; text-align:center; font-size:12px; color:#fff;">${item.tittel || 'Mangler bilde'}</div>` : ''}
       <div class="image-overlay">
         <div class="overlay-content">
           <div class="overlay-title">${item.tittel || ""}</div>
@@ -1585,20 +1581,31 @@
       wrapper.href = `film.html?navn=${key}`;
       wrapper.classList.add("top10-item");
 
-      const bildeKilde = film.posterVertikal || film.poster || "";
+      const bildePC = film.poster || film.bilde || "";
+      const bildeMobil = film.posterVertikal || bildePC;
 
-      const img = document.createElement("img");
-      if (bildeKilde) {
-        img.src = bildeKilde;
-        img.loading = "lazy";
+      const imgPC = document.createElement("img");
+      if (bildePC) {
+        imgPC.src = bildePC;
+        imgPC.loading = "lazy";
+        imgPC.className = "img-pc";
       }
-      img.alt = film.tittel || "Topp 10";
+      imgPC.alt = film.tittel || "Topp 10";
+
+      const imgMobil = document.createElement("img");
+      if (bildeMobil) {
+        imgMobil.src = bildeMobil;
+        imgMobil.loading = "lazy";
+        imgMobil.className = "img-mobil";
+      }
+      imgMobil.alt = film.tittel || "Topp 10";
 
       const number = document.createElement("div");
       number.classList.add("top10-number");
       number.textContent = index + 1;
 
-      wrapper.appendChild(img);
+      wrapper.appendChild(imgPC);
+      wrapper.appendChild(imgMobil);
       wrapper.appendChild(number);
       gallery.appendChild(wrapper);
     });
@@ -1694,13 +1701,14 @@
         ? `film-mal.html?navn=${urlParamNavn}&sesong=${sesongNr}&episode=${episodeNr}&returUrl=${encodeURIComponent("Hovedside.html")}`
         : `film-mal.html?navn=${urlParamNavn}&returUrl=${encodeURIComponent("Hovedside.html")}`;
 
-      let bildeKilde = metadataMatch.poster || metadataMatch.bilde || "";
+      let bildePC = metadataMatch.poster || metadataMatch.bilde || "";
       if (spillType === "serie" && metadataMatch.sesonger && metadataMatch.sesonger[sesongNr]) {
         const epInfo = metadataMatch.sesonger[sesongNr].find(e => String(e.episode) === String(episodeNr));
         if (epInfo && epInfo.bilde) {
-          bildeKilde = epInfo.bilde;
+          bildePC = epInfo.bilde;
         }
       }
+      let bildeMobil = metadataMatch.posterVertikal || bildePC;
 
       const link = document.createElement("a");
       link.href = hrefUrl;
@@ -1712,10 +1720,9 @@
 
       link.innerHTML = `
         <div class="continue-media-wrap">
-          ${bildeKilde 
-            ? `<img src="${bildeKilde}" alt="${metadataMatch.tittel}" loading="lazy">` 
-            : `<div style="width:100%; height:100%; background:#1a2629; display:flex; align-items:center; justify-content:center; padding:10px; text-align:center; font-size:12px; color:#fff;">${metadataMatch.tittel || 'Mangler bilde'}</div>`
-          }
+          ${bildePC ? `<img src="${bildePC}" alt="${metadataMatch.tittel}" class="img-pc" loading="lazy">` : ''}
+          ${bildeMobil ? `<img src="${bildeMobil}" alt="${metadataMatch.tittel}" class="img-mobil" loading="lazy">` : ''}
+          ${!bildePC && !bildeMobil ? `<div style="width:100%; height:100%; background:#1a2629; display:flex; align-items:center; justify-content:center; padding:10px; text-align:center; font-size:12px; color:#fff;">${metadataMatch.tittel || 'Mangler bilde'}</div>` : ''}
           <button class="delete-progress-btn" title="Skjul fra Fortsett å se" type="button" aria-label="Skjul fra visning">
             <i class="fas fa-trash-alt"></i>
           </button>
@@ -1737,10 +1744,8 @@
           profil.skjultFortsett.push(filmId);
         }
 
-        // Oppdater cachen umiddelbart for lokal responsivitet
         localStorage.setItem("watch_nordic_profiles_cache", JSON.stringify(heleProfilArrayet));
 
-        // Send til Firestore i bakgrunnen for å spare unødige tunge kall
         if (registrertBruker) {
           try {
             const userDocRef = doc(db, "users", registrertBruker.uid);
@@ -1752,7 +1757,6 @@
           }
         }
 
-        // Animer bort elementet fra brukergrensesnittet
         link.style.transition = "all 0.3s ease";
         link.style.transform = "scale(0.8)";
         link.style.opacity = "0";
@@ -1788,7 +1792,6 @@
     const cacheKeyFilmer = "watch_nordic_filmer_cache";
     const cacheKeySerier = "watch_nordic_serier_cache";
 
-    // 1. Vis data umiddelbart fra lokal cache dersom det finnes
     const lagredeFilmer = localStorage.getItem(cacheKeyFilmer);
     const lagredeSerier = localStorage.getItem(cacheKeySerier);
 
@@ -1797,7 +1800,6 @@
         filmer = JSON.parse(lagredeFilmer);
         serier = JSON.parse(lagredeSerier);
         
-        // Vent til nettleseren har beregnet dimensjonene korrekt
         requestAnimationFrame(() => {
           byggSiden();
         });
@@ -1806,7 +1808,6 @@
       }
     }
 
-    // 2. Oppdater media fra Firestore i bakgrunnen
     try {
       const [filmerSnap, serierSnap] = await Promise.all([
         getDocs(collection(db, "filmer")),
@@ -1872,11 +1873,14 @@
     hentDataFraFirestore();
   });
 
-  // Dersom mobilsynsvinkelen endres eller telefonen roteres/våkner fra dvale
+  // ==================== RESIZE / ORIENTERING (UNNGÅR FLIMMER) ==================== //
+  let resizeTimer;
   window.addEventListener("resize", () => {
-    if (Object.keys(filmer).length > 0 || Object.keys(serier).length > 0) {
-      byggSiden();
-    }
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(() => {
+      oppdaterBanner();
+      oppdaterAlleGalleripiler();
+    }, 250);
   });
 
   // ==================== NAV SCROLL EFFECT ==================== //
