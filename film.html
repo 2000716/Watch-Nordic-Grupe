@@ -4,51 +4,47 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
   
+  <!-- Endre tittelen slik at den passer til undersiden (f.eks. "Filmer | Watch Nordic™") -->
   <title>Forsiden | Watch Nordic™</title>
 
   <link rel="manifest" href="manifest.json">
-
   <link rel="icon" type="image/png" href="https://static.wixstatic.com/media/d9ace9_95bbe3f5ff4b4aab9314a8d08804344e~mv2.png" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
   
-  <!-- 🛑 HENTER INN TOPPMENYEN FRA DEN EGNE FILEN: -->
+  <!-- 🛑 FELLES MENY-STIL (Inneholder all styling for toppmenyen) -->
   <link rel="stylesheet" href="meny.css">
 
-  <!-- 🛑 RESTEN AV STILENE FOR DENNE SIDEN: -->
   <style>
-    /* ==========================================================================
-       1. GLOBALE TILBAKESTILLINGER & BASE STYLES
-       ========================================================================== */
+    /* --------------------------------------------------
+       Lokal CSS for DENNE undersiden.
+       Slett alt her som har med .header, .navbar, .top-menu
+       eller <nav> å gjøre!
+       -------------------------------------------------- */
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
     }
 
-    html {
-      font-size: clamp(14px, 1vw + 10px, 18px);
-      scroll-behavior: smooth;
-    }
-
-    body {
-      background: #050F11; /* PC: Mørk cyan-sort bakgrunn */
-      color: #fff;
-      font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
-      letter-spacing: .2px;
-      opacity: 0;
-      transition: opacity 1s ease;
+    html, body {
+      font-family: Arial, sans-serif;
+      background: #050F11;
+      color: #ffffff;
       overflow-x: hidden;
     }
 
-    body.loaded {
-      opacity: 1;
+    main {
+      width: 100%;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
     }
 
-    img, video {
-      max-width: 100%;
-      height: auto;
+    @media (max-width: 768px) {
+      html, body {
+        background: #091B1E !important;
+      }
     }
-
     /* ==========================================================================
        3. HERO-SEKSJON OG BAKGRUNNSMEDIA
        ========================================================================== */
