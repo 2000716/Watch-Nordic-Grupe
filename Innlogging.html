@@ -24,27 +24,23 @@
       min-height: 100vh;
       color: #FFFFFF;
       overflow-x: hidden;
-      position: relative;
     }
 
-    /* ================= SKJEMA CONTAINER (NETFLIX STIL) ================= */
+    /* ================= SKJEMA CONTAINER (UTEN RAMME/BOKS) ================= */
     .container {
-      background: rgba(12, 34, 38, 0.85);
-      padding: 50px 48px;
-      border-radius: 12px;
+      background: transparent; /* Fjernet boksbakgrunnen */
+      padding: 20px;
       border: none;
-      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.5);
-      max-width: 440px;
+      box-shadow: none; /* Fjernet skyggen */
+      max-width: 400px;
       width: 100%;
       text-align: center;
       z-index: 10;
-      margin: 20px;
-      transition: all 0.3s ease;
     }
 
     /* Watch Logo */
     .site-logo {
-      height: 42px;
+      height: 48px;
       width: auto;
       object-fit: contain;
       margin-bottom: 24px;
@@ -52,7 +48,7 @@
     }
 
     h2 { 
-      font-size: 26px;
+      font-size: 28px;
       font-weight: 800;
       letter-spacing: -0.5px;
       margin-bottom: 8px; 
@@ -62,13 +58,13 @@
     p.subtitle {
       font-size: 14px;
       color: #93A6A8;
-      margin-bottom: 28px;
+      margin-bottom: 32px;
       line-height: 1.4;
     }
 
     .input-group {
       position: relative;
-      margin-bottom: 18px;
+      margin-bottom: 20px;
       text-align: left;
     }
 
@@ -89,10 +85,10 @@
 
     input { 
       width: 100%; 
-      padding: 14px 16px; 
-      border: 1px solid rgba(255, 255, 255, 0.1); 
+      padding: 16px; 
+      border: 1px solid rgba(255, 255, 255, 0.12); 
       border-radius: 8px; 
-      background: rgba(6, 18, 20, 0.7);
+      background: rgba(6, 18, 20, 0.6);
       color: #FFFFFF;
       font-size: 15px;
       transition: all 0.2s ease;
@@ -105,8 +101,8 @@
     input:focus {
       outline: none;
       border-color: #00FFCC;
-      background: rgba(6, 18, 20, 0.95);
-      box-shadow: 0 0 10px rgba(0, 255, 204, 0.2);
+      background: rgba(6, 18, 20, 0.9);
+      box-shadow: 0 0 12px rgba(0, 255, 204, 0.2);
     }
 
     button.submit-btn {
@@ -120,7 +116,7 @@
       font-size: 16px; 
       font-weight: 800;
       letter-spacing: 0.5px;
-      margin-top: 10px;
+      margin-top: 12px;
       transition: all 0.3s ease;
       box-shadow: 0 6px 16px rgba(0, 255, 204, 0.2);
     }
@@ -144,7 +140,7 @@
     }
 
     .toggle-text, .forgot-text { 
-      margin-top: 20px; 
+      margin-top: 24px; 
       font-size: 14px; 
       color: #93A6A8;
     }
@@ -169,8 +165,7 @@
 
     @media (max-width: 480px) {
       .container {
-        padding: 36px 24px;
-        margin: 16px;
+        padding: 16px;
       }
     }
   </style>
