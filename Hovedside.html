@@ -15,38 +15,41 @@
   <link rel="stylesheet" href="meny.css">
 
   <style>
-    /* --------------------------------------------------
-       Lokal CSS for DENNE undersiden.
-       Slett alt her som har med .header, .navbar, .top-menu
-       eller <nav> å gjøre!
-       -------------------------------------------------- */
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
+/* ==========================================================================
+   1. GLOBALE TILBAKESTILLINGER & BASE STYLES (OPPDATERT FOR Å HINDRE HOPPING)
+   ========================================================================== */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
 
-    html, body {
-      font-family: Arial, sans-serif;
-      background: #050F11;
-      color: #ffffff;
-      overflow-x: hidden;
-    }
+/* 1. Tving vertikal rullestang på ALL E sider slik at layouten ikke skyves når siden har mye innhold */
+html {
+  overflow-y: scroll;
+  font-size: 16px; /* Sett fast rotstørrelse hvis rem i meny.css påvirkes, eller behold clamp om den matcher hovedsiden */
+  scroll-behavior: smooth;
+}
 
-    main {
-      width: 100%;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-    }
+body {
+  background: #050F11;
+  color: #fff;
+  font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+  letter-spacing: .2px;
+  opacity: 0;
+  transition: opacity 1s ease;
+  /* Endret overflow-x til clip/hidden på html/body for å unngå layout-hopp fra 100vw */
+  overflow-x: hidden; 
+  width: 100%;
+}
 
-    @media (max-width: 768px) {
-      html, body {
-        background: #091B1E !important;
-      }
-    }
-  </style>
-</head>
+/* 2. Rett opp .hero fra 100vw til 100% slik at den ikke beregner bredde inkludert rullestangen */
+.hero {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+}
     /* ==========================================================================
        3. HERO BANNER (PC)
        ========================================================================== */
