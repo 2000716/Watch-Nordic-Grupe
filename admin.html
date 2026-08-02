@@ -560,10 +560,12 @@
 
         const valgtLisens = lisensEl.value;
 
+        // Krever kilde hvis det er CC, kjøpefilm eller leiefilm
         if (valgtLisens === "cc" || valgtLisens === "kjop" || valgtLisens === "leie") {
             if (kildeWrapper) kildeWrapper.style.display = "block";
             if (kildeReqMarker) kildeReqMarker.style.display = "inline";
         } else {
+            // Skjul eller gi valgfri tilgang for Original / Public Domain
             if (kildeWrapper) kildeWrapper.style.display = "block"; 
             if (kildeReqMarker) kildeReqMarker.style.display = "none";
         }
@@ -714,8 +716,11 @@
 
     function forberedSkjemaDatoer() {
         const now = new Date();
+        const future = new Date();
+        future.setFullYear(now.getFullYear() + 2);
         if(!document.getElementById("inpPublishDate").value) {
             document.getElementById("inpPublishDate").value = now.toISOString().slice(0, 16);
+            document.getElementById("inpExpireDate").value = future.toISOString().slice(0, 16);
         }
     }
 
@@ -901,6 +906,7 @@
         document.getElementById("inpRegissor").value = data.regissor || "";
         document.getElementById("inpSkuespillere").value = data.skuespillere || "";
         
+        // Håndtering av Lisens og Kilde
         document.getElementById("inpLisens").value = data.lisens || "original";
         document.getElementById("inpKilde").value = data.kilde || "";
         oppdaterKildeKrav();
@@ -923,14 +929,9 @@
 
         if (data.publishDate) {
             document.getElementById("inpPublishDate").value = new Date(data.publishDate).toISOString().slice(0, 16);
-        } else {
-            document.getElementById("inpPublishDate").value = "";
         }
-        
         if (data.expireDate) {
             document.getElementById("inpExpireDate").value = new Date(data.expireDate).toISOString().slice(0, 16);
-        } else {
-            document.getElementById("inpExpireDate").value = "";
         }
 
         if (samling === "filmer") {
@@ -956,22 +957,23 @@
             return;
         }
 
+        // VALIDERING: Krav om kilde dersom det gjelder CC, Kjøp eller Leie
         if ((lisens === "cc" || lisens === "kjop" || lisens === "leie") && !kilde) {
             visMelding("Du må fylle ut eier / distribusjonsfirma for denne lisenstypen!", "error");
             return;
         }
 
+        // AUTOMATISK UTFYLLING: Sett til Watch Originals Studio dersom det er en original
         if (lisens === "original" && !kilde) {
             kilde = "Watch Originals Studio";
         }
 
-        // Korrekt indeksering i metadata
         const metadataArray = [
-            document.getElementById("metaAar").value.trim() || "",
-            document.getElementById("metaAldersgrense").value.trim() || "",
-            document.getElementById("metaSjanger").value.trim() || "",
-            document.getElementById("metaVarighet").value.trim() || ""
-        ];
+            document.getElementById("metaAar").value.trim(),
+            document.getElementById("metaAldersgrense").value.trim(),
+            document.getElementById("metaSjanger").value.trim(),
+            document.getElementById("metaVarighet").value.trim()
+        ].filter(Boolean);
 
         const pubDateVal = document.getElementById("inpPublishDate").value;
         const expDateVal = document.getElementById("inpExpireDate").value;
@@ -1036,6 +1038,7 @@
         }
 
         try {
+            // MERGE: true forhindrer utilsiktet sletting av uoppgitte felter i Firestore
             await setDoc(doc(db, samling, id), obj, { merge: true });
             
             sessionStorage.removeItem("adminCache");
