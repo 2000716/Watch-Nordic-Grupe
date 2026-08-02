@@ -688,198 +688,202 @@
 /* ==========================================================================
         10. MOBIL-OPTIMALISERING (768px og nedover)
         ========================================================================== */
-    @media (max-width: 768px) {
-      html, body {
-        background: #091B1E !important;
-        padding-bottom: 0 !important; 
-      }
+@media (max-width: 768px) {
+  html, body {
+    background: #091B1E !important;
+    padding-bottom: 0 !important; 
+  }
 
-      main {
-        padding-left: 0 !important;
-        padding-right: 0 !important;
-        margin-left: 0 !important;
-        margin-right: 0 !important;
-      }
+  main {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+  }
 
-      /* HERO BANNER MOBIL */
-      .hero-banner {
-        height: 55vh !important; 
-        min-height: 360px !important;
-        max-height: 500px !important;
-        margin-bottom: 20px !important;
-        background-color: #091B1E !important;
-      }
+  /* HERO BANNER MOBIL */
+  .hero-banner {
+    height: 55vh !important; 
+    min-height: 360px !important;
+    max-height: 500px !important;
+    margin-bottom: 20px !important;
+    background-color: #091B1E !important;
+  }
 
-      .hero-banner::after {
-        background: linear-gradient(to bottom, rgba(9, 27, 30, 0) 40%, rgba(9, 27, 30, 0.4) 60%, rgba(9, 27, 30, 0.8) 80%, #091B1E 100%) !important;
-      }
+  .hero-banner::after {
+    background: linear-gradient(to bottom, rgba(9, 27, 30, 0) 40%, rgba(9, 27, 30, 0.4) 60%, rgba(9, 27, 30, 0.8) 80%, #091B1E 100%) !important;
+  }
 
-      .banner-content {
-        bottom: 20px !important;
-        left: 20px !important;
-        max-width: calc(100% - 40px);
-        gap: 8px !important;
-      }
+  .banner-content {
+    bottom: 20px !important;
+    left: 20px !important;
+    max-width: calc(100% - 40px);
+    gap: 8px !important;
+  }
 
-      .film-logo {
-        width: 180px !important;
-        max-height: 75px !important;
-        object-fit: contain !important;
-        filter: drop-shadow(0px 2px 8px rgba(0,0,0,0.5));
-      }
+  .film-logo {
+    width: 180px !important;
+    max-height: 75px !important;
+    object-fit: contain !important;
+    filter: drop-shadow(0px 2px 8px rgba(0,0,0,0.5));
+  }
 
-      .banner-title { font-size: 28px !important; }
+  .banner-title { font-size: 28px !important; }
 
-      .banner-content p {
-        font-size: 12px !important;
-        line-height: 1.4;
-        color: #cccccc;
-        -webkit-line-clamp: 2;
-      }
+  .banner-content p {
+    font-size: 12px !important;
+    line-height: 1.4;
+    color: #cccccc;
+    -webkit-line-clamp: 2;
+  }
 
-      .banner-meta { font-size: 11px !important; }
-      .banner-buttons { gap: 10px !important; margin-top: 4px; }
+  .banner-meta { font-size: 11px !important; }
+  .banner-buttons { gap: 10px !important; margin-top: 4px; }
 
-      .watch-button {
-        font-size: 13px !important;
-        padding: 8px 22px !important;
-        font-weight: 700;
-        border-radius: 8px; 
-      }
+  .watch-button {
+    font-size: 13px !important;
+    padding: 8px 22px !important;
+    font-weight: 700;
+    border-radius: 8px; 
+  }
 
-      .add-button {
-        width: 36px !important;
-        height: 36px !important;
-        font-size: 14px !important;
-        border-radius: 8px;
-        background: rgba(255, 255, 255, 0.2);
-      }
+  .add-button {
+    width: 36px !important;
+    height: 36px !important;
+    font-size: 14px !important;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.2);
+  }
 
-      /* GALLERIER OG SEKSJONER PÅ MOBIL */
-      .gallery-section, .continue-watching-section {
-        margin-left: 0 !important; 
-        margin-right: 0 !important;
-        margin-bottom: 32px !important;
-        padding: 0 16px; 
-      }
+  /* GALLERIER OG SEKSJONER PÅ MOBIL */
+  .gallery-section, .continue-watching-section {
+    margin-left: 0 !important; 
+    margin-right: 0 !important;
+    margin-bottom: 32px !important;
+    padding: 0 16px; 
+  }
 
-      .gallery-section h2, .continue-watching-section h2 {
-        padding-left: 0 !important; 
-        margin-left: 0 !important;
-        font-size: 16px;
-        font-weight: 700;
-        letter-spacing: 0.5px;
-        color: #ffffff; 
-        margin-bottom: 8px;
-      }
+  .gallery-section h2, .continue-watching-section h2 {
+    padding-left: 0 !important; 
+    margin-left: 0 !important;
+    font-size: 16px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    color: #ffffff; 
+    margin-bottom: 8px;
+  }
 
-      .scroll-button { display: none !important; }
+  .scroll-button { display: none !important; }
 
-      .image-gallery, .continue-image-gallery {
-        margin-left: 0 !important; 
-        margin-right: 0 !important;
-        padding: 4px 0 12px 0 !important; 
-        gap: 12px !important;
-        scroll-snap-type: x mandatory !important;
-        -webkit-overflow-scrolling: touch !important;
-        overflow-x: auto !important;
-        overflow-y: visible !important;
-      }
+  .image-gallery, .continue-image-gallery {
+    margin-left: 0 !important; 
+    margin-right: 0 !important;
+    padding: 4px 0 12px 0 !important; 
+    gap: 12px !important;
+    scroll-snap-type: x mandatory !important;
+    -webkit-overflow-scrolling: touch !important;
+    overflow-x: auto !important;
+    overflow-y: visible !important;
+    display: flex !important;
+  }
 
-      .image-gallery a, .continue-image-gallery a, .top10-item {
-        scroll-snap-align: start !important;
-        transform: none !important;
-        transition: none !important;
-        flex-shrink: 0 !important;
-        border-radius: 12px !important; /* Sikrer myke kanter på selve lenkeelementene i galleriene */
-      }
+  .image-gallery a, .continue-image-gallery a, .top10-item {
+    scroll-snap-align: start !important;
+    transform: none !important;
+    transition: none !important;
+    flex-shrink: 0 !important;
+    border-radius: 12px !important;
+  }
 
-      /* MYKERE / RUNDERE KANTER FOR ALLE BILDER I HOVEDGALLERIENE */
-      .image-gallery a img, 
-      .gallery-item img, 
-      .image-gallery img {
-        width: 260px !important;  
-        height: 146px !important; 
-        aspect-ratio: 16 / 9 !important; 
-        object-fit: cover !important; 
-        border-radius: 12px !important; /* Mykere kanter på alle bilder */
-      }
+  /* MYKERE / RUNDERE KANTER FOR ALLE BILDER I HOVEDGALLERIENE */
+  .image-gallery a img, 
+  .gallery-item img, 
+  .image-gallery img {
+    width: 260px !important;  
+    height: 146px !important; 
+    aspect-ratio: 16 / 9 !important; 
+    object-fit: cover !important; 
+    border-radius: 12px !important;
+  }
 
-      .continue-image-gallery .continue-item {
-        width: 260px !important;
-        flex-shrink: 0 !important;
-        border-radius: 12px !important;
-      }
+  /* FORTSETT Å SE - HORISONTAL OG 16:9 PÅ MOBIL */
+  .continue-image-gallery .continue-item {
+    width: 260px !important;
+    flex-shrink: 0 !important;
+    border-radius: 12px !important;
+  }
 
-      .continue-media-wrap {
-        width: 100% !important;
-        height: 146px !important;
-        border-radius: 12px !important; /* Myke kanter på 'Fortsett å se' */
-        overflow: hidden !important; 
-      }
+  .continue-media-wrap {
+    width: 100% !important;
+    height: 146px !important;
+    border-radius: 12px !important;
+    overflow: hidden !important; 
+    position: relative !important;
+  }
 
-      .continue-media-wrap img {
-        width: 100% !important;
-        height: 100% !important;
-        object-fit: cover !important;
-        border-radius: 12px !important;
-      }
+  .continue-media-wrap img {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+    border-radius: 12px !important;
+  }
 
-      .continue-title {
-        font-size: 13px !important;
-        margin-top: 6px !important;
-      }
+  .continue-title {
+    font-size: 13px !important;
+    margin-top: 6px !important;
+  }
 
-      .image-overlay { display: none !important; }
+  .image-overlay { display: none !important; }
 
-      .top10-gallery {
-        margin-left: 0 !important;
-        margin-right: 0 !important;
-        gap: 16px !important;
-        padding: 4px 0 12px 0 !important;
-      }
-      
-      .top10-item img {
-        width: 110px !important; 
-        height: 165px !important;
-        aspect-ratio: 2 / 3 !important; 
-        object-fit: cover !important;
-        border-radius: 12px !important; /* Myke kanter på Topp 10 */
-      }
+  .top10-gallery {
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    gap: 16px !important;
+    padding: 4px 0 12px 0 !important;
+    display: flex !important;
+  }
+  
+  .top10-item img {
+    width: 110px !important; 
+    height: 165px !important;
+    aspect-ratio: 2 / 3 !important; 
+    object-fit: cover !important;
+    border-radius: 12px !important;
+  }
 
-      .top10-number {
-        font-size: 48px !important;
-        left: -8px !important;
-        bottom: -6px !important;
-        -webkit-text-stroke: 2px rgba(0, 255, 204, 0.8) !important;
-      }
+  .top10-number {
+    font-size: 48px !important;
+    left: -8px !important;
+    bottom: -6px !important;
+    -webkit-text-stroke: 2px rgba(0, 255, 204, 0.8) !important;
+  }
 
-      .kids-banner {
-        height: 120px !important;
-        margin: 20px 16px !important; 
-        width: calc(100% - 32px) !important;
-        border-radius: 12px !important;
-      }
-      
-      .kids-overlay { 
-        padding-left: 20px !important; 
-        background: linear-gradient(to right, rgba(9,27,30,0.9), rgba(9,27,30,0.2)) !important;
-        border-radius: 12px !important;
-      }
-      .kids-overlay h2 { font-size: 18px !important; margin-bottom: 2px; }
-      .kids-overlay p { font-size: 12px !important; }
+  .kids-banner {
+    height: 120px !important;
+    margin: 20px 16px !important; 
+    width: calc(100% - 32px) !important;
+    border-radius: 12px !important;
+  }
+  
+  .kids-overlay { 
+    padding-left: 20px !important; 
+    background: linear-gradient(to right, rgba(9,27,30,0.9), rgba(9,27,30,0.2)) !important;
+    border-radius: 12px !important;
+  }
+  .kids-overlay h2 { font-size: 18px !important; margin-bottom: 2px; }
+  .kids-overlay p { font-size: 12px !important; }
 
-      .footer {
-        display: flex !important;
-        padding: 40px 20px 35px !important; 
-        margin-top: 50px !important;
-        background: #091B1E !important;
-      }
-      .footer-links {
-        grid-template-columns: repeat(2, 1fr) !important;
-        gap: 15px 20px !important;
-      }
-    }
+  .footer {
+    display: flex !important;
+    padding: 40px 20px 35px !important; 
+    margin-top: 50px !important;
+    background: #091B1E !important;
+  }
+  .footer-links {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 15px 20px !important;
+  }
+}
     /* ==========================================================================
        11. NØDBREMS (PORTRETT PÅ LANDSKAP PÅ MOBIL)
        ========================================================================== */
@@ -1093,58 +1097,6 @@
 </footer>
 
 <script type="module">
-  // ==================== CSS INJEKSJON FOR KUN MOBIL (HORISONTALE GALLERIER) ==================== //
-  const style = document.createElement('style');
-  if (window.matchMedia("(max-width: 768px) or (pointer: coarse)").matches) {
-    style.textContent = `
-      .image-gallery, .coming-movies-gallery, .top10-gallery, .continue-image-gallery {
-        overflow-x: auto !important; 
-        scroll-behavior: smooth !important;
-        display: flex !important;
-        -webkit-overflow-scrolling: touch !important;
-        gap: 12px !important;
-      }
-      
-      .image-gallery .gallery-item img, 
-      .coming-movies-gallery .gallery-item img {
-        width: 115px !important;
-        height: 172px !important;
-        aspect-ratio: 2 / 3 !important;
-        object-fit: cover !important;
-        border-radius: 4px !important;
-      }
-      .gallery-item {
-        width: 115px !important;
-        flex-shrink: 0 !important;
-      }
-
-      .continue-image-gallery .continue-item {
-        width: 200px !important;
-        flex-shrink: 0 !important;
-      }
-      .continue-media-wrap {
-        width: 200px !important;
-        height: 112px !important;
-        border-radius: 4px !important;
-        position: relative !important;
-      }
-      .continue-media-wrap img {
-        width: 100% !important;
-        height: 100% !important;
-        object-fit: cover !important;
-      }
-    `;
-  } else {
-    style.textContent = `
-      .image-gallery, .coming-movies-gallery, .top10-gallery, .continue-image-gallery {
-        overflow-x: hidden !important; 
-        scroll-behavior: smooth !important;
-        display: flex !important;
-      }
-    `;
-  }
-  document.head.appendChild(style);
-
   // ==================== FIREBASE IMPORT & INITIALISERING ==================== //
   import { auth, db } from "./firebase-oppsett.js";
   import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-auth.js";
@@ -1382,40 +1334,6 @@
   }
 
   window.addEventListener("resize", oppdaterBanner);
-
-  function oppdaterAlleGalleripiler() {
-    if (window.matchMedia("(pointer: coarse)").matches) return;
-
-    document.querySelectorAll(".gallery-wrapper, .continue-gallery-wrapper").forEach(wrapper => {
-      const gallery = wrapper.querySelector(".image-gallery, .coming-movies-gallery, .top10-gallery, .continue-image-gallery");
-      const left = wrapper.querySelector(".scroll-button.left");
-      const right = wrapper.querySelector(".scroll-button.right");
-      const fadeL = wrapper.querySelector(".fade-left");
-      const fadeR = wrapper.querySelector(".fade-right");
-      if (!gallery) return;
-
-      const max = gallery.scrollWidth - gallery.clientWidth;
-      const pos = gallery.scrollLeft;
-      
-      const kanScrolle = max > 5;
-      const erHeltTilVenstre = pos <= 2;
-      const erHeltTilHoyre = Math.ceil(pos) >= max - 2;
-
-      const skjulVenstre = !kanScrolle || erHeltTilVenstre;
-      if (left) {
-        left.classList.toggle("hidden", skjulVenstre);
-        left.disabled = skjulVenstre;
-      }
-      if (fadeL) fadeL.classList.toggle("fade-hidden", skjulVenstre);
-
-      const skjulHoyre = !kanScrolle || erHeltTilHoyre;
-      if (right) {
-        right.classList.toggle("hidden", skjulHoyre);
-        right.disabled = skjulHoyre;
-      }
-      if (fadeR) fadeR.classList.toggle("fade-hidden", skjulHoyre);
-    });
-  }
 
   // ==================== DYNAMISK GALLERI GENERATOR ==================== //
   function createGalleryItem(itemKey, item) {
@@ -1699,7 +1617,6 @@
     const cacheKeyFilmer = "watch_nordic_filmer_cache";
     const cacheKeySerier = "watch_nordic_serier_cache";
     
-    // Henter alltid fyk fra Firestore med en gang hvis admin har oppdatert (sletter tids-sjekk som krevde 1 time ventetid)
     try {
       const nyeFilmer = {};
       const filmerSnap = await getDocs(collection(db, "filmer"));
