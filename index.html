@@ -2,37 +2,49 @@
 <html lang="no">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
-  <link rel="manifest" href="manifest.json">
-  <script>
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('sw.js');
-    }
-  </script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  
+  <!-- Endre tittelen slik at den passer til undersiden (f.eks. "Filmer | Watch Nordic™") -->
   <title>Velkommen | Watch Nordic™</title>
 
+  <link rel="manifest" href="manifest.json">
   <link rel="icon" type="image/png" href="https://static.wixstatic.com/media/d9ace9_95bbe3f5ff4b4aab9314a8d08804344e~mv2.png" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  
+  <!-- 🛑 FELLES MENY-STIL (Inneholder all styling for toppmenyen) -->
+  <link rel="stylesheet" href="meny.css">
+
   <style>
-    /* ================= RESET ================= */
-    *{
-      margin:0;
-      padding:0;
-      box-sizing:border-box;
+    /* --------------------------------------------------
+       Lokal CSS for DENNE undersiden.
+       Slett alt her som har med .header, .navbar, .top-menu
+       eller <nav> å gjøre!
+       -------------------------------------------------- */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
     }
 
-    html{
-      scroll-behavior:smooth;
+    html, body {
+      font-family: Arial, sans-serif;
+      background: #050F11;
+      color: #ffffff;
+      overflow-x: hidden;
     }
 
-    body{
-      background:#071214; 
-      color:white;
-      font-family: Inter, Arial, sans-serif;
-      overflow-x:hidden;
+    main {
+      width: 100%;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
     }
 
+    @media (max-width: 768px) {
+      html, body {
+        background: #091B1E !important;
+      }
+    }
     /* ================= NAVBAR ================= */
     .navbar{
       position:fixed;
@@ -613,10 +625,11 @@
 </head>
 
 <body>
-
-  <nav class="navbar">
-    <div class="logo">
-      <img src="https://static.wixstatic.com/media/d9ace9_081ea242211b45a2801873c3067e1205~mv2.png" alt="Watch Nordic Logo">
+  <header class="top-nav">
+    <div class="nav-left">
+      <a href="Hovedside.html" class="watch-logo-svg">
+        <img src="https://static.wixstatic.com/media/d9ace9_081ea242211b45a2801873c3067e1205~mv2.png" alt="Watch Nordic">
+      </a>
     </div>
     <div class="nav-buttons">
       <a href="Innlogging.html" class="login">Logg inn</a>
