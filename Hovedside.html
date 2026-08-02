@@ -787,7 +787,7 @@
     display: flex !important;
   }
 
-  .image-gallery a, .continue-image-gallery a, .top10-item {
+  .image-gallery a, .continue-image-gallery a, .top10-item, .continue-item {
     scroll-snap-align: start !important;
     transform: none !important;
     transition: none !important;
@@ -795,7 +795,7 @@
     border-radius: 12px !important;
   }
 
-  /* MYKERE / RUNDERE KANTER FOR ALLE BILDER I HOVEDGALLERIENE */
+  /* BILDER I HOVEDGALLERIENE */
   .image-gallery a img, 
   .gallery-item img, 
   .image-gallery img {
@@ -806,19 +806,22 @@
     border-radius: 12px !important;
   }
 
-  /* FORTSETT Å SE - HORISONTAL OG 16:9 PÅ MOBIL */
+  /* SPESIFIKT FOR "FORTSETT Å SE" PÅ MOBIL */
   .continue-image-gallery .continue-item {
     width: 260px !important;
     flex-shrink: 0 !important;
     border-radius: 12px !important;
+    display: block !important;
+    text-decoration: none !important;
   }
 
   .continue-media-wrap {
-    width: 100% !important;
+    width: 260px !important;
     height: 146px !important;
     border-radius: 12px !important;
     overflow: hidden !important; 
     position: relative !important;
+    flex-shrink: 0 !important;
   }
 
   .continue-media-wrap img {
@@ -831,6 +834,8 @@
   .continue-title {
     font-size: 13px !important;
     margin-top: 6px !important;
+    display: block !important;
+    color: #ffffff !important;
   }
 
   .image-overlay { display: none !important; }
