@@ -2,152 +2,49 @@
 <html lang="no">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  
+  <!-- Endre tittelen slik at den passer til undersiden (f.eks. "Filmer | Watch Nordic™") -->
   <title>Søk | Watch Nordic™</title>
 
-  <link rel="icon" type="image/png" href="https://static.wixstatic.com/media/fd2fb2_39376e4ee55b460ab7a3ebbfcf35fef7~mv2.png" />
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" type="image/png" href="https://static.wixstatic.com/media/d9ace9_95bbe3f5ff4b4aab9314a8d08804344e~mv2.png" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  
+  <!-- 🛑 FELLES MENY-STIL (Inneholder all styling for toppmenyen) -->
+  <link rel="stylesheet" href="meny.css">
+
   <style>
+    /* --------------------------------------------------
+       Lokal CSS for DENNE undersiden.
+       Slett alt her som har med .header, .navbar, .top-menu
+       eller <nav> å gjøre!
+       -------------------------------------------------- */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
-/* =========================
-   RESET
-========================= */
+    html, body {
+      font-family: Arial, sans-serif;
+      background: #050F11;
+      color: #ffffff;
+      overflow-x: hidden;
+    }
 
-*{
-  margin:0;
-  padding:0;
-  box-sizing:border-box;
-}
+    main {
+      width: 100%;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
 
-html,
-body{
-  font-family:Arial,sans-serif;
-  background:#091B1E;
-  color:white;
-  overflow-x:hidden;
-}
-
-/* =========================
-   TOP NAV
-========================= */
-
-.top-nav{
-  position:fixed;
-  top:0;
-  left:0;
-  width:100%;
-  height:70px;
-
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-
-  padding:0 40px;
-
-  z-index:1000;
-
-  background:transparent;
-  transition:background .3s ease, box-shadow .3s ease;
-}
-
-.top-nav::before{
-  content:"";
-  position:absolute;
-  inset:0;
-
-  background:linear-gradient(
-    to bottom,
-    rgba(9,27,30,.95),
-    rgba(9,27,30,0)
-  );
-
-  z-index:-1;
-}
-
-.top-nav.scrolled::before{
-  background:rgba(9,27,30,.96);
-}
-
-.top-nav.scrolled{
-  box-shadow:0 2px 10px rgba(0,0,0,.5);
-}
-
-.nav-left{
-  display:flex;
-  align-items:center;
-}
-
-.watch-logo-text{
-  font-size:28px;
-  font-weight:900;
-  letter-spacing:3px;
-  color:#00FFCC;
-  cursor:pointer;
-
-  text-shadow:
-    0 0 6px rgba(0,255,204,.6),
-    0 0 18px rgba(0,255,204,.3);
-
-  transition:transform .25s ease;
-}
-
-.watch-logo-text:hover{
-  transform:scale(1.05);
-}
-
-.nav-links{
-  position:absolute;
-  left:50%;
-  transform:translateX(-50%);
-
-  display:flex;
-  gap:30px;
-}
-
-.nav-links a{
-  color:#bfbfbf;
-  text-decoration:none;
-  font-size:15px;
-  font-weight:500;
-  transition:color .25s ease;
-}
-
-.nav-links a:hover{
-  color:white;
-}
-
-.nav-links a.active{
-  color:#00FFCC;
-  font-weight:bold;
-}
-
-.nav-links i{
-  margin-right:6px;
-}
-
-.nav-right{
-  display:flex;
-  align-items:center;
-  gap:15px;
-}
-
-.nav-search{
-  color:#00FFCC;
-  font-size:20px;
-}
-
-.profilmeny img{
-  width:42px;
-  height:42px;
-  border-radius:50%;
-  object-fit:cover;
-  border:2px solid white;
-}
-
-.profilmeny img.png-karakter {
-  object-fit: contain;
-  background: rgba(255, 255, 255, 0.05);
-}
+    @media (max-width: 768px) {
+      html, body {
+        background: #091B1E !important;
+      }
+    }
 
 /* =========================
    MAIN
@@ -459,54 +356,35 @@ body{
 
   </style>
 </head>
-
 <body>
-
-<!-- =========================
-     TOP NAV
-========================= -->
-
-<header class="top-nav">
-
-  <div class="nav-left">
-    <div class="watch-logo-text" onclick="window.location.href='Hovedside.html'">
-      WATCH
+  <header class="top-nav">
+    <div class="nav-left">
+      <a href="Hovedside.html" class="watch-logo-svg">
+        <img src="https://static.wixstatic.com/media/d9ace9_081ea242211b45a2801873c3067e1205~mv2.png" alt="Watch Nordic">
+      </a>
     </div>
-  </div>
 
-  <nav class="nav-links">
-    <a href="Hovedside.html">
-      <i class="fas fa-house"></i>
-      STARTSIDE
-    </a>
-    <a href="Serier.html">
-      <i class="fas fa-tv"></i>
-      SERIER
-    </a>
-    <a href="Film.html">
-      <i class="fas fa-clapperboard"></i>
-      FILMER
-    </a>
-    <a href="Nyheter.html">
-      <i class="fas fa-star"></i>
-      WATCH ORIGINALS
-    </a>
-    <a href="Min-Liste.html">
-      <i class="fas fa-bookmark"></i>
-      MIN LISTE
-    </a>
-  </nav>
+    <nav class="nav-links">
+      <a href="Hovedside.html" class="active"><i class="fas fa-house"></i> Hjem</a>
+      <a href="Serier.html"><i class="fas fa-tv"></i> Serier</a>
+      <a href="Film.html"><i class="fas fa-clapperboard"></i> Filmer</a>
+      <a href="Nyheter.html"><i class="fas fa-star"></i> Watch Originals</a>
+      <a href="Min-Liste.html"><i class="fas fa-bookmark"></i> Min Liste</a>
+    </nav>
 
-  <div class="nav-right">
-    <a href="Søk.html" class="nav-search active">
-      <i class="fas fa-search"></i>
-    </a>
-    <a href="hvem-ser-på.html" class="profilmeny" id="profilmenyLink">
-      <img id="menyProfilbilde" src="https://via.placeholder.com/100" alt="Profilbilde"/>
-    </a>
-  </div>
+    <div class="nav-right">
+      <a href="Søk.html" class="nav-search" aria-label="Søk">
+        <i class="fas fa-search"></i>
+      </a>
 
-</header>
+      <a href="hvem-ser-på.html" class="profilmeny" id="profilmenyLink">
+        <div class="profil-avatar-wrap">
+          <div class="profil-avatar-bg"></div>
+          <img id="menyProfilbilde" src="https://via.placeholder.com/100" alt="Profilbilde" class="profil-avatar-img" />
+        </div>
+      </a>
+    </div>
+  </header>
 
 <!-- =========================
      MAIN
