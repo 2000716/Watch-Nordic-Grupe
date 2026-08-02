@@ -685,7 +685,7 @@
       }
     }
 
-    /* ==========================================================================
+/* ==========================================================================
        10. MOBIL-OPTIMALISERING (768px og nedover)
        ========================================================================== */
     @media (max-width: 768px) {
@@ -759,8 +759,8 @@
       .gallery-section, .continue-watching-section {
         margin-left: 0 !important; 
         margin-right: 0 !important;
-        margin-bottom: 32px !important; /* Økt avstand mellom galleriene på mobil */
-        padding: 0 16px;
+        margin-bottom: 32px !important;
+        padding: 0 16px; /* Holder seksjonen og tittel på plass */
       }
 
       .gallery-section h2, .continue-watching-section h2 {
@@ -776,9 +776,9 @@
       .scroll-button { display: none !important; }
 
       .image-gallery, .continue-image-gallery {
-        margin-left: -16px !important;
-        margin-right: -16px !important;
-        padding: 4px 16px 12px 16px !important;
+        margin-left: 0 !important; /* Fjernet negativ margin så den ikke stikker ut */
+        margin-right: 0 !important;
+        padding: 4px 0 12px 0 !important; /* Fjernet venstre-padding */
         gap: 12px !important;
         scroll-snap-type: x mandatory !important;
         -webkit-overflow-scrolling: touch !important;
@@ -826,10 +826,10 @@
       .image-overlay { display: none !important; }
 
       .top10-gallery {
-        margin-left: -16px !important;
-        margin-right: -16px !important;
+        margin-left: 0 !important;
+        margin-right: 0 !important;
         gap: 16px !important;
-        padding: 4px 16px 12px 16px !important;
+        padding: 4px 0 12px 0 !important;
       }
       
       .top10-item img {
@@ -872,7 +872,6 @@
         gap: 15px 20px !important;
       }
     }
-
     /* ==========================================================================
        11. NØDBREMS (PORTRETT PÅ LANDSKAP PÅ MOBIL)
        ========================================================================== */
