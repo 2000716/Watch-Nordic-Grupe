@@ -2,7 +2,7 @@
 <html lang="no">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Innlogging / Registrering | Watch Nordic™</title>
   
   <link rel="icon" type="image/png" href="https://static.wixstatic.com/media/d9ace9_95bbe3f5ff4b4aab9314a8d08804344e~mv2.png" />
@@ -15,15 +15,14 @@
       padding: 0; 
     }
 
-    html, body {
-      height: 100vh;
-      width: 100vw;
+    body {
       background-color: #091B1E;
       font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
       display: flex;
       flex-direction: column;
+      min-height: 100vh;
       color: #FFFFFF;
-      overflow: hidden; /* Låser skjermen slik at den ikke kan skrolles */
+      overflow-x: hidden;
     }
 
     /* ================= TOPPLINJE / LOGO ================= */
@@ -33,7 +32,6 @@
       display: flex;
       align-items: center;
       justify-content: flex-start;
-      flex-shrink: 0;
     }
 
     .logo-link {
@@ -60,7 +58,6 @@
       align-items: center;
       justify-content: center;
       padding: 20px;
-      width: 100%;
     }
 
     .container {
@@ -216,7 +213,7 @@
     /* ================= MOBILANPASSNING (RESPONSIV DESIGN) ================= */
     @media (max-width: 600px) {
       .header {
-        padding: 24px;
+        padding: 24px 20px;
         justify-content: flex-start; /* Holder logoen til venstre på mobil */
       }
 
@@ -225,8 +222,7 @@
       }
 
       .main-content {
-        padding: 0 24px;
-        align-items: center; /* Sentrerer skjemaet vertikalt midt på skjermen på mobil */
+        padding: 10px 20px 40px 20px;
       }
 
       .container {
@@ -239,7 +235,7 @@
 
       input {
         padding: 14px;
-        font-size: 16px; /* Forhindrer automatisk zoom på iOS */
+        font-size: 16px; /* Forhindrer automatisk zoom på iOS ved fokus */
       }
 
       button.submit-btn {
