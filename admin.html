@@ -551,26 +551,6 @@
         setTimeout(() => { notif.style.display = "none"; }, 4000);
     }
 
-    // --- DYNAMISK LOGIKK FOR LISENS OG KILDE ---
-    window.oppdaterKildeKrav = function() {
-        const lisensEl = document.getElementById("inpLisens");
-        const kildeWrapper = document.getElementById("kildeFeltWrapper");
-        const kildeReqMarker = document.getElementById("kildePåpåkrevdMerk");
-        if (!lisensEl) return;
-
-        const valgtLisens = lisensEl.value;
-
-        // Krever kilde hvis det er CC, kjøpefilm eller leiefilm
-        if (valgtLisens === "cc" || valgtLisens === "kjop" || valgtLisens === "leie") {
-            if (kildeWrapper) kildeWrapper.style.display = "block";
-            if (kildeReqMarker) kildeReqMarker.style.display = "inline";
-        } else {
-            // Skjul eller gi valgfri tilgang for Original / Public Domain
-            if (kildeWrapper) kildeWrapper.style.display = "block"; 
-            if (kildeReqMarker) kildeReqMarker.style.display = "none";
-        }
-    }
-
     // --- AUTOMATISK INNSJEKKING VED OPPDATERING (PERSISTENS) ---
     onAuthStateChanged(auth, async (user) => {
         if (user) {
@@ -741,7 +721,6 @@
         document.getElementById("sesongContainer").innerHTML = "";
         forberedSkjemaDatoer();
         byttInnholdsType();
-        oppdaterKildeKrav();
     }
 
     window.lastInnAltData = async function(tvingOppdatering = false) {
@@ -905,11 +884,7 @@
         document.getElementById("inpBeskrivelse").value = data.beskrivelse || "";
         document.getElementById("inpRegissor").value = data.regissor || "";
         document.getElementById("inpSkuespillere").value = data.skuespillere || "";
-        
-        // Håndtering av Lisens og Kilde
-        document.getElementById("inpLisens").value = data.lisens || "original";
-        document.getElementById("inpKilde").value = data.kilde || "";
-        oppdaterKildeKrav();
+        document.getElementById("inpLisens").value = data.lisens || "";
 
         if (data.metadata && Array.isArray(data.metadata)) {
             document.getElementById("metaAar").value = data.metadata[0] || "";
@@ -949,23 +924,10 @@
         const id = document.getElementById("inpId").value.trim();
         const samling = document.getElementById("inpType").value;
         const tittel = document.getElementById("inpTittel").value.trim();
-        const lisens = document.getElementById("inpLisens").value;
-        let kilde = document.getElementById("inpKilde").value.trim();
 
         if (!id || !tittel) {
             visMelding("Tittel må fylles ut!", "error");
             return;
-        }
-
-        // VALIDERING: Krav om kilde dersom det gjelder CC, Kjøp eller Leie
-        if ((lisens === "cc" || lisens === "kjop" || lisens === "leie") && !kilde) {
-            visMelding("Du må fylle ut eier / distribusjonsfirma for denne lisenstypen!", "error");
-            return;
-        }
-
-        // AUTOMATISK UTFYLLING: Sett til Watch Originals Studio dersom det er en original
-        if (lisens === "original" && !kilde) {
-            kilde = "Watch Originals Studio";
         }
 
         const metadataArray = [
@@ -993,8 +955,7 @@
             metadata: metadataArray,
             skuespillere: document.getElementById("inpSkuespillere").value.trim(),
             regissor: document.getElementById("inpRegissor").value.trim(),
-            lisens: lisens,
-            kilde: kilde,
+            lisens: document.getElementById("inpLisens").value.trim(),
             audioLanguages: [{ code: "en", label: "Engelsk" }],
             subtitleLanguages: [{ code: "no", label: "Norsk" }],
             publishDate: pubDateVal ? new Date(pubDateVal).toISOString() : new Date().toISOString(),
