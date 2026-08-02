@@ -18,17 +18,17 @@
 
     body {
       background: #091B1E;
-      font-family: 'Inter', Arial, sans-serif;
+      font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
       display: flex;
       align-items: center;
       justify-content: center;
       min-height: 100vh;
-      color: white;
+      color: #FFFFFF;
       overflow-x: hidden;
       position: relative;
     }
 
-    /* Fallback bakgrunn hvis JS-postere ikke laster inn */
+    /* Fallback bakgrunn hvis poster-vegg ikke laster */
     .bg-fallback {
       position: absolute;
       inset: 0;
@@ -38,11 +38,11 @@
       z-index: 1;
     }
 
-    /* Overleggsgradient for å gi dybde og sikre at teksten er lesbar */
+    /* Overleggsgradient for dybde og lesbarhet */
     .overlay {
       position: absolute;
       inset: 0;
-      background: radial-gradient(circle, rgba(9,27,30,0.6) 0%, rgba(9,27,30,0.95) 100%);
+      background: radial-gradient(circle, rgba(9,27,30,0.5) 0%, rgba(9,27,30,0.95) 100%);
       z-index: 2;
     }
 
@@ -54,7 +54,7 @@
       z-index: 1;
       transform: perspective(2000px) rotateY(-18deg) rotateX(4deg) scale(1.2);
       transform-origin: right center;
-      opacity: 0.25;
+      opacity: 0.22;
     }
 
     .wall-row {
@@ -79,14 +79,15 @@
 
     /* ================= SKJEMA CONTAINER ================= */
     .container {
-      background-color: rgba(15, 42, 46, 0.45);
-      padding: 45px 40px;
-      border-radius: 24px;
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.55);
-      max-width: 420px;
+      background: rgba(12, 34, 38, 0.65);
+      padding: 48px 40px;
+      border-radius: 28px;
+      border: 1px solid rgba(0, 255, 204, 0.15);
+      backdrop-filter: blur(25px);
+      -webkit-backdrop-filter: blur(25px);
+      box-shadow: 0 30px 60px rgba(0, 0, 0, 0.6),
+                  0 0 40px rgba(0, 255, 204, 0.05);
+      max-width: 440px;
       width: 100%;
       text-align: center;
       z-index: 10;
@@ -94,98 +95,141 @@
       transition: all 0.3s ease;
     }
 
-    .logo-container {
-      font-size: 28px;
-      font-weight: 900;
-      letter-spacing: 4px;
-      color: #00FFCC;
-      margin-bottom: 25px;
-      text-shadow: 0 0 10px rgba(0,255,204,0.5);
+    /* Normal Watch Logo */
+    .site-logo {
+      height: 42px;
+      width: auto;
+      object-fit: contain;
+      margin-bottom: 24px;
+      filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.3));
     }
 
     h2 { 
-      font-size: 24px;
-      font-weight: 700;
+      font-size: 26px;
+      font-weight: 800;
+      letter-spacing: -0.5px;
       margin-bottom: 8px; 
+      color: #ffffff;
     }
     
     p.subtitle {
       font-size: 14px;
-      color: #bfc9c9;
-      margin-bottom: 25px;
+      color: #93A6A8;
+      margin-bottom: 28px;
+      line-height: 1.4;
+    }
+
+    .input-group {
+      position: relative;
+      margin-bottom: 18px;
+      text-align: left;
     }
 
     label { 
       display: block; 
-      text-align: left; 
-      margin-top: 18px; 
-      margin-bottom: 6px; 
-      font-size: 13px; 
-      font-weight: 600;
-      color: #bfc9c9;
+      margin-bottom: 8px; 
+      font-size: 12px; 
+      font-weight: 700;
+      color: #B2C4C6;
       text-transform: uppercase;
-      letter-spacing: 0.5px;
+      letter-spacing: 0.8px;
+    }
+
+    .input-wrapper {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    .input-wrapper i {
+      position: absolute;
+      left: 16px;
+      color: #587376;
+      font-size: 15px;
+      transition: color 0.3s ease;
     }
 
     input { 
       width: 100%; 
-      padding: 14px; 
-      border: 1px solid rgba(255,255,255,0.1); 
-      border-radius: 10px; 
-      background: rgba(9, 27, 30, 0.6);
-      color: white;
+      padding: 14px 16px 14px 44px; 
+      border: 1px solid rgba(255, 255, 255, 0.08); 
+      border-radius: 12px; 
+      background: rgba(6, 18, 20, 0.6);
+      color: #FFFFFF;
       font-size: 15px;
-      transition: 0.25s ease;
+      transition: all 0.3s ease;
+    }
+
+    input::placeholder {
+      color: #4A6366;
     }
 
     input:focus {
       outline: none;
       border-color: #00FFCC;
-      box-shadow: 0 0 10px rgba(0, 255, 204, 0.2);
+      background: rgba(6, 18, 20, 0.85);
+      box-shadow: 0 0 15px rgba(0, 255, 204, 0.15);
+    }
+
+    input:focus + i, .input-wrapper:focus-within i {
+      color: #00FFCC;
     }
 
     button.submit-btn {
       width: 100%; 
-      padding: 15px; 
-      background-color: #00FFCC;
-      color: #071214; 
+      padding: 16px; 
+      background: linear-gradient(135deg, #00FFCC 0%, #00D6AB 100%);
+      color: #041012; 
       border: none; 
-      border-radius: 999px;
+      border-radius: 12px;
       cursor: pointer; 
       font-size: 16px; 
       font-weight: 800;
-      margin-top: 25px;
-      transition: 0.3s ease;
-      box-shadow: 0 0 20px rgba(0,255,204,0.25);
+      letter-spacing: 0.5px;
+      margin-top: 10px;
+      transition: all 0.3s ease;
+      box-shadow: 0 8px 20px rgba(0, 255, 204, 0.2);
     }
     
     button.submit-btn:hover { 
       transform: translateY(-2px);
-      box-shadow: 0 0 30px rgba(0,255,204,0.45);
+      box-shadow: 0 12px 28px rgba(0, 255, 204, 0.35);
+      background: linear-gradient(135deg, #1AFFD1 0%, #00E6B8 100%);
+    }
+
+    button.submit-btn:active {
+      transform: translateY(0);
     }
 
     .error { 
-      color: #ff4c4c; 
-      margin-top: 12px; 
+      color: #FF5252; 
+      margin-top: 14px; 
       min-height: 20px; 
-      font-size: 14px;
+      font-size: 13px;
       font-weight: 600;
     }
 
     .toggle-text, .forgot-text { 
-      margin-top: 18px; 
+      margin-top: 20px; 
       font-size: 14px; 
-      color: #bfc9c9;
+      color: #93A6A8;
     }
     
+    .forgot-text {
+      margin-top: 14px;
+      text-align: right;
+    }
+
     .toggle-text a, .forgot-text a { 
       color: #00FFCC; 
       cursor: pointer; 
       text-decoration: none; 
       font-weight: 700;
+      transition: color 0.2s ease;
     }
 
     .toggle-text a:hover, .forgot-text a:hover {
+      color: #66FFE0;
       text-decoration: underline;
     }
 
@@ -199,7 +243,7 @@
         height: 85px;
       }
       .container {
-        padding: 35px 24px;
+        padding: 36px 24px;
       }
     }
   </style>
@@ -217,37 +261,48 @@
   </div>
 
   <div class="container">
-    <div class="logo-container">WATCH</div>
+    <!-- Watch logo -->
+    <img src="https://static.wixstatic.com/media/d9ace9_3558832367124fceb1b36f73dbdd40dd~mv2.png" alt="WATCH Logo" class="site-logo">
+    
     <h2 id="formTitle">Logg inn</h2>
     <p class="subtitle" id="formSubtitle">Vennligst oppgi dine detaljer for å fortsette</p>
 
     <form id="authForm">
-      <div id="navnGruppe" style="display: none;">
+      <div class="input-group" id="navnGruppe" style="display: none;">
         <label for="navn">Navn</label>
-        <input type="text" id="navn" placeholder="Ditt fulle navn" autocomplete="name" />
+        <div class="input-wrapper">
+          <input type="text" id="navn" placeholder="Ditt fulle navn" autocomplete="name" />
+          <i class="fa-solid fa-user"></i>
+        </div>
       </div>
 
-      <label for="epost">E-postadresse</label>
-      <input type="email" id="epost" placeholder="navn@domene.no" autocomplete="email" required />
+      <div class="input-group">
+        <label for="epost">E-postadresse</label>
+        <div class="input-wrapper">
+          <input type="email" id="epost" placeholder="navn@domene.no" autocomplete="email" required />
+          <i class="fa-solid fa-envelope"></i>
+        </div>
+      </div>
 
-      <label for="passord">Passord</label>
-      <input type="password" id="passord" placeholder="••••••••" autocomplete="current-password" required />
+      <div class="input-group">
+        <label for="passord">Passord</label>
+        <div class="input-wrapper">
+          <input type="password" id="passord" placeholder="••••••••" autocomplete="current-password" required />
+          <i class="fa-solid fa-lock"></i>
+        </div>
+        <div class="forgot-text" id="forgotContainer">
+          <a href="Passordfeil.html">Glemt passord?</a>
+        </div>
+      </div>
 
       <button type="submit" class="submit-btn" id="submitKnapp">Fortsett</button>
       <div class="error" id="feilmelding"></div>
     </form>
 
-    <div class="forgot-text" id="forgotContainer">
-      <a href="Passordfeil.html">Glemt passord?</a>
-    </div>
-
     <div class="toggle-text" id="toggleText">
       Er du ikke medlem? <a onclick="visRegistrering()">Registrer deg</a>
     </div>
   </div>
-
-  <script src="Filmdata.js"></script>
-  <script src="Seriedata.js"></script>
 
   <script type="module">
     // 1. Hent den ferdig oppsatte databasen og autentiseringen fra fellesfilen din
@@ -255,7 +310,7 @@
 
     // 2. Hent funksjonene denne siden trenger fra de offisielle CDN-lenkene (v12.15.0)
     import { signInWithEmailAndPassword, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-auth.js";
-    import { doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
+    import { doc, setDoc, getDoc, collection, getDocs, limit, query } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
 
     let registreringsmodus = false;
 
@@ -355,11 +410,10 @@
       document.getElementById("passord").setAttribute("autocomplete", "current-password");
     }
 
-    // Gjør disse tilgjengelige globalt for onclick i HTML-en siden vi kjører i en modul
     window.visRegistrering = visRegistrering;
     window.visInnlogging = visInnlogging;
 
-    /* ================= 3D GENERATOR FOR PLAKATER ================= */
+    /* ================= 3D GENERATOR MED FIREBASE-SPARING ================= */
     const rows = [
       document.querySelector(".row1"),
       document.querySelector(".row2"),
@@ -367,32 +421,79 @@
       document.querySelector(".row4")
     ];
 
-    let posters = [];
+    async function hentPostereMedSparing() {
+      const CACHE_KEY = "watch_poster_cache";
+      const TIME_KEY = "watch_poster_cache_time";
+      const ETT_DØGN = 24 * 60 * 60 * 1000; // 24 timer i millisekunder
 
-    if(typeof filmer !== "undefined"){
-      Object.values(filmer).forEach(f => f.poster && posters.push(f.poster));
-    }
-    if(typeof serier !== "undefined"){
-      Object.values(serier).forEach(s => s.poster && posters.push(s.poster));
-    }
+      const sistLagret = localStorage.getItem(TIME_KEY);
+      const lagredePostere = localStorage.getItem(CACHE_KEY);
 
-    posters.sort(() => Math.random() - 0.5);
+      // 1. Sjekk om vi har en gyldig cache i localStorage for å unngå Firestore-kall
+      if (lagredePostere && sistLagret && (Date.now() - sistLagret < ETT_DØGN)) {
+        return JSON.parse(lagredePostere);
+      }
 
-    if(posters.length > 0) {
-      document.querySelector(".bg-fallback").style.background = "#091B1E";
-      rows.forEach(row => {
-        if(row) {
-          for(let i = 0; i < 3; i++){ 
-            posters.forEach(src => {
-              const img = document.createElement("img");
-              img.src = src;
-              img.loading = "lazy";
-              row.appendChild(img);
-            });
-          }
+      // 2. Hvis cachen mangler eller er eldre enn 24 timer, hente kun et lite utvalg fra Firestore
+      let posterMiks = [];
+      try {
+        // Hent maks 15 filmer og 15 serier for å spare lesekall
+        const filmQuery = query(collection(db, "filmer"), limit(15));
+        const serieQuery = query(collection(db, "serier"), limit(15));
+
+        const [filmSnap, serieSnap] = await Promise.all([
+          getDocs(filmQuery),
+          getDocs(serieQuery)
+        ]);
+
+        filmSnap.forEach(doc => {
+          const data = doc.data();
+          if (data.poster) posterMiks.push(data.poster);
+        });
+
+        serieSnap.forEach(doc => {
+          const data = doc.data();
+          if (data.poster) posterMiks.push(data.poster);
+        });
+
+        // 3. Lagre i cache til neste besøk om vi fant noen postere
+        if (posterMiks.length > 0) {
+          localStorage.setItem(CACHE_KEY, JSON.stringify(posterMiks));
+          localStorage.setItem(TIME_KEY, Date.now().toString());
         }
-      });
+      } catch (err) {
+        console.warn("Kunne ikke hente postere fra Firestore, bruker fallback om tilgjengelig:", err);
+      }
+
+      return posterMiks;
     }
+
+    // Bygg 3D-veggen
+    async function byggPosterVegg() {
+      const posters = await hentPostereMedSparing();
+
+      if (posters && posters.length > 0) {
+        // Stokke posterne tilfeldig
+        posters.sort(() => Math.random() - 0.5);
+
+        document.querySelector(".bg-fallback").style.background = "#091B1E";
+        rows.forEach(row => {
+          if (row) {
+            for (let i = 0; i < 3; i++) { 
+              posters.forEach(src => {
+                const img = document.createElement("img");
+                img.src = src;
+                img.loading = "lazy";
+                row.appendChild(img);
+              });
+            }
+          }
+        });
+      }
+    }
+
+    // Start oppbyggingen av veggen
+    byggPosterVegg();
   </script>
 </body>
 </html>
