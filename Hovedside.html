@@ -778,6 +778,10 @@
   /* --------------------------------------------------------------------------
      A) ALLE STANDARD GALLERIER: HORISONTAL RULLING (VERTIKALE POSTERE)
      -------------------------------------------------------------------------- */
+  .image-gallery,
+  .coming-movies-gallery,
+  .top10-gallery,
+  .continue-image-gallery,
   .gallery-section .image-gallery,
   .gallery-section .coming-movies-gallery,
   .gallery-section .top10-gallery,
@@ -789,6 +793,7 @@
     gap: 12px !important;
     padding: 4px 0 12px 0 !important;
     scroll-snap-type: x mandatory !important;
+    scroll-behavior: smooth !important;
     -webkit-overflow-scrolling: touch !important;
   }
 
@@ -868,6 +873,7 @@
     gap: 12px !important;
     padding: 4px 0 12px 0 !important;
     scroll-snap-type: x mandatory !important;
+    scroll-behavior: smooth !important;
     -webkit-overflow-scrolling: touch !important;
   }
 
@@ -1147,19 +1153,6 @@
 </footer>
 
 <script type="module">
-  // ==================== CSS INJEKSJON FOR VIAPLAY-LÅSING ==================== //
-  const style = document.createElement('style');
-  const isCoarse = window.matchMedia("(pointer: coarse)").matches;
-  style.textContent = `
-    .image-gallery, .coming-movies-gallery, .top10-gallery, .continue-image-gallery {
-      overflow-x: ${isCoarse ? 'auto' : 'hidden'} !important; 
-      scroll-behavior: smooth !important;
-      display: flex !important;
-      ${isCoarse ? '-webkit-overflow-scrolling: touch !important;' : ''}
-    }
-  `;
-  document.head.appendChild(style);
-
   // ==================== FIREBASE IMPORT & INITIALISERING ==================== //
   import { auth, db } from "./firebase-oppsett.js";
   import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-auth.js";
