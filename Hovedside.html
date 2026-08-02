@@ -1153,6 +1153,19 @@
 </footer>
 
 <script type="module">
+  // ==================== CSS INJEKSJON FOR VIAPLAY-LÅSING ==================== //
+  const style = document.createElement('style');
+  const isCoarse = window.matchMedia("(pointer: coarse)").matches;
+  style.textContent = `
+    .image-gallery, .coming-movies-gallery, .top10-gallery, .continue-image-gallery {
+      overflow-x: ${isCoarse ? 'auto' : 'hidden'} !important; 
+      scroll-behavior: smooth !important;
+      display: flex !important;
+      ${isCoarse ? '-webkit-overflow-scrolling: touch !important;' : ''}
+    }
+  `;
+  document.head.appendChild(style);
+
   // ==================== FIREBASE IMPORT & INITIALISERING ==================== //
   import { auth, db } from "./firebase-oppsett.js";
   import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-auth.js";
@@ -1166,11 +1179,6 @@
   const aktivProfil = localStorage.getItem("aktivProfil") || "Hovedprofil";
   let heleProfilArrayet = [];
   let unsubscribeProfileListener = null;
-
-  // Hjelpefunksjon for å sjekke om enheten er mobil/smal skjerm
-  function sjekkErMobil() {
-    return window.matchMedia("(max-width: 768px)").matches;
-  }
 
   // Hjelpefunksjon for å oppdatere profilmeny i header
   function oppdaterMenyProfilVisning(bildeUrl, profilNavn, farge) {
@@ -1330,7 +1338,7 @@
     }
 
     const film = innhold[new Date().getHours() % innhold.length];
-    const erMobil = sjekkErMobil();
+    const erMobil = window.innerWidth <= 768;
 
     const bilde = document.getElementById("banner-bilde");
     const video = document.getElementById("banner-video");
@@ -1415,6 +1423,8 @@
     }, 5000);
   }
 
+  window.addEventListener("resize", oppdaterBanner);
+
   // ==================== GALLERIPILER LOGIKK ==================== //
   function oppdaterAlleGalleripiler() {
     if (window.matchMedia("(pointer: coarse)").matches) return;
@@ -1471,19 +1481,21 @@
     gallery.addEventListener("scroll", oppdaterAlleGalleripiler, { passive: true });
   });
 
-  // ==================== DYNAMISK GALLERI GENERATOR (FLIMMERFRI) ==================== //
+  window.addEventListener("resize", oppdaterAlleGalleripiler);
+
+  // ==================== DYNAMISK GALLERI GENERATOR ==================== //
   function createGalleryItem(itemKey, item) {
     const link = document.createElement("a");
     link.href = `film.html?navn=${itemKey}`;
     link.classList.add("gallery-item");
     
-    const bildePC = item.poster || item.bilde || "";
-    const bildeMobil = item.posterVertikal || bildePC;
+    const erMobil = window.innerWidth <= 768;
+    const bildeKilde = erMobil 
+      ? (item.posterVertikal || item.poster || item.bilde || "")
+      : (item.poster || item.bilde || "");
 
     link.innerHTML = `
-      ${bildePC ? `<img src="${bildePC}" alt="${item.tittel || 'Film'}" class="img-pc" loading="lazy">` : ''}
-      ${bildeMobil ? `<img src="${bildeMobil}" alt="${item.tittel || 'Film'}" class="img-mobil" loading="lazy">` : ''}
-      ${!bildePC && !bildeMobil ? `<div style="width:100%; height:100%; background:#1a2629; display:flex; align-items:center; justify-content:center; padding:10px; text-align:center; font-size:12px; color:#fff;">${item.tittel || 'Mangler bilde'}</div>` : ''}
+      ${bildeKilde ? `<img src="${bildeKilde}" alt="${item.tittel || 'Film'}" loading="lazy">` : `<div style="width:100%; height:100%; background:#1a2629; display:flex; align-items:center; justify-content:center; padding:10px; text-align:center; font-size:12px; color:#fff;">${item.tittel || 'Mangler bilde'}</div>`}
       <div class="image-overlay">
         <div class="overlay-content">
           <div class="overlay-title">${item.tittel || ""}</div>
@@ -1581,31 +1593,20 @@
       wrapper.href = `film.html?navn=${key}`;
       wrapper.classList.add("top10-item");
 
-      const bildePC = film.poster || film.bilde || "";
-      const bildeMobil = film.posterVertikal || bildePC;
+      const bildeKilde = film.posterVertikal || film.poster || "";
 
-      const imgPC = document.createElement("img");
-      if (bildePC) {
-        imgPC.src = bildePC;
-        imgPC.loading = "lazy";
-        imgPC.className = "img-pc";
+      const img = document.createElement("img");
+      if (bildeKilde) {
+        img.src = bildeKilde;
+        img.loading = "lazy";
       }
-      imgPC.alt = film.tittel || "Topp 10";
-
-      const imgMobil = document.createElement("img");
-      if (bildeMobil) {
-        imgMobil.src = bildeMobil;
-        imgMobil.loading = "lazy";
-        imgMobil.className = "img-mobil";
-      }
-      imgMobil.alt = film.tittel || "Topp 10";
+      img.alt = film.tittel || "Topp 10";
 
       const number = document.createElement("div");
       number.classList.add("top10-number");
       number.textContent = index + 1;
 
-      wrapper.appendChild(imgPC);
-      wrapper.appendChild(imgMobil);
+      wrapper.appendChild(img);
       wrapper.appendChild(number);
       gallery.appendChild(wrapper);
     });
@@ -1701,14 +1702,13 @@
         ? `film-mal.html?navn=${urlParamNavn}&sesong=${sesongNr}&episode=${episodeNr}&returUrl=${encodeURIComponent("Hovedside.html")}`
         : `film-mal.html?navn=${urlParamNavn}&returUrl=${encodeURIComponent("Hovedside.html")}`;
 
-      let bildePC = metadataMatch.poster || metadataMatch.bilde || "";
+      let bildeKilde = metadataMatch.poster || metadataMatch.bilde || "";
       if (spillType === "serie" && metadataMatch.sesonger && metadataMatch.sesonger[sesongNr]) {
         const epInfo = metadataMatch.sesonger[sesongNr].find(e => String(e.episode) === String(episodeNr));
         if (epInfo && epInfo.bilde) {
-          bildePC = epInfo.bilde;
+          bildeKilde = epInfo.bilde;
         }
       }
-      let bildeMobil = metadataMatch.posterVertikal || bildePC;
 
       const link = document.createElement("a");
       link.href = hrefUrl;
@@ -1720,9 +1720,10 @@
 
       link.innerHTML = `
         <div class="continue-media-wrap">
-          ${bildePC ? `<img src="${bildePC}" alt="${metadataMatch.tittel}" class="img-pc" loading="lazy">` : ''}
-          ${bildeMobil ? `<img src="${bildeMobil}" alt="${metadataMatch.tittel}" class="img-mobil" loading="lazy">` : ''}
-          ${!bildePC && !bildeMobil ? `<div style="width:100%; height:100%; background:#1a2629; display:flex; align-items:center; justify-content:center; padding:10px; text-align:center; font-size:12px; color:#fff;">${metadataMatch.tittel || 'Mangler bilde'}</div>` : ''}
+          ${bildeKilde 
+            ? `<img src="${bildeKilde}" alt="${metadataMatch.tittel}" loading="lazy">` 
+            : `<div style="width:100%; height:100%; background:#1a2629; display:flex; align-items:center; justify-content:center; padding:10px; text-align:center; font-size:12px; color:#fff;">${metadataMatch.tittel || 'Mangler bilde'}</div>`
+          }
           <button class="delete-progress-btn" title="Skjul fra Fortsett å se" type="button" aria-label="Skjul fra visning">
             <i class="fas fa-trash-alt"></i>
           </button>
@@ -1744,8 +1745,10 @@
           profil.skjultFortsett.push(filmId);
         }
 
+        // Oppdater cachen umiddelbart for lokal responsivitet
         localStorage.setItem("watch_nordic_profiles_cache", JSON.stringify(heleProfilArrayet));
 
+        // Send til Firestore i bakgrunnen for å spare unødige tunge kall
         if (registrertBruker) {
           try {
             const userDocRef = doc(db, "users", registrertBruker.uid);
@@ -1757,6 +1760,7 @@
           }
         }
 
+        // Animer bort elementet fra brukergrensesnittet
         link.style.transition = "all 0.3s ease";
         link.style.transform = "scale(0.8)";
         link.style.opacity = "0";
@@ -1792,6 +1796,7 @@
     const cacheKeyFilmer = "watch_nordic_filmer_cache";
     const cacheKeySerier = "watch_nordic_serier_cache";
 
+    // 1. Vis data umiddelbart fra lokal cache dersom det finnes
     const lagredeFilmer = localStorage.getItem(cacheKeyFilmer);
     const lagredeSerier = localStorage.getItem(cacheKeySerier);
 
@@ -1799,15 +1804,13 @@
       try {
         filmer = JSON.parse(lagredeFilmer);
         serier = JSON.parse(lagredeSerier);
-        
-        requestAnimationFrame(() => {
-          byggSiden();
-        });
+        byggSiden();
       } catch (e) {
         console.error("Feil ved parsing av lokal media-cache", e);
       }
     }
 
+    // 2. Oppdater media fra Firestore i bakgrunnen
     try {
       const [filmerSnap, serierSnap] = await Promise.all([
         getDocs(collection(db, "filmer")),
@@ -1871,16 +1874,6 @@
 
   document.addEventListener("DOMContentLoaded", () => {
     hentDataFraFirestore();
-  });
-
-  // ==================== RESIZE / ORIENTERING (UNNGÅR FLIMMER) ==================== //
-  let resizeTimer;
-  window.addEventListener("resize", () => {
-    clearTimeout(resizeTimer);
-    resizeTimer = setTimeout(() => {
-      oppdaterBanner();
-      oppdaterAlleGalleripiler();
-    }, 250);
   });
 
   // ==================== NAV SCROLL EFFECT ==================== //
