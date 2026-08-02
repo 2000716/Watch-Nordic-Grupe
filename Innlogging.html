@@ -25,7 +25,7 @@
       overflow-x: hidden;
     }
 
-    /* ================= TOPPLINJE / LOGO VED VENSTRE SIDE ================= */
+    /* ================= TOPPLINJE / LOGO ================= */
     .header {
       padding: 32px 48px;
       width: 100%;
@@ -51,7 +51,7 @@
       opacity: 0.85;
     }
 
-    /* ================= HOVEDINNHOLD / RENT SKJEMA ================= */
+    /* ================= HOVEDINNHOLD / SKJEMA ================= */
     .main-content {
       flex: 1;
       display: flex;
@@ -82,7 +82,7 @@
       line-height: 1.4;
     }
 
-    /* ================= ANIMASJONS-KLASSER FOR STEG ================= */
+    /* ================= ANIMASJON FOR STEG ================= */
     .step-content {
       opacity: 1;
       transform: translateY(0);
@@ -155,14 +155,12 @@
       color: #4A6366;
     }
 
-    /* Ingen glød ved fokus */
     input:focus {
       outline: none;
       border-color: #00FFCC;
       background: #061214;
     }
 
-    /* Ren knapp uten glød/skygging */
     button.submit-btn {
       width: 100%; 
       padding: 16px; 
@@ -212,16 +210,44 @@
       text-decoration: underline;
     }
 
+    /* ================= MOBILANPASSNING (RESPONSIV DESIGN) ================= */
     @media (max-width: 600px) {
       .header {
-        padding: 24px 20px;
+        padding: 20px 24px;
+        justify-content: center; /* Sentrerer logoen på mobil for et mer app-lignende utseende */
+      }
+
+      .site-logo {
+        height: 36px;
+      }
+
+      .main-content {
+        padding: 10px 20px 40px 20px;
+        align-items: flex-start; /* Lar skjemaet starte litt høyere på små mobilskjermer */
+      }
+
+      .container {
+        max-width: 100%;
+      }
+
+      h2 {
+        font-size: 26px;
+      }
+
+      input {
+        padding: 14px; /* Litt mindre padding på mobil for å spare plass */
+        font-size: 16px; /* 16px forhindrer automatisk zoom på iOS ved fokus */
+      }
+
+      button.submit-btn {
+        padding: 15px;
       }
     }
   </style>
 </head>
 <body>
 
-  <!-- WATCH LOGO ØVERST TIL VENSTRE (KLIKKBAR TIL INDEX.HTML) -->
+  <!-- WATCH LOGO ØVERST (KLIKKBAR TIL INDEX.HTML) -->
   <header class="header">
     <a href="index.html" class="logo-link">
       <img src="https://static.wixstatic.com/media/d9ace9_081ea242211b45a2801873c3067e1205~mv2.png" alt="WATCH Logo" class="site-logo">
@@ -320,18 +346,15 @@
       const fraElement = document.getElementById(`steg${fraStegNr}`);
       const tilElement = document.getElementById(`steg${tilStegNr}`);
 
-      // 1. Fade ut det aktive steget
       fraElement.classList.add("animating-out");
 
       setTimeout(() => {
         fraElement.style.display = "none";
         fraElement.classList.remove("animating-out");
 
-        // 2. Klargjør og vis det neste steget med startposisjon for inn-animasjon
         tilElement.style.display = "block";
         tilElement.classList.add("animating-in");
 
-        // Oppdater tekstinnhold basert på steg
         naavaarendeSteg = tilStegNr;
         if (tilStegNr === 2) {
           document.getElementById("visEpostTekst").textContent = epostInput.value.trim();
@@ -348,12 +371,11 @@
             : "Skriv inn e-postadressen din for å fortsette";
         }
 
-        // 3. Utløs fade/slide inn
         requestAnimationFrame(() => {
           tilElement.classList.remove("animating-in");
         });
 
-      }, 250); // Tiden matcher CSS-transisjonen
+      }, 250);
     }
 
     // FIREBASE INNLOGGING / REGISTRERING
