@@ -19,36 +19,45 @@
       background-color: #091B1E;
       font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
       display: flex;
-      align-items: center;
-      justify-content: center;
+      flex-direction: column;
       min-height: 100vh;
       color: #FFFFFF;
       overflow-x: hidden;
     }
 
-    /* ================= SKJEMA CONTAINER (UTEN RAMME/BOKS) ================= */
-    .container {
-      background: transparent; /* Fjernet boksbakgrunnen */
-      padding: 20px;
-      border: none;
-      box-shadow: none; /* Fjernet skyggen */
-      max-width: 400px;
+    /* ================= TOPPLINJE / LOGO VED VENSTRE SIDE ================= */
+    .header {
+      padding: 32px 48px;
       width: 100%;
-      text-align: center;
-      z-index: 10;
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
     }
 
-    /* Watch Logo */
     .site-logo {
-      height: 48px;
+      height: 42px;
       width: auto;
       object-fit: contain;
-      margin-bottom: 24px;
-      filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.3));
+    }
+
+    /* ================= HOVEDINNHOLD / RENT SKJEMA ================= */
+    .main-content {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .container {
+      background: transparent;
+      max-width: 380px;
+      width: 100%;
+      text-align: left;
     }
 
     h2 { 
-      font-size: 28px;
+      font-size: 30px;
       font-weight: 800;
       letter-spacing: -0.5px;
       margin-bottom: 8px; 
@@ -58,14 +67,39 @@
     p.subtitle {
       font-size: 14px;
       color: #93A6A8;
-      margin-bottom: 32px;
+      margin-bottom: 28px;
       line-height: 1.4;
     }
 
+    /* Viser valgt e-post i steg 2 */
+    .selected-email-badge {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 12px 14px;
+      border-radius: 6px;
+      font-size: 14px;
+      color: #FFFFFF;
+      margin-bottom: 24px;
+    }
+
+    .selected-email-badge button {
+      background: none;
+      border: none;
+      color: #00FFCC;
+      font-weight: 700;
+      cursor: pointer;
+      font-size: 13px;
+    }
+
+    .selected-email-badge button:hover {
+      text-decoration: underline;
+    }
+
     .input-group {
-      position: relative;
       margin-bottom: 20px;
-      text-align: left;
     }
 
     label { 
@@ -78,57 +112,46 @@
       letter-spacing: 0.8px;
     }
 
-    .input-wrapper {
-      position: relative;
-      width: 100%;
-    }
-
     input { 
       width: 100%; 
       padding: 16px; 
-      border: 1px solid rgba(255, 255, 255, 0.12); 
-      border-radius: 8px; 
-      background: rgba(6, 18, 20, 0.6);
+      border: 1px solid rgba(255, 255, 255, 0.15); 
+      border-radius: 6px; 
+      background: rgba(6, 18, 20, 0.8);
       color: #FFFFFF;
       font-size: 15px;
-      transition: all 0.2s ease;
+      transition: border-color 0.2s ease;
     }
 
     input::placeholder {
       color: #4A6366;
     }
 
+    /* Ingen glød ved fokus */
     input:focus {
       outline: none;
       border-color: #00FFCC;
-      background: rgba(6, 18, 20, 0.9);
-      box-shadow: 0 0 12px rgba(0, 255, 204, 0.2);
+      background: #061214;
     }
 
+    /* Ren knapp uten glød/skygging */
     button.submit-btn {
       width: 100%; 
       padding: 16px; 
-      background: linear-gradient(135deg, #00FFCC 0%, #00D6AB 100%);
+      background: #00FFCC;
       color: #041012; 
       border: none; 
-      border-radius: 8px;
+      border-radius: 6px;
       cursor: pointer; 
       font-size: 16px; 
       font-weight: 800;
       letter-spacing: 0.5px;
-      margin-top: 12px;
-      transition: all 0.3s ease;
-      box-shadow: 0 6px 16px rgba(0, 255, 204, 0.2);
+      margin-top: 8px;
+      transition: background-color 0.2s ease;
     }
     
     button.submit-btn:hover { 
-      transform: translateY(-1px);
-      box-shadow: 0 10px 24px rgba(0, 255, 204, 0.35);
-      background: linear-gradient(135deg, #1AFFD1 0%, #00E6B8 100%);
-    }
-
-    button.submit-btn:active {
-      transform: translateY(0);
+      background: #00E6B8;
     }
 
     .error { 
@@ -155,88 +178,155 @@
       cursor: pointer; 
       text-decoration: none; 
       font-weight: 700;
-      transition: color 0.2s ease;
     }
 
     .toggle-text a:hover, .forgot-text a:hover {
-      color: #66FFE0;
       text-decoration: underline;
     }
 
-    @media (max-width: 480px) {
-      .container {
-        padding: 16px;
+    @media (max-width: 600px) {
+      .header {
+        padding: 24px 20px;
       }
     }
   </style>
 </head>
 <body>
 
-  <div class="container">
-    <!-- Watch logo -->
+  <!-- WATCH LOGO ØVERST TIL VENSTRE -->
+  <header class="header">
     <img src="https://static.wixstatic.com/media/d9ace9_081ea242211b45a2801873c3067e1205~mv2.png" alt="WATCH Logo" class="site-logo">
-    
-    <h2 id="formTitle">Logg inn</h2>
-    <p class="subtitle" id="formSubtitle">Vennligst oppgi dine detaljer for å fortsette</p>
+  </header>
 
-    <form id="authForm">
-      <div class="input-group" id="navnGruppe" style="display: none;">
-        <label for="navn">Navn</label>
-        <div class="input-wrapper">
-          <input type="text" id="navn" placeholder="Ditt fulle navn" autocomplete="name" />
+  <!-- SKJEMA-OMRÅDE -->
+  <main class="main-content">
+    <div class="container">
+      <h2 id="formTitle">Logg inn</h2>
+      <p class="subtitle" id="formSubtitle">Skriv inn e-postadressen din for å fortsette</p>
+
+      <form id="authForm">
+        
+        <!-- TRINN 1: SKRIV INN E-POST -->
+        <div id="steg1">
+          <div class="input-group">
+            <label for="epost">E-postadresse</label>
+            <input type="email" id="epost" placeholder="navn@domene.no" autocomplete="email" required />
+          </div>
+          <button type="button" class="submit-btn" id="nesteKnapp">Neste</button>
         </div>
+
+        <!-- TRINN 2: SKRIV INN PASSORD (GÅR FØRST HIT NÅR MAN TRYKKER NESTE) -->
+        <div id="steg2" style="display: none;">
+          
+          <div class="selected-email-badge">
+            <span id="visEpostTekst"></span>
+            <button type="button" onclick="gaaTilSteg1()">Endre</button>
+          </div>
+
+          <div class="input-group" id="navnGruppe" style="display: none;">
+            <label for="navn">Navn</label>
+            <input type="text" id="navn" placeholder="Ditt fulle navn" autocomplete="name" />
+          </div>
+
+          <div class="input-group">
+            <label for="passord">Passord</label>
+            <input type="password" id="passord" placeholder="••••••••" autocomplete="current-password" />
+            <div class="forgot-text" id="forgotContainer">
+              <a href="Passordfeil.html">Glemt passord?</a>
+            </div>
+          </div>
+
+          <button type="submit" class="submit-btn" id="submitKnapp">Logg inn</button>
+        </div>
+
+        <div class="error" id="feilmelding"></div>
+      </form>
+
+      <div class="toggle-text" id="toggleText">
+        Er du ikke medlem? <a onclick="visRegistrering()">Registrer deg</a>
       </div>
-
-      <div class="input-group">
-        <label for="epost">E-postadresse</label>
-        <div class="input-wrapper">
-          <input type="email" id="epost" placeholder="navn@domene.no" autocomplete="email" required />
-        </div>
-      </div>
-
-      <div class="input-group">
-        <label for="passord">Passord</label>
-        <div class="input-wrapper">
-          <input type="password" id="passord" placeholder="••••••••" autocomplete="current-password" required />
-        </div>
-        <div class="forgot-text" id="forgotContainer">
-          <a href="Passordfeil.html">Glemt passord?</a>
-        </div>
-      </div>
-
-      <button type="submit" class="submit-btn" id="submitKnapp">Fortsett</button>
-      <div class="error" id="feilmelding"></div>
-    </form>
-
-    <div class="toggle-text" id="toggleText">
-      Er du ikke medlem? <a onclick="visRegistrering()">Registrer deg</a>
     </div>
-  </div>
+  </main>
 
   <script type="module">
-    // 1. Hent den ferdig oppsatte databasen og autentiseringen fra fellesfilen din
     import { auth, db } from "./firebase-oppsett.js";
-
-    // 2. Hent funksjonene denne siden trenger fra de offisielle CDN-lenkene (v12.15.0)
     import { signInWithEmailAndPassword, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-auth.js";
     import { doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
 
     let registreringsmodus = false;
+    let naavaarendeSteg = 1;
 
-    // ================= SKJEMABEHANDLING MED FIREBASE =================
+    const epostInput = document.getElementById("epost");
+    const passordInput = document.getElementById("passord");
+    const feilmelding = document.getElementById("feilmelding");
+
+    // TRYKK PÅ NESTE (TRINN 1 -> TRINN 2)
+    document.getElementById("nesteKnapp").addEventListener("click", validerOgGaVidere);
+
+    // Gjør at Enter-knappen i e-postfeltet utløser Steg 2 i stedet for form submission
+    epostInput.addEventListener("keydown", function(e) {
+      if (e.key === "Enter") {
+        e.preventDefault();
+        validerOgGaVidere();
+      }
+    });
+
+    function validerOgGaVidere() {
+      if (!epostInput.checkValidity() || !epostInput.value.trim()) {
+        feilmelding.textContent = "Vennligst oppgi en gyldig e-postadresse.";
+        return;
+      }
+      feilmelding.textContent = "";
+      gaaTilSteg2();
+    }
+
+    function gaaTilSteg2() {
+      naavaarendeSteg = 2;
+      document.getElementById("steg1").style.display = "none";
+      document.getElementById("steg2").style.display = "block";
+      document.getElementById("visEpostTekst").textContent = epostInput.value.trim();
+      passordInput.required = true;
+      passordInput.focus();
+
+      if (registreringsmodus) {
+        document.getElementById("formSubtitle").textContent = "Velg et passord for å opprette kontoen";
+      } else {
+        document.getElementById("formSubtitle").textContent = "Skriv inn passordet ditt";
+      }
+    }
+
+    function gaaTilSteg1() {
+      naavaarendeSteg = 1;
+      document.getElementById("steg1").style.display = "block";
+      document.getElementById("steg2").style.display = "none";
+      passordInput.required = false;
+      feilmelding.textContent = "";
+
+      if (registreringsmodus) {
+        document.getElementById("formSubtitle").textContent = "Skriv inn e-post for å opprette konto";
+      } else {
+        document.getElementById("formSubtitle").textContent = "Skriv inn e-postadressen din for å fortsette";
+      }
+    }
+
+    // FIREBASE INNLOGGING / REGISTRERING
     document.getElementById("authForm").addEventListener("submit", async function(event) {
       event.preventDefault(); 
       
-      const epost = document.getElementById("epost").value.trim().toLowerCase();
-      const passord = document.getElementById("passord").value.trim();
+      // Sikkerhetssjekk dersom man levert skjemaet på steg 1
+      if (naavaarendeSteg === 1) {
+        validerOgGaVidere();
+        return;
+      }
+
+      const epost = epostInput.value.trim().toLowerCase();
+      const passord = passordInput.value.trim();
       const navn = document.getElementById("navn").value.trim() || "Hovedprofil";
-      const feilmelding = document.getElementById("feilmelding");
       
       feilmelding.textContent = "Laster..."; 
 
       try {
         if (registreringsmodus) {
-          // 1. Opprett bruker i Firebase Auth
           const userCredential = await createUserWithEmailAndPassword(auth, epost, passord);
           const user = userCredential.user;
 
@@ -249,24 +339,19 @@
             }
           ];
 
-          // 2. Opprett brukerdokumentet i Firestore med navn med en gang!
           await setDoc(doc(db, "users", user.uid), {
             epost: epost,
             profiler: standardProfil
           });
 
-          // MELLOMLAGRING: Pre-lagre cachen lokalt slik at Hovedside slipper å hente fra Firestore!
           localStorage.setItem("watch_nordic_profiles_cache", JSON.stringify(standardProfil));
           localStorage.setItem("watch_nordic_email_cache", epost);
 
-          // Send videre til Hovedside med profilindeks 0
           window.location.href = "Hovedside.html?index=0";
         } else {
-          // Firebase Innlogging
           const userCredential = await signInWithEmailAndPassword(auth, epost, passord);
           const user = userCredential.user;
 
-          // MELLOMLAGRING: Last ned og cache profilene NÅ, så neste side slipper databasekall
           const docRef = doc(db, "users", user.uid);
           const docSnap = await getDoc(docRef);
 
@@ -282,7 +367,7 @@
         if (error.code === 'auth/email-already-in-use') {
           feilmelding.textContent = "E-posten er allerede registrert.";
         } else if (error.code === 'auth/wrong-password' || error.code === 'auth/user-not-found' || error.code === 'auth/invalid-credential') {
-          feilmelding.textContent = "Feil e-post eller passord.";
+          feilmelding.textContent = "Feil passord.";
         } else if (error.code === 'auth/weak-password') {
           feilmelding.textContent = "Passordet er for svakt (minst 6 tegn).";
         } else {
@@ -292,35 +377,46 @@
       }
     });
 
-    // ================= GRENSESNITTBYTTE =================
+    // VEKSLE MELLOM REGISTRERING OG INNLOGGING
     function visRegistrering() {
       registreringsmodus = true;
       document.getElementById("formTitle").textContent = "Registrer deg";
-      document.getElementById("formSubtitle").textContent = "Opprett en konto for å starte streamingen";
-      document.getElementById("submitKnapp").textContent = "Registrer";
+      document.getElementById("submitKnapp").textContent = "Opprett konto";
       document.getElementById("forgotContainer").style.display = "none";
       document.getElementById("toggleText").innerHTML =
         'Allerede medlem? <a onclick="visInnlogging()">Logg inn</a>';
       document.getElementById("navnGruppe").style.display = "block";
       document.getElementById("feilmelding").textContent = "";
-      document.getElementById("passord").setAttribute("autocomplete", "new-password");
+      passordInput.setAttribute("autocomplete", "new-password");
+
+      if (naavaarendeSteg === 1) {
+        document.getElementById("formSubtitle").textContent = "Skriv inn e-post for å opprette konto";
+      } else {
+        document.getElementById("formSubtitle").textContent = "Velg et passord for å opprette kontoen";
+      }
     }
 
     function visInnlogging() {
       registreringsmodus = false;
       document.getElementById("formTitle").textContent = "Logg inn";
-      document.getElementById("formSubtitle").textContent = "Vennligst oppgi dine detaljer for å fortsette";
-      document.getElementById("submitKnapp").textContent = "Fortsett";
+      document.getElementById("submitKnapp").textContent = "Logg inn";
       document.getElementById("forgotContainer").style.display = "block";
       document.getElementById("toggleText").innerHTML =
         'Er du ikke medlem? <a onclick="visRegistrering()">Registrer deg</a>';
       document.getElementById("navnGruppe").style.display = "none";
       document.getElementById("feilmelding").textContent = "";
-      document.getElementById("passord").setAttribute("autocomplete", "current-password");
+      passordInput.setAttribute("autocomplete", "current-password");
+
+      if (naavaarendeSteg === 1) {
+        document.getElementById("formSubtitle").textContent = "Skriv inn e-postadressen din for å fortsette";
+      } else {
+        document.getElementById("formSubtitle").textContent = "Skriv inn passordet ditt";
+      }
     }
 
     window.visRegistrering = visRegistrering;
     window.visInnlogging = visInnlogging;
+    window.gaaTilSteg1 = gaaTilSteg1;
   </script>
 </body>
 </html>
