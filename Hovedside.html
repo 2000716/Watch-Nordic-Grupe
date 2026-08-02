@@ -792,7 +792,7 @@
     -webkit-overflow-scrolling: touch !important;
   }
 
-  /* Standard størrelse på alle vanlige gallerier (beholdt: 130px bredde / 195px høyde) */
+  /* Standard størrelse på alle vanlige gallerier (130px bredde / 195px høyde) */
   .gallery-section .image-gallery a, 
   .gallery-section .gallery-item {
     width: 130px !important;
@@ -838,23 +838,20 @@
   }
 
   /* --------------------------------------------------------------------------
-     ENDRET 2: KUN FILM-GALLERIET (GJORT MINDRE ENN ALLE ANDRE)
+     ENDRET 2: KUN FILM-GALLERIET ("Filmer" - ID: filmer-galleri / alle-filmer-seksjon)
      -------------------------------------------------------------------------- */
-  .gallery-section.movies-section .gallery-item,
-  .gallery-section.movies-section a,
-  .gallery-section .movies-gallery .gallery-item,
-  .gallery-section .movies-gallery a,
-  .movies-gallery .gallery-item,
-  .movies-gallery a {
-    width: 105px !important;
+  #alle-filmer-seksjon .gallery-item,
+  #alle-filmer-seksjon a,
+  #filmer-galleri .gallery-item,
+  #filmer-galleri a {
+    width: 100px !important; /* Gjort mindre enn standard (130px) */
     flex-shrink: 0 !important;
   }
 
-  .gallery-section.movies-section img,
-  .gallery-section .movies-gallery img,
-  .movies-gallery img {
+  #alle-filmer-seksjon img,
+  #filmer-galleri img {
     width: 100% !important;
-    height: 157.5px !important;
+    height: 150px !important; /* Tilpasset høyde for 2/3-forhold (100px * 1.5) */
     aspect-ratio: 2 / 3 !important;
     object-fit: cover !important;
     border-radius: 6px !important;
