@@ -64,13 +64,13 @@
 
     .container {
       background: transparent;
-      max-width: 440px; /* Gjort bredere for PC */
+      max-width: 440px;
       width: 100%;
       text-align: left;
     }
 
     h2 { 
-      font-size: 36px; /* Større tittel for PC */
+      font-size: 36px;
       font-weight: 800;
       letter-spacing: -0.5px;
       margin-bottom: 10px; 
@@ -78,7 +78,7 @@
     }
     
     p.subtitle {
-      font-size: 16px; /* Større undertittel for PC */
+      font-size: 16px;
       color: #93A6A8;
       margin-bottom: 32px;
       line-height: 1.4;
@@ -101,7 +101,6 @@
       transform: translateY(10px);
     }
 
-    /* Viser valgt e-post i steg 2 */
     .selected-email-badge {
       display: flex;
       align-items: center;
@@ -144,12 +143,12 @@
 
     input { 
       width: 100%; 
-      padding: 18px 20px; /* Større skrivefelt (mer polstret) */
+      padding: 18px 20px;
       border: 1px solid rgba(255, 255, 255, 0.15); 
       border-radius: 8px; 
       background: rgba(6, 18, 20, 0.8);
       color: #FFFFFF;
-      font-size: 17px; /* Større tekst inni feltet for PC */
+      font-size: 17px;
       transition: border-color 0.2s ease;
     }
 
@@ -165,13 +164,13 @@
 
     button.submit-btn {
       width: 100%; 
-      padding: 18px; /* Større knapp */
+      padding: 18px;
       background: #00FFCC;
       color: #041012; 
       border: none; 
       border-radius: 8px;
       cursor: pointer; 
-      font-size: 17px; /* Større tekst på knapp */
+      font-size: 17px;
       font-weight: 800;
       letter-spacing: 0.5px;
       margin-top: 10px;
@@ -192,7 +191,7 @@
 
     .toggle-text, .forgot-text { 
       margin-top: 26px; 
-      font-size: 15px; /* Større buntekst */
+      font-size: 15px;
       color: #93A6A8;
     }
     
@@ -277,7 +276,7 @@
       color: #555;
     }
 
-    /* ================= MOBILANPASSNING (RESPONSIV DESIGN) ================= */
+    /* ================= MOBILTILPASSNING ================= */
     @media (max-width: 600px) {
       .header {
         padding: 24px 20px;
@@ -307,7 +306,7 @@
 
       input {
         padding: 14px 16px;
-        font-size: 16px; /* Holder 16px på mobil for å unngå auto-zoom på iOS */
+        font-size: 16px;
       }
 
       button.submit-btn {
@@ -329,7 +328,7 @@
 </head>
 <body>
 
-  <!-- WATCH LOGO ØVERST TIL VENSTRE (KLIKKBAR TIL INDEX.HTML) -->
+  <!-- WATCH LOGO ØVERST TIL VENSTRE -->
   <header class="header">
     <a href="index.html" class="logo-link">
       <img src="https://static.wixstatic.com/media/d9ace9_081ea242211b45a2801873c3067e1205~mv2.png" alt="WATCH Logo" class="site-logo">
@@ -430,10 +429,13 @@
     const passordInput = document.getElementById("passord");
     const feilmelding = document.getElementById("feilmelding");
 
+    // Tøm feilmelding når brukeren endrer tekst i feltene
+    epostInput.addEventListener("input", () => { feilmelding.textContent = ""; });
+    passordInput.addEventListener("input", () => { feilmelding.textContent = ""; });
+
     // TRYKK PÅ NESTE (TRINN 1 -> TRINN 2)
     document.getElementById("nesteKnapp").addEventListener("click", validerOgGaVidere);
 
-    // Enter-knapp i e-postfeltet utløser Steg 2
     epostInput.addEventListener("keydown", function(e) {
       if (e.key === "Enter") {
         e.preventDefault();
@@ -455,7 +457,6 @@
       skiftStegMedAnimasjon(2, 1);
     }
 
-    // Funksjon som styrer animasjonen mellom stegene
     function skiftStegMedAnimasjon(fraStegNr, tilStegNr) {
       const fraElement = document.getElementById(`steg${fraStegNr}`);
       const tilElement = document.getElementById(`steg${tilStegNr}`);
@@ -505,10 +506,16 @@
       const passord = passordInput.value.trim();
       const navn = document.getElementById("navn").value.trim() || "Hovedprofil";
       
+      if (registreringsmodus && passord.length < 6) {
+        feilmelding.textContent = "Passordet må bestå av minst 6 tegn.";
+        return;
+      }
+
       feilmelding.textContent = "Laster..."; 
 
       try {
         if (registreringsmodus) {
+          // 1. OPPGRETT BRUKER I FIREBASE AUTH
           const userCredential = await createUserWithEmailAndPassword(auth, epost, passord);
           const user = userCredential.user;
 
@@ -521,40 +528,79 @@
             }
           ];
 
-          await setDoc(doc(db, "users", user.uid), {
-            epost: epost,
-            profiler: standardProfil
-          });
+          // 2. LAGRE PROFILER I FIRESTORE
+          try {
+            await setDoc(doc(db, "users", user.uid), {
+              epost: epost,
+              profiler: standardProfil
+            });
+          } catch (fsErr) {
+            console.warn("Klarte ikke lagre til Firestore umiddelbart:", fsErr);
+          }
 
           localStorage.setItem("watch_nordic_profiles_cache", JSON.stringify(standardProfil));
           localStorage.setItem("watch_nordic_email_cache", epost);
 
           window.location.href = "Hovedside.html?index=0";
+
         } else {
+          // 1. LOGG INN BRUKER
           const userCredential = await signInWithEmailAndPassword(auth, epost, passord);
           const user = userCredential.user;
 
-          const docRef = doc(db, "users", user.uid);
-          const docSnap = await getDoc(docRef);
+          const standardProfil = [
+            {
+              navn: "Hovedprofil",
+              bilde: "https://static.wixstatic.com/media/fd2fb2_39376e4ee55b460ab7a3ebbfcf35fef7~mv2.png",
+              isKids: false,
+              maksAldersgrense: "12"
+            }
+          ];
 
-          if (docSnap.exists()) {
-            const data = docSnap.data();
-            if (data.profiler) localStorage.setItem("watch_nordic_profiles_cache", JSON.stringify(data.profiler));
-            localStorage.setItem("watch_nordic_email_cache", epost);
+          // 2. HENT FIRESTORE-DATA (TRYGT)
+          try {
+            const docRef = doc(db, "users", user.uid);
+            const docSnap = await getDoc(docRef);
+
+            if (docSnap.exists() && docSnap.data().profiler) {
+              localStorage.setItem("watch_nordic_profiles_cache", JSON.stringify(docSnap.data().profiler));
+            } else {
+              // Hvis brukerdokumentet mangler, opprett det nå
+              await setDoc(docRef, { epost: epost, profiler: standardProfil });
+              localStorage.setItem("watch_nordic_profiles_cache", JSON.stringify(standardProfil));
+            }
+          } catch (fsErr) {
+            console.warn("Kunne ikke lese Firestore-data ved innlogging, bruker fallback:", fsErr);
+            localStorage.setItem("watch_nordic_profiles_cache", JSON.stringify(standardProfil));
           }
 
+          localStorage.setItem("watch_nordic_email_cache", epost);
           window.location.href = "Hovedside.html?index=0";
         }
       } catch (error) {
-        if (error.code === 'auth/email-already-in-use') {
-          feilmelding.textContent = "E-posten er allerede registrert.";
-        } else if (error.code === 'auth/wrong-password' || error.code === 'auth/user-not-found' || error.code === 'auth/invalid-credential') {
-          feilmelding.textContent = "Feil passord.";
-        } else if (error.code === 'auth/weak-password') {
-          feilmelding.textContent = "Passordet er for svakt (minst 6 tegn).";
-        } else {
-          feilmelding.textContent = "En feil oppstod. Prøv igjen.";
-          console.error(error); 
+        console.error("Auth-feil:", error.code, error.message);
+
+        switch (error.code) {
+          case 'auth/email-already-in-use':
+            feilmelding.textContent = "Denne e-postadressen er allerede i bruk.";
+            break;
+          case 'auth/invalid-credential':
+          case 'auth/wrong-password':
+          case 'auth/user-not-found':
+            feilmelding.textContent = "Feil e-post eller passord.";
+            break;
+          case 'auth/invalid-email':
+            feilmelding.textContent = "Ugyldig format på e-postadressen.";
+            break;
+          case 'auth/weak-password':
+            feilmelding.textContent = "Passordet må ha minst 6 tegn.";
+            break;
+          case 'auth/too-many-requests':
+            feilmelding.textContent = "For mange forsøk. Prøv igjen om et øyeblikk.";
+            break;
+          default:
+            feilmelding.textContent = "Kunne ikke logge inn. Sjekk internettforbindelsen og prøv igjen.";
+            break;
         }
       }
     });
