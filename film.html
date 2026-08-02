@@ -242,11 +242,12 @@ img, video {
 .content-wrapper {
   position: absolute;
   bottom: 5%;
-  left: 5%;
-  right: 5%;
+  left: 0;
+  right: 0;
   z-index: 2;
+  width: 90%;
   max-width: 1400px;
-  margin: auto;
+  margin: 0 auto;
 }
 
 .logo-container {
@@ -425,15 +426,16 @@ img, video {
 }
 
 /* ==========================================================================
-   6. ANBEFALINGER & PRO STRØMME-EPISODER
+   6. ANBEFALINGER & PRO STRØMME-EPISODER (SYMMETRISK BREDDE MED CONTENT-WRAPPER)
    ========================================================================== */
 .recommendations {
   margin: 40px auto 0;
-  padding: 0 50px 50px;
+  padding: 0 0 50px 0; /* Fjernet side-padding slik at innholdet fyller nøyaktig samme bredde */
+  width: 90%;          /* Matcher .content-wrapper */
+  max-width: 1400px;   /* Matcher .content-wrapper */
   background: #050F11;
   position: relative;
   z-index: 5;
-  max-width: 1400px;
 }
 
 .recommendations h2 {
@@ -493,7 +495,7 @@ img, video {
 }
 
 /* --------------------------------------------------------------------------
-   EPISODES - NYTT PRO STRØMMEDESIGN (Horizontal Card Layout)
+   EPISODES - STRØMMEDESIGN
    -------------------------------------------------------------------------- */
 .season-buttons {
   display: flex;
@@ -531,7 +533,7 @@ img, video {
   font-weight: 700;
 }
 
-/* EPISODEGALLERI: 1 eller 2 per rad med bred, profesjonell strømme-layout */
+/* EPISODEGALLERI: Fyller bredden perfekt */
 .episode-gallery {
   display: flex;
   flex-direction: column;
@@ -555,6 +557,7 @@ img, video {
   position: relative;
   padding: 12px;
   gap: 20px;
+  width: 100%;
 }
 
 .episode-card:hover {
@@ -564,7 +567,6 @@ img, video {
   box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5);
 }
 
-/* Episodenummer til venstre */
 .episode-number {
   font-size: 20px;
   font-weight: 800;
@@ -574,11 +576,10 @@ img, video {
   opacity: 0.8;
 }
 
-/* Thumbnail med Play-knapp og Progress-bar */
 .episode-thumb {
   position: relative;
   width: 240px;
-  height: 135px; /* Perfekt 16:9 format */
+  height: 135px;
   flex-shrink: 0;
   border-radius: 8px;
   overflow: hidden;
@@ -631,7 +632,6 @@ img, video {
   background: #00FFCC;
 }
 
-/* Valgfri Progress Bar nederst på thumbnail */
 .episode-progress {
   position: absolute;
   bottom: 0;
@@ -642,7 +642,6 @@ img, video {
   box-shadow: 0 0 8px #00FFCC;
 }
 
-/* Informasjonstekst til høyre */
 .episode-info {
   flex: 1;
   display: flex;
@@ -681,7 +680,6 @@ img, video {
   overflow: hidden;
 }
 
-/* Låst episode style */
 .episode-card.locked {
   opacity: 0.4;
   cursor: not-allowed;
@@ -984,8 +982,9 @@ img, video {
     align-self: flex-start !important;
   }
 
-  /* MOBIL: Episoder stabling */
+  /* MOBIL: Tilpasninger */
   .recommendations {
+    width: 100% !important;
     margin: 30px 0 0 !important;
     padding: 0 20px 40px !important;
     background: rgb(9, 27, 30) !important;
@@ -1016,7 +1015,7 @@ img, video {
   }
 
   .episode-number {
-    display: none; /* Skjul tall på venstre side på mobil for mer plass */
+    display: none;
   }
 
   .episode-thumb {
