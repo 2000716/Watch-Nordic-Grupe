@@ -1093,46 +1093,56 @@
 </footer>
 
 <script type="module">
-  // ==================== CSS INJEKSJON FOR HORISONTALT OG VERTIKALE GALLERIER ==================== //
+  // ==================== CSS INJEKSJON FOR KUN MOBIL (HORISONTALE GALLERIER) ==================== //
   const style = document.createElement('style');
-  style.textContent = `
-    .image-gallery, .coming-movies-gallery, .top10-gallery, .continue-image-gallery {
-      overflow-x: auto !important; 
-      scroll-behavior: smooth !important;
-      display: flex !important;
-      -webkit-overflow-scrolling: touch !important;
-      gap: 12px !important;
-    }
-    
-    .image-gallery .gallery-item img, 
-    .coming-movies-gallery .gallery-item img {
-      width: 115px !important;
-      height: 172px !important;
-      aspect-ratio: 2 / 3 !important;
-      object-fit: cover !important;
-      border-radius: 4px !important;
-    }
-    .gallery-item {
-      width: 115px !important;
-      flex-shrink: 0 !important;
-    }
+  if (window.matchMedia("(max-width: 768px) or (pointer: coarse)").matches) {
+    style.textContent = `
+      .image-gallery, .coming-movies-gallery, .top10-gallery, .continue-image-gallery {
+        overflow-x: auto !important; 
+        scroll-behavior: smooth !important;
+        display: flex !important;
+        -webkit-overflow-scrolling: touch !important;
+        gap: 12px !important;
+      }
+      
+      .image-gallery .gallery-item img, 
+      .coming-movies-gallery .gallery-item img {
+        width: 115px !important;
+        height: 172px !important;
+        aspect-ratio: 2 / 3 !important;
+        object-fit: cover !important;
+        border-radius: 4px !important;
+      }
+      .gallery-item {
+        width: 115px !important;
+        flex-shrink: 0 !important;
+      }
 
-    .continue-image-gallery .continue-item {
-      width: 200px !important;
-      flex-shrink: 0 !important;
-    }
-    .continue-media-wrap {
-      width: 200px !important;
-      height: 112px !important;
-      border-radius: 4px !important;
-      position: relative !important;
-    }
-    .continue-media-wrap img {
-      width: 100% !important;
-      height: 100% !important;
-      object-fit: cover !important;
-    }
-  `;
+      .continue-image-gallery .continue-item {
+        width: 200px !important;
+        flex-shrink: 0 !important;
+      }
+      .continue-media-wrap {
+        width: 200px !important;
+        height: 112px !important;
+        border-radius: 4px !important;
+        position: relative !important;
+      }
+      .continue-media-wrap img {
+        width: 100% !important;
+        height: 100% !important;
+        object-fit: cover !important;
+      }
+    `;
+  } else {
+    style.textContent = `
+      .image-gallery, .coming-movies-gallery, .top10-gallery, .continue-image-gallery {
+        overflow-x: hidden !important; 
+        scroll-behavior: smooth !important;
+        display: flex !important;
+      }
+    `;
+  }
   document.head.appendChild(style);
 
   // ==================== FIREBASE IMPORT & INITIALISERING ==================== //
@@ -1407,35 +1417,13 @@
     });
   }
 
-  document.querySelectorAll(".gallery-wrapper, .continue-gallery-wrapper").forEach(wrapper => {
-    const gallery = wrapper.querySelector(".image-gallery, .coming-movies-gallery, .top10-gallery, .continue-image-gallery");
-    const left = wrapper.querySelector(".scroll-button.left");
-    const right = wrapper.querySelector(".scroll-button.right");
-    if (!gallery) return;
-
-    left?.addEventListener("click", () => {
-      const steg = gallery.clientWidth > 0 ? gallery.clientWidth * 0.90 : 400;
-      gallery.scrollBy({ left: -steg, behavior: "smooth" });
-      setTimeout(oppdaterAlleGalleripiler, 400);
-    });
-
-    right?.addEventListener("click", () => {
-      const steg = gallery.clientWidth > 0 ? gallery.clientWidth * 0.90 : 400;
-      gallery.scrollBy({ left: steg, behavior: "smooth" });
-      setTimeout(oppdaterAlleGalleripiler, 400);
-    });
-
-    gallery.addEventListener("scroll", oppdaterAlleGalleripiler, { passive: true });
-  });
-
-  window.addEventListener("resize", oppdaterAlleGalleripiler);
-
+  // ==================== DYNAMISK GALLERI GENERATOR ==================== //
   function createGalleryItem(itemKey, item) {
     const link = document.createElement("a");
     link.href = `film.html?navn=${itemKey}`;
     link.classList.add("gallery-item");
     
-    const erMobil = window.matchMedia("(pointer: coarse)").matches;
+    const erMobil = window.matchMedia("(max-width: 768px) or (pointer: coarse)").matches;
     const bildeKilde = erMobil ? (item.posterVertikal || item.poster || item.bilde || "") : (item.poster || item.bilde || "");
 
     link.innerHTML = `
@@ -1666,6 +1654,37 @@
         <span class="continue-title">${metadataMatch.tittel}${episodeTekst}</span>
       `;
 
+      const deleteBtn = link.querySelector(".delete-progress-btn");
+      deleteBtn.addEventListener("click", async (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+
+        if (!profil.skjultFortsett) profil.skjultFortsett = [];
+        if (!profil.skjultFortsett.includes(filmId)) profil.skjultFortsett.push(filmId);
+
+        localStorage.setItem("watch_nordic_profiles_cache", JSON.stringify(heleProfilArrayet));
+
+        if (registrertBruker) {
+          clearTimeout(updateFirebaseTimeout);
+          updateFirebaseTimeout = setTimeout(async () => {
+            try {
+              const userDocRef = doc(db, "users", registrertBruker.uid);
+              await updateDoc(userDocRef, { profiler: heleProfilArrayet });
+            } catch (err) {
+              console.error("Feil ved skjuling:", err);
+            }
+          }, 1500);
+        }
+
+        link.style.transition = "all 0.3s ease";
+        link.style.transform = "scale(0.8)";
+        link.style.opacity = "0";
+        setTimeout(() => {
+          link.remove();
+          if (gallery.children.length === 0) section.style.display = "none";
+        }, 300);
+      });
+
       gallery.appendChild(link);
     });
 
@@ -1677,6 +1696,10 @@
   }
 
   async function hentDataFraFirestore() {
+    const cacheKeyFilmer = "watch_nordic_filmer_cache";
+    const cacheKeySerier = "watch_nordic_serier_cache";
+    
+    // Henter alltid fyk fra Firestore med en gang hvis admin har oppdatert (sletter tids-sjekk som krevde 1 time ventetid)
     try {
       const nyeFilmer = {};
       const filmerSnap = await getDocs(collection(db, "filmer"));
@@ -1690,12 +1713,23 @@
         nyeSerier[docSnap.id] = docSnap.data();
       });
 
+      localStorage.setItem(cacheKeyFilmer, JSON.stringify(nyeFilmer));
+      localStorage.setItem(cacheKeySerier, JSON.stringify(nyeSerier));
+
       filmer = nyeFilmer;
       serier = nyeSerier;
       
       byggSiden();
+
     } catch (feil) {
-      console.error("Feil ved henting av data fra Firestore:", feil);
+      console.error("Feil ved henting av data fra Firestore, bruker lokal cache:", feil);
+      const lagredeFilmer = localStorage.getItem(cacheKeyFilmer);
+      const lagredeSerier = localStorage.getItem(cacheKeySerier);
+      if (lagredeFilmer && lagredeSerier) {
+        filmer = JSON.parse(lagredeFilmer);
+        serier = JSON.parse(lagredeSerier);
+        byggSiden();
+      }
     }
   }
 
@@ -1733,5 +1767,15 @@
 
   document.addEventListener("DOMContentLoaded", () => {
     hentDataFraFirestore();
+  });
+
+  window.addEventListener("scroll", () => {
+    const nav = document.querySelector(".top-nav");
+    if (!nav) return;
+    if (window.scrollY > 50) {
+      nav.classList.add("scrolled");
+    } else {
+      nav.classList.remove("scrolled");
+    }
   });
 </script>
