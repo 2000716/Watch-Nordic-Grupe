@@ -10,8 +10,13 @@
 
   <link rel="icon" type="image/png" href="https://static.wixstatic.com/media/d9ace9_95bbe3f5ff4b4aab9314a8d08804344e~mv2.png" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
-<style>
-/* ==========================================================================
+  
+  <!-- 🛑 HENTER INN TOPPMENYEN FRA DEN EGNE FILEN: -->
+  <link rel="stylesheet" href="meny.css">
+
+  <!-- 🛑 RESTEN AV STILENE FOR DENNE SIDEN: -->
+  <style>
+    /* ==========================================================================
        1. GLOBALE STILER & RESETS
        ========================================================================== */
     * {
@@ -41,157 +46,6 @@
       padding: 0 20px;
     }
 
-/* ==========================================================================
-       2. TOPPMENY (PC)
-       ========================================================================== */
-    .top-nav {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 85px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 40px;
-      z-index: 9999;
-      background: linear-gradient(to bottom, 
-        rgba(5, 15, 17, 0.95) 0%, 
-        rgba(5, 15, 17, 0.75) 40%, 
-        rgba(5, 15, 17, 0.3) 75%, 
-        rgba(5, 15, 17, 0) 100%
-      );
-      transition: background 0.4s ease, box-shadow 0.4s ease, height 0.4s ease;
-    }
-
-    .top-nav.scrolled {
-      height: 70px;
-      background: rgba(5, 15, 17, 0.98);
-      backdrop-filter: blur(10px);
-      box-shadow: 0 2px 15px rgba(0, 0, 0, 0.6);
-    }
-
-    .nav-left {
-      display: flex;
-      align-items: center;
-      gap: 40px;
-      flex-shrink: 0;
-    }
-
-    .watch-logo-svg {
-      height: 40px;
-      width: auto;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-    }
-
-    .watch-logo-svg img {
-      height: 100%;
-      width: auto;
-    }
-
-    .nav-links {
-      position: absolute;
-      left: 50%;
-      transform: translateX(-50%);
-      display: flex;
-      gap: 30px;
-      white-space: nowrap;
-      transition: gap 0.3s ease;
-    }
-
-    .nav-links a {
-      color: #e0e0e0;
-      text-decoration: none;
-      font-size: 15px;
-      font-weight: 500;
-      text-shadow: 0 1px 4px rgba(0, 0, 0, 0.8), 0 2px 8px rgba(0, 0, 0, 0.8);
-      transition: color 0.3s ease, font-size 0.3s ease;
-    }
-
-    .nav-links a i {
-      margin-right: 6px;
-      font-size: 16px;
-    }
-
-    .nav-links a:hover {
-      color: #ffffff;
-    }
-
-    .nav-links a.active {
-      color: #00FFCC;
-      font-weight: 700;
-    }
-
-    .nav-right {
-      display: flex;
-      align-items: center;
-      gap: 15px;
-      flex-shrink: 0;
-    }
-
-    .nav-search {
-      color: #e0e0e0;
-      font-size: 18px;
-      text-decoration: none;
-      text-shadow: 0 1px 4px rgba(0, 0, 0, 0.8);
-      transition: color 0.3s ease;
-    }
-
-    .nav-search:hover {
-      color: #00FFCC;
-    }
-
-    /* PROFILMENY (MED BILDET SIKRET INNE I SIRKELEN) */
-    .profilmeny {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      text-decoration: none;
-      cursor: pointer;
-    }
-
-    .profil-avatar-wrap {
-      width: 44px;
-      height: 44px;
-      position: relative;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border-radius: 50%; /* Lager sirkelformen */
-      overflow: hidden;   /* KUTTER ALT som stikker ut på sidene/toppen */
-      border: 2px solid rgba(255, 255, 255, 0.2);
-      background-color: #1e2a2e;
-      transition: border-color 0.35s ease, background-color 0.35s ease;
-    }
-
-    .profil-avatar-img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;  /* Bevarer bildets proporsjoner uten at det blir skjevt */
-      border-radius: 50%;
-      display: block;
-      transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
-    }
-
-    /* Sikrer at også PNG-karakterer holdes stramt inne i sirkelen */
-    .profil-avatar-img.png-karakter {
-      object-fit: cover;
-      height: 100%;
-      position: static;
-      transform: none;
-    }
-
-    /* HOVER EFFEKT (Gjør bakgrunnen grønn og gir en fin zoom INNE i sirkelen) */
-    .profilmeny:hover .profil-avatar-wrap {
-      background-color: var(--active-color, #00FFCC);
-      border-color: #ffffff;
-    }
-
-    .profilmeny:hover .profil-avatar-img {
-      transform: scale(1.15); /* Bildet zoomer litt inn på hover, men kappingen holder det i sirkelen */
-    }
     /* ==========================================================================
        3. HERO BANNER (PC)
        ========================================================================== */
@@ -299,7 +153,7 @@
 
     .banner-meta {
       font-size: 16px;        
-      color: #ffffff;         
+      color: #ffffff;          
       font-weight: 600;        
       letter-spacing: 0.5px;
       text-shadow: 0 1px 4px rgba(0,0,0,0.6); 
@@ -367,180 +221,168 @@
       transform: scale(1.05);
     }
 
-/* ==========================================================================
-   4. FORTSETT Å SE & GALLERIER (PC)
-   ========================================================================== */
-.gallery-section, .continue-watching-section {
-  margin: 0 auto 30px;
-  position: relative;
-  z-index: 2;
-  width: 100%;
-  max-width: 1400px; 
-  overflow: visible;
-}
+    /* ==========================================================================
+       4. FORTSETT Å SE & GALLERIER (PC)
+       ========================================================================== */
+    .gallery-section, .continue-watching-section {
+      margin: 0 auto 30px;
+      position: relative;
+      z-index: 2;
+      width: 100%;
+      max-width: 1400px; 
+      overflow: visible;
+    }
 
-.gallery-section h2, .continue-watching-section h2 {
-  font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
-  font-size: 18px;
-  font-weight: 600;
-  letter-spacing: 0.3px;
-  color: #00FFCC;
-  margin-bottom: 10px;
-  margin-left: 10px; 
-}
+    .gallery-section h2, .continue-watching-section h2 {
+      font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+      font-size: 18px;
+      font-weight: 600;
+      letter-spacing: 0.3px;
+      color: #00FFCC;
+      margin-bottom: 10px;
+      margin-left: 10px; 
+    }
 
-.gallery-wrapper, .continue-gallery-wrapper {
-  position: relative;
-  display: flex;
-  align-items: center;
-  overflow: visible;
-}
+    .gallery-wrapper, .continue-gallery-wrapper {
+      position: relative;
+      display: flex;
+      align-items: center;
+      overflow: visible;
+    }
 
-.image-gallery, .continue-image-gallery {
-  flex: 1;
-  display: flex;
-  overflow-x: auto;
-  overflow-y: visible;
-  gap: 16px;
-  padding: 15px 10px; 
-  scroll-behavior: smooth;
-  -ms-overflow-style: none;
-  scrollbar-width: none;
-}
+    .image-gallery, .continue-image-gallery {
+      flex: 1;
+      display: flex;
+      overflow-x: auto;
+      overflow-y: visible;
+      gap: 16px;
+      padding: 15px 10px; 
+      scroll-behavior: smooth;
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
 
-.image-gallery::-webkit-scrollbar, .continue-image-gallery::-webkit-scrollbar {
-  display: none;
-}
+    .image-gallery::-webkit-scrollbar, .continue-image-gallery::-webkit-scrollbar {
+      display: none;
+    }
 
-.image-gallery a, .gallery-item {
-  display: inline-block;
-  position: relative;
-  border-radius: 5px;
-  background: transparent;
-  border: 2px solid transparent;
-  transition: border 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
-  overflow: hidden !important;
-  flex-shrink: 0 !important;    
-}
+    .image-gallery a, .gallery-item {
+      display: inline-block;
+      position: relative;
+      border-radius: 5px;
+      background: transparent;
+      border: 2px solid transparent;
+      transition: border 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
+      overflow: hidden !important;
+      flex-shrink: 0 !important;    
+    }
 
-.image-gallery a img, .gallery-item img {
-  width: 330px !important;
-  height: 175px !important;
-  aspect-ratio: 2.2 / 1;
-  object-fit: cover;
-  border-radius: 5px;
-  display: block;
-  transition: transform 0.3s ease;
-}
+    .image-gallery a img, .gallery-item img {
+      width: 330px !important;
+      height: 175px !important;
+      aspect-ratio: 2.2 / 1;
+      object-fit: cover;
+      border-radius: 5px;
+      display: block;
+      transition: transform 0.3s ease;
+    }
 
-/* ==================== FORTSETT Å SE OPPSETT ==================== */
+    /* ==================== FORTSETT Å SE OPPSETT ==================== */
+    .continue-image-gallery .continue-item {
+      display: flex;
+      flex-direction: column;
+      width: 330px;
+      flex-shrink: 0 !important;
+      text-decoration: none;
+      position: relative;
+    }
 
-/* Kortet for Fortsett å se (Bilde øverst, strek og tekst under) */
-.continue-image-gallery .continue-item {
-  display: flex;
-  flex-direction: column;
-  width: 330px;
-  flex-shrink: 0 !important;
-  text-decoration: none;
-  position: relative;
-}
+    .continue-media-wrap {
+      position: relative;
+      width: 100%;
+      height: 175px;
+      border-radius: 5px;
+      overflow: hidden;
+    }
 
-/* Beholder for selve bildet */
-.continue-media-wrap {
-  position: relative;
-  width: 100%;
-  height: 175px;
-  border-radius: 5px;
-  overflow: hidden;
-}
+    .continue-media-wrap img {
+      width: 100% !important;
+      height: 100% !important;
+      object-fit: cover;
+      display: block;
+    }
 
-.continue-media-wrap img {
-  width: 100% !important;
-  height: 100% !important;
-  object-fit: cover;
-  display: block;
-}
+    .continue-media-wrap .progress-bar {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      height: 4px;
+      width: 100%;
+      background-color: rgba(255, 255, 255, 0.3);
+      z-index: 4;
+    }
 
-/* Grønn framdriftslinje helt nederst på bildet */
-.continue-media-wrap .progress-bar {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  height: 4px;
-  width: 100%;
-  background-color: rgba(255, 255, 255, 0.3);
-  z-index: 4;
-}
+    .continue-media-wrap .progress-bar::after {
+      content: '';
+      position: absolute;
+      height: 100%;
+      left: 0;
+      top: 0;
+      background-color: #00FFCC;
+      width: var(--progress, 0%);
+      transition: width 0.3s ease;
+    }
 
-.continue-media-wrap .progress-bar::after {
-  content: '';
-  position: absolute;
-  height: 100%;
-  left: 0;
-  top: 0;
-  background-color: #00FFCC;
-  width: var(--progress, 0%);
-  transition: width 0.3s ease;
-}
+    .continue-title {
+      margin-top: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      color: #ffffff;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      padding-left: 2px;
+    }
 
-/* Filmnavn under framdriftslinjen */
-.continue-title {
-  margin-top: 8px;
-  font-size: 14px;
-  font-weight: 600;
-  color: #ffffff;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  padding-left: 2px;
-}
+    .delete-progress-btn {
+      position: absolute;
+      bottom: 12px;
+      left: 12px;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background-color: rgba(5, 15, 17, 0.7); 
+      border: none;
+      outline: none;
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      z-index: 10;
+      opacity: 0;
+      transition: opacity 0.25s ease, transform 0.2s ease, background-color 0.25s ease, color 0.25s ease;
+      backdrop-filter: blur(4px);
+    }
 
-/* ==================== STYLET SLETTEKNAPP (UTEN RAMME) ==================== */
+    .delete-progress-btn:hover {
+      background-color: #00FFCC;
+      border: none;
+      color: #050F11;
+      transform: scale(1.1);
+    }
 
-.delete-progress-btn {
-  position: absolute;
-  bottom: 12px;
-  left: 12px;
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  
-  /* Semi-transparent mørk bakgrunn (synlig, men dempet) */
-  background-color: rgba(5, 15, 17, 0.7); 
-  border: none; /* Ingen ramme */
-  outline: none;
-  
-  color: #ffffff;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  z-index: 10;
-  opacity: 0; /* Skjult til kortet hovres */
-  transition: opacity 0.25s ease, transform 0.2s ease, background-color 0.25s ease, color 0.25s ease;
-  backdrop-filter: blur(4px);
-}
+    .continue-item:hover .delete-progress-btn {
+      opacity: 1;
+    }
 
-/* Hover-effekt på sletteknappen (Klassisk Watch-grønn uten ramme) */
-.delete-progress-btn:hover {
-  background-color: #00FFCC; /* Grønn bakgrunn ved hover */
-  border: none;
-  color: #050F11; /* Mørkt ikon for god kontrast */
-  transform: scale(1.1);
-}
+    @media (pointer: coarse) {
+      .delete-progress-btn {
+        opacity: 1 !important;
+        background-color: rgba(5, 15, 17, 0.85);
+      }
+    }
 
-/* Synlig når musepekeren hovrer over elementet */
-.continue-item:hover .delete-progress-btn {
-  opacity: 1;
-}
-
-/* På mobil/touch er knappen alltid synlig */
-@media (pointer: coarse) {
-  .delete-progress-btn {
-    opacity: 1 !important;
-    background-color: rgba(5, 15, 17, 0.85);
-  }
-}
     /* ==========================================================================
        5. TOP 10 GALLERI
        ========================================================================== */
@@ -750,7 +592,7 @@
       color: #555;
     }
 
-/* ==========================================================================
+    /* ==========================================================================
        9. HOVER EFFEKTER KUN FOR ENHETER MED MUS (PC / LAPTOP)
        ========================================================================== */
     @media (hover: hover) {
@@ -777,7 +619,6 @@
         opacity: 1;
       }
 
-      /* MEGET SYNLIG OG STERK FADE MED HOVEDFARGEN (#050F11) */
       .scroll-button {
         display: flex;
         position: absolute;
@@ -822,17 +663,9 @@
         );
       }
 
-      /* Flytter venstre pil lenger ut mot ytterkanten */
-      .scroll-button.left i {
-        margin-right: 25px;
-      }
+      .scroll-button.left i { margin-right: 25px; }
+      .scroll-button.right i { margin-left: 25px; }
 
-      /* Flytter høyre pil lenger ut mot ytterkanten */
-      .scroll-button.right i {
-        margin-left: 25px;
-      }
-
-      /* Selve pil-ikonet med kontrastfarge og skygge */
       .scroll-button i {
         position: relative;
         z-index: 2;
@@ -845,235 +678,203 @@
         transform: scale(1.25);
       }
 
-      /* Viser faden og pilen kun når du hovrer over galleriet */
       .gallery-wrapper:hover .scroll-button:not(.hidden),
       .continue-gallery-wrapper:hover .scroll-button:not(.hidden) {
         opacity: 1;
         pointer-events: auto;
       }
     }
+
     /* ==========================================================================
-       10. OPTIMALISERING FOR SKJERMER MELLOM 769px og 1200px (LAPTOPS)
+       10. MOBIL-OPTIMALISERING (768px og nedover)
        ========================================================================== */
-    @media (max-width: 1200px) and (min-width: 769px) {
-      .top-nav { padding: 0 20px; }
-      .nav-left { gap: 20px; }
-      .nav-links { gap: 15px; }
-      .nav-links a { font-size: 14px; }
-      .watch-logo-svg { height: 30px; }
+    @media (max-width: 768px) {
+      html, body {
+        background: #091B1E !important;
+        padding-bottom: 0 !important; 
+      }
+
+      main {
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+      }
+
+      /* HERO BANNER MOBIL */
+      .hero-banner {
+        height: 55vh !important; 
+        min-height: 360px !important;
+        max-height: 500px !important;
+        margin-bottom: 20px !important;
+        background-color: #091B1E !important;
+      }
+
+      .hero-banner::after {
+        background: linear-gradient(to bottom, rgba(9, 27, 30, 0) 40%, rgba(9, 27, 30, 0.4) 60%, rgba(9, 27, 30, 0.8) 80%, #091B1E 100%) !important;
+      }
+
+      .banner-content {
+        bottom: 20px !important;
+        left: 20px !important;
+        max-width: calc(100% - 40px);
+        gap: 8px !important;
+      }
+
+      .film-logo {
+        width: 180px !important;
+        max-height: 75px !important;
+        object-fit: contain !important;
+        filter: drop-shadow(0px 2px 8px rgba(0,0,0,0.5));
+      }
+
+      .banner-title { font-size: 28px !important; }
+
+      .banner-content p {
+        font-size: 12px !important;
+        line-height: 1.4;
+        color: #cccccc;
+        -webkit-line-clamp: 2;
+      }
+
+      .banner-meta { font-size: 11px !important; }
+      .banner-buttons { gap: 10px !important; margin-top: 4px; }
+
+      .watch-button {
+        font-size: 13px !important;
+        padding: 8px 22px !important;
+        font-weight: 700;
+        border-radius: 4px; 
+      }
+
+      .add-button {
+        width: 36px !important;
+        height: 36px !important;
+        font-size: 14px !important;
+        border-radius: 4px;
+        background: rgba(255, 255, 255, 0.2);
+      }
+
+      /* GALLERIER OG SEKSJONER PÅ MOBIL */
+      .gallery-section, .continue-watching-section {
+        margin-left: 0 !important; 
+        margin-right: 0 !important;
+        margin-bottom: 22px;
+        padding: 0 16px;
+      }
+
+      .gallery-section h2, .continue-watching-section h2 {
+        padding-left: 0 !important; 
+        margin-left: 0 !important;
+        font-size: 16px;
+        font-weight: 700;
+        letter-spacing: 0.5px;
+        color: #ffffff; 
+        margin-bottom: 8px;
+      }
+
+      .scroll-button { display: none !important; }
+
+      .image-gallery, .continue-image-gallery {
+        margin-left: -16px !important;
+        margin-right: -16px !important;
+        padding: 4px 16px 12px 16px !important;
+        gap: 12px !important;
+        scroll-snap-type: x mandatory !important;
+        -webkit-overflow-scrolling: touch !important;
+        overflow-x: auto !important;
+        overflow-y: visible !important;
+      }
+
+      .image-gallery a, .continue-image-gallery a, .top10-item {
+        scroll-snap-align: start !important;
+        transform: none !important;
+        transition: none !important;
+        flex-shrink: 0 !important;
+      }
+
+      .image-gallery a img, .gallery-item img {
+        width: 260px !important;  
+        height: 146px !important; 
+        aspect-ratio: 16 / 9 !important; 
+        object-fit: cover !important; 
+        border-radius: 4px !important;
+      }
+
+      .continue-image-gallery .continue-item {
+        width: 260px !important;
+        flex-shrink: 0 !important;
+      }
+
+      .continue-media-wrap {
+        width: 100% !important;
+        height: 146px !important;
+        border-radius: 4px !important;
+      }
+
+      .continue-media-wrap img {
+        width: 100% !important;
+        height: 100% !important;
+        object-fit: cover !important;
+      }
+
+      .continue-title {
+        font-size: 13px !important;
+        margin-top: 6px !important;
+      }
+
+      .image-overlay { display: none !important; }
+
+      .top10-gallery {
+        margin-left: -16px !important;
+        margin-right: -16px !important;
+        gap: 16px !important;
+        padding: 4px 16px 12px 16px !important;
+      }
+      
+      .top10-item img {
+        width: 110px !important; 
+        height: 165px !important;
+        aspect-ratio: 2 / 3 !important; 
+        object-fit: cover !important;
+        border-radius: 4px !important;
+      }
+
+      .top10-number {
+        font-size: 48px !important;
+        left: -8px !important;
+        bottom: -6px !important;
+        -webkit-text-stroke: 2px rgba(0, 255, 204, 0.8) !important;
+      }
+
+      .kids-banner {
+        height: 120px !important;
+        margin: 20px 16px !important; 
+        width: calc(100% - 32px) !important;
+        border-radius: 6px;
+      }
+      
+      .kids-overlay { 
+        padding-left: 20px !important; 
+        background: linear-gradient(to right, rgba(9,27,30,0.9), rgba(9,27,30,0.2)) !important;
+      }
+      .kids-overlay h2 { font-size: 18px !important; margin-bottom: 2px; }
+      .kids-overlay p { font-size: 12px !important; }
+
+      .footer {
+        display: flex !important;
+        padding: 40px 20px 35px !important; 
+        margin-top: 50px !important;
+        background: #091B1E !important;
+      }
+      .footer-links {
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 15px 20px !important;
+      }
     }
 
-/* ==========================================================================
-   11. MOBIL-OPTIMALISERING (768px og nedover)
-   ========================================================================== */
-@media (max-width: 768px) {
-  html, body {
-    background: #091B1E !important;
-    padding-bottom: 0 !important; 
-  }
-
-  .top-nav {
-    padding: 0 20px;
-    height: 70px;
-    background: linear-gradient(to bottom, 
-      rgba(9, 27, 30, 0.95) 0%, 
-      rgba(9, 27, 30, 0.75) 40%, 
-      rgba(9, 27, 30, 0.3) 75%, 
-      rgba(9, 27, 30, 0) 100%
-    ) !important;
-  }
-  
-  .nav-links {
-    display: none;
-  }
-
-  main {
-    padding-left: 0 !important;
-    padding-right: 0 !important;
-    margin-left: 0 !important;
-    margin-right: 0 !important;
-  }
-
-  /* HERO BANNER MOBIL */
-  .hero-banner {
-    height: 55vh !important; 
-    min-height: 360px !important;
-    max-height: 500px !important;
-    margin-bottom: 20px !important;
-    background-color: #091B1E !important;
-  }
-
-  .hero-banner::after {
-    background: linear-gradient(to bottom, rgba(9, 27, 30, 0) 40%, rgba(9, 27, 30, 0.4) 60%, rgba(9, 27, 30, 0.8) 80%, #091B1E 100%) !important;
-  }
-
-  .banner-content {
-    bottom: 20px !important;
-    left: 20px !important;
-    max-width: calc(100% - 40px);
-    gap: 8px !important;
-  }
-
-  .film-logo {
-    width: 180px !important;
-    max-height: 75px !important;
-    object-fit: contain !important;
-    filter: drop-shadow(0px 2px 8px rgba(0,0,0,0.5));
-  }
-
-  .banner-title { font-size: 28px !important; }
-
-  .banner-content p {
-    font-size: 12px !important;
-    line-height: 1.4;
-    color: #cccccc;
-    -webkit-line-clamp: 2;
-  }
-
-  .banner-meta { font-size: 11px !important; }
-  .banner-buttons { gap: 10px !important; margin-top: 4px; }
-
-  .watch-button {
-    font-size: 13px !important;
-    padding: 8px 22px !important;
-    font-weight: 700;
-    border-radius: 4px; 
-  }
-
-  .add-button {
-    width: 36px !important;
-    height: 36px !important;
-    font-size: 14px !important;
-    border-radius: 4px;
-    background: rgba(255, 255, 255, 0.2);
-  }
-
-  /* GALLERIER OG SEKSJONER PÅ MOBIL */
-  .gallery-section, .continue-watching-section {
-    margin-left: 0 !important; 
-    margin-right: 0 !important;
-    margin-bottom: 22px;
-    padding: 0 16px;
-  }
-
-  .gallery-section h2, .continue-watching-section h2 {
-    padding-left: 0 !important; 
-    margin-left: 0 !important;
-    font-size: 16px;
-    font-weight: 700;
-    letter-spacing: 0.5px;
-    color: #ffffff; 
-    margin-bottom: 8px;
-  }
-
-  /* SKJUL NAVIGASJONSPILER PÅ MOBIL (Sveiping brukes isteden) */
-  .scroll-button {
-    display: none !important;
-  }
-
-  .image-gallery, .continue-image-gallery {
-    margin-left: -16px !important;
-    margin-right: -16px !important;
-    padding: 4px 16px 12px 16px !important;
-    gap: 12px !important;
-    scroll-snap-type: x mandatory !important;
-    -webkit-overflow-scrolling: touch !important;
-    overflow-x: auto !important;
-    overflow-y: visible !important;
-  }
-
-  .image-gallery a, .continue-image-gallery a, .top10-item {
-    scroll-snap-align: start !important;
-    transform: none !important;
-    transition: none !important;
-    flex-shrink: 0 !important;
-  }
-
-  /* Standard galleri-bilder på mobil */
-  .image-gallery a img, .gallery-item img {
-    width: 260px !important;  
-    height: 146px !important; 
-    aspect-ratio: 16 / 9 !important; 
-    object-fit: cover !important; 
-    border-radius: 4px !important;
-  }
-
-  /* FIX: FORTSETT Å SE (MOBIL) */
-  .continue-image-gallery .continue-item {
-    width: 260px !important;
-    flex-shrink: 0 !important;
-  }
-
-  .continue-media-wrap {
-    width: 100% !important;
-    height: 146px !important;
-    border-radius: 4px !important;
-  }
-
-  .continue-media-wrap img {
-    width: 100% !important;
-    height: 100% !important;
-    object-fit: cover !important;
-  }
-
-  .continue-title {
-    font-size: 13px !important;
-    margin-top: 6px !important;
-  }
-
-  .image-overlay { display: none !important; }
-
-  /* TOP 10 GALLERI (MOBIL) */
-  .top10-gallery {
-    margin-left: -16px !important;
-    margin-right: -16px !important;
-    gap: 16px !important;
-    padding: 4px 16px 12px 16px !important;
-  }
-  
-  .top10-item img {
-    width: 110px !important; 
-    height: 165px !important;
-    aspect-ratio: 2 / 3 !important; 
-    object-fit: cover !important;
-    border-radius: 4px !important;
-  }
-
-  .top10-number {
-    font-size: 48px !important;
-    left: -8px !important;
-    bottom: -6px !important;
-    -webkit-text-stroke: 2px rgba(0, 255, 204, 0.8) !important;
-  }
-
-  /* BARNE-BANNER & FOOTER (MOBIL) */
-  .kids-banner {
-    height: 120px !important;
-    margin: 20px 16px !important; 
-    width: calc(100% - 32px) !important;
-    border-radius: 6px;
-  }
-  
-  .kids-overlay { 
-    padding-left: 20px !important; 
-    background: linear-gradient(to right, rgba(9,27,30,0.9), rgba(9,27,30,0.2)) !important;
-  }
-  .kids-overlay h2 { font-size: 18px !important; margin-bottom: 2px; }
-  .kids-overlay p { font-size: 12px !important; }
-
-  .footer {
-    display: flex !important;
-    padding: 40px 20px 35px !important; 
-    margin-top: 50px !important;
-    background: #091B1E !important;
-  }
-  .footer-links {
-    grid-template-columns: repeat(2, 1fr) !important;
-    gap: 15px 20px !important;
-  }
-}
     /* ==========================================================================
-       12. NØDBREMS (PORTRETT PÅ LANDSKAP PÅ MOBIL)
+       11. NØDBREMS (PORTRETT PÅ LANDSKAP PÅ MOBIL)
        ========================================================================== */
     @media screen and (orientation: landscape) and (max-width: 900px) {
       body {
@@ -1100,7 +901,6 @@
   </style>
 </head>
 <body>
-  
   <header class="top-nav">
     <div class="nav-left">
       <a href="Hovedside.html" class="watch-logo-svg">
