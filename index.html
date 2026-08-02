@@ -11,15 +11,15 @@
   <link rel="icon" type="image/png" href="https://static.wixstatic.com/media/d9ace9_95bbe3f5ff4b4aab9314a8d08804344e~mv2.png" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
   
-  <!-- 🛑 FELLES MENY-STIL (Inneholder all styling for toppmenyen) -->
+  <!-- 🛑 FELLES MENY-STIL (Inneholder all styling for toppmenyen og logoen) -->
   <link rel="stylesheet" href="meny.css">
 
   <style>
     /* --------------------------------------------------
-       Lokal CSS for DENNE undersiden.
-       Slett alt her som har med .header, .navbar, .top-menu
-       eller <nav> å gjøre!
-       -------------------------------------------------- */
+        Lokal CSS for DENNE undersiden.
+        Alt som hadde med .header, .navbar eller .top-menu
+        å gjøre er fjernet herfra siden det styres av meny.css!
+        -------------------------------------------------- */
     * {
       box-sizing: border-box;
       margin: 0;
@@ -44,66 +44,6 @@
       html, body {
         background: #091B1E !important;
       }
-    }
-    /* ================= NAVBAR ================= */
-    .navbar{
-      position:fixed;
-      top:0;
-      width:100%;
-      height:80px;
-
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-
-      padding:0 60px;
-      z-index:999;
-
-      backdrop-filter:blur(14px);
-      background:rgba(7,18,20,0.75); 
-      border-bottom:1px solid rgba(255,255,255,0.06);
-    }
-
-    .logo img {
-      height: 42px;
-      display: block;
-      object-fit: contain;
-    }
-
-    .nav-buttons{
-      display:flex;
-      align-items:center;
-      gap:15px;
-    }
-
-    .nav-buttons a{
-      text-decoration:none;
-      padding:12px 22px;
-      border-radius:999px;
-      font-weight:700;
-      transition:0.3s ease;
-      font-size:14px;
-    }
-
-    .login{
-      color:white;
-      border:1px solid rgba(255,255,255,0.2);
-      background:rgba(255,255,255,0.04);
-    }
-
-    .login:hover{
-      background:rgba(255,255,255,0.1);
-      transform:translateY(-2px);
-    }
-
-    .signup{
-      background:#00FFCC;
-      color:#071214;
-      box-shadow: none;
-    }
-
-    .signup:hover{
-      transform:translateY(-2px) scale(1.03);
     }
 
     /* ================= HERO ================= */
@@ -541,24 +481,6 @@
         text-align: center;
       }
 
-      .navbar {
-        padding: 12px 20px;
-        height: 70px;
-      }
-
-      .logo img {
-        height: 32px;
-      }
-
-      .nav-buttons {
-        gap: 8px;
-      }
-
-      .nav-buttons a {
-        padding: 9px 16px;
-        font-size: 12px;
-      }
-
       .section {
         padding: 50px 20px;
       }
@@ -625,7 +547,8 @@
 </head>
 
 <body>
-  <header class="top-nav">
+  <!-- 🛑 TOPPMENY SOM HENTER STIL OG OPPRETTES FRA meny.css -->
+  <header class="top-menu">
     <div class="nav-left">
       <a href="Hovedside.html" class="watch-logo-svg">
         <img src="https://static.wixstatic.com/media/d9ace9_081ea242211b45a2801873c3067e1205~mv2.png" alt="Watch Nordic">
@@ -635,7 +558,7 @@
       <a href="Innlogging.html" class="login">Logg inn</a>
       <a href="Innlogging.html" class="signup">Registrer</a>
     </div>
-  </nav>
+  </header>
 
   <section class="hero">
     <div class="hero-wall">
@@ -750,7 +673,7 @@
   </div>
 
   <div class="footer-bottom">
-     Alle varemerker fra WATCH NORDIC™, WATCH NORDIC ORIGINALS™ og alle øvrige tilknyttede immaterielle rettigheter tilhører Watch Nordic Group og brukes under lisens av Watch Nordic™. Alle varemerker, logoer, filmer, serier, bilder, design og øvrige tilknyttede immaterielle rettigheter tilhører sine respektive eiere. Alt innhold er beskyttet av opphavsrett og internasjonale varemerkelover. Alle rettigheter forbeholdt.
+      Alle varemerker fra WATCH NORDIC™, WATCH NORDIC ORIGINALS™ og alle øvrige tilknyttede immaterielle rettigheter tilhører Watch Nordic Group og brukes under lisens av Watch Nordic™. Alle varemerker, logoer, filmer, serier, bilder, design og øvrige tilknyttede immaterielle rettigheter tilhører sine respektive eiere. Alt innhold er beskyttet av opphavsrett og internasjonale varemerkelover. Alle rettigheter forbeholdt.
   </div>
 </footer>
 
