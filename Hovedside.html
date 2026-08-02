@@ -686,8 +686,8 @@
     }
 
 /* ==========================================================================
-       10. MOBIL-OPTIMALISERING (768px og nedover)
-       ========================================================================== */
+        10. MOBIL-OPTIMALISERING (768px og nedover)
+        ========================================================================== */
     @media (max-width: 768px) {
       html, body {
         background: #091B1E !important;
@@ -744,14 +744,14 @@
         font-size: 13px !important;
         padding: 8px 22px !important;
         font-weight: 700;
-        border-radius: 4px; 
+        border-radius: 8px; 
       }
 
       .add-button {
         width: 36px !important;
         height: 36px !important;
         font-size: 14px !important;
-        border-radius: 4px;
+        border-radius: 8px;
         background: rgba(255, 255, 255, 0.2);
       }
 
@@ -760,7 +760,7 @@
         margin-left: 0 !important; 
         margin-right: 0 !important;
         margin-bottom: 32px !important;
-        padding: 0 16px; /* Holder seksjonen og tittel på plass */
+        padding: 0 16px; 
       }
 
       .gallery-section h2, .continue-watching-section h2 {
@@ -776,9 +776,9 @@
       .scroll-button { display: none !important; }
 
       .image-gallery, .continue-image-gallery {
-        margin-left: 0 !important; /* Fjernet negativ margin så den ikke stikker ut */
+        margin-left: 0 !important; 
         margin-right: 0 !important;
-        padding: 4px 0 12px 0 !important; /* Fjernet venstre-padding */
+        padding: 4px 0 12px 0 !important; 
         gap: 12px !important;
         scroll-snap-type: x mandatory !important;
         -webkit-overflow-scrolling: touch !important;
@@ -793,12 +793,13 @@
         flex-shrink: 0 !important;
       }
 
+      /* MYKERE / RUNDERE KANTER FOR BILDER */
       .image-gallery a img, .gallery-item img {
         width: 260px !important;  
         height: 146px !important; 
         aspect-ratio: 16 / 9 !important; 
         object-fit: cover !important; 
-        border-radius: 4px !important;
+        border-radius: 12px !important; /* Økt til 12px for rundere kanter */
       }
 
       .continue-image-gallery .continue-item {
@@ -809,7 +810,8 @@
       .continue-media-wrap {
         width: 100% !important;
         height: 146px !important;
-        border-radius: 4px !important;
+        border-radius: 12px !important; /* Økt til 12px for rundere kanter */
+        overflow: hidden !important; /* Sikrer at evt. elementer holdes innenfor de runde kantene */
       }
 
       .continue-media-wrap img {
@@ -837,7 +839,7 @@
         height: 165px !important;
         aspect-ratio: 2 / 3 !important; 
         object-fit: cover !important;
-        border-radius: 4px !important;
+        border-radius: 12px !important; /* Økt til 12px for rundere kanter på Topp 10 */
       }
 
       .top10-number {
@@ -851,7 +853,7 @@
         height: 120px !important;
         margin: 20px 16px !important; 
         width: calc(100% - 32px) !important;
-        border-radius: 6px;
+        border-radius: 12px !important; /* Også gjort barnebannere litt rundere */
       }
       
       .kids-overlay { 
