@@ -512,23 +512,34 @@
     import { signInWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-auth.js";
     import { collection, getDocs, doc, getDoc, setDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
 
+    // Hjelpefunksjon for å unngå XSS-injeksjoner i innerHTML
+    function escapeHtml(str) {
+        if (!str) return '';
+        return String(str)
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&#039;');
+    }
+
     function visMelding(tekst, type = "success") {
         const notif = document.getElementById("globalNotif");
+        if (!notif) return;
         notif.className = `app-notification ${type}`;
-        notif.innerHTML = `<i class="fas fa-${type === 'success' ? 'check-circle' : 'exclamation-circle'}"></i> ${tekst}`;
+        notif.innerHTML = `<i class="fas fa-${type === 'success' ? 'check-circle' : 'exclamation-circle'}"></i> ${escapeHtml(tekst)}`;
         notif.style.display = "block";
         setTimeout(() => { notif.style.display = "none"; }, 4000);
     }
 
     // --- AUTOMATISK INNSJEKKING VED OPPDATERING (PERSISTENS) ---
-    // Sparer ressurs: onAuthStateChanged håndterer hele innloggingen og sjekker ansatt-status KUN ÉN GANG.
     onAuthStateChanged(auth, async (user) => {
         if (user) {
             try {
                 const ansattSnap = await getDoc(doc(db, "ansatte", user.uid));
                 if (ansattSnap.exists()) {
-                    document.getElementById("loginSection").classList.add("hidden");
-                    document.getElementById("adminSection").classList.remove("hidden");
+                    document.getElementById("loginSection")?.classList.add("hidden");
+                    document.getElementById("adminSection")?.classList.remove("hidden");
                     lastInnAltData();
                 } else {
                     visLoginSkjema();
@@ -542,24 +553,23 @@
     });
 
     function visLoginSkjema() {
-        document.getElementById("loginSection").classList.remove("hidden");
-        document.getElementById("adminSection").classList.add("hidden");
+        document.getElementById("loginSection")?.classList.remove("hidden");
+        document.getElementById("adminSection")?.classList.add("hidden");
     }
 
-    // Sparer ressurs: loginBtn trigget tidligere en EKSTRA getDoc på ansatte. 
-    // Nå trigger den kun Auth, og onAuthStateChanged overtar sjekken automatisk.
-    document.getElementById("loginBtn").addEventListener("click", async () => {
+    document.getElementById("loginBtn")?.addEventListener("click", async () => {
         const email = document.getElementById("emailInput").value.trim();
         const password = document.getElementById("passwordInput").value;
         const errorMsg = document.getElementById("loginErrorMsg");
-        errorMsg.style.display = "none";
+        if (errorMsg) errorMsg.style.display = "none";
 
         try {
             await signInWithEmailAndPassword(auth, email, password);
-            // Ingenting mer trengs her - onAuthStateChanged fanger det opp!
         } catch (err) {
-            errorMsg.textContent = "Feil ved innlogging (ugyldig e-post/passord).";
-            errorMsg.style.display = "block";
+            if (errorMsg) {
+                errorMsg.textContent = "Feil ved innlogging (ugyldig e-post/passord).";
+                errorMsg.style.display = "block";
+            }
         }
     });
 
@@ -569,27 +579,30 @@
             const contentEl = document.getElementById(`tab${t.charAt(0).toUpperCase() + t.slice(1)}`);
             const btnEl = document.getElementById(`tabBtn${t.charAt(0).toUpperCase() + t.slice(1)}`);
             if (t === tab) {
-                if (contentEl) contentEl.classList.remove("hidden");
-                if (btnEl) btnEl.classList.add("active");
+                contentEl?.classList.remove("hidden");
+                btnEl?.classList.add("active");
             } else {
-                if (contentEl) contentEl.classList.add("hidden");
-                if (btnEl) btnEl.classList.remove("active");
+                contentEl?.classList.add("hidden");
+                btnEl?.classList.remove("active");
             }
         });
 
-        if (tab === 'leggTil' && !document.getElementById("inpId").getAttribute("data-redigerer")) {
+        if (tab === 'leggTil' && !document.getElementById("inpId")?.getAttribute("data-redigerer")) {
             nullstillSkjema();
         }
     }
 
     window.byttInnholdsType = function() {
         const type = document.getElementById("inpType").value;
+        const filmFelt = document.getElementById("filmSpesifikkeFelt");
+        const serieFelt = document.getElementById("serieSpesifikkeFelt");
+
         if (type === "serier") {
-            document.getElementById("filmSpesifikkeFelt").classList.add("hidden");
-            document.getElementById("serieSpesifikkeFelt").classList.remove("hidden");
+            filmFelt?.classList.add("hidden");
+            serieFelt?.classList.remove("hidden");
         } else {
-            document.getElementById("filmSpesifikkeFelt").classList.remove("hidden");
-            document.getElementById("serieSpesifikkeFelt").classList.add("hidden");
+            filmFelt?.classList.remove("hidden");
+            serieFelt?.classList.add("hidden");
         }
     }
 
@@ -614,7 +627,7 @@
                 <strong>Sesong ${sesongNr}</strong>
                 <button type="button" onclick="this.parentElement.parentElement.remove()" style="background:#FF5252; color:#fff; padding:4px 8px; font-size:11px;">Fjern sesong</button>
             </div>
-            <input type="text" class="sesong-beskrivelse" placeholder="Beskrivelse for sesongen..." value="${dataSesong ? (dataSesong.beskrivelse || '') : ''}" style="margin-top:10px;">
+            <input type="text" class="sesong-beskrivelse" placeholder="Beskrivelse for sesongen..." value="${escapeHtml(dataSesong ? dataSesong.beskrivelse : '')}" style="margin-top:10px;">
             <div class="episoder-container" style="margin-top:10px;"></div>
             <button type="button" onclick="leggTilEpisodTilSesong(this)" style="background:#0D2328; color:var(--text-main); border:1px solid var(--border-color); font-size:12px; margin-top:5px;"><i class="fas fa-plus"></i> Legg til episode</button>
         `;
@@ -646,13 +659,13 @@
                 <button type="button" onclick="this.parentElement.parentElement.remove()" style="background:#FF5252; color:#fff; padding:3px 6px; font-size:10px;">Fjern episode</button>
             </div>
             <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 10px;">
-                <input type="text" class="epi-tittel" placeholder="Episode tittel..." value="${epiData ? (epiData.tittel || '') : ''}" style="margin:0 0 10px 0;">
-                <input type="text" class="epi-varighet" placeholder="Varighet..." value="${epiData ? (epiData.varighet || '') : ''}" style="margin:0 0 10px 0;">
+                <input type="text" class="epi-tittel" placeholder="Episode tittel..." value="${escapeHtml(epiData ? epiData.tittel : '')}" style="margin:0 0 10px 0;">
+                <input type="text" class="epi-varighet" placeholder="Varighet..." value="${escapeHtml(epiData ? epiData.varighet : '')}" style="margin:0 0 10px 0;">
             </div>
-            <textarea class="epi-beskrivelse" placeholder="Episodebeskrivelse..." style="margin:0 0 10px 0; height:60px;">${epiData ? (epiData.beskrivelse || '') : ''}</textarea>
+            <textarea class="epi-beskrivelse" placeholder="Episodebeskrivelse..." style="margin:0 0 10px 0; height:60px;">${escapeHtml(epiData ? epiData.beskrivelse : '')}</textarea>
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
-                <input type="text" class="epi-video" placeholder="Video URL (.mp4)" value="${epiData ? (epiData.videoUrl || '') : ''}" style="margin:0 0 10px 0;">
-                <input type="text" class="epi-thumb" placeholder="Thumbnail URL" value="${epiData ? (epiData.thumbnail || '') : ''}" style="margin:0 0 10px 0;">
+                <input type="text" class="epi-video" placeholder="Video URL (.mp4)" value="${escapeHtml(epiData ? epiData.videoUrl : '')}" style="margin:0 0 10px 0;">
+                <input type="text" class="epi-thumb" placeholder="Thumbnail URL" value="${escapeHtml(epiData ? epiData.thumbnail : '')}" style="margin:0 0 10px 0;">
             </div>
             <div>
                 <label style="font-size:11px; margin-top:0;">Publiseringsdato:</label>
@@ -675,10 +688,12 @@
     window.nullstillSkjema = function() {
         document.getElementById("skjemaTittelHeading").textContent = "Legg til ny tittel";
         document.getElementById("skjemaUnderTekst").textContent = "Fyll ut skjemaet for å publisere en film eller serie.";
-        document.getElementById("inpId").removeAttribute("data-redigerer");
-        document.getElementById("inpId").removeAttribute("readonly");
-        document.getElementById("inpId").style.background = "#050F11";
-        document.getElementById("inpId").style.color = "#ffffff";
+        
+        const inpId = document.getElementById("inpId");
+        inpId.removeAttribute("data-redigerer");
+        inpId.removeAttribute("readonly");
+        inpId.style.background = "#050F11";
+        inpId.style.color = "#ffffff";
 
         const inputs = document.querySelectorAll("#tabLeggTil input, #tabLeggTil textarea, #tabLeggTil select");
         inputs.forEach(input => {
@@ -689,7 +704,6 @@
         byttInnholdsType();
     }
 
-    // --- RESSURSBEPARET INNHENTING MED SESSIONSTORAGE CACHE ---
     window.lastInnAltData = async function(tvingOppdatering = false) {
         const filmBody = document.getElementById("filmTableBody");
         const serieBody = document.getElementById("serieTableBody");
@@ -702,16 +716,14 @@
 
         const cachedData = sessionStorage.getItem("adminCache");
         const cacheTid = sessionStorage.getItem("adminCacheTid");
-        // Utvidet cache-varighet til 15 minutter for å spare enda flere Firestore reads
         const erCacheGyldig = cacheTid && (new Date().getTime() - cacheTid < 15 * 60 * 1000);
 
         if (!tvingOppdatering && erCacheGyldig && cachedData) {
             const parsed = JSON.parse(cachedData);
-            filmerData = parsed.filmer;
-            serierData = parsed.serier;
-            brukereData = parsed.brukere;
+            filmerData = parsed.filmer || [];
+            serierData = parsed.serier || [];
+            brukereData = parsed.brukere || [];
         } else {
-            // Henter alt parallelt når cachen må fornyes
             const [filmSnap, serieSnap, brukereSnap] = await Promise.all([
                 getDocs(collection(db, "filmer")),
                 getDocs(collection(db, "serier")),
@@ -754,6 +766,7 @@
 
     function oppdaterSoyleDiagram(dagerTeller) {
         const chartContainer = document.getElementById("chartBarsContainer");
+        if (!chartContainer) return;
         chartContainer.innerHTML = "";
         const ukesRekkefolge = ["Man", "Tir", "Ons", "Tor", "Fre", "Lør", "Søn"];
         const verdier = Object.values(dagerTeller);
@@ -769,7 +782,7 @@
             wrap.innerHTML = `
                 <div style="font-size: 10px; color: var(--text-muted); margin-bottom: 4px;">${antall}</div>
                 <div class="chart-bar" style="height: ${tilpassetProsent}%;"></div>
-                <span class="chart-label">${dag}</span>
+                <span class="chart-label">${escapeHtml(dag)}</span>
             `;
             chartContainer.appendChild(wrap);
         });
@@ -782,49 +795,46 @@
         const tittel = data.tittel || id;
         
         if (samling === "filmer") {
-            const sjangerInfo = (data.metadata && data.metadata[2]) ? data.metadata[2] : "-";
+            const sjangerInfo = (Array.isArray(data.metadata) && data.metadata[2]) ? data.metadata[2] : "-";
             tr.innerHTML = `
-                <td>${id}</td>
-                <td><strong>${tittel}</strong></td>
-                <td>${sjangerInfo}</td>
+                <td>${escapeHtml(id)}</td>
+                <td><strong>${escapeHtml(tittel)}</strong></td>
+                <td>${escapeHtml(sjangerInfo)}</td>
                 <td>
                     <button class="btn-slett" data-samling="${samling}" data-id="${id}" style="background:#FF5252; color:#fff; padding:6px 12px; font-size:13px;" onclick="event.stopPropagation();"><i class="fas fa-trash"></i> Slett</button>
                 </td>
             `;
-            document.getElementById("filmTableBody").appendChild(tr);
+            document.getElementById("filmTableBody")?.appendChild(tr);
         } else {
             const antSesonger = data.sesonger ? Object.keys(data.sesonger).length : 0;
             tr.innerHTML = `
-                <td>${id}</td>
-                <td><strong>${tittel}</strong></td>
+                <td>${escapeHtml(id)}</td>
+                <td><strong>${escapeHtml(tittel)}</strong></td>
                 <td>${antSesonger} sesong(er)</td>
                 <td>
                     <button class="btn-slett" data-samling="${samling}" data-id="${id}" style="background:#FF5252; color:#fff; padding:6px 12px; font-size:13px;" onclick="event.stopPropagation();"><i class="fas fa-trash"></i> Slett</button>
                 </td>
             `;
-            document.getElementById("serieTableBody").appendChild(tr);
+            document.getElementById("serieTableBody")?.appendChild(tr);
         }
 
         tr.addEventListener("click", () => {
             apneRedigering(samling, id, data);
         });
 
-        // Sparer ressurs: Ved sletting fjernes raden direkte i UI + lokal cache. 
-        // Man slipper da å refetche heile databasen fra Firestore!
         tr.querySelector(".btn-slett").addEventListener("click", async function() {
             if(confirm(`Er du sikker på at du vil slette "${tittel}"?`)) {
                 try {
                     await deleteDoc(doc(db, samling, id));
-                    
-                    // Fjern fra UI umiddelbart
                     tr.remove();
 
-                    // Oppdater lokal sessionStorage uten ny Firestore-spørring
                     const cachedData = sessionStorage.getItem("adminCache");
                     if (cachedData) {
                         const parsed = JSON.parse(cachedData);
-                        parsed[samling] = parsed[samling].filter(item => item.id !== id);
-                        sessionStorage.setItem("adminCache", JSON.stringify(parsed));
+                        if (parsed[samling]) {
+                            parsed[samling] = parsed[samling].filter(item => item.id !== id);
+                            sessionStorage.setItem("adminCache", JSON.stringify(parsed));
+                        }
                     }
 
                     visMelding("Tittelen ble slettet.", "success");
@@ -840,11 +850,12 @@
         document.getElementById("skjemaTittelHeading").textContent = `Redigerer: ${data.tittel || id}`;
         document.getElementById("skjemaUnderTekst").textContent = `Endre oppsettet for denne tittelen nedenfor. ID kan ikke endres.`;
         
-        document.getElementById("inpId").value = id;
-        document.getElementById("inpId").setAttribute("data-redigerer", "true");
-        document.getElementById("inpId").setAttribute("readonly", "true");
-        document.getElementById("inpId").style.background = "#050F11";
-        document.getElementById("inpId").style.color = "#777";
+        const inpId = document.getElementById("inpId");
+        inpId.value = id;
+        inpId.setAttribute("data-redigerer", "true");
+        inpId.setAttribute("readonly", "true");
+        inpId.style.background = "#050F11";
+        inpId.style.color = "#777";
 
         document.getElementById("inpType").value = samling;
         byttInnholdsType();
@@ -969,12 +980,12 @@
         }
 
         try {
-            await setDoc(doc(db, samling, id), obj);
-            // Sletter cache slik at neste sidelasting refetcher nyeste endringer
+            // MERGE: true forhindrer utilsiktet sletting av uoppgitte felter i Firestore
+            await setDoc(doc(db, samling, id), obj, { merge: true });
+            
             sessionStorage.removeItem("adminCache");
             visMelding(`"${tittel}" ble oppdatert og lagret!`, "success");
             
-            // Refetcher med tvingOppdatering for å vise den nye datastrukturen
             lastInnAltData(true);
             byttTab(samling);
             nullstillSkjema();
