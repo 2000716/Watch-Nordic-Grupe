@@ -1111,30 +1111,21 @@
 <script type="module">
   // ==================== CSS INJEKSJON FOR VIAPLAY-LÅSING ==================== //
   const style = document.createElement('style');
-  if (window.matchMedia("(pointer: coarse)").matches) {
-    style.textContent = `
-      .image-gallery, .coming-movies-gallery, .top10-gallery, .continue-image-gallery {
-        overflow-x: auto !important; 
-        scroll-behavior: smooth !important;
-        display: flex !important;
-        -webkit-overflow-scrolling: touch !important;
-      }
-    `;
-  } else {
-    style.textContent = `
-      .image-gallery, .coming-movies-gallery, .top10-gallery, .continue-image-gallery {
-        overflow-x: hidden !important; 
-        scroll-behavior: smooth !important;
-        display: flex !important;
-      }
-    `;
-  }
+  const isCoarse = window.matchMedia("(pointer: coarse)").matches;
+  style.textContent = `
+    .image-gallery, .coming-movies-gallery, .top10-gallery, .continue-image-gallery {
+      overflow-x: ${isCoarse ? 'auto' : 'hidden'} !important; 
+      scroll-behavior: smooth !important;
+      display: flex !important;
+      ${isCoarse ? '-webkit-overflow-scrolling: touch !important;' : ''}
+    }
+  `;
   document.head.appendChild(style);
 
   // ==================== FIREBASE IMPORT & INITIALISERING ==================== //
   import { auth, db } from "./firebase-oppsett.js";
   import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-auth.js";
-  import { doc, getDoc, updateDoc, collection, getDocs } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
+  import { doc, getDoc, updateDoc, onSnapshot, collection, getDocs } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
 
   // Globale objekter for filmer og serier hentet fra Firestore eller cache
   let filmer = {};
@@ -1143,98 +1134,96 @@
   let registrertBruker = null;
   const aktivProfil = localStorage.getItem("aktivProfil") || "Hovedprofil";
   let heleProfilArrayet = [];
+  let unsubscribeProfileListener = null;
 
   // Hjelpefunksjon for å oppdatere profilmeny i header
   function oppdaterMenyProfilVisning(bildeUrl, profilNavn, farge) {
     const menyProfil = document.getElementById("menyProfilbilde");
     const profilmenyLink = document.getElementById("profilmenyLink");
     const navneEl = document.getElementById("profilNavn");
+    const headerProfil = document.getElementById("headerProfilbilde");
 
     if (menyProfil && bildeUrl) {
       menyProfil.src = bildeUrl;
-      if (bildeUrl.toLowerCase().endsWith('.png')) {
-        menyProfil.classList.add('png-karakter');
-      } else {
-        menyProfil.classList.remove('png-karakter');
-      }
+      menyProfil.classList.toggle('png-karakter', bildeUrl.toLowerCase().endsWith('.png'));
     }
 
-    if (navneEl && profilNavn) {
-      navneEl.textContent = profilNavn;
-    }
-
-    if (profilmenyLink && farge) {
-      profilmenyLink.style.setProperty('--active-color', farge);
-    }
-
-    const headerProfil = document.getElementById("headerProfilbilde");
-    if (headerProfil && bildeUrl) {
-      headerProfil.src = bildeUrl;
-    }
+    if (navneEl && profilNavn) navneEl.textContent = profilNavn;
+    if (profilmenyLink && farge) profilmenyLink.style.setProperty('--active-color', farge);
+    if (headerProfil && bildeUrl) headerProfil.src = bildeUrl;
   }
 
-  // ==================== REIDREKTERINGSVAKT & PROFIL-CACHE ==================== //
-  onAuthStateChanged(auth, async (user) => {
+  // ==================== REIDREKTERINGSVAKT & REALTIDS PROFIL-SYNC ==================== //
+  onAuthStateChanged(auth, (user) => {
     if (!user) {
+      if (unsubscribeProfileListener) unsubscribeProfileListener();
       const gjeldendeSide = window.location.pathname.split("/").pop();
       if (gjeldendeSide !== "index.html" && gjeldendeSide !== "") {
         window.location.href = "index.html";
       }
     } else {
       registrertBruker = user;
-      
-      const cachedeProfilerRaw = localStorage.getItem("watch_nordic_profiles_cache");
-      let profiler = [];
 
+      // 1. Last inn cache først for lynrask oppstart
+      const cachedeProfilerRaw = localStorage.getItem("watch_nordic_profiles_cache");
       if (cachedeProfilerRaw) {
         try {
-          profiler = JSON.parse(cachedeProfilerRaw);
-          heleProfilArrayet = profiler;
-        } catch(e) {
-          console.error("Feil ved parsing av profil-cache");
+          heleProfilArrayet = JSON.parse(cachedeProfilerRaw);
+          renderContinueWatching();
+        } catch (e) {
+          console.error("Feil ved parsing av profil-cache", e);
         }
       }
 
-      try {
-        const docRef = doc(db, "users", user.uid);
-        const docSnap = await getDoc(docRef);
+      // 2. Sett opp realtidslytter (onSnapshot) for å samhandle direkte med Firebase
+      const userDocRef = doc(db, "users", user.uid);
+      if (unsubscribeProfileListener) unsubscribeProfileListener();
+
+      unsubscribeProfileListener = onSnapshot(userDocRef, (docSnap) => {
         if (docSnap.exists()) {
-          profiler = docSnap.data().profiler || [];
+          const profiler = docSnap.data().profiler || [];
           heleProfilArrayet = profiler;
+          
+          // Lagre til lokal cache
           localStorage.setItem("watch_nordic_profiles_cache", JSON.stringify(profiler));
+
+          // Oppdater aktive profildata
+          const aktivProfilIndex = parseInt(localStorage.getItem("aktivProfilIndex")) || 0;
+          const gjeldendeProfil = profiler[aktivProfilIndex] || profiler[0];
+
+          if (gjeldendeProfil) {
+            const bildeUrl = gjeldendeProfil.bilde || "";
+            const profilNavn = gjeldendeProfil.navn || "";
+            const farge = gjeldendeProfil.farge || "";
+            const nyIsKids = gjeldendeProfil.isKids === true;
+            const nyMaks = gjeldendeProfil.maksAldersgrense || "12";
+
+            oppdaterMenyProfilVisning(bildeUrl, profilNavn, farge);
+
+            if (bildeUrl) localStorage.setItem("profilbilde", bildeUrl);
+            if (profilNavn) {
+              localStorage.setItem("profilnavn", profilNavn);
+              localStorage.setItem("aktivProfil", profilNavn);
+            }
+
+            const gammelIsKids = localStorage.getItem("isKids") === "true";
+            const gammelMaks = localStorage.getItem("maksAldersgrense") || "12";
+
+            // Sjekk om aldersgrenser må oppdateres
+            if (gammelIsKids !== nyIsKids || gammelMaks !== nyMaks) {
+              localStorage.setItem("isKids", nyIsKids ? "true" : "false");
+              localStorage.setItem("maksAldersgrense", nyMaks);
+              window.location.reload();
+              return;
+            }
+          }
+
+          // Oppdater Fortsett å se-visningen
+          renderContinueWatching();
         }
-      } catch (error) {
-        console.error("Feil ved henting av profiler:", error);
-      }
-
-      renderContinueWatching();
-
-      const aktivProfilIndex = parseInt(localStorage.getItem("aktivProfilIndex")) || 0;
-      const gjeldendeProfil = profiler[aktivProfilIndex];
-      if (gjeldendeProfil) {
-        const bildeUrl = gjeldendeProfil.bilde || "";
-        const profilNavn = gjeldendeProfil.navn || "";
-        const farge = gjeldendeProfil.farge || "";
-        const nyIsKids = gjeldendeProfil.isKids === true;
-        const nyMaks = gjeldendeProfil.maksAldersgrense || "12";
-
-        oppdaterMenyProfilVisning(bildeUrl, profilNavn, farge);
-
-        if (bildeUrl) localStorage.setItem("profilbilde", bildeUrl);
-        if (profilNavn) {
-          localStorage.setItem("profilnavn", profilNavn);
-          localStorage.setItem("aktivProfil", profilNavn);
-        }
-
-        const gammelIsKids = localStorage.getItem("isKids") === "true";
-        const gammelMaks = localStorage.getItem("maksAldersgrense") || "12";
-
-        if (gammelIsKids !== nyIsKids || gammelMaks !== nyMaks) {
-          localStorage.setItem("isKids", nyIsKids ? "true" : "false");
-          localStorage.setItem("maksAldersgrense", nyMaks);
-          window.location.reload(); 
-        }
-      }
+      }, (error) => {
+        console.error("Feil ved realtidslytting på brukerprofiler:", error);
+      });
     }
   });
 
@@ -1246,14 +1235,15 @@
     if (!item || !item.metadata) return false;
     const maksTall = (maksAldersgrense === "A" || maksAldersgrense === "Alle") ? 0 : parseInt(maksAldersgrense, 10);
     let varensAlder = 0;
+    
     item.metadata.forEach(meta => {
       const renTekst = meta.toLowerCase();
-      if (renTekst.includes("6")) varensAlder = 6;
-      if (renTekst.includes("9")) varensAlder = 9;
-      if (renTekst.includes("12")) varensAlder = 12;
-      if (renTekst.includes("15")) varensAlder = 15;
-      if (renTekst.includes("16")) varensAlder = 16;
       if (renTekst.includes("18")) varensAlder = 18;
+      else if (renTekst.includes("16")) varensAlder = 16;
+      else if (renTekst.includes("15")) varensAlder = 15;
+      else if (renTekst.includes("12")) varensAlder = 12;
+      else if (renTekst.includes("9")) varensAlder = 9;
+      else if (renTekst.includes("6")) varensAlder = 6;
     });
     return varensAlder <= maksTall;
   }
@@ -1266,12 +1256,11 @@
     });
   }
 
-  // ==================== NAVIGASJON ==================== //
+  // ==================== NAVIGASJON & LOCAL FALLBACK ==================== //
   window.gåTilKonto = function() {
     window.location.href = "konto.html";
-  }
+  };
 
-  // ==================== PROFILBILDE LOCAL FALLBACK ==================== //
   const lagretBilde = localStorage.getItem("profilbilde");
   const lagretNavn = localStorage.getItem("profilnavn");
   if (lagretBilde) {
@@ -1296,27 +1285,16 @@
     return bannerInnhold;
   }
 
-  function hentDesktopBanner() {
-    const innhold = hentBannerInnhold();
-    if (innhold.length === 0) return null;
-    return innhold[new Date().getHours() % innhold.length];
-  }
-
-  function hentMobilBanner() {
-    const innhold = hentBannerInnhold();
-    if (innhold.length === 0) return null;
-    return innhold[new Date().getHours() % innhold.length];
-  }
-
   function oppdaterBanner() {
-    const erMobil = window.innerWidth <= 768;
-    const film = erMobil ? hentMobilBanner() : hentDesktopBanner();
-
-    if (!film) {
+    const innhold = hentBannerInnhold();
+    if (innhold.length === 0) {
       const heroSection = document.querySelector(".hero-banner");
       if (heroSection) heroSection.style.display = "none";
       return;
     }
+
+    const film = innhold[new Date().getHours() % innhold.length];
+    const erMobil = window.innerWidth <= 768;
 
     const bilde = document.getElementById("banner-bilde");
     const video = document.getElementById("banner-video");
@@ -1326,8 +1304,10 @@
     const seNa = document.getElementById("banner-se-na");
     const addBtn = document.getElementById("banner-add");
 
-    if (bilde) bilde.src = erMobil ? (film.bannerMobil || film.banner) : film.banner;
-    if (bilde) bilde.style.display = "block";
+    if (bilde) {
+      bilde.src = erMobil ? (film.bannerMobil || film.banner) : film.banner;
+      bilde.style.display = "block";
+    }
 
     if (video) {
       if (film.trailer) {
@@ -1401,16 +1381,6 @@
 
   window.addEventListener("resize", oppdaterBanner);
 
-  function adjustBannerVideo(videoElement, container) {
-    if (!videoElement || !container) return;
-    videoElement.addEventListener('loadedmetadata', () => {
-      videoElement.style.width = '100%';
-      videoElement.style.height = '100%';
-      videoElement.style.objectFit = 'cover';
-    });
-  }
-  adjustBannerVideo(document.getElementById("banner-video"), document.querySelector(".hero-banner"));
-
   // ==================== GALLERIPILER LOGIKK ==================== //
   function oppdaterAlleGalleripiler() {
     if (window.matchMedia("(pointer: coarse)").matches) return;
@@ -1475,10 +1445,7 @@
     link.href = `film.html?navn=${itemKey}`;
     link.classList.add("gallery-item");
     
-    // Sjekker om brukeren har mobil-skjermbredde (768px eller smalere)
     const erMobil = window.innerWidth <= 768;
-
-    // Henter posterVertikal dersom mobil, ellers vanlig poster/bilde
     const bildeKilde = erMobil 
       ? (item.posterVertikal || item.poster || item.bilde || "")
       : (item.poster || item.bilde || "");
@@ -1615,9 +1582,8 @@
     });
   }
 
-  // ==================== SKYLAGRET (FIREBASE) FORTSETT Å SE ==================== //
-
-  async function renderContinueWatching() {
+  // ==================== OPTIMALISERT FORTSETT Å SE ==================== //
+  function renderContinueWatching() {
     const section = document.getElementById("fortsett-section");
     const gallery = document.getElementById("fortsett-galleri");
     if (!section || !gallery) return;
@@ -1688,14 +1654,10 @@
 
       fantInnhold = true;
 
-      let hrefUrl = "";
-      if (spillType === "serie") {
-        hrefUrl = `film-mal.html?navn=${urlParamNavn}&sesong=${sesongNr}&episode=${episodeNr}&returUrl=${encodeURIComponent("Hovedside.html")}`;
-      } else {
-        hrefUrl = `film-mal.html?navn=${urlParamNavn}&returUrl=${encodeURIComponent("Hovedside.html")}`;
-      }
+      const hrefUrl = spillType === "serie"
+        ? `film-mal.html?navn=${urlParamNavn}&sesong=${sesongNr}&episode=${episodeNr}&returUrl=${encodeURIComponent("Hovedside.html")}`
+        : `film-mal.html?navn=${urlParamNavn}&returUrl=${encodeURIComponent("Hovedside.html")}`;
 
-      // Fortsett å se beholder vanlig poster/bilde fra Firebase
       let bildeKilde = metadataMatch.poster || metadataMatch.bilde || "";
       if (spillType === "serie" && metadataMatch.sesonger && metadataMatch.sesonger[sesongNr]) {
         const epInfo = metadataMatch.sesonger[sesongNr].find(e => String(e.episode) === String(episodeNr));
@@ -1739,8 +1701,10 @@
           profil.skjultFortsett.push(filmId);
         }
 
+        // Oppdater cachen umiddelbart for lokal responsivitet
         localStorage.setItem("watch_nordic_profiles_cache", JSON.stringify(heleProfilArrayet));
 
+        // Send til Firestore i bakgrunnen for å spare unødige tunge kall
         if (registrertBruker) {
           try {
             const userDocRef = doc(db, "users", registrertBruker.uid);
@@ -1752,6 +1716,7 @@
           }
         }
 
+        // Animer bort elementet fra brukergrensesnittet
         link.style.transition = "all 0.3s ease";
         link.style.transform = "scale(0.8)";
         link.style.opacity = "0";
@@ -1787,7 +1752,7 @@
     const cacheKeyFilmer = "watch_nordic_filmer_cache";
     const cacheKeySerier = "watch_nordic_serier_cache";
 
-    // 1. Sjekk om det finnes lagret data lokalt for UMIDDELBAR visning
+    // 1. Vis data umiddelbart fra lokal cache dersom det finnes
     const lagredeFilmer = localStorage.getItem(cacheKeyFilmer);
     const lagredeSerier = localStorage.getItem(cacheKeySerier);
 
@@ -1795,41 +1760,34 @@
       try {
         filmer = JSON.parse(lagredeFilmer);
         serier = JSON.parse(lagredeSerier);
-        console.log("⚡ Lastet filmer og serier fra lokal cache!");
-        // Tegner siden med én gang slik at brukeren slipper hvit/tom skjerm
         byggSiden();
       } catch (e) {
-        console.error("Feil ved parsing av lokal media-cache");
+        console.error("Feil ved parsing av lokal media-cache", e);
       }
     }
 
-    // 2. Hent oppdaterte data fra Firestore i bakgrunnen
+    // 2. Oppdater media fra Firestore i bakgrunnen
     try {
+      const [filmerSnap, serierSnap] = await Promise.all([
+        getDocs(collection(db, "filmer")),
+        getDocs(collection(db, "serier"))
+      ]);
+
       const nyeFilmer = {};
-      const filmerSnap = await getDocs(collection(db, "filmer"));
-      filmerSnap.forEach(docSnap => {
-        nyeFilmer[docSnap.id] = docSnap.data();
-      });
+      filmerSnap.forEach(docSnap => { nyeFilmer[docSnap.id] = docSnap.data(); });
 
       const nyeSerier = {};
-      const serierSnap = await getDocs(collection(db, "serier"));
-      serierSnap.forEach(docSnap => {
-        nyeSerier[docSnap.id] = docSnap.data();
-      });
+      serierSnap.forEach(docSnap => { nyeSerier[docSnap.id] = docSnap.data(); });
 
-      // Oppdater cachen i localStorage
       localStorage.setItem(cacheKeyFilmer, JSON.stringify(nyeFilmer));
       localStorage.setItem(cacheKeySerier, JSON.stringify(nyeSerier));
 
-      // Oppdater globale variabler og bygg siden på nytt hvis data har endret seg
       filmer = nyeFilmer;
       serier = nyeSerier;
       
-      console.log("✅ Hentet/oppdatert filmer og serier fra Firestore!");
       byggSiden();
-
     } catch (feil) {
-      console.error("❌ Feil ved henting av data fra Firestore:", feil);
+      console.error("Feil ved henting av data fra Firestore:", feil);
     }
   }
 
@@ -1878,10 +1836,6 @@
   window.addEventListener("scroll", () => {
     const nav = document.querySelector(".top-nav");
     if (!nav) return;
-    if (window.scrollY > 50) {
-      nav.classList.add("scrolled");
-    } else {
-      nav.classList.remove("scrolled");
-    }
+    nav.classList.toggle("scrolled", window.scrollY > 50);
   });
 </script>
