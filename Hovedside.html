@@ -686,7 +686,7 @@
     }
 
 /* ==========================================================================
-   10. MOBIL-OPTIMALISERING (VERTIKALE GALLERIER OG HORISONTALT "FORTSETT Å SE")
+   10. MOBIL-OPTIMALISERING (HORISONTALE GALLERIER PÅ MOBIL)
    ========================================================================== */
 @media (max-width: 768px) {
   html, body {
@@ -776,24 +776,27 @@
   .scroll-button { display: none !important; }
 
   /* --------------------------------------------------------------------------
-     A) ALLE STANDARD GALLERIER: VERTIKALT GRID (2 I BREDDEN)
+     A) ALLE STANDARD GALLERIER: HORISONTAL RULLING (VERTIKALE POSTERE)
      -------------------------------------------------------------------------- */
   .gallery-section .image-gallery,
   .gallery-section .coming-movies-gallery,
   .gallery-section .top10-gallery {
-    display: grid !important;
-    grid-template-columns: repeat(2, 1fr) !important; /* 2 stående postere i bredden */
+    display: flex !important;
+    flex-direction: row !important;
+    overflow-x: auto !important;
+    overflow-y: hidden !important;
     gap: 12px !important;
-    overflow-x: visible !important;
-    padding: 0 !important;
+    padding: 4px 0 12px 0 !important;
+    scroll-snap-type: x mandatory !important;
+    -webkit-overflow-scrolling: touch !important;
   }
 
   .gallery-section .image-gallery a, 
   .gallery-section .gallery-item,
   .gallery-section .top10-item {
-    width: 100% !important;
-    flex-shrink: unset !important;
-    scroll-snap-align: none !important;
+    width: 130px !important;
+    flex-shrink: 0 !important;
+    scroll-snap-align: start !important;
     position: relative !important;
   }
 
@@ -802,28 +805,28 @@
   .gallery-section .image-gallery img,
   .gallery-section .top10-item img {
     width: 100% !important;
-    height: auto !important;
-    aspect-ratio: 2 / 3 !important; /* Stående/vertikalt plakat-format */
+    height: 195px !important;
+    aspect-ratio: 2 / 3 !important;
     object-fit: cover !important;
     border-radius: 8px !important;
   }
 
-  /* Tilpasning av tall for Top 10 i grid-visning */
+  /* Tilpasning av tall for Top 10 i horisontal visning */
   .top10-number {
-    font-size: 36px !important;
-    left: 4px !important;
-    bottom: 4px !important;
+    font-size: 38px !important;
+    left: 2px !important;
+    bottom: 2px !important;
     -webkit-text-stroke: 1.5px rgba(0, 255, 204, 0.8) !important;
   }
 
   /* --------------------------------------------------------------------------
-     B) "FORTSETT Å SE": HORISONTAL RULLING
+     B) "FORTSETT Å SE": HORISONTAL RULLING (HORISONTALE BILDER)
      -------------------------------------------------------------------------- */
   .continue-watching-section .continue-image-gallery {
     display: flex !important;
     flex-direction: row !important;
     overflow-x: auto !important;
-    overflow-y: visible !important;
+    overflow-y: hidden !important;
     gap: 12px !important;
     padding: 4px 0 12px 0 !important;
     scroll-snap-type: x mandatory !important;
