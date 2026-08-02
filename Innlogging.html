@@ -34,10 +34,21 @@
       justify-content: flex-start;
     }
 
+    .logo-link {
+      display: inline-block;
+      cursor: pointer;
+      line-height: 0;
+    }
+
     .site-logo {
       height: 42px;
       width: auto;
       object-fit: contain;
+      transition: opacity 0.2s ease;
+    }
+
+    .logo-link:hover .site-logo {
+      opacity: 0.85;
     }
 
     /* ================= HOVEDINNHOLD / RENT SKJEMA ================= */
@@ -69,6 +80,23 @@
       color: #93A6A8;
       margin-bottom: 28px;
       line-height: 1.4;
+    }
+
+    /* ================= ANIMASJONS-KLASSER FOR STEG ================= */
+    .step-content {
+      opacity: 1;
+      transform: translateY(0);
+      transition: opacity 0.3s ease, transform 0.3s ease;
+    }
+
+    .step-content.animating-out {
+      opacity: 0;
+      transform: translateY(-10px);
+    }
+
+    .step-content.animating-in {
+      opacity: 0;
+      transform: translateY(10px);
     }
 
     /* Viser valgt e-post i steg 2 */
@@ -193,9 +221,11 @@
 </head>
 <body>
 
-  <!-- WATCH LOGO ØVERST TIL VENSTRE -->
+  <!-- WATCH LOGO ØVERST TIL VENSTRE (KLIKKBAR TIL INDEX.HTML) -->
   <header class="header">
-    <img src="https://static.wixstatic.com/media/d9ace9_081ea242211b45a2801873c3067e1205~mv2.png" alt="WATCH Logo" class="site-logo">
+    <a href="index.html" class="logo-link">
+      <img src="https://static.wixstatic.com/media/d9ace9_081ea242211b45a2801873c3067e1205~mv2.png" alt="WATCH Logo" class="site-logo">
+    </a>
   </header>
 
   <!-- SKJEMA-OMRÅDE -->
@@ -207,7 +237,7 @@
       <form id="authForm">
         
         <!-- TRINN 1: SKRIV INN E-POST -->
-        <div id="steg1">
+        <div id="steg1" class="step-content">
           <div class="input-group">
             <label for="epost">E-postadresse</label>
             <input type="email" id="epost" placeholder="navn@domene.no" autocomplete="email" required />
@@ -215,8 +245,8 @@
           <button type="button" class="submit-btn" id="nesteKnapp">Neste</button>
         </div>
 
-        <!-- TRINN 2: SKRIV INN PASSORD (GÅR FØRST HIT NÅR MAN TRYKKER NESTE) -->
-        <div id="steg2" style="display: none;">
+        <!-- TRINN 2: SKRIV INN PASSORD -->
+        <div id="steg2" class="step-content" style="display: none;">
           
           <div class="selected-email-badge">
             <span id="visEpostTekst"></span>
@@ -263,7 +293,7 @@
     // TRYKK PÅ NESTE (TRINN 1 -> TRINN 2)
     document.getElementById("nesteKnapp").addEventListener("click", validerOgGaVidere);
 
-    // Gjør at Enter-knappen i e-postfeltet utløser Steg 2 i stedet for form submission
+    // Enter-knapp i e-postfeltet utløser Steg 2
     epostInput.addEventListener("keydown", function(e) {
       if (e.key === "Enter") {
         e.preventDefault();
@@ -277,43 +307,59 @@
         return;
       }
       feilmelding.textContent = "";
-      gaaTilSteg2();
-    }
-
-    function gaaTilSteg2() {
-      naavaarendeSteg = 2;
-      document.getElementById("steg1").style.display = "none";
-      document.getElementById("steg2").style.display = "block";
-      document.getElementById("visEpostTekst").textContent = epostInput.value.trim();
-      passordInput.required = true;
-      passordInput.focus();
-
-      if (registreringsmodus) {
-        document.getElementById("formSubtitle").textContent = "Velg et passord for å opprette kontoen";
-      } else {
-        document.getElementById("formSubtitle").textContent = "Skriv inn passordet ditt";
-      }
+      skiftStegMedAnimasjon(1, 2);
     }
 
     function gaaTilSteg1() {
-      naavaarendeSteg = 1;
-      document.getElementById("steg1").style.display = "block";
-      document.getElementById("steg2").style.display = "none";
-      passordInput.required = false;
       feilmelding.textContent = "";
+      skiftStegMedAnimasjon(2, 1);
+    }
 
-      if (registreringsmodus) {
-        document.getElementById("formSubtitle").textContent = "Skriv inn e-post for å opprette konto";
-      } else {
-        document.getElementById("formSubtitle").textContent = "Skriv inn e-postadressen din for å fortsette";
-      }
+    // Funksjon som styrer animasjonen mellom stegene
+    function skiftStegMedAnimasjon(fraStegNr, tilStegNr) {
+      const fraElement = document.getElementById(`steg${fraStegNr}`);
+      const tilElement = document.getElementById(`steg${tilStegNr}`);
+
+      // 1. Fade ut det aktive steget
+      fraElement.classList.add("animating-out");
+
+      setTimeout(() => {
+        fraElement.style.display = "none";
+        fraElement.classList.remove("animating-out");
+
+        // 2. Klargjør og vis det neste steget med startposisjon for inn-animasjon
+        tilElement.style.display = "block";
+        tilElement.classList.add("animating-in");
+
+        // Oppdater tekstinnhold basert på steg
+        naavaarendeSteg = tilStegNr;
+        if (tilStegNr === 2) {
+          document.getElementById("visEpostTekst").textContent = epostInput.value.trim();
+          passordInput.required = true;
+          passordInput.focus();
+          document.getElementById("formSubtitle").textContent = registreringsmodus 
+            ? "Velg et passord for å opprette kontoen" 
+            : "Skriv inn passordet ditt";
+        } else {
+          passordInput.required = false;
+          epostInput.focus();
+          document.getElementById("formSubtitle").textContent = registreringsmodus 
+            ? "Skriv inn e-post for å opprette konto" 
+            : "Skriv inn e-postadressen din for å fortsette";
+        }
+
+        // 3. Utløs fade/slide inn
+        requestAnimationFrame(() => {
+          tilElement.classList.remove("animating-in");
+        });
+
+      }, 250); // Tiden matcher CSS-transisjonen
     }
 
     // FIREBASE INNLOGGING / REGISTRERING
     document.getElementById("authForm").addEventListener("submit", async function(event) {
       event.preventDefault(); 
       
-      // Sikkerhetssjekk dersom man levert skjemaet på steg 1
       if (naavaarendeSteg === 1) {
         validerOgGaVidere();
         return;
