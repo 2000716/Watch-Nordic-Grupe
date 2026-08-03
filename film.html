@@ -309,11 +309,11 @@
        ANBEFALINGER & EPISODER (PC DEFAULT)
        ========================================================================== */
     .recommendations {
-      margin: 40px auto 0;
-      padding: 0 0 50px 0;
-      width: 90%;         
-      max-width: 1400px;   
-      background: #050F11;
+      margin: 0;
+      padding: 0 5vw 50px;
+      width: 100%;
+      max-width: none;
+      background: transparent;
       position: relative;
       z-index: 5;
     }
@@ -321,14 +321,14 @@
     .recommendations h2 {
       font-size: 24px;
       font-weight: 600;
-      margin-bottom: 20px;
+      margin: 0 0 20px;
       color: #ffffff;
     }
 
     .gallery {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 24px;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 20px;
       width: 100%;
     }
 
@@ -897,9 +897,9 @@
 
       .recommendations {
         width: 100% !important;
-        margin: 30px 0 0 !important;
+        margin: 0 !important;
         padding: 0 20px 40px !important;
-        background: #091B1E !important;
+        background: transparent !important;
         position: relative;
         z-index: 3;
       }
