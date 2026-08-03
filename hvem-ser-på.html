@@ -282,6 +282,114 @@
       border-color: var(--accent);
     }
 
+    .pin-modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(5, 14, 16, 0.86);
+      backdrop-filter: blur(10px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+      z-index: 1200;
+      padding: 20px;
+    }
+
+    .pin-modal.active {
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    .pin-modal-content {
+      background: #0f2a2f;
+      border: 1px solid var(--border);
+      padding: 28px 24px;
+      border-radius: 24px;
+      width: min(420px, 100%);
+      text-align: center;
+      box-shadow: 0 15px 40px rgba(0,0,0,0.45);
+      transform: translateY(18px);
+      transition: transform 0.3s ease;
+    }
+
+    .pin-modal.active .pin-modal-content {
+      transform: translateY(0);
+    }
+
+    .pin-modal h2 {
+      font-size: 22px;
+      margin-bottom: 8px;
+    }
+
+    .pin-profile-name {
+      color: var(--accent);
+      font-size: 16px;
+      font-weight: 700;
+      margin-bottom: 16px;
+    }
+
+    .pin-input {
+      width: 100%;
+      padding: 14px;
+      background: rgba(0,0,0,0.25);
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 14px;
+      color: white;
+      font-size: 24px;
+      letter-spacing: 0.4em;
+      text-align: center;
+      margin-bottom: 16px;
+      outline: none;
+    }
+
+    .pin-input:focus {
+      border-color: var(--accent);
+    }
+
+    .pin-keypad {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+
+    .pin-key {
+      padding: 14px;
+      border-radius: 12px;
+      border: 1px solid rgba(255,255,255,0.12);
+      background: rgba(255,255,255,0.08);
+      color: white;
+      font-size: 18px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .pin-key.is-action {
+      background: var(--accent);
+      color: #071214;
+      border-color: var(--accent);
+    }
+
+    .pin-key.is-danger {
+      background: rgba(255,255,255,0.06);
+      color: var(--muted);
+    }
+
+    .pin-actions {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+
+    .pin-error {
+      min-height: 20px;
+      color: #ff8f8f;
+      font-size: 14px;
+      font-weight: 600;
+    }
+
     .profile-lock {
       margin-top: 8px;
       color: var(--accent);
@@ -379,6 +487,35 @@
     </div>
   </div>
 
+  <div class="pin-modal" id="pinModal">
+    <div class="pin-modal-content">
+      <h2>Skriv koden</h2>
+      <p class="pin-profile-name" id="pinProfileName">Profil</p>
+      <input type="password" id="pinInput" class="pin-input" maxlength="4" inputmode="numeric" readonly>
+
+      <div class="pin-keypad">
+        <button type="button" class="pin-key" data-value="1">1</button>
+        <button type="button" class="pin-key" data-value="2">2</button>
+        <button type="button" class="pin-key" data-value="3">3</button>
+        <button type="button" class="pin-key" data-value="4">4</button>
+        <button type="button" class="pin-key" data-value="5">5</button>
+        <button type="button" class="pin-key" data-value="6">6</button>
+        <button type="button" class="pin-key" data-value="7">7</button>
+        <button type="button" class="pin-key" data-value="8">8</button>
+        <button type="button" class="pin-key" data-value="9">9</button>
+        <button type="button" class="pin-key is-danger" id="pinKeyClear">Slett</button>
+        <button type="button" class="pin-key" data-value="0">0</button>
+        <button type="button" class="pin-key is-action" id="pinKeyBack">Tilbake</button>
+      </div>
+
+      <div class="pin-actions">
+        <button class="btn-create" id="btnConfirmPin">Bekreft</button>
+        <button class="btn-close" id="btnClosePin">Avbryt</button>
+      </div>
+      <div class="pin-error" id="pinError"></div>
+    </div>
+  </div>
+
   <script type="module">
     import { auth, db } from "./firebase-oppsett.js";
     import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-auth.js";
@@ -387,6 +524,10 @@
     const MAX_PROFILER = 5;
     const container = document.getElementById("profiles");
     const modal = document.getElementById("addProfileModal");
+    const pinModal = document.getElementById("pinModal");
+    const pinProfileName = document.getElementById("pinProfileName");
+    const pinInput = document.getElementById("pinInput");
+    const pinError = document.getElementById("pinError");
     const newProfileNameInput = document.getElementById("newProfileName");
     const isKidsProfileInput = document.getElementById("isKidsProfile");
     const kontoLink = document.getElementById("kontoLink");
@@ -396,6 +537,7 @@
 
     let profiler = [];
     let docRef = null;
+    let pendingProfileIndex = null;
 
     // LYNRAST OPPSTART (Mellomlagring)
     const cachedProfiles = localStorage.getItem("watch_nordic_profiles_cache");
@@ -513,17 +655,8 @@
       }
     }
 
-    function velgProfil(index) {
+    function fortsettProfilvalg(index) {
       const profil = profiler[index];
-
-      if (profil.pin) {
-        const input = prompt(`Skriv PIN-kode for ${profil.navn}:`);
-        if (input !== profil.pin) {
-          alert("Feil PIN-kode!");
-          return;
-        }
-      }
-
       localStorage.setItem("aktivProfilIndex", index);
       localStorage.setItem("profilnavn", profil.navn || "");
       localStorage.setItem("aktivProfil", profil.navn || "");
@@ -537,6 +670,28 @@
       setTimeout(() => {
         window.location.href = `Hovedside.html?index=${index}`;
       }, 400);
+    }
+
+    function velgProfil(index) {
+      const profil = profiler[index];
+
+      if (profil.pin) {
+        pendingProfileIndex = index;
+        pinProfileName.textContent = profil.navn;
+        pinInput.value = "";
+        pinError.textContent = "";
+        pinModal.classList.add("active");
+        return;
+      }
+
+      fortsettProfilvalg(index);
+    }
+
+    function lukkPinModal() {
+      pinModal.classList.remove("active");
+      pendingProfileIndex = null;
+      pinInput.value = "";
+      pinError.textContent = "";
     }
 
     function åpneModal() {
@@ -572,6 +727,39 @@
       renderProfiler();
     }
 
+    document.querySelectorAll(".pin-key[data-value]").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        if (pinInput.value.length >= 4) return;
+        pinInput.value += btn.dataset.value;
+        pinError.textContent = "";
+      });
+    });
+
+    document.getElementById("pinKeyBack").addEventListener("click", () => {
+      pinInput.value = pinInput.value.slice(0, -1);
+      pinError.textContent = "";
+    });
+
+    document.getElementById("pinKeyClear").addEventListener("click", () => {
+      pinInput.value = "";
+      pinError.textContent = "";
+    });
+
+    document.getElementById("btnConfirmPin").addEventListener("click", () => {
+      const profil = profiler[pendingProfileIndex];
+      if (!profil) return;
+
+      if (pinInput.value === profil.pin) {
+        lukkPinModal();
+        fortsettProfilvalg(pendingProfileIndex);
+      } else {
+        pinError.textContent = "Feil kode. Prøv igjen.";
+        pinInput.value = "";
+      }
+    });
+
+    document.getElementById("btnClosePin").addEventListener("click", lukkPinModal);
+
     // Event listeners for knapper
     document.getElementById("btnCreateProfile").addEventListener("click", lagreNyProfil);
     document.getElementById("btnCloseModal").addEventListener("click", lukkModal);
@@ -585,8 +773,18 @@
     modal.addEventListener("click", (e) => {
       if (e.target === modal) lukkModal();
     });
+
+    pinModal.addEventListener("click", (e) => {
+      if (e.target === pinModal) lukkPinModal();
+    });
+
     window.addEventListener("keydown", (e) => {
       if (e.key === "Escape" && modal.classList.contains("active")) lukkModal();
+      if (e.key === "Escape" && pinModal.classList.contains("active")) lukkPinModal();
+      if (e.key === "Enter" && pinModal.classList.contains("active")) {
+        e.preventDefault();
+        document.getElementById("btnConfirmPin").click();
+      }
     });
 
     // Eksporterer til global window for bakoverkompatibilitet

@@ -260,6 +260,52 @@
       margin-top: 6px;
     }
 
+    .pin-toggle-wrap {
+      margin-top: 8px;
+      display: flex;
+      align-items: center;
+    }
+
+    .pin-toggle {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 12px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: rgba(255, 255, 255, 0.08);
+      color: var(--muted);
+      cursor: pointer;
+      transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+    }
+
+    .pin-toggle.active {
+      background: #00FFCC;
+      border-color: #00FFCC;
+      color: #091B1E;
+    }
+
+    .pin-toggle-thumb {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: #fff;
+      display: inline-block;
+      transition: transform 0.2s ease;
+    }
+
+    .pin-toggle.active .pin-toggle-thumb {
+      transform: translateX(8px);
+      background: #091B1E;
+    }
+
+    .pin-toggle-text {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
     .edit-box input:focus { border-color: rgba(255, 255, 255, 0.4); }
 
     .edit-box button {
@@ -392,14 +438,21 @@
           <div class="info-block">
             <div class="label">Inngangskode</div>
             <div class="value" id="pinView">Laster...</div>
+
+            <div class="pin-toggle-wrap">
+              <button type="button" class="pin-toggle" id="pinToggleBtn" aria-pressed="false">
+                <span class="pin-toggle-thumb"></span>
+                <span class="pin-toggle-text">Kode av</span>
+              </button>
+            </div>
+
             <div id="editPinBox" class="edit-box hidden">
               <input type="password" id="nyPinInput" placeholder="Skriv ny kode">
               <button class="btn-save" id="lagrePinBtn">Lagre</button>
               <button class="btn-cancel" id="avbrytPinBtn">Avbryt</button>
             </div>
-            <div class="pin-hint">La feltet stå tomt for å fjerne koden.</div>
+            <div class="pin-hint">Slå på for å aktivere eller deaktivere koden.</div>
           </div>
-          <button class="edit-trigger" id="endrePinKnapp">Legg til</button>
         </div>
       </div>
 
@@ -441,7 +494,8 @@
     const lagreNavnBtn = document.getElementById("lagreNavnBtn");
     const avbrytNavnBtn = document.getElementById("avbrytNavnBtn");
 
-    const endrePinKnapp = document.getElementById("endrePinKnapp");
+    const pinToggleBtn = document.getElementById("pinToggleBtn");
+    const pinToggleText = pinToggleBtn.querySelector(".pin-toggle-text");
     const editPinBox = document.getElementById("editPinBox");
     const nyPinInput = document.getElementById("nyPinInput");
     const lagrePinBtn = document.getElementById("lagrePinBtn");
@@ -524,27 +578,42 @@
       endreNavnKnapp.classList.remove("hidden");
     });
 
-    endrePinKnapp.addEventListener("click", () => {
+    pinToggleBtn.addEventListener("click", async () => {
       if (!profiler[aktivProfilIndex]) return;
+
+      if (pinToggleBtn.classList.contains("active")) {
+        profiler[aktivProfilIndex].pin = null;
+        await oppdaterProfilData();
+        byggProfilgrensesnitt();
+        return;
+      }
+
       nyPinInput.value = "";
       editPinBox.classList.remove("hidden");
-      endrePinKnapp.classList.add("hidden");
+      pinToggleBtn.classList.add("active");
+      pinToggleText.textContent = "Kode på";
       nyPinInput.focus();
     });
 
     avbrytPinBtn.addEventListener("click", () => {
       editPinBox.classList.add("hidden");
-      endrePinKnapp.classList.remove("hidden");
+      if (!profiler[aktivProfilIndex]?.pin) {
+        pinToggleBtn.classList.remove("active");
+        pinToggleText.textContent = "Kode av";
+      }
     });
 
     lagrePinBtn.addEventListener("click", async () => {
       if (!profiler[aktivProfilIndex]) return;
       const nyPin = nyPinInput.value.trim();
-      profiler[aktivProfilIndex].pin = nyPin ? nyPin : null;
+      if (!nyPin) {
+        alert("Skriv inn en kode først.");
+        return;
+      }
+      profiler[aktivProfilIndex].pin = nyPin;
       await oppdaterProfilData();
       byggProfilgrensesnitt();
       editPinBox.classList.add("hidden");
-      endrePinKnapp.classList.remove("hidden");
     });
 
     async function hentKontodata() {
@@ -573,9 +642,12 @@
       epostView.innerText = globalEpost;
       document.getElementById("profilbilde").src = gjeldendeProfil.bilde;
 
-      const pinStatus = gjeldendeProfil.pin ? "Kode satt" : "Ingen kode satt";
+      const harPin = Boolean(gjeldendeProfil.pin);
+      const pinStatus = harPin ? "Kode satt" : "Ingen kode satt";
       document.getElementById("pinView").innerText = pinStatus;
-      endrePinKnapp.innerText = gjeldendeProfil.pin ? "Endre" : "Legg til";
+      pinToggleBtn.classList.toggle("active", harPin);
+      pinToggleText.textContent = harPin ? "Kode på" : "Kode av";
+      editPinBox.classList.add("hidden");
 
       if (gjeldendeProfil.isKids) {
         endreNavnKnapp.classList.add("hidden");
