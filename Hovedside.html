@@ -1729,13 +1729,25 @@ function renderContinueWatching() {
       const dataA = profil.fremdrift[a];
       const dataB = profil.fremdrift[b];
       
-      // Henter tidsstempel (støtter lastUpdated, sistSett, eller opprettet)
-      const tidA = (typeof dataA === "object" && dataA !== null) 
-        ? (dataA.lastUpdated || dataA.sistSett || dataA.timestamp || 0) 
-        : 0;
-      const tidB = (typeof dataB === "object" && dataB !== null) 
-        ? (dataB.lastUpdated || dataB.sistSett || dataB.timestamp || 0) 
-        : 0;
+      const hentTid = (data) => {
+        if (!data || typeof data !== "object") return 0;
+        
+        // 1. Sjekker numerisk millisekunder
+        if (typeof data.lastUpdated === "number") return data.lastUpdated;
+        if (typeof data.timestamp === "number") return data.timestamp;
+        
+        // 2. Konverterer ISO-strenger til tall om nødvendig
+        const ISOtid = data.sistOppdatert || data.sistSett || data.lastUpdated;
+        if (ISOtid) {
+          const parsed = new Date(ISOtid).getTime();
+          return isNaN(parsed) ? 0 : parsed;
+        }
+        
+        return 0;
+      };
+
+      const tidA = hentTid(dataA);
+      const tidB = hentTid(dataB);
 
       // Nyest (høyest tall) øverst/først
       return tidB - tidA;
