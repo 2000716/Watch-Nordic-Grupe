@@ -1701,184 +1701,184 @@
     });
   }
 
-  // ==================== OPTIMALISERT FORTSETT Å SE ==================== //
-  function renderContinueWatching() {
-    try {
-      const section = document.getElementById("fortsett-section");
-      const gallery = document.getElementById("fortsett-galleri");
-      if (!section || !gallery) return;
+// ==================== OPTIMALISERT FORTSETT Å SE ==================== //
+function renderContinueWatching() {
+  try {
+    const section = document.getElementById("fortsett-section");
+    const gallery = document.getElementById("fortsett-galleri");
+    if (!section || !gallery) return;
+    
+    gallery.innerHTML = "";
+
+    const cacheData = localStorage.getItem("watch_nordic_profiles_cache");
+    if (cacheData) {
+      heleProfilArrayet = sikkerJSONParse(cacheData, []);
+    }
+
+    const profil = heleProfilArrayet.find(p => p && p.navn === aktivProfil);
+    if (!profil || !profil.fremdrift || typeof profil.fremdrift !== "object" || Object.keys(profil.fremdrift).length === 0) {
+      section.style.display = "none";
+      return;
+    }
+
+    const skjulteTitler = Array.isArray(profil.skjultFortsett) ? profil.skjultFortsett : [];
+    let fantInnhold = false;
+
+    // --- SORTERING: Nyeste fremst i galleriet ---
+    const sorterteFilmIder = Object.keys(profil.fremdrift).sort((a, b) => {
+      const dataA = profil.fremdrift[a];
+      const dataB = profil.fremdrift[b];
       
-      gallery.innerHTML = "";
+      // Henter tidsstempel (støtter lastUpdated, sistSett, eller opprettet)
+      const tidA = (typeof dataA === "object" && dataA !== null) 
+        ? (dataA.lastUpdated || dataA.sistSett || dataA.timestamp || 0) 
+        : 0;
+      const tidB = (typeof dataB === "object" && dataB !== null) 
+        ? (dataB.lastUpdated || dataB.sistSett || dataB.timestamp || 0) 
+        : 0;
 
-      const cacheData = localStorage.getItem("watch_nordic_profiles_cache");
-      if (cacheData) {
-        heleProfilArrayet = sikkerJSONParse(cacheData, []);
-      }
+      // Nyest (høyest tall) øverst/først
+      return tidB - tidA;
+    });
 
-      const profil = heleProfilArrayet.find(p => p && p.navn === aktivProfil);
-      if (!profil || !profil.fremdrift || typeof profil.fremdrift !== "object" || Object.keys(profil.fremdrift).length === 0) {
-        section.style.display = "none";
-        return;
-      }
+    sorterteFilmIder.forEach((filmId) => {
+      const dbData = profil.fremdrift[filmId];
+      const progressVerdi = typeof dbData === "object" && dbData !== null ? (dbData.percent || 0) : Number(dbData || 0);
+      const erFerdig = typeof dbData === "object" && dbData !== null && dbData.status === "ferdig";
 
-      const skjulteTitler = Array.isArray(profil.skjultFortsett) ? profil.skjultFortsett : [];
-      let fantInnhold = false;
-
-      // ENDRET: Henter filmKeys og sorterer etter sist oppdatert/spilt (lastUpdated timestamp)
-      let filmKeys = Object.keys(profil.fremdrift);
-      filmKeys.sort((a, b) => {
-        const itemA = profil.fremdrift[a];
-        const itemB = profil.fremdrift[b];
-        const timeA = typeof itemA === "object" && itemA?.lastUpdated ? new Date(itemA.lastUpdated).getTime() : 0;
-        const timeB = typeof itemB === "object" && itemB?.lastUpdated ? new Date(itemB.lastUpdated).getTime() : 0;
-        return timeB - timeA; // Siste spilte først
-      });
-
-      filmKeys.forEach((filmId) => {
-        const dbData = profil.fremdrift[filmId];
-        const progressVerdi = typeof dbData === "object" && dbData !== null ? (dbData.percent || 0) : Number(dbData || 0);
-        const erFerdig = typeof dbData === "object" && dbData !== null && dbData.status === "ferdig";
-
-        if (skjulteTitler.includes(filmId)) {
-          if (typeof dbData === "object" && dbData !== null && dbData.status === "paabegynt") {
-            profil.skjultFortsett = profil.skjultFortsett.filter(id => id !== filmId);
-            localStorage.setItem("watch_nordic_profiles_cache", JSON.stringify(heleProfilArrayet));
-          } else {
-            return;
-          }
-        }
-
-        if (progressVerdi > 96 || erFerdig) {
-          return; 
-        }
-        
-        let metadataMatch = null;
-        let urlParamNavn = "";
-        let spillType = "film";
-        let sesongNr = "";
-        let episodeNr = "";
-
-        if (filmId.startsWith("film-")) {
-          urlParamNavn = filmId.replace("film-", "");
-          if (filmer[urlParamNavn]) {
-            metadataMatch = filmer[urlParamNavn];
-            spillType = "film";
-          }
-        } else if (filmId.startsWith("serie-")) {
-          const deler = filmId.split("-"); 
-          urlParamNavn = deler[1];
-          sesongNr = deler[2] ? deler[2].replace("s", "") : "1";
-          episodeNr = deler[3] ? deler[3].replace("e", "") : "1";
-
-          if (serier[urlParamNavn]) {
-            metadataMatch = serier[urlParamNavn];
-            spillType = "serie";
-          }
-        }
-
-        if (!metadataMatch) return;
-
-        if (erInnloggetSomBarn) {
-          if (!erEgnetForBarn(metadataMatch) || !sjekkAldersgrense(metadataMatch)) return;
-        }
-
-        fantInnhold = true;
-
-        const hrefUrl = spillType === "serie"
-          ? `film-mal.html?navn=${encodeURIComponent(urlParamNavn)}&sesong=${encodeURIComponent(sesongNr)}&episode=${encodeURIComponent(episodeNr)}&returUrl=${encodeURIComponent("Hovedside.html")}`
-          : `film-mal.html?navn=${encodeURIComponent(urlParamNavn)}&returUrl=${encodeURIComponent("Hovedside.html")}`;
-
-        let bildeKilde = metadataMatch.poster || metadataMatch.bilde || "";
-        if (spillType === "serie" && metadataMatch.sesonger && metadataMatch.sesonger[sesongNr]) {
-          const epInfo = metadataMatch.sesonger[sesongNr].find(e => String(e.episode) === String(episodeNr));
-          if (epInfo && epInfo.bilde) {
-            bildeKilde = epInfo.bilde;
-          }
-        }
-
-        const link = document.createElement("a");
-        link.href = hrefUrl;
-        link.classList.add("continue-item");
-
-        const episodeTekst = spillType === "serie" && sesongNr && episodeNr
-          ? ` • S${sesongNr}E${episodeNr}` 
-          : "";
-
-        const tittelClean = escapeHTML(metadataMatch.tittel || "");
-
-        link.innerHTML = `
-          <div class="continue-media-wrap">
-            ${bildeKilde 
-              ? `<img src="${escapeHTML(bildeKilde)}" alt="${tittelClean}" loading="lazy">` 
-              : `<div style="width:100%; height:100%; background:#1a2629; display:flex; align-items:center; justify-content:center; padding:10px; text-align:center; font-size:12px; color:#fff;">${tittelClean || 'Mangler bilde'}</div>`
-            }
-            <button class="delete-progress-btn" title="Skjul fra Fortsett å se" type="button" aria-label="Skjul fra visning">
-              <i class="fas fa-trash-alt"></i>
-            </button>
-            <div class="progress-bar" style="--progress: ${Math.min(100, Math.max(0, progressVerdi))}%;"></div>
-          </div>
-          <span class="continue-title">${tittelClean}${escapeHTML(episodeTekst)}</span>
-        `;
-
-        const deleteBtn = link.querySelector(".delete-progress-btn");
-        deleteBtn.addEventListener("click", async (e) => {
-          e.preventDefault();
-          e.stopPropagation();
-
-          if (!Array.isArray(profil.skjultFortsett)) {
-            profil.skjultFortsett = [];
-          }
-
-          if (!profil.skjultFortsett.includes(filmId)) {
-            profil.skjultFortsett.push(filmId);
-          }
-
+      if (skjulteTitler.includes(filmId)) {
+        if (typeof dbData === "object" && dbData !== null && dbData.status === "paabegynt") {
+          profil.skjultFortsett = profil.skjultFortsett.filter(id => id !== filmId);
           localStorage.setItem("watch_nordic_profiles_cache", JSON.stringify(heleProfilArrayet));
+        } else {
+          return;
+        }
+      }
 
-          if (registrertBruker) {
-            try {
-              const userDocRef = doc(db, "users", registrertBruker.uid);
-              await updateDoc(userDocRef, {
-                profiler: heleProfilArrayet
-              });
-            } catch (err) {
-              console.error("Feil ved skjuling av tittel i Firebase:", err);
-            }
+      if (progressVerdi > 96 || erFerdig) {
+        return; 
+      }
+      
+      let metadataMatch = null;
+      let urlParamNavn = "";
+      let spillType = "film";
+      let sesongNr = "";
+      let episodeNr = "";
+
+      if (filmId.startsWith("film-")) {
+        urlParamNavn = filmId.replace("film-", "");
+        if (filmer[urlParamNavn]) {
+          metadataMatch = filmer[urlParamNavn];
+          spillType = "film";
+        }
+      } else if (filmId.startsWith("serie-")) {
+        const deler = filmId.split("-"); 
+        urlParamNavn = deler[1];
+        sesongNr = deler[2] ? deler[2].replace("s", "") : "1";
+        episodeNr = deler[3] ? deler[3].replace("e", "") : "1";
+
+        if (serier[urlParamNavn]) {
+          metadataMatch = serier[urlParamNavn];
+          spillType = "serie";
+        }
+      }
+
+      if (!metadataMatch) return;
+
+      if (erInnloggetSomBarn) {
+        if (!erEgnetForBarn(metadataMatch) || !sjekkAldersgrense(metadataMatch)) return;
+      }
+
+      fantInnhold = true;
+
+      const hrefUrl = spillType === "serie"
+        ? `film-mal.html?navn=${encodeURIComponent(urlParamNavn)}&sesong=${encodeURIComponent(sesongNr)}&episode=${encodeURIComponent(episodeNr)}&returUrl=${encodeURIComponent("Hovedside.html")}`
+        : `film-mal.html?navn=${encodeURIComponent(urlParamNavn)}&returUrl=${encodeURIComponent("Hovedside.html")}`;
+
+      let bildeKilde = metadataMatch.poster || metadataMatch.bilde || "";
+      if (spillType === "serie" && metadataMatch.sesonger && metadataMatch.sesonger[sesongNr]) {
+        const epInfo = metadataMatch.sesonger[sesongNr].find(e => String(e.episode) === String(episodeNr));
+        if (epInfo && epInfo.bilde) {
+          bildeKilde = epInfo.bilde;
+        }
+      }
+
+      const link = document.createElement("a");
+      link.href = hrefUrl;
+      link.classList.add("continue-item");
+
+      const episodeTekst = spillType === "serie" && sesongNr && episodeNr
+        ? ` • S${sesongNr}E${episodeNr}` 
+        : "";
+
+      const tittelClean = escapeHTML(metadataMatch.tittel || "");
+
+      link.innerHTML = `
+        <div class="continue-media-wrap">
+          ${bildeKilde 
+            ? `<img src="${escapeHTML(bildeKilde)}" alt="${tittelClean}" loading="lazy">` 
+            : `<div style="width:100%; height:100%; background:#1a2629; display:flex; align-items:center; justify-content:center; padding:10px; text-align:center; font-size:12px; color:#fff;">${tittelClean || 'Mangler bilde'}</div>`
           }
+          <button class="delete-progress-btn" title="Skjul fra Fortsett å se" type="button" aria-label="Skjul fra visning">
+            <i class="fas fa-trash-alt"></i>
+          </button>
+          <div class="progress-bar" style="--progress: ${Math.min(100, Math.max(0, progressVerdi))}%;"></div>
+        </div>
+        <span class="continue-title">${tittelClean}${escapeHTML(episodeTekst)}</span>
+      `;
 
-          link.style.transition = "all 0.3s ease";
-          link.style.transform = "scale(0.8)";
-          link.style.opacity = "0";
-          setTimeout(() => {
-            link.remove();
-            if (gallery.children.length === 0) {
-              section.style.display = "none";
-            } else {
-              oppdaterAlleGalleripiler();
-            }
-          }, 300);
-        });
+      const deleteBtn = link.querySelector(".delete-progress-btn");
+      deleteBtn.addEventListener("click", async (e) => {
+        e.preventDefault();
+        e.stopPropagation();
 
-        gallery.appendChild(link);
+        if (!Array.isArray(profil.skjultFortsett)) {
+          profil.skjultFortsett = [];
+        }
+
+        if (!profil.skjultFortsett.includes(filmId)) {
+          profil.skjultFortsett.push(filmId);
+        }
+
+        localStorage.setItem("watch_nordic_profiles_cache", JSON.stringify(heleProfilArrayet));
+
+        if (registrertBruker) {
+          try {
+            const userDocRef = doc(db, "users", registrertBruker.uid);
+            await updateDoc(userDocRef, {
+              profiler: heleProfilArrayet
+            });
+          } catch (err) {
+            console.error("Feil ved skjuling av tittel i Firebase:", err);
+          }
+        }
+
+        link.style.transition = "all 0.3s ease";
+        link.style.transform = "scale(0.8)";
+        link.style.opacity = "0";
+        setTimeout(() => {
+          link.remove();
+          if (gallery.children.length === 0) {
+            section.style.display = "none";
+          } else {
+            oppdaterAlleGalleripiler();
+          }
+        }, 300);
       });
 
-      if (fantInnhold) {
-        section.style.display = "block";
-        oppdaterAlleGalleripiler();
-      } else {
-        section.style.display = "none";
-      }
-    } catch (err) {
-      console.error("Feil i renderContinueWatching:", err);
+      gallery.appendChild(link);
+    });
+
+    if (fantInnhold) {
+      section.style.display = "block";
+      oppdaterAlleGalleripiler();
+    } else {
+      section.style.display = "none";
     }
+  } catch (err) {
+    console.error("Feil i renderContinueWatching:", err);
   }
-
-  window.addEventListener("storage", (e) => {
-    if (e.key === "watch_nordic_profiles_cache") {
-      renderContinueWatching();
-    }
-  });
-
+}
   // ==================== FIRESTORE DATAHENTING MED CACHE ==================== //
   async function hentDataFraFirestore() {
     const cacheKeyFilmer = "watch_nordic_filmer_cache";
