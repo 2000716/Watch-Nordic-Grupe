@@ -155,7 +155,21 @@
   transform: scale(1.15);
 }
 
-/* Tilpassing for mobil */
+/* Tilpassing for mobil og nettbrett */
+@media (max-width: 1024px) {
+  .top-nav {
+    padding: 0 24px;
+  }
+
+  .nav-links {
+    gap: 18px;
+  }
+
+  .nav-links a {
+    font-size: 14px;
+  }
+}
+
 @media (max-width: 768px) {
   .top-nav {
     padding: 0 20px;
@@ -168,7 +182,6 @@
     );
   }
 
-  /* Når siden scrollers på mobil: Helt solid, ugjennomsiktig farge uten glasseffekt */
   .top-nav.scrolled {
     height: 70px !important;
     background: #091b1e;
@@ -179,5 +192,20 @@
 
   .nav-links {
     display: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .top-nav {
+    padding: 0 14px;
+  }
+
+  .nav-right {
+    gap: 10px;
+  }
+
+  .profil-avatar-wrap {
+    width: 36px;
+    height: 36px;
   }
 }

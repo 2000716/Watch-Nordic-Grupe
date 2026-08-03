@@ -30,6 +30,17 @@
   pointer-events: none !important;
 }
 
+/* 4. Sørger for at loaderen er skjult på touch-enheter etter første visning */
+@media (prefers-reduced-motion: reduce) {
+  #page-loader {
+    transition: none !important;
+  }
+
+  .spinner {
+    animation: none !important;
+  }
+}
+
 /* 4. Spinneren (standard størrelse) */
 .spinner {
   width: 60px;

@@ -2,7 +2,12 @@
 <html lang="no">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#091B1E" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self' https: data: blob:; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com; script-src 'self' 'unsafe-inline' https://www.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' data: https: blob:; connect-src 'self' https:; font-src 'self' https://cdnjs.cloudflare.com; object-src 'none'; base-uri 'self'; frame-ancestors 'none';" />
+  <meta name="referrer-policy" content="strict-origin-when-cross-origin" />
   <title>Min Konto | Watch Nordic™</title>
 
   <link rel="icon" type="image/png" href="https://static.wixstatic.com/media/d9ace9_95bbe3f5ff4b4aab9314a8d08804344e~mv2.png" />
@@ -419,22 +424,28 @@
     let profiler = [];
     let globalEpost = ""; 
     let docRef = null;
+    let currentUser = null;
 
-    // Lokal-caching
     const cachedProfiles = localStorage.getItem("watch_nordic_profiles_cache");
     const cachedEmail = localStorage.getItem("watch_nordic_email_cache");
     if (cachedProfiles && cachedEmail) {
-      profiler = JSON.parse(cachedProfiles);
-      globalEpost = cachedEmail;
-      if(profiler[aktivProfilIndex]) byggProfilgrensesnitt();
+      try {
+        profiler = JSON.parse(cachedProfiles);
+        globalEpost = cachedEmail;
+        if (profiler[aktivProfilIndex]) byggProfilgrensesnitt();
+      } catch (error) {
+        console.warn("Kunne ikke lese lokal profilcache:", error);
+      }
     }
 
     onAuthStateChanged(auth, (user) => {
       if (user) {
+        currentUser = user;
         docRef = doc(db, "users", user.uid);
         globalEpost = user.email || globalEpost;
         hentKontodata();
       } else {
+        currentUser = null;
         window.location.href = "index.html";
       }
     });
@@ -451,8 +462,16 @@
 
     document.getElementById("navLoggUtBtn").addEventListener("click", loggUt);
     document.getElementById("sletteKnapp").addEventListener("click", slettProfil);
-    document.getElementById("loggutAlleBtn").addEventListener("click", () => {
-      alert("Du er nå logget ut på alle andre enheter.");
+    document.getElementById("loggutAlleBtn").addEventListener("click", async () => {
+      try {
+        await signOut(auth);
+        localStorage.removeItem("watch_nordic_profiles_cache");
+        localStorage.removeItem("watch_nordic_email_cache");
+        window.location.href = "index.html";
+      } catch (error) {
+        console.error("Kunne ikke logge ut alle enheter:", error);
+        alert("Kunne ikke logge ut akkurat nå. Prøv igjen.");
+      }
     });
 
     // Endre Navn Logikk
@@ -468,6 +487,7 @@
     });
 
     lagreNavnBtn.addEventListener("click", async () => {
+      if (!profiler[aktivProfilIndex]) return;
       const nyttNavn = nyttNavnInput.value.trim();
       if (nyttNavn && nyttNavn !== profiler[aktivProfilIndex].navn) {
         profiler[aktivProfilIndex].navn = nyttNavn;
@@ -483,12 +503,16 @@
         const docSnap = await getDoc(docRef);
         if (docSnap.exists()) {
           const data = docSnap.data();
-          profiler = data.profiler || [];
+          profiler = Array.isArray(data.profiler) ? data.profiler : [];
           globalEpost = data.epost || globalEpost;
           lagreILokalStorage();
           byggProfilgrensesnitt();
+        } else {
+          profiler = []; 
         }
-      } catch (e) { console.error("Feil ved henting av data:", e); }
+      } catch (e) {
+        console.error("Feil ved henting av data:", e);
+      }
     }
 
     function byggProfilgrensesnitt() {
@@ -508,6 +532,8 @@
     }
 
     async function slettProfil() {
+      if (!profiler[aktivProfilIndex]) return;
+
       if (profiler.length <= 1) {
         alert("Du kan ikke slette den eneste profilen på kontoen.");
         return;
@@ -521,7 +547,12 @@
     }
 
     async function oppdaterProfilData() {
-      await setDoc(docRef, { profiler: profiler }, { merge: true });
+      if (!docRef || !currentUser) return;
+      await setDoc(docRef, {
+        profiler: profiler,
+        epost: globalEpost,
+        sistOppdatert: new Date().toISOString()
+      }, { merge: true });
       lagreILokalStorage();
     }
 
@@ -531,9 +562,15 @@
     }
 
     async function loggUt() {
-      localStorage.clear();
-      await signOut(auth);
-      window.location.href = "index.html";
+      try {
+        await signOut(auth);
+        localStorage.removeItem("watch_nordic_profiles_cache");
+        localStorage.removeItem("watch_nordic_email_cache");
+        window.location.href = "index.html";
+      } catch (error) {
+        console.error("Kunne ikke logge ut:", error);
+        alert("Kunne ikke logge ut akkurat nå. Prøv igjen.");
+      }
     }
   </script>
 </body>

@@ -2,7 +2,7 @@
 // ALT ER OPPDATERT TIL VERSJON 12.15.0 FOR Å MATCHE PERFEKT
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-app.js";
-import { getAuth } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-auth.js";
+import { getAuth, setPersistence, browserLocalPersistence } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-auth.js";
 import { initializeFirestore, persistentLocalCache, persistentMultipleTabManager } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
 
 // Din unike Firebase-konfigurasjon
@@ -21,9 +21,14 @@ const app = initializeApp(firebaseConfig);
 // Eksporterer auth til de andre sidene
 export const auth = getAuth(app);
 
+// Sikrer at innloggingen blir beholdt på tvers av enheter og nettsesjoner
+setPersistence(auth, browserLocalPersistence).catch((error) => {
+  console.warn("Kunne ikke sette auth-persistens:", error);
+});
+
 // Initialiserer Firestore med lokal offline-cache aktivert (sparer ekstremt mye LESING/READS)
 export const db = initializeFirestore(app, {
   localCache: persistentLocalCache({
-    tabManager: persistentMultipleTabManager() // Sikrer at cachingen fungerer selv om brukeren har oppe flere faner samtidig
+    tabManager: persistentMultipleTabManager()
   })
 });

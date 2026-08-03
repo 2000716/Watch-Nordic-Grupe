@@ -3,6 +3,11 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <meta name="theme-color" content="#050F11" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self' https: data: blob:; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com; script-src 'self' 'unsafe-inline' https://www.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' data: https: blob:; media-src 'self' https: blob:; connect-src 'self' https: wss:; font-src 'self' https://cdnjs.cloudflare.com; object-src 'none'; base-uri 'self'; frame-ancestors 'none';" />
+  <meta name="referrer-policy" content="strict-origin-when-cross-origin" />
   <title>Forsiden | Watch Nordic™</title>
 
   <link rel="manifest" href="manifest.json">
@@ -686,8 +691,24 @@
     }
 
     /* ==========================================================================
-       MEDIA QUERIES (MOBIL- & NETTBRETT-OPTIMALISERING - 768px og mindre)
+       MEDIA QUERIES (MOBIL, TELEFON, NETTBRETT OG PC)
        ========================================================================== */
+    @media (max-width: 1024px) {
+      .content-wrapper {
+        width: 95%;
+        bottom: 4%;
+      }
+
+      .text-button-container {
+        padding: 28px;
+        gap: 24px;
+      }
+
+      .buttons-column {
+        min-width: 220px;
+      }
+    }
+
     @media (max-width: 768px) {
       html, body {
         background: #091B1E !important;
@@ -881,6 +902,38 @@
       .footer-links {
         grid-template-columns: repeat(2, 1fr) !important;
         gap: 15px !important;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .content-wrapper {
+        padding: 16px;
+        padding-top: 50vh !important;
+      }
+
+      .text-button-container {
+        padding: 0;
+        gap: 12px;
+      }
+
+      .watch-button {
+        padding: 14px 16px;
+        font-size: 14px;
+        min-height: 48px;
+      }
+
+      .description,
+      .cast-info,
+      .availability-info {
+        font-size: 14px;
+      }
+
+      .recommendations {
+        padding: 0 16px 32px !important;
+      }
+
+      .movie-card {
+        height: 100px !important;
       }
     }
   </style>
@@ -1164,7 +1217,9 @@
 
           const closeBtn = document.createElement("button");
           closeBtn.className = "close-btn";
-          closeBtn.innerHTML = "&times;";
+          closeBtn.type = "button";
+          closeBtn.setAttribute("aria-label", "Lukk beskrivelse");
+          closeBtn.textContent = "×";
 
           const textPara = document.createElement("p");
           textPara.textContent = fullText;
@@ -1523,12 +1578,22 @@
         const dato = new Date(ep.publishDate).toLocaleDateString("no-NO", { day: "numeric", month: "short" });
         const lockOverlay = document.createElement("div");
         lockOverlay.className = "lock-overlay";
-        lockOverlay.innerHTML = `<i class="fas fa-clock"></i><span>${dato}</span>`;
+
+        const lockIcon = document.createElement("i");
+        lockIcon.className = "fas fa-clock";
+        const lockText = document.createElement("span");
+        lockText.textContent = dato;
+
+        lockOverlay.appendChild(lockIcon);
+        lockOverlay.appendChild(lockText);
         thumbDiv.appendChild(lockOverlay);
       } else {
         const playOverlay = document.createElement("div");
         playOverlay.className = "play-overlay";
-        playOverlay.innerHTML = `<i class="fas fa-play"></i>`;
+
+        const playIcon = document.createElement("i");
+        playIcon.className = "fas fa-play";
+        playOverlay.appendChild(playIcon);
         thumbDiv.appendChild(playOverlay);
       }
 
@@ -1572,12 +1637,17 @@
     if (type === "serie" && data.sesonger) {
       if (document.getElementById("seasonButtons")) return;
 
-      recommendationsDiv.innerHTML = `
-        <div class="season-buttons" id="seasonButtons"></div>
-        <div class="episode-gallery" id="episodeGallery"></div>
-      `;
+      recommendationsDiv.replaceChildren();
+      const seasonButtons = document.createElement("div");
+      seasonButtons.className = "season-buttons";
+      seasonButtons.id = "seasonButtons";
 
-      const seasonButtons = document.getElementById("seasonButtons");
+      const episodeGallery = document.createElement("div");
+      episodeGallery.className = "episode-gallery";
+      episodeGallery.id = "episodeGallery";
+
+      recommendationsDiv.appendChild(seasonButtons);
+      recommendationsDiv.appendChild(episodeGallery);
       const sesongNumre = Object.keys(data.sesonger);
 
       if (seasonButtons) {

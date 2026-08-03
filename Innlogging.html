@@ -2,7 +2,12 @@
 <html lang="no">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"/>
+  <meta name="theme-color" content="#050F11" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self' https: data: blob:; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com; script-src 'self' 'unsafe-inline' https://www.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' data: https: blob:; connect-src 'self' https:; font-src 'self' https://cdnjs.cloudflare.com; object-src 'none'; base-uri 'self'; frame-ancestors 'none';" />
+  <meta name="referrer-policy" content="strict-origin-when-cross-origin" />
   <title>Innlogging / Registrering | Watch Nordic™</title>
   
   <link rel="icon" type="image/png" href="https://static.wixstatic.com/media/d9ace9_95bbe3f5ff4b4aab9314a8d08804344e~mv2.png" />
@@ -123,6 +128,28 @@
       font-weight: 700;
       cursor: pointer;
       font-size: 14px;
+    }
+
+    .password-input-wrap {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    .password-input-wrap input {
+      padding-right: 84px;
+    }
+
+    .password-toggle {
+      position: absolute;
+      right: 10px;
+      background: transparent;
+      border: none;
+      color: #00FFCC;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      padding: 6px 8px;
     }
 
     .selected-email-badge button:hover {
@@ -359,7 +386,7 @@
           
           <div class="selected-email-badge">
             <span id="visEpostTekst"></span>
-            <button type="button" onclick="gaaTilSteg1()">Endre</button>
+            <button type="button" id="changeEmailBtn">Endre</button>
           </div>
 
           <div class="input-group" id="navnGruppe" style="display: none;">
@@ -369,7 +396,10 @@
 
           <div class="input-group">
             <label for="passord">Passord</label>
-            <input type="password" id="passord" placeholder="••••••••" autocomplete="current-password" />
+            <div class="password-input-wrap">
+              <input type="password" id="passord" placeholder="••••••••" autocomplete="current-password" />
+              <button type="button" class="password-toggle" id="passwordToggle" aria-label="Vis passord">Vis</button>
+            </div>
             <div class="forgot-text" id="forgotContainer">
               <a href="Passordfeil.html">Glemt passord?</a>
             </div>
@@ -425,7 +455,8 @@
     signInWithEmailAndPassword, 
     createUserWithEmailAndPassword,
     setPersistence,
-    browserLocalPersistence
+    browserLocalPersistence,
+    onAuthStateChanged
   } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-auth.js";
   import { doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
 
@@ -440,6 +471,8 @@
   const authForm = document.getElementById("authForm");
   const nesteKnapp = document.getElementById("nesteKnapp");
   const submitKnapp = document.getElementById("submitKnapp");
+  const changeEmailBtn = document.getElementById("changeEmailBtn");
+  const passwordToggle = document.getElementById("passwordToggle");
 
   function settFeilmelding(melding = "") {
     if (feilmelding) feilmelding.textContent = melding;
@@ -450,6 +483,10 @@
     if (submitKnapp) {
       submitKnapp.disabled = laster;
       submitKnapp.style.opacity = laster ? "0.6" : "1";
+    }
+    if (nesteKnapp) {
+      nesteKnapp.disabled = laster;
+      nesteKnapp.style.opacity = laster ? "0.6" : "1";
     }
   }
 
@@ -472,6 +509,23 @@
     nesteKnapp.addEventListener("click", (e) => {
       e.preventDefault();
       validerOgGaVidere();
+    });
+  }
+
+  if (changeEmailBtn) {
+    changeEmailBtn.addEventListener("click", (e) => {
+      e.preventDefault();
+      gaaTilSteg1();
+    });
+  }
+
+  if (passwordToggle && passordInput) {
+    passwordToggle.addEventListener("click", () => {
+      const erSynlig = passordInput.type === "text";
+      passordInput.type = erSynlig ? "password" : "text";
+      passwordToggle.textContent = erSynlig ? "Vis" : "Skjul";
+      passwordToggle.setAttribute("aria-label", erSynlig ? "Vis passord" : "Skjul passord");
+      passordInput.focus();
     });
   }
 
@@ -542,6 +596,12 @@
     }, 250);
   }
 
+  onAuthStateChanged(auth, (user) => {
+    if (user && window.location.pathname.toLowerCase().includes("innlogging")) {
+      window.location.replace("Hovedside.html?index=0");
+    }
+  });
+
   // --- FIREBASE AUTENTISERING & FIRESTORE-OPERASJONER ---
   if (authForm) {
     authForm.addEventListener("submit", async function(event) {
@@ -568,7 +628,6 @@
       settFeilmelding("Vennligst vent..."); 
 
       try {
-        // Sikrer at sesjonen holdes aktiv i nettleseren på tvers av enheter
         await setPersistence(auth, browserLocalPersistence);
 
         const standardProfil = [
@@ -585,11 +644,11 @@
           const userCredential = await createUserWithEmailAndPassword(auth, epost, passord);
           const user = userCredential.user;
 
-          // Lagre ny bruker direkte i Firestore
           await setDoc(doc(db, "users", user.uid), {
             epost: epost,
             profiler: standardProfil,
-            opprettetDato: new Date().toISOString()
+            opprettetDato: new Date().toISOString(),
+            sistOppdatert: new Date().toISOString()
           });
 
           window.location.replace("Hovedside.html?index=0");
@@ -604,8 +663,11 @@
           const docSnap = await getDoc(docRef);
 
           if (!docSnap.exists()) {
-            // Hvis bruker mangler data i Firestore, opprett standard-profil
-            await setDoc(docRef, { epost: epost, profiler: standardProfil });
+            await setDoc(docRef, {
+              epost: epost,
+              profiler: standardProfil,
+              sistOppdatert: new Date().toISOString()
+            });
           }
 
           window.location.replace("Hovedside.html?index=0");
