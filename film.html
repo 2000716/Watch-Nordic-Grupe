@@ -736,8 +736,11 @@
       .background-image,
       .background-video {
         object-position: center top;
-        transform: scale(1.04);
-        filter: saturate(1.05) contrast(1.05);
+        transform: scale(1.06);
+        filter: saturate(1.08) contrast(1.08);
+        top: 0;
+        left: 0;
+        border-radius: 0;
       }
 
       .hero {
@@ -758,10 +761,11 @@
         position: absolute !important;
         top: 0;
         left: 0;
-        height: 65vh !important; 
+        height: 72vh !important;
         width: 100% !important;
         z-index: 1 !important;
         object-fit: cover;
+        object-position: center top;
       }
 
       .overlay {
@@ -770,8 +774,8 @@
         top: 0;
         left: 0;
         width: 100% !important;
-        height: 65vh !important;
-        background: linear-gradient(to bottom, rgba(0,0,0,.15) 20%, rgba(9,27,30,.95) 100%) !important;
+        height: 72vh !important;
+        background: linear-gradient(to bottom, rgba(0,0,0,.05) 0%, rgba(0,0,0,.2) 30%, rgba(0,0,0,.55) 70%, rgba(9,27,30,.95) 100%) !important;
         z-index: 2 !important;
       }
 
@@ -784,10 +788,10 @@
         inset: auto !important;
         width: 100% !important;
         padding: 20px;
-        padding-top: 53vh !important; 
-        margin-top: -35px !important; 
+        padding-top: 54vh !important;
+        margin-top: -8px !important;
         background: transparent !important;
-        z-index: 3 !important; 
+        z-index: 3 !important;
         display: flex !important;
         flex-direction: column !important;
       }
