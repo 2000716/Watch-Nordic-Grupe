@@ -254,6 +254,12 @@
       outline: none;
     }
 
+    .pin-hint {
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 6px;
+    }
+
     .edit-box input:focus { border-color: rgba(255, 255, 255, 0.4); }
 
     .edit-box button {
@@ -381,6 +387,20 @@
             <div class="value" id="epostView">Laster...</div>
           </div>
         </div>
+
+        <div class="row">
+          <div class="info-block">
+            <div class="label">Inngangskode</div>
+            <div class="value" id="pinView">Laster...</div>
+            <div id="editPinBox" class="edit-box hidden">
+              <input type="password" id="nyPinInput" placeholder="Skriv ny kode">
+              <button class="btn-save" id="lagrePinBtn">Lagre</button>
+              <button class="btn-cancel" id="avbrytPinBtn">Avbryt</button>
+            </div>
+            <div class="pin-hint">La feltet stå tomt for å fjerne koden.</div>
+          </div>
+          <button class="edit-trigger" id="endrePinKnapp">Legg til</button>
+        </div>
       </div>
 
       <h2><i class="fa-solid fa-tv"></i> Enheter</h2>
@@ -420,6 +440,12 @@
     const nyttNavnInput = document.getElementById("nyttNavnInput");
     const lagreNavnBtn = document.getElementById("lagreNavnBtn");
     const avbrytNavnBtn = document.getElementById("avbrytNavnBtn");
+
+    const endrePinKnapp = document.getElementById("endrePinKnapp");
+    const editPinBox = document.getElementById("editPinBox");
+    const nyPinInput = document.getElementById("nyPinInput");
+    const lagrePinBtn = document.getElementById("lagrePinBtn");
+    const avbrytPinBtn = document.getElementById("avbrytPinBtn");
 
     let profiler = [];
     let globalEpost = ""; 
@@ -498,6 +524,29 @@
       endreNavnKnapp.classList.remove("hidden");
     });
 
+    endrePinKnapp.addEventListener("click", () => {
+      if (!profiler[aktivProfilIndex]) return;
+      nyPinInput.value = "";
+      editPinBox.classList.remove("hidden");
+      endrePinKnapp.classList.add("hidden");
+      nyPinInput.focus();
+    });
+
+    avbrytPinBtn.addEventListener("click", () => {
+      editPinBox.classList.add("hidden");
+      endrePinKnapp.classList.remove("hidden");
+    });
+
+    lagrePinBtn.addEventListener("click", async () => {
+      if (!profiler[aktivProfilIndex]) return;
+      const nyPin = nyPinInput.value.trim();
+      profiler[aktivProfilIndex].pin = nyPin ? nyPin : null;
+      await oppdaterProfilData();
+      byggProfilgrensesnitt();
+      editPinBox.classList.add("hidden");
+      endrePinKnapp.classList.remove("hidden");
+    });
+
     async function hentKontodata() {
       try {
         const docSnap = await getDoc(docRef);
@@ -523,6 +572,10 @@
       navnView.innerText = gjeldendeProfil.navn;
       epostView.innerText = globalEpost;
       document.getElementById("profilbilde").src = gjeldendeProfil.bilde;
+
+      const pinStatus = gjeldendeProfil.pin ? "Kode satt" : "Ingen kode satt";
+      document.getElementById("pinView").innerText = pinStatus;
+      endrePinKnapp.innerText = gjeldendeProfil.pin ? "Endre" : "Legg til";
 
       if (gjeldendeProfil.isKids) {
         endreNavnKnapp.classList.add("hidden");

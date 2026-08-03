@@ -282,6 +282,14 @@
       border-color: var(--accent);
     }
 
+    .profile-lock {
+      margin-top: 8px;
+      color: var(--accent);
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.4px;
+    }
+
     .checkbox-container {
       display: flex;
       align-items: center;
@@ -464,11 +472,14 @@
 
         const kidsBadgeHtml = profil.isKids ? `<br><span class="kids-badge">Kids</span>` : '';
 
+        const lockHtml = profil.pin ? `<div class="profile-lock"><i class="fa-solid fa-lock"></i> Kode</div>` : '';
+
         div.innerHTML = `
           <div class="avatar">
             <img src="${profil.bilde || (profil.isKids ? barnBilde : standardBilde)}" alt="${profil.navn}">
           </div>
           <div class="name">${profil.navn}${kidsBadgeHtml}</div>
+          ${lockHtml}
           <div class="action-btn edit-btn" title="Endre navn og bilde">
             <i class="fa-solid fa-pen"></i>
           </div>
