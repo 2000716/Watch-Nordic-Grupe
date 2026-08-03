@@ -1,36 +1,35 @@
 /* ==========================================================================
-   PAGE LOADER (Går helt opp bak toppmenyen)
+   PAGE LOADER (Sømløs bakgrunn bak toppmenyen)
    ========================================================================== */
 
-/* 1. Gir toppmenyen høyest z-index slik at menyinnholdet er synlig og klikkbart */
+/* 1. Tvinger menyen til å ligge ØVERST av alt */
 .top-nav {
-  z-index: 10000 !important;
+  z-index: 10005 !important;
 }
 
-/* 2. Laderen dekker Hele skjermen fra top: 0, så bakgrunnen går helt opp */
+/* 2. Loaderen dekker HELE skjermen fra absolutte toppen (top: 0) */
 #page-loader {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh; /* Fyller hele skjermen, inkludert bak menyen */
-  background-color: #050F11; /* Bakgrunnsfargen som nå skinner gjennom meny-gradienten */
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding-top: 70px; /* Sørger for at spinneren er sentrert på skjermen under menyen */
-  box-sizing: border-box;
-  z-index: 9998; /* Under menyen (10000), men over alt innhold i main */
-  transition: opacity 0.6s ease, visibility 0.6s ease;
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  background-color: #050F11 !important; /* Mørk bakgrunnsfarge som dekker alt */
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  z-index: 10000 !important; /* Ligger rett under menyen (10005), men over alt annet */
+  transition: opacity 0.6s ease, visibility 0.6s ease !important;
 }
 
-/* Skjul-klasse som JavaScript legger til når siden er ferdig lastet */
+/* 3. Når JavaScript legger til .fade-out */
 #page-loader.fade-out {
-  opacity: 0;
-  visibility: hidden;
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
 }
 
-/* Spinneren */
+/* 4. Spinneren (justert litt ned slik at den er sentrert på flaten under 70px-menyen) */
 .spinner {
   width: 60px;
   height: 60px;
@@ -38,18 +37,16 @@
   border-top: 6px solid #2ecc71;
   border-radius: 50%;
   animation: spin 1s linear infinite;
+  transform: translateY(35px); /* Skyver kun spinneren litt ned */
 }
 
-/* Tilpassing for mobil */
+/* Mobil-tilpasning */
 @media (max-width: 768px) {
-  #page-loader {
-    padding-top: 70px;
-  }
-
   .spinner {
     width: 45px;
     height: 45px;
     border-width: 5px;
+    transform: translateY(35px);
   }
 }
 
