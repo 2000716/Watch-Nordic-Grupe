@@ -55,9 +55,8 @@
         background: #091B1E !important;
       }
     }
-    /* ==========================================================================
-       3. HERO-SEKSJON OG BAKGRUNNSMEDIA
-       ========================================================================== */
+
+    /* HERO-SEKSJON OG BAKGRUNNSMEDIA */
     .hero {
       position: relative;
       width: 100vw;
@@ -99,9 +98,7 @@
       z-index: 1;
     }
 
-    /* ==========================================================================
-       4. INNHOLD OG GLASS PANEL
-       ========================================================================== */
+    /* INNHOLD OG GLASS PANEL */
     .content-wrapper {
       position: absolute;
       bottom: 5%;
@@ -231,9 +228,7 @@
       border-radius: 6px;
     }
 
-    /* ==========================================================================
-       5. STRØMMETJENESTE-KNAPPER
-       ========================================================================== */
+    /* STRØMMETJENESTE-KNAPPER */
     .buttons-column {
       display: flex;
       flex-direction: column;
@@ -251,7 +246,7 @@
       width: 100%;
       padding: 14px 28px;
       background: #ffffff !important;
-      color: #000000 !important;        
+      color: #000000 !important;         
       font-size: 16px;
       font-weight: 600;
       text-transform: uppercase;
@@ -288,9 +283,7 @@
       transform: none !important;
     }
 
-    /* ==========================================================================
-       6. ANBEFALINGER & PRO STRØMME-EPISODER (SYMMETRISK BREDDE MED CONTENT-WRAPPER)
-       ========================================================================== */
+    /* ANBEFALINGER */
     .recommendations {
       margin: 40px auto 0;
       padding: 0 0 50px 0;
@@ -307,7 +300,6 @@
       margin-bottom: 20px;
     }
 
-    /* ANBEFALINGER: Grid */
     .gallery {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
@@ -357,9 +349,7 @@
       color: #fff;
     }
 
-    /* --------------------------------------------------------------------------
-       EPISODES - STRØMMEDESIGN
-       -------------------------------------------------------------------------- */
+    /* EPISODER - STRØMMEDESIGN */
     .season-buttons {
       display: flex;
       align-items: center;
@@ -568,9 +558,7 @@
       color: #fff;
     }
 
-    /* ==========================================================================
-       7. FOOTER OG SKJERM-POPUPS
-       ========================================================================== */
+    /* FOOTER OG POPUPS */
     .footer {
       width: 100%;
       padding: 70px 80px 35px;
@@ -697,9 +685,7 @@
       display: flex;
     }
 
-    /* ==========================================================================
-       8. MEDIA QUERIES (MOBIL-OPTIMALISERING - 768px og mindre)
-       ========================================================================== */
+    /* MEDIA QUERIES (MOBIL-OPTIMALISERING) */
     @media(max-width: 768px) {
       body, .hero {
         background: rgb(9, 27, 30) !important; 
@@ -835,7 +821,6 @@
         align-self: flex-start !important;
       }
 
-      /* MOBIL: Tilpasninger */
       .recommendations {
         width: 100% !important;
         margin: 30px 0 0 !important;
@@ -859,7 +844,6 @@
         border-radius: 4px !important;
       }
 
-      /* MOBIL EPISODE DESIGN */
       .episode-card {
         flex-direction: column;
         align-items: flex-start;
@@ -896,7 +880,7 @@
   </style>
 </head>
 <body>
-<header class="top-nav">
+  <header class="top-nav">
     <div class="nav-left">
       <a href="Hovedside.html" class="watch-logo-svg">
         <img src="https://static.wixstatic.com/media/d9ace9_081ea242211b45a2801873c3067e1205~mv2.png" alt="Watch Nordic">
@@ -926,81 +910,81 @@
   </header>
  
   <div id="page-loader">
-      <div class="spinner"></div>
-    </div>
-  
-<div class="hero">
-  <img class="background-image" id="backgroundImage" src="" alt="Bakgrunnsbilde" />
-  <video id="trailerVideo" class="background-video" muted playsinline></video>
-
-  <div class="overlay"></div>
-  <div class="bottom-fade"></div>
-
-  <div id="videoControls" class="video-controls">
-    <button id="pauseBtn"><i class="fas fa-pause"></i></button>
-    <button id="soundBtn"><i class="fas fa-volume-mute"></i></button>
+    <div class="spinner"></div>
   </div>
+  
+  <div class="hero">
+    <img class="background-image" id="backgroundImage" src="" alt="Bakgrunnsbilde" />
+    <video id="trailerVideo" class="background-video" muted playsinline></video>
 
-  <div class="content-wrapper">
-    <div class="logo-container">
-      <img class="film-logo" src="" alt="Filmlogo" />
+    <div class="overlay"></div>
+    <div class="bottom-fade"></div>
+
+    <div id="videoControls" class="video-controls">
+      <button id="pauseBtn" aria-label="Pause"><i class="fas fa-pause"></i></button>
+      <button id="soundBtn" aria-label="Mute"><i class="fas fa-volume-mute"></i></button>
     </div>
 
-    <div class="left-content">
-      <div class="text-button-container">
-        <div class="buttons-column">
-          <button class="watch-button" id="watchBtn">
-            <i class="fas fa-play"></i><span> Se nå</span>
-          </button>
-          <button class="watch-button" id="addToListBtn">
-            <i class="fas fa-plus"></i><span> Legg til i Min liste</span>
-          </button>
-        </div>
+    <div class="content-wrapper">
+      <div class="logo-container">
+        <img class="film-logo" src="" alt="Filmlogo" />
+      </div>
 
-        <div class="text-container">
-          <p class="description"></p>
-          <div class="metadata"></div>
-          <div class="availability-info" id="availabilityInfo"></div>
+      <div class="left-content">
+        <div class="text-button-container">
+          <div class="buttons-column">
+            <button class="watch-button" id="watchBtn">
+              <i class="fas fa-play"></i><span> Se nå</span>
+            </button>
+            <button class="watch-button" id="addToListBtn">
+              <i class="fas fa-plus"></i><span> Legg til i Min liste</span>
+            </button>
+          </div>
+
+          <div class="text-container">
+            <p class="description"></p>
+            <div class="metadata"></div>
+            <div class="availability-info" id="availabilityInfo"></div>
+          </div>
+          <div class="cast-info"></div>
         </div>
-        <div class="cast-info"></div>
       </div>
     </div>
   </div>
-</div>
   
-<div class="recommendations">
-  <h2>Anbefalt til deg</h2>
-  <div class="gallery" id="recommendationGallery"></div>
-</div>
-
-<footer class="footer">
-<div class="footer-socials">
-  <a href="https://www.instagram.com/watchnordicoriginals?igsh=aWRvcTJmMWl1NGRp&utm_source=qr"><i class="fab fa-instagram"></i></a>
-  <a href="www.tiktok.com/@watchnordicoriginals"><i class="fab fa-tiktok"></i></a>
-  <a href="#"><i class="fab fa-youtube"></i></a>
-</div>
-
-  <div class="footer-links">
-    <a href="om.html">Om Watch Nordic</a>
-    <a href="kontakt.html">Kontakt oss</a>
-    <a href="personvern.html">Personvern</a>
-    <a href="hjelp.html">Hjelpesenter</a>
-    <a href="#">Jobber</a>
-    <a href="#">Investorinformasjon</a>
-    <a href="#">Vilkår</a>
-    <a href="#">Informasjonskapsler</a>
-    <a href="#">Juridisk informasjon</a>
-    <a href="#">Bedriftskonto</a>
-    <a href="#">Gavekort</a>
-    <a href="#">Enheter</a>
+  <div class="recommendations">
+    <h2>Anbefalt til deg</h2>
+    <div class="gallery" id="recommendationGallery"></div>
   </div>
 
-  <div class="footer-copy">© 2026 Watch Nordic™</div>
-  <div class="footer-bottom">
-   Alle varemerker fra WATCH NORDIC™, WATCH NORDIC ORIGINALS™ og alle øvrige tilknyttede immaterielle rettigheter tilhører Watch Nordic Group og brukes under lisens av Watch Nordic™. Alle varemerker, logoer, filmer, serier, bilder, design og øvrige tilknyttede immaterielle rettigheter tilhører sine respektive eiere. Alt innhold er beskyttet av opphavsrett og internasjonale varemerkelover. Alle rettigheter forbeholdt.
-  </div>
-</footer>
-  
+  <footer class="footer">
+    <div class="footer-socials">
+      <a href="https://www.instagram.com/watchnordicoriginals?igsh=aWRvcTJmMWl1NGRp&utm_source=qr" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+      <a href="https://www.tiktok.com/@watchnordicoriginals" aria-label="TikTok"><i class="fab fa-tiktok"></i></a>
+      <a href="#" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+    </div>
+
+    <div class="footer-links">
+      <a href="om.html">Om Watch Nordic</a>
+      <a href="kontakt.html">Kontakt oss</a>
+      <a href="personvern.html">Personvern</a>
+      <a href="hjelp.html">Hjelpesenter</a>
+      <a href="#">Jobber</a>
+      <a href="#">Investorinformasjon</a>
+      <a href="#">Vilkår</a>
+      <a href="#">Informasjonskapsler</a>
+      <a href="#">Juridisk informasjon</a>
+      <a href="#">Bedriftskonto</a>
+      <a href="#">Gavekort</a>
+      <a href="#">Enheter</a>
+    </div>
+
+    <div class="footer-copy">© 2026 Watch Nordic™</div>
+    <div class="footer-bottom">
+      Alle varemerker fra WATCH NORDIC™, WATCH NORDIC ORIGINALS™ og alle øvrige tilknyttede immaterielle rettigheter tilhører Watch Nordic Group og brukes under lisens av Watch Nordic™. Alle varemerker, logoer, filmer, serier, bilder, design og øvrige tilknyttede immaterielle rettigheter tilhører sine respektive eiere. Alt innhold er beskyttet av opphavsrett og internasjonale varemerkelover. Alle rettigheter forbeholdt.
+    </div>
+  </footer>
+
 <script src="lader.js"></script>
 <script type="module">
   import { auth, db } from "./firebase-oppsett.js";
