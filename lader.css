@@ -1,28 +1,30 @@
 /* ==========================================================================
-   PAGE LOADER (Ligger under menyen - Både PC og Mobil)
+   PAGE LOADER (Går helt opp bak toppmenyen)
    ========================================================================== */
 
-/* 1. Vi gir menyen hakket høyere z-index så den garantert ligger øverst */
+/* 1. Gir toppmenyen høyest z-index slik at menyinnholdet er synlig og klikkbart */
 .top-nav {
   z-index: 10000 !important;
 }
 
-/* 2. Laderen dekker hele skjermen under menyen (start fra top: 70px) */
+/* 2. Laderen dekker Hele skjermen fra top: 0, så bakgrunnen går helt opp */
 #page-loader {
   position: fixed;
-  top: 70px; /* Matchet med din låste menyhøyde på 70px */
+  top: 0;
   left: 0;
   width: 100vw;
-  height: calc(100vh - 70px); /* Fyller resten av skjermen helt ned */
-  background-color: #050F11; /* Bakgrunnsfargen din */
+  height: 100vh; /* Fyller hele skjermen, inkludert bak menyen */
+  background-color: #050F11; /* Bakgrunnsfargen som nå skinner gjennom meny-gradienten */
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 9998; /* Ligger rett under menyen (10000), men over alt annet innhold */
+  padding-top: 70px; /* Sørger for at spinneren er sentrert på skjermen under menyen */
+  box-sizing: border-box;
+  z-index: 9998; /* Under menyen (10000), men over alt innhold i main */
   transition: opacity 0.6s ease, visibility 0.6s ease;
 }
 
-/* Skjul-klasse som JavaScript legger til */
+/* Skjul-klasse som JavaScript legger til når siden er ferdig lastet */
 #page-loader.fade-out {
   opacity: 0;
   visibility: hidden;
@@ -38,11 +40,10 @@
   animation: spin 1s linear infinite;
 }
 
-/* Tilpassing for mobil (mindre spinner for renere utseende) */
+/* Tilpassing for mobil */
 @media (max-width: 768px) {
   #page-loader {
-    top: 70px; /* Menyen din er også 70px på mobil */
-    height: calc(100vh - 70px);
+    padding-top: 70px;
   }
 
   .spinner {
