@@ -121,7 +121,6 @@
       font-size: 15px;
     }
 
-    /* Enda større avatar (økt fra 110px til 160px) */
     .avatar-wrapper {
       position: relative;
       width: 160px;
@@ -144,7 +143,6 @@
       transform: scale(1.02);
     }
 
-    /* Blyantboblen (skalert opp til 42px) */
     .edit-badge {
       position: absolute;
       bottom: 4px;
@@ -235,7 +233,7 @@
 
     .hidden { display: none !important; }
 
-    /* INLINE ENDRING AV NAVN */
+    /* INLINE ENDRING */
     .edit-box {
       display: flex;
       gap: 10px;
@@ -253,6 +251,20 @@
       font-size: 14px;
       outline: none;
     }
+
+    .edit-box input:focus { border-color: rgba(255, 255, 255, 0.4); }
+
+    .edit-box button {
+      padding: 8px 14px;
+      border-radius: 6px;
+      border: none;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .btn-save { background: white; color: black; }
+    .btn-cancel { background: rgba(255,255,255,0.1); color: white; }
 
     .pin-hint {
       font-size: 12px;
@@ -305,20 +317,6 @@
       text-transform: uppercase;
       letter-spacing: 0.5px;
     }
-
-    .edit-box input:focus { border-color: rgba(255, 255, 255, 0.4); }
-
-    .edit-box button {
-      padding: 8px 14px;
-      border-radius: 6px;
-      border: none;
-      font-size: 13px;
-      font-weight: 600;
-      cursor: pointer;
-    }
-
-    .btn-save { background: white; color: black; }
-    .btn-cancel { background: rgba(255,255,255,0.1); color: white; }
 
     /* SLETT PROFIL */
     .delete-container {
@@ -494,6 +492,7 @@
     const lagreNavnBtn = document.getElementById("lagreNavnBtn");
     const avbrytNavnBtn = document.getElementById("avbrytNavnBtn");
 
+    // PIN elementer
     const pinToggleBtn = document.getElementById("pinToggleBtn");
     const pinToggleText = pinToggleBtn.querySelector(".pin-toggle-text");
     const editPinBox = document.getElementById("editPinBox");
@@ -506,6 +505,7 @@
     let docRef = null;
     let currentUser = null;
 
+    // Lokal cache-sjekk
     const cachedProfiles = localStorage.getItem("watch_nordic_profiles_cache");
     const cachedEmail = localStorage.getItem("watch_nordic_email_cache");
     if (cachedProfiles && cachedEmail) {
@@ -530,11 +530,9 @@
       }
     });
 
-    const gaaTilVelgBilde = () => {
+    document.getElementById("avatarContainer").addEventListener("click", () => {
       window.location.href = `VelgProfilbilde.html?index=${aktivProfilIndex}`;
-    };
-
-    document.getElementById("avatarContainer").addEventListener("click", gaaTilVelgBilde);
+    });
 
     document.getElementById("navHovedsideBtn").addEventListener("click", () => {
       window.location.href = `hvem-ser-på.html?index=${aktivProfilIndex}`;
@@ -554,11 +552,12 @@
       }
     });
 
-    // Endre Navn Logikk
+    /* --- Endre Navn Logikk --- */
     endreNavnKnapp.addEventListener("click", () => {
-      nyttNavnInput.value = profiler[aktivProfilIndex].navn;
+      nyttNavnInput.value = profiler[aktivProfilIndex]?.navn || "";
       editNavnBox.classList.remove("hidden");
       endreNavnKnapp.classList.add("hidden");
+      nyttNavnInput.focus();
     });
 
     avbrytNavnBtn.addEventListener("click", () => {
@@ -578,9 +577,11 @@
       endreNavnKnapp.classList.remove("hidden");
     });
 
+    /* --- PIN Toggle Logikk --- */
     pinToggleBtn.addEventListener("click", async () => {
       if (!profiler[aktivProfilIndex]) return;
 
+      // Hvis koden allerede er aktiv og du trykker på togglen: skru av koden
       if (pinToggleBtn.classList.contains("active")) {
         profiler[aktivProfilIndex].pin = null;
         await oppdaterProfilData();
@@ -588,19 +589,18 @@
         return;
       }
 
+      // Hvis koden skal aktiveres: Åpne feltet for å skrive inn kode
       nyPinInput.value = "";
       editPinBox.classList.remove("hidden");
-      pinToggleBtn.classList.add("active");
-      pinToggleText.textContent = "Kode på";
       nyPinInput.focus();
     });
 
     avbrytPinBtn.addEventListener("click", () => {
       editPinBox.classList.add("hidden");
-      if (!profiler[aktivProfilIndex]?.pin) {
-        pinToggleBtn.classList.remove("active");
-        pinToggleText.textContent = "Kode av";
-      }
+      const harPin = Boolean(profiler[aktivProfilIndex]?.pin);
+      pinToggleBtn.classList.toggle("active", harPin);
+      pinToggleBtn.setAttribute("aria-pressed", harPin ? "true" : "false");
+      pinToggleText.textContent = harPin ? "Kode på" : "Kode av";
     });
 
     lagrePinBtn.addEventListener("click", async () => {
@@ -616,6 +616,7 @@
       editPinBox.classList.add("hidden");
     });
 
+    /* --- Firebase & Hjelpefunksjoner --- */
     async function hentKontodata() {
       try {
         const docSnap = await getDoc(docRef);
@@ -640,13 +641,15 @@
       navnDisplay.innerText = gjeldendeProfil.navn;
       navnView.innerText = gjeldendeProfil.navn;
       epostView.innerText = globalEpost;
-      document.getElementById("profilbilde").src = gjeldendeProfil.bilde;
+      document.getElementById("profilbilde").src = gjeldendeProfil.bilde || "https://via.placeholder.com/160";
 
       const harPin = Boolean(gjeldendeProfil.pin);
-      const pinStatus = harPin ? "Kode satt" : "Ingen kode satt";
-      document.getElementById("pinView").innerText = pinStatus;
+      document.getElementById("pinView").innerText = harPin ? "Kode satt" : "Ingen kode satt";
+      
       pinToggleBtn.classList.toggle("active", harPin);
+      pinToggleBtn.setAttribute("aria-pressed", harPin ? "true" : "false");
       pinToggleText.textContent = harPin ? "Kode på" : "Kode av";
+      
       editPinBox.classList.add("hidden");
 
       if (gjeldendeProfil.isKids) {
