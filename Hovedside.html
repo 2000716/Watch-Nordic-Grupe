@@ -384,52 +384,52 @@
       }
     }
 
-    /* ==========================================================================
-       5. TOP 10 GALLERI
-       ========================================================================== */
-    .top10-gallery {
-      display: flex;
-      flex-direction: row;
-      gap: 30px;
-      padding: 10px 40px; 
-      overflow-x: auto;
-      overflow-y: hidden;
-      -webkit-overflow-scrolling: touch;
-      scrollbar-width: none;
-    }
+/* ==========================================================================
+   5. TOP 10 GALLERI (STØRRE)
+   ========================================================================== */
+.top10-gallery {
+  display: flex;
+  flex-direction: row;
+  gap: 40px; /* Økt fra 30px for bedre luft mellom større kort */
+  padding: 20px 50px; /* Økt polstring slik at tallene ikke blir avskjært */
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
 
-    .top10-gallery::-webkit-scrollbar { display: none; }
+.top10-gallery::-webkit-scrollbar { display: none; }
 
-    .top10-item {
-      position: relative;
-      display: inline-block;
-      border-radius: 8px;
-      cursor: pointer;
-      transition: transform 0.3s ease;
-      flex-shrink: 0 !important;
-    }
+.top10-item {
+  position: relative;
+  display: inline-block;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+  flex-shrink: 0 !important;
+}
 
-    .top10-item img {
-      width: 150px;
-      height: 225px;
-      border-radius: 8px;
-      display: block;
-    }
+.top10-item img {
+  width: 200px;  /* Økt fra 150px */
+  height: 300px; /* Økt fra 225px (beholder 2:3 stil-forholdet) */
+  object-fit: cover; /* Sikrer at bildet skalerer piffig uten å strekkes */
+  border-radius: 8px;
+  display: block;
+}
 
-    .top10-number {
-      position: absolute;
-      bottom: -10px;
-      left: -15px;
-      font-size: 70px;
-      font-weight: 900;
-      line-height: 1;
-      color: transparent;
-      -webkit-text-stroke: 3px #00FFCC;
-      z-index: 2;
-      transition: all 0.3s ease;
-      pointer-events: none;
-    }
-
+.top10-number {
+  position: absolute;
+  bottom: -15px; /* Justert litt lengre ned for større tall */
+  left: -20px;   /* Justert litt lengre til venstre */
+  font-size: 90px; /* Økt fra 70px */
+  font-weight: 900;
+  line-height: 1;
+  color: transparent;
+  -webkit-text-stroke: 4px #00FFCC; /* Gjort streken litt tykkere (4px) */
+  z-index: 2;
+  transition: all 0.3s ease;
+  pointer-events: none;
+}
     /* ==========================================================================
        6. HOVER OVERLAY FOR BILDER (PC)
        ========================================================================== */
