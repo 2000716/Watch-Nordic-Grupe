@@ -1296,6 +1296,8 @@ function oppdaterFremdriftILokalMatrise(status) {
   if (!heleProfilArrayet[profilIdx].fremdrift) heleProfilArrayet[profilIdx].fremdrift = {};
   if (!heleProfilArrayet[profilIdx].historikk) heleProfilArrayet[profilIdx].historikk = {};
 
+  const naaTid = Date.now(); // Tidsstempel i millisekunder for nøyaktig sortering
+
   if (status === "ferdig" || percent > 96) {
     delete heleProfilArrayet[profilIdx].fremdrift[filmId];
     heleProfilArrayet[profilIdx].historikk[navn] = "ferdig";
@@ -1308,7 +1310,8 @@ function oppdaterFremdriftILokalMatrise(status) {
       currentTime: video.currentTime,
       percent: percent,
       status: "paabegynt",
-      sistOppdatert: new Date().toISOString(),
+      lastUpdated: naaTid,                    // Viktig for sortering
+      sistOppdatert: new Date().toISOString(),// ISO-streng for kompatibilitet
       tittel: film.tittel,
       id: filmId,
       navn: navn,
