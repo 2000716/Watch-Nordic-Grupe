@@ -12,10 +12,10 @@ function skjulLoader() {
   }
 }
 
-// Nød-fallback: Hvis noe i Firebase/API-et feiler eller tar uvanlig lang tid,
-// tvangsskjules loaderen etter 8 sekunder slik at brukeren ikke blir stående fast.
+// Disney+-stil: Vis laderen raskt, og fjern den automatisk etter 1 sekund (1000 millisekunder) 
+// slik at siden føles lynrask og responsiv, samtidig som du beholder den proffe looken.
 window.addEventListener("load", () => {
   setTimeout(() => {
     skjulLoader();
-  }, 8000);
+  }, 1000); // Endre til f.eks. 800 for enda raskere, eller 1200 om du vil ha den litt lengre
 });
