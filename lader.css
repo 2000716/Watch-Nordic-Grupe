@@ -1,34 +1,34 @@
-/* 1. Sørg for at toppmenyen alltid ligger fast øverst og har HØYEST z-index */
+/* ==========================================================================
+   PAGE LOADER (Ligger under menyen - Både PC og Mobil)
+   ========================================================================== */
+
+/* 1. Vi gir menyen hakket høyere z-index så den garantert ligger øverst */
 .top-nav {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  z-index: 10000; /* Ligger øverst av ALT, slik at menyen og logoen alltid er synlige */
+  z-index: 10000 !important;
 }
 
-/* 2. Laderen dekker kun alt fra under menyen og nedover skjermen */
+/* 2. Laderen dekker hele skjermen under menyen (start fra top: 70px) */
 #page-loader {
   position: fixed;
-  top: 70px; /* Endre 70px til den faktiske høyden på toppmenyen din om den er lavere/høyere */
+  top: 70px; /* Matchet med din låste menyhøyde på 70px */
   left: 0;
-  width: 100%;
-  height: calc(100vh - 70px); /* Fyller resten av skjermen under menyen */
-  background-color: #050F11; /* Din mørke bakgrunnsfarge */
+  width: 100vw;
+  height: calc(100vh - 70px); /* Fyller resten av skjermen helt ned */
+  background-color: #050F11; /* Bakgrunnsfargen din */
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 9999; /* Lavere enn toppmenyen, men over hero-banner og gallerier */
+  z-index: 9998; /* Ligger rett under menyen (10000), men over alt annet innhold */
   transition: opacity 0.6s ease, visibility 0.6s ease;
 }
 
-/* 3. Fade-out effekt når lader.js skjuler den */
+/* Skjul-klasse som JavaScript legger til */
 #page-loader.fade-out {
   opacity: 0;
   visibility: hidden;
 }
 
-/* 4. Spinner-elementet */
+/* Spinneren */
 .spinner {
   width: 60px;
   height: 60px;
@@ -38,6 +38,21 @@
   animation: spin 1s linear infinite;
 }
 
+/* Tilpassing for mobil (mindre spinner for renere utseende) */
+@media (max-width: 768px) {
+  #page-loader {
+    top: 70px; /* Menyen din er også 70px på mobil */
+    height: calc(100vh - 70px);
+  }
+
+  .spinner {
+    width: 45px;
+    height: 45px;
+    border-width: 5px;
+  }
+}
+
+/* Animasjon */
 @keyframes spin {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
