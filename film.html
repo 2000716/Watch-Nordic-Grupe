@@ -13,7 +13,7 @@
   
   <!-- 🛑 FELLES MENY-STIL (Inneholder all styling for toppmenyen) -->
   <link rel="stylesheet" href="meny.css">
-
+  <link rel="stylesheet" href="lader.css">
   <style>
     /* --------------------------------------------------
        Lokal CSS for DENNE undersiden.
@@ -916,6 +916,11 @@
   </header>
 
 <main>
+ 
+  <div id="page-loader">
+      <div class="spinner"></div>
+    </div>
+  
 <div class="hero">
   <img class="background-image" id="backgroundImage" src="" alt="Bakgrunnsbilde" />
   <video id="trailerVideo" class="background-video" muted playsinline></video>
@@ -987,7 +992,8 @@
    Alle varemerker fra WATCH NORDIC™, WATCH NORDIC ORIGINALS™ og alle øvrige tilknyttede immaterielle rettigheter tilhører Watch Nordic Group og brukes under lisens av Watch Nordic™. Alle varemerker, logoer, filmer, serier, bilder, design og øvrige tilknyttede immaterielle rettigheter tilhører sine respektive eiere. Alt innhold er beskyttet av opphavsrett og internasjonale varemerkelover. Alle rettigheter forbeholdt.
   </div>
 </footer>
-
+  
+<script src="lader.js"></script>
 <script type="module">
   import { auth, db } from "./firebase-oppsett.js";
   import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-auth.js";
