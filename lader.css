@@ -1,45 +1,44 @@
-/* Toppmenyen må ha en z-index som er HØYERE enn laderen */
+/* 1. Sørg for at toppmenyen alltid ligger fast øverst og har HØYEST z-index */
 .top-nav {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    z-index: 10000; /* Høyere enn laderen (9999) */
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 10000; /* Ligger øverst av ALT, slik at menyen og logoen alltid er synlige */
 }
 
-/* Laderen starter under toppmenyen og dekker resten av skjermen */
+/* 2. Laderen dekker kun alt fra under menyen og nedover skjermen */
 #page-loader {
-    position: fixed;
-    top: 70px; /* Tilpass dette tallet til nøyaktig hvor høy toppmenyen din er (f.eks. 70px eller 80px) */
-    left: 0;
-    width: 100%;
-    height: calc(100vh - 70px); /* Trekker fra høyden på toppmenyen */
-    background-color: #050F11; /* Din bakgrunnsfarge */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 9999; /* Ligger under toppmenyen, men over alt annet innhold */
-    transition: opacity 0.6s ease, visibility 0.6s ease;
+  position: fixed;
+  top: 70px; /* Endre 70px til den faktiske høyden på toppmenyen din om den er lavere/høyere */
+  left: 0;
+  width: 100%;
+  height: calc(100vh - 70px); /* Fyller resten av skjermen under menyen */
+  background-color: #050F11; /* Din mørke bakgrunnsfarge */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999; /* Lavere enn toppmenyen, men over hero-banner og gallerier */
+  transition: opacity 0.6s ease, visibility 0.6s ease;
 }
 
-/* Klasse som trigges av JavaScript for å fade ut */
+/* 3. Fade-out effekt når lader.js skjuler den */
 #page-loader.fade-out {
-    opacity: 0;
-    visibility: hidden;
+  opacity: 0;
+  visibility: hidden;
 }
 
-/* Sjefen for selve spinneren */
+/* 4. Spinner-elementet */
 .spinner {
-    width: 60px;
-    height: 60px;
-    border: 6px solid #2a3b40; 
-    border-top: 6px solid #2ecc71; 
-    border-radius: 50%;
-    animation: spin 1s linear infinite;
+  width: 60px;
+  height: 60px;
+  border: 6px solid #2a3b40;
+  border-top: 6px solid #2ecc71;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
 }
 
-/* Animasjonen som får den til å snurre rundt */
 @keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }
