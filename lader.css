@@ -1,0 +1,36 @@
+/* Fullskjerms-kontainer for laderen */
+#page-loader {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #050F11; /* Bakgrunnsfarge du ba om */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999; /* Sørger for at den ligger øverst av alt */
+    transition: opacity 0.6s ease, visibility 0.6s ease; /* Myk fade-effekt */
+}
+
+/* Klasse som trigges av JavaScript for å fade ut */
+#page-loader.fade-out {
+    opacity: 0;
+    visibility: hidden;
+}
+
+/* Sjefen for selve spinneren */
+.spinner {
+    width: 60px;
+    height: 60px;
+    border: 6px solid #2a3b40; /* Grålig tone for bakgrunnsdelen av ringen */
+    border-top: 6px solid #2ecc71; /* Frisk grønnfarge på toppen som roterer */
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+/* Animasjonen som får den til å snurre rundt */
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
