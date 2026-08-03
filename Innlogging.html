@@ -417,234 +417,322 @@
     </div>
   </footer>
 
-  <script type="module">
-    import { auth, db } from "./firebase-oppsett.js";
-    import { signInWithEmailAndPassword, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-auth.js";
-    import { doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
+<script type="module">
+  import { auth, db } from "./firebase-oppsett.js";
+  import { 
+    signInWithEmailAndPassword, 
+    createUserWithEmailAndPassword,
+    setPersistence,
+    browserLocalPersistence 
+  } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-auth.js";
+  import { doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
 
-    let registreringsmodus = false;
-    let naavaarendeSteg = 1;
+  // --- TRYGG RETTIGHETS- OG STORAGE-HANDTERING ---
+  const TryggStorage = {
+    setItem: (nokkel, verdi) => {
+      try {
+        localStorage.setItem(nokkel, verdi);
+      } catch (e) {
+        console.warn("localStorage er ikke tilgjengelig (f.eks. privat modus):", e);
+      }
+    }
+  };
 
-    const epostInput = document.getElementById("epost");
-    const passordInput = document.getElementById("passord");
-    const feilmelding = document.getElementById("feilmelding");
+  let registreringsmodus = false;
+  let naavaarendeSteg = 1;
+  let erSendt = false; // Hindrer dobbel-innsending
 
-    // Tøm feilmelding når brukeren endrer tekst i feltene
-    epostInput.addEventListener("input", () => { feilmelding.textContent = ""; });
-    passordInput.addEventListener("input", () => { feilmelding.textContent = ""; });
+  // --- ELEMENThENTING MED SJEKK (Unngår krasj hvis HTML mangler noe) ---
+  const epostInput = document.getElementById("epost");
+  const passordInput = document.getElementById("passord");
+  const feilmelding = document.getElementById("feilmelding");
+  const authForm = document.getElementById("authForm");
+  const nesteKnapp = document.getElementById("nesteKnapp");
+  const submitKnapp = document.getElementById("submitKnapp");
 
-    // TRYKK PÅ NESTE (TRINN 1 -> TRINN 2)
-    document.getElementById("nesteKnapp").addEventListener("click", validerOgGaVidere);
+  // --- UTILS ---
+  function settFeilmelding(melding = "") {
+    if (feilmelding) feilmelding.textContent = melding;
+  }
 
-    epostInput.addEventListener("keydown", function(e) {
+  function settLaster(laster) {
+    erSendt = laster;
+    if (submitKnapp) {
+      submitKnapp.disabled = laster;
+      submitKnapp.style.opacity = laster ? "0.6" : "1";
+    }
+  }
+
+  // --- EVENT LISTENERS (HÅNDTERT TRYGT) ---
+  if (epostInput) {
+    epostInput.addEventListener("input", () => settFeilmelding(""));
+    epostInput.addEventListener("keydown", (e) => {
       if (e.key === "Enter") {
         e.preventDefault();
         validerOgGaVidere();
       }
     });
+  }
 
-    function validerOgGaVidere() {
-      if (!epostInput.checkValidity() || !epostInput.value.trim()) {
-        feilmelding.textContent = "Vennligst oppgi en gyldig e-postadresse.";
-        return;
-      }
-      feilmelding.textContent = "";
-      skiftStegMedAnimasjon(1, 2);
+  if (passordInput) {
+    passordInput.addEventListener("input", () => settFeilmelding(""));
+  }
+
+  if (nesteKnapp) {
+    nesteKnapp.addEventListener("click", (e) => {
+      e.preventDefault();
+      validerOgGaVidere();
+    });
+  }
+
+  // --- STEGVALIDERINGS-FLYT ---
+  function validerOgGaVidere() {
+    if (!epostInput) return;
+    
+    const epostVerdi = epostInput.value.trim();
+    // Enkel regex-sjekk for bedre kompabilitet på tvers av nettlesere
+    const epostRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (!epostVerdi || !epostRegex.test(epostVerdi)) {
+      settFeilmelding("Vennligst oppgi en gyldig e-postadresse.");
+      return;
     }
+    
+    settFeilmelding("");
+    skiftStegMedAnimasjon(1, 2);
+  }
 
-    function gaaTilSteg1() {
-      feilmelding.textContent = "";
-      skiftStegMedAnimasjon(2, 1);
-    }
+  function gaaTilSteg1() {
+    settFeilmelding("");
+    skiftStegMedAnimasjon(2, 1);
+  }
 
-    function skiftStegMedAnimasjon(fraStegNr, tilStegNr) {
-      const fraElement = document.getElementById(`steg${fraStegNr}`);
-      const tilElement = document.getElementById(`steg${tilStegNr}`);
+  function skiftStegMedAnimasjon(fraStegNr, tilStegNr) {
+    const fraElement = document.getElementById(`steg${fraStegNr}`);
+    const tilElement = document.getElementById(`steg${tilStegNr}`);
+    const formSubtitle = document.getElementById("formSubtitle");
+    const visEpostTekst = document.getElementById("visEpostTekst");
 
-      fraElement.classList.add("animating-out");
+    if (!fraElement || !tilElement) return;
 
-      setTimeout(() => {
-        fraElement.style.display = "none";
-        fraElement.classList.remove("animating-out");
+    fraElement.classList.add("animating-out");
 
-        tilElement.style.display = "block";
-        tilElement.classList.add("animating-in");
+    setTimeout(() => {
+      fraElement.style.display = "none";
+      fraElement.classList.remove("animating-out");
 
-        naavaarendeSteg = tilStegNr;
-        if (tilStegNr === 2) {
-          document.getElementById("visEpostTekst").textContent = epostInput.value.trim();
+      tilElement.style.display = "block";
+      tilElement.classList.add("animating-in");
+
+      naavaarendeSteg = tilStegNr;
+
+      if (tilStegNr === 2) {
+        if (visEpostTekst && epostInput) visEpostTekst.textContent = epostInput.value.trim();
+        if (passordInput) {
           passordInput.required = true;
-          passordInput.focus();
-          document.getElementById("formSubtitle").textContent = registreringsmodus 
+          // Unngå automatisk focus på iOS Safari da det kan forårsake zoom-glitch
+          if (!('ontouchstart' in window)) passordInput.focus();
+        }
+        if (formSubtitle) {
+          formSubtitle.textContent = registreringsmodus 
             ? "Velg et passord for å opprette kontoen" 
             : "Skriv inn passordet ditt";
-        } else {
-          passordInput.required = false;
-          epostInput.focus();
-          document.getElementById("formSubtitle").textContent = registreringsmodus 
+        }
+      } else {
+        if (passordInput) passordInput.required = false;
+        if (epostInput && !('ontouchstart' in window)) epostInput.focus();
+        if (formSubtitle) {
+          formSubtitle.textContent = registreringsmodus 
             ? "Skriv inn e-post for å opprette konto" 
             : "Skriv inn e-postadressen din for å fortsette";
         }
+      }
 
-        requestAnimationFrame(() => {
-          tilElement.classList.remove("animating-in");
-        });
+      requestAnimationFrame(() => {
+        tilElement.classList.remove("animating-in");
+      });
 
-      }, 250);
-    }
+    }, 250);
+  }
 
-    // FIREBASE INNLOGGING / REGISTRERING
-    document.getElementById("authForm").addEventListener("submit", async function(event) {
+  // --- MAIN AUTH FORM SUBMIT ---
+  if (authForm) {
+    authForm.addEventListener("submit", async function(event) {
       event.preventDefault(); 
       
+      if (erSendt) return; // Hindrer at brukeren klikker 2 ganger raskt på knappen
+
       if (naavaarendeSteg === 1) {
         validerOgGaVidere();
         return;
       }
 
-      const epost = epostInput.value.trim().toLowerCase();
-      const passord = passordInput.value.trim();
-      const navn = document.getElementById("navn").value.trim() || "Hovedprofil";
+      const epost = epostInput ? epostInput.value.trim().toLowerCase() : "";
+      const passord = passordInput ? passordInput.value.trim() : "";
+      const navnEl = document.getElementById("navn");
+      const navn = (navnEl && navnEl.value.trim()) ? navnEl.value.trim() : "Hovedprofil";
       
       if (registreringsmodus && passord.length < 6) {
-        feilmelding.textContent = "Passordet må bestå av minst 6 tegn.";
+        settFeilmelding("Passordet må bestå av minst 6 tegn.");
         return;
       }
 
-      feilmelding.textContent = "Laster..."; 
+      settLaster(true);
+      settFeilmelding("Vennligst vent..."); 
 
       try {
+        // Garantierer innloggings-økt på mobil/nettleser
+        await setPersistence(auth, browserLocalPersistence);
+
+        const standardProfil = [
+          {
+            navn: navn,
+            bilde: "https://static.wixstatic.com/media/fd2fb2_39376e4ee55b460ab7a3ebbfcf35fef7~mv2.png",
+            isKids: false,
+            maksAldersgrense: "12"
+          }
+        ];
+
         if (registreringsmodus) {
-          // 1. OPPGRETT BRUKER I FIREBASE AUTH
+          // --- REGISTRERING ---
           const userCredential = await createUserWithEmailAndPassword(auth, epost, passord);
           const user = userCredential.user;
 
-          const standardProfil = [
-            {
-              navn: navn,
-              bilde: "https://static.wixstatic.com/media/fd2fb2_39376e4ee55b460ab7a3ebbfcf35fef7~mv2.png",
-              isKids: false,
-              maksAldersgrense: "12"
-            }
-          ];
-
-          // 2. LAGRE PROFILER I FIRESTORE
           try {
             await setDoc(doc(db, "users", user.uid), {
               epost: epost,
               profiler: standardProfil
             });
           } catch (fsErr) {
-            console.warn("Klarte ikke lagre til Firestore umiddelbart:", fsErr);
+            console.warn("Firestore setDoc feilet, fortsetter med fallback:", fsErr);
           }
 
-          localStorage.setItem("watch_nordic_profiles_cache", JSON.stringify(standardProfil));
-          localStorage.setItem("watch_nordic_email_cache", epost);
+          TryggStorage.setItem("watch_nordic_profiles_cache", JSON.stringify(standardProfil));
+          TryggStorage.setItem("watch_nordic_email_cache", epost);
 
-          window.location.href = "Hovedside.html?index=0";
+          window.location.replace("Hovedside.html?index=0");
 
         } else {
-          // 1. LOGG INN BRUKER
+          // --- INNLOGGING ---
           const userCredential = await signInWithEmailAndPassword(auth, epost, passord);
           const user = userCredential.user;
 
-          const standardProfil = [
-            {
-              navn: "Hovedprofil",
-              bilde: "https://static.wixstatic.com/media/fd2fb2_39376e4ee55b460ab7a3ebbfcf35fef7~mv2.png",
-              isKids: false,
-              maksAldersgrense: "12"
-            }
-          ];
-
-          // 2. HENT FIRESTORE-DATA (TRYGT)
           try {
             const docRef = doc(db, "users", user.uid);
             const docSnap = await getDoc(docRef);
 
             if (docSnap.exists() && docSnap.data().profiler) {
-              localStorage.setItem("watch_nordic_profiles_cache", JSON.stringify(docSnap.data().profiler));
+              TryggStorage.setItem("watch_nordic_profiles_cache", JSON.stringify(docSnap.data().profiler));
             } else {
-              // Hvis brukerdokumentet mangler, opprett det nå
               await setDoc(docRef, { epost: epost, profiler: standardProfil });
-              localStorage.setItem("watch_nordic_profiles_cache", JSON.stringify(standardProfil));
+              TryggStorage.setItem("watch_nordic_profiles_cache", JSON.stringify(standardProfil));
             }
           } catch (fsErr) {
-            console.warn("Kunne ikke lese Firestore-data ved innlogging, bruker fallback:", fsErr);
-            localStorage.setItem("watch_nordic_profiles_cache", JSON.stringify(standardProfil));
+            console.warn("Firestore getDoc feilet ved innlogging, bruker fallback:", fsErr);
+            TryggStorage.setItem("watch_nordic_profiles_cache", JSON.stringify(standardProfil));
           }
 
-          localStorage.setItem("watch_nordic_email_cache", epost);
-          window.location.href = "Hovedside.html?index=0";
+          TryggStorage.setItem("watch_nordic_email_cache", epost);
+          
+          // `window.location.replace` er mer robust enn `.href` for å forhindre tilbake-knapp krasj
+          window.location.replace("Hovedside.html?index=0");
         }
       } catch (error) {
+        settLaster(false);
         console.error("Auth-feil:", error.code, error.message);
 
         switch (error.code) {
           case 'auth/email-already-in-use':
-            feilmelding.textContent = "Denne e-postadressen er allerede i bruk.";
+            settFeilmelding("Denne e-postadressen er allerede i bruk.");
             break;
           case 'auth/invalid-credential':
           case 'auth/wrong-password':
           case 'auth/user-not-found':
-            feilmelding.textContent = "Feil e-post eller passord.";
+            settFeilmelding("Feil e-post eller passord.");
             break;
           case 'auth/invalid-email':
-            feilmelding.textContent = "Ugyldig format på e-postadressen.";
+            settFeilmelding("Ugyldig format på e-postadressen.");
             break;
           case 'auth/weak-password':
-            feilmelding.textContent = "Passordet må ha minst 6 tegn.";
+            settFeilmelding("Passordet må ha minst 6 tegn.");
             break;
           case 'auth/too-many-requests':
-            feilmelding.textContent = "For mange forsøk. Prøv igjen om et øyeblikk.";
+            settFeilmelding("For mange forsøk. Prøv igjen om et øyeblikk.");
+            break;
+          case 'auth/network-request-failed':
+            settFeilmelding("Nettverksfeil. Sjekk internettforbindelsen din.");
             break;
           default:
-            feilmelding.textContent = "Kunne ikke logge inn. Sjekk internettforbindelsen og prøv igjen.";
+            settFeilmelding("Kunne ikke logge inn. Prøv igjen.");
             break;
         }
       }
     });
+  }
 
-    // VEKSLE MELLOM REGISTRERING OG INNLOGGING
-    function visRegistrering() {
-      registreringsmodus = true;
-      document.getElementById("formTitle").textContent = "Registrer deg";
-      document.getElementById("submitKnapp").textContent = "Opprett konto";
-      document.getElementById("forgotContainer").style.display = "none";
-      document.getElementById("toggleText").innerHTML =
-        'Allerede medlem? <a onclick="visInnlogging()">Logg inn</a>';
-      document.getElementById("navnGruppe").style.display = "block";
-      document.getElementById("feilmelding").textContent = "";
-      passordInput.setAttribute("autocomplete", "new-password");
+  // --- VIS/SKJUL MODUSER ---
+  function visRegistrering() {
+    registreringsmodus = true;
+    settFeilmelding("");
+    
+    const title = document.getElementById("formTitle");
+    const submit = document.getElementById("submitKnapp");
+    const forgot = document.getElementById("forgotContainer");
+    const toggle = document.getElementById("toggleText");
+    const navnGruppe = document.getElementById("navnGruppe");
+    const formSubtitle = document.getElementById("formSubtitle");
 
-      if (naavaarendeSteg === 1) {
-        document.getElementById("formSubtitle").textContent = "Skriv inn e-post for å opprette konto";
-      } else {
-        document.getElementById("formSubtitle").textContent = "Velg et passord for å opprette kontoen";
-      }
+    if (title) title.textContent = "Registrer deg";
+    if (submit) submit.textContent = "Opprett konto";
+    if (forgot) forgot.style.display = "none";
+    if (toggle) toggle.innerHTML = 'Allerede medlem? <a href="#" id="velgInnloggingLink">Logg inn</a>';
+    if (navnGruppe) navnGruppe.style.display = "block";
+    if (passordInput) passordInput.setAttribute("autocomplete", "new-password");
+
+    if (formSubtitle) {
+      formSubtitle.textContent = (naavaarendeSteg === 1) 
+        ? "Skriv inn e-post for å opprette konto" 
+        : "Velg et passord for å opprette kontoen";
     }
 
-    function visInnlogging() {
-      registreringsmodus = false;
-      document.getElementById("formTitle").textContent = "Logg inn";
-      document.getElementById("submitKnapp").textContent = "Logg inn";
-      document.getElementById("forgotContainer").style.display = "block";
-      document.getElementById("toggleText").innerHTML =
-        'Er du ikke medlem? <a onclick="visRegistrering()">Registrer deg</a>';
-      document.getElementById("navnGruppe").style.display = "none";
-      document.getElementById("feilmelding").textContent = "";
-      passordInput.setAttribute("autocomplete", "current-password");
+    // Koble opp den dynamiske lenken trygt
+    const link = document.getElementById("velgInnloggingLink");
+    if (link) link.addEventListener("click", (e) => { e.preventDefault(); visInnlogging(); });
+  }
 
-      if (naavaarendeSteg === 1) {
-        document.getElementById("formSubtitle").textContent = "Skriv inn e-postadressen din for å fortsette";
-      } else {
-        document.getElementById("formSubtitle").textContent = "Skriv inn passordet ditt";
-      }
+  function visInnlogging() {
+    registreringsmodus = false;
+    settFeilmelding("");
+
+    const title = document.getElementById("formTitle");
+    const submit = document.getElementById("submitKnapp");
+    const forgot = document.getElementById("forgotContainer");
+    const toggle = document.getElementById("toggleText");
+    const navnGruppe = document.getElementById("navnGruppe");
+    const formSubtitle = document.getElementById("formSubtitle");
+
+    if (title) title.textContent = "Logg inn";
+    if (submit) submit.textContent = "Logg inn";
+    if (forgot) forgot.style.display = "block";
+    if (toggle) toggle.innerHTML = 'Er du ikke medlem? <a href="#" id="velgRegistreringLink">Registrer deg</a>';
+    if (navnGruppe) navnGruppe.style.display = "none";
+    if (passordInput) passordInput.setAttribute("autocomplete", "current-password");
+
+    if (formSubtitle) {
+      formSubtitle.textContent = (naavaarendeSteg === 1) 
+        ? "Skriv inn e-postadressen din for å fortsette" 
+        : "Skriv inn passordet ditt";
     }
 
-    window.visRegistrering = visRegistrering;
-    window.visInnlogging = visInnlogging;
-    window.gaaTilSteg1 = gaaTilSteg1;
-  </script>
+    // Koble opp den dynamiske lenken trygt
+    const link = document.getElementById("velgRegistreringLink");
+    if (link) link.addEventListener("click", (e) => { e.preventDefault(); visRegistrering(); });
+  }
+
+  // Gjør funksjonene globalt tilgjengelige om nødvendig (for bakoverkompatibilitet)
+  window.visRegistrering = visRegistrering;
+  window.visInnlogging = visInnlogging;
+  window.gaaTilSteg1 = gaaTilSteg1;
+</script>
 </body>
 </html>
