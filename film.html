@@ -290,7 +290,7 @@
     }
 
 /* ==========================================================================
-   ANBEFALINGER & PRO STRØMME-EPISODER
+   ANBEFALINGER & PRO STRØMME-EPISODER (REN & MINIMALISTISK STIL)
    ========================================================================== */
 .recommendations {
   margin: 40px auto 0;
@@ -323,7 +323,7 @@
   overflow: hidden;
   position: relative;
   cursor: pointer;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  transition: transform 0.2s ease;
 }
 
 .movie-card img {
@@ -333,8 +333,7 @@
 }
 
 .movie-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 10px 20px rgba(255, 255, 255, 0.1);
+  transform: translateY(-4px);
 }
 
 .movie-overlay {
@@ -342,7 +341,7 @@
   inset: 0;
   background: linear-gradient(to top, rgba(0, 0, 0, 0.9) 0%, rgba(0, 0, 0, 0.2) 100%);
   opacity: 0;
-  transition: opacity .3s ease;
+  transition: opacity .2s ease;
   display: flex;
   align-items: flex-end;
   padding: 16px;
@@ -355,115 +354,112 @@
 .movie-title {
   font-size: 15px;
   font-weight: 700;
-  color: #fff;
+  color: #ffffff;
 }
 
 /* ==========================================================================
-   HVITE SESONG-KNAPPER (INGEN NEON)
+   RENE & SKYGGEFRIE KNAPPER
    ========================================================================== */
 .season-buttons {
   display: flex;
   align-items: center;
-  gap: 12px;
-  margin-top: 60px;
+  gap: 10px;
+  margin-top: 50px;
   margin-bottom: 25px;
   overflow-x: auto;
   padding-bottom: 8px;
 }
 
 .season-btn {
-  background: rgba(255, 255, 255, 0.08);
-  color: #a0a0a0;
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  padding: 10px 22px;
+  background: rgba(255, 255, 255, 0.05);
+  color: #8a8a8a;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 8px 20px;
   border-radius: 20px;
   cursor: pointer;
   font-size: 14px;
   font-weight: 500;
   white-space: nowrap;
   flex-shrink: 0;
-  transition: all 0.25s ease;
+  box-shadow: none; /* Ingen skygger */
+  transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
 }
 
 .season-btn:hover {
-  background: rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.12);
   color: #ffffff;
-  border-color: rgba(255, 255, 255, 0.4);
+  border-color: rgba(255, 255, 255, 0.25);
 }
 
-/* Aktiv knapp: Hvit bakgrunn med mørk tekst */
+/* Aktiv knapp: Ren hvit flate, helt uten skygger eller glød */
 .season-btn.active {
   background: #ffffff;
   color: #050F11;
   border-color: #ffffff;
-  font-weight: 700;
-  box-shadow: 0 4px 15px rgba(255, 255, 255, 0.15);
+  font-weight: 600;
+  box-shadow: none;
 }
 
 /* ==========================================================================
-   EPISODE-GALLERI (RENE HVITE AKSENTER)
+   EPISODE-GALLERI
    ========================================================================== */
 .episode-gallery {
   display: flex;
   flex-direction: column;
-  gap: 18px;
+  gap: 16px;
   width: 100%;
 }
 
 .episode-card {
   display: flex;
   align-items: center;
-  background: rgba(18, 28, 32, 0.5);
-  backdrop-filter: blur(10px);
-  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 8px;
   overflow: hidden;
   cursor: pointer;
   border: 1px solid rgba(255, 255, 255, 0.08);
-  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), 
-              border-color 0.3s ease, 
-              background-color 0.3s ease,
-              box-shadow 0.3s ease;
+  transition: transform 0.2s ease, border-color 0.2s ease, background-color 0.2s ease;
   position: relative;
   padding: 12px;
   gap: 20px;
   width: 100%;
+  box-shadow: none;
 }
 
 .episode-card:hover {
-  transform: translateX(6px);
-  background: rgba(26, 40, 46, 0.8);
-  border-color: rgba(255, 255, 255, 0.3);
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5);
+  transform: translateX(4px);
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.2);
 }
 
 .episode-number {
-  font-size: 20px;
-  font-weight: 800;
+  font-size: 18px;
+  font-weight: 700;
   color: #ffffff;
   min-width: 35px;
   text-align: center;
-  opacity: 0.9;
+  opacity: 0.6;
 }
 
 .episode-thumb {
   position: relative;
-  width: 240px;
-  height: 135px;
+  width: 220px;
+  height: 124px;
   flex-shrink: 0;
-  border-radius: 8px;
+  border-radius: 6px;
   overflow: hidden;
-  background: #000;
+  background: #000000;
 }
 
 .episode-thumb img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: transform 0.4s ease;
+  transition: transform 0.3s ease;
 }
 
 .episode-card:hover .episode-thumb img {
-  transform: scale(1.06);
+  transform: scale(1.04);
 }
 
 .play-overlay {
@@ -472,33 +468,26 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(0, 0, 0, 0.35);
+  background: rgba(0, 0, 0, 0.4);
   opacity: 0;
-  transition: opacity 0.25s ease, background 0.25s ease;
+  transition: opacity 0.2s ease;
 }
 
 .play-icon-circle {
-  width: 48px;
-  height: 48px;
+  width: 44px;
+  height: 44px;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.9);
+  background: #ffffff;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #000;
-  font-size: 18px;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.5);
-  transform: scale(0.85);
-  transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+  color: #050F11;
+  font-size: 16px;
+  box-shadow: none;
 }
 
 .episode-card:hover .play-overlay {
   opacity: 1;
-}
-
-.episode-card:hover .play-icon-circle {
-  transform: scale(1);
-  background: #ffffff;
 }
 
 .episode-progress {
@@ -508,7 +497,7 @@
   height: 3px;
   background: #ffffff;
   z-index: 2;
-  box-shadow: 0 0 6px rgba(255, 255, 255, 0.5);
+  box-shadow: none;
 }
 
 .episode-info {
@@ -527,21 +516,20 @@
 }
 
 .episode-title {
-  font-size: 17px;
-  font-weight: 700;
+  font-size: 16px;
+  font-weight: 600;
   color: #ffffff;
-  letter-spacing: .3px;
 }
 
 .episode-meta {
   font-size: 13px;
-  color: rgba(255, 255, 255, 0.7);
-  font-weight: 600;
+  color: #8a8a8a;
+  font-weight: 500;
 }
 
 .episode-desc {
   font-size: 14px;
-  color: #a0a0a0;
+  color: #8a8a8a;
   line-height: 1.5;
   display: -webkit-box;
   -webkit-line-clamp: 2;
@@ -550,14 +538,15 @@
 }
 
 .episode-card.locked {
-  opacity: 0.4;
+  opacity: 0.3;
   cursor: not-allowed;
-  filter: grayscale(80%);
+  filter: grayscale(100%);
 }
 
 .episode-card.locked:hover {
   transform: none;
-  border-color: rgba(255, 255, 255, 0.05);
+  background: rgba(255, 255, 255, 0.03);
+  border-color: rgba(255, 255, 255, 0.08);
 }
 
 .lock-overlay {
@@ -566,13 +555,13 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(0,0,0,0.6);
+  background: rgba(0, 0, 0, 0.6);
   z-index: 3;
 }
 
 .lock-overlay i {
-  font-size: 24px;
-  color: #fff;
+  font-size: 22px;
+  color: #ffffff;
 }
     /* ==========================================================================
        FOOTER OG SKJERM-POPUPS
