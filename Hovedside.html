@@ -1159,7 +1159,6 @@
 <script src="lader.js"></script>
 <script type="module">
   // ==================== HJELPEFUNKSJONER FOR SIKKERHET & PARSING ==================== //
-  // Sikker parsing av JSON som aldri krasjer appen
   function sikkerJSONParse(str, fallback = null) {
     if (!str) return fallback;
     try {
@@ -1170,7 +1169,6 @@
     }
   }
 
-  // Sanitering for å unngå XSS i innerHTML
   function escapeHTML(str) {
     if (typeof str !== "string") return "";
     return str
@@ -1203,7 +1201,6 @@
   import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-auth.js";
   import { doc, getDoc, updateDoc, onSnapshot, collection, getDocs } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
 
-  // Globale objekter med fallback
   let filmer = {};
   let serier = {};
   let registrertBruker = null;
@@ -1211,7 +1208,6 @@
   let heleProfilArrayet = [];
   let unsubscribeProfileListener = null;
 
-  // Hjelpefunksjon for å oppdatere profilmeny i header
   function oppdaterMenyProfilVisning(bildeUrl, profilNavn, farge) {
     try {
       const menyProfil = document.getElementById("menyProfilbilde");
@@ -1245,14 +1241,12 @@
         } else {
           registrertBruker = user;
 
-          // 1. Last inn cache trygt
           const cachedeProfilerRaw = localStorage.getItem("watch_nordic_profiles_cache");
           if (cachedeProfilerRaw) {
             heleProfilArrayet = sikkerJSONParse(cachedeProfilerRaw, []);
             renderContinueWatching();
           }
 
-          // 2. Realtidslytter
           const userDocRef = doc(db, "users", user.uid);
           if (unsubscribeProfileListener) unsubscribeProfileListener();
 
@@ -1339,7 +1333,6 @@
     });
   }
 
-  // ==================== NAVIGASJON & LOCAL FALLBACK ==================== //
   window.gåTilKonto = function() {
     window.location.href = "konto.html";
   };
@@ -1592,13 +1585,14 @@
       }
     });
 
+    // Sorterer nyeste først (fallende)
     altInnhold.sort((a, b) => new Date(b.data.publishDate || 0) - new Date(a.data.publishDate || 0));
     altInnhold.slice(0, limit).forEach(item => {
       gallery.appendChild(createGalleryItem(item.key, item.data));
     });
   }
 
-  function renderFilmGallery(galleryId, filterFunction, sortByPublishDate = false, limit = null) {
+  function renderFilmGallery(galleryId, filterFunction, limit = null) {
     const gallery = document.getElementById(galleryId);
     if (!gallery) return;
     gallery.innerHTML = "";
@@ -1611,9 +1605,10 @@
     });
 
     if (filterFunction) filmKeys = filmKeys.filter(filterFunction);
-    if (sortByPublishDate) {
-      filmKeys.sort((a, b) => new Date(filmer[a]?.publishDate || 0) - new Date(filmer[b]?.publishDate || 0));
-    }
+    
+    // ENDRET: Sorterer alltid nyeste film først (fallende rekkefølge etter publishDate)
+    filmKeys.sort((a, b) => new Date(filmer[b]?.publishDate || 0) - new Date(filmer[a]?.publishDate || 0));
+    
     if (limit) filmKeys = filmKeys.slice(0, limit);
 
     filmKeys.forEach(key => {
@@ -1625,11 +1620,19 @@
     const gallery = document.getElementById(galleryId);
     if (!gallery) return;
     gallery.innerHTML = "";
-    Object.keys(serier || {}).forEach((key) => {
+
+    // ENDRET: Sorterer nyeste serier først
+    let serieKeys = Object.keys(serier || {}).filter(key => {
       const serie = serier[key];
-      if (!serie) return;
-      if (erInnloggetSomBarn && (!erEgnetForBarn(serie) || !sjekkAldersgrense(serie))) return;
-      gallery.appendChild(createGalleryItem(key, serie));
+      if (!serie) return false;
+      if (erInnloggetSomBarn && (!erEgnetForBarn(serie) || !sjekkAldersgrense(serie))) return false;
+      return true;
+    });
+
+    serieKeys.sort((a, b) => new Date(serier[b]?.publishDate || 0) - new Date(serier[a]?.publishDate || 0));
+
+    serieKeys.forEach((key) => {
+      gallery.appendChild(createGalleryItem(key, serier[key]));
     });
   }
 
@@ -1682,14 +1685,19 @@
     const gallery = document.getElementById(galleryId);
     if (!gallery) return;
     gallery.innerHTML = "";
-    Object.keys(serier || {}).forEach((key) => {
+
+    // ENDRET: Sorterer nyeste dokumentarserier først
+    let serieKeys = Object.keys(serier || {}).filter(key => {
       const serie = serier[key];
-      if (!serie) return;
-      if (erInnloggetSomBarn && (!erEgnetForBarn(serie) || !sjekkAldersgrense(serie))) return;
-      const erDokumentar = Array.isArray(serie.metadata) && serie.metadata.some(meta => typeof meta === "string" && meta.toLowerCase().includes("dokumentar"));
-      if (erDokumentar) {
-        gallery.appendChild(createGalleryItem(key, serie));
-      }
+      if (!serie) return false;
+      if (erInnloggetSomBarn && (!erEgnetForBarn(serie) || !sjekkAldersgrense(serie))) return false;
+      return Array.isArray(serie.metadata) && serie.metadata.some(meta => typeof meta === "string" && meta.toLowerCase().includes("dokumentar"));
+    });
+
+    serieKeys.sort((a, b) => new Date(serier[b]?.publishDate || 0) - new Date(serier[a]?.publishDate || 0));
+
+    serieKeys.forEach((key) => {
+      gallery.appendChild(createGalleryItem(key, serier[key]));
     });
   }
 
@@ -1716,7 +1724,17 @@
       const skjulteTitler = Array.isArray(profil.skjultFortsett) ? profil.skjultFortsett : [];
       let fantInnhold = false;
 
-      Object.keys(profil.fremdrift).forEach((filmId) => {
+      // ENDRET: Henter filmKeys og sorterer etter sist oppdatert/spilt (lastUpdated timestamp)
+      let filmKeys = Object.keys(profil.fremdrift);
+      filmKeys.sort((a, b) => {
+        const itemA = profil.fremdrift[a];
+        const itemB = profil.fremdrift[b];
+        const timeA = typeof itemA === "object" && itemA?.lastUpdated ? new Date(itemA.lastUpdated).getTime() : 0;
+        const timeB = typeof itemB === "object" && itemB?.lastUpdated ? new Date(itemB.lastUpdated).getTime() : 0;
+        return timeB - timeA; // Siste spilte først
+      });
+
+      filmKeys.forEach((filmId) => {
         const dbData = profil.fremdrift[filmId];
         const progressVerdi = typeof dbData === "object" && dbData !== null ? (dbData.percent || 0) : Number(dbData || 0);
         const erFerdig = typeof dbData === "object" && dbData !== null && dbData.status === "ferdig";
@@ -1866,7 +1884,6 @@
     const cacheKeyFilmer = "watch_nordic_filmer_cache";
     const cacheKeySerier = "watch_nordic_serier_cache";
 
-    // 1. Vis fra lokal cache først
     const lagredeFilmer = localStorage.getItem(cacheKeyFilmer);
     const lagredeSerier = localStorage.getItem(cacheKeySerier);
 
@@ -1876,7 +1893,6 @@
       byggSiden();
     }
 
-    // 2. Oppdater fra Firestore
     try {
       const [filmerSnap, serierSnap] = await Promise.all([
         getDocs(collection(db, "filmer")),
@@ -1920,10 +1936,10 @@
         });
 
         renderNyligLagtTil("nye-filmer-galleri", 5); 
-        renderTop10("topp10-filmer-galleri");
-        renderFilmGallery("filmer-galleri", null, true, 20);
-        renderSeries("serier-galleri");
-        renderDokumentarSerier("dokumentarserier-galleri"); 
+        renderTop10("topp10-filmer-galleri"); // Beholder Topp 10 uendret
+        renderFilmGallery("filmer-galleri", null, 20); // Sorteres automatisk nyeste først
+        renderSeries("serier-galleri"); // Sorteres automatisk nyeste først
+        renderDokumentarSerier("dokumentarserier-galleri"); // Sorteres automatisk nyeste først
         
         const barnSeksjon = document.getElementById("barn-seksjon");
         if (barnSeksjon) barnSeksjon.style.display = "block";
