@@ -7,7 +7,7 @@
   z-index: 10005 !important;
 }
 
-/* 2. Loaderen dekker 100% av mobilskjermen uansett om adressefeltet er synlig */
+/* 2. Loaderen dekker 100% av skjermen som standard */
 #page-loader {
   position: fixed !important;
   top: 0 !important;
@@ -15,7 +15,7 @@
   width: 100vw !important;
   height: 100vh !important;
   height: 100dvh !important; /* Dynamisk mobilhøyde - forhindrer glipp nederst på iOS/Android */
-  background-color: #050F11 !important; /* Mørk bakgrunn som dekker ALT */
+  background-color: #050F11 !important; /* Standard mørk bakgrunn (brukes på PC) */
   display: flex !important;
   justify-content: center !important;
   align-items: center !important;
@@ -30,7 +30,7 @@
   pointer-events: none !important;
 }
 
-/* 4. Spinneren */
+/* 4. Spinneren (standard størrelse) */
 .spinner {
   width: 60px;
   height: 60px;
@@ -46,11 +46,15 @@
    ========================================================================== */
 @media (max-width: 768px) {
   #page-loader {
+    /* HER setter vi den nye bakgrunnsfargen for mobil */
+    background-color: #091B1E !important; 
+    
     /* Sikrer at ingenting stikker ut på mobil */
     overflow: hidden !important;
   }
 
   .spinner {
+    /* Litt mindre spinner for mobilskjermer */
     width: 45px;
     height: 45px;
     border-width: 5px;
@@ -58,6 +62,7 @@
   }
 }
 
+/* Animasjon */
 @keyframes spin {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
