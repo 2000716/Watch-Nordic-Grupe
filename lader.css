@@ -1,35 +1,36 @@
 /* ==========================================================================
-   PAGE LOADER (Sømløs bakgrunn bak toppmenyen)
+   PAGE LOADER (Sømløs bakgrunn bak menyen - Både Mobil og PC)
    ========================================================================== */
 
-/* 1. Tvinger menyen til å ligge ØVERST av alt */
+/* 1. Tvinger menyen til å ligge ØVERST av alt (både på mobil og desktop) */
 .top-nav {
   z-index: 10005 !important;
 }
 
-/* 2. Loaderen dekker HELE skjermen fra absolutte toppen (top: 0) */
+/* 2. Loaderen dekker 100% av mobilskjermen uansett om adressefeltet er synlig */
 #page-loader {
   position: fixed !important;
   top: 0 !important;
   left: 0 !important;
   width: 100vw !important;
   height: 100vh !important;
-  background-color: #050F11 !important; /* Mørk bakgrunnsfarge som dekker alt */
+  height: 100dvh !important; /* Dynamisk mobilhøyde - forhindrer glipp nederst på iOS/Android */
+  background-color: #050F11 !important; /* Mørk bakgrunn som dekker ALT */
   display: flex !important;
   justify-content: center !important;
   align-items: center !important;
-  z-index: 10000 !important; /* Ligger rett under menyen (10005), men over alt annet */
+  z-index: 10000 !important; /* Rett under menyen (10005), over resten */
   transition: opacity 0.6s ease, visibility 0.6s ease !important;
 }
 
-/* 3. Når JavaScript legger til .fade-out */
+/* 3. Når JS-koden din legger til .fade-out */
 #page-loader.fade-out {
   opacity: 0 !important;
   visibility: hidden !important;
   pointer-events: none !important;
 }
 
-/* 4. Spinneren (justert litt ned slik at den er sentrert på flaten under 70px-menyen) */
+/* 4. Spinneren */
 .spinner {
   width: 60px;
   height: 60px;
@@ -37,20 +38,26 @@
   border-top: 6px solid #2ecc71;
   border-radius: 50%;
   animation: spin 1s linear infinite;
-  transform: translateY(35px); /* Skyver kun spinneren litt ned */
+  transform: translateY(35px); /* Skyver spinneren litt ned fra toppmenyen */
 }
 
-/* Mobil-tilpasning */
+/* ==========================================================================
+   EGEN TILPASSING FOR MOBIL (< 768px)
+   ========================================================================== */
 @media (max-width: 768px) {
+  #page-loader {
+    /* Sikrer at ingenting stikker ut på mobil */
+    overflow: hidden !important;
+  }
+
   .spinner {
     width: 45px;
     height: 45px;
     border-width: 5px;
-    transform: translateY(35px);
+    transform: translateY(35px); /* Sentrert under mobilmenyen */
   }
 }
 
-/* Animasjon */
 @keyframes spin {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
