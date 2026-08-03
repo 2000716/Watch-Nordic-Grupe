@@ -20,7 +20,7 @@
       box-sizing: border-box; 
       margin: 0; 
       padding: 0; 
-      touch-action: manipulation; /* Bedre responsivitet på touch-skjermer */
+      touch-action: manipulation; 
     }
 
     body {
@@ -35,29 +35,18 @@
     }
 
     /* ================= TOPPLINJE / LOGO ================= */
-    .header {
-      padding: 32px 48px;
-      width: 100%;
+    .top-nav {
       display: flex;
-      align-items: center;
       justify-content: flex-start;
+      align-items: center;
+      padding: 24px 48px;
+      width: 100%;
     }
 
-    .logo-link {
-      display: inline-block;
-      cursor: pointer;
-      line-height: 0;
-    }
-
-    .site-logo {
-      height: 46px;
+    .watch-logo-svg img {
+      height: 40px;
       width: auto;
       object-fit: contain;
-      transition: opacity 0.2s ease;
-    }
-
-    .logo-link:hover .site-logo {
-      opacity: 0.85;
     }
 
     /* ================= HOVEDINNHOLD / SKJEMA ================= */
@@ -307,13 +296,8 @@
 
     /* ================= MOBIL OG IPAD TILPASSNING ================= */
     @media (max-width: 768px) {
-      .header {
+      .top-nav {
         padding: 24px 20px;
-        justify-content: flex-start;
-      }
-
-      .site-logo {
-        height: 36px;
       }
 
       .main-content {
@@ -335,7 +319,7 @@
 
       input {
         padding: 14px 16px;
-        font-size: 16px; /* Forhindrer auto-zoom på iOS Safari */
+        font-size: 16px;
       }
 
       button.submit-btn {
@@ -357,17 +341,12 @@
 </head>
 <body>
 
-  <header class="top-nav top-menu">
+  <header class="top-nav">
     <div class="nav-left">
       <a href="index.html" class="watch-logo-svg">
         <img src="https://static.wixstatic.com/media/d9ace9_081ea242211b45a2801873c3067e1205~mv2.png" alt="Watch Nordic">
       </a>
     </div>
-    <nav class="nav-links">
-      <a href="index.html"><i class="fas fa-house"></i> Hjem</a>
-      <a href="Innlogging.html" class="active"><i class="fas fa-right-to-bracket"></i> Logg inn</a>
-    </nav>
-    <div class="nav-right"></div>
   </header>
 
   <!-- SKJEMA-OMRÅDE -->
@@ -418,7 +397,7 @@
       </form>
 
       <div class="toggle-text" id="toggleText">
-        Er du ikke medlem? <a onclick="visRegistrering()">Registrer deg</a>
+        Er du ikke medlem? <a href="#" id="toggleModeLink">Registrer deg</a>
       </div>
     </div>
   </main>
@@ -457,7 +436,7 @@
 
 <script type="module">
   import { auth, db } from "./firebase-oppsett.js";
-  import { 
+  import {  
     signInWithEmailAndPassword, 
     createUserWithEmailAndPassword,
     setPersistence,
@@ -479,6 +458,7 @@
   const submitKnapp = document.getElementById("submitKnapp");
   const changeEmailBtn = document.getElementById("changeEmailBtn");
   const passwordToggle = document.getElementById("passwordToggle");
+  const toggleModeLink = document.getElementById("toggleModeLink");
 
   function settFeilmelding(melding = "") {
     if (feilmelding) feilmelding.textContent = melding;
@@ -532,6 +512,17 @@
       passwordToggle.textContent = erSynlig ? "Vis" : "Skjul";
       passwordToggle.setAttribute("aria-label", erSynlig ? "Vis passord" : "Skjul passord");
       passordInput.focus();
+    });
+  }
+
+  if (toggleModeLink) {
+    toggleModeLink.addEventListener("click", (e) => {
+      e.preventDefault();
+      if (registreringsmodus) {
+        visInnlogging();
+      } else {
+        visRegistrering();
+      }
     });
   }
 
@@ -664,7 +655,6 @@
           const userCredential = await signInWithEmailAndPassword(auth, epost, passord);
           const user = userCredential.user;
 
-          // Sjekk om profildata finnes i Firestore
           const docRef = doc(db, "users", user.uid);
           const docSnap = await getDoc(docRef);
 
@@ -687,6 +677,8 @@
             settFeilmelding("Denne e-postadressen er allerede i bruk.");
             break;
           case 'auth/invalid-credential':
+            settFeilmelding("Feil e-post eller passord.");
+            break;
           case 'auth/wrong-password':
           case 'auth/user-not-found':
             settFeilmelding("Feil e-post eller passord.");
@@ -726,7 +718,7 @@
     if (title) title.textContent = "Registrer deg";
     if (submit) submit.textContent = "Opprett konto";
     if (forgot) forgot.style.display = "none";
-    if (toggle) toggle.innerHTML = 'Allerede medlem? <a href="#" id="velgInnloggingLink">Logg inn</a>';
+    if (toggle) toggle.innerHTML = 'Allerede medlem? <a href="#" id="toggleModeLink">Logg inn</a>';
     if (navnGruppe) navnGruppe.style.display = "block";
     if (passordInput) passordInput.setAttribute("autocomplete", "new-password");
 
@@ -736,8 +728,10 @@
         : "Velg et passord for å opprette kontoen";
     }
 
-    const link = document.getElementById("velgInnloggingLink");
-    if (link) link.addEventListener("click", (e) => { e.preventDefault(); visInnlogging(); });
+    document.getElementById("toggleModeLink").addEventListener("click", (e) => {
+      e.preventDefault();
+      visInnlogging();
+    });
   }
 
   function visInnlogging() {
@@ -754,7 +748,7 @@
     if (title) title.textContent = "Logg inn";
     if (submit) submit.textContent = "Logg inn";
     if (forgot) forgot.style.display = "block";
-    if (toggle) toggle.innerHTML = 'Er du ikke medlem? <a href="#" id="velgRegistreringLink">Registrer deg</a>';
+    if (toggle) toggle.innerHTML = 'Er du ikke medlem? <a href="#" id="toggleModeLink">Registrer deg</a>';
     if (navnGruppe) navnGruppe.style.display = "none";
     if (passordInput) passordInput.setAttribute("autocomplete", "current-password");
 
@@ -764,13 +758,11 @@
         : "Skriv inn passordet ditt";
     }
 
-    const link = document.getElementById("velgRegistreringLink");
-    if (link) link.addEventListener("click", (e) => { e.preventDefault(); visRegistrering(); });
+    document.getElementById("toggleModeLink").addEventListener("click", (e) => {
+      e.preventDefault();
+      visRegistrering();
+    });
   }
-
-  window.visRegistrering = visRegistrering;
-  window.visInnlogging = visInnlogging;
-  window.gaaTilSteg1 = gaaTilSteg1;
 </script>
 </body>
 </html>
