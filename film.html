@@ -998,11 +998,11 @@
   import { doc, getDoc, setDoc, collection, query, limit, getDocs } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
 
   /* ==========================================
-     1. GLOBALE TILSTANDER & CACHING
+     1. GLOBALE TILSTANDER
      ========================================== */
   let currentUser = null;
-  let aktivProfil = localStorage.getItem("aktivProfil") || "Hovedprofil";
-  let aktivProfilIndex = parseInt(localStorage.getItem("aktivProfilIndex") || "0", 10);
+  let aktivProfil = "Hovedprofil";
+  let aktivProfilIndex = 0;
   let heleProfilArrayet = [];
   let status = "ikke-påbegynt";
   let minListe = [];
@@ -1038,9 +1038,7 @@
     }
   }
 
-  /* OPTIMALISERT DATAHENTING:
-     Bruker sessionStorage for å unngå unødvendige Firestore-lesinger 
-     dersom brukeren refresher eller navigerer fram/tilbake. */
+  /* HENTER DIREKTE FRA FIREBASE (FJERSNET SESSIONSTORAGE CACHE) */
   async function lastDataFraFirebase() {
     try {
       const params = new URLSearchParams(window.location.search);
@@ -1051,32 +1049,19 @@
         return;
       }
 
-      const cacheKey = `media_cache_${navn}`;
-      const cachedData = sessionStorage.getItem(cacheKey);
+      // Hent direkte fra Firestore for å garantere at alle enheter har lik data
+      let docRef = doc(db, "filmer", navn);
+      let docSnap = await getDoc(docRef);
 
-      if (cachedData) {
-        const parsed = JSON.parse(cachedData);
-        data = parsed.data;
-        type = parsed.type;
+      if (docSnap.exists()) {
+        type = "film";
+        data = docSnap.data();
       } else {
-        // Hent fra Firestore dersom det ikke finnes i cache
-        let docRef = doc(db, "filmer", navn);
-        let docSnap = await getDoc(docRef);
-
+        docRef = doc(db, "serier", navn);
+        docSnap = await getDoc(docRef);
         if (docSnap.exists()) {
-          type = "film";
+          type = "serie";
           data = docSnap.data();
-        } else {
-          docRef = doc(db, "serier", navn);
-          docSnap = await getDoc(docRef);
-          if (docSnap.exists()) {
-            type = "serie";
-            data = docSnap.data();
-          }
-        }
-
-        if (data) {
-          sessionStorage.setItem(cacheKey, JSON.stringify({ data, type }));
         }
       }
 
@@ -1091,7 +1076,7 @@
       erUtilgjengelig = erUpublisert || erUtgått;
 
     } catch (err) {
-      console.error("Feil ved henting av mediedata:", err);
+      console.error("Feil ved henting av mediedata fra Firebase:", err);
     }
   }
 
@@ -1111,7 +1096,6 @@
 
     oppdaterBakgrunnsBilde();
     
-    // Ytelsesforbedring: Debounced window resize
     let resizeTimeout;
     window.addEventListener("resize", () => {
       clearTimeout(resizeTimeout);
@@ -1246,24 +1230,6 @@
       }
     }
 
-    // Profilbilde
-    const lagretBilde = localStorage.getItem("profilbilde");
-    const menyProfilbilde = document.getElementById("menyProfilbilde");
-    if (lagretBilde && menyProfilbilde && erTryggUrl(lagretBilde)) {
-      menyProfilbilde.src = lagretBilde;
-    }
-
-    // Innlasting av profil-cache
-    const cachedProfiles = localStorage.getItem("watch_nordic_profiles_cache");
-    if (cachedProfiles) {
-      try {
-        heleProfilArrayet = JSON.parse(cachedProfiles);
-        synkroniserLokalData();
-      } catch (e) {
-        console.error("Feil ved lesing av profil-cache:", e);
-      }
-    }
-
     document.body.classList.add("loaded");
   }
 
@@ -1359,13 +1325,18 @@
       status = (profilData.historikk && profilData.historikk[navn]) ? profilData.historikk[navn] : "ikke-påbegynt";
       minListe = profilData.minListe || [];
 
+      // Oppdater meny-profilbilde om det finnes i brukerprofilen fra Firebase
+      const menyProfilbilde = document.getElementById("menyProfilbilde");
+      if (profilData.bilde && menyProfilbilde && erTryggUrl(profilData.bilde)) {
+        menyProfilbilde.src = profilData.bilde;
+      }
+
       oppdaterWatchKnapp();
       oppdaterListeKnapp();
       byggAnbefalingerEllerEpisoder();
     }
   }
 
-  // Bakgrunns-synkronisering til skyen for å unngå å blokkere UI
   async function lagreProfilDataTilSkyen() {
     if (!currentUser) return;
 
@@ -1379,10 +1350,7 @@
     heleProfilArrayet[indeks].historikk[navn] = status;
     heleProfilArrayet[indeks].minListe = minListe;
 
-    // Lagre i lokal cache med en gang (Optimistic UI)
-    localStorage.setItem("watch_nordic_profiles_cache", JSON.stringify(heleProfilArrayet));
-
-    // Async skriving til Firestore i bakgrunnen
+    // Skriv direkte til Firestore skyen
     try {
       const userDocRef = doc(db, "users", currentUser.uid);
       await setDoc(userDocRef, { profiler: heleProfilArrayet }, { merge: true });
@@ -1391,6 +1359,7 @@
     }
   }
 
+  // Henter alt fra Firebase når innlogging er bekreftet
   onAuthStateChanged(auth, async (user) => {
     if (user) {
       currentUser = user;
@@ -1399,12 +1368,17 @@
         const docSnap = await getDoc(userDocRef);
 
         if (docSnap.exists()) {
-          heleProfilArrayet = docSnap.data().profiler || [];
-          localStorage.setItem("watch_nordic_profiles_cache", JSON.stringify(heleProfilArrayet));
+          const userData = docSnap.data();
+          heleProfilArrayet = userData.profiler || [];
+          
+          // Hent aktiv profil indeks om lagret i Firestore, ellers fallback til lokal eller 0
+          aktivProfilIndex = userData.sisteAktivProfilIndex ?? parseInt(localStorage.getItem("aktivProfilIndex") || "0", 10);
+          aktivProfil = heleProfilArrayet[aktivProfilIndex]?.navn || "Hovedprofil";
+
           synkroniserLokalData();
         }
       } catch (err) {
-        console.error("Feil ved henting av brukerdata:", err);
+        console.error("Feil ved henting av brukerdata fra Firestore:", err);
       }
     } else {
       window.location.href = "index.html";
@@ -1419,7 +1393,7 @@
 
     status = "påbegynt";
     oppdaterWatchKnapp();
-    lagreProfilDataTilSkyen(); // Trenger ikke 'await' – lar det gå i bakgrunnen
+    lagreProfilDataTilSkyen();
 
     const returUrl = encodeURIComponent(window.location.href);
 
@@ -1431,23 +1405,15 @@
       const separator = data.watchUrl.includes("?") ? "&" : "?";
       window.location.href = `${data.watchUrl}${separator}returUrl=${returUrl}`;
     } else if (type === "serie" && data.sesonger) {
-      const sisteEpKey = `${navn}-siste-episode`;
-      let sisteEp = null;
-      try {
-        sisteEp = JSON.parse(localStorage.getItem(sisteEpKey));
-      } catch (e) {
-        console.warn("Kunne ikke lese avspillingsfremdrift.");
+      let sesongNr = Object.keys(data.sesonger)[0];
+      let epNr = Object.keys(data.sesonger[sesongNr].episoder)[0];
+      
+      let profilData = heleProfilArrayet[aktivProfilIndex];
+      if (profilData && profilData.sisteEpisoder && profilData.sisteEpisoder[navn]) {
+        sesongNr = profilData.sisteEpisoder[navn].sesong;
+        epNr = profilData.sisteEpisoder[navn].episode;
       }
 
-      let sesongNr, epNr;
-
-      if (sisteEp && data.sesonger[sisteEp.sesong]?.episoder[sisteEp.episode]) {
-        sesongNr = sisteEp.sesong;
-        epNr = sisteEp.episode;
-      } else {
-        sesongNr = Object.keys(data.sesonger)[0];
-        epNr = Object.keys(data.sesonger[sesongNr].episoder)[0];
-      }
       window.location.href = `film-mal.html?navn=${encodeURIComponent(navn)}&sesong=${encodeURIComponent(sesongNr)}&episode=${encodeURIComponent(epNr)}&returUrl=${returUrl}`;
     }
   }
@@ -1467,7 +1433,7 @@
   }
 
   /* ==========================================
-     6. EPISODELISTING & OPTIMALISERTE ANBEFALINGER
+     6. EPISODELISTING & ANBEFALINGER
      ========================================== */
   function visSesong(sesongNr) {
     const seasonButtons = document.getElementById("seasonButtons");
@@ -1513,7 +1479,15 @@
 
       if (!erLåst) {
         epCard.addEventListener("click", () => {
-          localStorage.setItem(`${navn}-siste-episode`, JSON.stringify({ sesong: sesongNr, episode: epNr }));
+          // Lagrer fremdrift direkte i profilen i Firebase i stedet for lokal lagring
+          if (heleProfilArrayet[aktivProfilIndex]) {
+            if (!heleProfilArrayet[aktivProfilIndex].sisteEpisoder) {
+              heleProfilArrayet[aktivProfilIndex].sisteEpisoder = {};
+            }
+            heleProfilArrayet[aktivProfilIndex].sisteEpisoder[navn] = { sesong: sesongNr, episode: epNr };
+            lagreProfilDataTilSkyen();
+          }
+
           const returUrl = encodeURIComponent(window.location.href);
           window.location.href = `film-mal.html?navn=${encodeURIComponent(navn)}&sesong=${encodeURIComponent(sesongNr)}&episode=${encodeURIComponent(epNr)}&returUrl=${returUrl}`;
         });
@@ -1560,16 +1534,10 @@
 
       try {
         let filmer = [];
-        const cacheAnbefalinger = sessionStorage.getItem("anbefalinger_cache");
-
-        if (cacheAnbefalinger) {
-          filmer = JSON.parse(cacheAnbefalinger);
-        } else {
-          const q = query(collection(db, "filmer"), limit(10));
-          const filmerSnap = await getDocs(q);
-          filmerSnap.forEach(d => filmer.push({ id: d.id, ...d.data() }));
-          sessionStorage.setItem("anbefalinger_cache", JSON.stringify(filmer));
-        }
+        // Henter direkte fra Firestore-kolleksjonen i stedet for sessionStorage
+        const q = query(collection(db, "filmer"), limit(10));
+        const filmerSnap = await getDocs(q);
+        filmerSnap.forEach(d => filmer.push({ id: d.id, ...d.data() }));
 
         let antallVist = 0;
         filmer.forEach(item => {
@@ -1595,7 +1563,7 @@
           }
         });
       } catch (e) {
-        console.error("Feil ved henting av anbefalinger:", e);
+        console.error("Feil ved henting av anbefalinger fra Firebase:", e);
       } finally {
         gallery.dataset.laster = "false";
       }
@@ -1614,18 +1582,14 @@
 
     if (data.trailer && data.trailer.trim() !== "" && erTryggUrl(data.trailer) && trailerVideo) {
       trailerVideo.src = data.trailer;
-      
-      // OPTIMALISERING: Unngå aggressiv nedlasting for å spare server-båndbredde
       trailerVideo.preload = "none"; 
 
       trailerVideo.addEventListener("error", () => {
-        console.warn("Trailer-feil. Viser bakgrunnsbilde isteden.");
         if (trailerVideo) trailerVideo.style.display = "none";
         if (videoControls) videoControls.style.display = "none";
         if (bgImg) bgImg.style.opacity = "1";
       });
 
-      // Forsinket avspilling
       setTimeout(() => {
         if (bgImg) bgImg.style.opacity = "0";
         trailerVideo.style.opacity = "1";
@@ -1666,7 +1630,6 @@
     }
   }
 
-  // Ytelsesoptimalisert Scroll-lytter (RequestAnimationFrame)
   let ticking = false;
   window.addEventListener("scroll", () => {
     if (!ticking) {
