@@ -38,6 +38,9 @@
       transition: opacity 1s ease;
       overflow-x: hidden;
       width: 100%;
+      min-height: 100vh;
+      min-height: 100svh;
+      min-height: 100dvh;
     }
 
     body.loaded {
@@ -52,8 +55,11 @@
     main {
       width: 100%;
       min-height: 100vh;
+      min-height: 100svh;
+      min-height: 100dvh;
       display: flex;
       flex-direction: column;
+      background: #050F11;
     }
 
     /* ==========================================================================
@@ -62,8 +68,13 @@
     .hero {
       position: relative;
       width: 100%;
-      height: 100vh;
+      min-height: 100vh;
+      min-height: 100svh;
+      min-height: 100dvh;
       overflow: hidden;
+      background: #050F11;
+      display: flex;
+      align-items: flex-end;
     }
 
     .background-image,
@@ -72,9 +83,13 @@
       inset: 0;
       width: 100%;
       height: 100%;
+      min-height: 100%;
       object-fit: cover;
+      object-position: center;
+      background-color: #050F11;
       transition: opacity 1s ease;
       z-index: 0;
+      display: block;
     }
 
     .background-video {
@@ -104,14 +119,13 @@
        INNHOLD OG GLASS PANEL (PC DEFAULT)
        ========================================================================== */
     .content-wrapper {
-      position: absolute;
-      bottom: 5%;
-      left: 0;
-      right: 0;
+      position: relative;
       z-index: 2;
       width: 90%;
       max-width: 1400px;
       margin: 0 auto;
+      padding-bottom: clamp(24px, 4vw, 40px);
+      margin-top: auto;
     }
 
     .logo-container {
@@ -696,7 +710,12 @@
     @media (max-width: 1024px) {
       .content-wrapper {
         width: 95%;
-        bottom: 4%;
+        padding-bottom: 28px;
+      }
+
+      .hero {
+        min-height: 100svh;
+        min-height: 100dvh;
       }
 
       .text-button-container {
@@ -712,6 +731,11 @@
     @media (max-width: 768px) {
       html, body {
         background: #091B1E !important;
+      }
+
+      .hero {
+        min-height: 100svh;
+        min-height: 100dvh;
       }
 
       body, .hero {
@@ -1344,10 +1368,27 @@
      ========================================== */
   function oppdaterBakgrunnsBilde() {
     if (!bgImg || !data) return;
+    const heroEl = document.querySelector(".hero");
     const erMobil = window.innerWidth <= 768;
     const bildeUrl = (erMobil && data.bakgrunnMobil) ? data.bakgrunnMobil : (data.bakgrunn || "");
+
+    if (heroEl) heroEl.style.backgroundColor = "#050F11";
+    bgImg.style.opacity = "0";
+
     if (erTryggUrl(bildeUrl)) {
       bgImg.src = bildeUrl;
+      bgImg.onload = () => {
+        bgImg.style.opacity = "1";
+        if (heroEl) heroEl.style.backgroundColor = "transparent";
+      };
+      bgImg.onerror = () => {
+        bgImg.style.opacity = "0";
+        if (heroEl) heroEl.style.backgroundColor = "#050F11";
+      };
+    } else {
+      bgImg.removeAttribute("src");
+      bgImg.style.opacity = "0";
+      if (heroEl) heroEl.style.backgroundColor = "#050F11";
     }
   }
 
@@ -1739,10 +1780,11 @@
     if (data.trailer && data.trailer.trim() !== "" && erTryggUrl(data.trailer) && trailerVideo) {
       trailerVideo.src = data.trailer;
       trailerVideo.preload = "metadata";
-      
-      // Påkrevd for at Safari iOS / Mobil-enheter tillater automatisk bakgrunnsavspilling uten fullskjerm-tvang
-      trailerVideo.setAttribute("playsinline", "");
+      trailerVideo.autoplay = true;
       trailerVideo.muted = true;
+      trailerVideo.playsInline = true;
+      trailerVideo.setAttribute("playsinline", "");
+      trailerVideo.setAttribute("webkit-playsinline", "");
 
       trailerVideo.addEventListener("error", () => {
         console.warn("Trailer-feil. Viser bakgrunnsbilde isteden.");
