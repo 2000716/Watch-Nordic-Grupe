@@ -306,6 +306,7 @@
   font-size: 24px;
   font-weight: 600;
   margin-bottom: 20px;
+  color: #ffffff;
 }
 
 .gallery {
@@ -333,7 +334,7 @@
 
 .movie-card:hover {
   transform: translateY(-5px);
-  box-shadow: 0 10px 20px rgba(0, 255, 204, 0.15);
+  box-shadow: 0 10px 20px rgba(255, 255, 255, 0.1);
 }
 
 .movie-overlay {
@@ -358,7 +359,7 @@
 }
 
 /* ==========================================================================
-   SESONG-KNAPPER (KORRIGERT)
+   HVITE SESONG-KNAPPER (INGEN NEON)
    ========================================================================== */
 .season-buttons {
   display: flex;
@@ -371,9 +372,9 @@
 }
 
 .season-btn {
-  background: rgba(255, 255, 255, 0.06);
+  background: rgba(255, 255, 255, 0.08);
   color: #a0a0a0;
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
   padding: 10px 22px;
   border-radius: 20px;
   cursor: pointer;
@@ -385,20 +386,22 @@
 }
 
 .season-btn:hover {
-  background: rgba(255, 255, 255, 0.15);
-  color: #fff;
+  background: rgba(255, 255, 255, 0.2);
+  color: #ffffff;
+  border-color: rgba(255, 255, 255, 0.4);
 }
 
+/* Aktiv knapp: Hvit bakgrunn med mørk tekst */
 .season-btn.active {
-  background: #00FFCC;
+  background: #ffffff;
   color: #050F11;
-  border-color: #00FFCC;
+  border-color: #ffffff;
   font-weight: 700;
-  box-shadow: 0 0 12px rgba(0, 255, 204, 0.3);
+  box-shadow: 0 4px 15px rgba(255, 255, 255, 0.15);
 }
 
 /* ==========================================================================
-   EPISODE-GALLERI
+   EPISODE-GALLERI (RENE HVITE AKSENTER)
    ========================================================================== */
 .episode-gallery {
   display: flex;
@@ -415,7 +418,7 @@
   border-radius: 12px;
   overflow: hidden;
   cursor: pointer;
-  border: 1px solid rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.08);
   transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), 
               border-color 0.3s ease, 
               background-color 0.3s ease,
@@ -429,17 +432,17 @@
 .episode-card:hover {
   transform: translateX(6px);
   background: rgba(26, 40, 46, 0.8);
-  border-color: rgba(0, 255, 204, 0.4);
+  border-color: rgba(255, 255, 255, 0.3);
   box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5);
 }
 
 .episode-number {
   font-size: 20px;
   font-weight: 800;
-  color: #00FFCC;
+  color: #ffffff;
   min-width: 35px;
   text-align: center;
-  opacity: 0.8;
+  opacity: 0.9;
 }
 
 .episode-thumb {
@@ -495,7 +498,7 @@
 
 .episode-card:hover .play-icon-circle {
   transform: scale(1);
-  background: #00FFCC;
+  background: #ffffff;
 }
 
 .episode-progress {
@@ -503,9 +506,9 @@
   bottom: 0;
   left: 0;
   height: 3px;
-  background: #00FFCC;
+  background: #ffffff;
   z-index: 2;
-  box-shadow: 0 0 8px #00FFCC;
+  box-shadow: 0 0 6px rgba(255, 255, 255, 0.5);
 }
 
 .episode-info {
@@ -532,7 +535,7 @@
 
 .episode-meta {
   font-size: 13px;
-  color: #00FFCC;
+  color: rgba(255, 255, 255, 0.7);
   font-weight: 600;
 }
 
