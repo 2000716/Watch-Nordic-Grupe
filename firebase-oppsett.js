@@ -1,9 +1,13 @@
 // firebase-oppsett.js
-// ALT ER OPPDATERT TIL VERSJON 12.15.0 FOR Å MATCHE PERFEKT
+// OPPDATERT FOR FULL STABILITET PÅ IPAD, SAFARI OG PRIVAT MODUS (VERSJON 12.15.0)
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-app.js";
 import { getAuth, setPersistence, browserLocalPersistence } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-auth.js";
-import { initializeFirestore, persistentLocalCache, persistentMultipleTabManager } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
+import { 
+  initializeFirestore, 
+  persistentLocalCache, 
+  persistentMultipleTabManager 
+} from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
 
 // Din unike Firebase-konfigurasjon
 const firebaseConfig = {
@@ -26,9 +30,25 @@ setPersistence(auth, browserLocalPersistence).catch((error) => {
   console.warn("Kunne ikke sette auth-persistens:", error);
 });
 
-// Initialiserer Firestore med lokal offline-cache aktivert (sparer ekstremt mye LESING/READS)
-export const db = initializeFirestore(app, {
-  localCache: persistentLocalCache({
-    tabManager: persistentMultipleTabManager()
-  })
-});
+// Trygg initialisering av Firestore tilpasset iPad, iOS Safari og Privat Modus
+let firestoreDb;
+
+try {
+  firestoreDb = initializeFirestore(app, {
+    localCache: persistentLocalCache({
+      tabManager: persistentMultipleTabManager()
+    }),
+    // Tvinger automatisk Long-Polling dersom WebSockets blokkeres på iPad/Safari
+    experimentalAutoDetectLongPolling: true
+  });
+} catch (error) {
+  console.warn("Lokal cache feilet (f.eks. Privat Modus på iPad). Initialiserer Firestore uten cache som fallback:", error);
+  
+  // Fallback uten lokal cache dersom Safari/iPad nekter IndexedDB-tilgang
+  firestoreDb = initializeFirestore(app, {
+    experimentalAutoDetectLongPolling: true
+  });
+}
+
+// Eksporterer databasen til resten av prosjektet
+export const db = firestoreDb;
