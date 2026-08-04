@@ -2,12 +2,12 @@
    PAGE LOADER (Sømløs bakgrunn bak menyen - Mobil, iPad og PC)
    ========================================================================== */
 
-/* 1. Menyen har høy z-index under vanlig bruk */
+/* 1. Menyen har høyere z-index enn loaderen slik at den ligger øverst */
 .top-nav {
-  z-index: 10005 !important;
+  z-index: 25000 !important;
 }
 
-/* 2. Loaderen dekker 100% av skjermen OG blokkerer alt av klikk/touch */
+/* 2. Loaderen dekker skjermen, men ligger under toppmenyen */
 #page-loader {
   position: fixed !important;
   inset: 0 !important; /* Låser loaderen perfekt til alle 4 kanter på iPad/iOS */
