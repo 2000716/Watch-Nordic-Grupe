@@ -1,16 +1,6 @@
 /* ==========================================
-   OPTIMALISERT LADER.JS (Rettet for iPad)
+   OPTIMALISERT LADER.JS (Synkronisert med Firebase)
    ========================================== */
-
-// Forbedret iPad-deteksjon som fungerer på alle iPadOS-versjoner
-function erIpad() {
-  const ua = navigator.userAgent;
-  const erKlassiskIpad = /iPad/i.test(ua);
-  // Sjekker UserAgent (Macintosh) kombinert med touch-punkter
-  const erNyIpad = /Macintosh/i.test(ua) && (navigator.maxTouchPoints && navigator.maxTouchPoints > 1);
-
-  return erKlassiskIpad || erNyIpad;
-}
 
 function skjulLoader() {
   const loader = document.getElementById("page-loader");
@@ -23,61 +13,59 @@ function skjulLoader() {
     if (loader && loader.parentNode) {
       loader.remove();
     }
-  }, 600);
+  }, 600); // Gir tid til at CSS fade-out animasjonen kan spilles av
 }
 
 function initLoaderHåndtering() {
   const loader = document.getElementById("page-loader");
+  if (!loader) return;
 
-  // HVIS HMTL-elementet ikke finnes ennå, vent og prøv igjen når DOM er klar
-  if (!loader) {
-    if (document.readyState === "loading") {
-      document.addEventListener("DOMContentLoaded", initLoaderHåndtering);
-    }
-    return;
-  }
+  // Sjekker om dette er en side som henter data fra Firebase (f.eks. har ?navn= i URL-en)
+  const erDynamiskSide = window.location.search.includes("navn=");
 
-  // HVIS DET ER EN IPAD: Skjul og fjern umiddelbart
-  if (erIpad()) {
-    loader.style.display = "none";
-    loader.remove();
-    return;
-  }
-
-  // NØD-FALLBACK for andre enheter (maks 2.5s)
+  // NØD-FALLBACK: Hvis nettet er ekstremt tregt eller noe krasjer, fjerner vi loaderen etter 8 sekunder uansett.
   const nodTimeout = window.setTimeout(() => {
     skjulLoader();
-  }, 2500);
+  }, 8000);
 
-  try {
-    const sistLastet = Number(localStorage.getItem("watchNordicLastLoaded") || "0");
-    const naa = Date.now();
-
-    if (sistLastet && (naa - sistLastet < 300000)) {
+  if (erDynamiskSide) {
+    // 1. Hvis koden allerede har rukket å si at den er ferdig:
+    if (document.body && document.body.classList.contains("loaded")) {
       window.clearTimeout(nodTimeout);
       skjulLoader();
-    } else {
-      window.setTimeout(() => {
-        window.clearTimeout(nodTimeout);
-        skjulLoader();
-        localStorage.setItem("watchNordicLastLoaded", String(naa));
-      }, 800);
+      return;
     }
-  } catch (error) {
-    window.clearTimeout(nodTimeout);
-    skjulLoader();
+
+    // 2. Hvis ikke, setter vi opp en "vakt" (Observer) som venter på at Firebase blir ferdig
+    const observer = new MutationObserver((mutations) => {
+      mutations.forEach((mutation) => {
+        if (mutation.attributeName === "class" && document.body.classList.contains("loaded")) {
+          window.clearTimeout(nodTimeout);
+          skjulLoader();
+          observer.disconnect(); // Slutter å overvåke når den er ferdig
+        }
+      });
+    });
+
+    if (document.body) {
+      observer.observe(document.body, { attributes: true });
+    } else {
+      document.addEventListener("DOMContentLoaded", () => {
+        observer.observe(document.body, { attributes: true });
+      });
+    }
+  } else {
+    // For vanlige sider (som Hovedside.html) som ikke venter på filmdata
+    window.addEventListener("load", () => {
+      window.clearTimeout(nodTimeout);
+      skjulLoader();
+    });
   }
 }
 
-// Sørg for at koden alltid kjører etter at DOM-strukturen er klar
+// Sørg for at koden alltid kjører
 if (document.readyState === "loading") {
   document.addEventListener("DOMContentLoaded", initLoaderHåndtering);
 } else {
   initLoaderHåndtering();
 }
-
-window.addEventListener("load", () => {
-  if (!erIpad()) {
-    skjulLoader();
-  }
-});
