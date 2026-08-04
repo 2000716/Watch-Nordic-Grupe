@@ -22,8 +22,8 @@
   transition: opacity 0.6s ease, visibility 0.6s ease !important;
 }
 
-/* 3. Når JS-koden legger til .fade-out */
-#page-loader.fade-out {
+/* 3. Når body får klassen "loaded" fra JS, fader loaderen ut automatisk */
+body.loaded #page-loader {
   opacity: 0 !important;
   visibility: hidden !important;
   pointer-events: none !important;
