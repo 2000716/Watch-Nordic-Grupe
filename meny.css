@@ -14,7 +14,8 @@
   position: fixed;
   top: 0;
   left: 0;
-  width: 100vw; /* Bruker vw for å ignorere scrollbar-hopp */
+  right: 0;
+  width: 100%;
   height: 70px !important;
   display: flex;
   align-items: center;
@@ -22,17 +23,7 @@
   padding: 0 40px;
   z-index: 9999;
   
-  /* Standard scrollet tilstand (PC): Solid stripe uten glass-effekt */
-  background: #050F11;
-  backdrop-filter: none;
-  -webkit-backdrop-filter: none;
-  box-shadow: 0 2px 15px rgba(0, 0, 0, 0.6);
-  transition: background 0.4s ease, box-shadow 0.4s ease;
-}
-
-/* PC: ØVERST PÅ SIDEN (Gradient/Fade ned fra #050F11) */
-body:not(.scrolled-y) .top-nav,
-.top-nav:not(.scrolled) {
+  /* Standard tilstand: Gradient/Fade ned fra mørk bakgrunn */
   background: linear-gradient(
     to bottom, 
     #050F11 0%, 
@@ -43,6 +34,7 @@ body:not(.scrolled-y) .top-nav,
   backdrop-filter: none;
   -webkit-backdrop-filter: none;
   box-shadow: none;
+  transition: background 0.4s ease, box-shadow 0.4s ease;
 }
 
 /* PC: VED SCROLLING (Fast solid stripe av #050F11) */
@@ -193,30 +185,20 @@ body.scrolled-y .top-nav {
 @media (max-width: 768px) {
   .top-nav {
     padding: 0 20px;
-  }
-
-  /* MOBIL: Øverst på siden (Gradient/Fade ned fra #091B1E) */
-  body:not(.scrolled-y) .top-nav,
-  .top-nav:not(.scrolled) {
     background: linear-gradient(
       to bottom, 
       #091B1E 0%, 
       rgba(9, 27, 30, 0.8) 40%, 
       rgba(9, 27, 30, 0.3) 75%, 
       transparent 100%
-    ) !important;
-    backdrop-filter: none !important;
-    -webkit-backdrop-filter: none !important;
-    box-shadow: none !important;
+    );
   }
 
   /* MOBIL: Ved scrolling (Fast solid stripe av #091B1E) */
   .top-nav.scrolled,
   body.scrolled-y .top-nav {
-    background: #091B1E !important;
-    backdrop-filter: none !important;
-    -webkit-backdrop-filter: none !important;
-    box-shadow: 0 2px 15px rgba(0, 0, 0, 0.6) !important;
+    background: #091B1E;
+    box-shadow: 0 2px 15px rgba(0, 0, 0, 0.6);
   }
 
   .nav-links {
