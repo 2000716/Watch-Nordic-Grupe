@@ -754,7 +754,7 @@
     }
   }
 
-  /* ==========================================================================
+/* ==========================================================================
      MEDIA QUERIES (ORIGINAL MOBIL-OPPBYGGING SKJERM OPPTIL 768px)
      ========================================================================== */
   @media (max-width: 768px) {
@@ -822,7 +822,13 @@
       display: flex !important;
       justify-content: center !important;
       margin-bottom: 15px !important;
-      order: 1 !important; /* 1. Plassert øverst (Tittel-logoen) */
+      order: 1 !important;
+    }
+
+    .film-logo {
+      max-width: 60% !important;
+      max-height: 80px !important;
+      height: auto !important;
     }
 
     .left-content {
@@ -843,14 +849,11 @@
     }
 
     .text-container {
-      width: 100% !important;
-      max-width: 100% !important;
-      display: flex !important;
-      flex-direction: column !important;
+      display: contents !important;
     }
 
     .metadata {
-      order: 2 !important; /* 2. Plassert like under logoen (mellom logo og knapper) */
+      order: 2 !important;
       margin: 5px 0 10px 0 !important;
       display: flex !important;
       justify-content: center !important;
@@ -859,7 +862,7 @@
 
     .buttons-column {
       width: 100% !important;
-      order: 3 !important; /* 3. Knappene kommer etter metadata */
+      order: 3 !important;
       display: flex !important;
       flex-direction: column !important;
       gap: 10px !important;
