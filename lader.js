@@ -1,13 +1,23 @@
 /* ==========================================
-   OPTIMALISERT LADER.JS (iPad & Mobil-trygg)
+   OPTIMALISERT LADER.JS (Ekskludert for iPad)
    ========================================== */
+
+// Sjekk om enheten er en iPad
+function erIpad() {
+  const ua = navigator.userAgent;
+  const erKlassiskIpad = /iPad/i.test(ua);
+  // Nyere iPads på iPadOS rapporterer ofte som Mac, men har touch-skjerm
+  const erNyIpad = navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1;
+
+  return erKlassiskIpad || erNyIpad;
+}
 
 function skjulLoader() {
   const loader = document.getElementById("page-loader");
 
   if (!loader || loader.classList.contains("fade-out")) return;
 
-  // 1. Skru av klikk/touch UMONTBART når den begynner å forsvinne
+  // 1. Skru av klikk/touch UMIDDELBART når den begynner å forsvinne
   loader.style.pointerEvents = "none";
   loader.classList.add("fade-out");
 
@@ -23,8 +33,13 @@ function initLoaderHåndtering() {
   const loader = document.getElementById("page-loader");
   if (!loader) return;
 
-  // NØD-TIMEOUT: Tving loaderen til å forsvinne etter maks 2.5 sekunder,
-  // selv om iPad/nettverket henger på et bilde eller Firebase.
+  // HVIS DET ER EN IPAD: Fjern loaderen umiddelbart og stopp kjøring
+  if (erIpad()) {
+    loader.remove();
+    return;
+  }
+
+  // NØD-TIMEOUT: Tving loaderen til å forsvinne etter maks 2.5 sekunder
   const nodTimeout = window.setTimeout(() => {
     console.warn("Loader tidsavbrudd (Nød-fallback utløst).");
     skjulLoader();
@@ -60,5 +75,9 @@ if (document.readyState === "loading") {
   initLoaderHåndtering();
 }
 
-// Ekstra sikring: Hvis 'load' (alt ferdig) inntreffer superraskt, skjul den
-window.addEventListener("load", skjulLoader);
+// Ekstra sikring: Hvis 'load' inntreffer superraskt, skjul den (gjelder kun ikke-iPad)
+window.addEventListener("load", () => {
+  if (!erIpad()) {
+    skjulLoader();
+  }
+});
