@@ -1741,7 +1741,7 @@
   }
 
   /* ==========================================
-     7. VIDEO/TRAILER & MOBIL-STØTTE
+     7. VIDEO/TRAILER & MOBIL-STØTTE (OPTIMALISERT)
      ========================================== */
   function initTrailer() {
     if (!data) return;
@@ -1750,10 +1750,13 @@
     const pauseBtn = document.getElementById("pauseBtn");
     const soundBtn = document.getElementById("soundBtn");
 
-    if (data.trailer && data.trailer.trim() !== "" && erTryggUrl(data.trailer) && trailerVideo) {
+    const erMobil = window.innerWidth <= 768;
+
+    // Kun start videotrailer automatisk på stasjonære skjermer (PC/Mac).
+    // På mobil/iPad koples traileren ut for å unngå svart skjerm og treghet.
+    if (data.trailer && data.trailer.trim() !== "" && erTryggUrl(data.trailer) && trailerVideo && !erMobil) {
       trailerVideo.src = data.trailer;
       trailerVideo.preload = "metadata";
-      trailerVideo.autoplay = true;
       trailerVideo.muted = true;
       trailerVideo.playsInline = true;
       trailerVideo.setAttribute("playsinline", "");
@@ -1766,6 +1769,7 @@
         if (bgImg) bgImg.style.opacity = "1";
       });
 
+      // Rask oppstart (1 sek i stedet for 10 sek forsinkelse)
       setTimeout(() => {
         if (bgImg) bgImg.style.opacity = "0";
         trailerVideo.style.opacity = "1";
@@ -1774,7 +1778,7 @@
           trailerVideo.style.opacity = "0";
         });
         if (videoControls) videoControls.style.opacity = "1";
-      }, 10000);
+      }, 1000);
 
       trailerVideo.addEventListener("ended", () => {
         trailerVideo.style.opacity = "0";
@@ -1801,8 +1805,10 @@
         });
       }
     } else {
+      // Viser bakgrunnsbilde umiddelbart på mobil/nettbrett
       if (trailerVideo) trailerVideo.style.display = "none";
       if (videoControls) videoControls.style.display = "none";
+      if (bgImg) bgImg.style.opacity = "1";
     }
   }
 
