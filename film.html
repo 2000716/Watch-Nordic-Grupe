@@ -1098,7 +1098,7 @@
   let erUpublisert = false;
   let erUtgått = false;
   let erUtilgjengelig = false;
-  let erProfilLastetFraSkyen = false; // Hindrer overskriving av skydata før fullført last
+  let erProfilLastetFraSkyen = false;
 
   let watchBtn, addToListBtn, bgImg;
 
@@ -1140,7 +1140,8 @@
       }
 
       const cacheKey = `media_cache_${navn}`;
-      const cachedData = sessionStorage.getItem(cacheKey);
+      // Endret til localStorage for lynrask innlasting på tvers av økter
+      const cachedData = localStorage.getItem(cacheKey);
 
       if (cachedData) {
         try {
@@ -1148,7 +1149,7 @@
           data = parsed.data;
           type = parsed.type;
         } catch (e) {
-          sessionStorage.removeItem(cacheKey);
+          localStorage.removeItem(cacheKey);
         }
       }
 
@@ -1169,7 +1170,8 @@
         }
 
         if (data) {
-          sessionStorage.setItem(cacheKey, JSON.stringify({ data, type }));
+          // Lagrer dataen permanent i nettleseren så neste visning er umiddelbar
+          localStorage.setItem(cacheKey, JSON.stringify({ data, type }));
         }
       }
 
@@ -1371,6 +1373,7 @@
       byggAnbefalingerEllerEpisoder();
     }
 
+    // Viser selve innholdet når koden er ferdig
     document.body.classList.add("loaded");
   }
 
@@ -1489,7 +1492,7 @@
   }
 
   async function lagreProfilDataTilSkyen() {
-    if (!currentUser || !erProfilLastetFraSkyen) return; // FORHINDRER RACE CONDITION OVERWRITES
+    if (!currentUser || !erProfilLastetFraSkyen) return;
 
     let indeks = aktivProfilIndex;
     if (!heleProfilArrayet[indeks]) {
@@ -1727,13 +1730,14 @@
 
       try {
         let filmer = [];
-        const cacheAnbefalinger = sessionStorage.getItem("anbefalinger_cache");
+        // Endret til localStorage her også, slik at anbefalinger laster umiddelbart
+        const cacheAnbefalinger = localStorage.getItem("anbefalinger_cache");
 
         if (cacheAnbefalinger) {
           try {
             filmer = JSON.parse(cacheAnbefalinger);
           } catch (e) {
-            sessionStorage.removeItem("anbefalinger_cache");
+            localStorage.removeItem("anbefalinger_cache");
           }
         }
 
@@ -1741,7 +1745,7 @@
           const q = query(collection(db, "filmer"), limit(10));
           const filmerSnap = await getDocs(q);
           filmerSnap.forEach(d => filmer.push({ id: d.id, ...d.data() }));
-          sessionStorage.setItem("anbefalinger_cache", JSON.stringify(filmer));
+          localStorage.setItem("anbefalinger_cache", JSON.stringify(filmer));
         }
 
         const fragment = document.createDocumentFragment();
@@ -1881,7 +1885,6 @@
 
   oppdaterTopNavTilstand();
 
-  // Forhindrer dobbelt-oppkall dersom modulen lastes etter DOM-parsing
   if (document.readyState === "loading") {
     document.addEventListener("DOMContentLoaded", () => { init(); }, { once: true });
   } else {
