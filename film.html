@@ -1077,32 +1077,6 @@
 <script src="meny.js"></script>
 <script src="lader.js"></script>
 <script type="module">
-  // ==================== ØKT-KONTROLL (LUKKET NETTLESER = START) ==================== //
-  const OEKT_AKTIV_KEY = "watch_nordic_aktiv_oekt";
-
-  function sjekkOgValiderOekt() {
-    const erAktivIEkten = sessionStorage.getItem(OEKT_AKTIV_KEY);
-
-    if (!erAktivIEkten) {
-      // Hvis sessionStorage er tom, betyr det at nettleseren/fanen har vært lukket.
-      // Vi sender dem til index.html for å sikre en ren start.
-      const gjeldendeSide = window.location.pathname.split("/").pop();
-      if (gjeldendeSide !== "index.html" && gjeldendeSide !== "") {
-        window.location.href = "index.html";
-        return false;
-      }
-    }
-
-    // Marker at økten er aktiv
-    sessionStorage.setItem(OEKT_AKTIV_KEY, "true");
-    return true;
-  }
-
-  // Utfør sjekk med en gang skriptet lastes
-  if (!sjekkOgValiderOekt()) {
-    throw new Error("Ingen aktiv sesjon. Omdirigerer til velkomsside.");
-  }
-
   import { auth, db } from "./firebase-oppsett.js";
   import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-auth.js";
   import { doc, getDoc, setDoc, collection, query, limit, getDocs } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
@@ -1907,6 +1881,7 @@
 
   oppdaterTopNavTilstand();
 
+  // Forhindrer dobbelt-oppkall dersom modulen lastes etter DOM-parsing
   if (document.readyState === "loading") {
     document.addEventListener("DOMContentLoaded", () => { init(); }, { once: true });
   } else {
