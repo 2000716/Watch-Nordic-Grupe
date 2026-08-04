@@ -1,13 +1,13 @@
 /* ==========================================================================
-   PAGE LOADER (Sømløs bakgrunn bak menyen - Både Mobil og PC)
+   PAGE LOADER (Sømløs bakgrunn bak menyen - Mobil, iPad og PC)
    ========================================================================== */
 
-/* 1. Tvinger menyen til å ligge ØVERST av alt (både på mobil og desktop) */
+/* 1. Menyen har høy z-index under vanlig bruk */
 .top-nav {
   z-index: 10005 !important;
 }
 
-/* 2. Loaderen dekker 100% av skjermen som standard */
+/* 2. Loaderen dekker 100% av skjermen OG blokkerer alt av klikk/touch (også på menyen) */
 #page-loader {
   position: fixed !important;
   top: 0 !important;
@@ -19,7 +19,8 @@
   display: flex !important;
   justify-content: center !important;
   align-items: center !important;
-  z-index: 10000 !important; /* Rett under menyen (10005), over resten */
+  z-index: 20000 !important; /* Ligger ØVERST av alt (også over menyen) mens det laster! */
+  pointer-events: auto !important; /* Blokkerer ALL interaksjon bak loaderen */
   transition: opacity 0.6s ease, visibility 0.6s ease !important;
 }
 
@@ -27,10 +28,21 @@
 #page-loader.fade-out {
   opacity: 0 !important;
   visibility: hidden !important;
-  pointer-events: none !important;
+  pointer-events: none !important; /* Slipper gjennom klikk straks den begynner å fades ut */
 }
 
-/* 4. Sørger for at loaderen er skjult på touch-enheter etter første visning */
+/* 4. Spinneren */
+.spinner {
+  width: 60px;
+  height: 60px;
+  border: 6px solid #2a3b40;
+  border-top: 6px solid #2ecc71;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  transform: translateY(35px);
+}
+
+/* 5. Tilpasning for Redusert Bevegelse (Tilgjengelighet) */
 @media (prefers-reduced-motion: reduce) {
   #page-loader {
     transition: none !important;
@@ -41,35 +53,22 @@
   }
 }
 
-/* 4. Spinneren (standard størrelse) */
-.spinner {
-  width: 60px;
-  height: 60px;
-  border: 6px solid #2a3b40;
-  border-top: 6px solid #2ecc71;
-  border-radius: 50%;
-  animation: spin 1s linear infinite;
-  transform: translateY(35px); /* Skyver spinneren litt ned fra toppmenyen */
-}
-
 /* ==========================================================================
-   EGEN TILPASSING FOR MOBIL (< 768px)
+   EGEN TILPASSING FOR MOBIL OG NETTBRETT / IPAD (< 1024px)
    ========================================================================== */
-@media (max-width: 768px) {
+@media (max-width: 1024px) {
   #page-loader {
-    /* HER setter vi den nye bakgrunnsfargen for mobil */
+    /* Mørk nettbrett/mobil-bakgrunn */
     background-color: #091B1E !important; 
-    
-    /* Sikrer at ingenting stikker ut på mobil */
     overflow: hidden !important;
   }
 
   .spinner {
-    /* Litt mindre spinner for mobilskjermer */
-    width: 45px;
-    height: 45px;
+    /* Tilpasset spinner for mobil og iPad */
+    width: 48px;
+    height: 48px;
     border-width: 5px;
-    transform: translateY(35px); /* Sentrert under mobilmenyen */
+    transform: translateY(35px);
   }
 }
 
