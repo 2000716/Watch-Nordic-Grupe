@@ -1116,8 +1116,8 @@
   // HJELPEFUNKSJON: Sjekker om brukeren er på Mobil eller iPad/Nettbrett
   function erMobilEllerNettbrett() {
     const touchEnhet = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
-    const breddeSjekk = window.innerWidth <= 1024; // iPad og iPad Pro dekkes her
-    const isIPad = /Macintosh/i.test(navigator.userAgent) && navigator.maxTouchPoints > 1; // iPadOS 13+ rapporterer ofte Mac
+    const breddeSjekk = window.innerWidth <= 1024;
+    const isIPad = /Macintosh/i.test(navigator.userAgent) && navigator.maxTouchPoints > 1;
     return (touchEnhet && breddeSjekk) || isIPad;
   }
 
@@ -1376,6 +1376,9 @@
         synkroniserLokalData();
       } catch (e) {
         console.error("Feil ved lesing av profil-cache:", e);
+        oppdaterWatchKnapp();
+        oppdaterListeKnapp();
+        byggAnbefalingerEllerEpisoder();
       }
     } else {
       oppdaterWatchKnapp();
@@ -1475,8 +1478,8 @@
     const innholdAldersgrense = data.metadata ? data.metadata.find(m => String(m).toLowerCase().includes("år")) : null;
     if (!innholdAldersgrense) return true;
 
-    const grensTallInnhold = parseInt(innholdAldersgrense, 10) || 0;
-    const grensTallProfil = parseInt(profilData.aldersgrense, 10) || 99;
+    const grensTallInnhold = parseInt(String(innholdAldersgrense), 10) || 0;
+    const grensTallProfil = parseInt(String(profilData.aldersgrense), 10) || 99;
 
     return grensTallProfil >= grensTallInnhold;
   }
@@ -1616,7 +1619,7 @@
 
     if (!episodeGallery) return;
     episodeGallery.innerHTML = "";
-    const episoder = data.sesonger[sesongNr].episoder || {};
+    const episoder = data.sesonger[sesongNr]?.episoder || {};
 
     Object.keys(episoder).forEach(epNr => {
       const ep = episoder[epNr];
@@ -1737,8 +1740,14 @@
         const cacheAnbefalinger = sessionStorage.getItem("anbefalinger_cache");
 
         if (cacheAnbefalinger) {
-          filmer = JSON.parse(cacheAnbefalinger);
-        } else {
+          try {
+            filmer = JSON.parse(cacheAnbefalinger);
+          } catch (e) {
+            sessionStorage.removeItem("anbefalinger_cache");
+          }
+        }
+
+        if (filmer.length === 0) {
           const q = query(collection(db, "filmer"), limit(10));
           const filmerSnap = await getDocs(q);
           filmerSnap.forEach(d => filmer.push({ id: d.id, ...d.data() }));
@@ -1799,8 +1808,6 @@
 
     const erMobilEllerTablet = erMobilEllerNettbrett();
 
-    // Slår av automatisk bakgrunnstrailer på Mobil OG iPad/Nettbrett.
-    // Deres operativsystemer (iOS/iPadOS) hindrer bakgrunnsavspilling, så vi viser bakgrunnsbilde i stedet.
     if (data.trailer && data.trailer.trim() !== "" && erTryggUrl(data.trailer) && trailerVideo && !erMobilEllerTablet) {
       trailerVideo.src = data.trailer;
       trailerVideo.preload = "metadata";
@@ -1820,7 +1827,6 @@
         if (bgImg) bgImg.style.opacity = "0";
         trailerVideo.style.opacity = "1";
         trailerVideo.play().catch(() => {
-          // Hvis nettleseren nekter autoplay, fyll inn bakgrunnsbildet
           if (bgImg) bgImg.style.opacity = "1";
           trailerVideo.style.opacity = "0";
         });
@@ -1852,7 +1858,6 @@
         });
       }
     } else {
-      // Viser bakgrunnsbilde umiddelbart på Mobil/iPad
       if (trailerVideo) trailerVideo.style.display = "none";
       if (videoControls) videoControls.style.display = "none";
       if (bgImg) bgImg.style.opacity = "1";
@@ -1882,7 +1887,7 @@
   oppdaterTopNavTilstand();
 
   if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", init);
+    document.addEventListener("DOMContentLoaded", () => { init(); });
   } else {
     init();
   }
