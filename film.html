@@ -703,28 +703,73 @@
     }
 
     /* ==========================================================================
-       MEDIA QUERIES (ORIGINAL MOBIL-OPPBYGGING SKJERM OPPTIL 768px)
+       IPAD OG NETTBRETT TILPASSING (769px til 1024px)
        ========================================================================== */
-    @media (max-width: 1024px) {
-      .content-wrapper {
-        width: 95%;
-        padding-bottom: 28px;
+    @media (min-width: 769px) and (max-width: 1024px) {
+      .hero {
+        min-height: 75vh;
+        min-height: 75dvh;
       }
 
-      .hero {
-        min-height: 100dvh;
+      .content-wrapper {
+        width: 92%;
+        padding-bottom: 30px;
+      }
+
+      .film-logo {
+        max-width: 50%;
+        max-height: 100px;
       }
 
       .text-button-container {
         padding: 28px;
         gap: 24px;
+        flex-direction: row;
+        align-items: flex-start;
+      }
+
+      .text-container {
+        max-width: 65%;
       }
 
       .buttons-column {
-        min-width: 220px;
+        min-width: 200px;
+        gap: 10px;
+      }
+
+      .watch-button,
+      #addToListBtn {
+        padding: 12px 20px;
+        font-size: 14px;
+      }
+
+      .gallery {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 16px;
+      }
+
+      .movie-card {
+        height: 160px;
+      }
+
+      .episode-thumb {
+        width: 200px;
+        height: 112px;
+      }
+
+      .footer {
+        padding: 50px 40px 30px;
+      }
+
+      .footer-links {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 20px 30px;
       }
     }
 
+    /* ==========================================================================
+       MEDIA QUERIES (ORIGINAL MOBIL-OPPBYGGING SKJERM OPPTIL 768px)
+       ========================================================================== */
     @media (max-width: 768px) {
       body,
       main,
