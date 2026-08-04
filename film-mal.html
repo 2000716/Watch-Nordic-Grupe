@@ -521,7 +521,7 @@
 
 
   /* ==========================================================================
-     2. SERIE- OG NEDTELLINGSFUNKSJONER (NEDERST)
+     2. SERIE- OG NEDTELLINGSFUNKSJONER (SYNKSJONERT MED HTML)
      ========================================================================== */
 
   /* KNAPPER FOR INTRO/OUTRO & NESTE EPISODE INNI KONTROLLERNE */
@@ -581,27 +581,39 @@
     pointer-events: auto;
   }
 
-  .autoplay-card {
+  .autoplay-content {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
     max-width: 520px;
   }
 
-  .autoplay-subtitle {
+  .autoplay-serie-logo {
+    max-height: 60px;
+    width: auto;
+    margin-bottom: 15px;
+    object-fit: contain;
+  }
+
+  .autoplay-episode-meta {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+
+  .autoplay-ep-tag {
     text-transform: uppercase;
     color: #0fddcb;
     font-size: 13px;
     font-weight: 700;
-    letter-spacing: 2.5px;
-    margin-bottom: 10px;
+    letter-spacing: 1.5px;
   }
 
-  .autoplay-title {
-    font-size: 32px;
+  .autoplay-ep-title {
+    font-size: 28px;
     font-weight: 700;
     color: #ffffff;
-    margin-bottom: 24px;
     line-height: 1.2;
     white-space: nowrap;
     overflow: hidden;
@@ -609,18 +621,34 @@
     max-width: 100%;
   }
 
-  /* Sirkulær nedtellingselement */
-  .autoplay-countdown-wrapper {
+  .autoplay-ep-desc {
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.8);
+    line-height: 1.5;
+    margin-bottom: 24px;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .autoplay-action-row {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+  }
+
+  /* Sirkulær nedtellingselement (Matchet mot SVG i HTML) */
+  .autoplay-circle-timer {
     position: relative;
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 80px;
-    height: 80px;
-    margin-bottom: 24px;
+    width: 60px;
+    height: 60px;
   }
 
-  .autoplay-countdown-svg {
+  .timer-svg {
     position: absolute;
     top: 0; left: 0;
     width: 100%;
@@ -628,39 +656,32 @@
     transform: rotate(-90deg);
   }
 
-  .autoplay-countdown-svg circle {
+  .timer-bg {
     fill: none;
-    stroke-width: 4;
-  }
-
-  .autoplay-countdown-bg {
     stroke: rgba(255, 255, 255, 0.15);
+    stroke-width: 3;
   }
 
-  .autoplay-countdown-progress {
+  .timer-progress {
+    fill: none;
     stroke: #0fddcb;
+    stroke-width: 3;
     stroke-linecap: round;
-    stroke-dasharray: 226; /* 2 * PI * r (r=36) */
+    stroke-dasharray: 100, 100;
     stroke-dashoffset: 0;
     transition: stroke-dashoffset 1s linear;
   }
 
-  .autoplay-countdown {
-    font-size: 32px;
+  .timer-number {
+    font-size: 20px;
     font-weight: 800;
     color: #ffffff;
     z-index: 2;
     font-variant-numeric: tabular-nums;
   }
 
-  .autoplay-actions {
-    display: flex;
-    gap: 16px;
-    align-items: center;
-  }
-
   .autoplay-btn {
-    padding: 14px 28px;
+    padding: 12px 24px;
     border-radius: 30px;
     font-size: 15px;
     font-weight: 700;
@@ -671,6 +692,7 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
+    gap: 8px;
   }
 
   .autoplay-btn:active {
@@ -782,28 +804,27 @@
         background: rgba(0, 0, 0, 0.94);
       }
 
-      .autoplay-card {
+      .autoplay-content {
         align-items: center;
         text-align: center;
       }
 
-      .autoplay-title {
+      .autoplay-ep-title {
         font-size: 22px;
         max-width: 100%;
       }
 
-      .autoplay-countdown-wrapper {
-        width: 70px;
-        height: 70px;
-        margin-bottom: 20px;
+      .autoplay-circle-timer {
+        width: 50px;
+        height: 50px;
       }
 
-      .autoplay-countdown {
-        font-size: 26px;
+      .timer-number {
+        font-size: 18px;
       }
 
-      .autoplay-actions {
-        flex-direction: column;
+      .autoplay-action-row {
+        flex-direction: column-reverse;
         width: 100%;
         max-width: 280px;
       }
@@ -834,7 +855,7 @@
         padding-left: 6%;
       }
 
-      .autoplay-title {
+      .autoplay-ep-title {
         font-size: 24px;
       }
     }
