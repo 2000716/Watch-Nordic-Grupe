@@ -7,28 +7,26 @@
   z-index: 10005 !important;
 }
 
-/* 2. Loaderen dekker 100% av skjermen OG blokkerer alt av klikk/touch (også på menyen) */
+/* 2. Loaderen dekker 100% av skjermen OG blokkerer alt av klikk/touch */
 #page-loader {
   position: fixed !important;
-  top: 0 !important;
-  left: 0 !important;
-  width: 100vw !important;
-  height: 100vh !important;
-  height: 100dvh !important; /* Dynamisk mobilhøyde - forhindrer glipp nederst på iOS/Android */
-  background-color: #050F11 !important; /* Standard mørk bakgrunn (brukes på PC) */
+  inset: 0 !important; /* Låser loaderen perfekt til alle 4 kanter på iPad/iOS */
+  width: 100% !important;
+  height: 100% !important;
+  background-color: #050F11 !important;
   display: flex !important;
   justify-content: center !important;
   align-items: center !important;
-  z-index: 20000 !important; /* Ligger ØVERST av alt (også over menyen) mens det laster! */
-  pointer-events: auto !important; /* Blokkerer ALL interaksjon bak loaderen */
+  z-index: 20000 !important;
+  pointer-events: auto !important;
   transition: opacity 0.6s ease, visibility 0.6s ease !important;
 }
 
-/* 3. Når JS-koden din legger til .fade-out */
+/* 3. Når JS-koden legger til .fade-out */
 #page-loader.fade-out {
   opacity: 0 !important;
   visibility: hidden !important;
-  pointer-events: none !important; /* Slipper gjennom klikk straks den begynner å fades ut */
+  pointer-events: none !important;
 }
 
 /* 4. Spinneren */
@@ -42,7 +40,7 @@
   transform: translateY(35px);
 }
 
-/* 5. Tilpasning for Redusert Bevegelse (Tilgjengelighet) */
+/* 5. Tilpasning for Redusert Bevegelse */
 @media (prefers-reduced-motion: reduce) {
   #page-loader {
     transition: none !important;
@@ -54,17 +52,15 @@
 }
 
 /* ==========================================================================
-   EGEN TILPASSING FOR MOBIL OG NETTBRETT / IPAD (< 1024px)
+   EGEN TILPASSING FOR MOBIL OG NETTBRETT / IPAD (Inkludert iPad Pro)
    ========================================================================== */
-@media (max-width: 1024px) {
+@media (max-width: 1366px) and (hover: none), (pointer: coarse) {
   #page-loader {
-    /* Mørk nettbrett/mobil-bakgrunn */
     background-color: #091B1E !important; 
     overflow: hidden !important;
   }
 
   .spinner {
-    /* Tilpasset spinner for mobil og iPad */
     width: 48px;
     height: 48px;
     border-width: 5px;
