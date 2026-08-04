@@ -1071,6 +1071,14 @@
 
   let watchBtn, addToListBtn, bgImg;
 
+  // HJELPEFUNKSJON: Sjekker om brukeren er på Mobil eller iPad/Nettbrett
+  function erMobilEllerNettbrett() {
+    const touchEnhet = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
+    const breddeSjekk = window.innerWidth <= 1024; // iPad og iPad Pro dekkes her
+    const isIPad = /Macintosh/i.test(navigator.userAgent) && navigator.maxTouchPoints > 1; // iPadOS 13+ rapporterer ofte Mac
+    return (touchEnhet && breddeSjekk) || isIPad;
+  }
+
   // SIKKERHET: Stripper potensielt skadelig kode og tagger
   function sanitizeInput(str) {
     if (!str) return "";
@@ -1167,7 +1175,7 @@
     document.title = data.tittel ? `${data.tittel} - Watch Nordic` : "Watch Nordic";
 
     oppdaterBakgrunnsBilde();
-    
+
     let resizeTimeout;
     window.addEventListener("resize", () => {
       clearTimeout(resizeTimeout);
@@ -1208,7 +1216,7 @@
         moreBtn.addEventListener("click", () => {
           const overlay = document.createElement("div");
           overlay.className = "popup-overlay";
-          
+
           const popupBox = document.createElement("div");
           popupBox.className = "popup-box";
 
@@ -1226,7 +1234,7 @@
           overlay.appendChild(popupBox);
 
           document.body.appendChild(overlay);
-          
+
           const lukkModal = () => overlay.remove();
           closeBtn.addEventListener("click", lukkModal);
           overlay.addEventListener("click", (e) => {
@@ -1238,7 +1246,7 @@
       }
     }
 
-    // Metadata uten uønsket innerHTML-injeksjon
+    // Metadata
     const metadataEl = document.querySelector(".metadata");
     if (metadataEl) {
       metadataEl.innerHTML = "";
@@ -1342,11 +1350,10 @@
   function oppdaterBakgrunnsBilde() {
     if (!bgImg || !data) return;
     const heroEl = document.querySelector(".hero");
-    const erMobil = window.innerWidth <= 768;
-    const bildeUrl = (erMobil && data.bakgrunnMobil) ? data.bakgrunnMobil : (data.bakgrunn || "");
+    const erMobilEpad = erMobilEllerNettbrett();
+    const bildeUrl = (erMobilEpad && data.bakgrunnMobil) ? data.bakgrunnMobil : (data.bakgrunn || "");
 
     if (heroEl) heroEl.style.backgroundColor = "#050F11";
-    bgImg.style.opacity = "0";
 
     if (erTryggUrl(bildeUrl)) {
       bgImg.src = bildeUrl;
@@ -1474,7 +1481,6 @@
     }
   }
 
-  // Tømmer lokal cache ved utlogging eller feil for å hindre sikkerhetslekkasjer på tvers av brukersesjoner
   onAuthStateChanged(auth, async (user) => {
     if (user) {
       currentUser = user;
@@ -1579,7 +1585,6 @@
 
       const epBilde = erTryggUrl(ep.thumbnail) ? ep.thumbnail : "";
 
-      // Konstruerer DOM-noder sikkert uten rå innerHTML-injisering
       const thumbDiv = document.createElement("div");
       thumbDiv.className = "episode-thumb";
       
@@ -1741,7 +1746,7 @@
   }
 
   /* ==========================================
-     7. VIDEO/TRAILER & MOBIL-STØTTE (OPTIMALISERT)
+     7. VIDEO/TRAILER & MOBIL-/IPAD-STØTTE
      ========================================== */
   function initTrailer() {
     if (!data) return;
@@ -1750,11 +1755,11 @@
     const pauseBtn = document.getElementById("pauseBtn");
     const soundBtn = document.getElementById("soundBtn");
 
-    const erMobil = window.innerWidth <= 768;
+    const erMobilEllerTablet = erMobilEllerNettbrett();
 
-    // Kun start videotrailer automatisk på stasjonære skjermer (PC/Mac).
-    // På mobil/iPad koples traileren ut for å unngå svart skjerm og treghet.
-    if (data.trailer && data.trailer.trim() !== "" && erTryggUrl(data.trailer) && trailerVideo && !erMobil) {
+    // Slår av automatisk bakgrunnstrailer på Mobil OG iPad/Nettbrett.
+    // Deres operativsystemer (iOS/iPadOS) hindrer bakgrunnsavspilling, så vi viser bakgrunnsbilde i stedet.
+    if (data.trailer && data.trailer.trim() !== "" && erTryggUrl(data.trailer) && trailerVideo && !erMobilEllerTablet) {
       trailerVideo.src = data.trailer;
       trailerVideo.preload = "metadata";
       trailerVideo.muted = true;
@@ -1769,11 +1774,11 @@
         if (bgImg) bgImg.style.opacity = "1";
       });
 
-      // Rask oppstart (1 sek i stedet for 10 sek forsinkelse)
       setTimeout(() => {
         if (bgImg) bgImg.style.opacity = "0";
         trailerVideo.style.opacity = "1";
         trailerVideo.play().catch(() => {
+          // Hvis nettleseren nekter autoplay, fyll inn bakgrunnsbildet
           if (bgImg) bgImg.style.opacity = "1";
           trailerVideo.style.opacity = "0";
         });
@@ -1805,7 +1810,7 @@
         });
       }
     } else {
-      // Viser bakgrunnsbilde umiddelbart på mobil/nettbrett
+      // Viser bakgrunnsbilde umiddelbart på Mobil/iPad
       if (trailerVideo) trailerVideo.style.display = "none";
       if (videoControls) videoControls.style.display = "none";
       if (bgImg) bgImg.style.opacity = "1";
