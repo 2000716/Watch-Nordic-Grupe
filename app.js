@@ -37,7 +37,7 @@ function byttSide(sideNavn) {
     }
 
     // Skjul navbar og footer automatisk i fullskjermspiller
-    const navbar = document.querySelector('.navbar') || document.querySelector('nav');
+    const navbar = document.querySelector('.top-nav') || document.querySelector('nav');
     const footer = document.querySelector('footer');
 
     if (sideNavn === 'avspiller') {
