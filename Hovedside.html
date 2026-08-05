@@ -1531,15 +1531,20 @@
     const tittelTekst = escapeHTML(item.tittel || 'Mangler tittel');
     const metaTekst = escapeHTML((Array.isArray(item.metadata) ? item.metadata : []).join(" • "));
 
+    // Metadata bevares i DOM-en via en div med 'display: none', slik at den er helt skjult fra galleriet.
     link.innerHTML = `
       ${bildeKilde ? `<img src="${escapeHTML(bildeKilde)}" alt="${tittelTekst}" loading="lazy">` : `<div style="width:100%; height:100%; background:#1a2629; display:flex; align-items:center; justify-content:center; padding:10px; text-align:center; font-size:12px; color:#fff;">${tittelTekst}</div>`}
       <div class="image-overlay">
         <div class="overlay-content">
           <div class="overlay-title">${tittelTekst}</div>
-          <div class="overlay-meta">${metaTekst}</div>
+          <div class="overlay-meta" style="display: none;">${metaTekst}</div>
         </div>
       </div>
     `;
+    
+    // Alternativt kan du også lagre metadataen som en data-attributt om du skulle trenge den til filtrering senere:
+    link.setAttribute('data-metadata', metaTekst);
+    
     return link;
   }
 
@@ -1949,22 +1954,22 @@
 
   // ==================== NAV SCROLL EFFECT ==================== //
   let ticking = false;
-  function oppdaterTopNavTilstand() {
-    const nav = document.querySelector(".top-nav");
-    if (!nav) return;
-
-    const erToppen = window.scrollY <= 0;
-    document.body.classList.toggle("scrolled-y", !erToppen);
-    nav.classList.toggle("scrolled", !erToppen);
-  }
-
-  window.addEventListener("scroll", () => {
+  function oppdaterNavScroll() {
     if (!ticking) {
       window.requestAnimationFrame(() => {
-        oppdaterTopNavTilstand();
+        const navbar = document.querySelector("nav") || document.querySelector("header");
+        if (navbar) {
+          if (window.scrollY > 50) {
+            navbar.classList.add("scrolled");
+          } else {
+            navbar.classList.remove("scrolled");
+          }
+        }
         ticking = false;
       });
       ticking = true;
     }
-  }, { passive: true });
+  }
+
+  window.addEventListener("scroll", oppdaterNavScroll, { passive: true });
 </script>
