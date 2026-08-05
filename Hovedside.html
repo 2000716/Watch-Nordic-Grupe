@@ -1185,7 +1185,7 @@
     console.error("Kunne ikke injisere style-tag:", err);
   }
 
-  // ==================== FIREBASE IMPORT & INITIALISERING ==================== //
+// ==================== FIREBASE IMPORT & INITIALISERING ==================== //
   import { auth, db } from "./firebase-oppsett.js";
   import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-auth.js";
   import { doc, updateDoc, onSnapshot, collection, getDocs } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
@@ -1195,7 +1195,7 @@
   let registrertBruker = null;
   let heleProfilArrayet = [];
   let unsubscribeProfileListener = null;
-  let bannerTimer = null; 
+  let bannerTimer = null; // SIKKERHET: Unngår overlappende timere på resize
 
   function oppdaterMenyProfilVisning(bildeUrl, profilNavn, farge) {
     try {
@@ -1204,22 +1204,18 @@
       const navneEl = document.getElementById("profilNavn");
       const headerProfil = document.getElementById("headerProfilbilde");
 
-      // FIKS: Fjernet escapeHTML fra bildeUrl for å hindre at Firebase-lenker knekker
       if (menyProfil && bildeUrl) {
-        menyProfil.src = bildeUrl; 
+        menyProfil.src = escapeHTML(bildeUrl);
         menyProfil.classList.toggle('png-karakter', String(bildeUrl).toLowerCase().endsWith('.png'));
       }
 
-      if (navneEl && profilNavn) navneEl.textContent = profilNavn; // Kan fortsatt bruke escapeHTML her hvis ønskelig, men textContent er trygt
+      if (navneEl && profilNavn) navneEl.textContent = profilNavn;
       if (profilmenyLink && farge) profilmenyLink.style.setProperty('--active-color', farge);
-      
-      // FIKS: Fjernet escapeHTML
-      if (headerProfil && bildeUrl) headerProfil.src = bildeUrl; 
+      if (headerProfil && bildeUrl) headerProfil.src = escapeHTML(bildeUrl);
     } catch (err) {
       console.error("Feil i oppdaterMenyProfilVisning:", err);
     }
   }
-
   // ==================== OMDIRIGERING & REALTIDS PROFIL-SYNC ==================== //
   if (auth) {
     onAuthStateChanged(auth, (user) => {
