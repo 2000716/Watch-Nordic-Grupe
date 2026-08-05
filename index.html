@@ -21,28 +21,35 @@
     <!-- ========================================== -->
     <!-- 1. FAST TOPPMENY (Blinker aldri)           -->
     <!-- ========================================== -->
-    <header class="top-nav">
-        <div class="nav-left">
-            <a href="#hjem" onclick="byttSide('hjem')">
-                <img src="https://res.cloudinary.com/ocv4zhpk/image/upload/v1785855892/d9ace9_081ea242211b45a2801873c3067e1205_mv2_vtfrdn.png" alt="Watch Nordic" class="logo">
-            </a>
-        </div>
+<header class="top-nav">
+  <div class="nav-left">
+    <a href="#hjem" onclick="byttSide('hjem')" class="watch-logo-svg">
+      <img src="https://res.cloudinary.com/ocv4zhpk/image/upload/v1785855892/d9ace9_081ea242211b45a2801873c3067e1205_mv2_vtfrdn.png" alt="Watch Nordic">
+    </a>
+  </div>
 
-        <nav class="nav-links">
-            <a href="#hjem" id="link-hjem" onclick="byttSide('hjem')" class="active"><i class="fas fa-house"></i> Hjem</a>
-            <a href="#filmer" id="link-filmer" onclick="byttSide('filmer')"><i class="fas fa-clapperboard"></i> Filmer</a>
-            <a href="#serier" id="link-serier" onclick="byttSide('serier')"><i class="fas fa-tv"></i> Serier</a>
-            <a href="#sok" id="link-sok" onclick="byttSide('sok')"><i class="fas fa-search"></i> Søk</a>
-        </nav>
+  <nav class="nav-links">
+    <a href="#hjem" id="link-hjem" onclick="byttSide('hjem')" class="active"><i class="fas fa-house"></i> Hjem</a>
+    <a href="#serier" id="link-serier" onclick="byttSide('serier')"><i class="fas fa-tv"></i> Serier</a>
+    <a href="#film" id="link-film" onclick="byttSide('film')"><i class="fas fa-clapperboard"></i> Filmer</a>
+    <a href="#nyheter" id="link-nyheter" onclick="byttSide('nyheter')"><i class="fas fa-star"></i> Watch Originals</a>
+    <a href="#min-liste" id="link-min-liste" onclick="byttSide('min-liste')"><i class="fas fa-bookmark"></i> Min Liste</a>
+  </nav>
 
-        <div class="nav-right">
-            <a href="#konto" onclick="byttSide('konto')" class="konto-ikon"><i class="fas fa-gear"></i></a>
-            
-            <a href="hvem-ser-på.html" class="profilmeny">
-                <img id="menyProfilbilde" src="https://res.cloudinary.com/ocv4zhpk/image/upload/v1785856037/Muffins_profil_100_k1qd4h.png" alt="Profilbilde" class="profil-avatar-img" />
-            </a>
-        </div>
-    </header>
+  <div class="nav-right">
+    <a href="#sok" id="link-sok" onclick="byttSide('sok')" class="nav-search" aria-label="Søk">
+      <i class="fas fa-search"></i>
+    </a>
+
+    <a href="hvem-ser-på.html" class="profilmeny" id="profilmenyLink">
+      <div class="profil-avatar-wrap">
+        <div class="profil-avatar-bg"></div>
+        <!-- Setter standardbilde direkte i HTML-en slik at det aldri blir tomt -->
+        <img id="menyProfilbilde" src="https://res.cloudinary.com/ocv4zhpk/image/upload/v1785856037/Muffins_profil_100_k1qd4h.png" alt="Profilbilde" class="profil-avatar-img" />
+      </div>
+    </a>
+  </div>
+</header>
 
     <!-- ========================================== -->
     <!-- 2. HOVEDINNHOLD (SIDENE SOM BYTTES UT)      -->
