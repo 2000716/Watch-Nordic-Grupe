@@ -342,6 +342,18 @@
       height: 165px;
     }
 
+    /* 🛑 STØRRE VERTIKALE POSTERE (TAR OPP DOBBEL STØRRELSE / 2 KOLONNER) */
+    .wall-row img.vertical-large {
+      width: 238px;
+      height: 348px;
+    }
+
+    /* 🛑 GRØNN GLØD (NETFLIX-STIL) */
+    .wall-row img.glow {
+      box-shadow: 0 0 25px rgba(0, 255, 204, 0.7), 0 12px 30px rgba(0,0,0,.65);
+      border: 2px solid rgba(0, 255, 204, 0.5);
+    }
+
     .row1{margin-left:0px;}
     .row2{margin-left:-60px;}
     .row3{margin-left:-120px;}
@@ -528,6 +540,11 @@
       .wall-row img.vertical {
         width: 70px;
         height: 105px;
+      }
+
+      .wall-row img.vertical-large {
+        width: 152px;
+        height: 222px;
       }
 
       .row1, .row2, .row3, .row4 {
@@ -745,7 +762,7 @@
     </div>
   </footer>
 
-  <!-- HENT BILDER FRA FIREBASE (MED POSTER OG POSTERVERTIKAL) -->
+  <!-- HENT BILDER FRA FIREBASE MED STØRRELSESVARIASJON OG GRØNN GLØD -->
   <script type="module">
     import { db } from "./firebase-oppsett.js";
     import { collection, getDocs } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
@@ -757,8 +774,8 @@
       document.querySelector(".row4")
     ];
 
-    const CACHE_KEY = "watch_nordic_poster_wall_cache_v2";
-    const CACHE_TIME_KEY = "watch_nordic_poster_wall_time_v2";
+    const CACHE_KEY = "watch_nordic_poster_wall_cache_v3";
+    const CACHE_TIME_KEY = "watch_nordic_poster_wall_time_v3";
     const ONE_DAY_MS = 24 * 60 * 60 * 1000;
 
     async function lastInnPosters() {
@@ -777,16 +794,13 @@
 
       if (basePosters.length === 0) {
         try {
-          // Hjelpefunksjon for å hente ut fra samlinger
           async function hentFraSamling(samlingNavn) {
             const snap = await getDocs(collection(db, samlingNavn));
             snap.forEach(doc => {
               const data = doc.data();
-              // Henter vanlig/horisontal poster hvis feltet 'poster' finnes
               if (data.poster) {
                 basePosters.push({ url: data.poster, type: 'horizontal' });
               }
-              // Henter vertikal poster hvis feltet 'posterVertikal' finnes
               if (data.posterVertikal) {
                 basePosters.push({ url: data.posterVertikal, type: 'vertical' });
               }
@@ -819,9 +833,21 @@
                 img.src = item.url;
                 img.loading = "lazy";
                 
-                // Setter klassen basert på databasetypen (horizontal eller vertical)
-                img.className = item.type === 'vertical' ? "vertical" : "horizontal";
+                let cssClass = "horizontal";
+                
+                if (item.type === 'vertical') {
+                  // Sjekk om denne vertikale posteren skal være stor (2 kolonner) av og til
+                  const isLarge = Math.random() < 0.25; // 25% sjanse for stor poster
+                  cssClass = isLarge ? "vertical-large" : "vertical";
+                }
 
+                // Legg til grønn glød på ca 20% av bildene for en stilig effekt
+                const hasGlow = Math.random() < 0.20;
+                if (hasGlow) {
+                  cssClass += " glow";
+                }
+
+                img.className = cssClass;
                 rowFragment.appendChild(img);
               });
             }
