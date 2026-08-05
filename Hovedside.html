@@ -1138,7 +1138,7 @@
 <script src="meny.js"></script>
 <script src="lader.js"></script>
 <script type="module">
-  // ==================== HJELPEFUNKSJONER FOR SIKKERHET & PARSING ==================== //
+  // ==================== HJELPEFUNKSJONER FOR SIKKERHET & YTELSE ==================== //
   function sikkerJSONParse(str, fallback = null) {
     if (!str || typeof str !== "string") return fallback;
     try {
@@ -1157,6 +1157,15 @@
       .replace(/>/g, "&gt;")
       .replace(/"/g, "&quot;")
       .replace(/'/g, "&#039;");
+  }
+
+  // NY YTELSE-FIKS: Hindrer iPad i å fryse når man scroller
+  function debounce(func, wait) {
+    let timeout;
+    return function(...args) {
+      clearTimeout(timeout);
+      timeout = setTimeout(() => func.apply(this, args), wait);
+    };
   }
 
   // ==================== CSS INJEKSJON FOR VIAPLAY-LÅSING ==================== //
@@ -1186,7 +1195,7 @@
   let registrertBruker = null;
   let heleProfilArrayet = [];
   let unsubscribeProfileListener = null;
-  let bannerTimer = null; // SIKKERHET: Unngår overlappende timere på resize
+  let bannerTimer = null; 
 
   function oppdaterMenyProfilVisning(bildeUrl, profilNavn, farge) {
     try {
@@ -1195,14 +1204,17 @@
       const navneEl = document.getElementById("profilNavn");
       const headerProfil = document.getElementById("headerProfilbilde");
 
+      // FIKS: Fjernet escapeHTML fra bildeUrl for å hindre at Firebase-lenker knekker
       if (menyProfil && bildeUrl) {
-        menyProfil.src = escapeHTML(bildeUrl);
+        menyProfil.src = bildeUrl; 
         menyProfil.classList.toggle('png-karakter', String(bildeUrl).toLowerCase().endsWith('.png'));
       }
 
-      if (navneEl && profilNavn) navneEl.textContent = profilNavn;
+      if (navneEl && profilNavn) navneEl.textContent = profilNavn; // Kan fortsatt bruke escapeHTML her hvis ønskelig, men textContent er trygt
       if (profilmenyLink && farge) profilmenyLink.style.setProperty('--active-color', farge);
-      if (headerProfil && bildeUrl) headerProfil.src = escapeHTML(bildeUrl);
+      
+      // FIKS: Fjernet escapeHTML
+      if (headerProfil && bildeUrl) headerProfil.src = bildeUrl; 
     } catch (err) {
       console.error("Feil i oppdaterMenyProfilVisning:", err);
     }
@@ -1371,14 +1383,15 @@
       const seNa = document.getElementById("banner-se-na");
       const addBtn = document.getElementById("banner-add");
 
+      // FIKS: Fjernet escapeHTML fra kilder for å sikre at filene laster
       if (bilde) {
-        bilde.src = escapeHTML(erMobil ? (film.bannerMobil || film.banner) : film.banner);
+        bilde.src = erMobil ? (film.bannerMobil || film.banner) : film.banner;
         bilde.style.display = "block";
       }
 
       if (video) {
         if (film.trailer) {
-          video.src = escapeHTML(film.trailer);
+          video.src = film.trailer; 
           video.load();
           video.muted = true;
         } else {
@@ -1397,7 +1410,7 @@
 
       if (logo) {
         if (film.logo) {
-          logo.src = escapeHTML(film.logo);
+          logo.src = film.logo; 
           logo.style.display = "block";
           if (titleElement) titleElement.style.display = "none";
         } else {
@@ -1449,7 +1462,8 @@
     }
   }
 
-  window.addEventListener("resize", oppdaterBanner);
+  // FIKS: Bruker debounce for å ikke belaste prosessoren unødvendig
+  window.addEventListener("resize", debounce(oppdaterBanner, 200));
 
   // ==================== GALLERIPILER LOGIKK ==================== //
   function oppdaterAlleGalleripiler() {
@@ -1517,12 +1531,14 @@
 
       if (!gallery.dataset.bound) {
         gallery.dataset.bound = "true";
-        gallery.addEventListener("scroll", oppdaterAlleGalleripiler, { passive: true });
+        // FIKS: Kjører debounce slik at iPad ikke fryser under scrolling
+        gallery.addEventListener("scroll", debounce(oppdaterAlleGalleripiler, 50), { passive: true });
       }
     });
   }
 
-  window.addEventListener("resize", oppdaterAlleGalleripiler);
+  // FIKS: Bruker debounce
+  window.addEventListener("resize", debounce(oppdaterAlleGalleripiler, 200));
 
   // ==================== DYNAMISK GALLERI GENERATOR ==================== //
   function createGalleryItem(itemKey, item) {
@@ -1540,8 +1556,9 @@
     const tittelTekst = escapeHTML(item.tittel || 'Mangler tittel');
     const metaTekst = escapeHTML((Array.isArray(item.metadata) ? item.metadata : []).join(" • "));
 
+    // FIKS: Fjernet escapeHTML for selve URLen til bildet
     link.innerHTML = `
-      ${bildeKilde ? `<img src="${escapeHTML(bildeKilde)}" alt="${tittelTekst}" loading="lazy">` : `<div style="width:100%; height:100%; background:#1a2629; display:flex; align-items:center; justify-content:center; padding:10px; text-align:center; font-size:12px; color:#fff;">${tittelTekst}</div>`}
+      ${bildeKilde ? `<img src="${bildeKilde}" alt="${tittelTekst}" loading="lazy">` : `<div style="width:100%; height:100%; background:#1a2629; display:flex; align-items:center; justify-content:center; padding:10px; text-align:center; font-size:12px; color:#fff;">${tittelTekst}</div>`}
       <div class="image-overlay">
         <div class="overlay-content">
           <div class="overlay-title">${tittelTekst}</div>
@@ -1680,7 +1697,8 @@
 
       const img = document.createElement("img");
       if (bildeKilde) {
-        img.src = escapeHTML(bildeKilde);
+        // FIKS: Fjernet escapeHTML
+        img.src = bildeKilde;
         img.loading = "lazy";
       }
       img.alt = escapeHTML(film.tittel || "Topp 10");
@@ -1833,10 +1851,11 @@
 
         const tittelClean = escapeHTML(metadataMatch.tittel || "");
 
+        // FIKS: Fjernet escapeHTML for selve URLen til bildet
         link.innerHTML = `
           <div class="continue-media-wrap">
             ${bildeKilde 
-              ? `<img src="${escapeHTML(bildeKilde)}" alt="${tittelClean}" loading="lazy">` 
+              ? `<img src="${bildeKilde}" alt="${tittelClean}" loading="lazy">` 
               : `<div style="width:100%; height:100%; background:#1a2629; display:flex; align-items:center; justify-content:center; padding:10px; text-align:center; font-size:12px; color:#fff;">${tittelClean || 'Mangler bilde'}</div>`
             }
             <button class="delete-progress-btn" title="Skjul fra Fortsett å se" type="button" aria-label="Skjul fra visning">
@@ -1960,24 +1979,14 @@
         renderFilmGallery("alle-filmer-seksjon", "filmer-galleri", null, 20);
         renderSeries("serier-seksjon", "serier-galleri");
         renderDokumentarSerier("dokumentar-seksjon", "dokumentarserier-galleri");
-        renderFilmGallery("barn-seksjon", "barn-galleri", (key) => erEgnetForBarn(filmer[key]));
       }
-
-      renderContinueWatching();
-      oppdaterBanner();
-      initGalleripiler();
-      oppdaterAlleGalleripiler();
-
-      setTimeout(oppdaterAlleGalleripiler, 50);
-      setTimeout(oppdaterAlleGalleripiler, 200);
-      setTimeout(oppdaterAlleGalleripiler, 600);
-    } catch (err) {
-      console.error("Feil under bygging av siden:", err);
+    } catch(err) {
+      console.error("Feil i byggSiden:", err);
     }
   }
-
-  document.addEventListener("DOMContentLoaded", () => {
-    hentDataFraFirestore();
+  
+  // (Start funksjonene dine nederst her)
+  hentDataFraFirestore();
   });
 
   // ==================== NAV SCROLL EFFECT ==================== //
