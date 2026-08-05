@@ -593,7 +593,7 @@
 
   onAuthStateChanged(auth, (user) => {
     if (user && window.location.pathname.toLowerCase().includes("innlogging")) {
-      window.location.replace("Hovedside.html?index=0");
+      window.location.replace("hvem-ser-på.html");
     }
   });
 
@@ -644,7 +644,7 @@
             sistOppdatert: new Date().toISOString()
           });
 
-          window.location.replace("Hovedside.html?index=0");
+          window.location.replace("hvem-ser-på.html");
 
         } else {
           const userCredential = await signInWithEmailAndPassword(auth, epost, passord);
@@ -661,7 +661,7 @@
             });
           }
 
-          window.location.replace("Hovedside.html?index=0");
+          window.location.replace("hvem-ser-på.html");
         }
       } catch (error) {
         settLaster(false);
