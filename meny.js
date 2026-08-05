@@ -25,13 +25,18 @@ function initNav() {
     });
   };
 
-  // Hent og sett profilbilde automatisk når menyen lastes inn
+  // Hent og sett profilbilde automatisk når menyen lastes inn med sikkerhets-sjekk
   const oppdaterProfilBilde = () => {
     const lagretBilde = localStorage.getItem("profilbilde");
     const menyBildeEl = document.getElementById("menyProfilbilde");
 
-    if (menyBildeEl && lagretBilde) {
-      menyBildeEl.src = lagretBilde;
+    if (menyBildeEl) {
+      if (lagretBilde && lagretBilde !== "null" && lagretBilde !== "undefined" && lagretBilde.trim() !== "") {
+        menyBildeEl.src = lagretBilde;
+      } else {
+        // Standard reservebilde hvis ingenting er valgt, slik at det aldri blir tomt
+        menyBildeEl.src = "https://res.cloudinary.com/ocv4zhpk/image/upload/v1785856037/Muffins_profil_100_k1qd4h.png";
+      }
     }
   };
 
@@ -46,6 +51,10 @@ function initNav() {
         updateNavState();
         ticking = false;
       });
+      ticking = true;
+    }
+  }, { passive: true });
+}
       ticking = true;
     }
   }, { passive: true });
