@@ -13,7 +13,7 @@ function initNav() {
 
   const activateLink = () => {
     const currentPage = window.location.pathname.split('/').pop().toLowerCase();
-    const normalizedCurrent = currentPage || 'hovedside.html'; // Tilpasset din hovedside
+    const normalizedCurrent = currentPage || 'hovedside.html';
 
     navs.forEach((nav) => {
       const links = nav.querySelectorAll('.nav-links a');
@@ -25,8 +25,19 @@ function initNav() {
     });
   };
 
+  // Hent og sett profilbilde automatisk når menyen lastes inn
+  const oppdaterProfilBilde = () => {
+    const lagretBilde = localStorage.getItem("profilbilde");
+    const menyBildeEl = document.getElementById("menyProfilbilde");
+
+    if (menyBildeEl && lagretBilde) {
+      menyBildeEl.src = lagretBilde;
+    }
+  };
+
   activateLink();
   updateNavState();
+  oppdaterProfilBilde();
 
   let ticking = false;
   window.addEventListener('scroll', () => {
