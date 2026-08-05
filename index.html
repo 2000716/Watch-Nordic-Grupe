@@ -21,35 +21,35 @@
     <!-- ========================================== -->
     <!-- 1. FAST TOPPMENY (Blinker aldri)           -->
     <!-- ========================================== -->
-<header class="top-nav">
-  <div class="nav-left">
-    <a href="#hjem" onclick="byttSide('hjem')" class="watch-logo-svg">
-      <img src="https://res.cloudinary.com/ocv4zhpk/image/upload/v1785855892/d9ace9_081ea242211b45a2801873c3067e1205_mv2_vtfrdn.png" alt="Watch Nordic">
-    </a>
-  </div>
+    <header class="top-nav">
+        <div class="nav-left">
+            <a href="#hjem" onclick="byttSide('hjem')" class="watch-logo-svg">
+                <img src="https://res.cloudinary.com/ocv4zhpk/image/upload/v1785855892/d9ace9_081ea242211b45a2801873c3067e1205_mv2_vtfrdn.png" alt="Watch Nordic">
+            </a>
+        </div>
 
-  <nav class="nav-links">
-    <a href="#hjem" id="link-hjem" onclick="byttSide('hjem')" class="active"><i class="fas fa-house"></i> Hjem</a>
-    <a href="#serier" id="link-serier" onclick="byttSide('serier')"><i class="fas fa-tv"></i> Serier</a>
-    <a href="#film" id="link-film" onclick="byttSide('film')"><i class="fas fa-clapperboard"></i> Filmer</a>
-    <a href="#nyheter" id="link-nyheter" onclick="byttSide('nyheter')"><i class="fas fa-star"></i> Watch Originals</a>
-    <a href="#min-liste" id="link-min-liste" onclick="byttSide('min-liste')"><i class="fas fa-bookmark"></i> Min Liste</a>
-  </nav>
+        <nav class="nav-links">
+            <a href="#hjem" id="link-hjem" onclick="byttSide('hjem')" class="active"><i class="fas fa-house"></i> Hjem</a>
+            <a href="#serier" id="link-serier" onclick="byttSide('serier')"><i class="fas fa-tv"></i> Serier</a>
+            <a href="#film" id="link-film" onclick="byttSide('film')"><i class="fas fa-clapperboard"></i> Filmer</a>
+            <a href="#nyheter" id="link-nyheter" onclick="byttSide('nyheter')"><i class="fas fa-star"></i> Watch Originals</a>
+            <a href="#min-liste" id="link-min-liste" onclick="byttSide('min-liste')"><i class="fas fa-bookmark"></i> Min Liste</a>
+        </nav>
 
-  <div class="nav-right">
-    <a href="#sok" id="link-sok" onclick="byttSide('sok')" class="nav-search" aria-label="Søk">
-      <i class="fas fa-search"></i>
-    </a>
+        <div class="nav-right">
+            <a href="#sok" id="link-sok" onclick="byttSide('sok')" class="nav-search" aria-label="Søk">
+                <i class="fas fa-search"></i>
+            </a>
 
-    <a href="hvem-ser-på.html" class="profilmeny" id="profilmenyLink">
-      <div class="profil-avatar-wrap">
-        <div class="profil-avatar-bg"></div>
-        <!-- Setter standardbilde direkte i HTML-en slik at det aldri blir tomt -->
-        <img id="menyProfilbilde" src="https://res.cloudinary.com/ocv4zhpk/image/upload/v1785856037/Muffins_profil_100_k1qd4h.png" alt="Profilbilde" class="profil-avatar-img" />
-      </div>
-    </a>
-  </div>
-</header>
+            <!-- Sender nå til konto-siden som en seksjon i stedet for egen fil -->
+            <a href="#konto" onclick="byttSide('konto')" class="profilmeny" id="profilmenyLink" aria-label="Konto og profil">
+                <div class="profil-avatar-wrap">
+                    <div class="profil-avatar-bg"></div>
+                    <img id="menyProfilbilde" src="https://res.cloudinary.com/ocv4zhpk/image/upload/v1785856037/Muffins_profil_100_k1qd4h.png" alt="Profilbilde" class="profil-avatar-img" />
+                </div>
+            </a>
+        </div>
+    </header>
 
     <!-- ========================================== -->
     <!-- 2. HOVEDINNHOLD (SIDENE SOM BYTTES UT)      -->
@@ -57,8 +57,7 @@
     <main>
 
         <!-- A. HJEM-SEKSJON -->
-<section id="view-hjem" class="side-visning">
-            
+        <section id="view-hjem" class="side-visning">
             <div id="page-loader">
                 <div class="spinner"></div>
             </div>
@@ -168,71 +167,142 @@
                     <div class="fade-right"></div>
                 </div>
             </section>
+        </section>
 
-<!-- SERIE- ELLER FILMSIDE SOM EN SEKSJON INNE I INDEX.HTML -->
-<section id="view-serier" class="side-visning" style="display: none;">
-    
-    <!-- Valgfri lokal lader for denne seksjonen hvis du vil ha det -->
-    <div class="page-loader-seksjon">
-        <div class="spinner"></div>
-    </div>
-
-    <div class="hero">
-        <img class="background-image" id="backgroundImage" src="" alt="Bakgrunnsbilde" />
-        <video id="trailerVideo" class="background-video" muted playsinline></video>
-
-        <div class="overlay"></div>
-        <div class="bottom-fade"></div>
-
-        <div id="videoControls" class="video-controls">
-            <button id="pauseBtn"><i class="fas fa-pause"></i></button>
-            <button id="soundBtn"><i class="fas fa-volume-mute"></i></button>
-        </div>
-
-        <div class="content-wrapper">
-            <div class="logo-container">
-                <img class="film-logo" src="" alt="Filmlogo" />
+        <!-- B. SERIER-SEKSJON -->
+        <section id="view-serier" class="side-visning" style="display: none;">
+            <div class="page-loader-seksjon">
+                <div class="spinner"></div>
             </div>
 
-            <div class="left-content">
-                <div class="text-button-container">
-                    <div class="buttons-column">
-                        <button class="watch-button" id="watchBtn">
-                            <i class="fas fa-play"></i><span> Se nå</span>
-                        </button>
-                        <button class="watch-button" id="addToListBtn">
-                            <i class="fas fa-plus"></i><span> Legg til i Min liste</span>
-                        </button>
+            <div class="hero">
+                <img class="background-image" id="backgroundImage" src="" alt="Bakgrunnsbilde" />
+                <video id="trailerVideo" class="background-video" muted playsinline></video>
+
+                <div class="overlay"></div>
+                <div class="bottom-fade"></div>
+
+                <div id="videoControls" class="video-controls">
+                    <button id="pauseBtn"><i class="fas fa-pause"></i></button>
+                    <button id="soundBtn"><i class="fas fa-volume-mute"></i></button>
+                </div>
+
+                <div class="content-wrapper">
+                    <div class="logo-container">
+                        <img class="film-logo" src="" alt="Filmlogo" />
                     </div>
 
-                    <div class="text-container">
-                        <p class="description"></p>
-                        <div class="metadata"></div>
-                        <div class="availability-info" id="availabilityInfo"></div>
+                    <div class="left-content">
+                        <div class="text-button-container">
+                            <div class="buttons-column">
+                                <button class="watch-button" id="watchBtn">
+                                    <i class="fas fa-play"></i><span> Se nå</span>
+                                </button>
+                                <button class="watch-button" id="addToListBtn">
+                                    <i class="fas fa-plus"></i><span> Legg til i Min liste</span>
+                                </button>
+                            </div>
+
+                            <div class="text-container">
+                                <p class="description"></p>
+                                <div class="metadata"></div>
+                                <div class="availability-info" id="availabilityInfo"></div>
+                            </div>
+                            <div class="cast-info"></div>
+                        </div>
                     </div>
-                    <div class="cast-info"></div>
                 </div>
             </div>
-        </div>
-    </div>
 
-    <div class="recommendations">
-        <h2>Anbefalt til deg</h2>
-        <div class="gallery" id="recommendationGallery"></div>
-    </div>
+            <div class="recommendations">
+                <h2>Anbefalt til deg</h2>
+                <div class="gallery" id="recommendationGallery"></div>
+            </div>
+        </section>
 
-</section>
-
-        <!-- D. SØKE-SEKSJON -->
+        <!-- C. SØKE-SEKSJON -->
         <section id="view-sok" class="side-visning" style="display: none;">
             <h2>Søk</h2>
             <input type="text" id="sokefelt" placeholder="Søk etter film eller serie..." oninput="utforSok()">
             <div id="sokeResultater"></div>
         </section>
 
-        <!-- E. KONTO-SEKSJON -->
+        <!-- D. KONTO-SEKSJON -->
         <section id="view-konto" class="side-visning" style="display: none;">
-            <h2>Konto og Innstillinger</h2>
+            <div class="container konto-container">
+                <div class="profile-header">
+                    <div class="profile-info">
+                        <h1 id="navnDisplay">Laster...</h1>
+                        <p>Aktiv profil</p>
+                    </div>
+
+                    <div class="avatar-wrapper" id="avatarContainer" title="Klikk for å endre profilbilde">
+                        <img id="profilbilde" class="avatar-img" src="" alt="Profilbilde">
+                        <div class="edit-badge"><i class="fa-solid fa-pencil"></i></div>
+                    </div>
+                </div>
+
+                <section class="content">
+                    <h2><i class="fa-solid fa-user"></i> Kontoinformasjon</h2>
+                    <div class="card">
+                        <div class="row">
+                            <div class="info-block">
+                                <div class="label">Profilnavn</div>
+                                <div class="value" id="navnView">Laster...</div>
+                                <div id="editNavnBox" class="edit-box hidden">
+                                    <input type="text" id="nyttNavnInput" placeholder="Nytt navn">
+                                    <button class="btn-save" id="lagreNavnBtn">Lagre</button>
+                                    <button class="btn-cancel" id="avbrytNavnBtn">Avbryt</button>
+                                </div>
+                            </div>
+                            <button class="edit-trigger" id="endreNavnKnapp">Endre</button>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="info-block">
+                                <div class="label">E-postadresse (Konto)</div>
+                                <div class="value" id="epostView">Laster...</div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="info-block">
+                                <div class="label">Inngangskode</div>
+                                <div class="value" id="pinView">Laster...</div>
+
+                                <div class="pin-toggle-wrap">
+                                    <button type="button" class="pin-toggle" id="pinToggleBtn" aria-pressed="false">
+                                        <span class="pin-toggle-thumb"></span>
+                                        <span class="pin-toggle-text">Kode av</span>
+                                    </button>
+                                </div>
+
+                                <div id="editPinBox" class="edit-box hidden">
+                                    <input type="password" id="nyPinInput" placeholder="Skriv ny kode">
+                                    <button class="btn-save" id="lagrePinBtn">Lagre</button>
+                                    <button class="btn-cancel" id="avbrytPinBtn">Avbryt</button>
+                                </div>
+                                <div class="pin-hint">Slå på for å aktivere eller deaktivere koden.</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <h2><i class="fa-solid fa-tv"></i> Enheter</h2>
+                    <div class="card">
+                        <div class="row">
+                            <div class="info-block">
+                                <div class="label">Aktiv økt</div>
+                                <div class="value">Nettleser (Norge)</div>
+                            </div>
+                            <button class="edit-trigger" id="loggutAlleBtn">Logg ut alle enheter</button>
+                        </div>
+                    </div>
+
+                    <div class="delete-container">
+                        <button class="delete-btn" id="sletteKnapp"><i class="fa-solid fa-trash-can"></i> Slett profil permanent</button>
+                    </div>
+                </section>
+            </div>
         </section>
 
     </main>
@@ -242,9 +312,9 @@
     <!-- ========================================== -->
     <footer class="footer">
         <div class="footer-socials">
-            <a href="https://www.instagram.com/watchnordicoriginals?igsh=aWRvcTJmMWl1NGRp&utm_source=qr"><i class="fab fa-instagram"></i></a>
-            <a href="www.tiktok.com/@watchnordicoriginals"><i class="fab fa-tiktok"></i></a>
-            <a href="#"><i class="fab fa-youtube"></i></a>
+            <a href="https://www.instagram.com/watchnordicoriginals?igsh=aWRvcTJmMWl1NGRp&utm_source=qr" target="_blank" rel="noopener"><i class="fab fa-instagram"></i></a>
+            <a href="https://www.tiktok.com/@watchnordicoriginals" target="_blank" rel="noopener"><i class="fab fa-tiktok"></i></a>
+            <a href="#" target="_blank" rel="noopener"><i class="fab fa-youtube"></i></a>
         </div>
 
         <div class="footer-links">
@@ -270,7 +340,6 @@
             Alle varemerker fra WATCH NORDIC™, WATCH NORDIC ORIGINALS™ og alle øvrige tilknyttede immaterielle rettigheter tilhører Watch Nordic Group og brukes under lisens av Watch Nordic™. Alle varemerker, logoer, filmer, serier, bilder, design og øvrige tilknyttede immaterielle rettigheter tilhører sine respektive eiere. Alt innhold er beskyttet av opphavsrett og internasjonale varemerkelover. Alle rettigheter forbeholdt.
         </div>
     </footer>
-
 
     <!-- Appens hjerne -->
     <script type="module" src="app.js"></script>
