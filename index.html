@@ -299,7 +299,7 @@
       color: #555;
     }
 
-    /* ================= HERO POSTER WALL ================= */
+    /* ================= HERO POSTER WALL (VARIASJON MED VANLIG OG VERTIKAL) ================= */
     .hero-wall{
       position:absolute;
       inset:0;
@@ -311,8 +311,8 @@
         rotateX(2deg)
         scale(1.2);
       transform-origin:right center;
-      opacity: 0.65; /* 🛑 ØKT SYNLIGHET HER */
-      filter: grayscale(0%) blur(0px); /* Fjernet gråtoner for full fargeprakt */
+      opacity: 0.65; 
+      filter: grayscale(0%) blur(0px);
       -webkit-mask-image: linear-gradient(to bottom, rgba(0,0,0,1) 85%, rgba(0,0,0,0) 100%); 
       mask-image: linear-gradient(to bottom, rgba(0,0,0,1) 85%, rgba(0,0,0,0) 100%);
     }
@@ -322,15 +322,27 @@
       gap:18px;
       width:max-content;
       margin-bottom:18px;
+      align-items: center;
     }
 
-    .wall-row img{
-      width:260px;
-      height:146px;
-      object-fit:cover;
-      border-radius:6px;
-      box-shadow:0 12px 30px rgba(0,0,0,.65);
+    /* Fellesstil for alle bildekort i veggen */
+    .wall-row img {
+      object-fit: cover;
+      border-radius: 6px;
+      box-shadow: 0 12px 30px rgba(0,0,0,.65);
       transition: transform 0.3s ease;
+    }
+
+    /* Horisontal / Vanlig bakgrunnsbilde */
+    .wall-row img.horizontal {
+      width: 260px;
+      height: 146px;
+    }
+
+    /* Vertikal poster (høyere og smalere) */
+    .wall-row img.vertical {
+      width: 110px;
+      height: 165px;
     }
 
     .row1{margin-left:0px;}
@@ -501,7 +513,7 @@
       }
 
       .hero-wall {
-        opacity: 0.5; /* 🛑 ØKT SYNLIGHET PÅ MOBIL OGSÅ */
+        opacity: 0.5; 
         transform: perspective(1000px) rotateY(-15deg) rotateX(5deg) scale(1.3);
         transform-origin: center center;
       }
@@ -511,9 +523,14 @@
         margin-bottom: 12px;
       }
 
-      .wall-row img {
+      .wall-row img.horizontal {
         width: 140px;
         height: 85px;
+      }
+
+      .wall-row img.vertical {
+        width: 70px;
+        height: 105px;
       }
 
       .row1, .row2, .row3, .row4 {
@@ -731,7 +748,7 @@
     </div>
   </footer>
 
-  <!-- HENT BILDER FRA FIREBASE MED LOKAL CACHING -->
+  <!-- HENT BILDER FRA FIREBASE MED LOKAL CACHING OG VARIASJON -->
   <script type="module">
     import { db } from "./firebase-oppsett.js";
     import { collection, getDocs } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
@@ -766,15 +783,16 @@
           const filmerSnap = await getDocs(collection(db, "filmer"));
           filmerSnap.forEach(doc => {
             const data = doc.data();
-            if (data.poster) basePosters.push(data.poster);
-            else if (data.bakgrunn) basePosters.push(data.bakgrunn);
+            // Samler både bakgrunn (horisontal) og poster (vertikal) hvis de finnes
+            if (data.poster) basePosters.push({ url: data.poster, type: 'vertical' });
+            if (data.bakgrunn) basePosters.push({ url: data.bakgrunn, type: 'horizontal' });
           });
 
           const serierSnap = await getDocs(collection(db, "serier"));
           serierSnap.forEach(doc => {
             const data = doc.data();
-            if (data.poster) basePosters.push(data.poster);
-            else if (data.bakgrunn) basePosters.push(data.bakgrunn);
+            if (data.poster) basePosters.push({ url: data.poster, type: 'vertical' });
+            if (data.bakgrunn) basePosters.push({ url: data.bakgrunn, type: 'horizontal' });
           });
 
           if (basePosters.length > 0) {
@@ -795,10 +813,16 @@
             for (let i = 0; i < 4; i++) {
               rowPosters.sort(() => Math.random() - 0.5);
 
-              rowPosters.forEach(src => {
+              rowPosters.forEach(item => {
                 const img = document.createElement("img");
-                img.src = src;
+                img.src = item.url;
                 img.loading = "lazy";
+                
+                // Legger til klasse basert på om det er vertikal eller horisontal poster
+                // (Fallback til tilfeldig valg hvis objektet mangler 'type'-egenskap fra gammel cache)
+                const isVertical = item.type ? item.type === 'vertical' : (Math.random() > 0.6);
+                img.className = isVertical ? "vertical" : "horizontal";
+
                 rowFragment.appendChild(img);
               });
             }
