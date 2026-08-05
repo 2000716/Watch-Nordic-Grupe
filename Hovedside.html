@@ -1138,7 +1138,7 @@
 <script src="meny.js"></script>
 <script src="lader.js"></script>
 <script type="module">
-  // ==================== HJELPEFUNKSJONER FOR SIKKERHET & YTELSE ==================== //
+  // ==================== HJELPEFUNKSJONER FOR SIKKERHET & PARSING ==================== //
   function sikkerJSONParse(str, fallback = null) {
     if (!str || typeof str !== "string") return fallback;
     try {
@@ -1159,15 +1159,6 @@
       .replace(/'/g, "&#039;");
   }
 
-  // NY YTELSE-FIKS: Hindrer iPad i å fryse når man scroller
-  function debounce(func, wait) {
-    let timeout;
-    return function(...args) {
-      clearTimeout(timeout);
-      timeout = setTimeout(() => func.apply(this, args), wait);
-    };
-  }
-
   // ==================== CSS INJEKSJON FOR VIAPLAY-LÅSING ==================== //
   try {
     const style = document.createElement('style');
@@ -1185,7 +1176,7 @@
     console.error("Kunne ikke injisere style-tag:", err);
   }
 
-// ==================== FIREBASE IMPORT & INITIALISERING ==================== //
+  // ==================== FIREBASE IMPORT & INITIALISERING ==================== //
   import { auth, db } from "./firebase-oppsett.js";
   import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-auth.js";
   import { doc, updateDoc, onSnapshot, collection, getDocs } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
@@ -1216,6 +1207,7 @@
       console.error("Feil i oppdaterMenyProfilVisning:", err);
     }
   }
+
   // ==================== OMDIRIGERING & REALTIDS PROFIL-SYNC ==================== //
   if (auth) {
     onAuthStateChanged(auth, (user) => {
@@ -1379,15 +1371,14 @@
       const seNa = document.getElementById("banner-se-na");
       const addBtn = document.getElementById("banner-add");
 
-      // FIKS: Fjernet escapeHTML fra kilder for å sikre at filene laster
       if (bilde) {
-        bilde.src = erMobil ? (film.bannerMobil || film.banner) : film.banner;
+        bilde.src = escapeHTML(erMobil ? (film.bannerMobil || film.banner) : film.banner);
         bilde.style.display = "block";
       }
 
       if (video) {
         if (film.trailer) {
-          video.src = film.trailer; 
+          video.src = escapeHTML(film.trailer);
           video.load();
           video.muted = true;
         } else {
@@ -1406,7 +1397,7 @@
 
       if (logo) {
         if (film.logo) {
-          logo.src = film.logo; 
+          logo.src = escapeHTML(film.logo);
           logo.style.display = "block";
           if (titleElement) titleElement.style.display = "none";
         } else {
@@ -1458,8 +1449,7 @@
     }
   }
 
-  // FIKS: Bruker debounce for å ikke belaste prosessoren unødvendig
-  window.addEventListener("resize", debounce(oppdaterBanner, 200));
+  window.addEventListener("resize", oppdaterBanner);
 
   // ==================== GALLERIPILER LOGIKK ==================== //
   function oppdaterAlleGalleripiler() {
@@ -1527,14 +1517,12 @@
 
       if (!gallery.dataset.bound) {
         gallery.dataset.bound = "true";
-        // FIKS: Kjører debounce slik at iPad ikke fryser under scrolling
-        gallery.addEventListener("scroll", debounce(oppdaterAlleGalleripiler, 50), { passive: true });
+        gallery.addEventListener("scroll", oppdaterAlleGalleripiler, { passive: true });
       }
     });
   }
 
-  // FIKS: Bruker debounce
-  window.addEventListener("resize", debounce(oppdaterAlleGalleripiler, 200));
+  window.addEventListener("resize", oppdaterAlleGalleripiler);
 
   // ==================== DYNAMISK GALLERI GENERATOR ==================== //
   function createGalleryItem(itemKey, item) {
@@ -1552,9 +1540,8 @@
     const tittelTekst = escapeHTML(item.tittel || 'Mangler tittel');
     const metaTekst = escapeHTML((Array.isArray(item.metadata) ? item.metadata : []).join(" • "));
 
-    // FIKS: Fjernet escapeHTML for selve URLen til bildet
     link.innerHTML = `
-      ${bildeKilde ? `<img src="${bildeKilde}" alt="${tittelTekst}" loading="lazy">` : `<div style="width:100%; height:100%; background:#1a2629; display:flex; align-items:center; justify-content:center; padding:10px; text-align:center; font-size:12px; color:#fff;">${tittelTekst}</div>`}
+      ${bildeKilde ? `<img src="${escapeHTML(bildeKilde)}" alt="${tittelTekst}" loading="lazy">` : `<div style="width:100%; height:100%; background:#1a2629; display:flex; align-items:center; justify-content:center; padding:10px; text-align:center; font-size:12px; color:#fff;">${tittelTekst}</div>`}
       <div class="image-overlay">
         <div class="overlay-content">
           <div class="overlay-title">${tittelTekst}</div>
@@ -1693,8 +1680,7 @@
 
       const img = document.createElement("img");
       if (bildeKilde) {
-        // FIKS: Fjernet escapeHTML
-        img.src = bildeKilde;
+        img.src = escapeHTML(bildeKilde);
         img.loading = "lazy";
       }
       img.alt = escapeHTML(film.tittel || "Topp 10");
@@ -1847,11 +1833,10 @@
 
         const tittelClean = escapeHTML(metadataMatch.tittel || "");
 
-        // FIKS: Fjernet escapeHTML for selve URLen til bildet
         link.innerHTML = `
           <div class="continue-media-wrap">
             ${bildeKilde 
-              ? `<img src="${bildeKilde}" alt="${tittelClean}" loading="lazy">` 
+              ? `<img src="${escapeHTML(bildeKilde)}" alt="${tittelClean}" loading="lazy">` 
               : `<div style="width:100%; height:100%; background:#1a2629; display:flex; align-items:center; justify-content:center; padding:10px; text-align:center; font-size:12px; color:#fff;">${tittelClean || 'Mangler bilde'}</div>`
             }
             <button class="delete-progress-btn" title="Skjul fra Fortsett å se" type="button" aria-label="Skjul fra visning">
@@ -1976,10 +1961,16 @@
         renderSeries("serier-seksjon", "serier-galleri");
         renderDokumentarSerier("dokumentar-seksjon", "dokumentarserier-galleri");
       }
-    } catch(err) {
+
+      renderContinueWatching();
+      oppdaterBanner();
+      initGalleripiler();
+      oppdaterAlleGalleripiler();
+    } catch (err) {
       console.error("Feil i byggSiden:", err);
     }
   }
+
   // Start henting av data
   hentDataFraFirestore();
 
