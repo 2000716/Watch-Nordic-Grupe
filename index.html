@@ -40,6 +40,54 @@
       }
     }
 
+    /* ================= TOPP-MENY KNAPPER ================= */
+    .top-menu {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 40px;
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 100;
+    }
+
+    .nav-right-buttons {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .nav-btn {
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 700;
+      padding: 10px 20px;
+      border-radius: 999px;
+      transition: 0.3s ease;
+    }
+
+    .nav-btn.login {
+      background: transparent;
+      color: #ffffff;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .nav-btn.login:hover {
+      background: rgba(255, 255, 255, 0.08);
+      border-color: rgba(255, 255, 255, 0.4);
+    }
+
+    .nav-btn.register {
+      background: #00FFCC;
+      color: #071214;
+    }
+
+    .nav-btn.register:hover {
+      transform: scale(1.04);
+    }
+
     /* ================= HERO ================= */
     .hero{
       position:relative;
@@ -413,6 +461,15 @@
 
     /* ================= RESPONSIVE ================= */
     @media (max-width: 768px) {
+      .top-menu {
+        padding: 15px 20px;
+      }
+
+      .nav-btn {
+        padding: 8px 12px;
+        font-size: 12px;
+      }
+
       .hero {
         height: auto;
         min-height: 95vh;
@@ -541,18 +598,17 @@
 </head>
 
 <body>
-  <!-- 🛑 KUN LOGO I TOPPMENY (Henter struktur og styling fra meny.css) -->
+  <!-- 🛑 TOPPMENY MED LOGO OG 2 KNAPPER PÅ HØYRE SIDE -->
   <header class="top-nav top-menu">
     <div class="nav-left">
       <a href="Hovedside.html" class="watch-logo-svg">
         <img src="https://static.wixstatic.com/media/d9ace9_081ea242211b45a2801873c3067e1205~mv2.png" alt="Watch Nordic">
       </a>
     </div>
-    <nav class="nav-links">
-      <a href="index.html"><i class="fas fa-house"></i> Hjem</a>
-      <a href="Innlogging.html"><i class="fas fa-right-to-bracket"></i> Logg inn</a>
-    </nav>
-    <div class="nav-right"></div>
+    <div class="nav-right-buttons">
+      <a href="Innlogging.html" class="nav-btn login">Logg inn</a>
+      <a href="Registrer.html" class="nav-btn register">Registrer deg</a>
+    </div>
   </header>
 
   <main>
