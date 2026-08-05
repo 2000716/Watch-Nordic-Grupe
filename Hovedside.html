@@ -20,7 +20,7 @@
         Lokal CSS for DENNE undersiden.
         Slett alt her som har med .header, .navbar, .top-menu
         eller <nav> å gjøre!
-      -------------------------------------------------- */
+        -------------------------------------------------- */
     * {
       box-sizing: border-box;
       margin: 0;
@@ -271,10 +271,10 @@
       display: inline-block;
       position: relative;
       border-radius: 8px;
-      background: #050F11; /* Bakgrunnsfarge for mellomrommet */
-      border: 3px solid transparent; /* Tykkere ramme-plass, gjennomsiktig som standard */
-      padding: 4px; /* Lager mellomrommet mellom rammen og bildet */
-      transition: border-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
+      background: #050F11;
+      border: 3px solid transparent;
+      padding: 4px;
+      transition: border-color 0.3s ease, transform 0.3s ease;
       overflow: hidden !important;
       flex-shrink: 0 !important;    
     }
@@ -306,10 +306,10 @@
       height: 175px;
       border-radius: 8px;
       overflow: hidden;
-      background: #050F11; /* Bakgrunnsfarge for mellomrommet */
-      border: 3px solid transparent; /* Tykkere ramme-plass */
-      padding: 4px; /* Lager mellomrommet mellom rammen og bildet */
-      transition: border-color 0.3s ease, box-shadow 0.3s ease;
+      background: #050F11;
+      border: 3px solid transparent;
+      padding: 4px;
+      transition: border-color 0.3s ease;
     }
 
     .continue-media-wrap img {
@@ -432,7 +432,7 @@
       font-weight: 900;
       line-height: 1;
       color: transparent;
-      -webkit-text-stroke: 4px #ffffff; /* Endret til hvit farge også her */
+      -webkit-text-stroke: 4px #ffffff;
       z-index: 2;
       transition: all 0.3s ease;
       pointer-events: none;
@@ -566,8 +566,7 @@
       .image-gallery a:hover, .gallery-item:hover {
         z-index: 999;
         transform: scale(1.05);
-        border-color: #ffffff; /* Endret til hvit rammefarge ved hover */
-        box-shadow: 0 4px 15px rgba(255, 255, 255, 0.2);
+        border-color: #ffffff;
       }
 
       /* Fortsett å se-kort */
@@ -576,20 +575,19 @@
         transform: scale(1.05);
       }
       .continue-item:hover .continue-media-wrap {
-        border-color: #ffffff; /* Endret til hvit rammefarge ved hover */
-        box-shadow: 0 4px 15px rgba(255, 255, 255, 0.2);
+        border-color: #ffffff;
       }
 
       /* Top 10 galleri */
       .top10-item:hover { 
         transform: scale(1.05); 
-        outline: 3px solid #ffffff; /* Endret til hvit outline */
-        outline-offset: 2px; /* Plasserer den litt utenfor bildet for mellomrom-effekt */
+        outline: 3px solid #ffffff; 
+        outline-offset: 2px;
         border-radius: 8px;
       }
 
       .top10-item:hover .top10-number {
-        color: #ffffff; /* Endret til hvit tallfarge ved hover */
+        color: #ffffff;
         -webkit-text-stroke: 0;
       }
 
