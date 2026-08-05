@@ -299,7 +299,7 @@
       color: #555;
     }
 
-    /* ================= HERO POSTER WALL ================= */
+    /* ================= HERO POSTER WALL (NETFLIX STANDARD) ================= */
     .hero-wall{
       position:absolute;
       inset:0;
@@ -312,29 +312,29 @@
         scale(1.2);
       transform-origin:right center;
       opacity: 0.65; 
-      filter: grayscale(0%) blur(0px);
       -webkit-mask-image: linear-gradient(to bottom, rgba(0,0,0,1) 85%, rgba(0,0,0,0) 100%); 
       mask-image: linear-gradient(to bottom, rgba(0,0,0,1) 85%, rgba(0,0,0,0) 100%);
     }
 
     .wall-row{
       display:flex;
-      gap:18px;
+      gap:16px;
       width:max-content;
-      margin-bottom:18px;
+      margin-bottom:16px;
       align-items: center;
     }
 
     .wall-row img {
       object-fit: cover;
       border-radius: 6px;
-      box-shadow: 0 12px 30px rgba(0,0,0,.65);
+      box-shadow: 0 10px 25px rgba(0,0,0,.6);
       transition: transform 0.3s ease;
     }
 
+    /* Standard størrelser på rekkene – helt jevne og ryddige */
     .wall-row img.horizontal {
-      width: 260px;
-      height: 146px;
+      width: 240px;
+      height: 135px;
     }
 
     .wall-row img.vertical {
@@ -342,22 +342,16 @@
       height: 165px;
     }
 
-    /* 🛑 STØRRE VERTIKALE POSTERE (TAR OPP DOBBEL STØRRELSE / 2 KOLONNER) */
-    .wall-row img.vertical-large {
-      width: 238px;
-      height: 348px;
-    }
-
-    /* 🛑 GRØNN GLØD (NETFLIX-STIL) */
+    /* Diskret og elegant grønn glød på utvalgte titler (Netflix-stil) */
     .wall-row img.glow {
-      box-shadow: 0 0 25px rgba(0, 255, 204, 0.7), 0 12px 30px rgba(0,0,0,.65);
-      border: 2px solid rgba(0, 255, 204, 0.5);
+      box-shadow: 0 0 20px rgba(0, 255, 204, 0.45), 0 10px 25px rgba(0,0,0,.6);
+      border: 1px solid rgba(0, 255, 204, 0.3);
     }
 
     .row1{margin-left:0px;}
-    .row2{margin-left:-60px;}
-    .row3{margin-left:-120px;}
-    .row4{margin-left:-180px;}
+    .row2{margin-left:-50px;}
+    .row3{margin-left:-100px;}
+    .row4{margin-left:-150px;}
 
     /* ================= COOKIE BANNER ================= */
     .cookie-banner {
@@ -534,17 +528,12 @@
 
       .wall-row img.horizontal {
         width: 140px;
-        height: 85px;
+        height: 78px;
       }
 
       .wall-row img.vertical {
         width: 70px;
         height: 105px;
-      }
-
-      .wall-row img.vertical-large {
-        width: 152px;
-        height: 222px;
       }
 
       .row1, .row2, .row3, .row4 {
@@ -762,7 +751,7 @@
     </div>
   </footer>
 
-  <!-- HENT BILDER FRA FIREBASE MED STØRRELSESVARIASJON OG GRØNN GLØD -->
+  <!-- HENT BILDER FRA FIREBASE (NETFLIX STANDARD STØRRELSER + DISKRET GLØD) -->
   <script type="module">
     import { db } from "./firebase-oppsett.js";
     import { collection, getDocs } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
@@ -774,8 +763,8 @@
       document.querySelector(".row4")
     ];
 
-    const CACHE_KEY = "watch_nordic_poster_wall_cache_v3";
-    const CACHE_TIME_KEY = "watch_nordic_poster_wall_time_v3";
+    const CACHE_KEY = "watch_nordic_poster_wall_cache_v4";
+    const CACHE_TIME_KEY = "watch_nordic_poster_wall_time_v4";
     const ONE_DAY_MS = 24 * 60 * 60 * 1000;
 
     async function lastInnPosters() {
@@ -833,17 +822,11 @@
                 img.src = item.url;
                 img.loading = "lazy";
                 
-                let cssClass = "horizontal";
-                
-                if (item.type === 'vertical') {
-                  // Sjekk om denne vertikale posteren skal være stor (2 kolonner) av og til
-                  const isLarge = Math.random() < 0.25; // 25% sjanse for stor poster
-                  cssClass = isLarge ? "vertical-large" : "vertical";
-                }
+                // Fast standard størrelse per type (ingen stygge avvik)
+                let cssClass = item.type === 'vertical' ? "vertical" : "horizontal";
 
-                // Legg til grønn glød på ca 20% av bildene for en stilig effekt
-                const hasGlow = Math.random() < 0.20;
-                if (hasGlow) {
+                // Gi et par tilfeldige bilder en eksklusiv grønn glød (ca 15% sjanse)
+                if (Math.random() < 0.15) {
                   cssClass += " glow";
                 }
 
