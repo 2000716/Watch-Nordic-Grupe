@@ -6,7 +6,7 @@
   </div>
 
   <nav class="nav-links">
-    <a href="Hovedside.html" class="active"><i class="fas fa-house"></i> Hjem</a>
+    <a href="Hovedside.html"><i class="fas fa-house"></i> Hjem</a>
     <a href="Serier.html"><i class="fas fa-tv"></i> Serier</a>
     <a href="Film.html"><i class="fas fa-clapperboard"></i> Filmer</a>
     <a href="Nyheter.html"><i class="fas fa-star"></i> Watch Originals</a>
@@ -21,8 +21,22 @@
     <a href="hvem-ser-på.html" class="profilmeny" id="profilmenyLink">
       <div class="profil-avatar-wrap">
         <div class="profil-avatar-bg"></div>
-        <img id="menyProfilbilde" src="https://via.placeholder.com/100" alt="Profilbilde" class="profil-avatar-img" />
+        <!-- Setter standardbilde direkte i HTML-en slik at det aldri blir tomt -->
+        <img id="menyProfilbilde" src="https://res.cloudinary.com/ocv4zhpk/image/upload/v1785856037/Muffins_profil_100_k1qd4h.png" alt="Profilbilde" class="profil-avatar-img" />
       </div>
     </a>
   </div>
 </header>
+
+<script>
+  // Dette skriptet kjører med en gang meny.html lastes inn, før siden rekker å blinke
+  (function() {
+    const lagretBilde = localStorage.getItem("profilbilde");
+    if (lagretBilde && lagretBilde !== "null" && lagretBilde.trim() !== "") {
+      const imgEl = document.getElementById("menyProfilbilde");
+      if (imgEl) {
+        imgEl.src = lagretBilde;
+      }
+    }
+  })();
+</script>
