@@ -304,15 +304,161 @@
             </div>
         </section>
 
-        <!-- E. SELVE VIDEOAVSPILLER-SEKSJONEN (Når man trykker "Se nå") -->
-        <section id="view-avspiller" class="side-visning" style="display: none;">
-            <div class="video-player-wrapper" style="position: relative; width: 100vw; height: 100vh; background: #000; overflow: hidden;">
-                <button id="lukkAvspillerBtn" class="back-button" style="position: absolute; top: 30px; left: 30px; z-index: 100; background: rgba(0,0,0,0.6); color: #fff; border: none; padding: 12px 20px; border-radius: 4px; cursor: pointer; font-size: 16px;">
-                    <i class="fas fa-arrow-left"></i> Tilbake
-                </button>
-                <video id="hovedVideoAvspiller" controls autoplay playsinline style="width: 100%; height: 100%; object-fit: contain;"></video>
-            </div>
-        </section>
+       <!-- E. SELVE VIDEOAVSPILLER-SEKSJONEN (Full avspiller) -->
+<section id="view-avspiller" class="side-visning" style="display: none;">
+  <div class="container" id="container" style="width: 100vw; height: 100vh; margin: 0; padding: 0; max-width: none;">
+  
+    <!-- VIDEOSPILLER -->
+    <div id="videoWrapper">
+      <video id="video" preload="metadata" playsinline>
+        <source src="" type="video/mp4">
+        <track label="Norsk" kind="subtitles" srclang="no" src="" default>
+        Din nettleser støtter ikke videoavspilling.
+      </video>
+    </div>
+
+    <!-- OVERLAYS -->
+    <div class="subtitle-overlay" id="subtitleOverlay"></div>
+    <div class="loading-spinner" id="loadingSpinner"></div>
+
+    <!-- INTRO / OUTRO KNAPPER -->
+    <button id="skipIntroBtn" class="skip-btn" style="display: none;">
+      <i class="fa-solid fa-forward" style="margin-right: 5px;"></i> Hopp over intro
+    </button>
+
+    <button id="skipOutroBtn" class="skip-btn" style="display: none;">
+      Neste episode <i class="fa-solid fa-forward" style="margin-left: 5px;"></i>
+    </button>
+
+    <!-- AUTOPLAY OVERLAY -->
+    <div id="autoplayOverlay" style="display: none;">
+      <div class="autoplay-content">
+        <img id="autoplayLogo" class="autoplay-serie-logo" alt="Serie Logo" style="display: none;">
+        
+        <div class="autoplay-episode-meta">
+          <span id="autoplayEpTag" class="autoplay-ep-tag"></span>
+          <span id="autoplayEpTitle" class="autoplay-ep-title"></span>
+        </div>
+        
+        <p id="autoplayEpDesc" class="autoplay-ep-desc"></p>
+        
+        <div class="autoplay-action-row">
+          <button id="autoplayPlayNextBtn" class="autoplay-btn">
+            <i class="fa-solid fa-play"></i> Spill nå
+          </button>
+          <button id="autoplayCancelBtn" class="autoplay-btn">Avbryt</button>
+          
+          <div class="autoplay-circle-timer">
+            <svg class="timer-svg" viewBox="0 0 36 36">
+              <path class="timer-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+              <path id="timerProgress" class="timer-progress" stroke-dasharray="100, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+            </svg>
+            <div id="autoplayCountdown" class="timer-number">8</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- RESUME DIALOG -->
+    <div id="resumeOverlay" class="resume-overlay" style="display: none;">
+      <div class="resume-box">
+        <p>Vil du fortsette der du slapp?</p>
+        <div class="resume-buttons">
+          <button id="continueBtn">Fortsett</button>
+          <button id="restartBtn">Start på nytt</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- HOVED-UI -->
+    <div class="ui" id="ui">
+      
+      <div class="top-bar">
+        <div class="top-bar-left">
+          <a href="#" class="back-button" id="backButton">
+            <i class="fa-solid fa-chevron-left" style="color: white; font-size: 20px;"></i>
+          </a>
+          <div class="movie-title">Laster tittel...</div>
+        </div>
+        
+        <div class="volume-container">
+          <button class="btn" id="muteBtn" title="Lyd av/på">
+            <i class="fa-solid fa-volume-high" style="color: white; font-size: 18px;"></i>
+          </button>
+          <div class="volume-slider-wrapper">
+            <input type="range" class="volume-slider" id="volumeSlider" min="0" max="1" step="0.05" value="1" style="--volume-percent: 100%;">
+          </div>
+        </div>
+      </div>
+
+      <div class="progress-container">
+        <div class="progress" id="progress">
+          <div class="progress-filled" id="progressFilled"></div>
+          <div class="thumb" id="thumb"></div>
+        </div>
+      </div>
+
+      <div class="preview-box" id="previewBox" style="display: none;">
+        <img id="previewImage" src="" alt="Forhåndsvisning">
+        <div class="preview-time" id="previewTime">00:00</div>
+      </div>
+
+      <span class="time-display" id="timeDisplay">00:00</span>
+
+      <div class="controls">
+        <div class="left-controls"></div>
+
+        <div class="center-controls">
+          <button class="btn" id="rewindBtn" title="10 sekunder tilbake">
+            <i class="fa-solid fa-rotate-left" style="color: white; font-size: 20px;"></i>
+          </button>
+          <button class="btn" id="playPauseBtn" title="Spill / Pause">
+            <i class="fa-solid fa-play" style="color: white; font-size: 24px;"></i>
+          </button>
+          <button class="btn" id="forwardBtn" title="10 sekunder frem">
+            <i class="fa-solid fa-rotate-right" style="color: white; font-size: 20px;"></i>
+          </button>
+        </div>
+
+        <div class="right-controls">
+          <button id="nextEpisodeBtn" class="btn">
+            Neste <i class="fa-solid fa-forward" style="margin-left: 3px; font-size: 12px;"></i>
+          </button>
+          
+          <button class="btn" id="captionsBtn" title="Undertekster og lydspråk">
+            <i class="fa-solid fa-closed-captioning" style="color: white; font-size: 20px;"></i>
+          </button>
+          <button class="btn" id="fullscreenBtn" title="Fullskjerm">
+            <i class="fa-solid fa-expand" style="color: white; font-size: 20px;"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- MENY FOR LYD OG UNDERTEKSTER -->
+      <div class="caption-menu" id="captionMenu" style="display: none;">
+        <div class="caption-menu-header">
+          <h3>Lyd og undertekster</h3>
+          <button class="caption-menu-close" id="closeCaptionMenuBtn" aria-label="Lukk">
+            <i class="fa-solid fa-xmark"></i>
+          </button>
+        </div>
+        
+        <div class="caption-menu-grid">
+          <div class="caption-column">
+            <div class="caption-column-title">Lyd</div>
+            <div class="caption-track-list" id="audioTracks"></div>
+          </div>
+
+          <div class="caption-column">
+            <div class="caption-column-title">Undertekster</div>
+            <div class="caption-track-list" id="subtitleTracks"></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
 
     </main>
 
