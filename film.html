@@ -1079,7 +1079,7 @@
 <script type="module">
   import { auth, db } from "./firebase-oppsett.js";
   import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-auth.js";
-  import { doc, onSnapshot, setDoc, collection, query, limit, getDocs } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
+  import { doc, onSnapshot, setDoc, getDoc, collection, query, limit, getDocs } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
 
   /* ==========================================
      1. GLOBALE TILSTANDER & HJELPEFUNKSJONER
@@ -1099,7 +1099,7 @@
   let erUtgått = false;
   let erUtilgjengelig = false;
   let erProfilLastetFraSkyen = false;
-  let unsubscribeMedia = null; // Holder styr på sanntidslytteren
+  let unsubscribeMedia = null;
 
   let watchBtn, addToListBtn, bgImg;
 
@@ -1150,27 +1150,16 @@
       return;
     }
 
-    // Sjekk først om det er en film
     const filmRef = doc(db, "filmer", navn);
     const serieRef = doc(db, "serier", navn);
 
-    // Vi sjekker hvilken samling dokumentet tilhører først, deretter setter vi opp onSnapshot
-    // For å gjøre det enklest lytter vi på film-referansen, hvis den ikke finnes, sjekker vi serie.
-    // Her bruker vi onSnapshot direkte på den som finnes.
-    
-    // Først sjekker vi en gang for å finne ut om det er film eller serie
-    const cacheKey = `media_cache_${navn}`;
-    let docRef = doc(db, "filmer", navn);
-    
-    // Vi setter opp en generell lytter basert på type funnet
-    // For en robust løsning sjekker vi film først:
+    // Sjekk først om filmen finnes, hvis ikke lytter vi på serier
     unsubscribeMedia = onSnapshot(filmRef, (docSnap) => {
       if (docSnap.exists()) {
         type = "film";
         oppdaterMedieData(docSnap.data());
       } else {
-        // Hvis ikke film, prøv serie med onSnapshot
-        unsubscribeMedia(); // Avbryt film-lytter
+        if (typeof unsubscribeMedia === "function") unsubscribeMedia();
         unsubscribeMedia = onSnapshot(serieRef, (serieSnap) => {
           if (serieSnap.exists()) {
             type = "serie";
@@ -1192,7 +1181,6 @@
     erUtgått = data.expireDate && nå > new Date(data.expireDate);
     erUtilgjengelig = erUpublisert || erUtgått;
 
-    // Hvis UI allerede er initialisert, oppdater elementer dynamisk
     if (document.body.classList.contains("loaded")) {
       oppdaterUIEtterEndring();
     }
@@ -1217,7 +1205,6 @@
     document.title = data.tittel ? `${data.tittel} - Watch Nordic` : "Watch Nordic";
     oppdaterBakgrunnsBilde();
     
-    // Oppdater tittel/logo
     const fLogo = document.querySelector(".film-logo");
     const logoContainer = document.querySelector(".logo-container");
     if (fLogo) {
@@ -1240,8 +1227,8 @@
 
     oppdaterWatchKnapp();
     oppdaterListeKnapp();
-    if (type === "serie") {
-      const sesongNumre = Object.keys(data.sesonger || {});
+    if (type === "serie" && data.sesonger) {
+      const sesongNumre = Object.keys(data.sesonger);
       if (sesongNumre.length > 0) {
         const aktivSesongBtn = document.querySelector(".season-btn.active");
         const aktivSesong = aktivSesongBtn ? aktivSesongBtn.textContent.replace("Sesong ", "") : sesongNumre[0];
@@ -1259,7 +1246,6 @@
       resizeTimeout = setTimeout(oppdaterBakgrunnsBilde, 150);
     });
 
-    // Beskrivelse
     const descEl = document.querySelector(".description");
     if (descEl) {
       const fullText = data.beskrivelse || "";
@@ -1289,9 +1275,7 @@
           overlay.appendChild(popupBox);
           document.body.appendChild(overlay);
 
-          const lukkModal = () => {
-            overlay.remove();
-          };
+          const lukkModal = () => overlay.remove();
           closeBtn.addEventListener("click", lukkModal);
           overlay.addEventListener("click", (e) => { if (e.target === overlay) lukkModal(); });
         });
@@ -1300,7 +1284,6 @@
       }
     }
 
-    // Metadata
     const metadataEl = document.querySelector(".metadata");
     if (metadataEl) {
       metadataEl.innerHTML = "";
@@ -1320,7 +1303,6 @@
       }
     }
 
-    // Skuespillere & Lisens
     const castInfoEl = document.querySelector(".cast-info");
     if (castInfoEl) {
       castInfoEl.innerHTML = "";
@@ -1358,7 +1340,6 @@
       addToListBtn.addEventListener("click", handterListClick);
     }
 
-    initTrailer();
     byggAnbefalingerEllerEpisoder();
   }
 
@@ -1491,13 +1472,10 @@
       currentUser = user;
       try {
         const userDocRef = doc(db, "users", user.uid);
-        const docSnap = await getDocs(userDocRef); // eller getDoc
-        // Forenklet henting av brukerprofiler
-        const userDoc = await import("https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js").then(async m => {
-          return await m.getDoc(userDocRef);
-        });
-        if (userDoc.exists()) {
-          heleProfilArrayet = userDoc.data().profiler || [];
+        const docSnap = await getDoc(userDocRef);
+
+        if (docSnap.exists()) {
+          heleProfilArrayet = docSnap.data().profiler || [];
           tryggLagring("watch_nordic_profiles_cache", JSON.stringify(heleProfilArrayet));
           erProfilLastetFraSkyen = true;
           synkroniserLokalData();
@@ -1518,7 +1496,8 @@
     const returUrl = encodeURIComponent(window.location.href);
 
     if (type === "film") {
-      window.location.href = `${data.watchUrl}&returUrl=${returUrl}`;
+      const separator = data.watchUrl?.includes("?") ? "&" : "?";
+      window.location.href = `${data.watchUrl}${separator}returUrl=${returUrl}`;
     } else {
       window.location.href = `film-mal.html?navn=${encodeURIComponent(navn)}&returUrl=${returUrl}`;
     }
@@ -1601,10 +1580,6 @@
 
       if (sesongNumre.length > 0) visSesong(sesongNumre[0]);
     }
-  }
-
-  function initTrailer() {
-    // Trailer logikk forblir lik
   }
 
   if (document.readyState === "loading") {
