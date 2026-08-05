@@ -44,7 +44,6 @@
       z-index: -1;
     }
 
-    /* Topplinje for logo og kontoknapp */
     .top-bar {
       width: 100%;
       padding: 20px 60px;
@@ -172,7 +171,6 @@
       letter-spacing: 0.5px;
     }
 
-    /* Redigeringsknapp-styling (Pennen) */
     .action-btn {
       position: absolute;
       background: rgba(9, 27, 30, 0.9);
@@ -539,7 +537,6 @@
     let docRef = null;
     let pendingProfileIndex = null;
 
-    // LYNRAST OPPSTART (Mellomlagring)
     const cachedProfiles = localStorage.getItem("watch_nordic_profiles_cache");
     if (cachedProfiles) {
       try {
@@ -581,7 +578,6 @@
           databaseEndret = true;
         }
 
-        // Automatisk barnekonto hvis ingen finnes fra før
         const harBarneprofil = profiler.some(p => p.isKids === true);
         if (!harBarneprofil && profiler.length < MAX_PROFILER) {
           profiler.push({
@@ -613,7 +609,6 @@
         div.className = "profile" + (profil.isKids ? " kids-profile" : "");
 
         const kidsBadgeHtml = profil.isKids ? `<br><span class="kids-badge">Kids</span>` : '';
-
         const lockHtml = profil.pin ? `<div class="profile-lock"><i class="fa-solid fa-lock"></i> Kode</div>` : '';
 
         div.innerHTML = `
@@ -631,11 +626,10 @@
           velgProfil(index);
         });
 
-        // Event listener for pennen som sender brukeren til konto.html med riktig profilindex
         const editBtn = div.querySelector(".edit-btn");
         if (editBtn) {
           editBtn.addEventListener("click", (e) => {
-            e.stopPropagation(); // Hindrer at profilen velges når man trykker på pennen
+            e.stopPropagation();
             window.location.href = `konto.html?index=${index}`;
           });
         }
@@ -760,16 +754,13 @@
 
     document.getElementById("btnClosePin").addEventListener("click", lukkPinModal);
 
-    // Event listeners for knapper
     document.getElementById("btnCreateProfile").addEventListener("click", lagreNyProfil);
     document.getElementById("btnCloseModal").addEventListener("click", lukkModal);
 
-    // Enter-tast for å lagre profil i modalen
     newProfileNameInput.addEventListener("keyup", (e) => {
       if (e.key === "Enter") lagreNyProfil();
     });
 
-    // Lukke modal ved å klikke utenfor eller trykke på Esc
     modal.addEventListener("click", (e) => {
       if (e.target === modal) lukkModal();
     });
@@ -786,11 +777,6 @@
         document.getElementById("btnConfirmPin").click();
       }
     });
-
-    // Eksporterer til global window for bakoverkompatibilitet
-    window.lagreNyProfil = lagreNyProfil;
-    window.lukkModal = lukkModal;
-    window.åpneModal = åpneModal;
   </script>
 </body>
 </html>
