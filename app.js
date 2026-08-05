@@ -25,20 +25,20 @@ function settInnProfilbilde() {
     }
 }
 
-// 3. Styrer navigasjonen mellom de ulike seksjonene sømløst
+// 3. Hovedfunksjon for å bytte side uten blinking
 function byttSide(sideNavn) {
-    // Skjul alle seksjoner
+    // 1. Skjul alle seksjoner
     document.querySelectorAll('.side-visning').forEach(seksjon => {
         seksjon.style.display = 'none';
     });
 
-    // Vis den valgte seksjonen
+    // 2. Vis den seksjonen brukeren trykket på
     const aktivSeksjon = document.getElementById(`view-${sideNavn}`);
     if (aktivSeksjon) {
         aktivSeksjon.style.display = 'block';
     }
 
-    // Oppdater aktiv klasse i menyen
+    // 3. Oppdater hvilken meny-knapp som lyser opp
     document.querySelectorAll('.nav-links a').forEach(link => {
         link.classList.remove('active');
     });
@@ -47,11 +47,20 @@ function byttSide(sideNavn) {
         aktivLink.classList.add('active');
     }
 
-    // Eksempel på lasting av spesifikk data for sidene
-    if (sideNavn === 'filmer') {
-        // lastInnFilmerFraFirebase();
+    // 4. Start funksjonene for den spesifikke siden
+    if (sideNavn === 'hjem') {
+        // Eksempel: lastInnStartsiden();
     } else if (sideNavn === 'serier') {
-        // lastInnSerierFraFirebase();
+        // Her kaller du på funksjonen fra din gamle serier.js som henter data fra Firebase!
+        // Eksempel: lastInnSerierFraFirebase();
+    } else if (sideNavn === 'film') {
+        // Eksempel: lastInnFilmFraFirebase();
+    } else if (sideNavn === 'nyheter') {
+        // Eksempel: lastInnWatchOriginals();
+    } else if (sideNavn === 'min-liste') {
+        // Eksempel: lastInnMinListe();
+    } else if (sideNavn === 'sok') {
+        // Eksempel: klargjorSokefelt();
     }
 }
 
