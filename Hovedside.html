@@ -16,7 +16,7 @@
   <link rel="stylesheet" href="lader.css">
 
 <style>
-    /* --------------------------------------------------
+/* --------------------------------------------------
         Lokal CSS for DENNE undersiden.
         Slett alt her som har med .header, .navbar, .top-menu
         eller <nav> å gjøre!
@@ -48,8 +48,8 @@
     }
 
     /* ==========================================================================
-       3. HERO BANNER (PC)
-       ========================================================================== */
+        3. HERO BANNER (PC)
+        ========================================================================== */
     .hero-banner {
       position: relative;
       height: 85vh;
@@ -223,8 +223,8 @@
     }
 
     /* ==========================================================================
-       4. FORTSETT Å SE & GALLERIER (PC)
-       ========================================================================== */
+        4. FORTSETT Å SE & GALLERIER (PC)
+        ========================================================================== */
     .gallery-section, .continue-watching-section {
       margin: 0 auto 45px;
       position: relative;
@@ -296,7 +296,7 @@
       flex-shrink: 0 !important;
       text-decoration: none;
       position: relative;
-      transition: transform 0.3s ease; /* Jevn overgang når man drar over på PC */
+      transition: transform 0.3s ease;
     }
 
     .continue-media-wrap {
@@ -305,7 +305,7 @@
       height: 175px;
       border-radius: 5px;
       overflow: hidden;
-      border: 2px solid transparent; /* Gjøres klar for ramme på hover */
+      border: 2px solid transparent; 
       transition: border-color 0.3s ease, box-shadow 0.3s ease;
     }
 
@@ -388,8 +388,8 @@
     }
 
     /* ==========================================================================
-       5. TOP 10 GALLERI (STØRRE)
-       ========================================================================== */
+        5. TOP 10 GALLERI (STØRRE)
+        ========================================================================== */
     .top10-gallery {
       display: flex;
       flex-direction: row;
@@ -423,7 +423,7 @@
     .top10-number {
       position: absolute;
       bottom: -15px; 
-      left: -20px;   
+      left: -20px;    
       font-size: 90px; 
       font-weight: 900;
       line-height: 1;
@@ -435,8 +435,8 @@
     }
 
     /* ==========================================================================
-       7. BARNE BANNER & SPESIALINNHOLD
-       ========================================================================== */
+        7. BARNE BANNER & SPESIALINNHOLD
+        ========================================================================== */
     .kids-banner {
       position: relative;
       width: calc(100% - 80px); 
@@ -475,8 +475,8 @@
     }
 
     /* ==========================================================================
-       8. FOOTER
-       ========================================================================== */
+        8. FOOTER
+        ========================================================================== */
     .footer {
       width: 100%;
       padding: 70px 80px 35px;
@@ -555,8 +555,8 @@
     }
 
     /* ==========================================================================
-       9. HOVER EFFEKTER KUN FOR ENHETER MED MUS (PC / LAPTOP)
-       ========================================================================== */
+        9. HOVER EFFEKTER KUN FOR ENHETER MED MUS (PC / LAPTOP)
+        ========================================================================== */
     @media (hover: hover) {
       /* Vanlige gallerier */
       .image-gallery a:hover, .gallery-item:hover {
@@ -566,7 +566,7 @@
         box-shadow: 0 4px 15px rgba(0, 255, 204, 0.3);
       }
 
-      /* Fortsett å se-kort (forstørrer hele kortet, rammer inn bilde-delen) */
+      /* Fortsett å se-kort */
       .continue-item:hover {
         z-index: 999;
         transform: scale(1.05);
@@ -657,8 +657,8 @@
     }
 
     /* ==========================================================================
-       10. MOBIL-OPTIMALISERING (HORISONTALE GALLERIER PÅ MOBIL)
-       ========================================================================== */
+        10. MOBIL-OPTIMALISERING (HORISONTALE GALLERIER PÅ MOBIL)
+        ========================================================================== */
     @media (max-width: 768px) {
       html, body {
         background: #091B1E !important;
@@ -746,9 +746,7 @@
 
       .scroll-button { display: none !important; }
 
-      /* --------------------------------------------------------------------------
-         A) ALLE STANDARD GALLERIER: HORISONTAL RULLING (VERTIKALE POSTERE)
-         -------------------------------------------------------------------------- */
+      /* ALLE STANDARD GALLERIER */
       .image-gallery,
       .coming-movies-gallery,
       .top10-gallery,
@@ -768,7 +766,6 @@
         -webkit-overflow-scrolling: touch !important;
       }
 
-      /* Standard størrelse på alle vanlige gallerier (130px bredde / 195px høyde) */
       .gallery-section .image-gallery a, 
       .gallery-section .gallery-item {
         width: 130px !important;
@@ -787,9 +784,7 @@
         border-radius: 8px !important;
       }
 
-      /* --------------------------------------------------------------------------
-         ENDRET 1: TOP 10 GALLERI (STØRRE ENN STANDARD)
-         -------------------------------------------------------------------------- */
+      /* TOP 10 GALLERI (MOBIL) */
       .gallery-section .top10-item {
         width: 155px !important;
         flex-shrink: 0 !important;
@@ -805,7 +800,6 @@
         border-radius: 10px !important;
       }
 
-      /* Tilpasning av tall for Top 10 */
       .top10-number {
         font-size: 44px !important;
         left: 2px !important;
@@ -813,9 +807,7 @@
         -webkit-text-stroke: 1.5px rgba(0, 255, 204, 0.8) !important;
       }
 
-      /* --------------------------------------------------------------------------
-         ENDRET 2: KUN FILM-GALLERIET
-         -------------------------------------------------------------------------- */
+      /* KUN FILM-GALLERIET */
       #alle-filmer-seksjon .gallery-item,
       #alle-filmer-seksjon a,
       #filmer-galleri .gallery-item,
@@ -833,9 +825,7 @@
         border-radius: 6px !important;
       }
 
-      /* --------------------------------------------------------------------------
-         B) "FORTSETT Å SE": HORISONTAL RULLING
-         -------------------------------------------------------------------------- */
+      /* "FORTSETT Å SE" (MOBIL) */
       .continue-watching-section .continue-image-gallery {
         display: flex !important;
         flex-direction: row !important;
@@ -911,8 +901,8 @@
     }
 
     /* ==========================================================================
-       11. NØDBREMS (PORTRETT PÅ LANDSKAP PÅ MOBIL)
-       ========================================================================== */
+        11. NØDBREMS (PORTRETT PÅ LANDSKAP PÅ MOBIL)
+        ========================================================================== */
     @media screen and (orientation: landscape) and (max-width: 900px) {
       body {
         overflow: hidden !important;
@@ -933,6 +923,25 @@
         text-align: center;
         z-index: 999999;
         padding: 20px;
+      }
+    }
+
+    /* ==========================================================================
+        12. OVERLAY TITTEL OG METADATA (SKJUL SOM STANDARD, SYNLIG VED HOVER)
+        ========================================================================== */
+    .gallery-item .overlay-title,
+    .gallery-item .overlay-meta,
+    .continue-item .overlay-title,
+    .continue-item .overlay-meta {
+      display: none !important;
+    }
+
+    @media (hover: hover) {
+      .gallery-item:hover .overlay-title,
+      .gallery-item:hover .overlay-meta,
+      .continue-item:hover .overlay-title,
+      .continue-item:hover .overlay-meta {
+        display: block !important;
       }
     }
 </style>
