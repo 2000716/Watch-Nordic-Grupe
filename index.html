@@ -95,150 +95,187 @@
     }
 
     /* ================= HERO ================= */
-    .hero{
-      position:relative;
-      height:100vh;
-      display:flex;
-      align-items:center;
-      overflow:hidden; 
-      background:#071214; 
+    .hero {
+      position: relative;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      overflow: hidden; 
+      background: #071214; 
     }
 
-    .hero::before{
-      content:"";
-      position:absolute;
-      inset:0;
-      background:
-        linear-gradient(
-          to right,
-          rgba(7,18,20,0.95) 25%,     
-          rgba(7,18,20,0.6) 60%,
-          rgba(7,18,20,0.2) 100%
-        );
-      z-index:1;
+    .hero::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        to right,
+        rgba(7,18,20,0.95) 25%,     
+        rgba(7,18,20,0.6) 60%,
+        rgba(7,18,20,0.2) 100%
+      );
+      z-index: 1;
     }
 
-    .hero::after{
-      content:"";
-      position:absolute;
-      left:0;
-      right:0;
-      bottom:0;
-      height:120px; 
-      background:linear-gradient(
+    .hero::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      height: 120px; 
+      background: linear-gradient(
         to top,
         #071214, 
         transparent
       );
-      z-index:1;
+      z-index: 1;
     }
 
-    .hero-content{
-      position:relative;
-      z-index:2;
-      max-width:650px;
-      margin-left:70px;
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      max-width: 650px;
+      margin-left: 70px;
     }
 
-    .hero-content h1{
-      font-size:72px;
-      line-height:1.1;
-      margin-bottom:20px;
-      font-weight:900;
+    .hero-content h1 {
+      font-size: 72px;
+      line-height: 1.1;
+      margin-bottom: 20px;
+      font-weight: 900;
       letter-spacing: -1px;
     }
 
-    .hero-content p{
-      color:#e2e8f0;
-      font-size:19px;
-      line-height:1.6;
-      margin-bottom:35px;
-      max-width:550px;
+    .hero-content p {
+      color: #e2e8f0;
+      font-size: 19px;
+      line-height: 1.6;
+      margin-bottom: 35px;
+      max-width: 550px;
     }
 
-    .hero-buttons{
-      display:flex;
-      gap:16px;
-      flex-wrap:wrap;
+    .hero-buttons {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
     }
 
-    .hero-buttons a{
-      text-decoration:none;
-      font-weight:800;
-      transition:0.3s ease;
+    .hero-buttons a {
+      text-decoration: none;
+      font-weight: 800;
+      transition: 0.3s ease;
     }
 
-    .primary-btn{
-      background:#00FFCC;
-      color:#071214;
-      padding:16px 34px;
-      border-radius:999px;
+    .primary-btn {
+      background: #00FFCC;
+      color: #071214;
+      padding: 16px 34px;
+      border-radius: 999px;
       box-shadow: none;
     }
 
-    .primary-btn:hover{
-      transform:scale(1.04);
+    .primary-btn:hover {
+      transform: scale(1.04);
     }
 
     /* ================= SECTION ================= */
-    .section{
-      padding:70px 60px;
+    .section {
+      padding: 70px 60px;
       background: #071214; 
     }
 
-    .section-header{
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      margin-bottom:25px;
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 30px;
     }
 
-    .section h2{
-      font-size:26px;
+    .section h2 {
+      font-size: 28px;
       font-weight: 700;
-      color:white;
+      color: white;
     }
 
-    .section span{
-      color:#00FFCC;
+    .section span {
+      color: #00FFCC;
     }
 
     /* ================= DEVICES ================= */
-    .devices{
-      display:grid;
-      grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
-      gap:25px;
+    .devices {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 25px;
     }
 
-    .device{
-      padding:35px 25px;
-      text-align:center;
-      border-radius:16px;
-      background:rgba(255,255,255,0.02);
-      border:1px solid rgba(255,255,255,0.05);
-      transition:0.3s ease;
+    .device {
+      padding: 35px 25px;
+      text-align: center;
+      border-radius: 16px;
+      background: rgba(255,255,255,0.02);
+      border: 1px solid rgba(255,255,255,0.05);
+      transition: 0.3s ease;
     }
 
-    .device:hover{
-      transform:translateY(-6px);
-      border-color:rgba(0,255,204,0.3);
+    .device:hover {
+      transform: translateY(-6px);
+      border-color: rgba(0,255,204,0.3);
       box-shadow: 0 0 25px rgba(0,255,204,0.12);
     }
 
-    .device i{
-      font-size:45px;
-      margin-bottom:18px;
-      color:#00FFCC;
+    .device i {
+      font-size: 45px;
+      margin-bottom: 18px;
+      color: #00FFCC;
     }
 
-    .device h3{
-      margin-bottom:10px;
+    .device h3 {
+      margin-bottom: 10px;
     }
 
-    .device p{
-      color:#bfc9c9;
-      font-size:14px;
-      line-height:1.5;
+    .device p {
+      color: #bfc9c9;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    /* ================= PLATFORM FEATURES (NY SEKSJON) ================= */
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 25px;
+    }
+
+    .feature-card {
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      padding: 35px 30px;
+      border-radius: 16px;
+      transition: 0.3s ease;
+    }
+
+    .feature-card:hover {
+      border-color: rgba(0, 255, 204, 0.3);
+      background: rgba(255, 255, 255, 0.04);
+    }
+
+    .feature-card i {
+      font-size: 36px;
+      color: #00FFCC;
+      margin-bottom: 20px;
+    }
+
+    .feature-card h3 {
+      font-size: 20px;
+      margin-bottom: 12px;
+      color: #ffffff;
+    }
+
+    .feature-card p {
+      color: #bfc9c9;
+      font-size: 14px;
+      line-height: 1.6;
     }
 
     /* ================= FOOTER ================= */
@@ -305,27 +342,27 @@
     }
 
     /* ================= HERO POSTER WALL (NETFLIX STANDARD) ================= */
-    .hero-wall{
-      position:absolute;
-      inset:0;
-      overflow:hidden;
-      z-index:0;
+    .hero-wall {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+      z-index: 0;
       transform:
         perspective(2000px)
         rotateY(-20deg)
         rotateX(2deg)
         scale(1.2);
-      transform-origin:right center;
+      transform-origin: right center;
       opacity: 0.65; 
       -webkit-mask-image: linear-gradient(to bottom, rgba(0,0,0,1) 85%, rgba(0,0,0,0) 100%); 
       mask-image: linear-gradient(to bottom, rgba(0,0,0,1) 85%, rgba(0,0,0,0) 100%);
     }
 
-    .wall-row{
-      display:flex;
-      gap:16px;
-      width:max-content;
-      margin-bottom:16px;
+    .wall-row {
+      display: flex;
+      gap: 16px;
+      width: max-content;
+      margin-bottom: 16px;
       align-items: center;
     }
 
@@ -336,7 +373,6 @@
       transition: transform 0.3s ease;
     }
 
-    /* Standard størrelser på rekkene – helt jevne og ryddige */
     .wall-row img.horizontal {
       width: 240px;
       height: 135px;
@@ -347,16 +383,15 @@
       height: 165px;
     }
 
-    /* Diskret og elegant grønn glød på utvalgte titler (Netflix-stil) */
     .wall-row img.glow {
       box-shadow: 0 0 20px rgba(0, 255, 204, 0.45), 0 10px 25px rgba(0,0,0,.6);
       border: 1px solid rgba(0, 255, 204, 0.3);
     }
 
-    .row1{margin-left:0px;}
-    .row2{margin-left:-50px;}
-    .row3{margin-left:-100px;}
-    .row4{margin-left:-150px;}
+    .row1 { margin-left: 0px; }
+    .row2 { margin-left: -50px; }
+    .row3 { margin-left: -100px; }
+    .row4 { margin-left: -150px; }
 
     /* ================= COOKIE BANNER ================= */
     .cookie-banner {
@@ -627,13 +662,13 @@
   <!-- 🛑 TOPPMENY MED LOGO OG 2 KNAPPER PÅ HØYRE SIDE -->
   <header class="top-nav top-menu">
     <div class="nav-left">
-      <a href="" class="watch-logo-svg">
+      <a href="#" class="watch-logo-svg">
         <img src="https://static.wixstatic.com/media/d9ace9_081ea242211b45a2801873c3067e1205~mv2.png" alt="Watch Nordic">
       </a>
     </div>
     <div class="nav-right-buttons">
       <a href="Innlogging.html" class="nav-btn login">Logg inn</a>
-      <a href="Registrer.html" class="nav-btn register">Registrer deg</a>
+      <a href="Innlogging.html" class="nav-btn register">Registrer deg</a>
     </div>
   </header>
 
@@ -656,6 +691,31 @@
 
         <div class="hero-buttons">
           <a href="Innlogging.html" class="primary-btn">Begynn å se</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- NY SEKSJON: OM PLATTFORMEN -->
+    <section class="section">
+      <div class="section-header">
+        <h2>Hvorfor velge <span>Watch Nordic?</span></h2>
+      </div>
+
+      <div class="features-grid">
+        <div class="feature-card">
+          <i class="fas fa-film"></i>
+          <h3>Nordisk Fokus</h3>
+          <p>Få eksklusiv tilgang til kritikerroste serier og filmer produsert i Norden, i tillegg til store internasjonale suksesser.</p>
+        </div>
+        <div class="feature-card">
+          <i class="fas fa-bolt"></i>
+          <h3>Lynrask Streaming</h3>
+          <p>Nyt krystallklar 4K Ultra HD-kvalitet og adaptiv streaming uten avbrudd eller buffring, uansett nettverk.</p>
+        </div>
+        <div class="feature-card">
+          <i class="fas fa-shield-alt"></i>
+          <h3>Ingen Bindende Tid</h3>
+          <p>Full fleksibilitet med månedlig oppsigelse. Bytt abonnement eller stopp når du vil uten skjulte gebyrer.</p>
         </div>
       </div>
     </section>
@@ -756,7 +816,7 @@
     </div>
   </footer>
 
-  <!-- HENT BILDER FRA FIREBASE (NETFLIX STANDARD STØRRELSER + DISKRET GLØD) -->
+  <!-- HENT BILDER FRA FIREBASE -->
   <script type="module">
     import { db } from "./firebase-oppsett.js";
     import { collection, getDocs } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
@@ -827,10 +887,8 @@
                 img.src = item.url;
                 img.loading = "lazy";
                 
-                // Fast standard størrelse per type (ingen stygge avvik)
                 let cssClass = item.type === 'vertical' ? "vertical" : "horizontal";
 
-                // Gi et par tilfeldige bilder en eksklusiv grønn glød (ca 15% sjanse)
                 if (Math.random() < 0.15) {
                   cssClass += " glow";
                 }
