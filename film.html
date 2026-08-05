@@ -1082,7 +1082,7 @@
   import { doc, getDoc, setDoc, collection, query, limit, getDocs } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
 
   /* ==========================================
-     1. GLOBALE TILSTANDER & CACHING
+     1. GLOBALE TILSTANDER & HJELPEFUNKSJONER
      ========================================== */
   let currentUser = null;
   let aktivProfil = localStorage.getItem("aktivProfil") || "Hovedprofil";
@@ -1102,9 +1102,19 @@
 
   let watchBtn, addToListBtn, bgImg;
 
+  // Trygg håndtering av localStorage for å unngå krasj (QuotaExceeded eller Inkognito)
+  function tryggLagring(key, value) {
+    try {
+      localStorage.setItem(key, value);
+    } catch (e) {
+      console.warn("Kunne ikke lagre til localStorage (mulig full eller blokkert):", e);
+    }
+  }
+
   function erMobilEllerNettbrett() {
-    const touchEnhet = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
+    const touchEnhet = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0) || (navigator.msMaxTouchPoints > 0);
     const breddeSjekk = window.innerWidth <= 1024;
+    // Nyere iPader rapporterer som Mac, vi fanger dem her:
     const isIPad = /Macintosh/i.test(navigator.userAgent) && navigator.maxTouchPoints > 1;
     return (touchEnhet && breddeSjekk) || isIPad;
   }
@@ -1140,8 +1150,8 @@
       }
 
       const cacheKey = `media_cache_${navn}`;
-      // Endret til localStorage for lynrask innlasting på tvers av økter
-      const cachedData = localStorage.getItem(cacheKey);
+      let cachedData = null;
+      try { cachedData = localStorage.getItem(cacheKey); } catch (e) {}
 
       if (cachedData) {
         try {
@@ -1170,8 +1180,7 @@
         }
 
         if (data) {
-          // Lagrer dataen permanent i nettleseren så neste visning er umiddelbar
-          localStorage.setItem(cacheKey, JSON.stringify({ data, type }));
+          tryggLagring(cacheKey, JSON.stringify({ data, type }));
         }
       }
 
@@ -1228,7 +1237,7 @@
       }
     }
 
-    // Beskrivelse
+    // Beskrivelse og "Mer"-knapp med lukket minnelekkasje
     const descEl = document.querySelector(".description");
     if (descEl) {
       const fullText = data.beskrivelse || "";
@@ -1261,14 +1270,21 @@
           popupBox.appendChild(closeBtn);
           popupBox.appendChild(textPara);
           overlay.appendChild(popupBox);
-
           document.body.appendChild(overlay);
 
-          const lukkModal = () => overlay.remove();
-          closeBtn.addEventListener("click", lukkModal);
-          overlay.addEventListener("click", (e) => {
+          // Opprydding av event listeners for å unngå lekkasjer
+          const lukkModal = () => {
+            closeBtn.removeEventListener("click", lukkModal);
+            overlay.removeEventListener("click", overlayKlikk);
+            overlay.remove();
+          };
+          
+          const overlayKlikk = (e) => {
             if (e.target === overlay) lukkModal();
-          });
+          };
+
+          closeBtn.addEventListener("click", lukkModal);
+          overlay.addEventListener("click", overlayKlikk);
         });
       } else {
         descEl.textContent = fullText;
@@ -1324,12 +1340,17 @@
       }
     }
 
-    if (erUtilgjengelig && watchBtn) {
-      watchBtn.classList.add("locked");
+    // Sikker event-binding (fjerner gamle lyttere først)
+    if (watchBtn) {
+      if (erUtilgjengelig) watchBtn.classList.add("locked");
+      watchBtn.removeEventListener("click", handterWatchClick);
+      watchBtn.addEventListener("click", handterWatchClick);
     }
-
-    if (watchBtn) watchBtn.addEventListener("click", handterWatchClick);
-    if (addToListBtn) addToListBtn.addEventListener("click", handterListClick);
+    
+    if (addToListBtn) {
+      addToListBtn.removeEventListener("click", handterListClick);
+      addToListBtn.addEventListener("click", handterListClick);
+    }
 
     initTrailer();
 
@@ -1350,13 +1371,16 @@
     }
 
     // Profilbilde
-    const lagretBilde = localStorage.getItem("profilbilde");
+    let lagretBilde = null;
+    try { lagretBilde = localStorage.getItem("profilbilde"); } catch(e) {}
     const menyProfilbilde = document.getElementById("menyProfilbilde");
     if (lagretBilde && menyProfilbilde && erTryggUrl(lagretBilde)) {
       menyProfilbilde.src = lagretBilde;
     }
 
-    const cachedProfiles = localStorage.getItem("watch_nordic_profiles_cache");
+    let cachedProfiles = null;
+    try { cachedProfiles = localStorage.getItem("watch_nordic_profiles_cache"); } catch(e) {}
+    
     if (cachedProfiles) {
       try {
         heleProfilArrayet = JSON.parse(cachedProfiles);
@@ -1373,7 +1397,6 @@
       byggAnbefalingerEllerEpisoder();
     }
 
-    // Viser selve innholdet når koden er ferdig
     document.body.classList.add("loaded");
   }
 
@@ -1504,7 +1527,7 @@
     heleProfilArrayet[indeks].historikk[navn] = status;
     heleProfilArrayet[indeks].minListe = minListe;
 
-    localStorage.setItem("watch_nordic_profiles_cache", JSON.stringify(heleProfilArrayet));
+    tryggLagring("watch_nordic_profiles_cache", JSON.stringify(heleProfilArrayet));
 
     try {
       const userDocRef = doc(db, "users", currentUser.uid);
@@ -1523,7 +1546,7 @@
 
         if (docSnap.exists()) {
           heleProfilArrayet = docSnap.data().profiler || [];
-          localStorage.setItem("watch_nordic_profiles_cache", JSON.stringify(heleProfilArrayet));
+          tryggLagring("watch_nordic_profiles_cache", JSON.stringify(heleProfilArrayet));
           erProfilLastetFraSkyen = true;
           synkroniserLokalData();
         }
@@ -1531,7 +1554,7 @@
         console.error("Feil ved henting av brukerdata:", err);
       }
     } else {
-      localStorage.removeItem("watch_nordic_profiles_cache");
+      try { localStorage.removeItem("watch_nordic_profiles_cache"); } catch(e){}
       sessionStorage.clear();
       window.location.href = "index.html";
     }
@@ -1566,7 +1589,6 @@
       }
 
       let sesongNr, epNr;
-
       if (sisteEp && data.sesonger[sisteEp.sesong]?.episoder[sisteEp.episode]) {
         sesongNr = sisteEp.sesong;
         epNr = sisteEp.episode;
@@ -1676,7 +1698,7 @@
 
       if (!erLåst) {
         epCard.addEventListener("click", () => {
-          localStorage.setItem(`${navn}-siste-episode`, JSON.stringify({ sesong: sesongNr, episode: epNr }));
+          tryggLagring(`${navn}-siste-episode`, JSON.stringify({ sesong: sesongNr, episode: epNr }));
           const returUrl = encodeURIComponent(window.location.href);
           window.location.href = `film-mal.html?navn=${encodeURIComponent(navn)}&sesong=${encodeURIComponent(sesongNr)}&episode=${encodeURIComponent(epNr)}&returUrl=${returUrl}`;
         });
@@ -1730,14 +1752,14 @@
 
       try {
         let filmer = [];
-        // Endret til localStorage her også, slik at anbefalinger laster umiddelbart
-        const cacheAnbefalinger = localStorage.getItem("anbefalinger_cache");
+        let cacheAnbefalinger = null;
+        try { cacheAnbefalinger = localStorage.getItem("anbefalinger_cache"); } catch(e){}
 
         if (cacheAnbefalinger) {
           try {
             filmer = JSON.parse(cacheAnbefalinger);
           } catch (e) {
-            localStorage.removeItem("anbefalinger_cache");
+            try { localStorage.removeItem("anbefalinger_cache"); } catch(e){}
           }
         }
 
@@ -1745,7 +1767,7 @@
           const q = query(collection(db, "filmer"), limit(10));
           const filmerSnap = await getDocs(q);
           filmerSnap.forEach(d => filmer.push({ id: d.id, ...d.data() }));
-          localStorage.setItem("anbefalinger_cache", JSON.stringify(filmer));
+          tryggLagring("anbefalinger_cache", JSON.stringify(filmer));
         }
 
         const fragment = document.createDocumentFragment();
@@ -1817,7 +1839,7 @@
 
       trailerVideo.addEventListener("error", () => {
         console.warn("Trailer-feil. Viser bakgrunnsbilde isteden.");
-        if (trailerVideo) trailerVideo.style.display = "none";
+        trailerVideo.style.display = "none";
         if (videoControls) videoControls.style.display = "none";
         if (bgImg) bgImg.style.opacity = "1";
       });
@@ -1838,8 +1860,9 @@
         if (videoControls) videoControls.style.opacity = "0";
       });
 
+      // Sikrer at vi ikke legger til flere lyttere ved re-init
       if (pauseBtn) {
-        pauseBtn.addEventListener("click", () => {
+        const togglePlay = () => {
           if (trailerVideo.paused) {
             trailerVideo.play();
             pauseBtn.innerHTML = '<i class="fas fa-pause"></i>';
@@ -1847,22 +1870,35 @@
             trailerVideo.pause();
             pauseBtn.innerHTML = '<i class="fas fa-play"></i>';
           }
-        });
+        };
+        pauseBtn.removeEventListener("click", pauseBtn._togglePlay || togglePlay);
+        pauseBtn._togglePlay = togglePlay;
+        pauseBtn.addEventListener("click", togglePlay);
       }
 
       if (soundBtn) {
-        soundBtn.addEventListener("click", () => {
+        const toggleSound = () => {
           trailerVideo.muted = !trailerVideo.muted;
           soundBtn.innerHTML = trailerVideo.muted ? '<i class="fas fa-volume-mute"></i>' : '<i class="fas fa-volume-up"></i>';
-        });
+        };
+        soundBtn.removeEventListener("click", soundBtn._toggleSound || toggleSound);
+        soundBtn._toggleSound = toggleSound;
+        soundBtn.addEventListener("click", toggleSound);
       }
     } else {
-      if (trailerVideo) trailerVideo.style.display = "none";
+      // Hvis det er mobil/nettbrett fjerner vi src for å hindre unødig nedlasting (sparer RAM og nett)
+      if (trailerVideo) {
+        trailerVideo.pause();
+        trailerVideo.removeAttribute('src'); 
+        trailerVideo.load(); 
+        trailerVideo.style.display = "none";
+      }
       if (videoControls) videoControls.style.display = "none";
       if (bgImg) bgImg.style.opacity = "1";
     }
   }
 
+  // Optimalisert scroll-håndtering
   let ticking = false;
   function oppdaterTopNavTilstand() {
     const nav = document.querySelector(".top-nav");
@@ -1886,7 +1922,7 @@
   oppdaterTopNavTilstand();
 
   if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", () => { init(); }, { once: true });
+    document.addEventListener("DOMContentLoaded", init, { once: true });
   } else {
     init();
   }
