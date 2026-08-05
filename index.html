@@ -1,1 +1,98 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"/>
+    <meta name="theme-color" content="#050F11" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self' https: data: blob:; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com; script-src 'self' 'unsafe-inline' https://www.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' data: https: blob:; connect-src 'self' https:; font-src 'self' https://cdnjs.cloudflare.com; object-src 'none'; base-uri 'self'; frame-ancestors 'none';" />
+    <meta name="referrer-policy" content="strict-origin-when-cross-origin" />
+    <title>Watch Nordic™</title>
+    
+    <link rel="icon" type="image/png" href="https://static.wixstatic.com/media/d9ace9_95bbe3f5ff4b4aab9314a8d08804344e~mv2.png" />
+    <!-- FontAwesome for ikoner -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Hoved-CSS -->
+    <link rel="stylesheet" href="stil.css">
+</head>
+<body>
 
+    <!-- ========================================== -->
+    <!-- 1. FAST TOPPMENY (Blinker aldri)           -->
+    <!-- ========================================== -->
+    <header class="top-nav">
+        <div class="nav-left">
+            <a href="#hjem" onclick="byttSide('hjem')">
+                <img src="https://res.cloudinary.com/ocv4zhpk/image/upload/v1785855892/d9ace9_081ea242211b45a2801873c3067e1205_mv2_vtfrdn.png" alt="Watch Nordic" class="logo">
+            </a>
+        </div>
+
+        <nav class="nav-links">
+            <a href="#hjem" id="link-hjem" onclick="byttSide('hjem')" class="active"><i class="fas fa-house"></i> Hjem</a>
+            <a href="#filmer" id="link-filmer" onclick="byttSide('filmer')"><i class="fas fa-clapperboard"></i> Filmer</a>
+            <a href="#serier" id="link-serier" onclick="byttSide('serier')"><i class="fas fa-tv"></i> Serier</a>
+            <a href="#sok" id="link-sok" onclick="byttSide('sok')"><i class="fas fa-search"></i> Søk</a>
+        </nav>
+
+        <div class="nav-right">
+            <a href="#konto" onclick="byttSide('konto')" class="konto-ikon"><i class="fas fa-gear"></i></a>
+            
+            <a href="hvem-ser-på.html" class="profilmeny">
+                <img id="menyProfilbilde" src="https://res.cloudinary.com/ocv4zhpk/image/upload/v1785856037/Muffins_profil_100_k1qd4h.png" alt="Profilbilde" class="profil-avatar-img" />
+            </a>
+        </div>
+    </header>
+
+    <!-- ========================================== -->
+    <!-- 2. HOVEDINNHOLD (SIDENE SOM BYTTES UT)      -->
+    <!-- ========================================== -->
+    <main>
+
+        <!-- A. HJEM-SEKSJON -->
+        <section id="view-hjem" class="side-visning">
+            <div class="hero-banner">
+                <h1>Velkommen til Watch Nordic</h1>
+            </div>
+            <div id="hjemContainer"></div>
+        </section>
+
+        <!-- B. FILM-SEKSJON -->
+        <section id="view-filmer" class="side-visning" style="display: none;">
+            <h2>Filmer</h2>
+            <div id="filmContainer"></div>
+        </section>
+
+        <!-- C. SERIE-SEKSJON -->
+        <section id="view-serier" class="side-visning" style="display: none;">
+            <h2>Serier</h2>
+            <div id="serierContainer"></div>
+        </section>
+
+        <!-- D. SØKE-SEKSJON -->
+        <section id="view-sok" class="side-visning" style="display: none;">
+            <h2>Søk</h2>
+            <input type="text" id="sokefelt" placeholder="Søk etter film eller serie..." oninput="utforSok()">
+            <div id="sokeResultater"></div>
+        </section>
+
+        <!-- E. KONTO-SEKSJON -->
+        <section id="view-konto" class="side-visning" style="display: none;">
+            <h2>Konto og Innstillinger</h2>
+        </section>
+
+    </main>
+
+    <!-- ========================================== -->
+    <!-- 3. FOOTER                                  -->
+    <!-- ========================================== -->
+    <footer class="footer">
+        <div class="footer-copy">
+            &copy; 2026 Watch Nordic™. Alle rettigheter reservert.
+        </div>
+    </footer>
+
+    <!-- Appens hjerne -->
+    <script type="module" src="app.js"></script>
+</body>
+</html>
