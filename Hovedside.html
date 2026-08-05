@@ -1198,7 +1198,7 @@
     }
   }
 
-  // ==================== REIDREKTERINGSVAKT & REALTIDS PROFIL-SYNC ==================== //
+  // ==================== OMDIRIGERING & REALTIDS PROFIL-SYNC ==================== //
   if (auth) {
     onAuthStateChanged(auth, (user) => {
       try {
@@ -1249,7 +1249,6 @@
                   const gammelIsKids = localStorage.getItem("isKids") === "true";
                   const gammelMaks = localStorage.getItem("maksAldersgrense") || "12";
 
-                  // SIKKERHET: Unngår uendelig re-load ved å oppdatere localStorage først og kun laste på reell endring
                   if (gammelIsKids !== nyIsKids || gammelMaks !== nyMaks) {
                     localStorage.setItem("isKids", nyIsKids ? "true" : "false");
                     localStorage.setItem("maksAldersgrense", nyMaks);
@@ -1531,7 +1530,6 @@
     const tittelTekst = escapeHTML(item.tittel || 'Mangler tittel');
     const metaTekst = escapeHTML((Array.isArray(item.metadata) ? item.metadata : []).join(" • "));
 
-    // Metadata bevares i DOM-en via en div med 'display: none', slik at den er helt skjult fra galleriet.
     link.innerHTML = `
       ${bildeKilde ? `<img src="${escapeHTML(bildeKilde)}" alt="${tittelTekst}" loading="lazy">` : `<div style="width:100%; height:100%; background:#1a2629; display:flex; align-items:center; justify-content:center; padding:10px; text-align:center; font-size:12px; color:#fff;">${tittelTekst}</div>`}
       <div class="image-overlay">
@@ -1542,14 +1540,26 @@
       </div>
     `;
     
-    // Alternativt kan du også lagre metadataen som en data-attributt om du skulle trenge den til filtrering senere:
     link.setAttribute('data-metadata', metaTekst);
     
     return link;
   }
 
+  // ==================== HJELPEFUNKSJON FOR SEKSJONER & TITTEL ==================== //
+  function sjekkOgSkjulSeksjon(seksjonId, galleryId) {
+    const seksjon = document.getElementById(seksjonId);
+    const gallery = document.getElementById(galleryId);
+    if (!seksjon) return;
+
+    if (!gallery || gallery.children.length === 0) {
+      seksjon.style.display = "none";
+    } else {
+      seksjon.style.display = "block";
+    }
+  }
+
   // ==================== RENDERING FUNKSJONER ==================== //
-  function renderNyligLagtTil(galleryId, limit = 5) {
+  function renderNyligLagtTil(seksjonId, galleryId, limit = 5) {
     const gallery = document.getElementById(galleryId);
     if (!gallery) return;
     gallery.innerHTML = "";
@@ -1578,9 +1588,11 @@
     altInnhold.slice(0, limit).forEach(item => {
       gallery.appendChild(createGalleryItem(item.key, item.data));
     });
+
+    sjekkOgSkjulSeksjon(seksjonId, galleryId);
   }
 
-  function renderFilmGallery(galleryId, filterFunction, limit = null) {
+  function renderFilmGallery(seksjonId, galleryId, filterFunction, limit = null) {
     const gallery = document.getElementById(galleryId);
     if (!gallery) return;
     gallery.innerHTML = "";
@@ -1599,9 +1611,11 @@
     filmKeys.forEach(key => {
       gallery.appendChild(createGalleryItem(key, filmer[key]));
     });
+
+    sjekkOgSkjulSeksjon(seksjonId, galleryId);
   }
 
-  function renderSeries(galleryId) {
+  function renderSeries(seksjonId, galleryId) {
     const gallery = document.getElementById(galleryId);
     if (!gallery) return;
     gallery.innerHTML = "";
@@ -1618,9 +1632,11 @@
     serieKeys.forEach((key) => {
       gallery.appendChild(createGalleryItem(key, serier[key]));
     });
+
+    sjekkOgSkjulSeksjon(seksjonId, galleryId);
   }
 
-  function renderTop10(galleryId) {
+  function renderTop10(seksjonId, galleryId) {
     const gallery = document.getElementById(galleryId);
     if (!gallery) return;
     gallery.innerHTML = "";
@@ -1630,6 +1646,10 @@
       if (!film.publishDate) return true;
       return new Date(film.publishDate) <= new Date();
     });
+
+    if (erInnloggetSomBarn) {
+      filmKeys = filmKeys.filter(key => erEgnetForBarn(filmer[key]) && sjekkAldersgrense(filmer[key]));
+    }
 
     const today = new Date();
     const seed = today.getFullYear() * 1000 + today.getMonth() * 50 + today.getDate();
@@ -1663,9 +1683,11 @@
       wrapper.appendChild(number);
       gallery.appendChild(wrapper);
     });
+
+    sjekkOgSkjulSeksjon(seksjonId, galleryId);
   }
 
-  function renderDokumentarSerier(galleryId) {
+  function renderDokumentarSerier(seksjonId, galleryId) {
     const gallery = document.getElementById(galleryId);
     if (!gallery) return;
     gallery.innerHTML = "";
@@ -1682,6 +1704,8 @@
     serieKeys.forEach((key) => {
       gallery.appendChild(createGalleryItem(key, serier[key]));
     });
+
+    sjekkOgSkjulSeksjon(seksjonId, galleryId);
   }
 
   // ==================== OPTIMALISERT FORTSETT Å SE ==================== //
@@ -1698,7 +1722,6 @@
         heleProfilArrayet = sikkerJSONParse(cacheData, []);
       }
 
-      // SIKKERHET: Slår opp enten på lagret indeks eller navnematch
       const aktivIndex = parseInt(localStorage.getItem("aktivProfilIndex"), 10) || 0;
       const aktivNavn = localStorage.getItem("aktivProfil");
       const profil = heleProfilArrayet[aktivIndex] || heleProfilArrayet.find(p => p && p.navn === aktivNavn);
@@ -1909,30 +1932,25 @@
   function byggSiden() {
     try {
       if (erInnloggetSomBarn) {
-        const skjulSeksjoner = ["nye-filmer-seksjon", "topp10-seksjon", "alle-filmer-seksjon", "serier-seksjon", "dokumentar-seksjon"];
-        skjulSeksjoner.forEach(id => {
-          const el = document.getElementById(id);
-          if (el) el.style.display = "none";
-        });
-        const barnSeksjon = document.getElementById("barn-seksjon");
-        if (barnSeksjon) barnSeksjon.style.display = "block";
-        renderFilmGallery("barn-galleri", (key) => erEgnetForBarn(filmer[key]) && sjekkAldersgrense(filmer[key]));
-      } else {
-        const seksjoner = ["nye-filmer-seksjon", "alle-filmer-seksjon", "serier-seksjon", "topp10-seksjon", "dokumentar-seksjon"];
-        seksjoner.forEach(id => {
-          const el = document.getElementById(id);
-          if (el) el.style.display = "block";
-        });
-
-        renderNyligLagtTil("nye-filmer-galleri", 5); 
-        renderTop10("topp10-filmer-galleri");
-        renderFilmGallery("filmer-galleri", null, 20);
-        renderSeries("serier-galleri");
-        renderDokumentarSerier("dokumentarserier-galleri");
+        renderNyligLagtTil("nye-filmer-seksjon", "nye-filmer-galleri", 5);
+        renderTop10("topp10-seksjon", "topp10-filmer-galleri");
+        renderFilmGallery("alle-filmer-seksjon", "filmer-galleri", (key) => erEgnetForBarn(filmer[key]) && sjekkAldersgrense(filmer[key]), 20);
+        renderSeries("serier-seksjon", "serier-galleri");
+        renderDokumentarSerier("dokumentar-seksjon", "dokumentarserier-galleri");
         
         const barnSeksjon = document.getElementById("barn-seksjon");
         if (barnSeksjon) barnSeksjon.style.display = "block";
-        renderFilmGallery("barn-galleri", (key) => erEgnetForBarn(filmer[key]));
+        renderFilmGallery("barn-seksjon", "barn-galleri", (key) => erEgnetForBarn(filmer[key]) && sjekkAldersgrense(filmer[key]));
+      } else {
+        const barnSeksjon = document.getElementById("barn-seksjon");
+        if (barnSeksjon) barnSeksjon.style.display = "block";
+
+        renderNyligLagtTil("nye-filmer-seksjon", "nye-filmer-galleri", 5); 
+        renderTop10("topp10-seksjon", "topp10-filmer-galleri");
+        renderFilmGallery("alle-filmer-seksjon", "filmer-galleri", null, 20);
+        renderSeries("serier-seksjon", "serier-galleri");
+        renderDokumentarSerier("dokumentar-seksjon", "dokumentarserier-galleri");
+        renderFilmGallery("barn-seksjon", "barn-galleri", (key) => erEgnetForBarn(filmer[key]));
       }
 
       renderContinueWatching();
