@@ -1,27 +1,25 @@
 import { auth } from "./firebase-oppsett.js";
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-auth.js";
 
-// Global variabel for å holde styr på om spilleren er i gang eller om videoen spilles
+// Tilstandsvariabler
 let avspillerAktiv = false;
+let forrigeSide = 'hjem';
 
-// 1. Sjekk innlogging med en gang siden lastes
+// 1. Sjekk innlogging ved lasting
 window.addEventListener('DOMContentLoaded', () => {
     onAuthStateChanged(auth, (user) => {
         if (!user) {
-            // Ikke logget inn -> Kast brukeren til innloggingssiden
             window.location.href = "Innlogging.html";
         } else {
-            // Logget inn -> Hent profilbilde og åpne startsiden
             settInnProfilbilde();
             byttSide('hjem');
         }
     });
 
-    // Koble opp standard lyttere for avspilleren
     initialiserAvspillerKontroller();
 });
 
-// 2. Henter profilbilde fra localStorage uten blinking
+// 2. Hent profilbilde fra localStorage
 function settInnProfilbilde() {
     const lagretBilde = localStorage.getItem("profilbilde");
     const menyBildeEl = document.getElementById("menyProfilbilde");
@@ -31,25 +29,37 @@ function settInnProfilbilde() {
     }
 }
 
-// 3. Hovedfunksjon for å bytte side uten blinking
+// 3. Sidebytte og visningsstyring
 function byttSide(sideNavn) {
-    // Hvis vi forlater avspilleren, stopp videoen for å spare ressurser
     if (sideNavn !== 'avspiller') {
+        forrigeSide = sideNavn;
         stoppOgNullstillVideo();
     }
 
-    // 1. Skjul alle seksjoner
+    // Skjul navbar og footer automatisk i fullskjermspiller
+    const navbar = document.querySelector('.navbar') || document.querySelector('nav');
+    const footer = document.querySelector('footer');
+
+    if (sideNavn === 'avspiller') {
+        if (navbar) navbar.style.display = 'none';
+        if (footer) footer.style.display = 'none';
+    } else {
+        if (navbar) navbar.style.display = 'flex';
+        if (footer) footer.style.display = 'block';
+    }
+
+    // Skjul alle visninger
     document.querySelectorAll('.side-visning').forEach(seksjon => {
         seksjon.style.display = 'none';
     });
 
-    // 2. Vis den seksjonen brukeren trykket på
+    // Vis aktiv visning
     const aktivSeksjon = document.getElementById(`view-${sideNavn}`);
     if (aktivSeksjon) {
         aktivSeksjon.style.display = 'block';
     }
 
-    // 3. Oppdater hvilken meny-knapp som lyser opp (hvis knappen finnes)
+    // Oppdater aktiv fane i menyen
     document.querySelectorAll('.nav-links a').forEach(link => {
         link.classList.remove('active');
     });
@@ -58,25 +68,12 @@ function byttSide(sideNavn) {
         aktivLink.classList.add('active');
     }
 
-    // 4. Start funksjonene for den spesifikke siden
-    if (sideNavn === 'hjem') {
-        // Eksempel: lastInnStartsiden();
-    } else if (sideNavn === 'serier') {
-        // lastInnSerierFraFirebase();
-    } else if (sideNavn === 'film') {
-        // lastInnFilmFraFirebase();
-    } else if (sideNavn === 'nyheter') {
-        // lastInnWatchOriginals();
-    } else if (sideNavn === 'min-liste') {
-        // lastInnMinListe();
-    } else if (sideNavn === 'sok') {
-        // klargjorSokefelt();
-    } else if (sideNavn === 'avspiller') {
+    if (sideNavn === 'avspiller') {
         avspillerAktiv = true;
     }
 }
 
-// 4. Funksjon for å starte avspilleren med en gitt videolenke og tittel
+// 4. Åpne og starte videospiller
 function apneAvspiller(videoUrl, tittel) {
     const videoEl = document.getElementById('video');
     const tittelEl = document.querySelector('.movie-title');
@@ -94,7 +91,7 @@ function apneAvspiller(videoUrl, tittel) {
     byttSide('avspiller');
 }
 
-// 5. Stopp video og gå tilbake
+// 5. Stopp video og nullstill
 function stoppOgNullstillVideo() {
     const videoEl = document.getElementById('video');
     if (videoEl) {
@@ -104,27 +101,32 @@ function stoppOgNullstillVideo() {
     avspillerAktiv = false;
 }
 
-// 6. Koble opp knapper inni videospilleren (Tilbake-knapp etc.)
+// 6. Naviger tilbake til forrige side
+function gaTilbake() {
+    stoppOgNullstillVideo();
+    byttSide(forrigeSide);
+}
+
+// 7. Koble opp lyttere for avspiller
 function initialiserAvspillerKontroller() {
     const tilbakeKnapp = document.getElementById('backButton');
     if (tilbakeKnapp) {
         tilbakeKnapp.addEventListener('click', (e) => {
             e.preventDefault();
-            stoppOgNullstillVideo();
-            byttSide('hjem'); // Hopper tilbake til hjem, eller du kan lagre forrige side
+            gaTilbake();
         });
     }
 
-    // Eksempel på knytting mot "Se nå"-knappen i Hjem-banneret
     const bannerSeNa = document.getElementById('banner-se-na');
     if (bannerSeNa) {
         bannerSeNa.addEventListener('click', () => {
-            // Erstatt med din faktiske videostrekk og tittel
             apneAvspiller("https://www.w3schools.com/html/mov_bbb.mp4", "Big Buck Bunny");
         });
     }
 }
 
-// Gjør funksjonene tilgjengelige globalt for HTML-en
+// Global eksponering for inline HTML-eventer
 window.byttSide = byttSide;
 window.apneAvspiller = apneAvspiller;
+window.stoppOgNullstillVideo = stoppOgNullstillVideo;
+window.gaTilbake = gaTilbake;
