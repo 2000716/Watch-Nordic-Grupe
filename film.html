@@ -964,118 +964,106 @@
 </style>
 </head>
 <body>
-  <header class="top-nav">
-    <div class="nav-left">
-      <a href="Hovedside.html" class="watch-logo-svg">
-        <img src="https://res.cloudinary.com/ocv4zhpk/image/upload/v1785855892/d9ace9_081ea242211b45a2801873c3067e1205_mv2_vtfrdn.png" alt="Watch Nordic">
-      </a>
-    </div>
 
-    <nav class="nav-links">
-      <a href="Hovedside.html" class="active"><i class="fas fa-house"></i> Hjem</a>
-      <a href="Serier.html"><i class="fas fa-tv"></i> Serier</a>
-      <a href="Film.html"><i class="fas fa-clapperboard"></i> Filmer</a>
-      <a href="Nyheter.html"><i class="fas fa-star"></i> Watch Originals</a>
-      <a href="Min-Liste.html"><i class="fas fa-bookmark"></i> Min Liste</a>
-    </nav>
+    <div id="nav-placeholder"></div>
 
-    <div class="nav-right">
-      <a href="Søk.html" class="nav-search" aria-label="Søk">
-        <i class="fas fa-search"></i>
-      </a>
-
-      <a href="hvem-ser-på.html" class="profilmeny" id="profilmenyLink">
-        <div class="profil-avatar-wrap">
-          <div class="profil-avatar-bg"></div>
-          <img id="menyProfilbilde" src="https://via.placeholder.com/100" alt="Profilbilde" class="profil-avatar-img" />
-        </div>
-      </a>
-    </div>
-  </header>
-
-  <div id="page-loader">
-    <div class="spinner"></div>
-  </div>
-
-  <main>
-    <div class="hero">
-      <img class="background-image" id="backgroundImage" src="" alt="Bakgrunnsbilde" />
-      <video id="trailerVideo" class="background-video" muted playsinline></video>
-
-      <div class="overlay"></div>
-      <div class="bottom-fade"></div>
-
-      <div id="videoControls" class="video-controls">
-        <button id="pauseBtn"><i class="fas fa-pause"></i></button>
-        <button id="soundBtn"><i class="fas fa-volume-mute"></i></button>
-      </div>
-
-      <div class="content-wrapper">
-        <div class="logo-container">
-          <img class="film-logo" src="" alt="Filmlogo" />
+    <main>
+      
+        <div id="page-loader">
+            <div class="spinner"></div>
         </div>
 
-        <div class="left-content">
-          <div class="text-button-container">
-            <div class="buttons-column">
-              <button class="watch-button" id="watchBtn">
-                <i class="fas fa-play"></i><span> Se nå</span>
-              </button>
-              <button class="watch-button" id="addToListBtn">
-                <i class="fas fa-plus"></i><span> Legg til i Min liste</span>
-              </button>
+        <div class="hero">
+            <img class="background-image" id="backgroundImage" src="" alt="Bakgrunnsbilde" />
+            <video id="trailerVideo" class="background-video" muted playsinline></video>
+
+            <div class="overlay"></div>
+            <div class="bottom-fade"></div>
+
+            <div id="videoControls" class="video-controls">
+                <button id="pauseBtn"><i class="fas fa-pause"></i></button>
+                <button id="soundBtn"><i class="fas fa-volume-mute"></i></button>
             </div>
 
-            <div class="text-container">
-              <p class="description"></p>
-              <div class="metadata"></div>
-              <div class="availability-info" id="availabilityInfo"></div>
+            <div class="content-wrapper">
+                <div class="logo-container">
+                    <img class="film-logo" src="" alt="Filmlogo" />
+                </div>
+
+                <div class="left-content">
+                    <div class="text-button-container">
+                        <div class="buttons-column">
+                            <button class="watch-button" id="watchBtn">
+                                <i class="fas fa-play"></i><span> Se nå</span>
+                            </button>
+                            <button class="watch-button" id="addToListBtn">
+                                <i class="fas fa-plus"></i><span> Legg til i Min liste</span>
+                            </button>
+                        </div>
+
+                        <div class="text-container">
+                            <p class="description"></p>
+                            <div class="metadata"></div>
+                            <div class="availability-info" id="availabilityInfo"></div>
+                        </div>
+                        <div class="cast-info"></div>
+                    </div>
+                </div>
             </div>
-            <div class="cast-info"></div>
-          </div>
         </div>
-      </div>
-    </div>
 
-    <div class="recommendations">
-      <h2>Anbefalt til deg</h2>
-      <div class="gallery" id="recommendationGallery"></div>
-    </div>
-  </main>
+        <div class="recommendations">
+            <h2>Anbefalt til deg</h2>
+            <div class="gallery" id="recommendationGallery"></div>
+        </div>
 
-  <footer class="footer">
-    <div class="footer-socials">
-      <a href="https://www.instagram.com/watchnordicoriginals?igsh=aWRvcTJmMWl1NGRp&utm_source=qr"><i class="fab fa-instagram"></i></a>
-      <a href="https://www.tiktok.com/@watchnordicoriginals"><i class="fab fa-tiktok"></i></a>
-      <a href="#"><i class="fab fa-youtube"></i></a>
-    </div>
+    </main>
 
-    <div class="footer-links">
-      <a href="om.html">Om Watch Nordic</a>
-      <a href="kontakt.html">Contact oss</a>
-      <a href="personvern.html">Personvern</a>
-      <a href="hjelp.html">Hjelpesenter</a>
-      <a href="#">Jobber</a>
-      <a href="#">Investorinformasjon</a>
-      <a href="#">Vilkår</a>
-      <a href="#">Informasjonskapsler</a>
-      <a href="#">Juridisk informasjon</a>
-      <a href="#">Bedriftskonto</a>
-      <a href="#">Gavekort</a>
-      <a href="#">Enheter</a>
-    </div>
+    <footer class="footer">
+        <div class="footer-socials">
+            <a href="https://www.instagram.com/watchnordicoriginals?igsh=aWRvcTJmMWl1NGRp&utm_source=qr"><i class="fab fa-instagram"></i></a>
+            <a href="https://www.tiktok.com/@watchnordicoriginals"><i class="fab fa-tiktok"></i></a>
+            <a href="#"><i class="fab fa-youtube"></i></a>
+        </div>
 
-    <div class="footer-copy">
-      © 2026 Watch Nordic™
-    </div>
+        <div class="footer-links">
+            <a href="om.html">Om Watch Nordic</a>
+            <a href="kontakt.html">Contact oss</a>
+            <a href="personvern.html">Personvern</a>
+            <a href="hjelp.html">Hjelpesenter</a>
+            <a href="#">Jobber</a>
+            <a href="#">Investorinformasjon</a>
+            <a href="#">Vilkår</a>
+            <a href="#">Informasjonskapsler</a>
+            <a href="#">Juridisk informasjon</a>
+            <a href="#">Bedriftskonto</a>
+            <a href="#">Gavekort</a>
+            <a href="#">Enheter</a>
+        </div>
 
-    <div class="footer-bottom">
-      Alle varemerker fra WATCH NORDIC™, WATCH NORDIC ORIGINALS™ og alle øvrige tilknyttede immaterielle rettigheter tilhører Watch Nordic Group og brukes under lisens av Watch Nordic™. Alle varemerker, logoer, filmer, serier, bilder, design og øvrige tilknyttede immaterielle rettigheter tilhører sine respektive eiere. Alt innhold er beskyttet av opphavsrett og internasjonale varemerkelover. Alle rettigheter forbeholdt.
-    </div>
-  </footer>
+        <div class="footer-copy">
+            © 2026 Watch Nordic™
+        </div>
 
-<script src="meny.js"></script>
-<script src="lader.js"></script>
+        <div class="footer-bottom">
+            Alle varemerker fra WATCH NORDIC™, WATCH NORDIC ORIGINALS™ og alle øvrige tilknyttede immaterielle rettigheter tilhører Watch Nordic Group og brukes under lisens av Watch Nordic™. Alle varemerker, logoer, filmer, serier, bilder, design og øvrige tilknyttede immaterielle rettigheter tilhører sine respektive eiere. Alt innhold er beskyttet av opphavsrett og internasjonale varemerkelover. Alle rettigheter forbeholdt.
+        </div>
+    </footer>
+
+    <script>
+        fetch('meny.html')
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById('nav-placeholder').innerHTML = data;
+                
+                if (typeof initNav === 'function') {
+                    initNav();
+                }
+            });
+    </script>
+
+    <script src="meny.js"></script>
+    <script src="lader.js"></script>
 <script type="module">
   import { auth, db } from "./firebase-oppsett.js";
   import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-auth.js";
