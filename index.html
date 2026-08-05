@@ -299,7 +299,7 @@
       color: #555;
     }
 
-    /* ================= HERO POSTER WALL (VARIASJON MED VANLIG OG VERTIKAL) ================= */
+    /* ================= HERO POSTER WALL ================= */
     .hero-wall{
       position:absolute;
       inset:0;
@@ -325,7 +325,6 @@
       align-items: center;
     }
 
-    /* Fellesstil for alle bildekort i veggen */
     .wall-row img {
       object-fit: cover;
       border-radius: 6px;
@@ -333,13 +332,11 @@
       transition: transform 0.3s ease;
     }
 
-    /* Horisontal / Vanlig bakgrunnsbilde */
     .wall-row img.horizontal {
       width: 260px;
       height: 146px;
     }
 
-    /* Vertikal poster (høyere og smalere) */
     .wall-row img.vertical {
       width: 110px;
       height: 165px;
@@ -748,7 +745,7 @@
     </div>
   </footer>
 
-  <!-- HENT BILDER FRA FIREBASE MED LOKAL CACHING OG VARIASJON -->
+  <!-- HENT BILDER FRA FIREBASE (MED POSTER OG POSTERVERTIKAL) -->
   <script type="module">
     import { db } from "./firebase-oppsett.js";
     import { collection, getDocs } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
@@ -760,8 +757,8 @@
       document.querySelector(".row4")
     ];
 
-    const CACHE_KEY = "watch_nordic_poster_wall_cache";
-    const CACHE_TIME_KEY = "watch_nordic_poster_wall_time";
+    const CACHE_KEY = "watch_nordic_poster_wall_cache_v2";
+    const CACHE_TIME_KEY = "watch_nordic_poster_wall_time_v2";
     const ONE_DAY_MS = 24 * 60 * 60 * 1000;
 
     async function lastInnPosters() {
@@ -780,20 +777,24 @@
 
       if (basePosters.length === 0) {
         try {
-          const filmerSnap = await getDocs(collection(db, "filmer"));
-          filmerSnap.forEach(doc => {
-            const data = doc.data();
-            // Samler både bakgrunn (horisontal) og poster (vertikal) hvis de finnes
-            if (data.poster) basePosters.push({ url: data.poster, type: 'vertical' });
-            if (data.bakgrunn) basePosters.push({ url: data.bakgrunn, type: 'horizontal' });
-          });
+          // Hjelpefunksjon for å hente ut fra samlinger
+          async function hentFraSamling(samlingNavn) {
+            const snap = await getDocs(collection(db, samlingNavn));
+            snap.forEach(doc => {
+              const data = doc.data();
+              // Henter vanlig/horisontal poster hvis feltet 'poster' finnes
+              if (data.poster) {
+                basePosters.push({ url: data.poster, type: 'horizontal' });
+              }
+              // Henter vertikal poster hvis feltet 'posterVertikal' finnes
+              if (data.posterVertikal) {
+                basePosters.push({ url: data.posterVertikal, type: 'vertical' });
+              }
+            });
+          }
 
-          const serierSnap = await getDocs(collection(db, "serier"));
-          serierSnap.forEach(doc => {
-            const data = doc.data();
-            if (data.poster) basePosters.push({ url: data.poster, type: 'vertical' });
-            if (data.bakgrunn) basePosters.push({ url: data.bakgrunn, type: 'horizontal' });
-          });
+          await hentFraSamling("filmer");
+          await hentFraSamling("serier");
 
           if (basePosters.length > 0) {
             localStorage.setItem(CACHE_KEY, JSON.stringify(basePosters));
@@ -818,10 +819,8 @@
                 img.src = item.url;
                 img.loading = "lazy";
                 
-                // Legger til klasse basert på om det er vertikal eller horisontal poster
-                // (Fallback til tilfeldig valg hvis objektet mangler 'type'-egenskap fra gammel cache)
-                const isVertical = item.type ? item.type === 'vertical' : (Math.random() > 0.6);
-                img.className = isVertical ? "vertical" : "horizontal";
+                // Setter klassen basert på databasetypen (horizontal eller vertical)
+                img.className = item.type === 'vertical' ? "vertical" : "horizontal";
 
                 rowFragment.appendChild(img);
               });
