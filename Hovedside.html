@@ -154,8 +154,8 @@
 
     .banner-meta {
       font-size: 16px;         
-      color: #ffffff;           
-      font-weight: 600;           
+      color: #ffffff;            
+      font-weight: 600;            
       letter-spacing: 0.5px;
       text-shadow: 0 1px 4px rgba(0,0,0,0.6); 
       margin-top: 4px;        
@@ -273,7 +273,7 @@
       border-radius: 5px;
       background: transparent;
       border: 2px solid transparent;
-      transition: border 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
+      transition: border-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
       overflow: hidden !important;
       flex-shrink: 0 !important;    
     }
@@ -296,6 +296,7 @@
       flex-shrink: 0 !important;
       text-decoration: none;
       position: relative;
+      transition: transform 0.3s ease; /* Jevn overgang når man drar over på PC */
     }
 
     .continue-media-wrap {
@@ -304,6 +305,8 @@
       height: 175px;
       border-radius: 5px;
       overflow: hidden;
+      border: 2px solid transparent; /* Gjøres klar for ramme på hover */
+      transition: border-color 0.3s ease, box-shadow 0.3s ease;
     }
 
     .continue-media-wrap img {
@@ -384,93 +387,51 @@
       }
     }
 
-/* ==========================================================================
-   5. TOP 10 GALLERI (STØRRE)
-   ========================================================================== */
-.top10-gallery {
-  display: flex;
-  flex-direction: row;
-  gap: 40px; /* Økt fra 30px for bedre luft mellom større kort */
-  padding: 20px 50px; /* Økt polstring slik at tallene ikke blir avskjært */
-  overflow-x: auto;
-  overflow-y: hidden;
-  -webkit-overflow-scrolling: touch;
-  scrollbar-width: none;
-}
-
-.top10-gallery::-webkit-scrollbar { display: none; }
-
-.top10-item {
-  position: relative;
-  display: inline-block;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: transform 0.3s ease;
-  flex-shrink: 0 !important;
-}
-
-.top10-item img {
-  width: 200px;  /* Økt fra 150px */
-  height: 300px; /* Økt fra 225px (beholder 2:3 stil-forholdet) */
-  object-fit: cover; /* Sikrer at bildet skalerer piffig uten å strekkes */
-  border-radius: 8px;
-  display: block;
-}
-
-.top10-number {
-  position: absolute;
-  bottom: -15px; /* Justert litt lengre ned for større tall */
-  left: -20px;   /* Justert litt lengre til venstre */
-  font-size: 90px; /* Økt fra 70px */
-  font-weight: 900;
-  line-height: 1;
-  color: transparent;
-  -webkit-text-stroke: 4px #00FFCC; /* Gjort streken litt tykkere (4px) */
-  z-index: 2;
-  transition: all 0.3s ease;
-  pointer-events: none;
-}
     /* ==========================================================================
-       6. HOVER OVERLAY FOR BILDER (PC)
+       5. TOP 10 GALLERI (STØRRE)
        ========================================================================== */
-    .image-overlay {
-      position: absolute !important;
-      inset: 0;
-      pointer-events: none;
-      opacity: 0;
-      transition: opacity 0.3s ease, transform 0.3s ease;
-      background: linear-gradient(
-        to top,
-        rgba(0, 0, 0, 0.95) 0%,    
-        rgba(0, 0, 0, 0.7) 50%,    
-        rgba(0, 0, 0, 0.2) 80%,
-        rgba(0, 0, 0, 0) 100%        
-      );
-      border-radius: inherit;
+    .top10-gallery {
       display: flex;
-      align-items: flex-end;
-      z-index: 3;
+      flex-direction: row;
+      gap: 40px; 
+      padding: 20px 50px; 
+      overflow-x: auto;
+      overflow-y: hidden;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
     }
 
-    .overlay-content {
-      padding: 14px;
-      width: 100%;
-      z-index: 3;
+    .top10-gallery::-webkit-scrollbar { display: none; }
+
+    .top10-item {
+      position: relative;
+      display: inline-block;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: transform 0.3s ease;
+      flex-shrink: 0 !important;
     }
 
-    .overlay-title {
-      font-size: 15px;
-      font-weight: 700;
-      color: #ffffff;
-      margin-bottom: 4px;
-      text-shadow: 0 1px 4px rgba(0, 0, 0, 0.6);
+    .top10-item img {
+      width: 200px;  
+      height: 300px; 
+      object-fit: cover; 
+      border-radius: 8px;
+      display: block;
     }
 
-    .overlay-meta {
-      font-size: 13px;
-      color: rgba(255, 255, 255, 0.85);
-      font-weight: 500;
-      text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+    .top10-number {
+      position: absolute;
+      bottom: -15px; 
+      left: -20px;   
+      font-size: 90px; 
+      font-weight: 900;
+      line-height: 1;
+      color: transparent;
+      -webkit-text-stroke: 4px #00FFCC; 
+      z-index: 2;
+      transition: all 0.3s ease;
+      pointer-events: none;
     }
 
     /* ==========================================================================
@@ -597,17 +558,30 @@
        9. HOVER EFFEKTER KUN FOR ENHETER MED MUS (PC / LAPTOP)
        ========================================================================== */
     @media (hover: hover) {
-      .image-gallery a:hover, .continue-image-gallery a:hover, .gallery-item:hover {
+      /* Vanlige gallerier */
+      .image-gallery a:hover, .gallery-item:hover {
+        z-index: 999;
+        transform: scale(1.05);
+        border-color: #00FFCC; 
+        box-shadow: 0 4px 15px rgba(0, 255, 204, 0.3);
+      }
+
+      /* Fortsett å se-kort (forstørrer hele kortet, rammer inn bilde-delen) */
+      .continue-item:hover {
         z-index: 999;
         transform: scale(1.05);
       }
-
-      .image-gallery a:hover img, .continue-image-gallery a:hover img, .gallery-item:hover img {
-        transform: scale(1.0);
+      .continue-item:hover .continue-media-wrap {
+        border-color: #00FFCC;
+        box-shadow: 0 4px 15px rgba(0, 255, 204, 0.3);
       }
 
+      /* Top 10 galleri */
       .top10-item:hover { 
         transform: scale(1.05); 
+        outline: 2px solid #00FFCC; 
+        outline-offset: -2px;
+        border-radius: 8px;
       }
 
       .top10-item:hover .top10-number {
@@ -615,11 +589,7 @@
         -webkit-text-stroke: 0;
       }
 
-      .image-gallery a:hover .image-overlay,
-      .gallery-item:hover .image-overlay {
-        opacity: 1;
-      }
-
+      /* Piler */
       .scroll-button {
         display: flex;
         position: absolute;
@@ -686,261 +656,260 @@
       }
     }
 
-/* ==========================================================================
-   10. MOBIL-OPTIMALISERING (HORISONTALE GALLERIER PÅ MOBIL)
-   ========================================================================== */
-@media (max-width: 768px) {
-  html, body {
-    background: #091B1E !important;
-    padding-bottom: 0 !important; 
-  }
+    /* ==========================================================================
+       10. MOBIL-OPTIMALISERING (HORISONTALE GALLERIER PÅ MOBIL)
+       ========================================================================== */
+    @media (max-width: 768px) {
+      html, body {
+        background: #091B1E !important;
+        padding-bottom: 0 !important; 
+      }
 
-  main {
-    padding-left: 0 !important;
-    padding-right: 0 !important;
-    margin-left: 0 !important;
-    margin-right: 0 !important;
-  }
+      main {
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+      }
 
-  /* HERO BANNER MOBIL */
-  .hero-banner {
-    height: 55vh !important; 
-    min-height: 360px !important;
-    max-height: 500px !important;
-    margin-bottom: 20px !important;
-    background-color: #091B1E !important;
-  }
+      /* HERO BANNER MOBIL */
+      .hero-banner {
+        height: 55vh !important; 
+        min-height: 360px !important;
+        max-height: 500px !important;
+        margin-bottom: 20px !important;
+        background-color: #091B1E !important;
+      }
 
-  .hero-banner::after {
-    background: linear-gradient(to bottom, rgba(9, 27, 30, 0) 40%, rgba(9, 27, 30, 0.4) 60%, rgba(9, 27, 30, 0.8) 80%, #091B1E 100%) !important;
-  }
+      .hero-banner::after {
+        background: linear-gradient(to bottom, rgba(9, 27, 30, 0) 40%, rgba(9, 27, 30, 0.4) 60%, rgba(9, 27, 30, 0.8) 80%, #091B1E 100%) !important;
+      }
 
-  .banner-content {
-    bottom: 20px !important;
-    left: 20px !important;
-    max-width: calc(100% - 40px);
-    gap: 8px !important;
-  }
+      .banner-content {
+        bottom: 20px !important;
+        left: 20px !important;
+        max-width: calc(100% - 40px);
+        gap: 8px !important;
+      }
 
-  .film-logo {
-    width: 180px !important;
-    max-height: 75px !important;
-    object-fit: contain !important;
-    filter: drop-shadow(0px 2px 8px rgba(0,0,0,0.5));
-  }
+      .film-logo {
+        width: 180px !important;
+        max-height: 75px !important;
+        object-fit: contain !important;
+        filter: drop-shadow(0px 2px 8px rgba(0,0,0,0.5));
+      }
 
-  .banner-title { font-size: 28px !important; }
+      .banner-title { font-size: 28px !important; }
 
-  .banner-content p {
-    font-size: 12px !important;
-    line-height: 1.4;
-    color: #cccccc;
-    -webkit-line-clamp: 2;
-  }
+      .banner-content p {
+        font-size: 12px !important;
+        line-height: 1.4;
+        color: #cccccc;
+        -webkit-line-clamp: 2;
+      }
 
-  .banner-meta { font-size: 11px !important; }
-  .banner-buttons { gap: 10px !important; margin-top: 4px; }
+      .banner-meta { font-size: 11px !important; }
+      .banner-buttons { gap: 10px !important; margin-top: 4px; }
 
-  .watch-button {
-    font-size: 13px !important;
-    padding: 8px 22px !important;
-    font-weight: 700;
-    border-radius: 8px; 
-  }
+      .watch-button {
+        font-size: 13px !important;
+        padding: 8px 22px !important;
+        font-weight: 700;
+        border-radius: 8px; 
+      }
 
-  .add-button {
-    width: 36px !important;
-    height: 36px !important;
-    font-size: 14px !important;
-    border-radius: 8px;
-    background: rgba(255, 255, 255, 0.2);
-  }
+      .add-button {
+        width: 36px !important;
+        height: 36px !important;
+        font-size: 14px !important;
+        border-radius: 8px;
+        background: rgba(255, 255, 255, 0.2);
+      }
 
-  /* GENERELLE SEKSJONER PÅ MOBIL */
-  .gallery-section, .continue-watching-section {
-    margin-left: 0 !important; 
-    margin-right: 0 !important;
-    margin-bottom: 32px !important;
-    padding: 0 16px; 
-  }
+      /* GENERELLE SEKSJONER PÅ MOBIL */
+      .gallery-section, .continue-watching-section {
+        margin-left: 0 !important; 
+        margin-right: 0 !important;
+        margin-bottom: 32px !important;
+        padding: 0 16px; 
+      }
 
-  .gallery-section h2, .continue-watching-section h2 {
-    padding-left: 0 !important; 
-    margin-left: 0 !important;
-    font-size: 16px;
-    font-weight: 700;
-    letter-spacing: 0.5px;
-    color: #ffffff; 
-    margin-bottom: 8px;
-  }
+      .gallery-section h2, .continue-watching-section h2 {
+        padding-left: 0 !important; 
+        margin-left: 0 !important;
+        font-size: 16px;
+        font-weight: 700;
+        letter-spacing: 0.5px;
+        color: #ffffff; 
+        margin-bottom: 8px;
+      }
 
-  .scroll-button { display: none !important; }
+      .scroll-button { display: none !important; }
 
-  /* --------------------------------------------------------------------------
-     A) ALLE STANDARD GALLERIER: HORISONTAL RULLING (VERTIKALE POSTERE)
-     -------------------------------------------------------------------------- */
-  .image-gallery,
-  .coming-movies-gallery,
-  .top10-gallery,
-  .continue-image-gallery,
-  .gallery-section .image-gallery,
-  .gallery-section .coming-movies-gallery,
-  .gallery-section .top10-gallery,
-  .gallery-section .movies-gallery {
-    display: flex !important;
-    flex-direction: row !important;
-    overflow-x: auto !important;
-    overflow-y: hidden !important;
-    gap: 12px !important;
-    padding: 4px 0 12px 0 !important;
-    scroll-snap-type: x mandatory !important;
-    scroll-behavior: smooth !important;
-    -webkit-overflow-scrolling: touch !important;
-  }
+      /* --------------------------------------------------------------------------
+         A) ALLE STANDARD GALLERIER: HORISONTAL RULLING (VERTIKALE POSTERE)
+         -------------------------------------------------------------------------- */
+      .image-gallery,
+      .coming-movies-gallery,
+      .top10-gallery,
+      .continue-image-gallery,
+      .gallery-section .image-gallery,
+      .gallery-section .coming-movies-gallery,
+      .gallery-section .top10-gallery,
+      .gallery-section .movies-gallery {
+        display: flex !important;
+        flex-direction: row !important;
+        overflow-x: auto !important;
+        overflow-y: hidden !important;
+        gap: 12px !important;
+        padding: 4px 0 12px 0 !important;
+        scroll-snap-type: x mandatory !important;
+        scroll-behavior: smooth !important;
+        -webkit-overflow-scrolling: touch !important;
+      }
 
-  /* Standard størrelse på alle vanlige gallerier (130px bredde / 195px høyde) */
-  .gallery-section .image-gallery a, 
-  .gallery-section .gallery-item {
-    width: 130px !important;
-    flex-shrink: 0 !important;
-    scroll-snap-align: start !important;
-    position: relative !important;
-  }
+      /* Standard størrelse på alle vanlige gallerier (130px bredde / 195px høyde) */
+      .gallery-section .image-gallery a, 
+      .gallery-section .gallery-item {
+        width: 130px !important;
+        flex-shrink: 0 !important;
+        scroll-snap-align: start !important;
+        position: relative !important;
+      }
 
-  .gallery-section .image-gallery a img, 
-  .gallery-section .gallery-item img, 
-  .gallery-section .image-gallery img {
-    width: 100% !important;
-    height: 195px !important;
-    aspect-ratio: 2 / 3 !important;
-    object-fit: cover !important;
-    border-radius: 8px !important;
-  }
+      .gallery-section .image-gallery a img, 
+      .gallery-section .gallery-item img, 
+      .gallery-section .image-gallery img {
+        width: 100% !important;
+        height: 195px !important;
+        aspect-ratio: 2 / 3 !important;
+        object-fit: cover !important;
+        border-radius: 8px !important;
+      }
 
-  /* --------------------------------------------------------------------------
-     ENDRET 1: TOP 10 GALLERI (STØRRE ENN STANDARD)
-     -------------------------------------------------------------------------- */
-  .gallery-section .top10-item {
-    width: 155px !important;
-    flex-shrink: 0 !important;
-    scroll-snap-align: start !important;
-    position: relative !important;
-  }
+      /* --------------------------------------------------------------------------
+         ENDRET 1: TOP 10 GALLERI (STØRRE ENN STANDARD)
+         -------------------------------------------------------------------------- */
+      .gallery-section .top10-item {
+        width: 155px !important;
+        flex-shrink: 0 !important;
+        scroll-snap-align: start !important;
+        position: relative !important;
+      }
 
-  .gallery-section .top10-item img {
-    width: 100% !important;
-    height: 232px !important;
-    aspect-ratio: 2 / 3 !important;
-    object-fit: cover !important;
-    border-radius: 10px !important;
-  }
+      .gallery-section .top10-item img {
+        width: 100% !important;
+        height: 232px !important;
+        aspect-ratio: 2 / 3 !important;
+        object-fit: cover !important;
+        border-radius: 10px !important;
+      }
 
-  /* Tilpasning av tall for Top 10 */
-  .top10-number {
-    font-size: 44px !important;
-    left: 2px !important;
-    bottom: 2px !important;
-    -webkit-text-stroke: 1.5px rgba(0, 255, 204, 0.8) !important;
-  }
+      /* Tilpasning av tall for Top 10 */
+      .top10-number {
+        font-size: 44px !important;
+        left: 2px !important;
+        bottom: 2px !important;
+        -webkit-text-stroke: 1.5px rgba(0, 255, 204, 0.8) !important;
+      }
 
-  /* --------------------------------------------------------------------------
-     ENDRET 2: KUN FILM-GALLERIET ("Filmer" - ID: filmer-galleri / alle-filmer-seksjon)
-     -------------------------------------------------------------------------- */
-  #alle-filmer-seksjon .gallery-item,
-  #alle-filmer-seksjon a,
-  #filmer-galleri .gallery-item,
-  #filmer-galleri a {
-    width: 100px !important; /* Gjort mindre enn standard (130px) */
-    flex-shrink: 0 !important;
-  }
+      /* --------------------------------------------------------------------------
+         ENDRET 2: KUN FILM-GALLERIET
+         -------------------------------------------------------------------------- */
+      #alle-filmer-seksjon .gallery-item,
+      #alle-filmer-seksjon a,
+      #filmer-galleri .gallery-item,
+      #filmer-galleri a {
+        width: 100px !important; 
+        flex-shrink: 0 !important;
+      }
 
-  #alle-filmer-seksjon img,
-  #filmer-galleri img {
-    width: 100% !important;
-    height: 150px !important; /* Tilpasset høyde for 2/3-forhold (100px * 1.5) */
-    aspect-ratio: 2 / 3 !important;
-    object-fit: cover !important;
-    border-radius: 6px !important;
-  }
+      #alle-filmer-seksjon img,
+      #filmer-galleri img {
+        width: 100% !important;
+        height: 150px !important; 
+        aspect-ratio: 2 / 3 !important;
+        object-fit: cover !important;
+        border-radius: 6px !important;
+      }
 
-  /* --------------------------------------------------------------------------
-     B) "FORTSETT Å SE": HORISONTAL RULLING (HORISONTALE BILDER - URØRT)
-     -------------------------------------------------------------------------- */
-  .continue-watching-section .continue-image-gallery {
-    display: flex !important;
-    flex-direction: row !important;
-    overflow-x: auto !important;
-    overflow-y: hidden !important;
-    gap: 12px !important;
-    padding: 4px 0 12px 0 !important;
-    scroll-snap-type: x mandatory !important;
-    scroll-behavior: smooth !important;
-    -webkit-overflow-scrolling: touch !important;
-  }
+      /* --------------------------------------------------------------------------
+         B) "FORTSETT Å SE": HORISONTAL RULLING
+         -------------------------------------------------------------------------- */
+      .continue-watching-section .continue-image-gallery {
+        display: flex !important;
+        flex-direction: row !important;
+        overflow-x: auto !important;
+        overflow-y: hidden !important;
+        gap: 12px !important;
+        padding: 4px 0 12px 0 !important;
+        scroll-snap-type: x mandatory !important;
+        scroll-behavior: smooth !important;
+        -webkit-overflow-scrolling: touch !important;
+      }
 
-  .continue-image-gallery .continue-item {
-    width: 260px !important;
-    flex-shrink: 0 !important;
-    scroll-snap-align: start !important;
-    border-radius: 12px !important;
-    display: block !important;
-    text-decoration: none !important;
-    transform: none !important;
-    transition: none !important;
-  }
+      .continue-image-gallery .continue-item {
+        width: 260px !important;
+        flex-shrink: 0 !important;
+        scroll-snap-align: start !important;
+        border-radius: 12px !important;
+        display: block !important;
+        text-decoration: none !important;
+        transform: none !important;
+        transition: none !important;
+      }
 
-  .continue-media-wrap {
-    width: 260px !important;
-    height: 146px !important;
-    border-radius: 12px !important;
-    overflow: hidden !important; 
-    position: relative !important;
-    flex-shrink: 0 !important;
-  }
+      .continue-media-wrap {
+        width: 260px !important;
+        height: 146px !important;
+        border-radius: 12px !important;
+        overflow: hidden !important; 
+        position: relative !important;
+        flex-shrink: 0 !important;
+      }
 
-  .continue-media-wrap img {
-    width: 100% !important;
-    height: 100% !important;
-    object-fit: cover !important;
-    border-radius: 12px !important;
-  }
+      .continue-media-wrap img {
+        width: 100% !important;
+        height: 100% !important;
+        object-fit: cover !important;
+        border-radius: 12px !important;
+      }
 
-  .continue-title {
-    font-size: 13px !important;
-    margin-top: 6px !important;
-    display: block !important;
-    color: #ffffff !important;
-  }
+      .continue-title {
+        font-size: 13px !important;
+        margin-top: 6px !important;
+        display: block !important;
+        color: #ffffff !important;
+      }
 
-  .image-overlay { display: none !important; }
+      /* EKSTRA SEKSJONER */
+      .kids-banner {
+        height: 120px !important;
+        margin: 20px 16px !important; 
+        width: calc(100% - 32px) !important;
+        border-radius: 12px !important;
+      }
+      
+      .kids-overlay { 
+        padding-left: 20px !important; 
+        background: linear-gradient(to right, rgba(9,27,30,0.9), rgba(9,27,30,0.2)) !important;
+        border-radius: 12px !important;
+      }
+      .kids-overlay h2 { font-size: 18px !important; margin-bottom: 2px; }
+      .kids-overlay p { font-size: 12px !important; }
 
-  /* EKSTRA SEKSJONER */
-  .kids-banner {
-    height: 120px !important;
-    margin: 20px 16px !important; 
-    width: calc(100% - 32px) !important;
-    border-radius: 12px !important;
-  }
-  
-  .kids-overlay { 
-    padding-left: 20px !important; 
-    background: linear-gradient(to right, rgba(9,27,30,0.9), rgba(9,27,30,0.2)) !important;
-    border-radius: 12px !important;
-  }
-  .kids-overlay h2 { font-size: 18px !important; margin-bottom: 2px; }
-  .kids-overlay p { font-size: 12px !important; }
+      .footer {
+        display: flex !important;
+        padding: 40px 20px 35px !important; 
+        margin-top: 50px !important;
+        background: #091B1E !important;
+      }
+      .footer-links {
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 15px 20px !important;
+      }
+    }
 
-  .footer {
-    display: flex !important;
-    padding: 40px 20px 35px !important; 
-    margin-top: 50px !important;
-    background: #091B1E !important;
-  }
-  .footer-links {
-    grid-template-columns: repeat(2, 1fr) !important;
-    gap: 15px 20px !important;
-  }
-}
     /* ==========================================================================
        11. NØDBREMS (PORTRETT PÅ LANDSKAP PÅ MOBIL)
        ========================================================================== */
@@ -966,7 +935,7 @@
         padding: 20px;
       }
     }
-  </style>
+</style>
 </head>
 <body>
 <!-- Toppmenyen ligger UTENFOR main, slik at den vises umiddelbart -->
