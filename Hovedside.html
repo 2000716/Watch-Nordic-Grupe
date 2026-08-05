@@ -20,7 +20,7 @@
         Lokal CSS for DENNE undersiden.
         Slett alt her som har med .header, .navbar, .top-menu
         eller <nav> å gjøre!
-        -------------------------------------------------- */
+      -------------------------------------------------- */
     * {
       box-sizing: border-box;
       margin: 0;
@@ -270,9 +270,10 @@
     .image-gallery a, .gallery-item {
       display: inline-block;
       position: relative;
-      border-radius: 5px;
-      background: transparent;
-      border: 2px solid transparent;
+      border-radius: 8px;
+      background: #050F11; /* Bakgrunnsfarge for mellomrommet */
+      border: 3px solid transparent; /* Tykkere ramme-plass, gjennomsiktig som standard */
+      padding: 4px; /* Lager mellomrommet mellom rammen og bildet */
       transition: border-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
       overflow: hidden !important;
       flex-shrink: 0 !important;    
@@ -283,7 +284,7 @@
       height: 175px !important;
       aspect-ratio: 2.2 / 1;
       object-fit: cover;
-      border-radius: 5px;
+      border-radius: 4px;
       display: block;
       transition: transform 0.3s ease;
     }
@@ -303,9 +304,11 @@
       position: relative;
       width: 100%;
       height: 175px;
-      border-radius: 5px;
+      border-radius: 8px;
       overflow: hidden;
-      border: 2px solid transparent; 
+      background: #050F11; /* Bakgrunnsfarge for mellomrommet */
+      border: 3px solid transparent; /* Tykkere ramme-plass */
+      padding: 4px; /* Lager mellomrommet mellom rammen og bildet */
       transition: border-color 0.3s ease, box-shadow 0.3s ease;
     }
 
@@ -313,15 +316,16 @@
       width: 100% !important;
       height: 100% !important;
       object-fit: cover;
+      border-radius: 4px;
       display: block;
     }
 
     .continue-media-wrap .progress-bar {
       position: absolute;
-      bottom: 0;
-      left: 0;
+      bottom: 4px;
+      left: 4px;
       height: 4px;
-      width: 100%;
+      width: calc(100% - 8px);
       background-color: rgba(255, 255, 255, 0.3);
       z-index: 4;
     }
@@ -350,8 +354,8 @@
 
     .delete-progress-btn {
       position: absolute;
-      bottom: 12px;
-      left: 12px;
+      bottom: 16px;
+      left: 16px;
       width: 36px;
       height: 36px;
       border-radius: 50%;
@@ -428,7 +432,7 @@
       font-weight: 900;
       line-height: 1;
       color: transparent;
-      -webkit-text-stroke: 4px #00FFCC; 
+      -webkit-text-stroke: 4px #ffffff; /* Endret til hvit farge også her */
       z-index: 2;
       transition: all 0.3s ease;
       pointer-events: none;
@@ -465,7 +469,7 @@
 
     .kids-overlay h2 {
       font-size: 28px;
-      color: #00FFCC;
+      color: #ffffff;
       margin-bottom: 8px;
     }
 
@@ -562,8 +566,8 @@
       .image-gallery a:hover, .gallery-item:hover {
         z-index: 999;
         transform: scale(1.05);
-        border-color: #00FFCC; 
-        box-shadow: 0 4px 15px rgba(0, 255, 204, 0.3);
+        border-color: #ffffff; /* Endret til hvit rammefarge ved hover */
+        box-shadow: 0 4px 15px rgba(255, 255, 255, 0.2);
       }
 
       /* Fortsett å se-kort */
@@ -572,20 +576,20 @@
         transform: scale(1.05);
       }
       .continue-item:hover .continue-media-wrap {
-        border-color: #00FFCC;
-        box-shadow: 0 4px 15px rgba(0, 255, 204, 0.3);
+        border-color: #ffffff; /* Endret til hvit rammefarge ved hover */
+        box-shadow: 0 4px 15px rgba(255, 255, 255, 0.2);
       }
 
       /* Top 10 galleri */
       .top10-item:hover { 
         transform: scale(1.05); 
-        outline: 2px solid #00FFCC; 
-        outline-offset: -2px;
+        outline: 3px solid #ffffff; /* Endret til hvit outline */
+        outline-offset: 2px; /* Plasserer den litt utenfor bildet for mellomrom-effekt */
         border-radius: 8px;
       }
 
       .top10-item:hover .top10-number {
-        color: #00FFCC;
+        color: #ffffff; /* Endret til hvit tallfarge ved hover */
         -webkit-text-stroke: 0;
       }
 
@@ -645,7 +649,7 @@
       }
 
       .scroll-button:hover i {
-        color: #00FFCC; 
+        color: #ffffff; 
         transform: scale(1.25);
       }
 
@@ -772,6 +776,9 @@
         flex-shrink: 0 !important;
         scroll-snap-align: start !important;
         position: relative !important;
+        background: #091B1E !important;
+        border: 3px solid transparent !important;
+        padding: 3px !important;
       }
 
       .gallery-section .image-gallery a img, 
@@ -781,7 +788,7 @@
         height: 195px !important;
         aspect-ratio: 2 / 3 !important;
         object-fit: cover !important;
-        border-radius: 8px !important;
+        border-radius: 6px !important;
       }
 
       /* TOP 10 GALLERI (MOBIL) */
@@ -804,7 +811,7 @@
         font-size: 44px !important;
         left: 2px !important;
         bottom: 2px !important;
-        -webkit-text-stroke: 1.5px rgba(0, 255, 204, 0.8) !important;
+        -webkit-text-stroke: 1.5px #ffffff !important;
       }
 
       /* KUN FILM-GALLERIET */
@@ -852,17 +859,20 @@
       .continue-media-wrap {
         width: 260px !important;
         height: 146px !important;
-        border-radius: 12px !important;
+        border-radius: 10px !important;
         overflow: hidden !important; 
         position: relative !important;
         flex-shrink: 0 !important;
+        background: #091B1E !important;
+        border: 3px solid transparent !important;
+        padding: 3px !important;
       }
 
       .continue-media-wrap img {
         width: 100% !important;
         height: 100% !important;
         object-fit: cover !important;
-        border-radius: 12px !important;
+        border-radius: 6px !important;
       }
 
       .continue-title {
