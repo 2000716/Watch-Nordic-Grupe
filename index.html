@@ -4,9 +4,9 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"/>
     <meta name="theme-color" content="#050F11" />
-    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self' https: data: blob:; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com; script-src 'self' 'unsafe-inline' https://www.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' data: https: blob:; connect-src 'self' https:; font-src 'self' https://cdnjs.cloudflare.com; object-src 'none'; base-uri 'self'; frame-ancestors 'none';" />
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self' https: data: blob:; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com; script-src 'self' 'unsafe-inline' https://www.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' data: https: blob:; connect-src 'self' https:; font-src 'self' https://cdnjs.cloudflare.com; object-src 'none'; base-uri 'self';" />
     <meta name="referrer-policy" content="strict-origin-when-cross-origin" />
     <title>Watch Nordic™</title>
 
@@ -17,7 +17,7 @@
     <!-- CSS -->
     <link rel="stylesheet" href="css/hovedside.css">
     <link rel="stylesheet" href="css/video.css">
-   <link rel="stylesheet" href="css/filminfo.css">
+    <link rel="stylesheet" href="css/filminfo.css">
     <link rel="stylesheet" href="css/konto.css">
     <link rel="stylesheet" href="footer.css">
     <link rel="stylesheet" href="meny.css">
@@ -68,11 +68,11 @@
             </div>
 
             <section class="hero-banner">
-                <img class="banner-image" id="banner-bilde" src="https://via.placeholder.com/1920x1080" alt="Film Banner" />
+                <img class="banner-image" id="banner-bilde" src="" alt="Film Banner" />
                 <video id="banner-video" class="banner-video" playsinline preload="none"></video>
 
                 <div class="banner-content">
-                    <img class="film-logo" id="banner-logo" src="https://via.placeholder.com/320x180?text=LOGO" alt="Film Logo" />
+                    <img class="film-logo" id="banner-logo" src="" alt="Film Logo" />
                     <p id="banner-beskrivelse">Her kommer filmbeskrivelsen din inn via JavaScript eller ren tekst.</p>
                     <div id="banner-metadata" class="banner-meta">2026 • 16+ • 2t 15m</div>
                     <div class="banner-buttons">
@@ -92,9 +92,7 @@
                     <div class="fade-left"></div>
                     <button class="scroll-button left" aria-label="Rull til venstre">❮</button>
                     <div class="image-gallery" id="nye-filmer-galleri">
-                        <a href="#" class="gallery-item"><img src="https://via.placeholder.com/330x175" alt="Film"></a>
-                        <a href="#" class="gallery-item"><img src="https://via.placeholder.com/330x175" alt="Film"></a>
-                        <a href="#" class="gallery-item"><img src="https://via.placeholder.com/330x175" alt="Film"></a>
+                        <!-- Fylles dynamisk fra Firestore -->
                     </div>
                     <button class="scroll-button right" aria-label="Rull til høyre">❯</button>
                     <div class="fade-right"></div>
@@ -118,14 +116,7 @@
                     <div class="fade-left"></div>
                     <button class="scroll-button left" aria-label="Rull til venstre">❮</button>
                     <div class="top10-gallery" id="topp10-filmer-galleri">
-                        <div class="top10-item">
-                            <img src="https://via.placeholder.com/150x225" alt="Topp 1">
-                            <span class="top10-number">1</span>
-                        </div>
-                        <div class="top10-item">
-                            <img src="https://via.placeholder.com/150x225" alt="Topp 2">
-                            <span class="top10-number">2</span>
-                        </div>
+                        <!-- Fylles dynamisk fra Firestore -->
                     </div>
                     <button class="scroll-button right" aria-label="Rull til høyre">❯</button>
                     <div class="fade-right"></div>
@@ -138,8 +129,7 @@
                     <div class="fade-left"></div>
                     <button class="scroll-button left" aria-label="Rull til venstre">❮</button>
                     <div class="image-gallery" id="filmer-galleri">
-                        <a href="#" class="gallery-item"><img src="https://via.placeholder.com/330x175" alt="Film"></a>
-                        <a href="#" class="gallery-item"><img src="https://via.placeholder.com/330x175" alt="Film"></a>
+                        <!-- Fylles dynamisk fra Firestore -->
                     </div>
                     <button class="scroll-button right" aria-label="Rull til høyre">❯</button>
                     <div class="fade-right"></div>
@@ -152,8 +142,7 @@
                     <div class="fade-left"></div>
                     <button class="scroll-button left" aria-label="Rull til venstre">❮</button>
                     <div class="image-gallery" id="serier-galleri">
-                        <a href="#" class="gallery-item"><img src="https://via.placeholder.com/330x175" alt="Serie"></a>
-                        <a href="#" class="gallery-item"><img src="https://via.placeholder.com/330x175" alt="Serie"></a>
+                        <!-- Fylles dynamisk fra Firestore -->
                     </div>
                     <button class="scroll-button right" aria-label="Rull til høyre">❯</button>
                     <div class="fade-right"></div>
@@ -166,7 +155,7 @@
                     <div class="fade-left"></div>
                     <button class="scroll-button left" aria-label="Rull til venstre">❮</button>
                     <div class="image-gallery" id="dokumentarserier-galleri">
-                        <a href="#" class="gallery-item"><img src="https://via.placeholder.com/330x175" alt="Dokumentar"></a>
+                        <!-- Fylles dynamisk fra Firestore -->
                     </div>
                     <button class="scroll-button right" aria-label="Rull til høyre">❯</button>
                     <div class="fade-right"></div>
@@ -182,7 +171,7 @@
             <div class="gallery-section">
                 <h2>Alle Serier</h2>
                 <div class="image-gallery" id="alle-serier-oversikt-galleri">
-                    <!-- Fylles dynamically fra JS for serier -->
+                    <!-- Fylles dynamisk fra JS for serier -->
                 </div>
             </div>
         </section>
@@ -517,7 +506,7 @@
     <!-- ========================================== -->
     <!-- JAVASCRIPT-FILER                           -->
     <!-- ========================================== -->
-    <script type="module" src="app.js"></script>
-    <script type="module" src="meny.js"></script>
+    <script type="module" src="./app.js"></script>
+    <script type="module" src="./meny.js"></script>
 </body>
 </html>
