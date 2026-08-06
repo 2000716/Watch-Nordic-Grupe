@@ -1,6 +1,6 @@
 // app.js - Hovedstyring for applikasjonen
 import { auth } from "./firebase-oppsett.js";
-import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-auth.js";
+import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 
 // Tilstandsvariabler
 let avspillerAktiv = false;
