@@ -40,7 +40,7 @@ function initNav() {
     }
   };
 
-  activateLink();
+activateLink();
   updateNavState();
   oppdaterProfilBilde();
 
@@ -51,10 +51,6 @@ function initNav() {
         updateNavState();
         ticking = false;
       });
-      ticking = true;
-    }
-  }, { passive: true });
-}
       ticking = true;
     }
   }, { passive: true });
