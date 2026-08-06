@@ -4,7 +4,7 @@
    ========================================================================== */
 
 /* 1. HENTER INN ALLE CSS-FILENE */
-@import url('hoveddside.css');
+@import url('hovedside.css');
 @import url('filminfo.css');
 @import url('konto.css');
 @import url('video.css');
