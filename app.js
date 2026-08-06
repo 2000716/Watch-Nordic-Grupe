@@ -5,14 +5,14 @@ import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.15.0/f
 let avspillerAktiv = false;
 let forrigeSide = 'hjem';
 
-// Mapping dersom en menyknapp peker på en seksjon som gjenbruker en eksisterende visning
+// Mapping dersom en menyknapp peker på en seksjon som mangler i HTML (fallback)
 const sideMapping = {
-    'film': 'hjem',        // Hvis 'view-film' mangler, vis 'view-hjem'
-    'nyheter': 'hjem',      // Hvis 'view-nyheter' mangler, vis 'view-hjem'
-    'min-liste': 'hjem'    // Hvis 'view-min-liste' mangler, vis 'view-hjem'
+    'film': 'hjem',
+    'nyheter': 'hjem',
+    'min-liste': 'hjem'
 };
 
-// 1. Sjekk innlogging ved lasting
+// 1. Sjekk innlogging og initialiser applikasjonen
 window.addEventListener('DOMContentLoaded', () => {
     onAuthStateChanged(auth, (user) => {
         if (!user) {
@@ -25,16 +25,26 @@ window.addEventListener('DOMContentLoaded', () => {
 
     initialiserAvspillerKontroller();
     initialiserScrollLyttere();
+    initialiserGalleriRulling();
     fjernPageLoader();
 });
 
-// 2. Hent profilbilde fra localStorage
-function settInnProfilbilde() {
+// Lytt til endringer i localStorage (f.eks. når profilbilde endres i konto.js)
+window.addEventListener('storage', (e) => {
+    if (e.key === 'profilbilde') {
+        settInnProfilbilde();
+    }
+});
+
+// 2. Hent og oppdater profilbilde i menyen og på konto-siden
+export function settInnProfilbilde() {
     const lagretBilde = localStorage.getItem("profilbilde");
     const menyBildeEl = document.getElementById("menyProfilbilde");
+    const kontoBildeEl = document.getElementById("profilbilde");
 
-    if (menyBildeEl && lagretBilde && lagretBilde !== "null" && lagretBilde.trim() !== "") {
-        menyBildeEl.src = lagretBilde;
+    if (lagretBilde && lagretBilde !== "null" && lagretBilde.trim() !== "") {
+        if (menyBildeEl) menyBildeEl.src = lagretBilde;
+        if (kontoBildeEl) kontoBildeEl.src = lagretBilde;
     }
 }
 
@@ -45,7 +55,7 @@ export function byttSide(sideNavn) {
         stoppOgNullstillVideo();
     }
 
-    // Sjekk om det finnes en reell ID for siden, ellers bruk fallback
+    // Sjekk om det finnes en reell ID for siden, ellers bruk fallback fra sideMapping
     let malId = sideNavn;
     if (!document.getElementById(`view-${sideNavn}`) && sideMapping[sideNavn]) {
         malId = sideMapping[sideNavn];
@@ -61,11 +71,10 @@ export function byttSide(sideNavn) {
         return;
     }
 
-    // Skjul navbar og footer automatisk i fullskjermspiller
+    // Skjul/vis navbar og footer avhengig av om avspilleren er aktiv
     const navbar = document.querySelector('.top-nav') || document.querySelector('nav');
     const footer = document.querySelector('footer');
 
-    // Håndter scrolling på body og html for å unngå låsing
     if (sideNavn === 'avspiller') {
         if (navbar) navbar.style.display = 'none';
         if (footer) footer.style.display = 'none';
@@ -86,10 +95,11 @@ export function byttSide(sideNavn) {
     // Vis den valgte seksjonen
     targetSeksjon.style.display = 'block';
 
-    // Oppdater aktiv fane i menyen
+    // Oppdater aktiv fane i navigasjonsmenyen
     document.querySelectorAll('.nav-links a').forEach(link => {
         link.classList.remove('active');
     });
+
     const aktivLink = document.getElementById(`link-${sideNavn}`);
     if (aktivLink) {
         aktivLink.classList.add('active');
@@ -99,20 +109,20 @@ export function byttSide(sideNavn) {
         avspillerAktiv = true;
     }
 
-    // Tilbakestill rulleposisjon helt til toppen
-    nullstillScrollPosusjon();
+    // Tilbakestill rulleposisjon til toppen av siden
+    nullstillScrollPosisjon();
 }
 
-// Hjelpefunksjon for å tvinge scroll til toppen av siden
-function nullstillScrollPosusjon() {
+// Hjelpefunksjon for å tvinge scroll til toppen
+function nullstillScrollPosisjon() {
     window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
     document.body.scrollTop = 0;
     document.documentElement.scrollTop = 0;
 }
 
 // 4. Horisontal rulling for filmrader/kategorier
-export function rullRad(radId, retning) {
-    const rad = document.getElementById(radId);
+export function rullRad(radElement, retning) {
+    const rad = typeof radElement === 'string' ? document.getElementById(radElement) : radElement;
     if (!rad) return;
 
     const endring = retning === 'venstre' ? -500 : 500;
@@ -122,7 +132,25 @@ export function rullRad(radId, retning) {
     });
 }
 
-// 5. Generelle scroll-lyttere (f.eks. for transparent/mørk navbar ved rulling)
+// Automatisk oppkobling av pilknapper i alle galleri-seksjoner
+function initialiserGalleriRulling() {
+    const wrappers = document.querySelectorAll('.gallery-wrapper, .continue-gallery-wrapper');
+
+    wrappers.forEach(wrapper => {
+        const galleri = wrapper.querySelector('.image-gallery, .continue-image-gallery, .top10-gallery');
+        const venstreKnapp = wrapper.querySelector('.scroll-button.left');
+        const hoyreKnapp = wrapper.querySelector('.scroll-button.right');
+
+        if (galleri && venstreKnapp) {
+            venstreKnapp.addEventListener('click', () => rullRad(galleri, 'venstre'));
+        }
+        if (galleri && hoyreKnapp) {
+            hoyreKnapp.addEventListener('click', () => rullRad(galleri, 'høyre'));
+        }
+    });
+}
+
+// 5. Generelle scroll-lyttere (mørkere toppmeny ved rulling)
 function initialiserScrollLyttere() {
     const navbar = document.querySelector('.top-nav') || document.querySelector('nav');
 
@@ -137,12 +165,12 @@ function initialiserScrollLyttere() {
     });
 }
 
-// Fjern/skjul loader etter at siden har lastet
+// Skjul loader-animasjonen etter at siden har lastet
 function fjernPageLoader() {
     setTimeout(() => {
         const loader = document.getElementById('page-loader');
         if (loader) loader.style.display = 'none';
-        
+
         document.querySelectorAll('.page-loader-seksjon').forEach(el => {
             el.style.display = 'none';
         });
@@ -186,7 +214,17 @@ export function gaTilbake() {
 // 9. Utfør søk (kalles fra HTML via oninput)
 window.utforSok = function() {
     const sokefelt = document.getElementById('sokefelt');
-    const query = sokefelt ? sokefelt.value.trim() : '';
+    const query = sokefelt ? sokefelt.value.trim().toLowerCase() : '';
+    const resultaterContainer = document.getElementById('sokeResultater');
+
+    if (!resultaterContainer) return;
+
+    if (query === '') {
+        resultaterContainer.innerHTML = '';
+        return;
+    }
+
+    // Søkelogikk utvides i app.js eller egnede moduler
     console.log("Søker etter:", query);
 };
 
@@ -214,3 +252,4 @@ window.apneAvspiller = apneAvspiller;
 window.stoppOgNullstillVideo = stoppOgNullstillVideo;
 window.gaTilbake = gaTilbake;
 window.rullRad = rullRad;
+window.settInnProfilbilde = settInnProfilbilde;
