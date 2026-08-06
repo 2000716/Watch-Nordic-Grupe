@@ -8,9 +8,7 @@ html {
   font-family: Arial, sans-serif;
   background: #050F11;
   color: #ffffff;
-  /* Hovedrulling styres kun her fra rot-nivå */
-  overflow-x: hidden;
-  overflow-y: auto;
+  width: 100%;
   min-height: 100%;
 }
 
@@ -18,15 +16,20 @@ body {
   width: 100%;
   min-height: 100vh;
   background: #050F11;
-  /* Fjern overflow fra body for å unngå at innholdet blir usynlig */
-  overflow: visible;
+  /* overflow-x på body forhindrer at innholdet blir usynlig, samtidig som det stopper sidespilling */
+  overflow-x: hidden;
+  overflow-y: auto;
 }
 
 main {
   width: 100%;
   min-height: 100vh;
-  /* Endret fra flex til block for å hindre at flexbox klemmer sammen uvirksomme sider */
   display: block; 
+}
+
+/* Sikrer at SPA-sider fyller bredden når de vises */
+.side-visning {
+  width: 100%;
 }
 
 @media (max-width: 768px) {
@@ -34,6 +37,7 @@ main {
     background: #091B1E !important;
   }
 }
+
 /* ==========================================================================
    3. HERO BANNER (PC)
    ========================================================================== */
