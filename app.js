@@ -36,9 +36,6 @@ function byttSide(sideNavn) {
         stoppOgNullstillVideo();
     }
 
-    // Scroll alltid til toppen ved sidebytte for å hindre låst scrolling
-    window.scrollTo(0, 0);
-
     const navbar = document.querySelector('.navbar') || document.querySelector('nav');
     const footer = document.querySelector('footer');
 
@@ -75,23 +72,33 @@ function byttSide(sideNavn) {
     }
 }
 
-// 4. Funksjon for å hente data kun fra 'serier' i Firestore
+// 4. Funksjon for å hente data og fylle inn i din HTML-struktur for filminfo
 async function visFilmInfo(filmId) {
     if (!filmId) return;
 
+    // Vis loader hvis du har det i filminfo-seksjonen
     const loader = document.querySelector('#view-filminfo .page-loader-seksjon');
     if (loader) loader.style.display = 'flex';
 
     try {
-        const docRef = doc(db, "serier", filmId);
-        const docSnap = await getDoc(docRef);
+        // Søk først i 'filmer', hvis ikke finnes, søk i 'serier'
+        let docRef = doc(db, "filmer", filmId);
+        let docSnap = await getDoc(docRef);
         let data = null;
 
         if (docSnap.exists()) {
             data = docSnap.data();
+        } else {
+            docRef = doc(db, "serier", filmId);
+            docSnap = await getDoc(docRef);
+            if (docSnap.exists()) {
+                data = docSnap.data();
+            }
         }
 
         if (data) {
+            // Fyll inn elementer basert på HTML-strukturen din:
+            
             // Bakgrunnsbilde
             const bgImg = document.getElementById('backgroundImage');
             if (bgImg) bgImg.src = data.bakgrunn || data.bilde || '';
@@ -111,7 +118,7 @@ async function visFilmInfo(filmId) {
             const beskrivelseEl = document.querySelector('#view-filminfo .description');
             if (beskrivelseEl) beskrivelseEl.textContent = data.beskrivelse || data.synopsis || '';
 
-            // Metadata (årstall, sjanger, aldersgrense)
+            // Metadata (f.eks. årstall, sjanger, aldersgrense)
             const metadataEl = document.querySelector('#view-filminfo .metadata');
             if (metadataEl) {
                 metadataEl.innerHTML = `
@@ -124,6 +131,7 @@ async function visFilmInfo(filmId) {
             // "Se nå"-knapp funksjonalitet
             const watchBtn = document.getElementById('watchBtn');
             if (watchBtn) {
+                // Fjern gamle lyttere for å unngå duplikater ved å klone knappen
                 const nyWatchBtn = watchBtn.cloneNode(true);
                 watchBtn.parentNode.replaceChild(nyWatchBtn, watchBtn);
                 
@@ -132,12 +140,13 @@ async function visFilmInfo(filmId) {
                 });
             }
 
+            // Bytter til filminfo-siden uten oppdatering
             byttSide('filminfo');
         } else {
-            console.warn("Fant ikke serie med ID:", filmId);
+            console.warn("Fant ikke film eller serie med ID:", filmId);
         }
     } catch (error) {
-        console.error("Feil ved henting av serieinfo fra Firebase:", error);
+        console.error("Feil ved henting av filminfo fra Firebase:", error);
     } finally {
         if (loader) loader.style.display = 'none';
     }
@@ -186,6 +195,7 @@ function stoppOgNullstillVideo() {
         videoEl.currentTime = 0;
     }
     
+    // Stopp også eventuell trailer-video som spiller i bakgrunnen på filminfo
     const trailerVideo = document.getElementById('trailerVideo');
     if (trailerVideo) {
         trailerVideo.pause();
@@ -203,6 +213,13 @@ function initialiserAvspillerKontroller() {
             e.preventDefault();
             stoppOgNullstillVideo();
             byttSide('hjem');
+        });
+    }
+
+    const bannerSeNa = document.getElementById('banner-se-na');
+    if (bannerSeNa) {
+        bannerSeNa.addEventListener('click', () => {
+            apneAvspiller("https://www.w3schools.com/html/mov_bbb.mp4", "Big Buck Bunny");
         });
     }
 }
