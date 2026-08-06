@@ -1,7 +1,7 @@
 // ==================== APP.JS - HOVEDSTYRING FOR APPLIKASJONEN ==================== //
 import { auth, db } from "./firebase-oppsett.js";
-import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-import { doc, updateDoc, onSnapshot, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-auth.js";
+import { doc, updateDoc, onSnapshot, collection, getDocs } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
 
 // ==================== TILSTANDSVARIABLER ==================== //
 let avspillerAktiv = false;
