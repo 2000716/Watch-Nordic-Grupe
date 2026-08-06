@@ -1,4 +1,4 @@
-  // ==================== HJELPEFUNKSJONER FOR SIKKERHET & PARSING ==================== //
+// ==================== HJELPEFUNKSJONER FOR SIKKERHET & PARSING ==================== //
   function sikkerJSONParse(str, fallback = null) {
     if (!str || typeof str !== "string") return fallback;
     try {
@@ -831,26 +831,5 @@
     }
   }
 
-  // Start henting av data
+  // ==================== START OPPSTART ==================== //
   hentDataFraFirestore();
-
-  // ==================== NAV SCROLL EFFECT ==================== //
-  let ticking = false;
-  function oppdaterNavScroll() {
-    if (!ticking) {
-      window.requestAnimationFrame(() => {
-        const navbar = document.querySelector("nav") || document.querySelector("header");
-        if (navbar) {
-          if (window.scrollY > 50) {
-            navbar.classList.add("scrolled");
-          } else {
-            navbar.classList.remove("scrolled");
-          }
-        }
-        ticking = false;
-      });
-      ticking = true;
-    }
-  }
-
-  window.addEventListener("scroll", oppdaterNavScroll, { passive: true });
