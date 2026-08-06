@@ -2,10 +2,10 @@ import { auth, db } from "./firebase-oppsett.js";
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-auth.js";
 import { collection, getDocs } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
 
-// Import fra dine egne moduler
-import { initialiserHovedside } from "./hovedside.js";
-import { initialiserFilminfo } from "./filminfo.js";
-import { initialiserVideo } from "./video.js";
+// Import fra egne moduler
+import { initialiserHovedside } from "js/hovedside.js";
+import { initialiserFilminfo } from "js/filminfo.js";
+import { initialiserVideo } from "js/video.js";
 import { initialiserKonto, settInnProfilbilde } from "./konto.js";
 
 // Tilstandsvariabler
@@ -31,8 +31,9 @@ window.addEventListener('DOMContentLoaded', () => {
         } else {
             console.log("Bruker er innlogget:", user.uid);
             
-            // Kall funksjoner fra moduler
-            if (typeof settInnProfilbilde === 'function') settInnProfilbilde();
+            if (typeof settInnProfilbilde === 'function') {
+                settInnProfilbilde();
+            }
 
             const startSide = window.location.hash.replace('#', '') || 'hjem';
             byttSide(startSide, false);
@@ -42,7 +43,7 @@ window.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // Initialiser modulene
+    // Initialiser eksterne moduler
     if (typeof initialiserHovedside === 'function') initialiserHovedside();
     if (typeof initialiserKonto === 'function') initialiserKonto();
     if (typeof initialiserVideo === 'function') initialiserVideo();
@@ -68,7 +69,7 @@ window.addEventListener('storage', (e) => {
     }
 });
 
-// 3. Sidebytte og SPA-visningsstyring
+// 2. Sidebytte og SPA-visningsstyring
 export function byttSide(sideNavn, pushHistory = true) {
     if (sideNavn !== 'avspiller') {
         forrigeSide = sideNavn;
@@ -129,7 +130,7 @@ export function byttSide(sideNavn, pushHistory = true) {
     nullstillScrollPosisjon();
 }
 
-// 4. Firestore-integrasjon for Henting av Filmer og Serier
+// 3. Firestore-integrasjon for Henting av Filmer og Serier
 export async function hentInnholdFraFirestore() {
     console.log("Starter henting av innhold fra Firestore...");
     try {
@@ -192,11 +193,11 @@ function byggGalleriUI(containerMuligheter, dataListe) {
             `;
 
             kort.addEventListener("click", () => {
-                // Sjekk om filminfo-modulen skal trigges ved klikk
+                // Sjekk om filminfo-modulen skal trigges
                 if (typeof initialiserFilminfo === 'function') {
                     initialiserFilminfo(item);
                 }
-                
+
                 if (videoUrl) {
                     apneAvspiller(videoUrl, tittel);
                 } else {
@@ -209,7 +210,7 @@ function byggGalleriUI(containerMuligheter, dataListe) {
     });
 }
 
-// 5. Interaktivitet og navigering
+// 4. Interaktivitet og navigering
 function initialiserLenkeLyttere() {
     document.addEventListener('click', (e) => {
         const target = e.target.closest('a[data-side]');
@@ -280,7 +281,7 @@ function fjernPageLoader() {
     }, 500);
 }
 
-// 6. Videospiller
+// 5. Videospiller
 export function apneAvspiller(videoUrl, tittel) {
     const videoEl = document.getElementById('video');
     const tittelEl = document.querySelector('.movie-title');
@@ -312,7 +313,7 @@ export function gaTilbake() {
     byttSide(forrigeSide);
 }
 
-// 7. Søkelogikk
+// 6. Søkelogikk
 function initialiserSokefelt() {
     const sokefelt = document.getElementById('sokefelt');
     if (sokefelt) {
@@ -358,6 +359,9 @@ window.utforSok = function() {
         `;
 
         kort.addEventListener("click", () => {
+            if (typeof initialiserFilminfo === 'function') {
+                initialiserFilminfo(item);
+            }
             if (videoUrl) apneAvspiller(videoUrl, tittel);
         });
 
@@ -382,7 +386,7 @@ function initialiserAvspillerKontroller() {
     }
 }
 
-// Globale eksporter
+// Globale eksporter for inline HTML-funksjoner
 window.byttSide = byttSide;
 window.apneAvspiller = apneAvspiller;
 window.stoppOgNullstillVideo = stoppOgNullstillVideo;
