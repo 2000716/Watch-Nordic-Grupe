@@ -1,4 +1,3 @@
-// app.js - Hovedstyring for applikasjonen
 import { auth } from "./firebase-oppsett.js";
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 
@@ -44,9 +43,15 @@ export function byttSide(sideNavn) {
     if (sideNavn === 'avspiller') {
         if (navbar) navbar.style.display = 'none';
         if (footer) footer.style.display = 'none';
+        
+        // Lås rulling i selve videospilleren
+        document.body.style.overflow = 'hidden';
     } else {
         if (navbar) navbar.style.display = 'flex';
         if (footer) footer.style.display = 'block';
+        
+        // Åpne for rulling på alle vanlige sider
+        document.body.style.overflow = 'auto';
     }
 
     // Skjul alle visninger
