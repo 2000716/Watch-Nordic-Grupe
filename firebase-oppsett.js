@@ -1,7 +1,4 @@
-// ==========================================
-// WATCH NORDIC™ - FIREBASE OPPSETT
-// ==========================================
-
+// firebase-oppsett.js
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-app.js";
 import { getAuth, setPersistence, browserLocalPersistence, inMemoryPersistence } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-auth.js";
 import { 
