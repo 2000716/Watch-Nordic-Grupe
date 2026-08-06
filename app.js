@@ -2,7 +2,7 @@ import { auth, db } from "./firebase-oppsett.js";
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-auth.js";
 import { collection, getDocs } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
 
-// Import fra egne moduler
+// Import fra egne moduler (med korrekte filstier)
 import { initialiserHovedside } from "./js/hovedside.js";
 import { initialiserFilminfo } from "./js/filminfo.js";
 import { initialiserVideo } from "./js/video.js";
@@ -142,10 +142,14 @@ export async function hentInnholdFraFirestore() {
         console.log(`Hentet ${filmerSnapshot.size} filmer og ${serierSnapshot.size} serier.`);
 
         const filmerData = [];
-        filmerSnapshot.forEach(doc => filmerData.push({ id: doc.id, mediatype: 'film', ...doc.data() }));
+        filmerSnapshot.forEach(doc => {
+            filmerData.push({ id: doc.id, mediatype: 'film', ...doc.data() });
+        });
 
         const serierData = [];
-        serierSnapshot.forEach(doc => serierData.push({ id: doc.id, mediatype: 'serie', ...doc.data() }));
+        serierSnapshot.forEach(doc => {
+            serierData.push({ id: doc.id, mediatype: 'serie', ...doc.data() });
+        });
 
         // Lagrer alt innhold i en global liste for søk og gjenbruk
         altInnhold = [...filmerData, ...serierData];
@@ -181,7 +185,8 @@ function byggGalleriUI(containerMuligheter, dataListe) {
         container.innerHTML = ""; // Tøm statisk innhold
 
         dataListe.forEach((item) => {
-            const bildeUrl = item.poster || item.bilde || item.bildeUrl || item.posterVertikal || 'placeholder.jpg';
+            // Sørger for å plukke riktig plakat- og videobilde fra Firestore-strukturen din
+            const bildeUrl = item.poster || item.posterVertikal || item.bilde || item.bildeUrl || 'placeholder.jpg';
             const tittel = item.tittel || item.tittelNavn || "Uten tittel";
             const videoUrl = item.videoUrl || item.trailer || item.video || '';
 
@@ -193,7 +198,7 @@ function byggGalleriUI(containerMuligheter, dataListe) {
             `;
 
             kort.addEventListener("click", () => {
-                // Sjekk om filminfo-modulen skal trigges
+                // Sender hele item-objektet (med skuespillere, metadata, regissør osv.) til filminfo
                 if (typeof initialiserFilminfo === 'function') {
                     initialiserFilminfo(item);
                 }
@@ -335,8 +340,10 @@ window.utforSok = function() {
 
     const treff = altInnhold.filter(item => {
         const tittel = (item.tittel || item.tittelNavn || '').toLowerCase();
-        const sjanger = (item.sjanger || item.sjangere || item.sjKode || '').toString().toLowerCase();
-        return tittel.includes(query) || sjanger.includes(query);
+        // Sjekker også metadata-arrayen eller sjanger-feltet i søket ditt
+        const metadataString = Array.isArray(item.metadata) ? item.metadata.join(' ').toLowerCase() : '';
+        const sjanger = (item.sjanger || item.sjangere || '').toString().toLowerCase();
+        return tittel.includes(query) || sjanger.includes(query) || metadataString.includes(query);
     });
 
     resultaterContainer.innerHTML = '';
@@ -347,7 +354,7 @@ window.utforSok = function() {
     }
 
     treff.forEach(item => {
-        const bildeUrl = item.poster || item.bilde || item.bildeUrl || 'placeholder.jpg';
+        const bildeUrl = item.poster || item.posterVertikal || item.bilde || 'placeholder.jpg';
         const tittel = item.tittel || "Uten tittel";
         const videoUrl = item.videoUrl || item.trailer || '';
 
