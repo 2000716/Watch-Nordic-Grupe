@@ -2,6 +2,12 @@ import { auth, db } from "./firebase-oppsett.js";
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-auth.js";
 import { collection, getDocs } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
 
+// Import fra dine egne moduler
+import { initialiserHovedside } from "./hovedside.js";
+import { initialiserFilminfo } from "./filminfo.js";
+import { initialiserVideo } from "./video.js";
+import { initialiserKonto, settInnProfilbilde } from "./konto.js";
+
 // Tilstandsvariabler
 let avspillerAktiv = false;
 let forrigeSide = 'hjem';
@@ -24,7 +30,9 @@ window.addEventListener('DOMContentLoaded', () => {
             window.location.href = "Innlogging.html";
         } else {
             console.log("Bruker er innlogget:", user.uid);
-            settInnProfilbilde();
+            
+            // Kall funksjoner fra moduler
+            if (typeof settInnProfilbilde === 'function') settInnProfilbilde();
 
             const startSide = window.location.hash.replace('#', '') || 'hjem';
             byttSide(startSide, false);
@@ -33,6 +41,11 @@ window.addEventListener('DOMContentLoaded', () => {
             hentInnholdFraFirestore();
         }
     });
+
+    // Initialiser modulene
+    if (typeof initialiserHovedside === 'function') initialiserHovedside();
+    if (typeof initialiserKonto === 'function') initialiserKonto();
+    if (typeof initialiserVideo === 'function') initialiserVideo();
 
     initialiserAvspillerKontroller();
     initialiserScrollLyttere();
@@ -50,22 +63,10 @@ window.addEventListener('popstate', (e) => {
 
 // Lytt til endringer i localStorage
 window.addEventListener('storage', (e) => {
-    if (e.key === 'profilbilde') {
+    if (e.key === 'profilbilde' && typeof settInnProfilbilde === 'function') {
         settInnProfilbilde();
     }
 });
-
-// 2. Profilbilde
-export function settInnProfilbilde() {
-    const lagretBilde = localStorage.getItem("profilbilde");
-    const menyBildeEl = document.getElementById("menyProfilbilde");
-    const kontoBildeEl = document.getElementById("profilbilde");
-
-    if (lagretBilde && lagretBilde !== "null" && lagretBilde.trim() !== "") {
-        if (menyBildeEl) menyBildeEl.src = lagretBilde;
-        if (kontoBildeEl) kontoBildeEl.src = lagretBilde;
-    }
-}
 
 // 3. Sidebytte og SPA-visningsstyring
 export function byttSide(sideNavn, pushHistory = true) {
@@ -191,6 +192,11 @@ function byggGalleriUI(containerMuligheter, dataListe) {
             `;
 
             kort.addEventListener("click", () => {
+                // Sjekk om filminfo-modulen skal trigges ved klikk
+                if (typeof initialiserFilminfo === 'function') {
+                    initialiserFilminfo(item);
+                }
+                
                 if (videoUrl) {
                     apneAvspiller(videoUrl, tittel);
                 } else {
@@ -382,4 +388,3 @@ window.apneAvspiller = apneAvspiller;
 window.stoppOgNullstillVideo = stoppOgNullstillVideo;
 window.gaTilbake = gaTilbake;
 window.rullRad = rullRad;
-window.settInnProfilbilde = settInnProfilbilde;
