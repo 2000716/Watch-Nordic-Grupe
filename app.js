@@ -1,6 +1,6 @@
 // app.js - Hovedstyring for applikasjonen
 import { auth } from "./firebase-oppsett.js";
-import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-auth.js";
+import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 
 // Tilstandsvariabler
 let avspillerAktiv = false;
@@ -111,12 +111,11 @@ export function gaTilbake() {
     byttSide(forrigeSide);
 }
 
-// 7. Utfor søk (kalles fra HTML via oninput)
+// 7. Utfør søk (kalles fra HTML via oninput)
 window.utforSok = function() {
     const sokefelt = document.getElementById('sokefelt');
     const query = sokefelt ? sokefelt.value.trim() : '';
     console.log("Søker etter:", query);
-    // Din søkelogikk kan kobles inn her
 };
 
 // 8. Koble opp lyttere for avspiller
@@ -137,7 +136,7 @@ function initialiserAvspillerKontroller() {
     }
 }
 
-// Global eksponering for inline HTML-eventer (onclick / oninput)
+// Global eksponering for inline HTML-eventer
 window.byttSide = byttSide;
 window.apneAvspiller = apneAvspiller;
 window.stoppOgNullstillVideo = stoppOgNullstillVideo;
