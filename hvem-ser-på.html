@@ -537,6 +537,7 @@
     let docRef = null;
     let pendingProfileIndex = null;
 
+    // Last inn eventuell cache først for rask visning
     const cachedProfiles = localStorage.getItem("watch_nordic_profiles_cache");
     if (cachedProfiles) {
       try {
@@ -561,8 +562,8 @@
         const docSnap = await getDoc(docRef);
         let databaseEndret = false;
         
-        if (docSnap.exists()) {
-          profiler = docSnap.data().profiler || [];
+        if (docSnap.exists() && docSnap.data().profiler) {
+          profiler = docSnap.data().profiler;
         } else {
           profiler = [];
         }
@@ -590,14 +591,15 @@
           databaseEndret = true;
         }
 
-        if (databaseEndret) {
+        // Bruk setDoc med { merge: true } slik at vi trygt oppretter eller oppdaterer dokumentet
+        if (databaseEndret || !docSnap.exists()) {
           await setDoc(docRef, { profiler: profiler }, { merge: true });
         }
         
         localStorage.setItem("watch_nordic_profiles_cache", JSON.stringify(profiler));
         renderProfiler();
       } catch (error) {
-        console.error("Feil ved henting av profiler:", error);
+        console.error("Feil ved henting av profiler fra Firestore:", error);
       }
     }
 
@@ -753,7 +755,6 @@
     });
 
     document.getElementById("btnClosePin").addEventListener("click", lukkPinModal);
-
     document.getElementById("btnCreateProfile").addEventListener("click", lagreNyProfil);
     document.getElementById("btnCloseModal").addEventListener("click", lukkModal);
 
