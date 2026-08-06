@@ -11,11 +11,6 @@ const firebaseConfig = {
   appId: "1:541804766412:web:83fc77721e384131a1ce69"
 };
 
-// Initialiser appen
 export const app = initializeApp(firebaseConfig);
-
-// Eksporter Auth (innlogging)
 export const auth = getAuth(app);
-
-// Eksporter Firestore (database for filmer og data)
 export const db = getFirestore(app);
