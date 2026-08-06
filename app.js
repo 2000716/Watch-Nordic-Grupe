@@ -185,7 +185,6 @@ function byggGalleriUI(containerMuligheter, dataListe) {
         container.innerHTML = ""; // Tøm statisk innhold
 
         dataListe.forEach((item) => {
-            // Sørger for å plukke riktig plakat- og videobilde fra Firestore-strukturen din
             const bildeUrl = item.poster || item.posterVertikal || item.bilde || item.bildeUrl || 'placeholder.jpg';
             const tittel = item.tittel || item.tittelNavn || "Uten tittel";
             const videoUrl = item.videoUrl || item.trailer || item.video || '';
@@ -198,7 +197,6 @@ function byggGalleriUI(containerMuligheter, dataListe) {
             `;
 
             kort.addEventListener("click", () => {
-                // Sender hele item-objektet (med skuespillere, metadata, regissør osv.) til filminfo
                 if (typeof initialiserFilminfo === 'function') {
                     initialiserFilminfo(item);
                 }
@@ -340,7 +338,6 @@ window.utforSok = function() {
 
     const treff = altInnhold.filter(item => {
         const tittel = (item.tittel || item.tittelNavn || '').toLowerCase();
-        // Sjekker også metadata-arrayen eller sjanger-feltet i søket ditt
         const metadataString = Array.isArray(item.metadata) ? item.metadata.join(' ').toLowerCase() : '';
         const sjanger = (item.sjanger || item.sjangere || '').toString().toLowerCase();
         return tittel.includes(query) || sjanger.includes(query) || metadataString.includes(query);
