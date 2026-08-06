@@ -2,12 +2,9 @@
 // WATCH NORDIC™ - HOVEDSTYRING (APP.JS)
 // ==========================================
 
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { getFirestore, collection, getDocs, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-
-// Hent database-referansen (forutsetter at firebase-oppsett.js initialiserer dette, eller vi gjør det her)
-// Vi sjekker vindusobjektet eller importerer fra din felles Firebase-konfigurasjon hvis tilgjengelig.
-const db = getFirestore();
+// Importer db direkte fra din egen oppsettsfil
+import { db } from "./firebase-oppsett.js";
+import { collection, getDocs, doc, getDoc } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
 
 document.addEventListener("DOMContentLoaded", () => {
     console.log("Watch Nordic™ app er lastet og klar.");
@@ -23,7 +20,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
 /**
  * Hovedfunksjon for å bytte mellom de ulike sidene/visningene i applikasjonen.
- * Sørger for at riktig seksjon vises (`view-hjem`, `view-serier`, `view-film`, `view-filminfo`, `view-avspiller`, etc.)
  * @param {string} sideId - ID-en til siden som skal vises
  */
 window.byttSide = function(sideId) {
@@ -45,7 +41,7 @@ window.byttSide = function(sideId) {
             lastInnSerierOversikt(); // Laster inn serier fra Firebase automatisk
             break;
         case 'film':
-            aktivVisningId = 'view-hjem'; // Eventuelt en egen filmoversikt hvis du har opprettet det
+            aktivVisningId = 'view-hjem'; 
             break;
         case 'nyheter':
         case 'min-liste':
@@ -92,17 +88,14 @@ window.byttSide = function(sideId) {
  */
 window.visDetaljer = async function(mediaId) {
     try {
-        // Bytter visning til filminfo med en gang
         window.byttSide('filminfo');
 
-        // Hent film/serie-data fra Firestore (f.eks. kolleksjon 'medier' eller 'filmer')
         const docRef = doc(db, "medier", mediaId);
         const docSnap = await getDoc(docRef);
 
         if (docSnap.exists()) {
             const data = docSnap.data();
             
-            // Fyll inn elementer på filminfosiden
             const bgImg = document.getElementById('backgroundImage');
             if (bgImg) bgImg.src = data.bakgrunnsbilde || data.bilde || '';
 
@@ -112,7 +105,6 @@ window.visDetaljer = async function(mediaId) {
             const metaElem = document.querySelector('#view-filminfo .metadata');
             if (metaElem) metaElem.textContent = `${data.aar || '2026'} • ${data.aldersgrense || '12+' } • ${data.varighet || ''}`;
 
-            // Koble "Se nå"-knappen til avspilleren og send med video-URL
             const watchBtn = document.getElementById('watchBtn');
             if (watchBtn) {
                 watchBtn.onclick = () => {
@@ -130,7 +122,7 @@ window.visDetaljer = async function(mediaId) {
 /**
  * Starter videoavspilleren med angitt video-URL.
  * @param {string} videoUrl - URL til videofilen
- * @param {string} tittel - Titten på filmen/serien
+ * @param {string} tittel - Tittelen på filmen/serien
  */
 window.startAvspiller = function(videoUrl, tittel) {
     window.byttSide('avspiller');
