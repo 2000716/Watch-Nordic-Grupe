@@ -8,7 +8,7 @@ let forrigeSide = 'hjem';
 // Mapping dersom en menyknapp peker på en seksjon som gjenbruker en eksisterende visning
 const sideMapping = {
     'film': 'hjem',        // Hvis 'view-film' mangler, vis 'view-hjem'
-    'nyheter': 'hjem',     // Hvis 'view-nyheter' mangler, vis 'view-hjem'
+    'nyheter': 'hjem',      // Hvis 'view-nyheter' mangler, vis 'view-hjem'
     'min-liste': 'hjem'    // Hvis 'view-min-liste' mangler, vis 'view-hjem'
 };
 
@@ -24,6 +24,7 @@ window.addEventListener('DOMContentLoaded', () => {
     });
 
     initialiserAvspillerKontroller();
+    initialiserScrollLyttere();
     fjernPageLoader();
 });
 
@@ -64,14 +65,17 @@ export function byttSide(sideNavn) {
     const navbar = document.querySelector('.top-nav') || document.querySelector('nav');
     const footer = document.querySelector('footer');
 
+    // Håndter scrolling på body og html for å unngå låsing
     if (sideNavn === 'avspiller') {
         if (navbar) navbar.style.display = 'none';
         if (footer) footer.style.display = 'none';
         document.body.style.overflow = 'hidden';
+        document.documentElement.style.overflow = 'hidden';
     } else {
         if (navbar) navbar.style.display = 'flex';
         if (footer) footer.style.display = 'block';
-        document.body.style.overflow = 'auto';
+        document.body.style.overflow = '';
+        document.documentElement.style.overflow = '';
     }
 
     // Skjul alle visninger
@@ -95,8 +99,42 @@ export function byttSide(sideNavn) {
         avspillerAktiv = true;
     }
 
-    // Scroll til toppen ved sidebytte
-    window.scrollTo(0, 0);
+    // Tilbakestill rulleposisjon helt til toppen
+    nullstillScrollPosusjon();
+}
+
+// Hjelpefunksjon for å tvinge scroll til toppen av siden
+function nullstillScrollPosusjon() {
+    window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+    document.body.scrollTop = 0;
+    document.documentElement.scrollTop = 0;
+}
+
+// 4. Horisontal rulling for filmrader/kategorier
+export function rullRad(radId, retning) {
+    const rad = document.getElementById(radId);
+    if (!rad) return;
+
+    const endring = retning === 'venstre' ? -500 : 500;
+    rad.scrollBy({
+        left: endring,
+        behavior: 'smooth'
+    });
+}
+
+// 5. Generelle scroll-lyttere (f.eks. for transparent/mørk navbar ved rulling)
+function initialiserScrollLyttere() {
+    const navbar = document.querySelector('.top-nav') || document.querySelector('nav');
+
+    window.addEventListener('scroll', () => {
+        if (navbar) {
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        }
+    });
 }
 
 // Fjern/skjul loader etter at siden har lastet
@@ -111,7 +149,7 @@ function fjernPageLoader() {
     }, 500);
 }
 
-// 4. Åpne og starte videospiller
+// 6. Åpne og starte videospiller
 export function apneAvspiller(videoUrl, tittel) {
     const videoEl = document.getElementById('video');
     const tittelEl = document.querySelector('.movie-title');
@@ -129,7 +167,7 @@ export function apneAvspiller(videoUrl, tittel) {
     byttSide('avspiller');
 }
 
-// 5. Stopp video og nullstill
+// 7. Stopp video og nullstill
 export function stoppOgNullstillVideo() {
     const videoEl = document.getElementById('video');
     if (videoEl) {
@@ -139,20 +177,20 @@ export function stoppOgNullstillVideo() {
     avspillerAktiv = false;
 }
 
-// 6. Naviger tilbake til forrige side
+// 8. Naviger tilbake til forrige side
 export function gaTilbake() {
     stoppOgNullstillVideo();
     byttSide(forrigeSide);
 }
 
-// 7. Utfør søk (kalles fra HTML via oninput)
+// 9. Utfør søk (kalles fra HTML via oninput)
 window.utforSok = function() {
     const sokefelt = document.getElementById('sokefelt');
     const query = sokefelt ? sokefelt.value.trim() : '';
     console.log("Søker etter:", query);
 };
 
-// 8. Koble opp lyttere for avspiller
+// 10. Koble opp lyttere for avspiller
 function initialiserAvspillerKontroller() {
     const tilbakeKnapp = document.getElementById('backButton');
     if (tilbakeKnapp) {
@@ -175,3 +213,4 @@ window.byttSide = byttSide;
 window.apneAvspiller = apneAvspiller;
 window.stoppOgNullstillVideo = stoppOgNullstillVideo;
 window.gaTilbake = gaTilbake;
+window.rullRad = rullRad;
