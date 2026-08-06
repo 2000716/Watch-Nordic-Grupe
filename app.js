@@ -15,10 +15,14 @@ const sideMapping = {
 
 // 1. Sjekk innlogging og initialiser applikasjonen
 window.addEventListener('DOMContentLoaded', () => {
+    console.log("DOMContentLoaded: Initialiserer auth-sjekk...");
+
     onAuthStateChanged(auth, (user) => {
         if (!user) {
+            console.warn("Ingen bruker innlogget. Omdirigerer til Innlogging.html");
             window.location.href = "Innlogging.html";
         } else {
+            console.log("Bruker er innlogget:", user.uid);
             settInnProfilbilde();
 
             // Les gjeldende side fra URL-hash eller standard 'hjem'
@@ -125,15 +129,18 @@ export function byttSide(sideNavn, pushHistory = true) {
 
 // 4. Firestore-integrasjon for Henting av Filmer og Serier
 export async function hentInnholdFraFirestore() {
+    console.log("Starter henting av innhold fra Firestore...");
     try {
-        // Hent filmer og serier samtidig i parallell
         const [filmerSnapshot, serierSnapshot] = await Promise.all([
             getDocs(collection(db, "filmer")),
             getDocs(collection(db, "serier"))
         ]);
 
-        byggGalleriUI("filmer-container", filmerSnapshot);
-        byggGalleriUI("serier-container", serierSnapshot);
+        console.log(`Hentet ${filmerSnapshot.size} filmer og ${serierSnapshot.size} serier.`);
+
+        // Prøver flere vanlige ID-er dersom "filmer-container" ikke finnes
+        byggGalleriUI(["filmer-container", "filmer-galleri", "filmer-seksjon"], filmerSnapshot);
+        byggGalleriUI(["serier-container", "serier-galleri", "serier-seksjon"], serierSnapshot);
 
     } catch (error) {
         console.error("Feil ved henting av innhold fra Firestore:", error);
@@ -141,32 +148,56 @@ export async function hentInnholdFraFirestore() {
 }
 
 // Hjelpefunksjon for å generere HTML-kort for filmer og serier
-function byggGalleriUI(containerId, snapshot) {
-    const container = document.getElementById(containerId);
-    if (!container) return;
+function byggGalleriUI(containerMuligheter, snapshot) {
+    const IDer = Array.isArray(containerMuligheter) ? containerMuligheter : [containerMuligheter];
+    
+    let container = null;
+    for (const id of IDer) {
+        const el = document.getElementById(id);
+        if (el) {
+            container = el;
+            break;
+        }
+    }
+
+    if (!container) {
+        console.error(`Fant ingen HTML-container for ID-ene: ${IDer.join(", ")}. Sjekk at ID-en i HTML stemmer!`);
+        return;
+    }
+
+    if (snapshot.empty) {
+        console.warn(`Kolleksjonen tilkoblet ${container.id} er tom i Firestore.`);
+        return;
+    }
 
     container.innerHTML = ""; // Tøm eksisterende statisk innhold
 
     snapshot.forEach((doc) => {
         const item = doc.data();
 
+        // Støtter flere ulike bildemodeller
+        const bildeUrl = item.poster || item.bilde || item.bildeUrl || item.posterVertikal || 'placeholder.jpg';
+        const tittel = item.tittel || "Uten tittel";
+
         const kort = document.createElement("div");
         kort.className = "media-card";
         kort.innerHTML = `
-            <img src="${item.poster || item.bildeUrl || 'placeholder.jpg'}" alt="${item.tittel}">
-            <p class="media-title">${item.tittel}</p>
+            <img src="${bildeUrl}" alt="${tittel}" loading="lazy">
+            <p class="media-title">${tittel}</p>
         `;
 
-        // Klikk på bildet åpner videospilleren direkte
+        // Klikk på bildet åpner videospilleren
         kort.addEventListener("click", () => {
-            apneAvspiller(item.videoUrl, item.tittel);
+            apneAvspiller(item.videoUrl || item.trailer, tittel);
         });
 
         container.appendChild(kort);
     });
+
+    console.log(`Bygget UI for #${container.id} med ${snapshot.size} elementer.`);
 }
 
-// 5. Interaktivitet og navgering
+// 5. Interaktivitet og navigering
 function initialiserLenkeLyttere() {
     document.addEventListener('click', (e) => {
         const target = e.target.closest('a[data-side]');
