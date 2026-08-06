@@ -1,246 +1,177 @@
-// app.js - Hovedstyring for Watch Nordic™ med Firebase Firestore
-import { db } from "./firebase.js";
-import { collection, getDocs } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-firestore.js";
+// 1. Importer Firebase-moduler
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+import { 
+  getFirestore, 
+  collection, 
+  getDocs 
+} from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-// Global tilstand
-const appState = {
-    aktivSide: 'hjem',
-    valgtMedia: null,
-    mediaData: [],
-    minListe: JSON.parse(localStorage.getItem('minListe')) || []
+// 2. Firebase konfigurasjon
+const firebaseConfig = {
+  apiKey: "AIzaSyBlfCbB1AuiKVHMBEhYd0cvkJ0jxHVZfUg",
+  authDomain: "watch-nordic-78b99.firebaseapp.com",
+  projectId: "watch-nordic-78b99",
+  storageBucket: "watch-nordic-78b99.firebasestorage.app",
+  messagingSenderId: "541804766412",
+  appId: "1:541804766412:web:83fc77721e384131a1ce69"
 };
 
-// Initialisering ved oppstart
-document.addEventListener('DOMContentLoaded', async () => {
-    initRuting();
-    initGalleriRulling();
-    
-    // Hent innhold fra Firestore
-    await lastMediaFraFirestore();
-    
-    // Lytt til navigering i nettleser
-    window.addEventListener('popstate', samkjorRuteFraHash);
+// 3. Initialiser Firebase & Firestore
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+// 4. Testdata (vises automatisk hvis Firestore-databasen din er tom enn så lenge)
+const reserveData = [
+  {
+    id: "1",
+    tittel: "Stranger Things",
+    kategori: "serier",
+    bilde: "https://images.unsplash.com/photo-1536440136628-849c177e76a1?w=800&q=80",
+    bannerBilde: "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=1600&q=80",
+    beskrivelse: "Når en ung gutt forsvinner, avdekker en liten by et mysterium som involverer hemmelige eksperimenter.",
+    meta: "2024 • 16+ • 4 Sesonger",
+    topp10: true,
+    nylig: true
+  },
+  {
+    id: "2",
+    tittel: "Inception",
+    kategori: "filmer",
+    bilde: "https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?w=800&q=80",
+    beskrivelse: "En tyv som stjeler bedriftshemmeligheter gjennom bruk av drømme-delingsteknologi.",
+    meta: "2010 • 13+ • 2t 28m",
+    topp10: true,
+    nylig: false
+  },
+  {
+    id: "3",
+    tittel: "Planet Earth",
+    kategori: "dokumentar",
+    bilde: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=800&q=80",
+    beskrivelse: "En storslått utforskning av verdens mest fantastiske habitater og dyreliv.",
+    meta: "2023 • Tillatt for alle • 1 Sesong",
+    topp10: false,
+    nylig: true
+  }
+];
+
+// ==========================================
+// KJERNEFUNKSJONER
+// ==========================================
+
+// Opprett et filmkort (HTML-element)
+function lagFilmkort(item) {
+  const card = document.createElement("div");
+  card.className = "gallery-item";
+  card.dataset.id = item.id;
+
+  card.innerHTML = `
+    <img src="${item.bilde}" alt="${item.tittel}" loading="lazy" />
+  `;
+
+  // Klikk på et kort oppdaterer hero-banneret
+  card.addEventListener("click", () => settHeroBanner(item));
+  return card;
+}
+
+// Oppdater Hero Banner med valgt film
+function settHeroBanner(item) {
+  const bannerBilde = document.getElementById("banner-bilde");
+  const bannerBeskrivelse = document.getElementById("banner-beskrivelse");
+  const bannerMeta = document.getElementById("banner-metadata");
+  const bannerLogo = document.getElementById("banner-logo");
+
+  if (bannerBilde) bannerBilde.src = item.bannerBilde || item.bilde;
+  if (bannerBeskrivelse) bannerBeskrivelse.textContent = item.beskrivelse || item.tittel;
+  if (bannerMeta) bannerMeta.textContent = item.meta || "";
+  if (bannerLogo && item.logo) {
+    bannerLogo.src = item.logo;
+    bannerLogo.style.display = "block";
+  } else if (bannerLogo) {
+    bannerLogo.style.display = "none";
+  }
+}
+
+// Hent data fra Firestore (eller bruk reservedata)
+async function lastInnhold() {
+  let mediaListe = [];
+
+  try {
+    const querySnapshot = await getDocs(collection(db, "media"));
+    querySnapshot.forEach((doc) => {
+      mediaListe.push({ id: doc.id, ...doc.data() });
+    });
+  } catch (feil) {
+    console.warn("Kunne ikke koble til Firestore, bruker reservedata:", feil);
+  }
+
+  // Hvis databasen var tom, bruk reservedataene
+  if (mediaListe.length === 0) {
+    mediaListe = reserveData;
+  }
+
+  // Sett første film i hero-banneret
+  if (mediaListe.length > 0) {
+    settHeroBanner(mediaListe[0]);
+  }
+
+  // Fordel filmer til riktige gallerier i HTML
+  mediaListe.forEach((item) => {
+    // Filmer
+    if (item.kategori === "filmer") {
+      document.getElementById("filmer-galleri")?.appendChild(lagFilmkort(item));
+    }
+    // Serier
+    if (item.kategori === "serier") {
+      document.getElementById("serier-galleri")?.appendChild(lagFilmkort(item));
+    }
+    // Dokumentarer
+    if (item.kategori === "dokumentar") {
+      document.getElementById("dokumentarserier-galleri")?.appendChild(lagFilmkort(item));
+    }
+    // Nylig lagt til
+    if (item.nylig) {
+      document.getElementById("nye-filmer-galleri")?.appendChild(lagFilmkort(item));
+    }
+    // Topp 10
+    if (item.topp10) {
+      document.getElementById("topp10-filmer-galleri")?.appendChild(lagFilmkort(item));
+    }
+  });
+
+  // Skjul lasteskjermen
+  skjulLoader();
+}
+
+// Skjul laste-spinneren når alt er klart
+function skjulLoader() {
+  const loader = document.getElementById("page-loader");
+  if (loader) {
+    loader.classList.add("hidden");
+  }
+}
+
+// Aktiver rulleknappene (venstre / høyre pil)
+function aktiverSkrollKnapper() {
+  document.querySelectorAll(".gallery-wrapper, .continue-gallery-wrapper").forEach((wrapper) => {
+    const gallery = wrapper.querySelector(".image-gallery, .continue-image-gallery, .top10-gallery");
+    const leftBtn = wrapper.querySelector(".scroll-button.left");
+    const rightBtn = wrapper.querySelector(".scroll-button.right");
+
+    if (!gallery) return;
+
+    leftBtn?.addEventListener("click", () => {
+      gallery.scrollBy({ left: -400, behavior: "smooth" });
+    });
+
+    rightBtn?.addEventListener("click", () => {
+      gallery.scrollBy({ left: 400, behavior: "smooth" });
+    });
+  });
+}
+
+// Initialiser når siden lastes
+document.addEventListener("DOMContentLoaded", () => {
+  lastInnhold();
+  aktiverSkrollKnapper();
 });
-
-// ==========================================
-// 1. DATAHENTING FRA FIREBASE FIRESTORE
-// ==========================================
-
-async function lastMediaFraFirestore() {
-    visLoader(true);
-    try {
-        // Henter dokumenter fra samlingen "media" i Firestore
-        const querySnapshot = await getDocs(collection(db, "media"));
-        appState.mediaData = [];
-
-        querySnapshot.forEach((doc) => {
-            appState.mediaData.push({ id: doc.id, ...doc.data() });
-        });
-
-        // Oppdaterer grensesnittet når data er hentet
-        lastHeroBanner();
-        fyllGallerier();
-    } catch (error) {
-        console.error("Feil ved henting av media fra Firestore:", error);
-    } finally {
-        visLoader(false);
-    }
-}
-
-function visLoader(synlig) {
-    const loader = document.getElementById('page-loader');
-    if (loader) {
-        loader.style.display = synlig ? 'flex' : 'none';
-    }
-}
-
-// ==========================================
-// 2. RUTING OG SPA-LOGIKK
-// ==========================================
-
-export function byttSide(sideId, data = null) {
-    const lovligeSider = ['hjem', 'serier', 'film', 'nyheter', 'min-liste', 'filminfo', 'sok', 'konto', 'avspiller'];
-    const malSide = lovligeSider.includes(sideId) ? sideId : 'hjem';
-
-    appState.aktivSide = malSide;
-    if (data) appState.valgtMedia = data;
-
-    // Skjul alle seksjoner
-    document.querySelectorAll('.side-visning').forEach(side => {
-        side.style.display = 'none';
-    });
-
-    // Vis valgt seksjon
-    const aktivSeksjon = document.getElementById(`view-${malSide}`);
-    if (aktivSeksjon) {
-        aktivSeksjon.style.display = 'block';
-    }
-
-    oppdaterNavigasjonUI(malSide);
-    håndterSpesialVisninger(malSide);
-
-    if (window.location.hash !== `#${malSide}`) {
-        history.pushState(null, '', `#${malSide}`);
-    }
-
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-}
-
-window.byttSide = byttSide;
-
-function initRuting() {
-    samkjorRuteFraHash();
-}
-
-function samkjorRuteFraHash() {
-    const hash = window.location.hash.replace('#', '');
-    byttSide(hash || 'hjem');
-}
-
-function oppdaterNavigasjonUI(aktivSide) {
-    document.querySelectorAll('.nav-links a').forEach(lenke => {
-        lenke.classList.remove('active');
-    });
-
-    const aktivLenke = document.getElementById(`link-${aktivSide}`);
-    if (aktivLenke) {
-        aktivLenke.classList.add('active');
-    }
-}
-
-function håndterSpesialVisninger(sideId) {
-    const topNav = document.querySelector('.top-nav');
-    const footer = document.querySelector('.footer');
-
-    if (sideId === 'avspiller') {
-        if (topNav) topNav.style.display = 'none';
-        if (footer) footer.style.display = 'none';
-    } else {
-        if (topNav) topNav.style.display = 'flex';
-        if (footer) footer.style.display = 'block';
-    }
-
-    if (sideId === 'filminfo' && appState.valgtMedia) {
-        oppdaterFilminfoSide(appState.valgtMedia);
-    }
-}
-
-// ==========================================
-// 3. RENDER ALL GALLERIDATA
-// ==========================================
-
-function lastHeroBanner() {
-    const fremhevet = appState.mediaData.find(m => m.fremhevet) || appState.mediaData[0];
-    if (!fremhevet) return;
-
-    const bannerBilde = document.getElementById('banner-bilde');
-    const bannerLogo = document.getElementById('banner-logo');
-    const bannerBeskrivelse = document.getElementById('banner-beskrivelse');
-    const bannerMeta = document.getElementById('banner-metadata');
-    const seNaKnapp = document.getElementById('banner-se-na');
-
-    if (bannerBilde) bannerBilde.src = fremhevet.bannerUrl || fremhevet.bildeUrl || '';
-    if (bannerLogo && fremhevet.logoUrl) bannerLogo.src = fremhevet.logoUrl;
-    if (bannerBeskrivelse) bannerBeskrivelse.innerText = fremhevet.beskrivelse || '';
-    if (bannerMeta) bannerMeta.innerText = `${fremhevet.ar || 2026} • ${fremhevet.alder || '12+'} • ${fremhevet.varighet || ''}`;
-
-    if (seNaKnapp) {
-        seNaKnapp.onclick = () => byttSide('avspiller', fremhevet);
-    }
-}
-
-function fyllGallerier() {
-    const data = appState.mediaData;
-
-    lagaGalleriKort('nye-filmer-galleri', data);
-    lagaGalleriKort('topp10-filmer-galleri', data.filter(m => m.topp10));
-    lagaGalleriKort('filmer-galleri', data.filter(m => m.kategori === 'film'));
-    lagaGalleriKort('serier-galleri', data.filter(m => m.kategori === 'serie'));
-    lagaGalleriKort('alle-serier-oversikt-galleri', data.filter(m => m.kategori === 'serie'));
-    lagaGalleriKort('dokumentarserier-galleri', data.filter(m => m.kategori === 'dokumentar'));
-}
-
-function lagaGalleriKort(elementId, liste) {
-    const container = document.getElementById(elementId);
-    if (!container) return;
-
-    container.innerHTML = '';
-
-    if (!liste || liste.length === 0) {
-        container.innerHTML = '<p style="color: #888; padding: 10px;">Ingen innhold tilgjengelig.</p>';
-        return;
-    }
-
-    liste.forEach(item => {
-        const kort = document.createElement('div');
-        kort.className = 'gallery-card';
-        kort.style.cssText = 'min-width: 180px; margin-right: 12px; cursor: pointer; display: inline-block;';
-
-        const bildeSrc = item.bildeUrl || item.posterUrl || item.bilde || '';
-
-        kort.innerHTML = `
-            <img src="${bildeSrc}" alt="${item.tittel || ''}" style="width: 100%; border-radius: 6px; aspect-ratio: 16/9; object-fit: cover;" />
-            <p style="margin-top: 6px; font-size: 14px; font-weight: 500;">${item.tittel || 'Uten tittel'}</p>
-        `;
-
-        kort.addEventListener('click', () => {
-            byttSide('filminfo', item);
-        });
-
-        container.appendChild(kort);
-    });
-}
-
-function oppdaterFilminfoSide(media) {
-    const bgImg = document.getElementById('backgroundImage');
-    const desc = document.querySelector('#view-filminfo .description');
-    const meta = document.querySelector('#view-filminfo .metadata');
-    const watchBtn = document.getElementById('watchBtn');
-
-    if (bgImg) bgImg.src = media.bannerUrl || media.bildeUrl || '';
-    if (desc) desc.innerText = media.beskrivelse || '';
-    if (meta) meta.innerText = `${media.ar || ''} | ${media.alder || ''} | ${media.varighet || ''}`;
-
-    if (watchBtn) {
-        watchBtn.onclick = () => byttSide('avspiller', media);
-    }
-}
-
-// ==========================================
-// 4. RULLING & SØK
-// ==========================================
-
-function initGalleriRulling() {
-    document.querySelectorAll('.gallery-wrapper, .continue-gallery-wrapper').forEach(wrapper => {
-        const leftBtn = wrapper.querySelector('.scroll-button.left');
-        const rightBtn = wrapper.querySelector('.scroll-button.right');
-        const gallery = wrapper.querySelector('.image-gallery, .top10-gallery, .continue-image-gallery');
-
-        if (gallery && leftBtn && rightBtn) {
-            leftBtn.addEventListener('click', () => {
-                gallery.scrollBy({ left: -400, behavior: 'smooth' });
-            });
-            rightBtn.addEventListener('click', () => {
-                gallery.scrollBy({ left: 400, behavior: 'smooth' });
-            });
-        }
-    });
-}
-
-window.utforSok = function() {
-    const sokefelt = document.getElementById('sokefelt');
-    const resultatContainer = document.getElementById('sokeResultater');
-    if (!sokefelt || !resultatContainer) return;
-
-    const query = sokefelt.value.toLowerCase().trim();
-    resultatContainer.innerHTML = '';
-
-    if (query === '') return;
-
-    const treff = appState.mediaData.filter(item => 
-        (item.tittel && item.tittel.toLowerCase().includes(query)) || 
-        (item.beskrivelse && item.beskrivelse.toLowerCase().includes(query))
-    );
-
-    lagaGalleriKort('sokeResultater', treff);
-};
