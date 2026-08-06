@@ -3,10 +3,10 @@ import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.15.0/f
 import { collection, getDocs } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
 
 // Import fra egne moduler
-import { initialiserHovedside } from "js/hovedside.js";
-import { initialiserFilminfo } from "js/filminfo.js";
-import { initialiserVideo } from "js/video.js";
-import { initialiserKonto, settInnProfilbilde } from "./konto.js";
+import { initialiserHovedside } from "./js/hovedside.js";
+import { initialiserFilminfo } from "./js/filminfo.js";
+import { initialiserVideo } from "./js/video.js";
+import { initialiserKonto, settInnProfilbilde } from "./js/konto.js";
 
 // Tilstandsvariabler
 let avspillerAktiv = false;
