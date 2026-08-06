@@ -8,11 +8,17 @@ html {
   font-family: Arial, sans-serif;
   background: #050F11;
   color: #ffffff;
+  /* Flytt overflow-x hit og tillat vertikal rulling */
+  overflow-x: hidden;
+  overflow-y: auto;
+  min-height: 100%;
 }
 
 body {
-  overflow-x: hidden;
   width: 100%;
+  min-height: 100vh;
+  /* Fjern overflow-x: hidden fra body */
+  overflow-y: auto;
 }
 
 main {
@@ -27,7 +33,6 @@ main {
     background: #091B1E !important;
   }
 }
-
 /* ==========================================================================
    3. HERO BANNER (PC)
    ========================================================================== */
