@@ -2,13 +2,11 @@ import { auth, db } from "./firebase-oppsett.js";
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-auth.js";
 import { collection, getDocs } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
 
-// Import fra egne moduler i js-mappen
 import { initialiserHovedside } from "./js/hovedside.js";
 import { initialiserFilminfo } from "./js/filminfo.js";
 import { initialiserVideo } from "./js/video.js";
 import { initialiserKonto, settInnProfilbilde } from "./js/konto.js";
 
-let avspillerAktiv = false;
 let forrigeSide = 'hjem';
 let altInnhold = [];
 
@@ -18,21 +16,12 @@ const sideMapping = {
     'min-liste': 'hjem'
 };
 
-// 1. Sjekk innlogging og initialiser applikasjonen
 window.addEventListener('DOMContentLoaded', () => {
-    console.log("DOMContentLoaded: Initialiserer auth-sjekk...");
-
     onAuthStateChanged(auth, (user) => {
         if (!user) {
-            console.warn("Ingen bruker innlogget. Omdirigerer til Innlogging.html");
             window.location.href = "Innlogging.html";
         } else {
-            console.log("Bruker er innlogget:", user.uid);
-            
-            if (typeof settInnProfilbilde === 'function') {
-                settInnProfilbilde();
-            }
-
+            if (typeof settInnProfilbilde === 'function') settInnProfilbilde();
             const startSide = window.location.hash.replace('#', '') || 'hjem';
             byttSide(startSide, false);
             hentInnholdFraFirestore();
@@ -44,10 +33,7 @@ window.addEventListener('DOMContentLoaded', () => {
     if (typeof initialiserVideo === 'function') initialiserVideo();
 
     initialiserAvspillerKontroller();
-    initialiserScrollLyttere();
-    initialiserGalleriRulling();
     initialiserLenkeLyttere();
-    initialiserSokefelt();
     fjernPageLoader();
 });
 
@@ -56,13 +42,6 @@ window.addEventListener('popstate', (e) => {
     byttSide(side, false);
 });
 
-window.addEventListener('storage', (e) => {
-    if (e.key === 'profilbilde' && typeof settInnProfilbilde === 'function') {
-        settInnProfilbilde();
-    }
-});
-
-// 2. Sidebytte og SPA-visningsstyring
 export function byttSide(sideNavn, pushHistory = true) {
     if (sideNavn !== 'avspiller') {
         forrigeSide = sideNavn;
@@ -75,9 +54,7 @@ export function byttSide(sideNavn, pushHistory = true) {
     }
 
     const targetSeksjon = document.getElementById(`view-${malId}`);
-
     if (!targetSeksjon) {
-        console.warn(`Seksjonen 'view-${sideNavn}' finnes ikke. Omdirigerer til 'view-hjem'.`);
         byttSide('hjem', pushHistory);
         return;
     }
@@ -86,7 +63,7 @@ export function byttSide(sideNavn, pushHistory = true) {
         history.pushState({ side: sideNavn }, '', `#${sideNavn}`);
     }
 
-    const navbar = document.querySelector('.top-nav') || document.querySelector('nav');
+    const navbar = document.querySelector('.top-nav');
     const footer = document.querySelector('footer');
 
     if (sideNavn === 'avspiller') {
@@ -114,16 +91,10 @@ export function byttSide(sideNavn, pushHistory = true) {
         aktivLink.classList.add('active');
     }
 
-    if (sideNavn === 'avspiller') {
-        avspillerAktiv = true;
-    }
-
-    nullstillScrollPosisjon();
+    window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
 }
 
-// 3. Firestore-integrasjon
 export async function hentInnholdFraFirestore() {
-    console.log("Starter henting av innhold fra Firestore...");
     try {
         const [filmerSnapshot, serierSnapshot] = await Promise.all([
             getDocs(collection(db, "filmer")),
@@ -142,8 +113,8 @@ export async function hentInnholdFraFirestore() {
 
         altInnhold = [...filmerData, ...serierData];
 
-        byggGalleriUI(["filmer-container", "filmer-galleri"], filmerData);
-        byggGalleriUI(["serier-container", "serier-galleri"], serierData);
+        byggGalleriUI(["filmer-container", "filmer-galleri", "nye-filmer-galleri"], filmerData);
+        byggGalleriUI(["serier-container", "serier-galleri", "alle-serier-oversikt-galleri"], serierData);
 
     } catch (error) {
         console.error("Feil ved henting av innhold fra Firestore:", error);
@@ -159,8 +130,8 @@ function byggGalleriUI(containerMuligheter, dataListe) {
     funneContainere.forEach(container => {
         container.innerHTML = "";
         dataListe.forEach((item) => {
-            const bildeUrl = item.poster || item.posterVertikal || item.bilde || 'placeholder.jpg';
-            const tittel = item.tittel || item.tittelNavn || "Uten tittel";
+            const bildeUrl = item.poster || item.bilde || 'placeholder.jpg';
+            const tittel = item.tittel || "Uten tittel";
             const videoUrl = item.videoUrl || item.trailer || '';
 
             const kort = document.createElement("div");
@@ -180,43 +151,12 @@ function byggGalleriUI(containerMuligheter, dataListe) {
     });
 }
 
-// 4. Navigasjon og rulling
 function initialiserLenkeLyttere() {
     document.addEventListener('click', (e) => {
         const target = e.target.closest('a[data-side]');
         if (target) {
             e.preventDefault();
             byttSide(target.getAttribute('data-side'));
-        }
-    });
-}
-
-function nullstillScrollPosisjon() {
-    window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
-}
-
-export function rullRad(radElement, retning) {
-    const rad = typeof radElement === 'string' ? document.getElementById(radElement) : radElement;
-    if (!rad) return;
-    rad.scrollBy({ left: retning === 'venstre' ? -500 : 500, behavior: 'smooth' });
-}
-
-function initialiserGalleriRulling() {
-    document.querySelectorAll('.gallery-wrapper').forEach(wrapper => {
-        const galleri = wrapper.querySelector('.image-gallery');
-        const venstre = wrapper.querySelector('.scroll-button.left');
-        const hoyre = wrapper.querySelector('.scroll-button.right');
-
-        if (galleri && venstre) venstre.addEventListener('click', () => rullRad(galleri, 'venstre'));
-        if (galleri && hoyre) hoyre.addEventListener('click', () => rullRad(galleri, 'høyre'));
-    });
-}
-
-function initialiserScrollLyttere() {
-    const navbar = document.querySelector('.top-nav');
-    window.addEventListener('scroll', () => {
-        if (navbar) {
-            navbar.classList.toggle('scrolled', window.scrollY > 50);
         }
     });
 }
@@ -228,7 +168,6 @@ function fjernPageLoader() {
     }, 500);
 }
 
-// 5. Videospiller
 export function apneAvspiller(videoUrl, tittel) {
     const videoEl = document.getElementById('video');
     const tittelEl = document.querySelector('.movie-title');
@@ -248,18 +187,11 @@ export function stoppOgNullstillVideo() {
         videoEl.pause();
         videoEl.currentTime = 0;
     }
-    avspillerAktiv = false;
 }
 
 export function gaTilbake() {
     stoppOgNullstillVideo();
     byttSide(forrigeSide);
-}
-
-// 6. Søkelogikk
-function initialiserSokefelt() {
-    const sokefelt = document.getElementById('sokefelt');
-    if (sokefelt) sokefelt.addEventListener('input', window.utforSok);
 }
 
 window.utforSok = function() {
@@ -275,7 +207,7 @@ window.utforSok = function() {
 
     const treff = altInnhold.filter(item => {
         const tittel = (item.tittel || item.tittelNavn || '').toLowerCase();
-        const sjanger = (item.sjanger || item.sjangere || '').toString().toLowerCase();
+        const sjanger = (item.sjanger || '').toString().toLowerCase();
         return tittel.includes(query) || sjanger.includes(query);
     });
 
@@ -306,7 +238,6 @@ function initialiserAvspillerKontroller() {
     }
 }
 
-// Globale eksporter
 window.byttSide = byttSide;
 window.apneAvspiller = apneAvspiller;
 window.gaTilbake = gaTilbake;
