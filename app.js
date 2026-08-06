@@ -13,18 +13,17 @@ window.addEventListener('DOMContentLoaded', () => {
         } else {
             settInnProfilbilde();
             
-            // Les hash fra URL hvis brukeren laster siden på nytt (f.eks. #serier)
             const startSide = window.location.hash.replace('#', '') || 'hjem';
             byttSide(startSide);
-            
-            initialiserFilmKort();
         }
     });
 
+    // Registrer globale klikklyttere og kontroller én gang
+    initialiserFilmKortLytter();
     initialiserAvspillerKontroller();
 });
 
-// Lytter til endringer i nettleserens URL-hash (tilbake/frem-knapper)
+// Lytter til endringer i URL-hash
 window.addEventListener('hashchange', () => {
     const sideNavn = window.location.hash.replace('#', '') || 'hjem';
     byttSide(sideNavn);
@@ -49,7 +48,6 @@ export function byttSide(sideNavn) {
     const header = document.querySelector('.top-nav') || document.querySelector('header');
     const footer = document.querySelector('footer');
 
-    // Skjul/vis meny og footer i videoavspilleren
     if (sideNavn === 'avspiller') {
         if (header) header.style.display = 'none';
         if (footer) footer.style.display = 'none';
@@ -58,23 +56,19 @@ export function byttSide(sideNavn) {
         if (footer) footer.style.display = 'block';
     }
 
-    // 1. Skjul alle seksjoner
     document.querySelectorAll('.side-visning').forEach(seksjon => {
         seksjon.style.display = 'none';
     });
 
-    // 2. Vis aktuelt view
     const aktivSeksjon = document.getElementById(`view-${sideNavn}`);
     if (aktivSeksjon) {
         aktivSeksjon.style.display = 'block';
-        window.scrollTo(0, 0); // Rull til toppen av den nye siden
+        window.scrollTo(0, 0);
     } else {
-        // Fallback dersom lenken peker til en ugyldig side
         const hjemSeksjon = document.getElementById('view-hjem');
         if (hjemSeksjon) hjemSeksjon.style.display = 'block';
     }
 
-    // 3. Oppdater aktiv knapp i navigasjonen
     document.querySelectorAll('.nav-links a').forEach(link => {
         link.classList.remove('active');
     });
@@ -89,9 +83,13 @@ export function byttSide(sideNavn) {
 
 // 4. Viser informasjonsside for film/serie
 export async function visFilmInfo(filmId) {
-    if (!filmId) return;
+    if (!filmId) {
+        console.error("visFilmInfo ble kalt uten filmId");
+        return;
+    }
 
     try {
+        // Sjekk først 'filmer'-samlingen
         let docRef = doc(db, "filmer", filmId);
         let docSnap = await getDoc(docRef);
         let data = null;
@@ -99,6 +97,7 @@ export async function visFilmInfo(filmId) {
         if (docSnap.exists()) {
             data = docSnap.data();
         } else {
+            // Dersom den ikke finnes i 'filmer', sjekk 'serier'
             docRef = doc(db, "serier", filmId);
             docSnap = await getDoc(docRef);
             if (docSnap.exists()) {
@@ -120,23 +119,27 @@ export async function visFilmInfo(filmId) {
 
             byttSide('filminfo');
         } else {
-            console.warn("Fant ikke innhold med ID:", filmId);
+            console.warn(`Fant intet dokument i hverken 'filmer' eller 'serier' med ID: "${filmId}"`);
         }
     } catch (error) {
-        console.error("Feil ved henting av filminfo:", error);
+        console.error("Feil ved henting av filminfo fra Firestore:", error);
     }
 }
 
-// 5. Registrerer klikk-hendelser på film- og seriekort
-function initialiserFilmKort() {
-    document.querySelectorAll('.gallery-item, .top10-item').forEach(kort => {
-        kort.addEventListener('click', (e) => {
+// 5. Event Delegation: Fanger opp klikk på filmkort uansett når de opprettes i DOM-en
+function initialiserFilmKortLytter() {
+    document.addEventListener('click', (e) => {
+        const kort = e.target.closest('.gallery-item, .top10-item');
+        if (kort) {
             e.preventDefault();
-            const filmId = kort.getAttribute('data-id') || kort.querySelector('img')?.alt;
+            const filmId = kort.getAttribute('data-id');
+            
             if (filmId) {
                 visFilmInfo(filmId);
+            } else {
+                console.warn("Elementet mangler 'data-id'-attributt:", kort);
             }
-        });
+        }
     });
 }
 
@@ -159,6 +162,6 @@ function initialiserAvspillerKontroller() {
     }
 }
 
-// Giver tilgang til funksjoner i globalt skop (nødvendig for inline onclick="" i HTML)
+// Eksporter til globalt skop for inline HTML-kall
 window.byttSide = byttSide;
 window.visFilmInfo = visFilmInfo;
