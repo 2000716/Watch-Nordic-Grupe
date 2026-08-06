@@ -8,25 +8,22 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
     <meta http-equiv="Content-Security-Policy" content="default-src 'self' https: data: blob:; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com; script-src 'self' 'unsafe-inline' https://www.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' data: https: blob:; connect-src 'self' https:; font-src 'self' https://cdnjs.cloudflare.com; object-src 'none'; base-uri 'self'; frame-ancestors 'none';" />
     <meta name="referrer-policy" content="strict-origin-when-cross-origin" />
-    <title>Watch Nordic™</title>
+    <title>Watch Nordic™</title>    
     
     <link rel="icon" type="image/png" href="https://static.wixstatic.com/media/d9ace9_95bbe3f5ff4b4aab9314a8d08804344e~mv2.png" />
-    <!-- FontAwesome for ikoner -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <!-- CSS -->
-    <link rel="stylesheet" href="css/hoveddside.css">
+    <link rel="stylesheet" href="css/hovedside.css">
     <link rel="stylesheet" href="css/video.css">
     <link rel="stylesheet" href="css/videoinfo.css">
     <link rel="stylesheet" href="css/konto.css">
-   <link rel="stylesheet" href="footer.css">
-    <link rel="stylesheet" href="meny.css">
+    <link rel="stylesheet" href="css/footer.css">
+    <link rel="stylesheet" href="css/meny.css">
 </head>
 <body>
 
-    <!-- ========================================== -->
-    <!-- 1. FAST TOPPMENY                           -->
-    <!-- ========================================== -->
+    <!-- TOPPMENY -->
     <header class="top-nav">
         <div class="nav-left">
             <a href="#hjem" onclick="byttSide('hjem')" class="watch-logo-svg">
@@ -56,12 +53,10 @@
         </div>
     </header>
 
-    <!-- ========================================== -->
-    <!-- 2. HOVEDINNHOLD (SIDENE SOM BYTTES UT)      -->
-    <!-- ========================================== -->
+    <!-- HOVEDINNHOLD -->
     <main>
 
-        <!-- A. HJEM-SEKSJON -->
+        <!-- HJEM -->
         <section id="view-hjem" class="side-visning">
             <div id="page-loader">
                 <div class="spinner"></div>
@@ -90,13 +85,9 @@
                 <h2>Nylig lagt til</h2>
                 <div class="gallery-wrapper">
                     <div class="fade-left"></div>
-                    <button class="scroll-button left">❮</button>
-                    <div class="image-gallery" id="nye-filmer-galleri">
-                        <a href="#" class="gallery-item"><img src="https://via.placeholder.com/330x175" alt="Film"></a>
-                        <a href="#" class="gallery-item"><img src="https://via.placeholder.com/330x175" alt="Film"></a>
-                        <a href="#" class="gallery-item"><img src="https://via.placeholder.com/330x175" alt="Film"></a>
-                    </div>
-                    <button class="scroll-button right">❯</button>
+                    <button class="scroll-button left" aria-label="Rull til venstre">❮</button>
+                    <div class="image-gallery" id="nye-filmer-galleri"></div>
+                    <button class="scroll-button right" aria-label="Rull til høyre">❯</button>
                     <div class="fade-right"></div>
                 </div>
             </section>
@@ -116,18 +107,9 @@
                 <h2>Filmtoppen!</h2>
                 <div class="gallery-wrapper">
                     <div class="fade-left"></div>
-                    <button class="scroll-button left">❮</button>
-                    <div class="top10-gallery" id="topp10-filmer-galleri">
-                        <div class="top10-item">
-                            <img src="https://via.placeholder.com/150x225" alt="Topp 1">
-                            <span class="top10-number">1</span>
-                        </div>
-                        <div class="top10-item">
-                            <img src="https://via.placeholder.com/150x225" alt="Topp 2">
-                            <span class="top10-number">2</span>
-                        </div>
-                    </div>
-                    <button class="scroll-button right">❯</button>
+                    <button class="scroll-button left" aria-label="Rull til venstre">❮</button>
+                    <div class="top10-gallery" id="topp10-filmer-galleri"></div>
+                    <button class="scroll-button right" aria-label="Rull til høyre">❯</button>
                     <div class="fade-right"></div>
                 </div>
             </section> 
@@ -136,12 +118,9 @@
                 <h2>Filmer</h2>
                 <div class="gallery-wrapper">
                     <div class="fade-left"></div>
-                    <button class="scroll-button left">❮</button>
-                    <div class="image-gallery" id="filmer-galleri">
-                        <a href="#" class="gallery-item"><img src="https://via.placeholder.com/330x175" alt="Film"></a>
-                        <a href="#" class="gallery-item"><img src="https://via.placeholder.com/330x175" alt="Film"></a>
-                    </div>
-                    <button class="scroll-button right">❯</button>
+                    <button class="scroll-button left" aria-label="Rull til venstre">❮</button>
+                    <div class="image-gallery" id="filmer-galleri"></div>
+                    <button class="scroll-button right" aria-label="Rull til høyre">❯</button>
                     <div class="fade-right"></div>
                 </div>
             </section>
@@ -150,12 +129,9 @@
                 <h2>Serier</h2>
                 <div class="gallery-wrapper">
                     <div class="fade-left"></div>
-                    <button class="scroll-button left">❮</button>
-                    <div class="image-gallery" id="serier-galleri">
-                        <a href="#" class="gallery-item"><img src="https://via.placeholder.com/330x175" alt="Serie"></a>
-                        <a href="#" class="gallery-item"><img src="https://via.placeholder.com/330x175" alt="Serie"></a>
-                    </div>
-                    <button class="scroll-button right">❯</button>
+                    <button class="scroll-button left" aria-label="Rull til venstre">❮</button>
+                    <div class="image-gallery" id="serier-galleri"></div>
+                    <button class="scroll-button right" aria-label="Rull til høyre">❯</button>
                     <div class="fade-right"></div>
                 </div>
             </section>
@@ -164,45 +140,57 @@
                 <h2>Dokumentarserier</h2>
                 <div class="gallery-wrapper">
                     <div class="fade-left"></div>
-                    <button class="scroll-button left">❮</button>
-                    <div class="image-gallery" id="dokumentarserier-galleri">
-                        <a href="#" class="gallery-item"><img src="https://via.placeholder.com/330x175" alt="Dokumentar"></a>
-                    </div>
-                    <button class="scroll-button right">❯</button>
+                    <button class="scroll-button left" aria-label="Rull til venstre">❮</button>
+                    <div class="image-gallery" id="dokumentarserier-galleri"></div>
+                    <button class="scroll-button right" aria-label="Rull til høyre">❯</button>
                     <div class="fade-right"></div>
                 </div>
             </section>
         </section>
 
-        <!-- B. SERIER-OVERSIKT SEKSJON -->
+        <!-- SERIER -->
         <section id="view-serier" class="side-visning" style="display: none;">
-            <div class="page-loader-seksjon">
-                <div class="spinner"></div>
-            </div>
             <div class="gallery-section">
                 <h2>Alle Serier</h2>
-                <div class="image-gallery" id="alle-serier-oversikt-galleri">
-                    <!-- Fylles dynamically fra JS for serier -->
-                </div>
+                <div class="image-gallery" id="alle-serier-oversikt-galleri"></div>
             </div>
         </section>
 
-        <!-- C. FILMINFO / DETALJSIDE FOR FILM OG SERIE -->
-        <section id="view-filminfo" class="side-visning" style="display: none;">
-            <div class="page-loader-seksjon">
-                <div class="spinner"></div>
+        <!-- FILMER -->
+        <section id="view-film" class="side-visning" style="display: none;">
+            <div class="gallery-section">
+                <h2>Alle Filmer</h2>
+                <div class="image-gallery" id="alle-filmer-oversikt-galleri"></div>
             </div>
+        </section>
 
+        <!-- WATCH ORIGINALS -->
+        <section id="view-nyheter" class="side-visning" style="display: none;">
+            <div class="gallery-section">
+                <h2>Watch Originals</h2>
+                <div class="image-gallery" id="originals-oversikt-galleri"></div>
+            </div>
+        </section>
+
+        <!-- MIN LISTE -->
+        <section id="view-min-liste" class="side-visning" style="display: none;">
+            <div class="gallery-section">
+                <h2>Min Liste</h2>
+                <div class="image-gallery" id="min-liste-galleri"></div>
+            </div>
+        </section>
+
+        <!-- FILMINFO -->
+        <section id="view-filminfo" class="side-visning" style="display: none;">
             <div class="hero">
                 <img class="background-image" id="backgroundImage" src="" alt="Bakgrunnsbilde" />
                 <video id="trailerVideo" class="background-video" muted playsinline></video>
-
                 <div class="overlay"></div>
                 <div class="bottom-fade"></div>
 
                 <div id="videoControls" class="video-controls">
-                    <button id="pauseBtn"><i class="fas fa-pause"></i></button>
-                    <button id="soundBtn"><i class="fas fa-volume-mute"></i></button>
+                    <button id="pauseBtn" aria-label="Pause"><i class="fas fa-pause"></i></button>
+                    <button id="soundBtn" aria-label="Mute/Unmute"><i class="fas fa-volume-mute"></i></button>
                 </div>
 
                 <div class="content-wrapper">
@@ -238,14 +226,14 @@
             </div>
         </section>
 
-        <!-- D. SØKE-SEKSJON -->
+        <!-- SØK -->
         <section id="view-sok" class="side-visning" style="display: none;">
             <h2>Søk</h2>
             <input type="text" id="sokefelt" placeholder="Søk etter film eller serie..." oninput="utforSok()">
             <div id="sokeResultater"></div>
         </section>
 
-        <!-- E. KONTO-SEKSJON -->
+        <!-- KONTO -->
         <section id="view-konto" class="side-visning" style="display: none;">
             <div class="container konto-container">
                 <div class="profile-header">
@@ -254,7 +242,7 @@
                         <p>Aktiv profil</p>
                     </div>
 
-                    <div class="avatar-wrapper" id="avatarContainer" title="Klikk for å endre profilbilde">
+                    <div class="avatar-wrapper" id="avatarContainer" role="button" tabindex="0" title="Klikk for å endre profilbilde">
                         <img id="profilbilde" class="avatar-img" src="" alt="Profilbilde">
                         <div class="edit-badge"><i class="fa-solid fa-pencil"></i></div>
                     </div>
@@ -323,11 +311,9 @@
             </div>
         </section>
 
-        <!-- F. VIDEOAVSPILLER-SEKSJON -->
+        <!-- VIDEOAVSPILLER -->
         <section id="view-avspiller" class="side-visning" style="display: none;">
             <div class="container" id="container" style="width: 100vw; height: 100vh; margin: 0; padding: 0; max-width: none;">
-            
-                <!-- VIDEOSPILLER -->
                 <div id="videoWrapper">
                     <video id="video" preload="metadata" playsinline>
                         <source src="" type="video/mp4">
@@ -336,11 +322,9 @@
                     </video>
                 </div>
 
-                <!-- OVERLAYS -->
                 <div class="subtitle-overlay" id="subtitleOverlay"></div>
                 <div class="loading-spinner" id="loadingSpinner"></div>
 
-                <!-- INTRO / OUTRO KNAPPER -->
                 <button id="skipIntroBtn" class="skip-btn" style="display: none;">
                     <i class="fa-solid fa-forward" style="margin-right: 5px;"></i> Hopp over intro
                 </button>
@@ -349,24 +333,19 @@
                     Neste episode <i class="fa-solid fa-forward" style="margin-left: 5px;"></i>
                 </button>
 
-                <!-- AUTOPLAY OVERLAY -->
                 <div id="autoplayOverlay" style="display: none;">
                     <div class="autoplay-content">
                         <img id="autoplayLogo" class="autoplay-serie-logo" alt="Serie Logo" style="display: none;">
-                        
                         <div class="autoplay-episode-meta">
                             <span id="autoplayEpTag" class="autoplay-ep-tag"></span>
                             <span id="autoplayEpTitle" class="autoplay-ep-title"></span>
                         </div>
-                        
                         <p id="autoplayEpDesc" class="autoplay-ep-desc"></p>
-                        
                         <div class="autoplay-action-row">
                             <button id="autoplayPlayNextBtn" class="autoplay-btn">
                                 <i class="fa-solid fa-play"></i> Spill nå
                             </button>
                             <button id="autoplayCancelBtn" class="autoplay-btn">Avbryt</button>
-                            
                             <div class="autoplay-circle-timer">
                                 <svg class="timer-svg" viewBox="0 0 36 36">
                                     <path class="timer-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
@@ -378,7 +357,6 @@
                     </div>
                 </div>
 
-                <!-- RESUME DIALOG -->
                 <div id="resumeOverlay" class="resume-overlay" style="display: none;">
                     <div class="resume-box">
                         <p>Vil du fortsette der du slapp?</p>
@@ -389,11 +367,10 @@
                     </div>
                 </div>
 
-                <!-- HOVED-UI -->
                 <div class="ui" id="ui">
                     <div class="top-bar">
                         <div class="top-bar-left">
-                            <a href="#" class="back-button" id="backButton">
+                            <a href="#" class="back-button" id="backButton" aria-label="Gå tilbake">
                                 <i class="fa-solid fa-chevron-left" style="color: white; font-size: 20px;"></i>
                             </a>
                             <div class="movie-title">Laster tittel...</div>
@@ -425,7 +402,6 @@
 
                     <div class="controls">
                         <div class="left-controls"></div>
-
                         <div class="center-controls">
                             <button class="btn" id="rewindBtn" title="10 sekunder tilbake">
                                 <i class="fa-solid fa-rotate-left" style="color: white; font-size: 20px;"></i>
@@ -442,7 +418,6 @@
                             <button id="nextEpisodeBtn" class="btn">
                                 Neste <i class="fa-solid fa-forward" style="margin-left: 3px; font-size: 12px;"></i>
                             </button>
-                            
                             <button class="btn" id="captionsBtn" title="Undertekster og lydspråk">
                                 <i class="fa-solid fa-closed-captioning" style="color: white; font-size: 20px;"></i>
                             </button>
@@ -452,7 +427,6 @@
                         </div>
                     </div>
 
-                    <!-- MENY FOR LYD OG UNDERTEKSTER -->
                     <div class="caption-menu" id="captionMenu" style="display: none;">
                         <div class="caption-menu-header">
                             <h3>Lyd og undertekster</h3>
@@ -460,39 +434,34 @@
                                 <i class="fa-solid fa-xmark"></i>
                             </button>
                         </div>
-                        
                         <div class="caption-menu-grid">
                             <div class="caption-column">
                                 <div class="caption-column-title">Lyd</div>
                                 <div class="caption-track-list" id="audioTracks"></div>
                             </div>
-
                             <div class="caption-column">
                                 <div class="caption-column-title">Undertekster</div>
                                 <div class="caption-track-list" id="subtitleTracks"></div>
                             </div>
                         </div>
                     </div>
-
                 </div>
             </div>
         </section>
 
     </main>
 
-    <!-- ========================================== -->
-    <!-- 3. FOOTER                                  -->
-    <!-- ========================================== -->
+    <!-- FOOTER -->
     <footer class="footer">
         <div class="footer-socials">
-            <a href="https://www.instagram.com/watchnordicoriginals?igsh=aWRvcTJmMWl1NGRp&utm_source=qr" target="_blank" rel="noopener"><i class="fab fa-instagram"></i></a>
-            <a href="https://www.tiktok.com/@watchnordicoriginals" target="_blank" rel="noopener"><i class="fab fa-tiktok"></i></a>
-            <a href="#" target="_blank" rel="noopener"><i class="fab fa-youtube"></i></a>
+            <a href="https://www.instagram.com/watchnordicoriginals" target="_blank" rel="noopener" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+            <a href="https://www.tiktok.com/@watchnordicoriginals" target="_blank" rel="noopener" aria-label="TikTok"><i class="fab fa-tiktok"></i></a>
+            <a href="#" target="_blank" rel="noopener" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
         </div>
 
         <div class="footer-links">
             <a href="om.html">Om Watch Nordic</a>
-            <a href="kontakt.html">Contact oss</a>
+            <a href="kontakt.html">Kontakt oss</a>
             <a href="personvern.html">Personvern</a>
             <a href="hjelp.html">Hjelpesenter</a>
             <a href="#">Jobber</a>
@@ -514,15 +483,13 @@
         </div>
     </footer>
 
-    <!-- ========================================== -->
-    <!-- JAVASCRIPT-FILER                           -->
-    <!-- ========================================== -->
-    <script type="module" src="firebase-oppsett.js"></script>
-    <script type="module" src="meny.js"></script>
-    <script type="module" src="js/hoveddside.js"></script>
+    <!-- JAVASCRIPT -->
+    <script type="module" src="js/firebase-oppsett.js"></script>
+    <script type="module" src="js/meny.js"></script>
+    <script type="module" src="js/hovedside.js"></script>
     <script type="module" src="js/filminfo.js"></script>
     <script type="module" src="js/konto.js"></script>
     <script type="module" src="js/video.js"></script>
-    <script type="module" src="app.js"></script>
+    <script type="module" src="js/app.js"></script>
 </body>
 </html>
