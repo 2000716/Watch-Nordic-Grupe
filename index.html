@@ -15,7 +15,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <!-- CSS -->
-<link rel="stylesheet" href="css/hovedside.css">
+    <link rel="stylesheet" href="css/hovedside.css">
     <link rel="stylesheet" href="css/video.css">
     <link rel="stylesheet" href="css/filminfo.css">
     <link rel="stylesheet" href="css/konto.css">
@@ -57,7 +57,7 @@
     </header>
 
     <!-- ========================================== -->
-    <!-- 2. HOVEDINNHOLD (SIDENE SOM BYTTES UT)     -->
+    <!-- 2. HOVEDINNHOLD                            -->
     <!-- ========================================== -->
     <main>
 
@@ -91,9 +91,7 @@
                 <div class="gallery-wrapper">
                     <div class="fade-left"></div>
                     <button class="scroll-button left" aria-label="Rull til venstre">❮</button>
-                    <div class="image-gallery" id="nye-filmer-galleri">
-                        <!-- Fylles dynamisk fra Firestore -->
-                    </div>
+                    <div class="image-gallery" id="nye-filmer-galleri"></div>
                     <button class="scroll-button right" aria-label="Rull til høyre">❯</button>
                     <div class="fade-right"></div>
                 </div>
@@ -115,9 +113,7 @@
                 <div class="gallery-wrapper">
                     <div class="fade-left"></div>
                     <button class="scroll-button left" aria-label="Rull til venstre">❮</button>
-                    <div class="top10-gallery" id="topp10-filmer-galleri">
-                        <!-- Fylles dynamisk fra Firestore -->
-                    </div>
+                    <div class="top10-gallery" id="topp10-filmer-galleri"></div>
                     <button class="scroll-button right" aria-label="Rull til høyre">❯</button>
                     <div class="fade-right"></div>
                 </div>
@@ -128,9 +124,7 @@
                 <div class="gallery-wrapper">
                     <div class="fade-left"></div>
                     <button class="scroll-button left" aria-label="Rull til venstre">❮</button>
-                    <div class="image-gallery" id="filmer-galleri">
-                        <!-- Fylles dynamisk fra Firestore -->
-                    </div>
+                    <div class="image-gallery" id="filmer-galleri"></div>
                     <button class="scroll-button right" aria-label="Rull til høyre">❯</button>
                     <div class="fade-right"></div>
                 </div>
@@ -141,9 +135,7 @@
                 <div class="gallery-wrapper">
                     <div class="fade-left"></div>
                     <button class="scroll-button left" aria-label="Rull til venstre">❮</button>
-                    <div class="image-gallery" id="serier-galleri">
-                        <!-- Fylles dynamisk fra Firestore -->
-                    </div>
+                    <div class="image-gallery" id="serier-galleri"></div>
                     <button class="scroll-button right" aria-label="Rull til høyre">❯</button>
                     <div class="fade-right"></div>
                 </div>
@@ -154,9 +146,7 @@
                 <div class="gallery-wrapper">
                     <div class="fade-left"></div>
                     <button class="scroll-button left" aria-label="Rull til venstre">❮</button>
-                    <div class="image-gallery" id="dokumentarserier-galleri">
-                        <!-- Fylles dynamisk fra Firestore -->
-                    </div>
+                    <div class="image-gallery" id="dokumentarserier-galleri"></div>
                     <button class="scroll-button right" aria-label="Rull til høyre">❯</button>
                     <div class="fade-right"></div>
                 </div>
@@ -170,13 +160,11 @@
             </div>
             <div class="gallery-section">
                 <h2>Alle Serier</h2>
-                <div class="image-gallery" id="alle-serier-oversikt-galleri">
-                    <!-- Fylles dynamisk fra JS for serier -->
-                </div>
+                <div class="image-gallery" id="alle-serier-oversikt-galleri"></div>
             </div>
         </section>
 
-        <!-- C. FILMINFO / DETALJSIDE FOR FILM OG SERIE -->
+        <!-- C. FILMINFO / DETALJSIDE -->
         <section id="view-filminfo" class="side-visning" style="display: none;">
             <div class="page-loader-seksjon">
                 <div class="spinner"></div>
@@ -316,7 +304,6 @@
         <section id="view-avspiller" class="side-visning" style="display: none;">
             <div class="container" id="container" style="width: 100vw; height: 100vh; margin: 0; padding: 0; max-width: none;">
 
-                <!-- VIDEOSPILLER -->
                 <div id="videoWrapper">
                     <video id="video" preload="metadata" playsinline>
                         <source src="" type="video/mp4">
@@ -325,11 +312,9 @@
                     </video>
                 </div>
 
-                <!-- OVERLAYS -->
                 <div class="subtitle-overlay" id="subtitleOverlay"></div>
                 <div class="loading-spinner" id="loadingSpinner"></div>
 
-                <!-- INTRO / OUTRO KNAPPER -->
                 <button id="skipIntroBtn" class="skip-btn" style="display: none;">
                     <i class="fa-solid fa-forward" style="margin-right: 5px;"></i> Hopp over intro
                 </button>
@@ -338,7 +323,6 @@
                     Neste episode <i class="fa-solid fa-forward" style="margin-left: 5px;"></i>
                 </button>
 
-                <!-- AUTOPLAY OVERLAY -->
                 <div id="autoplayOverlay" style="display: none;">
                     <div class="autoplay-content">
                         <img id="autoplayLogo" class="autoplay-serie-logo" alt="Serie Logo" style="display: none;">
@@ -367,7 +351,6 @@
                     </div>
                 </div>
 
-                <!-- RESUME DIALOG -->
                 <div id="resumeOverlay" class="resume-overlay" style="display: none;">
                     <div class="resume-box">
                         <p>Vil du fortsette der du slapp?</p>
@@ -378,7 +361,6 @@
                     </div>
                 </div>
 
-                <!-- HOVED-UI -->
                 <div class="ui" id="ui">
                     <div class="top-bar">
                         <div class="top-bar-left">
@@ -431,7 +413,6 @@
                             <button id="nextEpisodeBtn" class="btn">
                                 Neste <i class="fa-solid fa-forward" style="margin-left: 3px; font-size: 12px;"></i>
                             </button>
-
                             <button class="btn" id="captionsBtn" title="Undertekster og lydspråk">
                                 <i class="fa-solid fa-closed-captioning" style="color: white; font-size: 20px;"></i>
                             </button>
@@ -441,7 +422,6 @@
                         </div>
                     </div>
 
-                    <!-- MENY FOR LYD OG UNDERTEKSTER -->
                     <div class="caption-menu" id="captionMenu" style="display: none;">
                         <div class="caption-menu-header">
                             <h3>Lyd og undertekster</h3>
@@ -462,7 +442,6 @@
                             </div>
                         </div>
                     </div>
-
                 </div>
             </div>
         </section>
