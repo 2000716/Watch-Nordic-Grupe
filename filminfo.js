@@ -25,13 +25,11 @@ let watchBtn, addToListBtn, bgImg;
 let oppryddingsFunksjoner = [];
 let authUnsubscribe = null;
 
-// Hjelpefunksjon for SPA-navigasjon uden hard reload
+// Hjelpefunksjon for SPA-navigasjon uten hard reload
 function navigerTil(url) {
-  // Hvis du bruker en SPA-router (f.eks. Navigo, Page.js, eller custom router):
   if (window.router && typeof window.router.navigate === "function") {
     window.router.navigate(url);
   } else {
-    // Fallback om SPA-router ikke finnes i vinduet ennå:
     history.pushState(null, "", url);
     window.dispatchEvent(new Event("popstate"));
   }
@@ -160,6 +158,10 @@ export async function renderFilmPage(medieNavn) {
 
   const suksess = await lastDataFraFirebase(medieNavn);
   if (!suksess || !data) return;
+
+  // Skjul laste-spinner automatisk når dataen er klar
+  const loader = document.querySelector("#view-filminfo .page-loader-seksjon") || document.querySelector(".page-loader-seksjon");
+  if (loader) loader.style.display = "none";
 
   watchBtn = document.getElementById("watchBtn");
   addToListBtn = document.getElementById("addToListBtn");
@@ -409,13 +411,11 @@ export async function renderFilmPage(medieNavn) {
    4. OPPRYDDINGSFUNKSJON FOR SPA (UNMOUNT)
    ========================================== */
 export function destroyFilmPage() {
-  // Kjør alle registrerte oppryddingsfunksjoner
   while (oppryddingsFunksjoner.length > 0) {
     const cleanup = oppryddingsFunksjoner.pop();
     cleanup();
   }
 
-  // Stopp eventuell video som spilles i bakgrunnen
   const trailerVideo = document.getElementById("trailerVideo");
   if (trailerVideo) {
     trailerVideo.pause();
@@ -798,7 +798,6 @@ async function byggAnbefalingerEllerEpisoder() {
           card.appendChild(overlay);
 
           card.addEventListener("click", () => {
-            // I en SPA ruter vi om til samme side med nytt navn i stedet for full omlasting
             renderFilmPage(nøkkel);
           });
           fragment.appendChild(card);
@@ -897,3 +896,10 @@ function oppdaterTopNavTilstand() {
   document.body.classList.toggle("scrolled-y", !erToppen);
   nav.classList.toggle("scrolled", !erToppen);
 }
+
+/* ==========================================
+   10. GLOBALE EKSPORTER FOR SPA & WINDOW-KALL
+   ========================================== */
+window.renderFilmPage = renderFilmPage;
+window.lastInnFilm = renderFilmPage;
+window.destroyFilmPage = destroyFilmPage;
