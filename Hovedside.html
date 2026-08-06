@@ -945,41 +945,6 @@
 </head>
 <body>
 
-    <!-- ========================================== -->
-    <!-- 1. FAST TOPPMENY                           -->
-    <!-- ========================================== -->
-    <header class="top-nav">
-        <div class="nav-left">
-            <a href="#hjem" onclick="byttSide('hjem')" class="watch-logo-svg">
-                <img src="https://res.cloudinary.com/ocv4zhpk/image/upload/v1785855892/d9ace9_081ea242211b45a2801873c3067e1205_mv2_vtfrdn.png" alt="Watch Nordic">
-            </a>
-        </div>
-
-        <nav class="nav-links">
-            <a href="#hjem" id="link-hjem" onclick="byttSide('hjem')" class="active"><i class="fas fa-house"></i> Hjem</a>
-            <a href="#serier" id="link-serier" onclick="byttSide('serier')"><i class="fas fa-tv"></i> Serier</a>
-            <a href="#film" id="link-film" onclick="byttSide('film')"><i class="fas fa-clapperboard"></i> Filmer</a>
-            <a href="#nyheter" id="link-nyheter" onclick="byttSide('nyheter')"><i class="fas fa-star"></i> Watch Originals</a>
-            <a href="#min-liste" id="link-min-liste" onclick="byttSide('min-liste')"><i class="fas fa-bookmark"></i> Min Liste</a>
-        </nav>
-
-        <div class="nav-right">
-            <a href="#sok" id="link-sok" onclick="byttSide('sok')" class="nav-search" aria-label="Søk">
-                <i class="fas fa-search"></i>
-            </a>
-
-            <a href="#konto" onclick="byttSide('konto')" class="profilmeny" id="profilmenyLink" aria-label="Konto og profil">
-                <div class="profil-avatar-wrap">
-                    <div class="profil-avatar-bg"></div>
-                    <img id="menyProfilbilde" src="https://res.cloudinary.com/ocv4zhpk/image/upload/v1785856037/Muffins_profil_100_k1qd4h.png" alt="Profilbilde" class="profil-avatar-img" />
-                </div>
-            </a>
-        </div>
-    </header>
-
-    <!-- ========================================== -->
-    <!-- 2. HOVEDINNHOLD (SIDENE SOM BYTTES UT)      -->
-    <!-- ========================================== -->
     <main>
 
         <!-- A. HJEM-SEKSJON -->
@@ -1095,10 +1060,51 @@
             </section>
         </section>
 
+    <footer class="footer">
+        <div class="footer-socials">
+            <a href="https://www.instagram.com/watchnordicoriginals?igsh=aWRvcTJmMWl1NGRp&utm_source=qr"><i class="fab fa-instagram"></i></a>
+            <a href="https://www.tiktok.com/@watchnordicoriginals"><i class="fab fa-tiktok"></i></a>
+            <a href="#"><i class="fab fa-youtube"></i></a>
+        </div>
 
+        <div class="footer-links">
+            <a href="om.html">Om Watch Nordic</a>
+            <a href="kontakt.html">Contact oss</a>
+            <a href="personvern.html">Personvern</a>
+            <a href="hjelp.html">Hjelpesenter</a>
+            <a href="#">Jobber</a>
+            <a href="#">Investorinformasjon</a>
+            <a href="#">Vilkår</a>
+            <a href="#">Informasjonskapsler</a>
+            <a href="#">Juridisk informasjon</a>
+            <a href="#">Bedriftskonto</a>
+            <a href="#">Gavekort</a>
+            <a href="#">Enheter</a>
+        </div>
 
+        <div class="footer-copy">
+            © 2026 Watch Nordic™
+        </div>
 
+        <div class="footer-bottom">
+            Alle varemerker fra WATCH NORDIC™, WATCH NORDIC ORIGINALS™ og alle øvrige tilknyttede immaterielle rettigheter tilhører Watch Nordic Group og brukes under lisens av Watch Nordic™. Alle varemerker, logoer, filmer, serier, bilder, design og øvrige tilknyttede immaterielle rettigheter tilhører sine respektive eiere. Alt innhold er beskyttet av opphavsrett og internasjonale varemerkelover. Alle rettigheter forbeholdt.
+        </div>
+    </footer>
 
+    <script>
+        fetch('meny.html')
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById('nav-placeholder').innerHTML = data;
+                
+                if (typeof initNav === 'function') {
+                    initNav();
+                }
+            });
+    </script>
+
+<script src="meny.js"></script>
+<script src="lader.js"></script>
 <script type="module">
   // ==================== HJELPEFUNKSJONER FOR SIKKERHET & PARSING ==================== //
   function sikkerJSONParse(str, fallback = null) {
