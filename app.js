@@ -1,177 +1,145 @@
-import { auth } from "./firebase-oppsett.js";
+
+import { auth, db } from "./firebase-oppsett.js";
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+import { collection, getDocs } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
-// Tilstandsvariabler
-let avspillerAktiv = false;
+// ===============================================
+// STATE & UTILITIES
+// ===============================================
+let filmer = {}, serier = {};
 let forrigeSide = 'hjem';
+const escapeHTML = (str) => String(str || '').replace(/[&<>'"/]/g, s => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' }[s]));
 
-// Mapping dersom en menyknapp peker på en seksjon som gjenbruker en eksisterende visning
-const sideMapping = {
-    'film': 'hjem',        // Hvis 'view-film' mangler, vis 'view-hjem'
-    'nyheter': 'hjem',     // Hvis 'view-nyheter' mangler, vis 'view-hjem'
-    'min-liste': 'hjem'    // Hvis 'view-min-liste' mangler, vis 'view-hjem'
-};
-
-// 1. Sjekk innlogging ved lasting
-window.addEventListener('DOMContentLoaded', () => {
-    onAuthStateChanged(auth, (user) => {
-        if (!user) {
-            window.location.href = "Innlogging.html";
-        } else {
-            settInnProfilbilde();
-            byttSide('hjem');
-        }
-    });
-
-    initialiserAvspillerKontroller();
-    fjernPageLoader();
-});
-
-// 2. Hent profilbilde fra localStorage
-function settInnProfilbilde() {
-    const lagretBilde = localStorage.getItem("profilbilde");
-    const menyBildeEl = document.getElementById("menyProfilbilde");
-
-    if (menyBildeEl && lagretBilde && lagretBilde !== "null" && lagretBilde.trim() !== "") {
-        menyBildeEl.src = lagretBilde;
-    }
-}
-
-// 3. Sidebytte og visningsstyring
-export function byttSide(sideNavn) {
+// ===============================================
+// CORE SPA NAVIGATION
+// ===============================================
+const byttSide = (sideNavn, data = {}) => {
     if (sideNavn !== 'avspiller') {
         forrigeSide = sideNavn;
         stoppOgNullstillVideo();
     }
+    document.querySelectorAll('.side-visning').forEach(s => s.style.display = 'none');
+    const targetSeksjon = document.getElementById(`view-${sideNavn}`);
+    if (targetSeksjon) targetSeksjon.style.display = 'block';
+    else byttSide('hjem');
 
-    // Sjekk om det finnes en reell ID for siden, ellers bruk fallback
-    let malId = sideNavn;
-    if (!document.getElementById(`view-${sideNavn}`) && sideMapping[sideNavn]) {
-        malId = sideMapping[sideNavn];
-    }
+    const isPlayer = sideNavn === 'avspiller';
+    document.querySelector('.top-nav').style.display = isPlayer ? 'none' : 'flex';
+    document.querySelector('.footer').style.display = isPlayer ? 'none' : 'block';
 
-    const targetSeksjon = document.getElementById(`view-${malId}`);
-
-    // Sikkerhet: Hvis målsiden mot formodning ikke finnes, gå til 'hjem'
-    if (!targetSeksjon) {
-        console.warn(`Seksjonen 'view-${sideNavn}' finnes ikke. Omdirigerer til 'view-hjem'.`);
-        const hjemSeksjon = document.getElementById('view-hjem');
-        if (hjemSeksjon) hjemSeksjon.style.display = 'block';
-        return;
-    }
-
-    // Skjul navbar og footer automatisk i fullskjermspiller
-    const navbar = document.querySelector('.top-nav') || document.querySelector('nav');
-    const footer = document.querySelector('footer');
-
-    if (sideNavn === 'avspiller') {
-        if (navbar) navbar.style.display = 'none';
-        if (footer) footer.style.display = 'none';
-        document.body.style.overflow = 'hidden';
-    } else {
-        if (navbar) navbar.style.display = 'flex';
-        if (footer) footer.style.display = 'block';
-        document.body.style.overflow = 'auto';
-    }
-
-    // Skjul alle visninger
-    document.querySelectorAll('.side-visning').forEach(seksjon => {
-        seksjon.style.display = 'none';
-    });
-
-    // Vis den valgte seksjonen
-    targetSeksjon.style.display = 'block';
-
-    // Oppdater aktiv fane i menyen
-    document.querySelectorAll('.nav-links a').forEach(link => {
-        link.classList.remove('active');
-    });
-    const aktivLink = document.getElementById(`link-${sideNavn}`);
-    if (aktivLink) {
-        aktivLink.classList.add('active');
-    }
-
-    if (sideNavn === 'avspiller') {
-        avspillerAktiv = true;
-    }
-
-    // Scroll til toppen ved sidebytte
+    document.querySelectorAll('a[data-side]').forEach(link => link.classList.toggle('active', link.dataset.side === sideNavn));
     window.scrollTo(0, 0);
-}
 
-// Fjern/skjul loader etter at siden har lastet
-function fjernPageLoader() {
-    setTimeout(() => {
-        const loader = document.getElementById('page-loader');
-        if (loader) loader.style.display = 'none';
-        
-        document.querySelectorAll('.page-loader-seksjon').forEach(el => {
-            el.style.display = 'none';
-        });
-    }, 500);
-}
-
-// 4. Åpne og starte videospiller
-export function apneAvspiller(videoUrl, tittel) {
-    const videoEl = document.getElementById('video');
-    const tittelEl = document.querySelector('.movie-title');
-
-    if (videoEl && videoUrl) {
-        videoEl.src = videoUrl;
-        videoEl.load();
-        videoEl.play().catch(err => console.log("Autoplay krevde brukerinteraksjon:", err));
-    }
-
-    if (tittelEl) {
-        tittelEl.textContent = tittel || "Watch Nordic Video";
-    }
-
-    byttSide('avspiller');
-}
-
-// 5. Stopp video og nullstill
-export function stoppOgNullstillVideo() {
-    const videoEl = document.getElementById('video');
-    if (videoEl) {
-        videoEl.pause();
-        videoEl.currentTime = 0;
-    }
-    avspillerAktiv = false;
-}
-
-// 6. Naviger tilbake til forrige side
-export function gaTilbake() {
-    stoppOgNullstillVideo();
-    byttSide(forrigeSide);
-}
-
-// 7. Utfør søk (kalles fra HTML via oninput)
-window.utforSok = function() {
-    const sokefelt = document.getElementById('sokefelt');
-    const query = sokefelt ? sokefelt.value.trim() : '';
-    console.log("Søker etter:", query);
+    // Handle content loading for specific pages
+    if (sideNavn === 'filminfo') renderFilminfoSide(data.itemId, data.itemType);
+    else if (sideNavn === 'hjem' && !Object.keys(filmer).length) hentDataFraFirestore();
 };
 
-// 8. Koble opp lyttere for avspiller
-function initialiserAvspillerKontroller() {
-    const tilbakeKnapp = document.getElementById('backButton');
-    if (tilbakeKnapp) {
-        tilbakeKnapp.addEventListener('click', (e) => {
+// ===============================================
+// VIDEO PLAYER
+// ===============================================
+const stoppOgNullstillVideo = () => {
+    const video = document.getElementById('video');
+    if (video) { video.pause(); video.src = ""; }
+};
+
+const apneAvspiller = (videoUrl, tittel) => {
+    const video = document.getElementById('video');
+    const tittelEl = document.querySelector('#view-avspiller .movie-title');
+    if (video && videoUrl) { video.src = videoUrl; video.play(); }
+    if (tittelEl) tittelEl.textContent = tittel || "";
+    byttSide('avspiller');
+};
+
+// ===============================================
+// DATA FETCHING & RENDERING
+// ===============================================
+const hentDataFraFirestore = async () => {
+    try {
+        const [filmerSnap, serierSnap] = await Promise.all([getDocs(collection(db, "filmer")), getDocs(collection(db, "serier"))]);
+        filmer = Object.fromEntries(filmerSnap.docs.map(doc => [doc.id, doc.data()]));
+        serier = Object.fromEntries(serierSnap.docs.map(doc => [doc.id, doc.data()]));
+        renderHjemmeside();
+    } catch (err) { console.error("Error fetching data:", err); }
+};
+
+const renderHjemmeside = () => {
+    renderGalleri('filmer-galleri', filmer, 'film');
+    renderGalleri('serier-galleri', serier, 'serie');
+    oppdaterBanner();
+    document.getElementById('page-loader').style.display = 'none';
+};
+
+const renderGalleri = (galleryId, items, type) => {
+    const galleri = document.getElementById(galleryId);
+    if (!galleri) return;
+    galleri.innerHTML = '';
+    for (const key in items) {
+        galleri.appendChild(createGalleryItem(key, items[key], type));
+    }
+};
+
+const createGalleryItem = (id, item, type) => {
+    const link = document.createElement('a');
+    link.href = '#';
+    link.className = 'gallery-item';
+    link.dataset.side = 'filminfo';
+    link.dataset.itemId = id;
+    link.dataset.itemType = type;
+    link.innerHTML = `<img src="${escapeHTML(item.poster || item.bilde)}" alt="${escapeHTML(item.tittel)}" loading="lazy"><div class="image-overlay">${escapeHTML(item.tittel)}</div>`;
+    return link;
+};
+
+const oppdaterBanner = () => {
+    const bannerItems = Object.values(filmer).filter(f => f.banner);
+    if (!bannerItems.length) return;
+    const item = bannerItems[Math.floor(Math.random() * bannerItems.length)];
+    document.getElementById('banner-bilde').src = escapeHTML(item.banner);
+    document.getElementById('banner-logo').src = escapeHTML(item.logo);
+    document.getElementById('banner-beskrivelse').textContent = item.beskrivelse;
+    document.getElementById('banner-metadata').textContent = (item.metadata || []).join(' • ');
+    document.getElementById('banner-se-na').onclick = () => apneAvspiller(item.trailer, item.tittel);
+};
+
+const renderFilminfoSide = (itemId, itemType) => {
+    const item = (itemType === 'film' ? filmer : serier)[itemId];
+    if (!item) { byttSide('hjem'); return; }
+    const view = document.getElementById('view-filminfo');
+    view.innerHTML = `
+        <div class="hero" style="background-image: url(${escapeHTML(item.banner)});"><div class="overlay"></div>
+            <div class="content-wrapper">
+                <img class="film-logo" src="${escapeHTML(item.logo)}" alt="Logo">
+                <p class="description">${escapeHTML(item.beskrivelse)}</p>
+                <div class="metadata">${(item.metadata || []).join(' • ')}</div>
+                <button class="watch-button"><i class="fas fa-play"></i> Se nå</button>
+            </div>
+        </div>`;
+    view.querySelector('.watch-button').onclick = () => apneAvspiller(item.trailer, item.tittel);
+};
+
+// ===============================================
+// INITIALIZATION
+// ===============================================
+const initializeApp = () => {
+    document.body.addEventListener('click', (e) => {
+        const link = e.target.closest('a[data-side]');
+        if (link) {
             e.preventDefault();
-            gaTilbake();
-        });
-    }
+            byttSide(link.dataset.side, { ...link.dataset });
+        }
+    });
+    document.getElementById('backButton')?.addEventListener('click', () => byttSide(forrigeSide));
 
-    const bannerSeNa = document.getElementById('banner-se-na');
-    if (bannerSeNa) {
-        bannerSeNa.addEventListener('click', () => {
-            apneAvspiller("https://www.w3schools.com/html/mov_bbb.mp4", "Big Buck Bunny");
-        });
-    }
-}
+    onAuthStateChanged(auth, user => {
+        if (user) {
+            console.log("User is logged in.");
+            byttSide(forrigeSide || 'hjem');
+        } else {
+            console.log("User not logged in.");
+            // Implement login view or redirect if necessary
+            byttSide('hjem');
+        }
+    });
+};
 
-// Global eksponering for inline HTML-eventer
-window.byttSide = byttSide;
-window.apneAvspiller = apneAvspiller;
-window.stoppOgNullstillVideo = stoppOgNullstillVideo;
-window.gaTilbake = gaTilbake;
+document.addEventListener('DOMContentLoaded', initializeApp);
