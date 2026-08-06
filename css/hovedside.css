@@ -1,4 +1,4 @@
-    * {
+* {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
@@ -9,6 +9,8 @@
       background: #050F11;
       color: #ffffff;
       overflow-x: hidden;
+      overflow-y: auto !important; /* Sikrer at man alltid kan scrolle */
+      height: 100%;
     }
 
     main {
@@ -16,6 +18,7 @@
       min-height: 100vh;
       display: flex;
       flex-direction: column;
+      overflow: visible; /* Sikrer at innhold ikke blir kuttet */
     }
 
     @media (max-width: 768px) {
@@ -409,7 +412,7 @@
       font-weight: 900;
       line-height: 1;
       color: transparent;
-      -webkit-text-stroke: 4px #00FFCC; /* Endret til grønn farge (#00FFCC) */
+      -webkit-text-stroke: 4px #00FFCC;
       z-index: 2;
       transition: all 0.3s ease;
       pointer-events: none;
@@ -539,14 +542,12 @@
         9. HOVER EFFEKTER KUN FOR ENHETER MED MUS (PC / LAPTOP)
         ========================================================================== */
     @media (hover: hover) {
-      /* Vanlige gallerier */
       .image-gallery a:hover, .gallery-item:hover {
         z-index: 999;
         transform: scale(1.05);
         border-color: #ffffff;
       }
 
-      /* Fortsett å se-kort */
       .continue-item:hover {
         z-index: 999;
         transform: scale(1.05);
@@ -555,7 +556,6 @@
         border-color: #ffffff;
       }
 
-      /* Top 10 galleri */
       .top10-item:hover { 
         transform: scale(1.05); 
         outline: 3px solid #ffffff; 
@@ -564,11 +564,10 @@
       }
 
       .top10-item:hover .top10-number {
-        color: #00FFCC; /* Endret til grønn farge ved hover i stedet for hvit */
+        color: #00FFCC; 
         -webkit-text-stroke: 0;
       }
 
-      /* Piler */
       .scroll-button {
         display: flex;
         position: absolute;
@@ -651,7 +650,6 @@
         margin-right: 0 !important;
       }
 
-      /* HERO BANNER MOBIL */
       .hero-banner {
         height: 55vh !important; 
         min-height: 360px !important;
@@ -705,7 +703,6 @@
         background: rgba(255, 255, 255, 0.2);
       }
 
-      /* GENERELLE SEKSJONER PÅ MOBIL */
       .gallery-section, .continue-watching-section {
         margin-left: 0 !important; 
         margin-right: 0 !important;
@@ -725,7 +722,6 @@
 
       .scroll-button { display: none !important; }
 
-      /* ALLE STANDARD GALLERIER */
       .image-gallery,
       .coming-movies-gallery,
       .top10-gallery,
@@ -766,7 +762,6 @@
         border-radius: 6px !important;
       }
 
-      /* TOP 10 GALLERI (MOBIL) */
       .gallery-section .top10-item {
         width: 155px !important;
         flex-shrink: 0 !important;
@@ -786,10 +781,9 @@
         font-size: 44px !important;
         left: 2px !important;
         bottom: 2px !important;
-        -webkit-text-stroke: 1.5px #00FFCC !important; /* Endret til grønn på mobil også */
+        -webkit-text-stroke: 1.5px #00FFCC !important;
       }
 
-      /* KUN FILM-GALLERIET */
       #alle-filmer-seksjon .gallery-item,
       #alle-filmer-seksjon a,
       #filmer-galleri .gallery-item,
@@ -807,7 +801,6 @@
         border-radius: 6px !important;
       }
 
-      /* "FORTSETT Å SE" (MOBIL) */
       .continue-watching-section .continue-image-gallery {
         display: flex !important;
         flex-direction: row !important;
@@ -857,7 +850,6 @@
         color: #ffffff !important;
       }
 
-      /* EKSTRA SEKSJONER */
       .kids-banner {
         height: 120px !important;
         margin: 20px 16px !important; 
@@ -886,30 +878,8 @@
     }
 
     /* ==========================================================================
-        11. NØDBREMS (PORTRETT PÅ LANDSKAP PÅ MOBIL)
-        ========================================================================== */
-    @media screen and (orientation: landscape) and (max-width: 900px) {
-      body {
-        overflow: hidden !important;
-      }
-
-      body::after {
-        content: "Vennligst roter telefonen til portrett-modus for å bruke appen.";
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100vw;
-        height: 100vh;
-        background: #091B1E;
-        color: #ffffff;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        text-align: center;
-        z-index: 999999;
-        padding: 20px;
-      }
-    }
+       Fjernet den aggressive landskap-nødbremsen som låste skjermen din helt.
+       ========================================================================== */
 
     /* ==========================================================================
         12. SKJUL TITTEL OG METADATA HELT (MEN BEHOLDES I KODEN)
@@ -920,5 +890,3 @@
     .continue-item .overlay-meta {
       display: none !important;
      }
-
-
