@@ -1,6 +1,6 @@
-import { auth, db } from "./firebase-oppsett.js";
+import { auth, db } from "./firebase-oppsett.js"; // Sørg for at db er importert herfra om du bruker den her
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-auth.js";
-import { doc, getDoc } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js"; // Sørg for at disse er med for å hente filmdata
+import { initFilmMal } from "./film-mal-spa.js"; // Modulen vi lagde for filmmalen
 
 // Global variabel for å holde styr på om spilleren er i gang
 let avspillerAktiv = false;
@@ -13,7 +13,8 @@ window.addEventListener('DOMContentLoaded', () => {
         } else {
             settInnProfilbilde();
             byttSide('hjem');
-            initialiserFilmKort(); // Aktiverer klikk på filmer
+            // Last inn film-kort og lyttere når siden er klar
+            initialiserFilmKort();
         }
     });
 
@@ -30,8 +31,8 @@ function settInnProfilbilde() {
     }
 }
 
-// 3. Hovedfunksjon for å bytte side uten blinking
-function byttSide(sideNavn) {
+// 3. Utvidet hovedfunksjon for å bytte side (støtter nå parametere til f.eks. filmmal)
+function byttSide(sideNavn, params = {}) {
     if (sideNavn !== 'avspiller') {
         stoppOgNullstillVideo();
     }
@@ -67,69 +68,21 @@ function byttSide(sideNavn) {
         aktivLink.classList.add('active');
     }
 
+    // 4. Spesifikk logikk per side
     if (sideNavn === 'avspiller') {
         avspillerAktiv = true;
+    } else if (sideNavn === 'filmmal') {
+        // Initialiser filmmalen dynamisk med filmens navn/parametere
+        initFilmMal(params);
     }
 }
 
-// 4. Funksjon for å hente filminfo og vise filminfo-siden din
-async function visFilmInfo(filmNavn) {
-    if (!filmNavn) return;
+// Global hjelpefunksjon for SPA-navigering som moduler kan kalle på
+window.navigateTo = function(side, params) {
+    byttSide(side, params);
+};
 
-    try {
-        // Hent filmdata fra Firebase (sjekker 'filmer' og evt. 'serier')
-        let docRef = doc(db, "filmer", filmNavn);
-        let docSnap = await getDoc(docRef);
-        let data = null;
-
-        if (docSnap.exists()) {
-            data = docSnap.data();
-        } else {
-            docRef = doc(db, "serier", filmNavn);
-            docSnap = await getDoc(docRef);
-            if (docSnap.exists()) {
-                data = docSnap.data();
-            }
-        }
-
-        if (data) {
-            // HER PLASSERER DU KODEN DIN FOR Å FYLLE INN FILMINFO
-            // Eksempel på å fylle inn elementer hvis de finnes i 'view-filminfo':
-            const tittelEl = document.querySelector('#view-filminfo .filminfo-tittel');
-            if (tittelEl) tittelEl.textContent = data.tittel || filmNavn;
-
-            const beskrivelseEl = document.querySelector('#view-filminfo .filminfo-beskrivelse');
-            if (beskrivelseEl) beskrivelseEl.textContent = data.beskrivelse || '';
-
-            const bildeEl = document.querySelector('#view-filminfo .filminfo-bilde');
-            if (bildeEl && data.bakgrunn) bildeEl.src = data.bakgrunn;
-
-            // Bytter visning til filminfo-siden uten oppdatering
-            byttSide('filminfo');
-        } else {
-            console.warn("Fant ikke film med navn:", filmNavn);
-        }
-    } catch (error) {
-        console.error("Feil ved henting av filminfo:", error);
-    }
-}
-
-// 5. Automatisk gjenkjenning av klikk på filmkort
-function initialiserFilmKort() {
-    // Bruker 'event delegation' slik at det også fungerer på filmer som lastes dynamisk inn
-    document.body.addEventListener('click', (e) => {
-        const filmKort = e.target.closest('.movie-card, [data-film-navn]');
-        if (filmKort) {
-            const filmNavn = filmKort.getAttribute('data-film-navn') || filmKort.dataset.navn;
-            if (filmNavn) {
-                e.preventDefault();
-                visFilmInfo(filmNavn); // Åpner filminfo-koden din med riktig film
-            }
-        }
-    });
-}
-
-// 6. Funksjon for å starte avspilleren med en gitt videolenke og tittel
+// 4. Funksjon for å starte avspilleren med en gitt videolenke og tittel
 function apneAvspiller(videoUrl, tittel) {
     const videoEl = document.getElementById('video');
     const tittelEl = document.querySelector('.movie-title');
@@ -147,7 +100,7 @@ function apneAvspiller(videoUrl, tittel) {
     byttSide('avspiller');
 }
 
-// 7. Stopp video og nullstill
+// 5. Stopp video og nullstill
 function stoppOgNullstillVideo() {
     const videoEl = document.getElementById('video');
     if (videoEl) {
@@ -157,22 +110,28 @@ function stoppOgNullstillVideo() {
     avspillerAktiv = false;
 }
 
-// 8. Koble opp lyttere for knapper
+// 6. Automatisk gjenkjenning og klikk-håndtering for film-kort på tvers av sidene
+function initialiserFilmKort() {
+    // Bruk "event delegation" på dokumentet slik at også dynamisk lastede filmer fungerer
+    document.body.addEventListener('click', (e) => {
+        const filmKort = e.target.closest('.movie-card, [data-film-navn]');
+        if (filmKort) {
+            const filmNavn = filmKort.getAttribute('data-film-navn') || filmKort.dataset.navn;
+            if (filmNavn) {
+                e.preventDefault();
+                byttSide('filmmal', { navn: filmNavn });
+            }
+        }
+    });
+}
+
+// 7. Koble opp lyttere for knapper
 function initialiserAvspillerKontroller() {
     const tilbakeKnapp = document.getElementById('backButton');
     if (tilbakeKnapp) {
         tilbakeKnapp.addEventListener('click', (e) => {
             e.preventDefault();
             stoppOgNullstillVideo();
-            byttSide('hjem');
-        });
-    }
-
-    // Legg også til en tilbake-knapp fra filminfo til hjem hvis du har en
-    const filminfoTilbake = document.getElementById('filminfoTilbake');
-    if (filminfoTilbake) {
-        filminfoTilbake.addEventListener('click', (e) => {
-            e.preventDefault();
             byttSide('hjem');
         });
     }
@@ -185,8 +144,7 @@ function initialiserAvspillerKontroller() {
     }
 }
 
-// 9. GJØR FUNKSJONER TILGJENGELIG GLOBALMENT
+// 8. GJØR FUNKSJONER TILGJENGELIG GLOBALMENT
 window.byttSide = byttSide;
-window.visFilmInfo = visFilmInfo;
 window.apneAvspiller = apneAvspiller;
 window.stoppOgNullstillVideo = stoppOgNullstillVideo;
