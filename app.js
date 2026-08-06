@@ -1,11 +1,12 @@
-import { auth } from "./firebase-oppsett.js";
+import { auth, db } from "./firebase-oppsett.js";
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-auth.js";
+import { collection, getDocs } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
 
 // Tilstandsvariabler
 let avspillerAktiv = false;
 let forrigeSide = 'hjem';
 
-// Mapping dersom en menyknapp peker på en seksjon som mangler i HTML (fallback)
+// Mapping dersom en menyknapp peker på en seksjon som mangler i HTML
 const sideMapping = {
     'film': 'hjem',
     'nyheter': 'hjem',
@@ -19,24 +20,37 @@ window.addEventListener('DOMContentLoaded', () => {
             window.location.href = "Innlogging.html";
         } else {
             settInnProfilbilde();
-            byttSide('hjem');
+
+            // Les gjeldende side fra URL-hash eller standard 'hjem'
+            const startSide = window.location.hash.replace('#', '') || 'hjem';
+            byttSide(startSide, false);
+
+            // Hent både filmer og serier fra Firestore
+            hentInnholdFraFirestore();
         }
     });
 
     initialiserAvspillerKontroller();
     initialiserScrollLyttere();
     initialiserGalleriRulling();
+    initialiserLenkeLyttere();
     fjernPageLoader();
 });
 
-// Lytt til endringer i localStorage (f.eks. når profilbilde endres i konto.js)
+// Lytt til frem/tilbake-knapper i nettleseren (SPA history support)
+window.addEventListener('popstate', (e) => {
+    const side = e.state?.side || window.location.hash.replace('#', '') || 'hjem';
+    byttSide(side, false);
+});
+
+// Lytt til endringer i localStorage
 window.addEventListener('storage', (e) => {
     if (e.key === 'profilbilde') {
         settInnProfilbilde();
     }
 });
 
-// 2. Hent og oppdater profilbilde i menyen og på konto-siden
+// 2. Profilbilde
 export function settInnProfilbilde() {
     const lagretBilde = localStorage.getItem("profilbilde");
     const menyBildeEl = document.getElementById("menyProfilbilde");
@@ -48,14 +62,13 @@ export function settInnProfilbilde() {
     }
 }
 
-// 3. Sidebytte og visningsstyring
-export function byttSide(sideNavn) {
+// 3. Sidebytte og SPA-visningsstyring
+export function byttSide(sideNavn, pushHistory = true) {
     if (sideNavn !== 'avspiller') {
         forrigeSide = sideNavn;
         stoppOgNullstillVideo();
     }
 
-    // Sjekk om det finnes en reell ID for siden, ellers bruk fallback fra sideMapping
     let malId = sideNavn;
     if (!document.getElementById(`view-${sideNavn}`) && sideMapping[sideNavn]) {
         malId = sideMapping[sideNavn];
@@ -63,15 +76,16 @@ export function byttSide(sideNavn) {
 
     const targetSeksjon = document.getElementById(`view-${malId}`);
 
-    // Sikkerhet: Hvis målsiden mot formodning ikke finnes, gå til 'hjem'
     if (!targetSeksjon) {
         console.warn(`Seksjonen 'view-${sideNavn}' finnes ikke. Omdirigerer til 'view-hjem'.`);
-        const hjemSeksjon = document.getElementById('view-hjem');
-        if (hjemSeksjon) hjemSeksjon.style.display = 'block';
+        byttSide('hjem', pushHistory);
         return;
     }
 
-    // Skjul/vis navbar og footer avhengig av om avspilleren er aktiv
+    if (pushHistory) {
+        history.pushState({ side: sideNavn }, '', `#${sideNavn}`);
+    }
+
     const navbar = document.querySelector('.top-nav') || document.querySelector('nav');
     const footer = document.querySelector('footer');
 
@@ -87,15 +101,12 @@ export function byttSide(sideNavn) {
         document.documentElement.style.overflow = '';
     }
 
-    // Skjul alle visninger
     document.querySelectorAll('.side-visning').forEach(seksjon => {
         seksjon.style.display = 'none';
     });
 
-    // Vis den valgte seksjonen
     targetSeksjon.style.display = 'block';
 
-    // Oppdater aktiv fane i navigasjonsmenyen
     document.querySelectorAll('.nav-links a').forEach(link => {
         link.classList.remove('active');
     });
@@ -109,18 +120,70 @@ export function byttSide(sideNavn) {
         avspillerAktiv = true;
     }
 
-    // Tilbakestill rulleposisjon til toppen av siden
     nullstillScrollPosisjon();
 }
 
-// Hjelpefunksjon for å tvinge scroll til toppen
+// 4. Firestore-integrasjon for Henting av Filmer og Serier
+export async function hentInnholdFraFirestore() {
+    try {
+        // Hent filmer og serier samtidig i parallell
+        const [filmerSnapshot, serierSnapshot] = await Promise.all([
+            getDocs(collection(db, "filmer")),
+            getDocs(collection(db, "serier"))
+        ]);
+
+        byggGalleriUI("filmer-container", filmerSnapshot);
+        byggGalleriUI("serier-container", serierSnapshot);
+
+    } catch (error) {
+        console.error("Feil ved henting av innhold fra Firestore:", error);
+    }
+}
+
+// Hjelpefunksjon for å generere HTML-kort for filmer og serier
+function byggGalleriUI(containerId, snapshot) {
+    const container = document.getElementById(containerId);
+    if (!container) return;
+
+    container.innerHTML = ""; // Tøm eksisterende statisk innhold
+
+    snapshot.forEach((doc) => {
+        const item = doc.data();
+
+        const kort = document.createElement("div");
+        kort.className = "media-card";
+        kort.innerHTML = `
+            <img src="${item.poster || item.bildeUrl || 'placeholder.jpg'}" alt="${item.tittel}">
+            <p class="media-title">${item.tittel}</p>
+        `;
+
+        // Klikk på bildet åpner videospilleren direkte
+        kort.addEventListener("click", () => {
+            apneAvspiller(item.videoUrl, item.tittel);
+        });
+
+        container.appendChild(kort);
+    });
+}
+
+// 5. Interaktivitet og navgering
+function initialiserLenkeLyttere() {
+    document.addEventListener('click', (e) => {
+        const target = e.target.closest('a[data-side]');
+        if (target) {
+            e.preventDefault();
+            const side = target.getAttribute('data-side');
+            byttSide(side);
+        }
+    });
+}
+
 function nullstillScrollPosisjon() {
     window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
     document.body.scrollTop = 0;
     document.documentElement.scrollTop = 0;
 }
 
-// 4. Horisontal rulling for filmrader/kategorier
 export function rullRad(radElement, retning) {
     const rad = typeof radElement === 'string' ? document.getElementById(radElement) : radElement;
     if (!rad) return;
@@ -132,7 +195,6 @@ export function rullRad(radElement, retning) {
     });
 }
 
-// Automatisk oppkobling av pilknapper i alle galleri-seksjoner
 function initialiserGalleriRulling() {
     const wrappers = document.querySelectorAll('.gallery-wrapper, .continue-gallery-wrapper');
 
@@ -150,7 +212,6 @@ function initialiserGalleriRulling() {
     });
 }
 
-// 5. Generelle scroll-lyttere (mørkere toppmeny ved rulling)
 function initialiserScrollLyttere() {
     const navbar = document.querySelector('.top-nav') || document.querySelector('nav');
 
@@ -165,7 +226,6 @@ function initialiserScrollLyttere() {
     });
 }
 
-// Skjul loader-animasjonen etter at siden har lastet
 function fjernPageLoader() {
     setTimeout(() => {
         const loader = document.getElementById('page-loader');
@@ -177,7 +237,7 @@ function fjernPageLoader() {
     }, 500);
 }
 
-// 6. Åpne og starte videospiller
+// 6. Videospiller
 export function apneAvspiller(videoUrl, tittel) {
     const videoEl = document.getElementById('video');
     const tittelEl = document.querySelector('.movie-title');
@@ -195,7 +255,6 @@ export function apneAvspiller(videoUrl, tittel) {
     byttSide('avspiller');
 }
 
-// 7. Stopp video og nullstill
 export function stoppOgNullstillVideo() {
     const videoEl = document.getElementById('video');
     if (videoEl) {
@@ -205,13 +264,12 @@ export function stoppOgNullstillVideo() {
     avspillerAktiv = false;
 }
 
-// 8. Naviger tilbake til forrige side
 export function gaTilbake() {
     stoppOgNullstillVideo();
     byttSide(forrigeSide);
 }
 
-// 9. Utfør søk (kalles fra HTML via oninput)
+// 7. Søkelogikk
 window.utforSok = function() {
     const sokefelt = document.getElementById('sokefelt');
     const query = sokefelt ? sokefelt.value.trim().toLowerCase() : '';
@@ -224,11 +282,9 @@ window.utforSok = function() {
         return;
     }
 
-    // Søkelogikk utvides i app.js eller egnede moduler
     console.log("Søker etter:", query);
 };
 
-// 10. Koble opp lyttere for avspiller
 function initialiserAvspillerKontroller() {
     const tilbakeKnapp = document.getElementById('backButton');
     if (tilbakeKnapp) {
@@ -246,7 +302,7 @@ function initialiserAvspillerKontroller() {
     }
 }
 
-// Global eksponering for inline HTML-eventer
+// Globale eksporter
 window.byttSide = byttSide;
 window.apneAvspiller = apneAvspiller;
 window.stoppOgNullstillVideo = stoppOgNullstillVideo;
