@@ -1,3 +1,4 @@
+// app.js - Hovedstyring for applikasjonen
 import { auth } from "./firebase-oppsett.js";
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-auth.js";
 
@@ -30,7 +31,7 @@ function settInnProfilbilde() {
 }
 
 // 3. Sidebytte og visningsstyring
-function byttSide(sideNavn) {
+export function byttSide(sideNavn) {
     if (sideNavn !== 'avspiller') {
         forrigeSide = sideNavn;
         stoppOgNullstillVideo();
@@ -71,10 +72,13 @@ function byttSide(sideNavn) {
     if (sideNavn === 'avspiller') {
         avspillerAktiv = true;
     }
+
+    // Scroll til toppen ved sidebytte
+    window.scrollTo(0, 0);
 }
 
 // 4. Åpne og starte videospiller
-function apneAvspiller(videoUrl, tittel) {
+export function apneAvspiller(videoUrl, tittel) {
     const videoEl = document.getElementById('video');
     const tittelEl = document.querySelector('.movie-title');
 
@@ -92,7 +96,7 @@ function apneAvspiller(videoUrl, tittel) {
 }
 
 // 5. Stopp video og nullstill
-function stoppOgNullstillVideo() {
+export function stoppOgNullstillVideo() {
     const videoEl = document.getElementById('video');
     if (videoEl) {
         videoEl.pause();
@@ -102,12 +106,20 @@ function stoppOgNullstillVideo() {
 }
 
 // 6. Naviger tilbake til forrige side
-function gaTilbake() {
+export function gaTilbake() {
     stoppOgNullstillVideo();
     byttSide(forrigeSide);
 }
 
-// 7. Koble opp lyttere for avspiller
+// 7. Utfor søk (kalles fra HTML via oninput)
+window.utforSok = function() {
+    const sokefelt = document.getElementById('sokefelt');
+    const query = sokefelt ? sokefelt.value.trim() : '';
+    console.log("Søker etter:", query);
+    // Din søkelogikk kan kobles inn her
+};
+
+// 8. Koble opp lyttere for avspiller
 function initialiserAvspillerKontroller() {
     const tilbakeKnapp = document.getElementById('backButton');
     if (tilbakeKnapp) {
@@ -125,7 +137,7 @@ function initialiserAvspillerKontroller() {
     }
 }
 
-// Global eksponering for inline HTML-eventer
+// Global eksponering for inline HTML-eventer (onclick / oninput)
 window.byttSide = byttSide;
 window.apneAvspiller = apneAvspiller;
 window.stoppOgNullstillVideo = stoppOgNullstillVideo;
