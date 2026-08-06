@@ -157,29 +157,34 @@ main {
   margin-top: 8px;
 }
 
+/* GRØNN SE-KNAPP */
 .watch-button {
   display: flex;
   align-items: center;
   gap: 10px;
   font-size: 16px;
-  font-weight: 600;
+  font-weight: 700;
   padding: 12px 34px;
   border-radius: 50px;
   border: none;
-  background: #00FFCC;
-  color: #003a2f;
+  background: #00E676; /* Grønn farge */
+  color: #000000;      /* God kontrast */
   cursor: pointer;        
   transition: transform 0.2s ease, background 0.2s ease;
 }
 
 .watch-button:hover {
   transform: scale(1.03);
-  background: #00e6b8;
+  background: #00c865;
 }
 
+/* RUND MIN LISTE-KNAPP (IKKE SKVIST) */
 .add-button {
   width: 48px;
   height: 48px;
+  min-width: 48px;
+  min-height: 48px;
+  flex-shrink: 0; /* Hindrer flexbox fra å trykke knappen sammen */
   border-radius: 50%;
   border: 2px solid rgba(255, 255, 255, 0.8);
   background: rgba(255, 255, 255, 0.1);
@@ -187,7 +192,7 @@ main {
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 18px;
+  font-size: 22px;
   cursor: pointer;
   transition: background 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
   backdrop-filter: blur(6px);
@@ -685,18 +690,25 @@ main {
   .banner-meta { font-size: 11px !important; }
   .banner-buttons { gap: 10px !important; margin-top: 4px; }
 
+  /* OVERSTYRING FOR MOBIL: SE-KNAPP */
   .watch-button {
     font-size: 13px !important;
     padding: 8px 22px !important;
     font-weight: 700;
     border-radius: 8px; 
+    background: #00E676 !important;
+    color: #000000 !important;
   }
 
+  /* OVERSTYRING FOR MOBIL: BEHOLD KNAPPEN RUND OG HINDRER SKVIS */
   .add-button {
-    width: 36px !important;
-    height: 36px !important;
-    font-size: 14px !important;
-    border-radius: 8px;
+    width: 38px !important;
+    height: 38px !important;
+    min-width: 38px !important;
+    min-height: 38px !important;
+    font-size: 16px !important;
+    border-radius: 50% !important; /* Rettet fra 8px til 50% slik at den forbli rund */
+    flex-shrink: 0 !important;    /* Forhindrer at knappen blir skvist */
     background: rgba(255, 255, 255, 0.2);
   }
 
