@@ -9,8 +9,6 @@
       background: #050F11;
       color: #ffffff;
       overflow-x: hidden;
-      overflow-y: auto !important; /* Sikrer at man alltid kan scrolle */
-      height: 100%;
     }
 
     main {
@@ -18,7 +16,6 @@
       min-height: 100vh;
       display: flex;
       flex-direction: column;
-      overflow: visible; /* Sikrer at innhold ikke blir kuttet */
     }
 
     @media (max-width: 768px) {
@@ -133,7 +130,7 @@
     }
 
     .banner-meta {
-      font-size: 16px;         
+      font-size: 16px;          
       color: #ffffff;            
       font-weight: 600;            
       letter-spacing: 0.5px;
@@ -233,6 +230,7 @@
 
     .image-gallery, .continue-image-gallery {
       flex: 1;
+      min-width: 0; /* VIKTIG: Hindrer at flex-boksen låser seg */
       display: flex;
       overflow-x: auto;
       overflow-y: visible;
@@ -377,6 +375,7 @@
     .top10-gallery {
       display: flex;
       flex-direction: row;
+      min-width: 0; /* VIKTIG */
       gap: 40px; 
       padding: 20px 50px; 
       overflow-x: auto;
@@ -564,7 +563,7 @@
       }
 
       .top10-item:hover .top10-number {
-        color: #00FFCC; 
+        color: #00FFCC;
         -webkit-text-stroke: 0;
       }
 
@@ -732,6 +731,7 @@
       .gallery-section .movies-gallery {
         display: flex !important;
         flex-direction: row !important;
+        min-width: 0 !important; /* VIKTIG for mobil */
         overflow-x: auto !important;
         overflow-y: hidden !important;
         gap: 12px !important;
@@ -804,6 +804,7 @@
       .continue-watching-section .continue-image-gallery {
         display: flex !important;
         flex-direction: row !important;
+        min-width: 0 !important;
         overflow-x: auto !important;
         overflow-y: hidden !important;
         gap: 12px !important;
@@ -878,8 +879,30 @@
     }
 
     /* ==========================================================================
-       Fjernet den aggressive landskap-nødbremsen som låste skjermen din helt.
-       ========================================================================== */
+        11. NØDBREMS (PORTRETT PÅ LANDSKAP PÅ MOBIL)
+        ========================================================================== */
+    @media screen and (orientation: landscape) and (max-width: 900px) {
+      body {
+        overflow: hidden !important;
+      }
+
+      body::after {
+        content: "Vennligst roter telefonen til portrett-modus for å bruke appen.";
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background: #091B1E;
+        color: #ffffff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        z-index: 999999;
+        padding: 20px;
+      }
+    }
 
     /* ==========================================================================
         12. SKJUL TITTEL OG METADATA HELT (MEN BEHOLDES I KODEN)
