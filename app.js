@@ -1,26 +1,8 @@
-// 1. Importer Firebase-moduler
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-import { 
-  getFirestore, 
-  collection, 
-  getDocs 
-} from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+// Importer databasen fra konfigurasjonsfilen din
+import { db } from "./firebase-config.js";
+import { collection, getDocs } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
 
-// 2. Firebase konfigurasjon
-const firebaseConfig = {
-  apiKey: "AIzaSyBlfCbB1AuiKVHMBEhYd0cvkJ0jxHVZfUg",
-  authDomain: "watch-nordic-78b99.firebaseapp.com",
-  projectId: "watch-nordic-78b99",
-  storageBucket: "watch-nordic-78b99.firebasestorage.app",
-  messagingSenderId: "541804766412",
-  appId: "1:541804766412:web:83fc77721e384131a1ce69"
-};
-
-// 3. Initialiser Firebase & Firestore
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
-
-// 4. Testdata (vises automatisk hvis Firestore-databasen din er tom enn så lenge)
+// Reservedata dersom Firestore-databasen ennå ikke inneholder data
 const reserveData = [
   {
     id: "1",
@@ -29,7 +11,7 @@ const reserveData = [
     bilde: "https://images.unsplash.com/photo-1536440136628-849c177e76a1?w=800&q=80",
     bannerBilde: "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=1600&q=80",
     beskrivelse: "Når en ung gutt forsvinner, avdekker en liten by et mysterium som involverer hemmelige eksperimenter.",
-    meta: "2024 • 16+ • 4 Sesonger",
+    meta: "2026 • 16+ • 4 Sesonger",
     topp10: true,
     nylig: true
   },
@@ -55,26 +37,19 @@ const reserveData = [
   }
 ];
 
-// ==========================================
-// KJERNEFUNKSJONER
-// ==========================================
-
-// Opprett et filmkort (HTML-element)
+// Bygger et enkelt filmkort
 function lagFilmkort(item) {
   const card = document.createElement("div");
   card.className = "gallery-item";
   card.dataset.id = item.id;
 
-  card.innerHTML = `
-    <img src="${item.bilde}" alt="${item.tittel}" loading="lazy" />
-  `;
-
-  // Klikk på et kort oppdaterer hero-banneret
+  card.innerHTML = `<img src="${item.bilde}" alt="${item.tittel}" loading="lazy" />`;
   card.addEventListener("click", () => settHeroBanner(item));
+  
   return card;
 }
 
-// Oppdater Hero Banner med valgt film
+// Oppdaterer Hero Banner øverst på siden
 function settHeroBanner(item) {
   const bannerBilde = document.getElementById("banner-bilde");
   const bannerBeskrivelse = document.getElementById("banner-beskrivelse");
@@ -84,6 +59,7 @@ function settHeroBanner(item) {
   if (bannerBilde) bannerBilde.src = item.bannerBilde || item.bilde;
   if (bannerBeskrivelse) bannerBeskrivelse.textContent = item.beskrivelse || item.tittel;
   if (bannerMeta) bannerMeta.textContent = item.meta || "";
+  
   if (bannerLogo && item.logo) {
     bannerLogo.src = item.logo;
     bannerLogo.style.display = "block";
@@ -92,7 +68,7 @@ function settHeroBanner(item) {
   }
 }
 
-// Hent data fra Firestore (eller bruk reservedata)
+// Henter data fra Firestore og renderer elementene på skjermen
 async function lastInnhold() {
   let mediaListe = [];
 
@@ -102,56 +78,44 @@ async function lastInnhold() {
       mediaListe.push({ id: doc.id, ...doc.data() });
     });
   } catch (feil) {
-    console.warn("Kunne ikke koble til Firestore, bruker reservedata:", feil);
+    console.warn("Bruker reservedata (kunne ikke koble til Firestore):", feil);
   }
 
-  // Hvis databasen var tom, bruk reservedataene
   if (mediaListe.length === 0) {
     mediaListe = reserveData;
   }
 
-  // Sett første film i hero-banneret
   if (mediaListe.length > 0) {
     settHeroBanner(mediaListe[0]);
   }
 
-  // Fordel filmer til riktige gallerier i HTML
+  // Sorterer innhold i sine respektive seksjoner
   mediaListe.forEach((item) => {
-    // Filmer
     if (item.kategori === "filmer") {
       document.getElementById("filmer-galleri")?.appendChild(lagFilmkort(item));
     }
-    // Serier
     if (item.kategori === "serier") {
       document.getElementById("serier-galleri")?.appendChild(lagFilmkort(item));
     }
-    // Dokumentarer
     if (item.kategori === "dokumentar") {
       document.getElementById("dokumentarserier-galleri")?.appendChild(lagFilmkort(item));
     }
-    // Nylig lagt til
     if (item.nylig) {
       document.getElementById("nye-filmer-galleri")?.appendChild(lagFilmkort(item));
     }
-    // Topp 10
     if (item.topp10) {
       document.getElementById("topp10-filmer-galleri")?.appendChild(lagFilmkort(item));
     }
   });
 
-  // Skjul lasteskjermen
   skjulLoader();
 }
 
-// Skjul laste-spinneren når alt er klart
 function skjulLoader() {
   const loader = document.getElementById("page-loader");
-  if (loader) {
-    loader.classList.add("hidden");
-  }
+  if (loader) loader.classList.add("hidden");
 }
 
-// Aktiver rulleknappene (venstre / høyre pil)
 function aktiverSkrollKnapper() {
   document.querySelectorAll(".gallery-wrapper, .continue-gallery-wrapper").forEach((wrapper) => {
     const gallery = wrapper.querySelector(".image-gallery, .continue-image-gallery, .top10-gallery");
@@ -160,17 +124,11 @@ function aktiverSkrollKnapper() {
 
     if (!gallery) return;
 
-    leftBtn?.addEventListener("click", () => {
-      gallery.scrollBy({ left: -400, behavior: "smooth" });
-    });
-
-    rightBtn?.addEventListener("click", () => {
-      gallery.scrollBy({ left: 400, behavior: "smooth" });
-    });
+    leftBtn?.addEventListener("click", () => gallery.scrollBy({ left: -400, behavior: "smooth" }));
+    rightBtn?.addEventListener("click", () => gallery.scrollBy({ left: 400, behavior: "smooth" }));
   });
 }
 
-// Initialiser når siden lastes
 document.addEventListener("DOMContentLoaded", () => {
   lastInnhold();
   aktiverSkrollKnapper();
