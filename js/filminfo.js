@@ -1,8 +1,10 @@
+/* ==========================================
+   FILM-MAL MODUL FOR SPA-PLATTFORM
+   ========================================== */
 
-  /* ==========================================
-     1. GLOBALE TILSTANDER & HJELPEFUNKSJONER
-     ========================================== */
-  let currentUser = null;
+export function initFilmMal(routerParams = {}) {
+  // 1. GLOBALE TILSTANDER (lokale for modulen/sesjonen)
+  let currentUser = window.currentAuthUser || null; // Tilpasses din SPA sin auth-sjekk
   let aktivProfil = localStorage.getItem("aktivProfil") || "Hovedprofil";
   let aktivProfilIndex = parseInt(localStorage.getItem("aktivProfilIndex") || "0", 10);
   let heleProfilArrayet = [];
@@ -20,19 +22,18 @@
 
   let watchBtn, addToListBtn, bgImg;
 
-  // Trygg håndtering av localStorage for å unngå krasj (QuotaExceeded eller Inkognito)
+  // Trygg håndtering av localStorage
   function tryggLagring(key, value) {
     try {
       localStorage.setItem(key, value);
     } catch (e) {
-      console.warn("Kunne ikke lagre til localStorage (mulig full eller blokkert):", e);
+      console.warn("Kunne ikke lagre til localStorage:", e);
     }
   }
 
   function erMobilEllerNettbrett() {
     const touchEnhet = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0) || (navigator.msMaxTouchPoints > 0);
     const breddeSjekk = window.innerWidth <= 1024;
-    // Nyere iPader rapporterer som Mac, vi fanger dem her:
     const isIPad = /Macintosh/i.test(navigator.userAgent) && navigator.maxTouchPoints > 1;
     return (touchEnhet && breddeSjekk) || isIPad;
   }
@@ -59,11 +60,14 @@
 
   async function lastDataFraFirebase() {
     try {
+      // Hent navn fra SPA-routerens parametere eller fallback til URLSearchParams
       const params = new URLSearchParams(window.location.search);
-      navn = sanitizeInput(params.get("navn"));
+      navn = sanitizeInput(routerParams.navn || params.get("navn"));
 
       if (!navn) {
-        window.location.href = "Hovedside.html";
+        // SPA-navigering i stedet for hard refresh
+        if (window.navigateTo) window.navigateTo("hovedside");
+        else window.location.href = "#hovedside";
         return;
       }
 
@@ -82,6 +86,7 @@
       }
 
       if (!data) {
+        // Merk: db og firebase-funksjoner (doc, getDoc) må være tilgjengelige globalt eller importeres øverst i filen din.
         let docRef = doc(db, "filmer", navn);
         let docSnap = await getDoc(docRef);
 
@@ -103,7 +108,8 @@
       }
 
       if (!data) {
-        window.location.href = "Hovedside.html";
+        if (window.navigateTo) window.navigateTo("hovedside");
+        else window.location.href = "#hovedside";
         return;
       }
 
@@ -118,7 +124,7 @@
   }
 
   /* ==========================================
-     2. HOVEDFUNKSJON
+     2. HOVEDFUNKSJON FOR INITIALISERING
      ========================================== */
   async function init() {
     await lastDataFraFirebase();
@@ -133,10 +139,11 @@
     oppdaterBakgrunnsBilde();
 
     let resizeTimeout;
-    window.addEventListener("resize", () => {
+    const handleResize = () => {
       clearTimeout(resizeTimeout);
       resizeTimeout = setTimeout(oppdaterBakgrunnsBilde, 150);
-    });
+    };
+    window.addEventListener("resize", handleResize);
 
     // Logo
     const fLogo = document.querySelector(".film-logo");
@@ -144,6 +151,7 @@
     if (fLogo) {
       if (data.logo && data.logo.trim() !== "" && erTryggUrl(data.logo)) {
         fLogo.src = data.logo;
+        fLogo.style.display = "block";
       } else {
         fLogo.style.display = "none";
         if (logoContainer && !logoContainer.querySelector(".text-logo")) {
@@ -155,7 +163,7 @@
       }
     }
 
-    // Beskrivelse og "Mer"-knapp med lukket minnelekkasje
+    // Beskrivelse og "Mer"-knapp
     const descEl = document.querySelector(".description");
     if (descEl) {
       const fullText = data.beskrivelse || "";
@@ -190,7 +198,6 @@
           overlay.appendChild(popupBox);
           document.body.appendChild(overlay);
 
-          // Opprydding av event listeners for å unngå lekkasjer
           const lukkModal = () => {
             closeBtn.removeEventListener("click", lukkModal);
             overlay.removeEventListener("click", overlayKlikk);
@@ -258,7 +265,6 @@
       }
     }
 
-    // Sikker event-binding (fjerner gamle lyttere først)
     if (watchBtn) {
       if (erUtilgjengelig) watchBtn.classList.add("locked");
       watchBtn.removeEventListener("click", handterWatchClick);
@@ -455,48 +461,55 @@
     }
   }
 
-  onAuthStateChanged(auth, async (user) => {
-    if (user) {
-      currentUser = user;
-      try {
-        const userDocRef = doc(db, "users", user.uid);
-        const docSnap = await getDoc(userDocRef);
+  // Håndter auth endring via SPA sin auth-observatør eller lokal instans
+  if (typeof onAuthStateChanged !== "undefined" && typeof auth !== "undefined") {
+    onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        currentUser = user;
+        try {
+          const userDocRef = doc(db, "users", user.uid);
+          const docSnap = await getDoc(userDocRef);
 
-        if (docSnap.exists()) {
-          heleProfilArrayet = docSnap.data().profiler || [];
-          tryggLagring("watch_nordic_profiles_cache", JSON.stringify(heleProfilArrayet));
-          erProfilLastetFraSkyen = true;
-          synkroniserLokalData();
+          if (docSnap.exists()) {
+            heleProfilArrayet = docSnap.data().profiler || [];
+            tryggLagring("watch_nordic_profiles_cache", JSON.stringify(heleProfilArrayet));
+            erProfilLastetFraSkyen = true;
+            synkroniserLokalData();
+          }
+        } catch (err) {
+          console.error("Feil ved henting av brukerdata:", err);
         }
-      } catch (err) {
-        console.error("Feil ved henting av brukerdata:", err);
+      } else {
+        try { localStorage.removeItem("watch_nordic_profiles_cache"); } catch(e){}
+        sessionStorage.clear();
+        if (window.navigateTo) window.navigateTo("login");
+        else window.location.href = "index.html";
       }
-    } else {
-      try { localStorage.removeItem("watch_nordic_profiles_cache"); } catch(e){}
-      sessionStorage.clear();
-      window.location.href = "index.html";
-    }
-  });
+    });
+  }
 
   /* ==========================================
-     5. KLIKKHÅNDTERERE OG SPILLER-RUTING
+     5. KLIKKHÅNDTERERE OG SPA-SPILLER-RUTING
      ========================================== */
   async function handterWatchClick() {
     if (erUpublisert || erUtgått || watchBtn.disabled) return;
 
     status = "påbegynt";
     oppdaterWatchKnapp();
-    lagreProfilDataTilSkyen();
-
-    const returUrl = encodeURIComponent(window.location.href);
+    await lagreProfilDataTilSkyen();
 
     if (type === "film") {
       if (!data.watchUrl || !erTryggUrl(data.watchUrl)) {
         alert("Kunne ikke starte avspilling: Ugyldig kilde-URL.");
         return;
       }
-      const separator = data.watchUrl.includes("?") ? "&" : "?";
-      window.location.href = `${data.watchUrl}${separator}returUrl=${returUrl}`;
+      // SPA-ruting for avspiller (eksempel: window.navigateTo('spiller', { url: data.watchUrl }))
+      if (window.navigateTo) {
+        window.navigateTo("spiller", { watchUrl: data.watchUrl, returNavn: navn });
+      } else {
+        const separator = data.watchUrl.includes("?") ? "&" : "?";
+        window.location.href = `${data.watchUrl}${separator}returNavn=${encodeURIComponent(navn)}`;
+      }
     } else if (type === "serie" && data.sesonger) {
       const sisteEpKey = `${navn}-siste-episode`;
       let sisteEp = null;
@@ -514,7 +527,13 @@
         sesongNr = Object.keys(data.sesonger)[0];
         epNr = Object.keys(data.sesonger[sesongNr].episoder)[0];
       }
-      window.location.href = `film-mal.html?navn=${encodeURIComponent(navn)}&sesong=${encodeURIComponent(sesongNr)}&episode=${encodeURIComponent(epNr)}&returUrl=${returUrl}`;
+
+      // SPA-navigering for serieepisode
+      if (window.navigateTo) {
+        window.navigateTo("film-mal", { navn: navn, sesong: sesongNr, episode: epNr });
+      } else {
+        window.location.href = `film-mal.html?navn=${encodeURIComponent(navn)}&sesong=${encodeURIComponent(sesongNr)}&episode=${encodeURIComponent(epNr)}`;
+      }
     }
   }
 
@@ -529,11 +548,11 @@
     }
 
     oppdaterListeKnapp();
-    lagreProfilDataTilSkyen();
+    await lagreProfilDataTilSkyen();
   }
 
   /* ==========================================
-     6. EPISODELISTING & OPTIMALISERTE ANBEFALINGER
+     6. EPISODELISTING & ANBEFALINGER
      ========================================== */
   function visSesong(sesongNr) {
     const seasonButtons = document.getElementById("seasonButtons");
@@ -541,9 +560,9 @@
 
     document.querySelectorAll(".season-btn").forEach(b => b.classList.remove("active"));
     if (seasonButtons) {
-      [...seasonButtons.children]
+      ([...seasonButtons.children]
         .find(b => b.textContent === `Sesong ${sesongNr}`)
-        ?.classList.add("active");
+        ?.classList.add("active"));
     }
 
     if (!episodeGallery) return;
@@ -617,8 +636,11 @@
       if (!erLåst) {
         epCard.addEventListener("click", () => {
           tryggLagring(`${navn}-siste-episode`, JSON.stringify({ sesong: sesongNr, episode: epNr }));
-          const returUrl = encodeURIComponent(window.location.href);
-          window.location.href = `film-mal.html?navn=${encodeURIComponent(navn)}&sesong=${encodeURIComponent(sesongNr)}&episode=${encodeURIComponent(epNr)}&returUrl=${returUrl}`;
+          if (window.navigateTo) {
+            window.navigateTo("film-mal", { navn: navn, sesong: sesongNr, episode: epNr });
+          } else {
+            window.location.href = `film-mal.html?navn=${encodeURIComponent(navn)}&sesong=${encodeURIComponent(sesongNr)}&episode=${encodeURIComponent(epNr)}`;
+          }
         });
       }
       fragment.appendChild(epCard);
@@ -718,7 +740,11 @@
             card.appendChild(overlay);
 
             card.addEventListener("click", () => {
-              window.location.href = `film.html?navn=${encodeURIComponent(nøkkel)}`;
+              if (window.navigateTo) {
+                window.navigateTo("film", { navn: nøkkel });
+              } else {
+                window.location.href = `film.html?navn=${encodeURIComponent(nøkkel)}`;
+              }
             });
             fragment.appendChild(card);
             antallVist++;
@@ -736,7 +762,7 @@
   }
 
   /* ==========================================
-     7. VIDEO/TRAILER & MOBIL-/IPAD-STØTTE
+     7. VIDEO/TRAILER & OPPRYDDING
      ========================================== */
   function initTrailer() {
     if (!data) return;
@@ -778,7 +804,6 @@
         if (videoControls) videoControls.style.opacity = "0";
       });
 
-      // Sikrer at vi ikke legger til flere lyttere ved re-init
       if (pauseBtn) {
         const togglePlay = () => {
           if (trailerVideo.paused) {
@@ -804,7 +829,6 @@
         soundBtn.addEventListener("click", toggleSound);
       }
     } else {
-      // Hvis det er mobil/nettbrett fjerner vi src for å hindre unødig nedlasting (sparer RAM og nett)
       if (trailerVideo) {
         trailerVideo.pause();
         trailerVideo.removeAttribute('src'); 
@@ -816,31 +840,6 @@
     }
   }
 
-  // Optimalisert scroll-håndtering
-  let ticking = false;
-  function oppdaterTopNavTilstand() {
-    const nav = document.querySelector(".top-nav");
-    if (!nav) return;
-
-    const erToppen = window.scrollY <= 0;
-    document.body.classList.toggle("scrolled-y", !erToppen);
-    nav.classList.toggle("scrolled", !erToppen);
-  }
-
-  window.addEventListener("scroll", () => {
-    if (!ticking) {
-      window.requestAnimationFrame(() => {
-        oppdaterTopNavTilstand();
-        ticking = false;
-      });
-      ticking = true;
-    }
-  }, { passive: true });
-
-  oppdaterTopNavTilstand();
-
-  if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", init, { once: true });
-  } else {
-    init();
-  }
+  // Start initialisering
+  init();
+}
