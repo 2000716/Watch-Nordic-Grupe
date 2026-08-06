@@ -8,7 +8,7 @@ html {
   font-family: Arial, sans-serif;
   background: #050F11;
   color: #ffffff;
-  /* Flytt overflow-x hit og tillat vertikal rulling */
+  /* Hovedrulling styres kun her fra rot-nivå */
   overflow-x: hidden;
   overflow-y: auto;
   min-height: 100%;
@@ -17,15 +17,16 @@ html {
 body {
   width: 100%;
   min-height: 100vh;
-  /* Fjern overflow-x: hidden fra body */
-  overflow-y: auto;
+  background: #050F11;
+  /* Fjern overflow fra body for å unngå at innholdet blir usynlig */
+  overflow: visible;
 }
 
 main {
   width: 100%;
   min-height: 100vh;
-  display: flex;
-  flex-direction: column;
+  /* Endret fra flex til block for å hindre at flexbox klemmer sammen uvirksomme sider */
+  display: block; 
 }
 
 @media (max-width: 768px) {
