@@ -5,6 +5,7 @@ import { collection, getDocs } from "https://www.gstatic.com/firebasejs/12.15.0/
 // Tilstandsvariabler
 let avspillerAktiv = false;
 let forrigeSide = 'hjem';
+let altInnhold = []; // Lagrer alt innhold fra Firestore for søk og visning
 
 // Mapping dersom en menyknapp peker på en seksjon som mangler i HTML
 const sideMapping = {
@@ -25,7 +26,6 @@ window.addEventListener('DOMContentLoaded', () => {
             console.log("Bruker er innlogget:", user.uid);
             settInnProfilbilde();
 
-            // Les gjeldende side fra URL-hash eller standard 'hjem'
             const startSide = window.location.hash.replace('#', '') || 'hjem';
             byttSide(startSide, false);
 
@@ -38,6 +38,7 @@ window.addEventListener('DOMContentLoaded', () => {
     initialiserScrollLyttere();
     initialiserGalleriRulling();
     initialiserLenkeLyttere();
+    initialiserSokefelt();
     fjernPageLoader();
 });
 
@@ -138,9 +139,18 @@ export async function hentInnholdFraFirestore() {
 
         console.log(`Hentet ${filmerSnapshot.size} filmer og ${serierSnapshot.size} serier.`);
 
-        // Prøver flere vanlige ID-er dersom "filmer-container" ikke finnes
-        byggGalleriUI(["filmer-container", "filmer-galleri", "filmer-seksjon"], filmerSnapshot);
-        byggGalleriUI(["serier-container", "serier-galleri", "serier-seksjon"], serierSnapshot);
+        const filmerData = [];
+        filmerSnapshot.forEach(doc => filmerData.push({ id: doc.id, mediatype: 'film', ...doc.data() }));
+
+        const serierData = [];
+        serierSnapshot.forEach(doc => serierData.push({ id: doc.id, mediatype: 'serie', ...doc.data() }));
+
+        // Lagrer alt innhold i en global liste for søk og gjenbruk
+        altInnhold = [...filmerData, ...serierData];
+
+        // Oppdaterer alle matchende HTML-containere
+        byggGalleriUI(["filmer-container", "filmer-galleri", "filmer-seksjon"], filmerData);
+        byggGalleriUI(["serier-container", "serier-galleri", "serier-seksjon"], serierData);
 
     } catch (error) {
         console.error("Feil ved henting av innhold fra Firestore:", error);
@@ -148,53 +158,50 @@ export async function hentInnholdFraFirestore() {
 }
 
 // Hjelpefunksjon for å generere HTML-kort for filmer og serier
-function byggGalleriUI(containerMuligheter, snapshot) {
+function byggGalleriUI(containerMuligheter, dataListe) {
     const IDer = Array.isArray(containerMuligheter) ? containerMuligheter : [containerMuligheter];
-    
-    let container = null;
-    for (const id of IDer) {
-        const el = document.getElementById(id);
-        if (el) {
-            container = el;
-            break;
-        }
-    }
 
-    if (!container) {
-        console.error(`Fant ingen HTML-container for ID-ene: ${IDer.join(", ")}. Sjekk at ID-en i HTML stemmer!`);
+    // Finner ALLE matchende containere i DOM-en
+    const funneContainere = IDer
+        .map(id => document.getElementById(id))
+        .filter(el => el !== null);
+
+    if (funneContainere.length === 0) {
+        console.warn(`Fant ingen HTML-container for ID-ene: ${IDer.join(", ")}.`);
         return;
     }
 
-    if (snapshot.empty) {
-        console.warn(`Kolleksjonen tilkoblet ${container.id} er tom i Firestore.`);
+    if (!dataListe || dataListe.length === 0) {
+        console.warn(`Ingen elementer å vise for ${IDer.join(", ")}.`);
         return;
     }
 
-    container.innerHTML = ""; // Tøm eksisterende statisk innhold
+    funneContainere.forEach(container => {
+        container.innerHTML = ""; // Tøm statisk innhold
 
-    snapshot.forEach((doc) => {
-        const item = doc.data();
+        dataListe.forEach((item) => {
+            const bildeUrl = item.poster || item.bilde || item.bildeUrl || item.posterVertikal || 'placeholder.jpg';
+            const tittel = item.tittel || item.tittelNavn || "Uten tittel";
+            const videoUrl = item.videoUrl || item.trailer || item.video || '';
 
-        // Støtter flere ulike bildemodeller
-        const bildeUrl = item.poster || item.bilde || item.bildeUrl || item.posterVertikal || 'placeholder.jpg';
-        const tittel = item.tittel || "Uten tittel";
+            const kort = document.createElement("div");
+            kort.className = "media-card";
+            kort.innerHTML = `
+                <img src="${bildeUrl}" alt="${tittel}" loading="lazy">
+                <p class="media-title">${tittel}</p>
+            `;
 
-        const kort = document.createElement("div");
-        kort.className = "media-card";
-        kort.innerHTML = `
-            <img src="${bildeUrl}" alt="${tittel}" loading="lazy">
-            <p class="media-title">${tittel}</p>
-        `;
+            kort.addEventListener("click", () => {
+                if (videoUrl) {
+                    apneAvspiller(videoUrl, tittel);
+                } else {
+                    console.warn(`Ingen video-URL registrert for "${tittel}"`);
+                }
+            });
 
-        // Klikk på bildet åpner videospilleren
-        kort.addEventListener("click", () => {
-            apneAvspiller(item.videoUrl || item.trailer, tittel);
+            container.appendChild(kort);
         });
-
-        container.appendChild(kort);
     });
-
-    console.log(`Bygget UI for #${container.id} med ${snapshot.size} elementer.`);
 }
 
 // 5. Interaktivitet og navigering
@@ -301,6 +308,13 @@ export function gaTilbake() {
 }
 
 // 7. Søkelogikk
+function initialiserSokefelt() {
+    const sokefelt = document.getElementById('sokefelt');
+    if (sokefelt) {
+        sokefelt.addEventListener('input', window.utforSok);
+    }
+}
+
 window.utforSok = function() {
     const sokefelt = document.getElementById('sokefelt');
     const query = sokefelt ? sokefelt.value.trim().toLowerCase() : '';
@@ -313,7 +327,38 @@ window.utforSok = function() {
         return;
     }
 
-    console.log("Søker etter:", query);
+    // Filtrer alt innhold på tittel, sjanger eller andre relevante felter
+    const treff = altInnhold.filter(item => {
+        const tittel = (item.tittel || item.tittelNavn || '').toLowerCase();
+        const sjanger = (item.sjanger || item.sjangere || item.sjKode || '').toString().toLowerCase();
+        return tittel.includes(query) || sjanger.includes(query);
+    });
+
+    resultaterContainer.innerHTML = '';
+
+    if (treff.length === 0) {
+        resultaterContainer.innerHTML = '<p class="no-results">Ingen treff funnet.</p>';
+        return;
+    }
+
+    treff.forEach(item => {
+        const bildeUrl = item.poster || item.bilde || item.bildeUrl || 'placeholder.jpg';
+        const tittel = item.tittel || "Uten tittel";
+        const videoUrl = item.videoUrl || item.trailer || '';
+
+        const kort = document.createElement("div");
+        kort.className = "media-card";
+        kort.innerHTML = `
+            <img src="${bildeUrl}" alt="${tittel}" loading="lazy">
+            <p class="media-title">${tittel}</p>
+        `;
+
+        kort.addEventListener("click", () => {
+            if (videoUrl) apneAvspiller(videoUrl, tittel);
+        });
+
+        resultaterContainer.appendChild(kort);
+    });
 };
 
 function initialiserAvspillerKontroller() {
