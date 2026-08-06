@@ -1,219 +1,132 @@
-// ==========================================
-// WATCH NORDIC™ - HOVEDSTYRING (APP.JS)
-// ==========================================
-
-// Importer db direkte fra din egen oppsettsfil
-import { db } from "./firebase-oppsett.js";
-import { collection, getDocs, doc, getDoc } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
-
-document.addEventListener("DOMContentLoaded", () => {
-    console.log("Watch Nordic™ app er lastet og klar.");
-    
-    // Håndter initial URL-hash ved lasting
-    const hash = window.location.hash.replace("#", "");
-    if (hash) {
-        byttSide(hash);
-    } else {
-        byttSide('hjem');
-    }
-});
-
 /**
- * Hovedfunksjon for å bytte mellom de ulike sidene/visningene i applikasjonen.
- * @param {string} sideId - ID-en til siden som skal vises
+ * APP.JS - Hovedfil for routing og global state management
  */
+
+// 1. Importer Firebase-modulene fra oppsettsfilen din
+import { auth, db } from './firebase-oppsett.js';
+import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-auth.js";
+import { collection, query, orderBy, startAt, endAt, getDocs } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
+
+// ==========================================
+// 2. Ruting / Navigasjon (SPA-logikk)
+// ==========================================
 window.byttSide = function(sideId) {
-    // 1. Skjul alle hovedvisninger (.side-visning)
-    const visninger = document.querySelectorAll('.side-visning');
-    visninger.forEach(visning => {
-        visning.style.display = 'none';
+    const alleSider = document.querySelectorAll('.side-visning');
+    alleSider.forEach(side => {
+        side.style.display = 'none';
     });
 
-    // 2. Map lenken/valget til riktig DOM-element
-    let aktivVisningId = 'view-hjem';
-
-    switch (sideId) {
-        case 'hjem':
-            aktivVisningId = 'view-hjem';
-            break;
-        case 'serier':
-            aktivVisningId = 'view-serier';
-            lastInnSerierOversikt(); // Laster inn serier fra Firebase automatisk
-            break;
-        case 'film':
-            aktivVisningId = 'view-hjem'; 
-            break;
-        case 'nyheter':
-        case 'min-liste':
-            aktivVisningId = 'view-hjem';
-            break;
-        case 'sok':
-            aktivVisningId = 'view-sok';
-            break;
-        case 'konto':
-            aktivVisningId = 'view-konto';
-            break;
-        case 'filminfo':
-            aktivVisningId = 'view-filminfo';
-            break;
-        case 'avspiller':
-            aktivVisningId = 'view-avspiller';
-            break;
-        default:
-            aktivVisningId = 'view-hjem';
-    }
-
-    // 3. Vis den valgte visningen
-    const aktivVisning = document.getElementById(aktivVisningId);
-    if (aktivVisning) {
-        aktivVisning.style.display = 'block';
-    }
-
-    // 4. Oppdater aktiv klasse på toppmenyen
-    const navLinks = document.querySelectorAll('.nav-links a');
-    navLinks.forEach(link => {
-        link.classList.remove('active');
-        if (link.getAttribute('href') === `#${sideId}`) {
-            link.classList.add('active');
-        }
-    });
-
-    // 5. Scroll til toppen ved sidebytte
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-};
-
-/**
- * Åpner detaljsiden (Filminfo) for en spesifikk film eller serie, og henter data fra Firebase.
- * @param {string} mediaId - ID-en til filmen/serien i Firestore
- */
-window.visDetaljer = async function(mediaId) {
-    try {
-        window.byttSide('filminfo');
-
-        const docRef = doc(db, "medier", mediaId);
-        const docSnap = await getDoc(docRef);
-
-        if (docSnap.exists()) {
-            const data = docSnap.data();
-            
-            const bgImg = document.getElementById('backgroundImage');
-            if (bgImg) bgImg.src = data.bakgrunnsbilde || data.bilde || '';
-
-            const descElem = document.querySelector('#view-filminfo .description');
-            if (descElem) descElem.textContent = data.beskrivelse || 'Ingen beskrivelse tilgjengelig.';
-
-            const metaElem = document.querySelector('#view-filminfo .metadata');
-            if (metaElem) metaElem.textContent = `${data.aar || '2026'} • ${data.aldersgrense || '12+' } • ${data.varighet || ''}`;
-
-            const watchBtn = document.getElementById('watchBtn');
-            if (watchBtn) {
-                watchBtn.onclick = () => {
-                    window.startAvspiller(data.videoUrl, data.tittel);
-                };
-            }
-        } else {
-            console.error("Fant ikke mediet i databasen.");
-        }
-    } catch (error) {
-        console.error("Feil ved henting av filminfo:", error);
-    }
-};
-
-/**
- * Starter videoavspilleren med angitt video-URL.
- * @param {string} videoUrl - URL til videofilen
- * @param {string} tittel - Tittelen på filmen/serien
- */
-window.startAvspiller = function(videoUrl, tittel) {
-    window.byttSide('avspiller');
-    
-    const videoElement = document.getElementById('video');
-    const titleElement = document.querySelector('#view-avspiller .movie-title');
-
-    if (videoElement && videoUrl) {
-        videoElement.src = videoUrl;
-        videoElement.play().catch(err => console.log("Autoplay forhindret av nettleser:", err));
-    }
-
-    if (titleElement) {
-        titleElement.textContent = tittel || 'Avspiller';
-    }
-};
-
-/**
- * Henter og viser alle serier i serier-oversikten (#view-serier) fra Firebase.
- */
-async function lastInnSerierOversikt() {
-    const galleri = document.getElementById('alle-serier-oversikt-galleri');
-    if (!galleri) return;
-
-    try {
-        const querySnapshot = await getDocs(collection(db, "serier"));
-        let html = '';
-
-        querySnapshot.forEach((docSnap) => {
-            const data = docSnap.data();
-            html += `
-                <div class="gallery-item" onclick="visDetaljer('${docSnap.id}')" style="cursor: pointer;">
-                    <img src="${data.bilde || 'https://via.placeholder.com/330x175'}" alt="${data.tittel || 'Serie'}">
-                    <p style="color: #fff; margin-top: 5px; font-size: 14px;">${data.tittel || ''}</p>
-                </div>
-            `;
-        });
-
-        if (html === '') {
-            html = '<p style="color: #fff; padding: 20px;">Ingen serier funnet.</p>';
-        }
-
-        galleri.innerHTML = html;
-    } catch (error) {
-        console.error("Feil ved lasting av serier:", error);
-        galleri.innerHTML = '<p style="color: red; padding: 20px;">Kunne ikke laste serier.</p>';
-    }
-}
-
-/**
- * Sanntidssøk mot Firebase Firestore (tilpasset søkefeltet).
- */
-window.utforSok = async function() {
-    const sokefelt = document.getElementById('sokefelt');
-    const sokeResultater = document.getElementById('sokeResultater');
-
-    if (!sokefelt || !sokeResultater) return;
-
-    const queryText = sokefelt.value.trim().toLowerCase();
-
-    if (queryText === '') {
-        sokeResultater.innerHTML = '';
+    const valgtSide = document.getElementById(`view-${sideId}`);
+    if (valgtSide) {
+        valgtSide.style.display = 'block';
+    } else {
+        console.error(`Siden med id 'view-${sideId}' ble ikke funnet.`);
         return;
     }
 
-    try {
-        const querySnapshot = await getDocs(collection(db, "medier"));
-        let html = '<div style="padding: 20px; color: #fff; display: flex; flex-direction: column; gap: 10px;">';
-        let treff = 0;
+    const navLinks = document.querySelectorAll('.nav-links a');
+    navLinks.forEach(link => {
+        link.classList.remove('active');
+    });
 
-        querySnapshot.forEach((docSnap) => {
-            const data = docSnap.data();
-            if (data.tittel && data.tittel.toLowerCase().includes(queryText)) {
-                treff++;
+    const aktivLink = document.getElementById(`link-${sideId}`);
+    if (aktivLink) {
+        aktivLink.classList.add('active');
+    }
+
+    if (window.location.hash !== `#${sideId}`) {
+        window.history.pushState(null, null, `#${sideId}`);
+    }
+
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+
+    const event = new CustomEvent('sideByttet', { detail: { side: sideId } });
+    document.dispatchEvent(event);
+};
+
+// ==========================================
+// 3. Firebase Auth - Sjekk hvem som er logget inn
+// ==========================================
+onAuthStateChanged(auth, (user) => {
+    if (user) {
+        console.log("Bruker er logget inn:", user.email);
+        // Her kan du f.eks. endre "Logg inn"-knappen til "Min Konto" i HTML-en
+        // document.getElementById('konto-lenke').innerText = 'Min Konto';
+    } else {
+        console.log("Ingen bruker er logget inn.");
+        // Gjenopprett standardvisning hvis logget ut
+        // document.getElementById('konto-lenke').innerText = 'Logg inn';
+    }
+});
+
+// ==========================================
+// 4. Firebase Firestore - Søkefunksjon
+// ==========================================
+window.utforSok = async function() {
+    const sokefelt = document.getElementById('sokefelt');
+    const resultaterContainer = document.getElementById('sokeResultater');
+    const queryTekst = sokefelt.value.trim().toLowerCase();
+
+    if (queryTekst.length > 2) {
+        resultaterContainer.innerHTML = `<div style="padding: 20px; color: white;">Laster resultater for "<strong>${queryTekst}</strong>"...</div>`;
+
+        try {
+            // Referanse til en samling i databasen (bytt ut "filmer" med navnet på din collection)
+            const filmerRef = collection(db, "filmer");
+            
+            // Vi gjør et "prefix-søk" (søk som starter på bokstavene)
+            // For at dette skal fungere best, bør du ha et felt i databasen som heter 'sokeTittel' der alt er med små bokstaver
+            const q = query(
+                filmerRef,
+                orderBy("sokeTittel"),
+                startAt(queryTekst),
+                endAt(queryTekst + '\uf8ff')
+            );
+
+            const querySnapshot = await getDocs(q);
+            
+            if (querySnapshot.empty) {
+                resultaterContainer.innerHTML = `<div style="padding: 20px; color: white;">Ingen treff på "<strong>${queryTekst}</strong>"</div>`;
+                return;
+            }
+
+            // Bygg HTML for søkeresultatene
+            let html = '<div class="soke-grid" style="display: flex; gap: 15px; flex-wrap: wrap;">';
+            querySnapshot.forEach((doc) => {
+                const film = doc.data();
                 html += `
-                    <div style="padding: 10px; background: rgba(255,255,255,0.05); border-radius: 4px; cursor: pointer;" onclick="visDetaljer('${docSnap.id}')">
-                        <strong>${data.tittel}</strong> (${data.aar || '2026'})
+                    <div class="film-kort" onclick="byttSide('filminfo'); window.lastInnFilm('${doc.id}')" style="cursor: pointer; max-width: 150px;">
+                        <img src="${film.bildeUrl || 'placeholder.jpg'}" alt="${film.tittel}" style="width: 100%; border-radius: 8px;">
+                        <h4 style="color: white; margin-top: 5px; font-size: 14px;">${film.tittel}</h4>
                     </div>
                 `;
-            }
-        });
+            });
+            html += '</div>';
+            resultaterContainer.innerHTML = html;
 
-        if (treff === 0) {
-            html += `<p>Ingen treff på "${queryText}".</p>`;
+        } catch (error) {
+            console.error("Feil ved henting av søkeresultater:", error);
+            resultaterContainer.innerHTML = `<div style="padding: 20px; color: red;">Det oppstod en feil under søket.</div>`;
         }
-
-        html += '</div>';
-        sokeResultater.innerHTML = html;
-
-    } catch (error) {
-        console.error("Feil ved søk:", error);
-        sokeResultater.innerHTML = '<p style="color: red; padding: 20px;">Søk feilet.</p>';
+    } else {
+        resultaterContainer.innerHTML = ''; // Tøm resultater hvis søket er slettet eller for kort
     }
 };
+
+// ==========================================
+// 5. Initialisering ved sidelasting
+// ==========================================
+document.addEventListener('DOMContentLoaded', () => {
+    let initialSide = window.location.hash.replace('#', '');
+    
+    if (!initialSide || !document.getElementById(`view-${initialSide}`)) {
+        initialSide = 'hjem';
+    }
+
+    window.byttSide(initialSide);
+
+    window.addEventListener('popstate', () => {
+        let nySide = window.location.hash.replace('#', '') || 'hjem';
+        window.byttSide(nySide);
+    });
+});
