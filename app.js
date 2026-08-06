@@ -148,9 +148,9 @@ export async function hentInnholdFraFirestore() {
         // Lagrer alt innhold i en global liste for søk og gjenbruk
         altInnhold = [...filmerData, ...serierData];
 
-        // Oppdaterer alle matchende HTML-containere
-        byggGalleriUI(["filmer-container", "filmer-galleri", "filmer-seksjon"], filmerData);
-        byggGalleriUI(["serier-container", "serier-galleri", "serier-seksjon"], serierData);
+        // Oppdaterer alle relevante gallerier og seksjoner
+        byggGalleriUI(["filmer-container", "filmer-galleri", "filmer-seksjon", "alle-filmer-seksjon"], filmerData);
+        byggGalleriUI(["serier-container", "serier-galleri", "serier-seksjon", "alle-serier-oversikt-galleri"], serierData);
 
     } catch (error) {
         console.error("Feil ved henting av innhold fra Firestore:", error);
@@ -161,7 +161,6 @@ export async function hentInnholdFraFirestore() {
 function byggGalleriUI(containerMuligheter, dataListe) {
     const IDer = Array.isArray(containerMuligheter) ? containerMuligheter : [containerMuligheter];
 
-    // Finner ALLE matchende containere i DOM-en
     const funneContainere = IDer
         .map(id => document.getElementById(id))
         .filter(el => el !== null);
@@ -327,7 +326,6 @@ window.utforSok = function() {
         return;
     }
 
-    // Filtrer alt innhold på tittel, sjanger eller andre relevante felter
     const treff = altInnhold.filter(item => {
         const tittel = (item.tittel || item.tittelNavn || '').toLowerCase();
         const sjanger = (item.sjanger || item.sjangere || item.sjKode || '').toString().toLowerCase();
