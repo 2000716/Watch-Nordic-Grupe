@@ -1,11 +1,11 @@
-import { auth, db } from "./firebase-oppsett.js"; // Sørg for at db er importert herfra om du bruker den her
+import { auth } from "./firebase-oppsett.js";
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-auth.js";
-import { initFilmMal } from "./film-mal-spa.js"; // Modulen vi lagde for filmmalen
 
-// Global variabel for å holde styr på om spilleren er i gang
+// Tilstandsvariabler
 let avspillerAktiv = false;
+let forrigeSide = 'hjem';
 
-// 1. Sjekk innlogging med en gang siden lastes
+// 1. Sjekk innlogging ved lasting
 window.addEventListener('DOMContentLoaded', () => {
     onAuthStateChanged(auth, (user) => {
         if (!user) {
@@ -13,15 +13,13 @@ window.addEventListener('DOMContentLoaded', () => {
         } else {
             settInnProfilbilde();
             byttSide('hjem');
-            // Last inn film-kort og lyttere når siden er klar
-            initialiserFilmKort();
         }
     });
 
     initialiserAvspillerKontroller();
 });
 
-// 2. Henter profilbilde fra localStorage uten blinking
+// 2. Hent profilbilde fra localStorage
 function settInnProfilbilde() {
     const lagretBilde = localStorage.getItem("profilbilde");
     const menyBildeEl = document.getElementById("menyProfilbilde");
@@ -31,12 +29,14 @@ function settInnProfilbilde() {
     }
 }
 
-// 3. Utvidet hovedfunksjon for å bytte side (støtter nå parametere til f.eks. filmmal)
-function byttSide(sideNavn, params = {}) {
+// 3. Sidebytte og visningsstyring
+function byttSide(sideNavn) {
     if (sideNavn !== 'avspiller') {
+        forrigeSide = sideNavn;
         stoppOgNullstillVideo();
     }
 
+    // Skjul navbar og footer automatisk i fullskjermspiller
     const navbar = document.querySelector('.navbar') || document.querySelector('nav');
     const footer = document.querySelector('footer');
 
@@ -48,18 +48,18 @@ function byttSide(sideNavn, params = {}) {
         if (footer) footer.style.display = 'block';
     }
 
-    // 1. Skjul alle seksjoner
+    // Skjul alle visninger
     document.querySelectorAll('.side-visning').forEach(seksjon => {
         seksjon.style.display = 'none';
     });
 
-    // 2. Vis den seksjonen brukeren trykket på
+    // Vis aktiv visning
     const aktivSeksjon = document.getElementById(`view-${sideNavn}`);
     if (aktivSeksjon) {
         aktivSeksjon.style.display = 'block';
     }
 
-    // 3. Oppdater hvilken meny-knapp som lyser opp
+    // Oppdater aktiv fane i menyen
     document.querySelectorAll('.nav-links a').forEach(link => {
         link.classList.remove('active');
     });
@@ -68,21 +68,12 @@ function byttSide(sideNavn, params = {}) {
         aktivLink.classList.add('active');
     }
 
-    // 4. Spesifikk logikk per side
     if (sideNavn === 'avspiller') {
         avspillerAktiv = true;
-    } else if (sideNavn === 'filmmal') {
-        // Initialiser filmmalen dynamisk med filmens navn/parametere
-        initFilmMal(params);
     }
 }
 
-// Global hjelpefunksjon for SPA-navigering som moduler kan kalle på
-window.navigateTo = function(side, params) {
-    byttSide(side, params);
-};
-
-// 4. Funksjon for å starte avspilleren med en gitt videolenke og tittel
+// 4. Åpne og starte videospiller
 function apneAvspiller(videoUrl, tittel) {
     const videoEl = document.getElementById('video');
     const tittelEl = document.querySelector('.movie-title');
@@ -110,29 +101,19 @@ function stoppOgNullstillVideo() {
     avspillerAktiv = false;
 }
 
-// 6. Automatisk gjenkjenning og klikk-håndtering for film-kort på tvers av sidene
-function initialiserFilmKort() {
-    // Bruk "event delegation" på dokumentet slik at også dynamisk lastede filmer fungerer
-    document.body.addEventListener('click', (e) => {
-        const filmKort = e.target.closest('.movie-card, [data-film-navn]');
-        if (filmKort) {
-            const filmNavn = filmKort.getAttribute('data-film-navn') || filmKort.dataset.navn;
-            if (filmNavn) {
-                e.preventDefault();
-                byttSide('filmmal', { navn: filmNavn });
-            }
-        }
-    });
+// 6. Naviger tilbake til forrige side
+function gaTilbake() {
+    stoppOgNullstillVideo();
+    byttSide(forrigeSide);
 }
 
-// 7. Koble opp lyttere for knapper
+// 7. Koble opp lyttere for avspiller
 function initialiserAvspillerKontroller() {
     const tilbakeKnapp = document.getElementById('backButton');
     if (tilbakeKnapp) {
         tilbakeKnapp.addEventListener('click', (e) => {
             e.preventDefault();
-            stoppOgNullstillVideo();
-            byttSide('hjem');
+            gaTilbake();
         });
     }
 
@@ -144,7 +125,8 @@ function initialiserAvspillerKontroller() {
     }
 }
 
-// 8. GJØR FUNKSJONER TILGJENGELIG GLOBALMENT
+// Global eksponering for inline HTML-eventer
 window.byttSide = byttSide;
 window.apneAvspiller = apneAvspiller;
 window.stoppOgNullstillVideo = stoppOgNullstillVideo;
+window.gaTilbake = gaTilbake;
