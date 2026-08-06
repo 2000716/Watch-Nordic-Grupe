@@ -1,4 +1,3 @@
-<script type="module">
   // ==================== HJELPEFUNKSJONER FOR SIKKERHET & PARSING ==================== //
   function sikkerJSONParse(str, fallback = null) {
     if (!str || typeof str !== "string") return fallback;
