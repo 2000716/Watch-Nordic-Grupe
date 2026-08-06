@@ -1,6 +1,6 @@
-import { auth, db } from "./firebase-oppsett.js";
+\import { auth, db } from "./firebase-oppsett.js";
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-auth.js";
-import { doc, getDoc } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
+import { doc, getDoc } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js"; // Sørg for at disse er med for å hente filmdata
 
 // Global variabel for å holde styr på om spilleren er i gang
 let avspillerAktiv = false;
@@ -13,7 +13,7 @@ window.addEventListener('DOMContentLoaded', () => {
         } else {
             settInnProfilbilde();
             byttSide('hjem');
-            initialiserFilmKort(); // Aktiverer klikk på filmkort på tvers av sider
+            initialiserFilmKort(); // Aktiverer klikk på filmer
         }
     });
 
@@ -30,14 +30,11 @@ function settInnProfilbilde() {
     }
 }
 
-// 3. Hovedfunksjon for å bytte side uten blinking (inkludert fiks for scrolling)
+// 3. Hovedfunksjon for å bytte side uten blinking
 function byttSide(sideNavn) {
     if (sideNavn !== 'avspiller') {
         stoppOgNullstillVideo();
     }
-
-    // Scroll alltid til toppen ved sidebytte for å hindre låst scrolling
-    window.scrollTo(0, 0);
 
     const navbar = document.querySelector('.navbar') || document.querySelector('nav');
     const footer = document.querySelector('footer');
@@ -75,24 +72,20 @@ function byttSide(sideNavn) {
     }
 }
 
-// 4. Funksjon for å hente data og fylle inn i din HTML-struktur for filminfo
-async function visFilmInfo(filmId) {
-    if (!filmId) return;
-
-    // Vis loader hvis du har det i filminfo-seksjonen
-    const loader = document.querySelector('#view-filminfo .page-loader-seksjon');
-    if (loader) loader.style.display = 'flex';
+// 4. Funksjon for å hente filminfo og vise filminfo-siden din
+async function visFilmInfo(filmNavn) {
+    if (!filmNavn) return;
 
     try {
-        // Søk først i 'filmer', hvis ikke finnes, søk i 'serier'
-        let docRef = doc(db, "filmer", filmId);
+        // Hent filmdata fra Firebase (sjekker 'filmer' og evt. 'serier')
+        let docRef = doc(db, "filmer", filmNavn);
         let docSnap = await getDoc(docRef);
         let data = null;
 
         if (docSnap.exists()) {
             data = docSnap.data();
         } else {
-            docRef = doc(db, "serier", filmId);
+            docRef = doc(db, "serier", filmNavn);
             docSnap = await getDoc(docRef);
             if (docSnap.exists()) {
                 data = docSnap.data();
@@ -100,79 +93,43 @@ async function visFilmInfo(filmId) {
         }
 
         if (data) {
-            // Fyll inn elementer basert på HTML-strukturen din:
-            
-            // Bakgrunnsbilde
-            const bgImg = document.getElementById('backgroundImage');
-            if (bgImg) bgImg.src = data.bakgrunn || data.bilde || '';
+            // HER PLASSERER DU KODEN DIN FOR Å FYLLE INN FILMINFO
+            // Eksempel på å fylle inn elementer hvis de finnes i 'view-filminfo':
+            const tittelEl = document.querySelector('#view-filminfo .filminfo-tittel');
+            if (tittelEl) tittelEl.textContent = data.tittel || filmNavn;
 
-            // Logo bilde
-            const filmLogo = document.querySelector('#view-filminfo .film-logo');
-            if (filmLogo) {
-                if (data.logo) {
-                    filmLogo.src = data.logo;
-                    filmLogo.style.display = 'block';
-                } else {
-                    filmLogo.style.display = 'none';
-                }
-            }
+            const beskrivelseEl = document.querySelector('#view-filminfo .filminfo-beskrivelse');
+            if (beskrivelseEl) beskrivelseEl.textContent = data.beskrivelse || '';
 
-            // Beskrivelse
-            const beskrivelseEl = document.querySelector('#view-filminfo .description');
-            if (beskrivelseEl) beskrivelseEl.textContent = data.beskrivelse || data.synopsis || '';
+            const bildeEl = document.querySelector('#view-filminfo .filminfo-bilde');
+            if (bildeEl && data.bakgrunn) bildeEl.src = data.bakgrunn;
 
-            // Metadata (f.eks. årstall, sjanger, aldersgrense)
-            const metadataEl = document.querySelector('#view-filminfo .metadata');
-            if (metadataEl) {
-                metadataEl.innerHTML = `
-                    <span>${data.aar || ''}</span>
-                    <span>${data.sjanger || ''}</span>
-                    <span>${data.aldersgrense || ''}</span>
-                `;
-            }
-
-            // "Se nå"-knapp funksjonalitet
-            const watchBtn = document.getElementById('watchBtn');
-            if (watchBtn) {
-                // Fjern gamle lyttere for å unngå duplikater ved å klone knappen
-                const nyWatchBtn = watchBtn.cloneNode(true);
-                watchBtn.parentNode.replaceChild(nyWatchBtn, watchBtn);
-                
-                nyWatchBtn.addEventListener('click', () => {
-                    apneAvspiller(data.videoUrl || data.url, data.tittel || filmId);
-                });
-            }
-
-            // Bytter til filminfo-siden uten oppdatering
+            // Bytter visning til filminfo-siden uten oppdatering
             byttSide('filminfo');
         } else {
-            console.warn("Fant ikke film eller serie med ID:", filmId);
+            console.warn("Fant ikke film med navn:", filmNavn);
         }
     } catch (error) {
-        console.error("Feil ved henting av filminfo fra Firebase:", error);
-    } finally {
-        if (loader) loader.style.display = 'none';
+        console.error("Feil ved henting av filminfo:", error);
     }
 }
 
-// 5. Automatisk gjenkjenning av klikk på filmkort overalt på nettsiden
+// 5. Automatisk gjenkjenning av klikk på filmkort
 function initialiserFilmKort() {
+    // Bruker 'event delegation' slik at det også fungerer på filmer som lastes dynamisk inn
     document.body.addEventListener('click', (e) => {
-        const filmKort = e.target.closest('.movie-card, [data-film-id], [data-film-navn]');
+        const filmKort = e.target.closest('.movie-card, [data-film-navn]');
         if (filmKort) {
-            const filmId = filmKort.getAttribute('data-film-id') || 
-                           filmKort.getAttribute('data-film-navn') || 
-                           filmKort.dataset.id || 
-                           filmKort.dataset.navn;
-            if (filmId) {
+            const filmNavn = filmKort.getAttribute('data-film-navn') || filmKort.dataset.navn;
+            if (filmNavn) {
                 e.preventDefault();
-                visFilmInfo(filmId);
+                visFilmInfo(filmNavn); // Åpner filminfo-koden din med riktig film
             }
         }
     });
 }
 
-// 6. Funksjon for å starte avspilleren
+// 6. Funksjon for å starte avspilleren med en gitt videolenke og tittel
 function apneAvspiller(videoUrl, tittel) {
     const videoEl = document.getElementById('video');
     const tittelEl = document.querySelector('.movie-title');
@@ -197,14 +154,6 @@ function stoppOgNullstillVideo() {
         videoEl.pause();
         videoEl.currentTime = 0;
     }
-    
-    // Stopp også eventuell trailer-video som spiller i bakgrunnen på filminfo
-    const trailerVideo = document.getElementById('trailerVideo');
-    if (trailerVideo) {
-        trailerVideo.pause();
-        trailerVideo.currentTime = 0;
-    }
-
     avspillerAktiv = false;
 }
 
@@ -215,6 +164,15 @@ function initialiserAvspillerKontroller() {
         tilbakeKnapp.addEventListener('click', (e) => {
             e.preventDefault();
             stoppOgNullstillVideo();
+            byttSide('hjem');
+        });
+    }
+
+    // Legg også til en tilbake-knapp fra filminfo til hjem hvis du har en
+    const filminfoTilbake = document.getElementById('filminfoTilbake');
+    if (filminfoTilbake) {
+        filminfoTilbake.addEventListener('click', (e) => {
+            e.preventDefault();
             byttSide('hjem');
         });
     }
