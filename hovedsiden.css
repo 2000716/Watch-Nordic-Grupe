@@ -9,6 +9,7 @@ html, body {
   background: #050F11;
   color: #ffffff;
   overflow-x: hidden;
+  overflow-y: auto; /* Sikrer stabil vertikal skrolling på alle enheter */
 }
 
 main {
@@ -258,7 +259,7 @@ main {
   padding: 4px;
   transition: border-color 0.3s ease, transform 0.3s ease;
   overflow: hidden !important;
-  flex-shrink: 0 !important;    
+  flex-shrink: 0 !important;     
 }
 
 .image-gallery a img, .gallery-item img {
@@ -707,8 +708,8 @@ main {
     min-width: 38px !important;
     min-height: 38px !important;
     font-size: 16px !important;
-    border-radius: 50% !important; /* Rettet fra 8px til 50% slik at den forbli rund */
-    flex-shrink: 0 !important;    /* Forhindrer at knappen blir skvist */
+    border-radius: 50% !important;
+    flex-shrink: 0 !important;    
     background: rgba(255, 255, 255, 0.2);
   }
 
