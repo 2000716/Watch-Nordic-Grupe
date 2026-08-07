@@ -435,15 +435,16 @@
   </footer>
 
 <script type="module">
-  import { auth, db } from "./firebase-oppsett.js";
-  import {  
+  // Importerer fra samme firebase-konfigurasjon som app.js benytter
+  import { auth, db } from "./firebase-config.js";
+  import { 
     signInWithEmailAndPassword, 
     createUserWithEmailAndPassword,
     setPersistence,
     browserLocalPersistence,
     onAuthStateChanged
-  } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-auth.js";
-  import { doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
+  } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+  import { doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
   let registreringsmodus = false;
   let naavaarendeSteg = 1;
@@ -458,6 +459,21 @@
   const changeEmailBtn = document.getElementById("changeEmailBtn");
   const passwordToggle = document.getElementById("passwordToggle");
   const toggleModeLink = document.getElementById("toggleModeLink");
+
+  // Hjelpefunksjon for lokal lagring slik app.js forventer
+  function tryggLagring(nokkel, verdi) {
+    try {
+      localStorage.setItem(nokkel, typeof verdi === "object" ? JSON.stringify(verdi) : verdi);
+    } catch (e) {
+      console.warn("Kunne ikke lagre i localStorage:", e);
+    }
+  }
+
+  function hentMålUrl() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const redirectParam = urlParams.get("redirect");
+    return redirectParam ? decodeURIComponent(redirectParam) : "hvem-ser-på.html";
+  }
 
   function settFeilmelding(melding = "") {
     if (feilmelding) feilmelding.textContent = melding;
@@ -591,9 +607,16 @@
     }, 250);
   }
 
+  // Sjekker om bruker allerede er innlogget
   onAuthStateChanged(auth, (user) => {
-    if (user && window.location.pathname.toLowerCase().includes("innlogging")) {
-      window.location.replace("hvem-ser-på.html");
+    if (user) {
+      tryggLagring("brukerEpost", user.email);
+      tryggLagring("userUid", user.uid);
+      
+      const maalUrl = hentMålUrl();
+      if (window.location.pathname.toLowerCase().includes("innlogging")) {
+        window.location.replace(maalUrl);
+      }
     }
   });
 
@@ -629,12 +652,15 @@
             navn: navn,
             bilde: "https://static.wixstatic.com/media/fd2fb2_39376e4ee55b460ab7a3ebbfcf35fef7~mv2.png",
             isKids: false,
-            maksAldersgrense: "12"
+            alder: 18,
+            maksAldersgrense: "18"
           }
         ];
 
+        let userCredential;
+
         if (registreringsmodus) {
-          const userCredential = await createUserWithEmailAndPassword(auth, epost, passord);
+          userCredential = await createUserWithEmailAndPassword(auth, epost, passord);
           const user = userCredential.user;
 
           await setDoc(doc(db, "users", user.uid), {
@@ -644,10 +670,13 @@
             sistOppdatert: new Date().toISOString()
           });
 
-          window.location.replace("hvem-ser-på.html");
+          // Synkroniser lokal profil til app.js
+          tryggLagring("brukerProfil", standardProfil[0]);
+          tryggLagring("brukerEpost", epost);
+          tryggLagring("userUid", user.uid);
 
         } else {
-          const userCredential = await signInWithEmailAndPassword(auth, epost, passord);
+          userCredential = await signInWithEmailAndPassword(auth, epost, passord);
           const user = userCredential.user;
 
           const docRef = doc(db, "users", user.uid);
@@ -659,10 +688,20 @@
               profiler: standardProfil,
               sistOppdatert: new Date().toISOString()
             });
+            tryggLagring("brukerProfil", standardProfil[0]);
+          } else {
+            const userData = docSnap.data();
+            if (userData.profiler && userData.profiler.length > 0) {
+              tryggLagring("brukerProfil", userData.profiler[0]);
+            }
           }
 
-          window.location.replace("hvem-ser-på.html");
+          tryggLagring("brukerEpost", epost);
+          tryggLagring("userUid", user.uid);
         }
+
+        window.location.replace(hentMålUrl());
+
       } catch (error) {
         settLaster(false);
         console.error("Auth-feil:", error.code, error.message);
@@ -672,8 +711,6 @@
             settFeilmelding("Denne e-postadressen er allerede i bruk.");
             break;
           case 'auth/invalid-credential':
-            settFeilmelding("Feil e-post eller passord.");
-            break;
           case 'auth/wrong-password':
           case 'auth/user-not-found':
             settFeilmelding("Feil e-post eller passord.");
@@ -722,10 +759,13 @@
         : "Velg et passord for å opprette kontoen";
     }
 
-    document.getElementById("toggleModeLink").addEventListener("click", (e) => {
-      e.preventDefault();
-      visInnlogging();
-    });
+    const nyToggleLink = document.getElementById("toggleModeLink");
+    if (nyToggleLink) {
+      nyToggleLink.addEventListener("click", (e) => {
+        e.preventDefault();
+        visInnlogging();
+      });
+    }
   }
 
   function visInnlogging() {
@@ -752,10 +792,13 @@
         : "Skriv inn passordet ditt";
     }
 
-    document.getElementById("toggleModeLink").addEventListener("click", (e) => {
-      e.preventDefault();
-      visRegistrering();
-    });
+    const nyToggleLink = document.getElementById("toggleModeLink");
+    if (nyToggleLink) {
+      nyToggleLink.addEventListener("click", (e) => {
+        e.preventDefault();
+        visRegistrering();
+      });
+    }
   }
 </script>
 </body>
