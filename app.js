@@ -126,19 +126,18 @@ async function lastSerierData() {
 }
 
 /**
- * ENDRET: Nå bare endrer vi URL-en når noen klikker på et filmkort.
- * filminfo.js vil oppdage dette og hente filmen automatisk!
+ * ENDRET: Nå oppdaterer vi URL-en med #film- prefiks for å støtte direktelenker.
  */
 window.velgOgVisInfo = function(docId) {
     window.AppState.valgtMediaId = docId;
-    window.location.hash = docId; // Dette trigger hashchange/popstate nederst i koden
+    window.location.hash = `#film-${docId}`; 
 };
 
 /**
  * NY: Global funksjon for tilbake-knappen i filminfo-skjermen
  */
 window.gaaTilbake = () => {
-    window.location.hash = "hjem";
+    window.location.hash = "#hjem";
     if (typeof window.destroyFilmPage === "function") {
         window.destroyFilmPage(); // Rydder opp minne fra filminfo.js
     }
@@ -148,9 +147,6 @@ window.gaaTilbake = () => {
 // 4. Ruting / Navigasjon (SPA-logikk)
 // ==========================================
 
-/**
- * ENDRET: Gjør byttSide smartere så den forstår forskjell på faste sider (hjem) og film-sider
- */
 window.byttSide = function(sideId) {
     const alleSider = document.querySelectorAll('.side-visning, .view');
     alleSider.forEach(side => {
@@ -159,21 +155,16 @@ window.byttSide = function(sideId) {
 
     let valgtSide = document.getElementById(`view-${sideId}`);
     
-    // Hvis vi finner f.eks view-hjem eller view-serier, viser vi dem
     if (valgtSide) {
         valgtSide.style.display = 'block';
     } else {
-        // Hvis vi IKKE finner view-(film-id), betyr det at brukeren har klikket på en film.
-        // Da viser vi filminfo-containeren i stedet.
         valgtSide = document.getElementById('view-filminfo');
         if (valgtSide) valgtSide.style.display = 'block';
     }
 
-    // Fjern active-klasse fra menyen
     const navLinks = document.querySelectorAll('.nav-links a, header nav a');
     navLinks.forEach(link => link.classList.remove('active'));
 
-    // Legg til active-klasse i menyen HVIS det er en hovedside
     const aktivLink = document.getElementById(`link-${sideId}`);
     if (aktivLink) {
         aktivLink.classList.add('active');
@@ -181,7 +172,6 @@ window.byttSide = function(sideId) {
 
     window.scrollTo({ top: 0, behavior: 'smooth' });
 
-    // Last inn Firebase-data basert på aktiv side
     if (sideId === 'hjem') lastHovedsideData();
     if (sideId === 'serier') lastSerierData();
 
@@ -258,11 +248,8 @@ window.utforSok = async function() {
                     <h4 style="color: white; margin-top: 5px; font-size: 14px;">${tittel}</h4>
                 `;
 
-                // Bruker vår nye velgOgVisInfo som endrer URL-en
                 kort.addEventListener("click", () => {
                     window.velgOgVisInfo(docId);
-                    
-                    // Valgfritt: Tøm søkefeltet når man klikker på et resultat
                     resultaterContainer.innerHTML = '';
                     sokefelt.value = '';
                 });
@@ -286,17 +273,32 @@ window.utforSok = async function() {
 // ==========================================
 document.addEventListener('DOMContentLoaded', () => {
     
-    // Funksjon for å sjekke URL og bytte side deretter
+    // Funksjon for å sjekke URL og håndtere ruting inkludert #film- IDer
     const handterSideLasting = () => {
-        let sideId = window.location.hash.replace('#', '');
-        if (!sideId) sideId = 'hjem'; // Standard til hjem hvis ingen hash
-        window.byttSide(sideId);
+        let cleanHash = window.location.hash.replace('#', '');
+        
+        if (!cleanHash) {
+            cleanHash = 'hjem';
+        }
+
+        if (cleanHash.startsWith('film-')) {
+            const filmKey = cleanHash.replace('film-', '');
+            window.byttSide('filminfo');
+            window.AppState.valgtMediaId = filmKey;
+            
+            // Kaller funksjonen i filminfo.js for å hente filmen fra Firestore
+            if (typeof window.lastInnFilminfo === "function") {
+                window.lastInnFilminfo(filmKey);
+            }
+        } else {
+            window.byttSide(cleanHash);
+        }
     };
 
     // Kjør ved første innlasting
     handterSideLasting();
 
-    // Lytt til URL-endringer (for tilbake-knapp i nettleser, eller når vi setter location.hash)
+    // Lytt til URL-endringer (for tilbake-knapp eller når vi endrer location.hash)
     window.addEventListener('hashchange', handterSideLasting);
 
     // Søkefelt logikk
