@@ -389,7 +389,7 @@ function createGalleryItem(itemKey, item) {
     const link = document.createElement("a");
     
     // Bruk hash i stedet for ny HTML-fil for å holde seg i SPA-en
-    link.href = `#film-${encodeURIComponent(itemKey)}`; 
+   link.href = `#film-${encodeURIComponent(itemKey)}`;
     link.classList.add("gallery-item");
     
     if (!item) return link;
