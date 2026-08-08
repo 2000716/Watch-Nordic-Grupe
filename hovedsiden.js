@@ -384,36 +384,51 @@
 
   window.addEventListener("resize", oppdaterAlleGalleripiler);
 
-  // ==================== DYNAMISK GALLERI GENERATOR ==================== //
-  function createGalleryItem(itemKey, item) {
+// ==================== DYNAMISK GALLERI GENERATOR (SPA-TILPASSET) ==================== //
+function createGalleryItem(itemKey, item) {
     const link = document.createElement("a");
-    link.href = `film.html?navn=${encodeURIComponent(itemKey)}`;
+    
+    // Bruk hash i stedet for ny HTML-fil for å holde seg i SPA-en
+    link.href = `#film-${encodeURIComponent(itemKey)}`; 
     link.classList.add("gallery-item");
     
     if (!item) return link;
 
     const erMobil = window.innerWidth <= 768;
     const bildeKilde = erMobil 
-      ? (item.posterVertikal || item.poster || item.bilde || "")
-      : (item.poster || item.bilde || "");
+        ? (item.posterVertikal || item.poster || item.bilde || "")
+        : (item.poster || item.bilde || "");
 
     const tittelTekst = escapeHTML(item.tittel || 'Mangler tittel');
     const metaTekst = escapeHTML((Array.isArray(item.metadata) ? item.metadata : []).join(" • "));
 
     link.innerHTML = `
-      ${bildeKilde ? `<img src="${escapeHTML(bildeKilde)}" alt="${tittelTekst}" loading="lazy">` : `<div style="width:100%; height:100%; background:#1a2629; display:flex; align-items:center; justify-content:center; padding:10px; text-align:center; font-size:12px; color:#fff;">${tittelTekst}</div>`}
-      <div class="image-overlay">
-        <div class="overlay-content">
-          <div class="overlay-title">${tittelTekst}</div>
-          <div class="overlay-meta" style="display: none;">${metaTekst}</div>
+        ${bildeKilde ? `<img src="${escapeHTML(bildeKilde)}" alt="${tittelTekst}" loading="lazy">` : `<div style="width:100%; height:100%; background:#1a2629; display:flex; align-items:center; justify-content:center; padding:10px; text-align:center; font-size:12px; color:#fff;">${tittelTekst}</div>`}
+        <div class="image-overlay">
+            <div class="overlay-content">
+                <div class="overlay-title">${tittelTekst}</div>
+                <div class="overlay-meta" style="display: none;">${metaTekst}</div>
+            </div>
         </div>
-      </div>
     `;
     
     link.setAttribute('data-metadata', metaTekst);
     
+    // SPA-klikk-håndterer som forhindrer sideinnlasting
+    link.addEventListener("click", (e) => {
+        e.preventDefault();
+        
+        // Oppdater hash slik at routeren fanger det opp
+        window.location.hash = `#film-${encodeURIComponent(itemKey)}`;
+        
+        // Hvis du har en funksjon for å vise filminfo direkte, kan du kalle den her:
+        if (typeof visFilminfo === "function") {
+            visFilminfo(itemKey);
+        }
+    });
+    
     return link;
-  }
+}
 
   // ==================== HJELPEFUNKSJON FOR SEKSJONER & TITTEL ==================== //
   function sjekkOgSkjulSeksjon(seksjonId, galleryId) {
