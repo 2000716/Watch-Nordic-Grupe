@@ -116,7 +116,6 @@ function oppdaterWatchKnapp() {
   if (!watchBtn.querySelector("i")) watchBtn.prepend(icon);
   if (!watchBtn.querySelector("span")) watchBtn.appendChild(text);
 
-  // Bevar låse-status hvis knappen er deaktivert pga aldersgrense
   if (watchBtn.disabled && watchBtn.title && watchBtn.title.includes("aldersgrense")) {
     icon.className = "fas fa-lock";
     text.textContent = " Låst (Aldersgrense)";
@@ -205,131 +204,63 @@ async function lastDataFraFirebase(mediaNavn) {
 async function renderFilmPage(mediaNavn) {
   kjørOpprydding();
   
-  navn = mediaNavn || window.location.hash.replace("#", "").trim();
+  // Rens opp navnet i tilfelle det kommer med # eller 'film-' prefiks
+  let rensetNavn = mediaNavn || window.location.hash.replace("#", "").trim();
+  if (rensetNavn.startsWith("film-")) {
+    rensetNavn = rensetNavn.replace("film-", "");
+  }
+  navn = rensetNavn;
   nå = new Date();
 
-  const container = document.getElementById("main-content");
+  // Sjekk om HTML-en din bruker #view-filminfo eller #main-content
+  const container = document.getElementById("view-filminfo") || document.getElementById("main-content");
   if (!container) return;
 
-  container.innerHTML = "";
+  // Hvis du bruker strukturert HTML for filminfo (med #backgroundImage, .description osv),
+  // bør vi sørge for at containeren ikke tømmes helt hvis elementene ligger der fast.
+  // Men basert på din tidligere HTML-struktur, lar vi logikken fylle inn dataene direkte:
 
   try {
     const res = await lastDataFraFirebase(navn);
     data = res.data;
     type = res.type;
 
-    // Hovedkontainer
-    const wrapper = document.createElement("article");
-    wrapper.className = "media-details-container";
-
-    // Tittel
-    const tittel = document.createElement("h1");
-    tittel.textContent = sanitizeInput(data.tittel || "Uten tittel");
-    wrapper.appendChild(tittel);
-
-    // Bakgrunnsbilde / Poster
+    // Fyll inn elementer basert på din HTML-struktur
+    const bgImgEl = document.getElementById("backgroundImage");
     const bildeUrl = erTryggUrl(data.bakgrunn) ? data.bakgrunn : (erTryggUrl(data.bildeUrl) ? data.bildeUrl : "");
-    if (bildeUrl) {
-      bgImg = document.createElement("img");
-      bgImg.src = bildeUrl;
-      bgImg.alt = sanitizeInput(data.tittel || "Mediebilde");
-      bgImg.className = "media-poster";
-      wrapper.appendChild(bgImg);
+    if (bgImgEl && bildeUrl) {
+      bgImgEl.src = bildeUrl;
+      bgImgEl.alt = sanitizeInput(data.tittel || "Bakgrunnsbilde");
     }
 
-    // Beskrivelse med Popup-modal
-    const beskrivelseTekst = data.beskrivelse || "Ingen beskrivelse tilgjengelig.";
-    const beskrivelsePara = document.createElement("p");
-    beskrivelsePara.className = "media-description";
-
-    if (beskrivelseTekst.length > 200) {
-      beskrivelsePara.textContent = beskrivelseTekst.substring(0, 200) + "... ";
-      
-      const lesMerBtn = document.createElement("button");
-      lesMerBtn.type = "button";
-      lesMerBtn.className = "link-btn";
-      lesMerBtn.textContent = "Les mer";
-
-      const opnaModal = () => {
-        const overlay = document.createElement("div");
-        overlay.className = "popup-overlay";
-
-        const popupBox = document.createElement("div");
-        popupBox.className = "popup-box";
-
-        const closeBtn = document.createElement("button");
-        closeBtn.className = "close-btn";
-        closeBtn.type = "button";
-        closeBtn.setAttribute("aria-label", "Lukk beskrivelse");
-        closeBtn.textContent = "×";
-
-        const textPara = document.createElement("p");
-        textPara.textContent = beskrivelseTekst;
-
-        popupBox.appendChild(closeBtn);
-        popupBox.appendChild(textPara);
-        overlay.appendChild(popupBox);
-        document.body.appendChild(overlay);
-
-        const lukkModal = () => {
-          closeBtn.removeEventListener("click", lukkModal);
-          overlay.removeEventListener("click", overlayKlikk);
-          window.removeEventListener("keydown", escHåndterer);
-          overlay.remove();
-        };
-
-        const overlayKlikk = (e) => {
-          if (e.target === overlay) lukkModal();
-        };
-
-        const escHåndterer = (e) => {
-          if (e.key === "Escape") lukkModal();
-        };
-
-        closeBtn.addEventListener("click", lukkModal);
-        overlay.addEventListener("click", overlayKlikk);
-        window.addEventListener("keydown", escHåndterer);
-      };
-
-      lesMerBtn.addEventListener("click", opnaModal);
-      beskrivelsePara.appendChild(lesMerBtn);
-    } else {
-      beskrivelsePara.textContent = beskrivelseTekst;
-    }
-    wrapper.appendChild(beskrivelsePara);
-
-    // Watch-knapp
-    watchBtn = document.createElement("button");
-    watchBtn.type = "button";
-    watchBtn.className = "watch-button";
-    
-    const clickHandler = () => {
-      if (watchBtn.disabled) return;
-      if (data.videoUrl && erTryggUrl(data.videoUrl)) {
-        window.location.href = data.videoUrl;
+    const tittelEl = document.querySelector("#view-filminfo h1") || document.querySelector(".film-logo");
+    if (tittelEl) {
+      if (tittelEl.tagName === "IMG" && data.logoUrl) {
+        tittelEl.src = data.logoUrl;
       } else {
-        alert("Avspillingslenke er ikke tilgjengelig.");
+        tittelEl.textContent = sanitizeInput(data.tittel || "");
       }
-    };
+    }
 
-    watchBtn.addEventListener("click", clickHandler);
-    oppryddingsFunksjoner.push(() => watchBtn?.removeEventListener("click", clickHandler));
+    const descEl = document.querySelector(".description");
+    if (descEl) {
+      descEl.textContent = data.beskrivelse || "Ingen beskrivelse tilgjengelig.";
+    }
 
-    wrapper.appendChild(watchBtn);
-
-    // Anbefalinger / Episoder seksjonsbeholder
-    const recommendationsDiv = document.createElement("div");
-    recommendationsDiv.className = "recommendations";
-    
-    const recTitle = document.createElement("h2");
-    recommendationsDiv.appendChild(recTitle);
-
-    const recGallery = document.createElement("div");
-    recGallery.id = "recommendationGallery";
-    recommendationsDiv.appendChild(recGallery);
-
-    wrapper.appendChild(recommendationsDiv);
-    container.appendChild(wrapper);
+    // Finn watchBtn
+    watchBtn = document.getElementById("watchBtn");
+    if (watchBtn) {
+      const clickHandler = () => {
+        if (watchBtn.disabled) return;
+        if (data.videoUrl && erTryggUrl(data.videoUrl)) {
+          window.location.href = data.videoUrl;
+        } else {
+          alert("Avspillingslenke er ikke tilgjengelig.");
+        }
+      };
+      watchBtn.addEventListener("click", clickHandler);
+      oppryddingsFunksjoner.push(() => watchBtn?.removeEventListener("click", clickHandler));
+    }
 
     // Synkroniser brukerdata
     const profilRaw = hentFraLagring("brukerProfil");
@@ -348,7 +279,12 @@ async function renderFilmPage(mediaNavn) {
 
   } catch (err) {
     console.error("Feil ved rendring av medieside:", err);
-    container.innerHTML = `<p class="error-msg">Kunne ikke laste innhold: ${sanitizeInput(err.message)}</p>`;
+    if (container) {
+      const feilDiv = document.createElement("div");
+      feilDiv.style.cssText = "color: white; padding: 40px; text-align: center;";
+      feilDiv.innerHTML = `<p class="error-msg">Kunne ikke laste innhold: ${sanitizeInput(err.message)}</p>`;
+      container.appendChild(feilDiv);
+    }
   }
 }
 
@@ -522,7 +458,7 @@ async function byggAnbefalingerEllerEpisoder() {
     gallery.dataset.laster = "true";
 
     const tittelEl = document.querySelector(".recommendations h2");
-    if (tittelEl) tittelEl.textContent = "Filmer du kanskje vil like";
+    if (tittelEl) tittelEl.textContent = "Anbefalt til deg";
 
     try {
       let filmer = [];
@@ -558,27 +494,26 @@ async function byggAnbefalingerEllerEpisoder() {
 
         if (!erGjeldende && erPublisert && antallVist < 6) {
           const card = document.createElement("div");
-          card.className = "movie-card";
+          card.className = "film-kort"; // Tilpasset din stil i app.js
+          card.style.cssText = "cursor: pointer; min-width: 150px; flex-shrink: 0;";
 
-          const bildeUrl = (erTryggUrl(item.poster) ? item.poster : (erTryggUrl(item.bakgrunn) ? item.bakgrunn : ''));
+          const bildeUrl = (erTryggUrl(item.bildeUrl) ? item.bildeUrl : (erTryggUrl(item.poster) ? item.poster : ''));
 
           const img = document.createElement("img");
           img.src = bildeUrl;
           img.alt = item.tittel || '';
-
-          const overlay = document.createElement("div");
-          overlay.className = "movie-overlay";
+          img.style.cssText = "width: 100%; border-radius: 8px; object-fit: cover; aspect-ratio: 2/3;";
           
-          const title = document.createElement("div");
-          title.className = "movie-title";
-          title.textContent = item.tittel || '';
+          const tittelH4 = document.createElement("h4");
+          tittelH4.textContent = item.tittel || '';
+          tittelH4.style.cssText = "color: white; margin-top: 6px; font-size: 14px; text-align: center;";
 
-          overlay.appendChild(title);
           card.appendChild(img);
-          card.appendChild(overlay);
+          card.appendChild(tittelH4);
 
           card.addEventListener("click", () => {
-            renderFilmPage(nøkkel);
+            // Bruker rutingen i app.js via hash-endring
+            window.location.hash = `#film-${nøkkel}`;
           });
           fragment.appendChild(card);
           antallVist++;
@@ -594,7 +529,6 @@ async function byggAnbefalingerEllerEpisoder() {
     }
   }
 }
-
 /* ==========================================
    8. VIDEO / TRAILER
    ========================================== */
