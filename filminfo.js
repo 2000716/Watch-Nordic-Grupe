@@ -632,5 +632,6 @@ window.addEventListener("DOMContentLoaded", () => {
    10. GLOBALE EKSPORTER FOR SPA & WINDOW-KALL
    ========================================== */
 window.renderFilmPage = renderFilmPage;
+window.lastInnFilminfo = renderFilmPage; // Viktig for at app.js skal kalle riktig funksjon
 window.lastInnFilm = renderFilmPage;
 window.destroyFilmPage = destroyFilmPage;
