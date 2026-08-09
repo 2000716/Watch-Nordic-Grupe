@@ -947,14 +947,17 @@
 </style>
 </head>
 <body>
-  
-<div id="nav-placeholder"></div>
+    
+    <!-- 1. Helside-loader (Ligger direkte under body) -->
+    <div id="page-loader">
+        <div class="spinner"></div>
+    </div>
 
-    <main id="hovedinnhold">
-        
-        <div id="page-loader">
-            <div class="spinner"></div>
-        </div>
+    <!-- 2. Menyen hentes automatisk inn av HTMX -->
+    <div id="nav-placeholder" hx-get="meny.html" hx-trigger="load" hx-swap="outerHTML"></div>
+
+    <!-- 3. Hovedinnhold med HTMX-boost for sømløs navigasjon -->
+    <main id="hovedinnhold" hx-boost="true" hx-target="#hovedinnhold" hx-select="#hovedinnhold" hx-swap="innerHTML">
 
         <section class="hero-banner">
             <img class="banner-image" id="banner-bilde" src="https://via.placeholder.com/1920x1080" alt="Film Banner" />
@@ -981,9 +984,9 @@
                 <div class="fade-left"></div>
                 <button class="scroll-button left">❮</button>
                 <div class="image-gallery" id="nye-filmer-galleri">
-                    <a href="#" class="gallery-item"><img src="https://via.placeholder.com/330x175" alt="Film"></a>
-                    <a href="#" class="gallery-item"><img src="https://via.placeholder.com/330x175" alt="Film"></a>
-                    <a href="#" class="gallery-item"><img src="https://via.placeholder.com/330x175" alt="Film"></a>
+                    <a href="Film-detail.html" class="gallery-item"><img src="https://via.placeholder.com/330x175" alt="Film"></a>
+                    <a href="Film-detail.html" class="gallery-item"><img src="https://via.placeholder.com/330x175" alt="Film"></a>
+                    <a href="Film-detail.html" class="gallery-item"><img src="https://via.placeholder.com/330x175" alt="Film"></a>
                 </div>
                 <button class="scroll-button right">❯</button>
                 <div class="fade-right"></div>
@@ -1027,8 +1030,8 @@
                 <div class="fade-left"></div>
                 <button class="scroll-button left">❮</button>
                 <div class="image-gallery" id="filmer-galleri">
-                    <a href="#" class="gallery-item"><img src="https://via.placeholder.com/330x175" alt="Film"></a>
-                    <a href="#" class="gallery-item"><img src="https://via.placeholder.com/330x175" alt="Film"></a>
+                    <a href="Film-detail.html" class="gallery-item"><img src="https://via.placeholder.com/330x175" alt="Film"></a>
+                    <a href="Film-detail.html" class="gallery-item"><img src="https://via.placeholder.com/330x175" alt="Film"></a>
                 </div>
                 <button class="scroll-button right">❯</button>
                 <div class="fade-right"></div>
@@ -1041,8 +1044,8 @@
                 <div class="fade-left"></div>
                 <button class="scroll-button left">❮</button>
                 <div class="image-gallery" id="serier-galleri">
-                    <a href="#" class="gallery-item"><img src="https://via.placeholder.com/330x175" alt="Serie"></a>
-                    <a href="#" class="gallery-item"><img src="https://via.placeholder.com/330x175" alt="Serie"></a>
+                    <a href="Serie-detail.html" class="gallery-item"><img src="https://via.placeholder.com/330x175" alt="Serie"></a>
+                    <a href="Serie-detail.html" class="gallery-item"><img src="https://via.placeholder.com/330x175" alt="Serie"></a>
                 </div>
                 <button class="scroll-button right">❯</button>
                 <div class="fade-right"></div>
@@ -1055,7 +1058,7 @@
                 <div class="fade-left"></div>
                 <button class="scroll-button left">❮</button>
                 <div class="image-gallery" id="dokumentarserier-galleri">
-                    <a href="#" class="gallery-item"><img src="https://via.placeholder.com/330x175" alt="Dokumentar"></a>
+                    <a href="Dokumentar-detail.html" class="gallery-item"><img src="https://via.placeholder.com/330x175" alt="Dokumentar"></a>
                 </div>
                 <button class="scroll-button right">❯</button>
                 <div class="fade-right"></div>
@@ -1072,7 +1075,7 @@
 
         <div class="footer-links">
             <a href="om.html">Om Watch Nordic</a>
-            <a href="kontakt.html">Contact oss</a>
+            <a href="kontakt.html">Kontakt oss</a>
             <a href="personvern.html">Personvern</a>
             <a href="hjelp.html">Hjelpesenter</a>
             <a href="#">Jobber</a>
