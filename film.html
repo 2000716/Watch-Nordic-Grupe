@@ -966,15 +966,16 @@
 </head>
 <body>
 
-    <div id="nav-placeholder"></div>
+    <!-- 1. Helside-loader (Ligger øverst i body) -->
+    <div id="page-loader">
+        <div class="spinner"></div>
+    </div>
 
-    <main>
-      
-        <div id="page-loader">
-            <div class="spinner"></div>
-        </div>
-    
-        <div id="nav-placeholder" hx-get="meny.html" hx-trigger="load" hx-swap="outerHTML"></div>
+    <!-- 2. Menyelement med HTMX (Plassert én gang, rett før main) -->
+    <div id="nav-placeholder" hx-get="meny.html" hx-trigger="load" hx-swap="outerHTML"></div>
+
+    <!-- 3. Hovedinnhold -->
+    <main id="hovedinnhold" hx-boost="true" hx-target="#hovedinnhold" hx-select="#hovedinnhold" hx-swap="innerHTML">
 
         <div class="hero">
             <img class="background-image" id="backgroundImage" src="" alt="Bakgrunnsbilde" />
@@ -1031,7 +1032,7 @@
 
         <div class="footer-links">
             <a href="om.html">Om Watch Nordic</a>
-            <a href="kontakt.html">Contact oss</a>
+            <a href="kontakt.html">Kontakt oss</a>
             <a href="personvern.html">Personvern</a>
             <a href="hjelp.html">Hjelpesenter</a>
             <a href="#">Jobber</a>
@@ -1053,9 +1054,9 @@
         </div>
     </footer>
 
-<script src="meny.js"></script>
-<script src="lader.js"></script>
-<script type="module">
+    <script src="meny.js"></script>
+    <script src="lader.js"></script>
+    <script type="module">
   import { auth, db } from "./firebase-oppsett.js";
   import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-auth.js";
   import { doc, getDoc, setDoc, collection, query, limit, getDocs } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
