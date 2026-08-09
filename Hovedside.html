@@ -946,121 +946,121 @@
 </style>
 </head>
 <body>
+  
+<div id="nav-placeholder"></div>
 
-    <div id="nav-placeholder"></div>
-
-    <main>
-      
+    <main id="hovedinnhold">
+        
         <div id="page-loader">
             <div class="spinner"></div>
         </div>
 
-            <section class="hero-banner">
-                <img class="banner-image" id="banner-bilde" src="https://via.placeholder.com/1920x1080" alt="Film Banner" />
-                <video id="banner-video" class="banner-video" playsinline preload="none"></video>
+        <section class="hero-banner">
+            <img class="banner-image" id="banner-bilde" src="https://via.placeholder.com/1920x1080" alt="Film Banner" />
+            <video id="banner-video" class="banner-video" playsinline preload="none"></video>
 
-                <div class="banner-content">
-                    <img class="film-logo" id="banner-logo" src="https://via.placeholder.com/320x180?text=LOGO" alt="Film Logo" />
-                    <p id="banner-beskrivelse">Her kommer filmbeskrivelsen din inn via JavaScript eller ren tekst.</p>
-                    <div id="banner-metadata" class="banner-meta">2026 • 16+ • 2t 15m</div>
-                    <div class="banner-buttons">
-                        <button class="watch-button" id="banner-se-na">
-                            <i class="fas fa-play"></i> Se nå
-                        </button>
-                        <button class="add-button" id="banner-add" aria-label="Legg til i min liste">
-                            <i class="fas fa-plus"></i>
-                        </button>
-                    </div>
+            <div class="banner-content">
+                <img class="film-logo" id="banner-logo" src="https://via.placeholder.com/320x180?text=LOGO" alt="Film Logo" />
+                <p id="banner-beskrivelse">Her kommer filmbeskrivelsen din inn via JavaScript eller ren tekst.</p>
+                <div id="banner-metadata" class="banner-meta">2026 • 16+ • 2t 15m</div>
+                <div class="banner-buttons">
+                    <button class="watch-button" id="banner-se-na">
+                        <i class="fas fa-play"></i> Se nå
+                    </button>
+                    <button class="add-button" id="banner-add" aria-label="Legg til i min liste">
+                        <i class="fas fa-plus"></i>
+                    </button>
                 </div>
-            </section>
-
-            <section class="gallery-section" id="nye-filmer-seksjon">
-                <h2>Nylig lagt til</h2>
-                <div class="gallery-wrapper">
-                    <div class="fade-left"></div>
-                    <button class="scroll-button left">❮</button>
-                    <div class="image-gallery" id="nye-filmer-galleri">
-                        <a href="#" class="gallery-item"><img src="https://via.placeholder.com/330x175" alt="Film"></a>
-                        <a href="#" class="gallery-item"><img src="https://via.placeholder.com/330x175" alt="Film"></a>
-                        <a href="#" class="gallery-item"><img src="https://via.placeholder.com/330x175" alt="Film"></a>
-                    </div>
-                    <button class="scroll-button right">❯</button>
-                    <div class="fade-right"></div>
-                </div>
-            </section>
-
-            <section class="continue-watching-section" id="fortsett-section" style="display:none;">
-                <h2>Fortsett å se</h2>
-                <div class="continue-gallery-wrapper">
-                    <div class="fade-left"></div>
-                    <button class="scroll-button left" aria-label="Rull til venstre">❮</button>
-                    <div class="continue-image-gallery" id="fortsett-galleri"></div>
-                    <button class="scroll-button right" aria-label="Rull til høyre">❯</button>
-                    <div class="fade-right"></div>
-                </div>
-            </section>
-
-            <section class="gallery-section" id="topp10-seksjon">
-                <h2>Filmtoppen!</h2>
-                <div class="gallery-wrapper">
-                    <div class="fade-left"></div>
-                    <button class="scroll-button left">❮</button>
-                    <div class="top10-gallery" id="topp10-filmer-galleri">
-                        <div class="top10-item">
-                            <img src="https://via.placeholder.com/150x225" alt="Topp 1">
-                            <span class="top10-number">1</span>
-                        </div>
-                        <div class="top10-item">
-                            <img src="https://via.placeholder.com/150x225" alt="Topp 2">
-                            <span class="top10-number">2</span>
-                        </div>
-                    </div>
-                    <button class="scroll-button right">❯</button>
-                    <div class="fade-right"></div>
-                </div>
-            </section> 
-
-            <section class="gallery-section" id="alle-filmer-seksjon">
-                <h2>Filmer</h2>
-                <div class="gallery-wrapper">
-                    <div class="fade-left"></div>
-                    <button class="scroll-button left">❮</button>
-                    <div class="image-gallery" id="filmer-galleri">
-                        <a href="#" class="gallery-item"><img src="https://via.placeholder.com/330x175" alt="Film"></a>
-                        <a href="#" class="gallery-item"><img src="https://via.placeholder.com/330x175" alt="Film"></a>
-                    </div>
-                    <button class="scroll-button right">❯</button>
-                    <div class="fade-right"></div>
-                </div>
-            </section>
-
-            <section class="gallery-section" id="serier-seksjon">
-                <h2>Serier</h2>
-                <div class="gallery-wrapper">
-                    <div class="fade-left"></div>
-                    <button class="scroll-button left">❮</button>
-                    <div class="image-gallery" id="serier-galleri">
-                        <a href="#" class="gallery-item"><img src="https://via.placeholder.com/330x175" alt="Serie"></a>
-                        <a href="#" class="gallery-item"><img src="https://via.placeholder.com/330x175" alt="Serie"></a>
-                    </div>
-                    <button class="scroll-button right">❯</button>
-                    <div class="fade-right"></div>
-                </div>
-            </section>
-
-            <section class="gallery-section" id="dokumentar-seksjon">
-                <h2>Dokumentarserier</h2>
-                <div class="gallery-wrapper">
-                    <div class="fade-left"></div>
-                    <button class="scroll-button left">❮</button>
-                    <div class="image-gallery" id="dokumentarserier-galleri">
-                        <a href="#" class="gallery-item"><img src="https://via.placeholder.com/330x175" alt="Dokumentar"></a>
-                    </div>
-                    <button class="scroll-button right">❯</button>
-                    <div class="fade-right"></div>
-                </div>
-            </section>
+            </div>
         </section>
+
+        <section class="gallery-section" id="nye-filmer-seksjon">
+            <h2>Nylig lagt til</h2>
+            <div class="gallery-wrapper">
+                <div class="fade-left"></div>
+                <button class="scroll-button left">❮</button>
+                <div class="image-gallery" id="nye-filmer-galleri">
+                    <a href="#" class="gallery-item"><img src="https://via.placeholder.com/330x175" alt="Film"></a>
+                    <a href="#" class="gallery-item"><img src="https://via.placeholder.com/330x175" alt="Film"></a>
+                    <a href="#" class="gallery-item"><img src="https://via.placeholder.com/330x175" alt="Film"></a>
+                </div>
+                <button class="scroll-button right">❯</button>
+                <div class="fade-right"></div>
+            </div>
+        </section>
+
+        <section class="continue-watching-section" id="fortsett-section" style="display:none;">
+            <h2>Fortsett å se</h2>
+            <div class="continue-gallery-wrapper">
+                <div class="fade-left"></div>
+                <button class="scroll-button left" aria-label="Rull til venstre">❮</button>
+                <div class="continue-image-gallery" id="fortsett-galleri"></div>
+                <button class="scroll-button right" aria-label="Rull til høyre">❯</button>
+                <div class="fade-right"></div>
+            </div>
+        </section>
+
+        <section class="gallery-section" id="topp10-seksjon">
+            <h2>Filmtoppen!</h2>
+            <div class="gallery-wrapper">
+                <div class="fade-left"></div>
+                <button class="scroll-button left">❮</button>
+                <div class="top10-gallery" id="topp10-filmer-galleri">
+                    <div class="top10-item">
+                        <img src="https://via.placeholder.com/150x225" alt="Topp 1">
+                        <span class="top10-number">1</span>
+                    </div>
+                    <div class="top10-item">
+                        <img src="https://via.placeholder.com/150x225" alt="Topp 2">
+                        <span class="top10-number">2</span>
+                    </div>
+                </div>
+                <button class="scroll-button right">❯</button>
+                <div class="fade-right"></div>
+            </div>
+        </section> 
+
+        <section class="gallery-section" id="alle-filmer-seksjon">
+            <h2>Filmer</h2>
+            <div class="gallery-wrapper">
+                <div class="fade-left"></div>
+                <button class="scroll-button left">❮</button>
+                <div class="image-gallery" id="filmer-galleri">
+                    <a href="#" class="gallery-item"><img src="https://via.placeholder.com/330x175" alt="Film"></a>
+                    <a href="#" class="gallery-item"><img src="https://via.placeholder.com/330x175" alt="Film"></a>
+                </div>
+                <button class="scroll-button right">❯</button>
+                <div class="fade-right"></div>
+            </div>
+        </section>
+
+        <section class="gallery-section" id="serier-seksjon">
+            <h2>Serier</h2>
+            <div class="gallery-wrapper">
+                <div class="fade-left"></div>
+                <button class="scroll-button left">❮</button>
+                <div class="image-gallery" id="serier-galleri">
+                    <a href="#" class="gallery-item"><img src="https://via.placeholder.com/330x175" alt="Serie"></a>
+                    <a href="#" class="gallery-item"><img src="https://via.placeholder.com/330x175" alt="Serie"></a>
+                </div>
+                <button class="scroll-button right">❯</button>
+                <div class="fade-right"></div>
+            </div>
+        </section>
+
+        <section class="gallery-section" id="dokumentar-seksjon">
+            <h2>Dokumentarserier</h2>
+            <div class="gallery-wrapper">
+                <div class="fade-left"></div>
+                <button class="scroll-button left">❮</button>
+                <div class="image-gallery" id="dokumentarserier-galleri">
+                    <a href="#" class="gallery-item"><img src="https://via.placeholder.com/330x175" alt="Dokumentar"></a>
+                </div>
+                <button class="scroll-button right">❯</button>
+                <div class="fade-right"></div>
+            </div>
+        </section>
+    </main>
 
     <footer class="footer">
         <div class="footer-socials">
@@ -1105,8 +1105,8 @@
             });
     </script>
 
-<script src="meny.js"></script>
-<script src="lader.js"></script>
+    <script src="meny.js"></script>
+    <script src="lader.js"></script>
 <script type="module">
   // ==================== HJELPEFUNKSJONER FOR SIKKERHET & PARSING ==================== //
   function sikkerJSONParse(str, fallback = null) {
