@@ -1,6 +1,6 @@
-/**
+'/**
  * APP.JS - Watch Nordic
- * Hovedfil for routing, Firestore-datanetting, søk og global tilstandshåndtering
+ * Hovedfil for routing, Firestore-datahenting, søk og global tilstandshåndtering
  */
 
 // 1. Importer Firebase-moduler og filminfo.js
@@ -14,9 +14,7 @@ import {
     limit,
     startAt, 
     endAt, 
-    getDocs,
-    doc,
-    getDoc 
+    getDocs
 } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
 
 // Laster inn filminfo-scriptet slik at det er klart til å ta imot film-klikk
@@ -43,22 +41,32 @@ window.AppState = {
 // 2. Firebase Firestore - Hentefunksjoner
 // ==========================================
 
+/**
+ * Henter medier dynamisk fra 'filmer' eller 'serier' samlingene i Firestore.
+ * Fungerer for et ubegrenset antall elementer.
+ */
 async function hentMedier(type = null, begrensningsAntall = 12) {
     try {
-        const filmerRef = collection(db, "filmer");
-        let q;
+        const resultater = [];
 
-        if (type) {
-            q = query(filmerRef, where("type", "==", type), limit(begrensningsAntall));
+        // Hent fra 'serier'-samlingen hvis spesifisert, ellers fra 'filmer'
+        if (type === 'serie') {
+            const serierRef = collection(db, "serier");
+            const qSerie = query(serierRef, limit(begrensningsAntall));
+            const serieSnap = await getDocs(qSerie);
+            serieSnap.forEach((docSnap) => {
+                resultater.push({ id: docSnap.id, type: 'serie', ...docSnap.data() });
+            });
         } else {
-            q = query(filmerRef, limit(begrensningsAntall));
+            const filmerRef = collection(db, "filmer");
+            const qFilm = query(filmerRef, limit(begrensningsAntall));
+            const filmSnap = await getDocs(qFilm);
+            filmSnap.forEach((docSnap) => {
+                const data = docSnap.data();
+                resultater.push({ id: docSnap.id, type: data.type || 'film', ...data });
+            });
         }
 
-        const querySnapshot = await getDocs(q);
-        const resultater = [];
-        querySnapshot.forEach((docSnap) => {
-            resultater.push({ id: docSnap.id, ...docSnap.data() });
-        });
         return resultater;
     } catch (error) {
         console.error(`Feil ved henting av medier (${type}):`, error);
@@ -71,11 +79,12 @@ async function hentMedier(type = null, begrensningsAntall = 12) {
 // ==========================================
 
 function byggMedieKort(item) {
+    const safeId = sanitizeInput(item.id);
     const tittel = sanitizeInput(item.tittel || "Uten tittel");
     const bildeUrl = sanitizeInput(item.bildeUrl || item.poster || item.bakgrunn || 'placeholder.jpg');
     
     return `
-        <div class="film-kort" data-id="${item.id}" style="cursor: pointer; min-width: 150px; flex-shrink: 0;" onclick="velgOgVisInfo('${item.id}')">
+        <div class="film-kort" data-id="${safeId}" style="cursor: pointer; min-width: 150px; flex-shrink: 0;" onclick="velgOgVisInfo('${safeId}')">
             <img src="${bildeUrl}" alt="${tittel}" style="width: 100%; border-radius: 8px; object-fit: cover; aspect-ratio: 2/3;" loading="lazy">
             <h4 style="color: white; margin-top: 6px; font-size: 14px; text-align: center;">${tittel}</h4>
         </div>
@@ -89,9 +98,11 @@ async function lastHovedsideData() {
     const filmerContainer = document.getElementById('filmer-container');
     const serierContainer = document.getElementById('serier-container');
 
-    const alleMedier = await hentMedier(null, 15);
-    if (alleMedier.length > 0) {
-        const heroItem = alleMedier[0];
+    const alleFilmer = await hentMedier('film', 15);
+    const alleSerier = await hentMedier('serie', 15);
+
+    if (alleFilmer.length > 0) {
+        const heroItem = alleFilmer[0];
         if (heroTittel) heroTittel.textContent = heroItem.tittel || '';
         if (heroBeskrivelse) heroBeskrivelse.textContent = heroItem.beskrivelse || '';
         if (heroBanner && (heroItem.bakgrunn || heroItem.bildeUrl)) {
@@ -100,13 +111,11 @@ async function lastHovedsideData() {
     }
 
     if (filmerContainer) {
-        const filmer = alleMedier.filter(m => m.type === 'film' || !m.type);
-        filmerContainer.innerHTML = filmer.map(m => byggMedieKort(m)).join('');
+        filmerContainer.innerHTML = alleFilmer.map(m => byggMedieKort(m)).join('');
     }
 
     if (serierContainer) {
-        const serier = alleMedier.filter(m => m.type === 'serie');
-        serierContainer.innerHTML = serier.map(m => byggMedieKort(m)).join('');
+        serierContainer.innerHTML = alleSerier.map(s => byggMedieKort(s)).join('');
     }
 }
 
@@ -126,7 +135,7 @@ async function lastSerierData() {
 }
 
 /**
- * Oppdaterer URL-en med #film- prefiks for å utløse sidevisning
+ * Oppdaterer URL-en med #film- prefiks for å utløse dynamisk visning av en hvilken som helst film/serie
  */
 window.velgOgVisInfo = function(docId) {
     window.AppState.valgtMediaId = docId;
@@ -189,10 +198,8 @@ onAuthStateChanged(auth, (user) => {
     const kontoLink = document.getElementById('konto-lenke');
 
     if (user) {
-        console.log("Bruker er logget inn:", user.email);
         if (kontoLink) kontoLink.textContent = 'Min Konto';
     } else {
-        console.log("Ingen bruker er logget inn.");
         if (kontoLink) kontoLink.textContent = 'Logg inn';
     }
 });
@@ -277,7 +284,7 @@ window.utforSok = async function() {
 
 document.addEventListener('DOMContentLoaded', () => {
     
-    // Funksjon for å sjekke URL og håndtere ruting inkludert #film- ID-er
+    // Håndterer URL-hashing dynamisk ved første innlasting og ved URL-endring
     const handterSideLasting = () => {
         let cleanHash = window.location.hash.replace('#', '').trim();
         
@@ -290,13 +297,13 @@ document.addEventListener('DOMContentLoaded', () => {
             window.byttSide('filminfo');
             window.AppState.valgtMediaId = filmKey;
             
-            // Kaller rendrefunksjonen fra filminfo.js (støtter både renderFilmPage og lastInnFilminfo)
+            // Kaller rendrefunksjonen i filminfo.js
             if (typeof window.renderFilmPage === "function") {
                 window.renderFilmPage(filmKey);
             } else if (typeof window.lastInnFilminfo === "function") {
                 window.lastInnFilminfo(filmKey);
             } else {
-                console.error("Klarte ikke kalle innlastingsfunksjon. Husk å koble renderFilmPage til window i filminfo.js!");
+                console.error("Kunne ikke laste filminfo. Sjekk at filminfo.js er lastet inn riktig.");
             }
         } else {
             window.byttSide(cleanHash);
@@ -306,10 +313,10 @@ document.addEventListener('DOMContentLoaded', () => {
     // Kjør ved første innlasting
     handterSideLasting();
 
-    // Lytt til URL-endringer (for tilbake-knapp eller navigerings-hash)
+    // Lytt til URL-endringer (f.eks. ved klikk på nye filmer eller tilbake-knapp i nettleseren)
     window.addEventListener('hashchange', handterSideLasting);
 
-    // Søkefelt logikk
+    // Søkefelt-debounce
     const sokefelt = document.getElementById('sokefelt');
     if (sokefelt) {
         sokefelt.addEventListener('input', () => {
@@ -318,17 +325,5 @@ document.addEventListener('DOMContentLoaded', () => {
                 window.utforSok();
             }, 300);
         });
-    }
-});
-/* ==========================================
-   AUTOMATISK OPPDATERING VED ENDRING I URL (#)
-   ========================================== */
-window.addEventListener("hashchange", () => {
-    const nyHash = window.location.hash.trim();
-    
-    // Hvis URL-en starter med #film-, last inn den nye filmen dynamisk
-    if (nyHash.startsWith("#film-")) {
-        const filmNavn = nyHash.replace("#film-", "");
-        renderFilmPage(filmNavn);
     }
 });
