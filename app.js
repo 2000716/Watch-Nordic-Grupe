@@ -3,7 +3,7 @@
  * Hovedfil for routing, Firestore-datanetting, søk og global tilstandshåndtering
  */
 
-// 1. Importer Firebase-moduler (OG FILMINFO.JS!)
+// 1. Importer Firebase-moduler og filminfo.js
 import { auth, db } from './firebase-oppsett.js';
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-auth.js";
 import { 
@@ -126,7 +126,7 @@ async function lastSerierData() {
 }
 
 /**
- * ENDRET: Nå oppdaterer vi URL-en med #film- prefiks for å støtte direktelenker.
+ * Oppdaterer URL-en med #film- prefiks for å utløse sidevisning
  */
 window.velgOgVisInfo = function(docId) {
     window.AppState.valgtMediaId = docId;
@@ -134,12 +134,12 @@ window.velgOgVisInfo = function(docId) {
 };
 
 /**
- * NY: Global funksjon for tilbake-knappen i filminfo-skjermen
+ * Global funksjon for tilbake-knappen i filminfo-skjermen
  */
 window.gaaTilbake = () => {
     window.location.hash = "#hjem";
     if (typeof window.destroyFilmPage === "function") {
-        window.destroyFilmPage(); // Rydder opp minne fra filminfo.js
+        window.destroyFilmPage();
     }
 };
 
@@ -153,12 +153,13 @@ window.byttSide = function(sideId) {
         side.style.display = 'none';
     });
 
-    let valgtSide = document.getElementById(`view-${sideId}`);
+    // Søker først etter ID-er med "view-" prefiks, deretter uten prefiks som fallback
+    let valgtSide = document.getElementById(`view-${sideId}`) || document.getElementById(sideId);
     
     if (valgtSide) {
         valgtSide.style.display = 'block';
-    } else {
-        valgtSide = document.getElementById('view-filminfo');
+    } else if (sideId === 'filminfo' || sideId.startsWith('film-')) {
+        valgtSide = document.getElementById('view-filminfo') || document.getElementById('filminfo');
         if (valgtSide) valgtSide.style.display = 'block';
     }
 
@@ -182,6 +183,7 @@ window.byttSide = function(sideId) {
 // ==========================================
 // 5. Firebase Auth - Sjekk innloggingstilstand
 // ==========================================
+
 onAuthStateChanged(auth, (user) => {
     window.AppState.bruker = user;
     const kontoLink = document.getElementById('konto-lenke');
@@ -198,6 +200,7 @@ onAuthStateChanged(auth, (user) => {
 // ==========================================
 // 6. Firebase Firestore - Søkefunksjon
 // ==========================================
+
 let sokDebounceTimer = null;
 
 window.utforSok = async function() {
@@ -271,11 +274,12 @@ window.utforSok = async function() {
 // ==========================================
 // 7. Initialisering ved sidelasting
 // ==========================================
+
 document.addEventListener('DOMContentLoaded', () => {
     
-    // Funksjon for å sjekke URL og håndtere ruting inkludert #film- IDer
+    // Funksjon for å sjekke URL og håndtere ruting inkludert #film- ID-er
     const handterSideLasting = () => {
-        let cleanHash = window.location.hash.replace('#', '');
+        let cleanHash = window.location.hash.replace('#', '').trim();
         
         if (!cleanHash) {
             cleanHash = 'hjem';
@@ -286,9 +290,13 @@ document.addEventListener('DOMContentLoaded', () => {
             window.byttSide('filminfo');
             window.AppState.valgtMediaId = filmKey;
             
-            // Kaller funksjonen i filminfo.js for å hente filmen fra Firestore
-            if (typeof window.lastInnFilminfo === "function") {
+            // Kaller rendrefunksjonen fra filminfo.js (støtter både renderFilmPage og lastInnFilminfo)
+            if (typeof window.renderFilmPage === "function") {
+                window.renderFilmPage(filmKey);
+            } else if (typeof window.lastInnFilminfo === "function") {
                 window.lastInnFilminfo(filmKey);
+            } else {
+                console.error("Klarte ikke kalle innlastingsfunksjon. Husk å koble renderFilmPage til window i filminfo.js!");
             }
         } else {
             window.byttSide(cleanHash);
@@ -298,7 +306,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Kjør ved første innlasting
     handterSideLasting();
 
-    // Lytt til URL-endringer (for tilbake-knapp eller når vi endrer location.hash)
+    // Lytt til URL-endringer (for tilbake-knapp eller navigerings-hash)
     window.addEventListener('hashchange', handterSideLasting);
 
     // Søkefelt logikk
