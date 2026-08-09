@@ -529,6 +529,7 @@ async function byggAnbefalingerEllerEpisoder() {
     }
   }
 }
+
 /* ==========================================
    8. VIDEO / TRAILER
    ========================================== */
@@ -601,32 +602,6 @@ function initTrailer() {
     if (bgImg) bgImg.style.opacity = "1";
   }
 }
-
-function oppdaterTopNavTilstand() {
-  const nav = document.querySelector(".top-nav");
-  if (!nav) return;
-
-  const erToppen = window.scrollY <= 0;
-  document.body.classList.toggle("scrolled-y", !erToppen);
-  nav.classList.toggle("scrolled", !erToppen);
-}
-
-/* ==========================================
-   9. INITIALISERING OG HENDELSESLYTTERE
-   ========================================== */
-function initPage() {
-  const mediaNavn = window.location.hash.replace("#", "").trim();
-  if (mediaNavn) {
-    renderFilmPage(mediaNavn);
-  }
-}
-
-window.addEventListener("scroll", oppdaterTopNavTilstand);
-window.addEventListener("hashchange", initPage);
-window.addEventListener("DOMContentLoaded", () => {
-  oppdaterTopNavTilstand();
-  initPage();
-});
 
 /* ==========================================
    10. GLOBALE EKSPORTER FOR SPA & WINDOW-KALL
