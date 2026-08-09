@@ -320,3 +320,15 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 });
+/* ==========================================
+   AUTOMATISK OPPDATERING VED ENDRING I URL (#)
+   ========================================== */
+window.addEventListener("hashchange", () => {
+    const nyHash = window.location.hash.trim();
+    
+    // Hvis URL-en starter med #film-, last inn den nye filmen dynamisk
+    if (nyHash.startsWith("#film-")) {
+        const filmNavn = nyHash.replace("#film-", "");
+        renderFilmPage(filmNavn);
+    }
+});
