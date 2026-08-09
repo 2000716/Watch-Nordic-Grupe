@@ -1492,7 +1492,6 @@
     }
   }
 
-  // Tømmer lokal cache ved utlogging eller feil for å hindre sikkerhetslekkasjer på tvers av brukersesjoner
   onAuthStateChanged(auth, async (user) => {
     if (user) {
       currentUser = user;
@@ -1528,13 +1527,7 @@
     const returUrl = encodeURIComponent(window.location.href);
 
     if (type === "film") {
-      if (!data.watchUrl || !erTryggUrl(data.watchUrl)) {
-        alert("Kunne ikke starte avspilling: Ugyldig kilde-URL.");
-        return;
-      }
-      const urlObj = new URL(data.watchUrl, window.location.origin);
-      urlObj.searchParams.set("returUrl", window.location.href);
-      window.location.href = urlObj.toString();
+      window.location.href = `./film-mal.html?navn=${encodeURIComponent(navn)}&returUrl=${returUrl}`;
     } else if (type === "serie" && data.sesonger) {
       const sisteEpKey = `${navn}-siste-episode`;
       let sisteEp = null;
@@ -1553,7 +1546,7 @@
         sesongNr = Object.keys(data.sesonger)[0];
         epNr = Object.keys(data.sesonger[sesongNr].episoder)[0];
       }
-      window.location.href = `film-mal.html?navn=${encodeURIComponent(navn)}&sesong=${encodeURIComponent(sesongNr)}&episode=${encodeURIComponent(epNr)}&returUrl=${returUrl}`;
+      window.location.href = `./film-mal.html?navn=${encodeURIComponent(navn)}&sesong=${encodeURIComponent(sesongNr)}&episode=${encodeURIComponent(epNr)}&returUrl=${returUrl}`;
     }
   }
 
@@ -1598,7 +1591,6 @@
 
       const epBilde = erTryggUrl(ep.thumbnail) ? ep.thumbnail : "";
 
-      // Konstruerer DOM-noder sikkert uten rå innerHTML-injisering
       const thumbDiv = document.createElement("div");
       thumbDiv.className = "episode-thumb";
       
@@ -1656,7 +1648,7 @@
         epCard.addEventListener("click", () => {
           localStorage.setItem(`${navn}-siste-episode`, JSON.stringify({ sesong: sesongNr, episode: epNr }));
           const returUrl = encodeURIComponent(window.location.href);
-          window.location.href = `film-mal.html?navn=${encodeURIComponent(navn)}&sesong=${encodeURIComponent(sesongNr)}&episode=${encodeURIComponent(epNr)}&returUrl=${returUrl}`;
+          window.location.href = `./film-mal.html?navn=${encodeURIComponent(navn)}&sesong=${encodeURIComponent(sesongNr)}&episode=${encodeURIComponent(epNr)}&returUrl=${returUrl}`;
         });
       }
       episodeGallery.appendChild(epCard);
@@ -1771,8 +1763,6 @@
 
     const erMobil = window.innerWidth <= 768;
 
-    // Kun start videotrailer automatisk på stasjonære skjermer (PC/Mac).
-    // På mobil/iPad koples traileren ut for å unngå svart skjerm og treghet.
     if (data.trailer && data.trailer.trim() !== "" && erTryggUrl(data.trailer) && trailerVideo && !erMobil) {
       trailerVideo.src = data.trailer;
       trailerVideo.preload = "metadata";
@@ -1788,7 +1778,6 @@
         if (bgImg) bgImg.style.opacity = "1";
       });
 
-      // Rask oppstart (1 sek i stedet for 10 sek forsinkelse)
       setTimeout(() => {
         if (bgImg) bgImg.style.opacity = "0";
         trailerVideo.style.opacity = "1";
@@ -1824,7 +1813,6 @@
         });
       }
     } else {
-      // Viser bakgrunnsbilde umiddelbart på mobil/nettbrett
       if (trailerVideo) trailerVideo.style.display = "none";
       if (videoControls) videoControls.style.display = "none";
       if (bgImg) bgImg.style.opacity = "1";
