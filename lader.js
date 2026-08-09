@@ -1,5 +1,5 @@
 /* ==========================================
-   STABIL LADER.JS (F5 vs HTMX)
+   LADER.JS (Tilpasset Z-Index Hierarki)
    ========================================== */
 
 function skjulHelsideLoader() {
@@ -11,7 +11,7 @@ function skjulHelsideLoader() {
       if (helsideLoader && helsideLoader.parentNode) {
         helsideLoader.remove();
       }
-    }, 600);
+    }, 500);
   }
 }
 
@@ -24,7 +24,7 @@ function skjulInnholdsLoader() {
       if (loader && loader.parentNode) {
         loader.remove();
       }
-    }, 400);
+    }, 300);
   });
 }
 
@@ -33,29 +33,19 @@ function visLoaderForInnhold() {
   if (!targetContainer) return;
 
   // Unngå doble loadere
-  if (document.querySelector(".content-loader")) return;
+  if (targetContainer.querySelector(".content-loader")) return;
 
+  // Bygg loaderen
   const loader = document.createElement("div");
   loader.className = "content-loader";
   loader.innerHTML = '<div class="spinner"></div>';
 
-  // Legger loaderen direkte på document.body plassert over #hovedinnhold
-  // slik at HTMX-swap ikke sletter loaderen før animasjonen er ferdig
-  const rect = targetContainer.getBoundingClientRect();
-  const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-
-  loader.style.position = "absolute";
-  loader.style.top = (rect.top + scrollTop) + "px";
-  loader.style.left = rect.left + "px";
-  loader.style.width = rect.width + "px";
-  loader.style.height = rect.height + "px";
-  loader.style.zIndex = "99";
-
-  document.body.appendChild(loader);
+  // Legges rett inn i #hovedinnhold (CSS styrer posisjon/z-index under menyen)
+  targetContainer.appendChild(loader);
 }
 
 function initLoaderHåndtering() {
-  // --- 1. HÅNDTER F5 / FULL OPPDATERING ---
+  // 1. Full oppdatering (F5)
   const helsideLoader = document.getElementById("page-loader");
   
   const maxTimeout = window.setTimeout(() => {
@@ -69,13 +59,13 @@ function initLoaderHåndtering() {
     });
   }
 
-  // --- 2. HÅNDTER HTMX-KLIKK (KUN INNHOLD) ---
+  // 2. HTMX-navigasjon (Kun innhold)
   document.body.addEventListener("htmx:beforeRequest", (evt) => {
-    // Ignorer forespørsler som henter menyen (meny.html)
+    // Ignorer hvis HTMX henter selve meny.html
     const path = evt.detail.requestConfig ? evt.detail.requestConfig.path : "";
     if (path && path.includes("meny.html")) return;
 
-    // Vis kun innholdsloader dersom helsideladeren allerede er fjernet
+    // Vis kun innholdsloader hvis helsideladeren allerede er fjernet
     if (!document.getElementById("page-loader")) {
       visLoaderForInnhold();
     }
