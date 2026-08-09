@@ -3,156 +3,175 @@
   import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-auth.js";
   import { doc, getDoc, setDoc, collection, query, limit, getDocs } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
 
-  /* ==========================================
-     1. GLOBALE TILSTANDER & HJELPEFUNKSJONER
-     ========================================== */
-  let currentUser = null;
-  let aktivProfil = localStorage.getItem("aktivProfil") || "Hovedprofil";
-  let aktivProfilIndex = parseInt(localStorage.getItem("aktivProfilIndex") || "0", 10);
-  let heleProfilArrayet = [];
-  let status = "ikke-påbegynt";
-  let minListe = [];
+/* ==========================================
+   1. GLOBALE TILSTANDER & HJELPEFUNKSJONER
+   ========================================== */
+let currentUser = null;
+let aktivProfil = localStorage.getItem("aktivProfil") || "Hovedprofil";
+let aktivProfilIndex = parseInt(localStorage.getItem("aktivProfilIndex") || "0", 10);
+let heleProfilArrayet = [];
+let status = "ikke-påbegynt";
+let minListe = [];
 
-  let data = null;
-  let type = "film";
-  let navn = "";
-  let nå = new Date();
-  let erUpublisert = false;
-  let erUtgått = false;
-  let erUtilgjengelig = false;
-  let erProfilLastetFraSkyen = false;
+let data = null;
+let type = "film";
+let navn = "";
+let nå = new Date();
+let erUpublisert = false;
+let erUtgått = false;
+let erUtilgjengelig = false;
+let erProfilLastetFraSkyen = false;
 
-  let watchBtn, addToListBtn, bgImg;
+let watchBtn, addToListBtn, bgImg;
 
-  // SPA-hjelper for å navigere uten å laste siden på nytt
-  function spaNaviger(sideId, params = {}) {
-    if (typeof window.byttSide === "function") {
-      window.byttSide(sideId, params);
-    } else {
-      // Fallback dersom hash-basert ruter brukes
-      const queryString = new URLSearchParams(params).toString();
-      window.location.hash = `#${sideId}${queryString ? '?' + queryString : ''}`;
-    }
+// SPA-hjelper for å navigere uten å laste siden på nytt
+function spaNaviger(sideId, params = {}) {
+  if (typeof window.byttSide === "function") {
+    window.byttSide(sideId, params);
+  } else {
+    // Fallback dersom hash-basert ruter brukes
+    const queryString = new URLSearchParams(params).toString();
+    window.location.hash = `#${sideId}${queryString ? '?' + queryString : ''}`;
   }
+}
 
-  // Henter ID dynamisk fra hash, URL search params eller argument
-  function hentMediaIdFraUrl() {
-    // 1. Sjekk hash (f.eks. #view-filminfo?id=filmnavn eller #film/filmnavn)
-    const hash = window.location.hash;
+// Henter ID dynamisk fra hash (#film-singularity, #film/singularity, osv.), URL search params eller argument
+function hentMediaIdFraUrl() {
+  const hash = window.location.hash; // F.eks. "#film-singularity"
+
+  if (hash) {
+    // 1. Sjekk query-params i hash (f.eks. #view?id=singularity eller #view?navn=singularity)
     if (hash.includes("?")) {
       const hashParams = new URLSearchParams(hash.split("?")[1]);
       const idFromHash = hashParams.get("navn") || hashParams.get("id");
       if (idFromHash) return sanitizeInput(idFromHash);
-    } else if (hash.includes("/")) {
+    }
+
+    // 2. Sjekk skråstrek (f.eks. #film/singularity eller #serie/singularity)
+    if (hash.includes("/")) {
       const deler = hash.split("/");
       if (deler.length > 1 && deler[1]) return sanitizeInput(deler[1]);
     }
 
-    // 2. Fallback til standard URL parameter (?navn=... eller ?id=...)
-    const params = new URLSearchParams(window.location.search);
-    const idFromQuery = params.get("navn") || params.get("id");
-    return sanitizeInput(idFromQuery);
-  }
+    // 3. Sjekk prefiks med bindestrek (f.eks. #film-singularity eller #serie-singularity)
+    const renHash = hash.replace(/^#/, "");
+    if (renHash.startsWith("film-")) {
+      return sanitizeInput(renHash.replace("film-", ""));
+    }
+    if (renHash.startsWith("serie-")) {
+      return sanitizeInput(renHash.replace("serie-", ""));
+    }
 
-  function tryggLagring(key, value) {
-    try {
-      localStorage.setItem(key, value);
-    } catch (e) {
-      console.warn("Kunne ikke lagre til localStorage:", e);
+    // 4. Fallback dersom hash bare er selve id-en (#singularity)
+    if (renHash) {
+      return sanitizeInput(renHash);
     }
   }
 
-  function erMobilEllerNettbrett() {
-    const touchEnhet = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0) || (navigator.msMaxTouchPoints > 0);
-    const breddeSjekk = window.innerWidth <= 1024;
-    const isIPad = /Macintosh/i.test(navigator.userAgent) && navigator.maxTouchPoints > 1;
-    return (touchEnhet && breddeSjekk) || isIPad;
-  }
+  // 5. Fallback til standard URL parameter (?navn=singularity eller ?id=singularity)
+  const params = new URLSearchParams(window.location.search);
+  const idFromQuery = params.get("navn") || params.get("id");
+  return sanitizeInput(idFromQuery);
+}
 
-  function sanitizeInput(str) {
-    if (!str) return "";
-    return String(str)
-      .replace(/&/g, "&amp;")
-      .replace(/</g, "&lt;")
-      .replace(/>/g, "&gt;")
-      .replace(/"/g, "&quot;")
-      .replace(/'/g, "&#039;");
+function tryggLagring(key, value) {
+  try {
+    localStorage.setItem(key, value);
+  } catch (e) {
+    console.warn("Kunne ikke lagre til localStorage:", e);
   }
+}
 
-  function erTryggUrl(url) {
-    if (!url || typeof url !== "string") return false;
-    try {
-      const parsed = new URL(url, window.location.origin);
-      return parsed.protocol === "http:" || parsed.protocol === "https:";
-    } catch (e) {
+function erMobilEllerNettbrett() {
+  const touchEnhet = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0) || (navigator.msMaxTouchPoints > 0);
+  const breddeSjekk = window.innerWidth <= 1024;
+  const isIPad = /Macintosh/i.test(navigator.userAgent) && navigator.maxTouchPoints > 1;
+  return (touchEnhet && breddeSjekk) || isIPad;
+}
+
+function sanitizeInput(str) {
+  if (!str) return "";
+  return String(str)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+}
+
+function erTryggUrl(url) {
+  if (!url || typeof url !== "string") return false;
+  try {
+    const parsed = new URL(url, window.location.origin);
+    return parsed.protocol === "http:" || parsed.protocol === "https:";
+  } catch (e) {
+    return false;
+  }
+}
+
+async function lastDataFraFirebase(eksplisittId = null) {
+  try {
+    // Prioriterer innsendt ID fra SPA, deretter URL
+    navn = eksplisittId ? sanitizeInput(eksplisittId) : hentMediaIdFraUrl();
+
+    if (!navn) {
+      console.warn("Ingen medie-ID funnet.");
+      spaNaviger("hjem");
       return false;
     }
-  }
 
-  async function lastDataFraFirebase(eksplisittId = null) {
-    try {
-      // Prioriterer innsendt ID fra SPA, deretter URL
-      navn = eksplisittId ? sanitizeInput(eksplisittId) : hentMediaIdFraUrl();
+    const cacheKey = `media_cache_${navn}`;
+    let cachedData = null;
+    try { cachedData = localStorage.getItem(cacheKey); } catch (e) {}
 
-      if (!navn) {
-        console.warn("Ingen medie-ID funnet.");
-        spaNaviger("hjem");
-        return false;
+    if (cachedData) {
+      try {
+        const parsed = JSON.parse(cachedData);
+        data = parsed.data;
+        type = parsed.type;
+      } catch (e) {
+        localStorage.removeItem(cacheKey);
       }
+    }
 
-      const cacheKey = `media_cache_${navn}`;
-      let cachedData = null;
-      try { cachedData = localStorage.getItem(cacheKey); } catch (e) {}
+    if (!data) {
+      let docRef = doc(db, "filmer", navn);
+      let docSnap = await getDoc(docRef);
 
-      if (cachedData) {
-        try {
-          const parsed = JSON.parse(cachedData);
-          data = parsed.data;
-          type = parsed.type;
-        } catch (e) {
-          localStorage.removeItem(cacheKey);
-        }
-      }
-
-      if (!data) {
-        let docRef = doc(db, "filmer", navn);
-        let docSnap = await getDoc(docRef);
-
+      if (docSnap.exists()) {
+        type = "film";
+        data = docSnap.data();
+      } else {
+        docRef = doc(db, "serier", navn);
+        docSnap = await getDoc(docRef);
         if (docSnap.exists()) {
-          type = "film";
+          type = "serie";
           data = docSnap.data();
-        } else {
-          docRef = doc(db, "serier", navn);
-          docSnap = await getDoc(docRef);
-          if (docSnap.exists()) {
-            type = "serie";
-            data = docSnap.data();
-          }
-        }
-
-        if (data) {
-          tryggLagring(cacheKey, JSON.stringify({ data, type }));
         }
       }
 
-      if (!data) {
-        console.warn("Innhold ikke funnet i Firestore:", navn);
-        spaNaviger("hjem");
-        return false;
+      if (data) {
+        tryggLagring(cacheKey, JSON.stringify({ data, type }));
       }
+    }
 
-      nå = new Date();
-      erUpublisert = data.publishDate && new Date(data.publishDate) > nå;
-      erUtgått = data.expireDate && nå > new Date(data.expireDate);
-      erUtilgjengelig = erUpublisert || erUtgått;
-      return true;
-
-    } catch (err) {
-      console.error("Feil ved henting av mediedata:", err);
+    if (!data) {
+      console.warn("Innhold ikke funnet i Firestore:", navn);
+      spaNaviger("hjem");
       return false;
     }
-  }
 
+    nå = new Date();
+    erUpublisert = data.publishDate && new Date(data.publishDate) > nå;
+    erUtgått = data.expireDate && nå > new Date(data.expireDate);
+    erUtilgjengelig = erUpublisert || erUtgått;
+    return true;
+
+  } catch (err) {
+    console.error("Feil ved henting av mediedata:", err);
+    return false;
+  }
+}
   /* ==========================================
      2. HOVEDFUNKSJON (SPA-KLAR)
      ========================================== */
