@@ -456,7 +456,7 @@
   const submitKnapp = document.getElementById("submitKnapp");
   const changeEmailBtn = document.getElementById("changeEmailBtn");
   const passwordToggle = document.getElementById("passwordToggle");
-  const toggleModeLink = document.getElementById("toggleModeLink");
+  const toggleText = document.getElementById("toggleText");
 
   function tryggLagring(nokkel, verdi) {
     try {
@@ -520,13 +520,16 @@
     });
   }
 
-  if (toggleModeLink) {
-    toggleModeLink.addEventListener("click", (e) => {
-      e.preventDefault();
-      if (registreringsmodus) {
-        visInnlogging();
-      } else {
-        visRegistrering();
+  // Event Delegation for Registrer / Logg inn-knappen (Løser problem med # koder)
+  if (toggleText) {
+    toggleText.addEventListener("click", (e) => {
+      if (e.target && e.target.id === "toggleModeLink") {
+        e.preventDefault();
+        if (registreringsmodus) {
+          visInnlogging();
+        } else {
+          visRegistrering();
+        }
       }
     });
   }
@@ -677,7 +680,7 @@
           tryggLagring("userUid", user.uid);
         }
 
-        // Videresender direkte til hvem-ser-på.html ved velykket innlogging/registrering
+        // Videresending ved vellykket innlogging/registrering
         window.location.href = "hvem-ser-på.html";
 
       } catch (error) {
@@ -736,14 +739,6 @@
         ? "Skriv inn e-post for å opprette konto" 
         : "Velg et passord for å opprette kontoen";
     }
-
-    const nyToggleLink = document.getElementById("toggleModeLink");
-    if (nyToggleLink) {
-      nyToggleLink.addEventListener("click", (e) => {
-        e.preventDefault();
-        visInnlogging();
-      });
-    }
   }
 
   function visInnlogging() {
@@ -768,14 +763,6 @@
       formSubtitle.textContent = (naavaarendeSteg === 1) 
         ? "Skriv inn e-postadressen din for å fortsette" 
         : "Skriv inn passordet ditt";
-    }
-
-    const nyToggleLink = document.getElementById("toggleModeLink");
-    if (nyToggleLink) {
-      nyToggleLink.addEventListener("click", (e) => {
-        e.preventDefault();
-        visRegistrering();
-      });
     }
   }
 </script>
