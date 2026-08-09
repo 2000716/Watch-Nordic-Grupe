@@ -440,8 +440,7 @@
     signInWithEmailAndPassword, 
     createUserWithEmailAndPassword,
     setPersistence,
-    browserLocalPersistence,
-    onAuthStateChanged
+    browserLocalPersistence
   } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
   import { doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
@@ -465,12 +464,6 @@
     } catch (e) {
       console.warn("Kunne ikke lagre i localStorage:", e);
     }
-  }
-
-  function hentMålUrl() {
-    const urlParams = new URLSearchParams(window.location.search);
-    const redirectParam = urlParams.get("redirect");
-    return redirectParam ? decodeURIComponent(redirectParam) : "hvem-ser-på.html";
   }
 
   function settFeilmelding(melding = "") {
@@ -605,15 +598,6 @@
     }, 250);
   }
 
-  // Sjekker om bruker allerede er innlogget og videresender umiddelbart
-  onAuthStateChanged(auth, (user) => {
-    if (user) {
-      tryggLagring("brukerEpost", user.email);
-      tryggLagring("userUid", user.uid);
-      window.location.replace(hentMålUrl());
-    }
-  });
-
   if (authForm) {
     authForm.addEventListener("submit", async function(event) {
       event.preventDefault(); 
@@ -693,7 +677,8 @@
           tryggLagring("userUid", user.uid);
         }
 
-        window.location.replace(hentMålUrl());
+        // Videresender direkte til hvem-ser-på.html ved velykket innlogging/registrering
+        window.location.href = "hvem-ser-på.html";
 
       } catch (error) {
         settLaster(false);
