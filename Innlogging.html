@@ -341,7 +341,7 @@
 </head>
 <body>
 
-  <header class="top-nav top-menu">
+  <header class="top-nav">
     <div class="nav-left">
       <a href="index.html" class="watch-logo-svg">
         <img src="https://static.wixstatic.com/media/d9ace9_081ea242211b45a2801873c3067e1205~mv2.png" alt="Watch Nordic">
@@ -435,19 +435,21 @@
   </footer>
 
 <script type="module">
-  import { auth, db } from "./firebase-config.js";
-  import { 
+  import { auth, db } from "./firebase-oppsett.js";
+  import {  
     signInWithEmailAndPassword, 
     createUserWithEmailAndPassword,
     setPersistence,
-    browserLocalPersistence
-  } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-  import { doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+    browserLocalPersistence,
+    onAuthStateChanged
+  } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-auth.js";
+  import { doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
 
   let registreringsmodus = false;
   let naavaarendeSteg = 1;
   let erSendt = false;
 
+  // Henting av HTML-elementer
   const epostInput = document.getElementById("epost");
   const passordInput = document.getElementById("passord");
   const feilmelding = document.getElementById("feilmelding");
@@ -456,15 +458,7 @@
   const submitKnapp = document.getElementById("submitKnapp");
   const changeEmailBtn = document.getElementById("changeEmailBtn");
   const passwordToggle = document.getElementById("passwordToggle");
-  const toggleText = document.getElementById("toggleText");
-
-  function tryggLagring(nokkel, verdi) {
-    try {
-      localStorage.setItem(nokkel, typeof verdi === "object" ? JSON.stringify(verdi) : verdi);
-    } catch (e) {
-      console.warn("Kunne ikke lagre i localStorage:", e);
-    }
-  }
+  const toggleModeLink = document.getElementById("toggleModeLink");
 
   function settFeilmelding(melding = "") {
     if (feilmelding) feilmelding.textContent = melding;
@@ -482,6 +476,7 @@
     }
   }
 
+  // --- HANDTERING AV HENDELSER ---
   if (epostInput) {
     epostInput.addEventListener("input", () => settFeilmelding(""));
     epostInput.addEventListener("keydown", (e) => {
@@ -520,16 +515,13 @@
     });
   }
 
-  // Event Delegation for Registrer / Logg inn-knappen (Løser problem med # koder)
-  if (toggleText) {
-    toggleText.addEventListener("click", (e) => {
-      if (e.target && e.target.id === "toggleModeLink") {
-        e.preventDefault();
-        if (registreringsmodus) {
-          visInnlogging();
-        } else {
-          visRegistrering();
-        }
+  if (toggleModeLink) {
+    toggleModeLink.addEventListener("click", (e) => {
+      e.preventDefault();
+      if (registreringsmodus) {
+        visInnlogging();
+      } else {
+        visRegistrering();
       }
     });
   }
@@ -601,6 +593,13 @@
     }, 250);
   }
 
+  onAuthStateChanged(auth, (user) => {
+    if (user && window.location.pathname.toLowerCase().includes("innlogging")) {
+      window.location.replace("Hovedside.html?index=0");
+    }
+  });
+
+  // --- FIREBASE AUTENTISERING & FIRESTORE-OPERASJONER ---
   if (authForm) {
     authForm.addEventListener("submit", async function(event) {
       event.preventDefault(); 
@@ -633,15 +632,13 @@
             navn: navn,
             bilde: "https://static.wixstatic.com/media/fd2fb2_39376e4ee55b460ab7a3ebbfcf35fef7~mv2.png",
             isKids: false,
-            alder: 18,
-            maksAldersgrense: "18"
+            maksAldersgrense: "12"
           }
         ];
 
-        let userCredential;
-
         if (registreringsmodus) {
-          userCredential = await createUserWithEmailAndPassword(auth, epost, passord);
+          // --- REGISTRERING ---
+          const userCredential = await createUserWithEmailAndPassword(auth, epost, passord);
           const user = userCredential.user;
 
           await setDoc(doc(db, "users", user.uid), {
@@ -651,12 +648,11 @@
             sistOppdatert: new Date().toISOString()
           });
 
-          tryggLagring("brukerProfil", standardProfil[0]);
-          tryggLagring("brukerEpost", epost);
-          tryggLagring("userUid", user.uid);
+          window.location.replace("Hovedside.html?index=0");
 
         } else {
-          userCredential = await signInWithEmailAndPassword(auth, epost, passord);
+          // --- INNLOGGING ---
+          const userCredential = await signInWithEmailAndPassword(auth, epost, passord);
           const user = userCredential.user;
 
           const docRef = doc(db, "users", user.uid);
@@ -668,21 +664,10 @@
               profiler: standardProfil,
               sistOppdatert: new Date().toISOString()
             });
-            tryggLagring("brukerProfil", standardProfil[0]);
-          } else {
-            const userData = docSnap.data();
-            if (userData.profiler && userData.profiler.length > 0) {
-              tryggLagring("brukerProfil", userData.profiler[0]);
-            }
           }
 
-          tryggLagring("brukerEpost", epost);
-          tryggLagring("userUid", user.uid);
+          window.location.replace("Hovedside.html?index=0");
         }
-
-        // Videresending ved vellykket innlogging/registrering
-        window.location.href = "hvem-ser-på.html";
-
       } catch (error) {
         settLaster(false);
         console.error("Auth-feil:", error.code, error.message);
@@ -692,6 +677,8 @@
             settFeilmelding("Denne e-postadressen er allerede i bruk.");
             break;
           case 'auth/invalid-credential':
+            settFeilmelding("Feil e-post eller passord.");
+            break;
           case 'auth/wrong-password':
           case 'auth/user-not-found':
             settFeilmelding("Feil e-post eller passord.");
@@ -716,6 +703,7 @@
     });
   }
 
+  // --- BYTT MELLOM INNLOGGING OG REGISTRERING ---
   function visRegistrering() {
     registreringsmodus = true;
     settFeilmelding("");
@@ -739,6 +727,11 @@
         ? "Skriv inn e-post for å opprette konto" 
         : "Velg et passord for å opprette kontoen";
     }
+
+    document.getElementById("toggleModeLink").addEventListener("click", (e) => {
+      e.preventDefault();
+      visInnlogging();
+    });
   }
 
   function visInnlogging() {
@@ -764,6 +757,11 @@
         ? "Skriv inn e-postadressen din for å fortsette" 
         : "Skriv inn passordet ditt";
     }
+
+    document.getElementById("toggleModeLink").addEventListener("click", (e) => {
+      e.preventDefault();
+      visRegistrering();
+    });
   }
 </script>
 </body>
