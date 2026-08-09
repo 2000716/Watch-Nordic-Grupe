@@ -1,4 +1,4 @@
-'/**
+/**
  * APP.JS - Watch Nordic
  * Hovedfil for routing, Firestore-datahenting, søk og global tilstandshåndtering
  */
@@ -82,9 +82,10 @@ function byggMedieKort(item) {
     const safeId = sanitizeInput(item.id);
     const tittel = sanitizeInput(item.tittel || "Uten tittel");
     const bildeUrl = sanitizeInput(item.bildeUrl || item.poster || item.bakgrunn || 'placeholder.jpg');
+    const type = item.type || 'film';
     
     return `
-        <div class="film-kort" data-id="${safeId}" style="cursor: pointer; min-width: 150px; flex-shrink: 0;" onclick="velgOgVisInfo('${safeId}')">
+        <div class="film-kort" data-id="${safeId}" style="cursor: pointer; min-width: 150px; flex-shrink: 0;" onclick="velgOgVisInfo('${safeId}', '${type}')">
             <img src="${bildeUrl}" alt="${tittel}" style="width: 100%; border-radius: 8px; object-fit: cover; aspect-ratio: 2/3;" loading="lazy">
             <h4 style="color: white; margin-top: 6px; font-size: 14px; text-align: center;">${tittel}</h4>
         </div>
@@ -135,11 +136,11 @@ async function lastSerierData() {
 }
 
 /**
- * Oppdaterer URL-en med #film- prefiks for å utløse dynamisk visning av en hvilken som helst film/serie
+ * Oppdaterer URL-en med #film- eller #serie- prefiks for å utløse dynamisk visning
  */
-window.velgOgVisInfo = function(docId) {
+window.velgOgVisInfo = function(docId, type = 'film') {
     window.AppState.valgtMediaId = docId;
-    window.location.hash = `#film-${docId}`; 
+    window.location.hash = `#${type}-${docId}`; 
 };
 
 /**
@@ -156,7 +157,7 @@ window.gaaTilbake = () => {
 // 4. Ruting / Navigasjon (SPA-logikk)
 // ==========================================
 
-window.byttSide = function(sideId) {
+window.byttSide = function(sideId, params = {}) {
     const alleSider = document.querySelectorAll('.side-visning, .view');
     alleSider.forEach(side => {
         side.style.display = 'none';
@@ -167,7 +168,7 @@ window.byttSide = function(sideId) {
     
     if (valgtSide) {
         valgtSide.style.display = 'block';
-    } else if (sideId === 'filminfo' || sideId.startsWith('film-')) {
+    } else if (sideId === 'filminfo' || sideId.startsWith('film-') || sideId.startsWith('serie-')) {
         valgtSide = document.getElementById('view-filminfo') || document.getElementById('filminfo');
         if (valgtSide) valgtSide.style.display = 'block';
     }
@@ -185,7 +186,16 @@ window.byttSide = function(sideId) {
     if (sideId === 'hjem') lastHovedsideData();
     if (sideId === 'serier') lastSerierData();
 
-    const event = new CustomEvent('sideByttet', { detail: { side: sideId } });
+    // Håndtering av egendesignet avspiller
+    if (sideId === 'avspiller') {
+        const videoElement = document.querySelector('#view-avspiller video, #avspiller video');
+        if (videoElement && params.kilde) {
+            videoElement.src = params.kilde;
+            videoElement.play().catch(e => console.log("Auto-play hindret eller ugyldig kilde:", e));
+        }
+    }
+
+    const event = new CustomEvent('sideByttet', { detail: { side: sideId, params: params } });
     document.dispatchEvent(event);
 };
 
@@ -259,7 +269,7 @@ window.utforSok = async function() {
                 `;
 
                 kort.addEventListener("click", () => {
-                    window.velgOgVisInfo(docId);
+                    window.velgOgVisInfo(docId, film.type || 'film');
                     resultaterContainer.innerHTML = '';
                     sokefelt.value = '';
                 });
@@ -292,16 +302,16 @@ document.addEventListener('DOMContentLoaded', () => {
             cleanHash = 'hjem';
         }
 
-        if (cleanHash.startsWith('film-')) {
-            const filmKey = cleanHash.replace('film-', '');
+        if (cleanHash.startsWith('film-') || cleanHash.startsWith('serie-')) {
+            const mediaKey = cleanHash.replace(/^(film-|serie-)/, '');
             window.byttSide('filminfo');
-            window.AppState.valgtMediaId = filmKey;
+            window.AppState.valgtMediaId = mediaKey;
             
             // Kaller rendrefunksjonen i filminfo.js
             if (typeof window.renderFilmPage === "function") {
-                window.renderFilmPage(filmKey);
+                window.renderFilmPage(mediaKey);
             } else if (typeof window.lastInnFilminfo === "function") {
-                window.lastInnFilminfo(filmKey);
+                window.lastInnFilminfo(mediaKey);
             } else {
                 console.error("Kunne ikke laste filminfo. Sjekk at filminfo.js er lastet inn riktig.");
             }
