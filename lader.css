@@ -19,7 +19,9 @@
   align-items: center !important;
   z-index: 20000 !important;
   pointer-events: auto !important;
-  transition: opacity 0.6s ease, visibility 0.6s ease !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  transition: opacity 0.6s ease-in-out, visibility 0.6s ease-in-out !important;
 }
 
 /* 3. Når body får klassen "loaded" fra JS, fader loaderen ut automatisk */
