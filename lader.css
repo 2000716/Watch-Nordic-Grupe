@@ -1,5 +1,5 @@
 /* ==========================================================================
-   PAGE LOADER CSS
+   PAGE LOADER & CONTENT LOADER CSS
    ========================================================================== */
 
 /* 1. Menyen */
@@ -7,7 +7,7 @@
   z-index: 25000 !important;
 }
 
-/* 2. Helside-loader (Ved F5 / oppdatering) – Ligger OVER menyen */
+/* 2. Helside-loader (Ved F5 / Oppdatering) – DEKKER ALT, inkludert logo og meny */
 #page-loader {
   position: fixed !important;
   inset: 0 !important;
@@ -17,14 +17,13 @@
   display: flex !important;
   justify-content: center !important;
   align-items: center !important;
-  z-index: 99999 !important; /* Høyere enn .top-nav slik at alt forsvinner under */
+  z-index: 99999 !important; /* Høyere enn .top-nav (25000) -> Skjuler alt ved F5 */
   pointer-events: auto !important;
   opacity: 1 !important;
   visibility: visible !important;
   transition: opacity 0.6s ease-in-out, visibility 0.6s ease-in-out !important;
 }
 
-/* Fader ut enten via klassen 'fade-out' fra JS eller 'loaded' på body */
 #page-loader.fade-out,
 body.loaded #page-loader {
   opacity: 0 !important;
@@ -32,7 +31,7 @@ body.loaded #page-loader {
   pointer-events: none !important;
 }
 
-/* 3. Innholds-loader (Ved HTMX-navigasjon) – Ligger UNDER menyen */
+/* 3. Innholds-loader (Ved HTMX-klikk) – Ligger UNDER menyen, kun over innholdet */
 .content-loader {
   position: absolute !important;
   inset: 0 !important;
@@ -42,7 +41,7 @@ body.loaded #page-loader {
   display: flex !important;
   justify-content: center !important;
   align-items: center !important;
-  z-index: 10000 !important; /* Lavere enn menyen (25000) */
+  z-index: 5000 !important; /* Lavere enn .top-nav (25000) -> Menyen/logoen vises ALLTID */
   opacity: 1 !important;
   visibility: visible !important;
   transition: opacity 0.4s ease-in-out, visibility 0.4s ease-in-out !important;
@@ -64,7 +63,7 @@ body.loaded #page-loader {
   animation: spin 1s linear infinite;
 }
 
-/* 5. Tilpasning for Redusert Bevegelse */
+/* 5. Tilpasninger */
 @media (prefers-reduced-motion: reduce) {
   #page-loader, .content-loader {
     transition: none !important;
@@ -74,7 +73,6 @@ body.loaded #page-loader {
   }
 }
 
-/* 6. Mobil / iPad tilpasning */
 @media (max-width: 1366px) and (hover: none), (pointer: coarse) {
   #page-loader, .content-loader {
     background-color: #091B1E !important; 
