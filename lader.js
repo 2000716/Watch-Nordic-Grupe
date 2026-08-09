@@ -32,17 +32,26 @@ function visLoaderForInnhold() {
   const targetContainer = document.querySelector("#hovedinnhold");
   if (!targetContainer) return;
 
-  if (targetContainer.querySelector(".content-loader")) return;
-
-  const computedStyle = window.getComputedStyle(targetContainer);
-  if (computedStyle.position === "static") {
-    targetContainer.style.position = "relative";
-  }
+  // Unngå doble loadere
+  if (document.querySelector(".content-loader")) return;
 
   const loader = document.createElement("div");
   loader.className = "content-loader";
   loader.innerHTML = '<div class="spinner"></div>';
-  targetContainer.appendChild(loader);
+
+  // Legger loaderen direkte på document.body plassert over #hovedinnhold
+  // slik at HTMX-swap ikke sletter loaderen før animasjonen er ferdig
+  const rect = targetContainer.getBoundingClientRect();
+  const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+
+  loader.style.position = "absolute";
+  loader.style.top = (rect.top + scrollTop) + "px";
+  loader.style.left = rect.left + "px";
+  loader.style.width = rect.width + "px";
+  loader.style.height = rect.height + "px";
+  loader.style.zIndex = "99";
+
+  document.body.appendChild(loader);
 }
 
 function initLoaderHåndtering() {
@@ -62,6 +71,10 @@ function initLoaderHåndtering() {
 
   // --- 2. HÅNDTER HTMX-KLIKK (KUN INNHOLD) ---
   document.body.addEventListener("htmx:beforeRequest", (evt) => {
+    // Ignorer forespørsler som henter menyen (meny.html)
+    const path = evt.detail.requestConfig ? evt.detail.requestConfig.path : "";
+    if (path && path.includes("meny.html")) return;
+
     // Vis kun innholdsloader dersom helsideladeren allerede er fjernet
     if (!document.getElementById("page-loader")) {
       visLoaderForInnhold();
