@@ -1,50 +1,63 @@
 /* ==========================================================================
-   PAGE LOADER & CONTENT LOADER CSS
+   Z-INDEX HIERARKI (Kritisk for korrekt visning)
    ========================================================================== */
 
-/* 1. Menyen */
+/* 1. Menyen ligger fast øverst ved HTMX-navigasjon */
 .top-nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
   z-index: 25000 !important;
 }
 
-/* 2. Helside-loader (Ved F5 / Oppdatering) – DEKKER ALT, inkludert logo og meny */
+/* 2. Innholdsbeholderen må starte under menyen */
+#hovedinnhold {
+  position: relative;
+  min-height: 80vh;
+  z-index: 1;
+}
+
+/* 3. Helsidelader (Ved F5 / Hard Oppdatering) */
+/* z-index: 99999 gjør at den dekker BÅDE menyen, logoen og innholdet */
 #page-loader {
   position: fixed !important;
   inset: 0 !important;
-  width: 100% !important;
-  height: 100% !important;
+  width: 100vw !important;
+  height: 100vh !important;
   background-color: #050F11 !important;
   display: flex !important;
   justify-content: center !important;
   align-items: center !important;
-  z-index: 99999 !important; /* Høyere enn .top-nav (25000) -> Skjuler alt ved F5 */
-  pointer-events: auto !important;
+  z-index: 99999 !important; 
   opacity: 1 !important;
   visibility: visible !important;
-  transition: opacity 0.6s ease-in-out, visibility 0.6s ease-in-out !important;
+  transition: opacity 0.5s ease, visibility 0.5s ease !important;
 }
 
-#page-loader.fade-out,
-body.loaded #page-loader {
+#page-loader.fade-out {
   opacity: 0 !important;
   visibility: hidden !important;
   pointer-events: none !important;
 }
 
-/* 3. Innholds-loader (Ved HTMX-klikk) – Ligger UNDER menyen, kun over innholdet */
+/* 4. Innholdsloader (Ved HTMX-klikk) */
+/* z-index: 5000 gjør at den KUN dekker #hovedinnhold og ligger UNDER menyen (25000) */
 .content-loader {
   position: absolute !important;
   inset: 0 !important;
   width: 100% !important;
-  min-height: 200px !important;
-  background-color: #050F11 !important;
+  height: 100% !important;
+  min-height: 300px !important;
+  background-color: rgba(5, 15, 17, 0.85) !important;
+  backdrop-filter: blur(4px);
   display: flex !important;
   justify-content: center !important;
   align-items: center !important;
-  z-index: 5000 !important; /* Lavere enn .top-nav (25000) -> Menyen/logoen vises ALLTID */
+  z-index: 5000 !important; 
   opacity: 1 !important;
   visibility: visible !important;
-  transition: opacity 0.4s ease-in-out, visibility 0.4s ease-in-out !important;
+  transition: opacity 0.3s ease, visibility 0.3s ease !important;
 }
 
 .content-loader.fade-out {
@@ -53,35 +66,14 @@ body.loaded #page-loader {
   pointer-events: none !important;
 }
 
-/* 4. Spinneren */
+/* 5. Spinner animation */
 .spinner {
-  width: 60px;
-  height: 60px;
-  border: 6px solid #2a3b40;
-  border-top: 6px solid #2ecc71;
+  width: 50px;
+  height: 50px;
+  border: 5px solid #2a3b40;
+  border-top: 5px solid #2ecc71;
   border-radius: 50%;
-  animation: spin 1s linear infinite;
-}
-
-/* 5. Tilpasninger */
-@media (prefers-reduced-motion: reduce) {
-  #page-loader, .content-loader {
-    transition: none !important;
-  }
-  .spinner {
-    animation: none !important;
-  }
-}
-
-@media (max-width: 1366px) and (hover: none), (pointer: coarse) {
-  #page-loader, .content-loader {
-    background-color: #091B1E !important; 
-  }
-  .spinner {
-    width: 48px;
-    height: 48px;
-    border-width: 5px;
-  }
+  animation: spin 0.8s linear infinite;
 }
 
 @keyframes spin {
