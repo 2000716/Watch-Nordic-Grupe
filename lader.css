@@ -1,37 +1,59 @@
 /* ==========================================================================
-   PAGE LOADER (Sømløs bakgrunn bak menyen - Mobil, iPad og PC)
+   PAGE LOADER (Helside ved F5, Innhold ved HTMX)
    ========================================================================== */
 
-/* 1. Menyen har høyere z-index enn loaderen slik at den ligger øverst */
+/* 1. Menyen har sin standard z-index */
 .top-nav {
   z-index: 25000 !important;
 }
 
-/* 2. Loaderen dekker skjermen, men ligger under toppmenyen */
+/* 2. Helside-loader (Ved F5 / full oppdatering) - Ligger OVER alt, inkludert menyen */
 #page-loader {
   position: fixed !important;
-  inset: 0 !important; /* Låser loaderen perfekt til alle 4 kanter på iPad/iOS */
+  inset: 0 !important;
   width: 100% !important;
   height: 100% !important;
   background-color: #050F11 !important;
   display: flex !important;
   justify-content: center !important;
   align-items: center !important;
-  z-index: 20000 !important;
+  z-index: 30000 !important; /* Høyere enn .top-nav (25000) slik at alt forsvinner under den */
   pointer-events: auto !important;
   opacity: 1 !important;
   visibility: visible !important;
   transition: opacity 0.6s ease-in-out, visibility 0.6s ease-in-out !important;
 }
 
-/* 3. Når body får klassen "loaded" fra JS, fader loaderen ut automatisk */
+/* 3. Når body får klassen "loaded" fra JS, fader helside-loaderen ut */
 body.loaded #page-loader {
   opacity: 0 !important;
   visibility: hidden !important;
   pointer-events: none !important;
 }
 
-/* 4. Spinneren */
+/* 4. Innholds-lader (Brukes ved HTMX-navigasjon - lar menyen være synlig) */
+.content-loader {
+  position: absolute !important;
+  inset: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  background-color: #050F11 !important;
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  z-index: 1000 !important; /* Lavere enn menyen, slik at menyen forblir synlig */
+  opacity: 1 !important;
+  visibility: visible !important;
+  transition: opacity 0.4s ease, visibility 0.4s ease !important;
+}
+
+.content-loader.fade-out {
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
+
+/* 5. Spinneren */
 .spinner {
   width: 60px;
   height: 60px;
@@ -42,9 +64,9 @@ body.loaded #page-loader {
   transform: translateY(35px);
 }
 
-/* 5. Tilpasning for Redusert Bevegelse */
+/* 6. Tilpasning for Redusert Bevegelse */
 @media (prefers-reduced-motion: reduce) {
-  #page-loader {
+  #page-loader, .content-loader {
     transition: none !important;
   }
 
@@ -54,10 +76,10 @@ body.loaded #page-loader {
 }
 
 /* ==========================================================================
-   EGEN TILPASSING FOR MOBIL OG NETTBRETT / IPAD (Inkludert iPad Pro)
+   EGEN TILPASSING FOR MOBIL OG NETTBRETT / IPAD
    ========================================================================== */
 @media (max-width: 1366px) and (hover: none), (pointer: coarse) {
-  #page-loader {
+  #page-loader, .content-loader {
     background-color: #091B1E !important; 
     overflow: hidden !important;
   }
