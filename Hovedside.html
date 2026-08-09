@@ -17,7 +17,8 @@
   
   <link rel="stylesheet" href="meny.css">
   <link rel="stylesheet" href="lader.css">
-
+  <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+  
 <style>
 * {
       box-sizing: border-box;
@@ -1092,18 +1093,6 @@
             Alle varemerker fra WATCH NORDIC™, WATCH NORDIC ORIGINALS™ og alle øvrige tilknyttede immaterielle rettigheter tilhører Watch Nordic Group og brukes under lisens av Watch Nordic™. Alle varemerker, logoer, filmer, serier, bilder, design og øvrige tilknyttede immaterielle rettigheter tilhører sine respektive eiere. Alt innhold er beskyttet av opphavsrett og internasjonale varemerkelover. Alle rettigheter forbeholdt.
         </div>
     </footer>
-
-    <script>
-        fetch('meny.html')
-            .then(response => response.text())
-            .then(data => {
-                document.getElementById('nav-placeholder').innerHTML = data;
-                
-                if (typeof initNav === 'function') {
-                    initNav();
-                }
-            });
-    </script>
 
     <script src="meny.js"></script>
     <script src="lader.js"></script>
