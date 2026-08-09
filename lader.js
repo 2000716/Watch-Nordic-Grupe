@@ -1,5 +1,5 @@
 /* ==========================================
-   OPTIMALISERT LADER.JS (Synkronisert med Firebase)
+   OPTIMALISERT LADER.JS (Synkronisert med Firebase & htmx)
    ========================================== */
 
 function skjulLoader() {
@@ -16,33 +16,45 @@ function skjulLoader() {
   }, 600); // Gir tid til at CSS fade-out animasjonen kan spilles av
 }
 
+function visLoaderForInnhold() {
+  // Sjekk om loader allerede finnes, hvis ikke lager vi en midlertidig for innholdet
+  let loader = document.getElementById("page-loader");
+  if (!loader) {
+    loader = document.createElement("div");
+    loader.id = "page-loader";
+    loader.className = "content-loader"; // Egen klasse for kun innholdsområdet
+    // Sett inn loaderen i hovedinnholdet eller over body (tilpass etter din HTML-struktur)
+    const mainContent = document.querySelector("main") || document.body;
+    mainContent.appendChild(loader);
+  } else {
+    loader.classList.remove("fade-out");
+    loader.style.pointerEvents = "auto";
+  }
+}
+
 function initLoaderHåndtering() {
   const loader = document.getElementById("page-loader");
   if (!loader) return;
 
-  // Sjekker om dette er en side som henter data fra Firebase (f.eks. har ?navn= i URL-en)
   const erDynamiskSide = window.location.search.includes("navn=");
 
-  // NØD-FALLBACK: Hvis nettet er ekstremt tregt eller noe krasjer, fjerner vi loaderen etter 8 sekunder uansett.
   const nodTimeout = window.setTimeout(() => {
     skjulLoader();
   }, 8000);
 
   if (erDynamiskSide) {
-    // 1. Hvis koden allerede har rukket å si at den er ferdig:
     if (document.body && document.body.classList.contains("loaded")) {
       window.clearTimeout(nodTimeout);
       skjulLoader();
       return;
     }
 
-    // 2. Hvis ikke, setter vi opp en "vakt" (Observer) som venter på at Firebase blir ferdig
     const observer = new MutationObserver((mutations) => {
       mutations.forEach((mutation) => {
         if (mutation.attributeName === "class" && document.body.classList.contains("loaded")) {
           window.clearTimeout(nodTimeout);
           skjulLoader();
-          observer.disconnect(); // Slutter å overvåke når den er ferdig
+          observer.disconnect();
         }
       });
     });
@@ -55,12 +67,20 @@ function initLoaderHåndtering() {
       });
     }
   } else {
-    // For vanlige sider (som Hovedside.html) som ikke venter på filmdata
     window.addEventListener("load", () => {
       window.clearTimeout(nodTimeout);
       skjulLoader();
     });
   }
+
+  // HTMX INTEGRASJON: Håndterer overganger uten at menyen berøres
+  document.body.addEventListener('htmx:beforeRequest', () => {
+    visLoaderForInnhold();
+  });
+
+  document.body.addEventListener('htmx:afterSwap', () => {
+    skjulLoader();
+  });
 }
 
 // Sørg for at koden alltid kjører
