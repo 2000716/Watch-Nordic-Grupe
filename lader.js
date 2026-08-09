@@ -1,9 +1,8 @@
 /* ==========================================
-   STABIL LADER.JS (Helside ved F5, Innhold ved HTMX)
+   STABIL LADER.JS (F5 vs HTMX)
    ========================================== */
 
-function skjulLoader() {
-  // 1. Skjul helside-loaderen (ved F5 / oppdatering)
+function skjulHelsideLoader() {
   const helsideLoader = document.getElementById("page-loader");
   if (helsideLoader) {
     helsideLoader.classList.add("fade-out");
@@ -14,8 +13,9 @@ function skjulLoader() {
       }
     }, 600);
   }
+}
 
-  // 2. Skjul innholds-loaderne (ved HTMX-klikk)
+function skjulInnholdsLoader() {
   const contentLoaders = document.querySelectorAll(".content-loader");
   contentLoaders.forEach((loader) => {
     loader.classList.add("fade-out");
@@ -28,12 +28,9 @@ function skjulLoader() {
   });
 }
 
-function visLoaderForInnhold(targetElement) {
-  // Finn innholdsområdet (bruker HTMX sitt målelement eller #hovedinnhold / main)
-  const targetContainer = targetElement || document.querySelector("#hovedinnhold") || document.querySelector("main");
-
-  // STRENG SPERRE: Skal ALDRI legge seg på body eller dekke menyen
-  if (!targetContainer || targetContainer === document.body) return;
+function visLoaderForInnhold() {
+  const targetContainer = document.querySelector("#hovedinnhold");
+  if (!targetContainer) return;
 
   if (targetContainer.querySelector(".content-loader")) return;
 
@@ -49,48 +46,34 @@ function visLoaderForInnhold(targetElement) {
 }
 
 function initLoaderHåndtering() {
+  // --- 1. HÅNDTER F5 / FULL OPPDATERING ---
   const helsideLoader = document.getElementById("page-loader");
-  const erDynamiskSide = window.location.search.includes("navn=");
-
-  const nodTimeout = window.setTimeout(() => {
-    skjulLoader();
+  
+  const maxTimeout = window.setTimeout(() => {
+    skjulHelsideLoader();
   }, 8000);
 
   if (helsideLoader) {
-    if (document.body && document.body.classList.contains("loaded")) {
-      window.clearTimeout(nodTimeout);
-      skjulLoader();
-    } else if (erDynamiskSide) {
-      const observer = new MutationObserver(() => {
-        if (document.body.classList.contains("loaded")) {
-          window.clearTimeout(nodTimeout);
-          skjulLoader();
-          observer.disconnect();
-        }
-      });
-      observer.observe(document.body, { attributes: true, attributeFilter: ["class"] });
-    } else {
-      window.addEventListener("load", () => {
-        window.clearTimeout(nodTimeout);
-        skjulLoader();
-      });
-    }
+    window.addEventListener("load", () => {
+      window.clearTimeout(maxTimeout);
+      skjulHelsideLoader();
+    });
   }
 
-  // HTMX INTEGRASJON
+  // --- 2. HÅNDTER HTMX-KLIKK (KUN INNHOLD) ---
   document.body.addEventListener("htmx:beforeRequest", (evt) => {
-    // Kun vis innholds-loader hvis helside-loaderen (F5) ikke er aktiv
+    // Vis kun innholdsloader dersom helsideladeren allerede er fjernet
     if (!document.getElementById("page-loader")) {
-      visLoaderForInnhold(evt.detail?.target);
+      visLoaderForInnhold();
     }
   });
 
   document.body.addEventListener("htmx:afterSwap", () => {
-    skjulLoader();
+    skjulInnholdsLoader();
   });
 
   document.body.addEventListener("htmx:responseError", () => {
-    skjulLoader();
+    skjulInnholdsLoader();
   });
 }
 
