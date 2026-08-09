@@ -3,7 +3,7 @@
    ========================================== */
 
 function skjulLoader() {
-  // 1. Skjul helside-loaderen (F5)
+  // 1. Skjul helside-loaderen (ved F5 / oppdatering)
   const helsideLoader = document.getElementById("page-loader");
   if (helsideLoader) {
     helsideLoader.classList.add("fade-out");
@@ -15,7 +15,7 @@ function skjulLoader() {
     }, 600);
   }
 
-  // 2. Skjul innholds-loaderne (HTMX)
+  // 2. Skjul innholds-loaderne (ved HTMX-klikk)
   const contentLoaders = document.querySelectorAll(".content-loader");
   contentLoaders.forEach((loader) => {
     loader.classList.add("fade-out");
@@ -28,10 +28,12 @@ function skjulLoader() {
   });
 }
 
-function visLoaderForInnhold() {
-  // Finn hovedinnholdet (endre #hovedinnhold hvis du bruker en annen ID)
-  const targetContainer = document.querySelector("#hovedinnhold") || document.querySelector("main") || document.body;
-  if (!targetContainer) return;
+function visLoaderForInnhold(targetElement) {
+  // Finn innholdsområdet (bruker HTMX sitt målelement eller #hovedinnhold / main)
+  const targetContainer = targetElement || document.querySelector("#hovedinnhold") || document.querySelector("main");
+
+  // STRENG SPERRE: Skal ALDRI legge seg på body eller dekke menyen
+  if (!targetContainer || targetContainer === document.body) return;
 
   if (targetContainer.querySelector(".content-loader")) return;
 
@@ -55,7 +57,6 @@ function initLoaderHåndtering() {
   }, 8000);
 
   if (helsideLoader) {
-    // Sjekk om Firebase allerede har merket siden som 'loaded'
     if (document.body && document.body.classList.contains("loaded")) {
       window.clearTimeout(nodTimeout);
       skjulLoader();
@@ -77,14 +78,14 @@ function initLoaderHåndtering() {
   }
 
   // HTMX INTEGRASJON
-  document.body.addEventListener("htmx:beforeRequest", () => {
-    // Bare vis innholds-loader hvis helside-loaderen allerede er borte
+  document.body.addEventListener("htmx:beforeRequest", (evt) => {
+    // Kun vis innholds-loader hvis helside-loaderen (F5) ikke er aktiv
     if (!document.getElementById("page-loader")) {
-      visLoaderForInnhold();
+      visLoaderForInnhold(evt.detail?.target);
     }
   });
 
-  document.body.addEventListener("htmx:afterOnLoad", () => {
+  document.body.addEventListener("htmx:afterSwap", () => {
     skjulLoader();
   });
 
