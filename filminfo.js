@@ -158,18 +158,17 @@ function oppdaterWatchKnapp() {
 }
 
 /* ==========================================
-   4. DATAHENTING OG CACHING
+   4. DATAHENTING OG CACHING (Med Fallback-søk)
    ========================================== */
 async function lastDataFraFirebase(mediaNavn) {
     const cacheKey = `media_cache_${mediaNavn}`;
     const cachedData = hentFraLagring(cacheKey);
 
+    // Sjekk lokal cache først
     if (cachedData) {
         try {
             const parsed = JSON.parse(cachedData);
-            const naatid = Date.now();
-            
-            if (parsed.timestamp && (naatid - parsed.timestamp < CACHE_TTL_MS)) {
+            if (parsed.timestamp && (Date.now() - parsed.timestamp < CACHE_TTL_MS)) {
                 return { data: parsed.data, type: parsed.type };
             } else {
                 localStorage.removeItem(cacheKey);
@@ -179,7 +178,7 @@ async function lastDataFraFirebase(mediaNavn) {
         }
     }
 
-    // Sjekk filmer først
+    // 1. Sjekk direkte Dokument-ID i "filmer" (f.eks. doc ID "tears-of-steel")
     const filmRef = doc(db, "filmer", mediaNavn);
     const filmSnap = await getDoc(filmRef);
 
@@ -189,7 +188,18 @@ async function lastDataFraFirebase(mediaNavn) {
         return { data: hentetData, type: "film" };
     }
 
-    // Sjekk serier hvis det ikke er en film
+    // 2. Fallback: Søk i "filmer" dersom "tears-of-steel" er lagret i et felt (f.eks. slug eller id)
+    const filmerRef = collection(db, "filmer");
+    const qFilm = query(filmerRef, where("slug", "==", mediaNavn), limit(1));
+    const qFilmSnap = await getDocs(qFilm);
+
+    if (!qFilmSnap.empty) {
+        const hentetData = qFilmSnap.docs[0].data();
+        tryggLagring(cacheKey, JSON.stringify({ data: hentetData, type: "film", timestamp: Date.now() }));
+        return { data: hentetData, type: "film" };
+    }
+
+    // 3. Sjekk direkte Dokument-ID i "serier"
     const serieRef = doc(db, "serier", mediaNavn);
     const serieSnap = await getDoc(serieRef);
 
@@ -199,9 +209,19 @@ async function lastDataFraFirebase(mediaNavn) {
         return { data: hentetData, type: "serie" };
     }
 
-    throw new Error("Mediet ble ikke funnet i databasen.");
-}
+    // 4. Fallback: Søk i "serier" på slug
+    const serierRef = collection(db, "serier");
+    const qSerie = query(serierRef, where("slug", "==", mediaNavn), limit(1));
+    const qSerieSnap = await getDocs(qSerie);
 
+    if (!qSerieSnap.empty) {
+        const hentetData = qSerieSnap.docs[0].data();
+        tryggLagring(cacheKey, JSON.stringify({ data: hentetData, type: "serie", timestamp: Date.now() }));
+        return { data: hentetData, type: "serie" };
+    }
+
+    throw new Error(`Mediet "${mediaNavn}" ble ikke funnet i databasen.`);
+}
 /* ==========================================
    5. HOVED-RENDERING AV MEDIESIDE
    ========================================== */
