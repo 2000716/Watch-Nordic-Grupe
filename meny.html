@@ -1,23 +1,25 @@
 <header class="top-nav">
   <div class="nav-left">
-    <!-- Vi bruker hx-get her også, slik at logoen tar deg til Hjem uten blinking -->
-    <a href="Hovedside.html" hx-get="Hovedside.html #hovedinnhold" hx-target="#hovedinnhold" hx-swap="innerHTML" class="watch-logo-svg">
+    <a href="Hovedside.html" 
+       hx-get="Hovedside.html #hovedinnhold" 
+       hx-target="#hovedinnhold" 
+       hx-swap="innerHTML" 
+       hx-push-url="true" 
+       class="watch-logo-svg">
       <img src="https://res.cloudinary.com/ocv4zhpk/image/upload/v1785855892/d9ace9_081ea242211b45a2801873c3067e1205_mv2_vtfrdn.png" alt="Watch Nordic">
     </a>
   </div>
 
   <nav class="nav-links">
-    <!-- HTMX henter bare innholdet og bytter ut #hovedinnhold uten at menyen blinker -->
-    <a href="Hovedside.html" hx-get="Hovedside.html #hovedinnhold" hx-target="#hovedinnhold" hx-swap="innerHTML"><i class="fas fa-house"></i> Hjem</a>
-    <a href="Serier.html" hx-get="Serier.html #hovedinnhold" hx-target="#hovedinnhold" hx-swap="innerHTML"><i class="fas fa-tv"></i> Serier</a>
-    <a href="Film.html" hx-get="Film.html #hovedinnhold" hx-target="#hovedinnhold" hx-swap="innerHTML"><i class="fas fa-clapperboard"></i> Filmer</a>
-    <a href="Nyheter.html" hx-get="Nyheter.html #hovedinnhold" hx-target="#hovedinnhold" hx-swap="innerHTML"><i class="fas fa-star"></i> Watch Originals</a>
-    <a href="Min-Liste.html" hx-get="Min-Liste.html #hovedinnhold" hx-target="#hovedinnhold" hx-swap="innerHTML"><i class="fas fa-bookmark"></i> Min Liste</a>
+    <a href="Hovedside.html" hx-get="Hovedside.html #hovedinnhold" hx-target="#hovedinnhold" hx-swap="innerHTML" hx-push-url="true"><i class="fas fa-house"></i> Hjem</a>
+    <a href="Serier.html" hx-get="Serier.html #hovedinnhold" hx-target="#hovedinnhold" hx-swap="innerHTML" hx-push-url="true"><i class="fas fa-tv"></i> Serier</a>
+    <a href="Film.html" hx-get="Film.html #hovedinnhold" hx-target="#hovedinnhold" hx-swap="innerHTML" hx-push-url="true"><i class="fas fa-clapperboard"></i> Filmer</a>
+    <a href="Nyheter.html" hx-get="Nyheter.html #hovedinnhold" hx-target="#hovedinnhold" hx-swap="innerHTML" hx-push-url="true"><i class="fas fa-star"></i> Watch Originals</a>
+    <a href="Min-Liste.html" hx-get="Min-Liste.html #hovedinnhold" hx-target="#hovedinnhold" hx-swap="innerHTML" hx-push-url="true"><i class="fas fa-bookmark"></i> Min Liste</a>
   </nav>
 
   <div class="nav-right">
-    <!-- Søk og profil kan fremdeles være vanlige lenker (eller hx-get hvis de også har #hovedinnhold-struktur) -->
-    <a href="Søk.html" hx-get="Søk.html #hovedinnhold" hx-target="#hovedinnhold" hx-swap="innerHTML" class="nav-search" aria-label="Søk">
+    <a href="Søk.html" hx-get="Søk.html #hovedinnhold" hx-target="#hovedinnhold" hx-swap="innerHTML" hx-push-url="true" class="nav-search" aria-label="Søk">
       <i class="fas fa-search"></i>
     </a>
 
@@ -29,15 +31,3 @@
     </a>
   </div>
 </header>
-
-<script>
-  (function() {
-    const lagretBilde = localStorage.getItem("profilbilde");
-    if (lagretBilde && lagretBilde !== "null" && lagretBilde.trim() !== "") {
-      const imgEl = document.getElementById("menyProfilbilde");
-      if (imgEl) {
-        imgEl.src = lagretBilde;
-      }
-    }
-  })();
-</script>
