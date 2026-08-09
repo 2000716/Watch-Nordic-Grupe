@@ -1,7 +1,5 @@
 /**
- * FILMINFO.JS - Watch Nordic
- * Inneholder all logikk for detaljvisning av film/serie, video-spiller, 
- * sesongvisning, brukerhistorikk, aldersgrensekontroll og anbefalinger.
+ * FILMINFO.JS - Watch Nordic (Optimalisert)
  */
 
 import { auth, db } from "./firebase-oppsett.js";
@@ -29,7 +27,13 @@ let erProfilLastetFraSkyen = false;
 
 let watchBtn, addToListBtn, bgImg;
 
-// Trygg håndtering av localStorage
+// Global resize-lytter (definert én gang på modulnivå for å unngå minnelekkasje)
+let resizeTimeout;
+window.addEventListener("resize", () => {
+  clearTimeout(resizeTimeout);
+  resizeTimeout = setTimeout(oppdaterBakgrunnsBilde, 150);
+});
+
 function tryggLagring(key, value) {
   try {
     localStorage.setItem(key, value);
@@ -75,6 +79,7 @@ async function lastDataFraFirebase(mediaId) {
     }
 
     const cacheKey = `media_cache_${navn}`;
+    const CACHE_TTL_MS = 1000 * 60 * 60 * 12; // 12 timers utløpstid
     let cachedData = null;
     try { cachedData = localStorage.getItem(cacheKey); } catch (e) {}
 
@@ -82,8 +87,13 @@ async function lastDataFraFirebase(mediaId) {
     if (cachedData) {
       try {
         const parsed = JSON.parse(cachedData);
-        data = parsed.data;
-        type = parsed.type;
+        // Sjekk om cachen fortsatt er gyldig
+        if (parsed.timestamp && (Date.now() - parsed.timestamp < CACHE_TTL_MS)) {
+          data = parsed.data;
+          type = parsed.type;
+        } else {
+          localStorage.removeItem(cacheKey);
+        }
       } catch (e) {
         localStorage.removeItem(cacheKey);
       }
@@ -106,7 +116,7 @@ async function lastDataFraFirebase(mediaId) {
       }
 
       if (data) {
-        tryggLagring(cacheKey, JSON.stringify({ data, type }));
+        tryggLagring(cacheKey, JSON.stringify({ data, type, timestamp: Date.now() }));
       }
     }
 
@@ -128,7 +138,7 @@ async function lastDataFraFirebase(mediaId) {
 /* ==========================================
    2. HOVEDFUNKSJON FOR RENDERING
    ========================================== */
-window.renderFilmPage = async function(docId) {
+export async function renderFilmPage(docId) {
   const targetId = docId || window.AppState?.valgtMediaId;
   if (!targetId) return;
 
@@ -142,12 +152,6 @@ window.renderFilmPage = async function(docId) {
   document.title = data.tittel ? `${data.tittel} - Watch Nordic` : "Watch Nordic";
 
   oppdaterBakgrunnsBilde();
-
-  let resizeTimeout;
-  window.addEventListener("resize", () => {
-    clearTimeout(resizeTimeout);
-    resizeTimeout = setTimeout(oppdaterBakgrunnsBilde, 150);
-  });
 
   // Logo
   const fLogo = document.querySelector(".film-logo");
@@ -207,7 +211,7 @@ window.renderFilmPage = async function(docId) {
           overlay.removeEventListener("click", overlayKlikk);
           overlay.remove();
         };
-        
+
         const overlayKlikk = (e) => {
           if (e.target === overlay) lukkModal();
         };
@@ -275,7 +279,7 @@ window.renderFilmPage = async function(docId) {
     watchBtn.removeEventListener("click", handterWatchClick);
     watchBtn.addEventListener("click", handterWatchClick);
   }
-  
+
   if (addToListBtn) {
     addToListBtn.removeEventListener("click", handterListClick);
     addToListBtn.addEventListener("click", handterListClick);
@@ -306,7 +310,7 @@ window.renderFilmPage = async function(docId) {
   // Profil-synkronisering
   let cachedProfiles = null;
   try { cachedProfiles = localStorage.getItem("watch_nordic_profiles_cache"); } catch(e) {}
-  
+
   if (cachedProfiles) {
     try {
       heleProfilArrayet = JSON.parse(cachedProfiles);
@@ -323,19 +327,29 @@ window.renderFilmPage = async function(docId) {
   }
 
   document.body.classList.add("loaded");
-};
+}
 
 /**
  * Opprydding når du navigerer bort fra filminfo-siden
  */
-window.destroyFilmPage = function() {
+export function destroyFilmPage() {
   const trailerVideo = document.getElementById("trailerVideo");
   if (trailerVideo) {
     trailerVideo.pause();
     trailerVideo.removeAttribute('src');
     trailerVideo.load();
   }
-};
+
+  // Tilbakestill videoknapper om nødvendig
+  const pauseBtn = document.getElementById("pauseBtn");
+  const soundBtn = document.getElementById("soundBtn");
+  if (pauseBtn && pauseBtn._togglePlay) {
+    pauseBtn.removeEventListener("click", pauseBtn._togglePlay);
+  }
+  if (soundBtn && soundBtn._toggleSound) {
+    soundBtn.removeEventListener("click", soundBtn._toggleSound);
+  }
+}
 
 /* ==========================================
    3. DYNAMISKE UI-OPPDATERINGSFUNKSJONER
@@ -804,7 +818,7 @@ function initTrailer() {
           pauseBtn.innerHTML = '<i class="fas fa-play"></i>';
         }
       };
-      pauseBtn.removeEventListener("click", pauseBtn._togglePlay || togglePlay);
+      if (pauseBtn._togglePlay) pauseBtn.removeEventListener("click", pauseBtn._togglePlay);
       pauseBtn._togglePlay = togglePlay;
       pauseBtn.addEventListener("click", togglePlay);
     }
@@ -814,7 +828,7 @@ function initTrailer() {
         trailerVideo.muted = !trailerVideo.muted;
         soundBtn.innerHTML = trailerVideo.muted ? '<i class="fas fa-volume-mute"></i>' : '<i class="fas fa-volume-up"></i>';
       };
-      soundBtn.removeEventListener("click", soundBtn._toggleSound || toggleSound);
+      if (soundBtn._toggleSound) soundBtn.removeEventListener("click", soundBtn._toggleSound);
       soundBtn._toggleSound = toggleSound;
       soundBtn.addEventListener("click", toggleSound);
     }
@@ -829,17 +843,16 @@ function initTrailer() {
     if (bgImg) bgImg.style.opacity = "1";
   }
 }
+
 /* ==========================================
-   AUTOMATISK OPPDATERING VED ENDRING I URL (#)
+   8. AUTOMATISK OPPDATERING VED ENDRING I URL (#)
    ========================================== */
 window.addEventListener("hashchange", () => {
-    const nyHash = window.location.hash.trim();
-    
-    // Hvis URL-en starter med #film-, last inn den nye filmen dynamisk
-    if (nyHash.startsWith("#film-")) {
-        const filmNavn = nyHash.replace("#film-", "");
-        renderFilmPage(filmNavn);
-    }
+  const nyHash = window.location.hash.trim();
+  if (nyHash.startsWith("#film-")) {
+    const filmNavn = nyHash.replace("#film-", "");
+    renderFilmPage(filmNavn);
+  }
 });
 
 /* ==========================================
