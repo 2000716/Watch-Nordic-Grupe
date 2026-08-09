@@ -435,7 +435,6 @@
   </footer>
 
 <script type="module">
-  // Importerer fra samme firebase-konfigurasjon som app.js benytter
   import { auth, db } from "./firebase-config.js";
   import { 
     signInWithEmailAndPassword, 
@@ -460,7 +459,6 @@
   const passwordToggle = document.getElementById("passwordToggle");
   const toggleModeLink = document.getElementById("toggleModeLink");
 
-  // Hjelpefunksjon for lokal lagring slik app.js forventer
   function tryggLagring(nokkel, verdi) {
     try {
       localStorage.setItem(nokkel, typeof verdi === "object" ? JSON.stringify(verdi) : verdi);
@@ -607,16 +605,12 @@
     }, 250);
   }
 
-  // Sjekker om bruker allerede er innlogget
+  // Sjekker om bruker allerede er innlogget og videresender umiddelbart
   onAuthStateChanged(auth, (user) => {
     if (user) {
       tryggLagring("brukerEpost", user.email);
       tryggLagring("userUid", user.uid);
-      
-      const maalUrl = hentMålUrl();
-      if (window.location.pathname.toLowerCase().includes("innlogging")) {
-        window.location.replace(maalUrl);
-      }
+      window.location.replace(hentMålUrl());
     }
   });
 
@@ -670,7 +664,6 @@
             sistOppdatert: new Date().toISOString()
           });
 
-          // Synkroniser lokal profil til app.js
           tryggLagring("brukerProfil", standardProfil[0]);
           tryggLagring("brukerEpost", epost);
           tryggLagring("userUid", user.uid);
