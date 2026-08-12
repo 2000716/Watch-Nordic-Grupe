@@ -1716,7 +1716,7 @@ function renderContinueWatching() {
       return;
     }
 
-    // Hjelpefunksjon for å hente tidsstempel for når innholdet sist ble oppdatert/sett
+    // Hjelpefunksjon for å hente sist oppdaterte tidsstempel for et element
     const hentTid = (data) => {
       if (!data || typeof data !== "object") return 0;
       if (typeof data.lastUpdated === "number") return data.lastUpdated;
@@ -1729,15 +1729,14 @@ function renderContinueWatching() {
       return 0;
     };
 
-    // Konverter skjultFortsett til objekt med tidspunkter dersom det var et gammelt Array
+    // Sikre bakoverkompatibilitet hvis skjultFortsett tidligere var et Array
     if (!profil.skjultFortsett || typeof profil.skjultFortsett !== "object") {
       profil.skjultFortsett = {};
     } else if (Array.isArray(profil.skjultFortsett)) {
       const gammelArray = profil.skjultFortsett;
       profil.skjultFortsett = {};
       gammelArray.forEach(id => {
-        const itemData = profil.fremdrift ? profil.fremdrift[id] : null;
-        profil.skjultFortsett[id] = hentTid(itemData) || Date.now();
+        profil.skjultFortsett[id] = hentTid(profil.fremdrift[id]) || 1;
       });
     }
 
@@ -1746,7 +1745,7 @@ function renderContinueWatching() {
     const sorterteFilmIder = Object.keys(profil.fremdrift).sort((a, b) => {
       const dataA = profil.fremdrift[a];
       const dataB = profil.fremdrift[b];
-      return hentTid(dataB) - hentTid(a);
+      return hentTid(dataB) - hentTid(dataA);
     });
 
     sorterteFilmIder.forEach((filmId) => {
@@ -1754,7 +1753,7 @@ function renderContinueWatching() {
       const progressVerdi = typeof dbData === "object" && dbData !== null ? (dbData.percent || 0) : Number(dbData || 0);
       const erFerdig = typeof dbData === "object" && dbData !== null && dbData.status === "ferdig";
 
-      // Sjekk om filmen/serien er skjult fra "Fortsett å se"
+      // Sjekk om tittelen er skjult
       const skjultTid = profil.skjultFortsett[filmId] || 0;
       const sistOppdatertTid = hentTid(dbData);
 
@@ -1764,7 +1763,7 @@ function renderContinueWatching() {
           delete profil.skjultFortsett[filmId];
           localStorage.setItem("watch_nordic_profiles_cache", JSON.stringify(heleProfilArrayet));
         } else {
-          // Den er fortsatt skjult og har ikke blitt sett på nytt -> hopp over
+          // Fortsatt skjult og ikke spilt av på nytt -> hopp over
           return;
         }
       }
@@ -1848,7 +1847,7 @@ function renderContinueWatching() {
           profil.skjultFortsett = {};
         }
 
-        // Lagre nøyaktig tidspunkt for når den ble skjult
+        // Sett nøyaktig tidsstempel for når knappen ble trykket
         profil.skjultFortsett[filmId] = Date.now();
 
         localStorage.setItem("watch_nordic_profiles_cache", JSON.stringify(heleProfilArrayet));
