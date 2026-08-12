@@ -1,60 +1,45 @@
 /* ==========================================
-   LADER.JS (Målsentrert skanning av kun nytt innhold)
+   LADER.JS (Hurtiglasting – Kun synlig innhold)
    ========================================== */
 
 /**
- * Skanner KUN bildene som ligger inne i den gitte containeren (f.eks #hovedinnhold).
- * Venter nøyaktig til bildene er lastet ned, helt uten kunstige forsinkelser.
+ * Venter KUN på de første, mest kritiske bildene øverst på siden (f.eks. hero + 4 første plakater).
+ * Bildene lenger nede får laste inn i bakgrunnen mens du bruker siden.
  */
-function ventPåInnhold(container) {
+function ventPåKritiskInnhold(container) {
   if (!container) return Promise.resolve();
 
-  // 1. Hent KUN <img>-tagger direkte inne i denne beholderen
-  const bilder = Array.from(container.querySelectorAll("img"));
-
-  // 2. Hent KUN elementer med bakgrunnsbilde direkte inne i denne beholderen
-  const bgElementer = Array.from(
-    container.querySelectorAll("[style*='background-image'], .hero, .banner, .card, .poster")
-  );
+  // 1. Hent kun de første 6 bildene i containeren (det som er synlig øverst)
+  const alleBilder = Array.from(container.querySelectorAll("img"));
+  const kritiskeBilder = alleBilder.slice(0, 6);
 
   const løfter = [];
 
-  // Sjekk standard <img>-tagger i innholdet
-  bilder.forEach((img) => {
-    // Hvis bildet allerede er i minnet/cache, hopp over
+  // Hjelpefunksjon som setter en maksgrense på 400ms per bilde
+  const kjappSjekk = (promise) => {
+    return Promise.race([
+      promise,
+      new Promise((resolve) => setTimeout(resolve, 400))
+    ]);
+  };
+
+  kritiskeBilder.forEach((img) => {
+    // Hvis bildet allerede er i minnet/cache, fortsett
     if (img.complete && img.naturalWidth !== 0) return;
 
-    løfter.push(
-      new Promise((resolve) => {
-        img.addEventListener("load", resolve, { once: true });
-        img.addEventListener("error", resolve, { once: true });
-      })
-    );
+    // Bruk moderne `decode()` hvis tilgjengelig, ellers vanlig load-event
+    const bildeLøfte = img.decode
+      ? img.decode().catch(() => {})
+      : new Promise((resolve) => {
+          img.addEventListener("load", resolve, { once: true });
+          img.addEventListener("error", resolve, { once: true });
+        });
+
+    løfter.push(kjappSjekk(bildeLøfte));
   });
 
-  // Sjekk bakgrunnsbilder i innholdet
-  bgElementer.forEach((el) => {
-    const bgVal = window.getComputedStyle(el).backgroundImage;
-    if (bgVal && bgVal.startsWith("url(")) {
-      const match = bgVal.match(/url\((['"]?)(.*?)\1\)/);
-      if (match && match[2]) {
-        løfter.push(
-          new Promise((resolve) => {
-            const tempImg = new Image();
-            tempImg.src = match[2];
-            if (tempImg.complete) return resolve();
-            tempImg.onload = resolve;
-            tempImg.onerror = resolve;
-          })
-        );
-      }
-    }
-  });
-
-  // Hvis det ikke er noen bilder i innholdet, fortsett umiddelbart
   if (løfter.length === 0) return Promise.resolve();
 
-  // Vent nøyaktig til alle medier i innholdet er lastet
   return Promise.all(løfter);
 }
 
@@ -67,7 +52,7 @@ function skjulHelsideLoader() {
       if (helsideLoader && helsideLoader.parentNode) {
         helsideLoader.remove();
       }
-    }, 500);
+    }, 300);
   }
 }
 
@@ -80,7 +65,7 @@ function skjulInnholdsLoader() {
       if (loader && loader.parentNode) {
         loader.remove();
       }
-    }, 300);
+    }, 200);
   });
 }
 
@@ -103,13 +88,13 @@ function visLoaderForInnhold(targetContainer) {
 }
 
 function initLoaderHåndtering() {
-  // 1. Første innlasting (F5) - skanner kun #hovedinnhold
+  // 1. Første innlasting (F5 / Direktebesøk)
   const helsideLoader = document.getElementById("page-loader");
 
   if (helsideLoader) {
     const kjørHelsideSkanning = async () => {
       const hovedInnhold = document.querySelector("#hovedinnhold") || document.body;
-      await ventPåInnhold(hovedInnhold);
+      await ventPåKritiskInnhold(hovedInnhold);
       skjulHelsideLoader();
     };
 
@@ -120,7 +105,7 @@ function initLoaderHåndtering() {
     }
   }
 
-  // 2. HTMX-navigasjon - Viser loader i målområdet
+  // 2. HTMX – Vis lader i valgt container
   document.body.addEventListener("htmx:beforeRequest", (evt) => {
     const path = evt.detail.requestConfig ? evt.detail.requestConfig.path : "";
     if (path && path.includes("meny.html")) return;
@@ -132,14 +117,13 @@ function initLoaderHåndtering() {
     }
   });
 
-  // 3. HTMX etter bytte - Skanner KUN det nye target-elementet som ble satt inn
+  // 3. HTMX etter bytte – Sjekk kun de øverste bildene i det nye innholdet
   document.body.addEventListener("htmx:afterSwap", async (evt) => {
     const targetElement = evt.detail.target || document.querySelector("#hovedinnhold");
     
-    // Skanner BARE innholdet som skal spilles av/vises i målområdet
-    await ventPåInnhold(targetElement);
+    // Venter KUN på de første bildene øverst på skjermen
+    await ventPåKritiskInnhold(targetElement);
     
-    // Fjern loader umiddelbart når innholdet er klart
     skjulInnholdsLoader();
   });
 
