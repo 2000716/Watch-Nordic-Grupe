@@ -445,6 +445,9 @@
   } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-auth.js";
   import { doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
 
+  // MÅLSIDE ETTER INNLOGGING / REGISTRERING:
+  const MAALSIDE = "hvem-ser-på.html";
+
   let registreringsmodus = false;
   let naavaarendeSteg = 1;
   let erSendt = false;
@@ -593,9 +596,10 @@
     }, 250);
   }
 
+  // Sjekk om bruker allerede er innlogget
   onAuthStateChanged(auth, (user) => {
     if (user && window.location.pathname.toLowerCase().includes("innlogging")) {
-      window.location.replace("Hovedside.html?index=0");
+      window.location.replace(MAALSIDE);
     }
   });
 
@@ -648,7 +652,7 @@
             sistOppdatert: new Date().toISOString()
           });
 
-          window.location.replace("Hovedside.html?index=0");
+          window.location.replace(MAALSIDE);
 
         } else {
           // --- INNLOGGING ---
@@ -666,7 +670,7 @@
             });
           }
 
-          window.location.replace("Hovedside.html?index=0");
+          window.location.replace(MAALSIDE);
         }
       } catch (error) {
         settLaster(false);
