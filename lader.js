@@ -1,139 +1,84 @@
 /* ==========================================
-   LADER.JS (Hurtiglasting – Kun synlig innhold)
+   LADER.JS (For vanlige HTML-sider)
    ========================================== */
 
-/**
- * Venter KUN på de første, mest kritiske bildene øverst på siden (f.eks. hero + 4 første plakater).
- * Bildene lenger nede får laste inn i bakgrunnen mens du bruker siden.
- */
-function ventPåKritiskInnhold(container) {
-  if (!container) return Promise.resolve();
+(function () {
+  /**
+   * Finner og venter KUN på at hovedbanneret/hero-bildet på gjeldende HTML-side er klart.
+   */
+  function ventPåBanner() {
+    // 1. Sjekk etter <img> i banner/hero-området
+    const bannerImg = document.querySelector(
+      ".hero img, .banner img, #hero img, img.hero-img, img.banner-img, [data-banner] img"
+    );
 
-  // 1. Hent kun de første 6 bildene i containeren (det som er synlig øverst)
-  const alleBilder = Array.from(container.querySelectorAll("img"));
-  const kritiskeBilder = alleBilder.slice(0, 6);
+    // 2. Sjekk etter elementer med bakgrunnsbilde (CSS)
+    const bannerBg = document.querySelector(
+      ".hero, .banner, #hero, [data-banner]"
+    );
 
-  const løfter = [];
+    const løfter = [];
 
-  // Hjelpefunksjon som setter en maksgrense på 400ms per bilde
-  const kjappSjekk = (promise) => {
-    return Promise.race([
-      promise,
-      new Promise((resolve) => setTimeout(resolve, 400))
-    ]);
-  };
-
-  kritiskeBilder.forEach((img) => {
-    // Hvis bildet allerede er i minnet/cache, fortsett
-    if (img.complete && img.naturalWidth !== 0) return;
-
-    // Bruk moderne `decode()` hvis tilgjengelig, ellers vanlig load-event
-    const bildeLøfte = img.decode
-      ? img.decode().catch(() => {})
-      : new Promise((resolve) => {
-          img.addEventListener("load", resolve, { once: true });
-          img.addEventListener("error", resolve, { once: true });
-        });
-
-    løfter.push(kjappSjekk(bildeLøfte));
-  });
-
-  if (løfter.length === 0) return Promise.resolve();
-
-  return Promise.all(løfter);
-}
-
-function skjulHelsideLoader() {
-  const helsideLoader = document.getElementById("page-loader");
-  if (helsideLoader) {
-    helsideLoader.classList.add("fade-out");
-    helsideLoader.style.pointerEvents = "none";
-    window.setTimeout(() => {
-      if (helsideLoader && helsideLoader.parentNode) {
-        helsideLoader.remove();
+    if (bannerImg) {
+      // Hvis bildet ikke allerede er hentet fra nettleserens cache
+      if (!bannerImg.complete || bannerImg.naturalWidth === 0) {
+        løfter.push(
+          new Promise((resolve) => {
+            bannerImg.addEventListener("load", resolve, { once: true });
+            bannerImg.addEventListener("error", resolve, { once: true });
+          })
+        );
       }
-    }, 300);
-  }
-}
-
-function skjulInnholdsLoader() {
-  const contentLoaders = document.querySelectorAll(".content-loader");
-  contentLoaders.forEach((loader) => {
-    loader.classList.add("fade-out");
-    loader.style.pointerEvents = "none";
-    window.setTimeout(() => {
-      if (loader && loader.parentNode) {
-        loader.remove();
+    } else if (bannerBg) {
+      const bgVal = window.getComputedStyle(bannerBg).backgroundImage;
+      if (bgVal && bgVal.startsWith("url(")) {
+        const match = bgVal.match(/url\((['"]?)(.*?)\1\)/);
+        if (match && match[2]) {
+          løfter.push(
+            new Promise((resolve) => {
+              const tempImg = new Image();
+              tempImg.src = match[2];
+              if (tempImg.complete) return resolve();
+              tempImg.onload = resolve;
+              tempImg.onerror = resolve;
+            })
+          );
+        }
       }
-    }, 200);
-  });
-}
+    }
 
-function visLoaderForInnhold(targetContainer) {
-  const container = targetContainer || document.querySelector("#hovedinnhold");
-  if (!container) return;
+    // Hvis siden ikke har noe bannerbilde (f.eks. en ren tekstside), fortsett umiddelbart
+    if (løfter.length === 0) {
+      return Promise.resolve();
+    }
 
-  if (container.querySelector(".content-loader")) return;
-
-  const loader = document.createElement("div");
-  loader.className = "content-loader";
-  loader.innerHTML = '<div class="spinner"></div>';
-
-  const pos = window.getComputedStyle(container).position;
-  if (pos === "static") {
-    container.style.position = "relative";
+    return Promise.all(løfter);
   }
 
-  container.appendChild(loader);
-}
-
-function initLoaderHåndtering() {
-  // 1. Første innlasting (F5 / Direktebesøk)
-  const helsideLoader = document.getElementById("page-loader");
-
-  if (helsideLoader) {
-    const kjørHelsideSkanning = async () => {
-      const hovedInnhold = document.querySelector("#hovedinnhold") || document.body;
-      await ventPåKritiskInnhold(hovedInnhold);
-      skjulHelsideLoader();
-    };
-
-    if (document.readyState === "complete") {
-      kjørHelsideSkanning();
-    } else {
-      window.addEventListener("load", kjørHelsideSkanning, { once: true });
+  function skjulLoader() {
+    const loader = document.getElementById("page-loader");
+    if (loader) {
+      loader.classList.add("fade-out");
+      loader.style.pointerEvents = "none";
+      setTimeout(() => {
+        if (loader && loader.parentNode) {
+          loader.remove();
+        }
+      }, 300);
     }
   }
 
-  // 2. HTMX – Vis lader i valgt container
-  document.body.addEventListener("htmx:beforeRequest", (evt) => {
-    const path = evt.detail.requestConfig ? evt.detail.requestConfig.path : "";
-    if (path && path.includes("meny.html")) return;
+  async function startOpplasting() {
+    // Vent på at kun bannerbildet er lastet
+    await ventPåBanner();
+    // Skjul loaderen umiddelbart
+    skjulLoader();
+  }
 
-    const target = evt.detail.target || document.querySelector("#hovedinnhold");
-
-    if (!document.getElementById("page-loader")) {
-      visLoaderForInnhold(target);
-    }
-  });
-
-  // 3. HTMX etter bytte – Sjekk kun de øverste bildene i det nye innholdet
-  document.body.addEventListener("htmx:afterSwap", async (evt) => {
-    const targetElement = evt.detail.target || document.querySelector("#hovedinnhold");
-    
-    // Venter KUN på de første bildene øverst på skjermen
-    await ventPåKritiskInnhold(targetElement);
-    
-    skjulInnholdsLoader();
-  });
-
-  document.body.addEventListener("htmx:responseError", () => {
-    skjulInnholdsLoader();
-  });
-}
-
-if (document.readyState === "loading") {
-  document.addEventListener("DOMContentLoaded", initLoaderHåndtering);
-} else {
-  initLoaderHåndtering();
-}
+  // Start så fort HTML-strukturen er klar
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", startOpplasting);
+  } else {
+    startOpplasting();
+  }
+})();
