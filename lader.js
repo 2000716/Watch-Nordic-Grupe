@@ -1,56 +1,60 @@
 /* ==========================================
-   LADER.JS (Universell for alle sider & elementer)
+   LADER.JS (Målsentrert skanning av kun nytt innhold)
    ========================================== */
 
 /**
- * Skanner alt innhold i en valgt container (eller hele siden)
- * og venter på at både <img> og CSS-bakgrunnsbilder er 100% hentet.
+ * Skanner KUN bildene som ligger inne i den gitte containeren (f.eks #hovedinnhold).
+ * Venter nøyaktig til bildene er lastet ned, helt uten kunstige forsinkelser.
  */
-function ventPåBilderIElement(container = document) {
-  // 1. Finn alle standard <img>-tagger
+function ventPåInnhold(container) {
+  if (!container) return Promise.resolve();
+
+  // 1. Hent KUN <img>-tagger direkte inne i denne beholderen
   const bilder = Array.from(container.querySelectorAll("img"));
 
-  // 2. Finn elementer som har bakgrunnsbilde via CSS
-  const elementerMedBg = Array.from(container.querySelectorAll("*")).filter((el) => {
-    const bg = window.getComputedStyle(el).backgroundImage;
-    return bg && bg !== "none" && bg.startsWith("url(");
-  });
+  // 2. Hent KUN elementer med bakgrunnsbilde direkte inne i denne beholderen
+  const bgElementer = Array.from(
+    container.querySelectorAll("[style*='background-image'], .hero, .banner, .card, .poster")
+  );
 
   const løfter = [];
 
-  // Hjelper for å laste en bilde-URL (brukes på bakgrunnsbilder)
-  const lastUrl = (url) => {
-    return new Promise((resolve) => {
-      const img = new Image();
-      img.src = url;
-      if (img.complete) return resolve();
-      img.onload = resolve;
-      img.onerror = resolve;
-    });
-  };
-
-  // Sjekk <img>-tagger
+  // Sjekk standard <img>-tagger i innholdet
   bilder.forEach((img) => {
-    if (img.complete && img.naturalWidth !== 0) {
-      løfter.push(Promise.resolve());
-    } else {
-      løfter.push(
-        new Promise((resolve) => {
-          img.addEventListener("load", resolve, { once: true });
-          img.addEventListener("error", resolve, { once: true });
-        })
-      );
+    // Hvis bildet allerede er i minnet/cache, hopp over
+    if (img.complete && img.naturalWidth !== 0) return;
+
+    løfter.push(
+      new Promise((resolve) => {
+        img.addEventListener("load", resolve, { once: true });
+        img.addEventListener("error", resolve, { once: true });
+      })
+    );
+  });
+
+  // Sjekk bakgrunnsbilder i innholdet
+  bgElementer.forEach((el) => {
+    const bgVal = window.getComputedStyle(el).backgroundImage;
+    if (bgVal && bgVal.startsWith("url(")) {
+      const match = bgVal.match(/url\((['"]?)(.*?)\1\)/);
+      if (match && match[2]) {
+        løfter.push(
+          new Promise((resolve) => {
+            const tempImg = new Image();
+            tempImg.src = match[2];
+            if (tempImg.complete) return resolve();
+            tempImg.onload = resolve;
+            tempImg.onerror = resolve;
+          })
+        );
+      }
     }
   });
 
-  // Sjekk CSS-bakgrunnsbilder
-  elementerMedBg.forEach((el) => {
-    const bgVal = window.getComputedStyle(el).backgroundImage;
-    const cleanUrl = bgVal.slice(4, -1).replace(/["']/g, "");
-    if (cleanUrl) løfter.push(lastUrl(cleanUrl));
-  });
-
+  // Hvis det ikke er noen bilder i innholdet, fortsett umiddelbart
   if (løfter.length === 0) return Promise.resolve();
+
+  // Vent nøyaktig til alle medier i innholdet er lastet
   return Promise.all(løfter);
 }
 
@@ -80,12 +84,8 @@ function skjulInnholdsLoader() {
   });
 }
 
-/**
- * Legger lader dynamisk i målområdet som oppdateres, 
- * uavhengig av hva containeren heter på den aktuelle siden.
- */
 function visLoaderForInnhold(targetContainer) {
-  const container = targetContainer || document.querySelector("#hovedinnhold") || document.body;
+  const container = targetContainer || document.querySelector("#hovedinnhold");
   if (!container) return;
 
   if (container.querySelector(".content-loader")) return;
@@ -94,7 +94,6 @@ function visLoaderForInnhold(targetContainer) {
   loader.className = "content-loader";
   loader.innerHTML = '<div class="spinner"></div>';
 
-  // Sikre at laderen plasserer seg riktig i containeren
   const pos = window.getComputedStyle(container).position;
   if (pos === "static") {
     container.style.position = "relative";
@@ -104,21 +103,16 @@ function visLoaderForInnhold(targetContainer) {
 }
 
 function initLoaderHåndtering() {
-  // 1. Første innlasting av ENHVILKEN SOM HELST side (F5 eller direkte lenke)
+  // 1. Første innlasting (F5) - skanner kun #hovedinnhold
   const helsideLoader = document.getElementById("page-loader");
 
-  // Sikkerhetsnett hvis et bilde eller et nettverkskall henger
-  const maxTimeout = window.setTimeout(() => {
-    skjulHelsideLoader();
-  }, 8000);
-
-  const kjørHelsideSkanning = async () => {
-    await ventPåBilderIElement(document);
-    window.clearTimeout(maxTimeout);
-    skjulHelsideLoader();
-  };
-
   if (helsideLoader) {
+    const kjørHelsideSkanning = async () => {
+      const hovedInnhold = document.querySelector("#hovedinnhold") || document.body;
+      await ventPåInnhold(hovedInnhold);
+      skjulHelsideLoader();
+    };
+
     if (document.readyState === "complete") {
       kjørHelsideSkanning();
     } else {
@@ -126,12 +120,11 @@ function initLoaderHåndtering() {
     }
   }
 
-  // 2. HTMX-navigasjon mellom undersider/innhold
+  // 2. HTMX-navigasjon - Viser loader i målområdet
   document.body.addEventListener("htmx:beforeRequest", (evt) => {
     const path = evt.detail.requestConfig ? evt.detail.requestConfig.path : "";
     if (path && path.includes("meny.html")) return;
 
-    // Finn ut hvilket element HTMX er i ferd med å oppdatere
     const target = evt.detail.target || document.querySelector("#hovedinnhold");
 
     if (!document.getElementById("page-loader")) {
@@ -139,12 +132,14 @@ function initLoaderHåndtering() {
     }
   });
 
+  // 3. HTMX etter bytte - Skanner KUN det nye target-elementet som ble satt inn
   document.body.addEventListener("htmx:afterSwap", async (evt) => {
-    // Skann kun det nye området som akkurat ble byttet ut på siden
-    const targetElement = evt.detail.target || document;
+    const targetElement = evt.detail.target || document.querySelector("#hovedinnhold");
     
-    await ventPåBilderIElement(targetElement);
+    // Skanner BARE innholdet som skal spilles av/vises i målområdet
+    await ventPåInnhold(targetElement);
     
+    // Fjern loader umiddelbart når innholdet er klart
     skjulInnholdsLoader();
   });
 
