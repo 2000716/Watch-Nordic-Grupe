@@ -1067,9 +1067,9 @@
     .catch(err => console.error('Feil ved lasting av meny:', err));
 </script>
 
-    <script src="meny.js"></script>
-    <script src="lader.js"></script>
-    <script type="module">
+<script src="meny.js" defer></script>
+<script src="lader.js" defer></script>
+<script type="module">
   import { auth, db } from "./firebase-oppsett.js";
   import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-auth.js";
   import { doc, getDoc, setDoc, collection, query, limit, getDocs } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
@@ -1105,7 +1105,7 @@
       .replace(/'/g, "&#039;");
   }
 
-  // SIKKERHET: Validerer at URL-er bruker gyldig/trygt protokoll (HTTP/HTTPS eller relative paths)
+  // SIKKERHET: Validerer URL-er
   function erTryggUrl(url) {
     if (!url || typeof url !== "string") return false;
     try {
@@ -1139,20 +1139,22 @@
         }
       }
 
+      // OPTIMALISERING: Kjører spørringer i parallell (Promise.all) i stedet for sekvensielt
       if (!data) {
-        let docRef = doc(db, "filmer", navn);
-        let docSnap = await getDoc(docRef);
+        const filmRef = doc(db, "filmer", navn);
+        const serieRef = doc(db, "serier", navn);
 
-        if (docSnap.exists()) {
+        const [filmSnap, serieSnap] = await Promise.all([
+          getDoc(filmRef),
+          getDoc(serieRef)
+        ]);
+
+        if (filmSnap.exists()) {
           type = "film";
-          data = docSnap.data();
-        } else {
-          docRef = doc(db, "serier", navn);
-          docSnap = await getDoc(docRef);
-          if (docSnap.exists()) {
-            type = "serie";
-            data = docSnap.data();
-          }
+          data = filmSnap.data();
+        } else if (serieSnap.exists()) {
+          type = "serie";
+          data = serieSnap.data();
         }
 
         if (data) {
@@ -1195,7 +1197,7 @@
     window.addEventListener("resize", () => {
       clearTimeout(resizeTimeout);
       resizeTimeout = setTimeout(oppdaterBakgrunnsBilde, 150);
-    });
+    }, { passive: true });
 
     // Logo
     const fLogo = document.querySelector(".film-logo");
@@ -1250,18 +1252,26 @@
 
           document.body.appendChild(overlay);
           
-          const lukkModal = () => overlay.remove();
-          closeBtn.addEventListener("click", lukkModal);
-          overlay.addEventListener("click", (e) => {
+          // OPPRYDDING: Forhindrer minnelekkasje ved opprydding av listeners
+          const lukkModal = () => {
+            closeBtn.removeEventListener("click", lukkModal);
+            overlay.removeEventListener("click", overlayClick);
+            overlay.remove();
+          };
+
+          const overlayClick = (e) => {
             if (e.target === overlay) lukkModal();
-          });
+          };
+
+          closeBtn.addEventListener("click", lukkModal);
+          overlay.addEventListener("click", overlayClick);
         });
       } else {
         descEl.textContent = fullText;
       }
     }
 
-    // Metadata uten uønsket innerHTML-injeksjon
+    // Metadata
     const metadataEl = document.querySelector(".metadata");
     if (metadataEl) {
       metadataEl.replaceChildren();
@@ -1372,7 +1382,6 @@
     bgImg.style.opacity = "0";
 
     if (erTryggUrl(bildeUrl)) {
-      bgImg.src = bildeUrl;
       bgImg.onload = () => {
         bgImg.style.opacity = "1";
         if (heroEl) heroEl.style.backgroundColor = "transparent";
@@ -1381,6 +1390,7 @@
         bgImg.style.opacity = "0";
         if (heroEl) heroEl.style.backgroundColor = "#050F11";
       };
+      bgImg.src = bildeUrl;
     } else {
       bgImg.removeAttribute("src");
       bgImg.style.opacity = "0";
@@ -1578,7 +1588,7 @@
 
     document.querySelectorAll(".season-btn").forEach(b => b.classList.remove("active"));
     if (seasonButtons) {
-      [...seasonButtons.children]
+      Array.from(seasonButtons.children)
         .find(b => b.textContent === `Sesong ${sesongNr}`)
         ?.classList.add("active");
     }
@@ -1602,6 +1612,8 @@
       const img = document.createElement("img");
       img.src = epBilde;
       img.alt = ep.tittel || '';
+      img.loading = "lazy"; // OPTIMALISERING: Lazy loading av miniatyrbilder
+      img.decoding = "async";
       thumbDiv.appendChild(img);
 
       if (erLåst) {
@@ -1729,6 +1741,8 @@
             const img = document.createElement("img");
             img.src = bildeUrl;
             img.alt = item.tittel || '';
+            img.loading = "lazy"; // OPTIMALISERING: Lazy loading av filmanbefalinger
+            img.decoding = "async";
 
             const overlay = document.createElement("div");
             overlay.className = "movie-overlay";
@@ -1757,7 +1771,7 @@
   }
 
   /* ==========================================
-     7. VIDEO/TRAILER & MOBIL-STØTTE (OPTIMALISERT)
+     7. VIDEO/TRAILER & MOBIL-STØTTE
      ========================================== */
   function initTrailer() {
     if (!data) return;
@@ -1773,8 +1787,6 @@
       trailerVideo.preload = "metadata";
       trailerVideo.muted = true;
       trailerVideo.playsInline = true;
-      trailerVideo.setAttribute("playsinline", "");
-      trailerVideo.setAttribute("webkit-playsinline", "");
 
       trailerVideo.addEventListener("error", () => {
         console.warn("Trailer-feil. Viser bakgrunnsbilde isteden.");
