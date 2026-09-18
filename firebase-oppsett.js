@@ -1,20 +1,21 @@
 // firebase-oppsett.js
-import { initializeApp } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-app.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-app.js";
 import { 
   getAuth, 
   setPersistence, 
   browserLocalPersistence, 
   inMemoryPersistence 
-} from "https://www.gstatic.com/firebasejs/12.15.0/firebase-auth.js";
+} from "https://www.gstatic.com/firebasejs/11.4.0/firebase-auth.js";
 import { 
   initializeFirestore, 
+  getFirestore,
   persistentLocalCache, 
   persistentMultipleTabManager 
-} from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
+} from "https://www.gstatic.com/firebasejs/11.4.0/firebase-firestore.js";
 
 // Firebase-konfigurasjon
 const firebaseConfig = {
-  apiKey: "DIN_NYE_API_NØKKEL_HER", // Lim inn den nye API-nøkkelen fra Google Cloud Console her
+  apiKey: "DIN_REELLE_API_NØKKEL_HER", // Sett inn din faktiske API-nøkkel
   authDomain: "watch-nordic-78b99.firebaseapp.com",
   projectId: "watch-nordic-78b99",
   storageBucket: "watch-nordic-78b99.firebasestorage.app",
@@ -35,7 +36,7 @@ setPersistence(auth, browserLocalPersistence).catch(() => {
   });
 });
 
-// Trygg initialisering av Firestore med lokal hurtigbuffer (cache)
+// Trygg initialisering av Firestore
 let firestoreDb;
 try {
   firestoreDb = initializeFirestore(app, {
@@ -45,10 +46,9 @@ try {
     experimentalAutoDetectLongPolling: true
   });
 } catch (error) {
-  console.warn("Bruker standard Firestore-konfigurasjon pga. restriksjoner i nettleser:", error);
-  firestoreDb = initializeFirestore(app, {
-    experimentalAutoDetectLongPolling: true
-  });
+  console.warn("Klarte ikke å initialisere meke-fane cache, bruker standard Firestore:", error);
+  // Fallback til eksisterende instans eller standard getFirestore
+  firestoreDb = getFirestore(app);
 }
 
 // Eksporter Firestore-databasen
