@@ -6,7 +6,10 @@
   <meta name="theme-color" content="#050F11" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self' https: data: blob:; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com; script-src 'self' 'unsafe-inline' https://www.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' data: https: blob:; connect-src 'self' https:; font-src 'self' https://cdnjs.cloudflare.com; object-src 'none'; base-uri 'self'; frame-ancestors 'none';" />
+  
+  <!-- KORRIGERT CSP: Tillater nødvendige oppkoblinger mot Firebase Auth og Firestore -->
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self' https: data: blob:; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com; script-src 'self' 'unsafe-inline' https://www.gstatic.com https://*.firebaseapis.com https://cdnjs.cloudflare.com; img-src 'self' data: https: blob: https://static.wixstatic.com; connect-src 'self' https://*.firebaseauth.com https://*.firestore.googleapis.com https://*.firebaseapis.com https:; font-src 'self' https://cdnjs.cloudflare.com; object-src 'none'; base-uri 'self'; frame-ancestors 'none';" />
+  
   <meta name="referrer-policy" content="strict-origin-when-cross-origin" />
   <title>Innlogging / Registrering | Watch Nordic™</title>
   
@@ -436,7 +439,7 @@
 
 <script type="module">
   import { auth, db } from "./firebase-oppsett.js";
-  import {  
+  import { 
     signInWithEmailAndPassword, 
     createUserWithEmailAndPassword,
     setPersistence,
@@ -461,7 +464,7 @@
   const submitKnapp = document.getElementById("submitKnapp");
   const changeEmailBtn = document.getElementById("changeEmailBtn");
   const passwordToggle = document.getElementById("passwordToggle");
-  const toggleModeLink = document.getElementById("toggleModeLink");
+  const toggleTextContainer = document.getElementById("toggleText");
 
   function settFeilmelding(melding = "") {
     if (feilmelding) feilmelding.textContent = melding;
@@ -518,13 +521,16 @@
     });
   }
 
-  if (toggleModeLink) {
-    toggleModeLink.addEventListener("click", (e) => {
-      e.preventDefault();
-      if (registreringsmodus) {
-        visInnlogging();
-      } else {
-        visRegistrering();
+  // EVENT DELEGATION FOR BYTTE MELLOM INNLOGGING OG REGISTRERING
+  if (toggleTextContainer) {
+    toggleTextContainer.addEventListener("click", (e) => {
+      if (e.target && e.target.id === "toggleModeLink") {
+        e.preventDefault();
+        if (registreringsmodus) {
+          visInnlogging();
+        } else {
+          visRegistrering();
+        }
       }
     });
   }
@@ -681,8 +687,6 @@
             settFeilmelding("Denne e-postadressen er allerede i bruk.");
             break;
           case 'auth/invalid-credential':
-            settFeilmelding("Feil e-post eller passord.");
-            break;
           case 'auth/wrong-password':
           case 'auth/user-not-found':
             settFeilmelding("Feil e-post eller passord.");
@@ -731,11 +735,6 @@
         ? "Skriv inn e-post for å opprette konto" 
         : "Velg et passord for å opprette kontoen";
     }
-
-    document.getElementById("toggleModeLink").addEventListener("click", (e) => {
-      e.preventDefault();
-      visInnlogging();
-    });
   }
 
   function visInnlogging() {
@@ -761,11 +760,6 @@
         ? "Skriv inn e-postadressen din for å fortsette" 
         : "Skriv inn passordet ditt";
     }
-
-    document.getElementById("toggleModeLink").addEventListener("click", (e) => {
-      e.preventDefault();
-      visRegistrering();
-    });
   }
 </script>
 </body>
