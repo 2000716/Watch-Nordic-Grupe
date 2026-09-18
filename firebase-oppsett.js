@@ -1,4 +1,4 @@
-// firebase-oppsett.js
+// Import funksjonene du trenger fra SDK-ene
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-app.js";
 import { 
   getAuth, 
@@ -13,9 +13,9 @@ import {
   persistentMultipleTabManager 
 } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-firestore.js";
 
-// Firebase-konfigurasjon
+// Firebase-konfigurasjonen din
 const firebaseConfig = {
-  apiKey: "DIN_REELLE_API_NØKKEL_HER", // Sett inn din faktiske API-nøkkel
+  apiKey: "AIzaSyBlfCbB1AuiKVHMBEhYd0cvkJ0jxHVZfUg",
   authDomain: "watch-nordic-78b99.firebaseapp.com",
   projectId: "watch-nordic-78b99",
   storageBucket: "watch-nordic-78b99.firebasestorage.app",
@@ -26,10 +26,10 @@ const firebaseConfig = {
 // Initialiser Firebase App
 const app = initializeApp(firebaseConfig);
 
-// Initialiser Autentisering
+// Initialiser og eksporter Autentisering
 export const auth = getAuth(app);
 
-// Håndtering av innloggingstilstand (persistens)
+// Sett innloggingspersistens (holder brukeren innlogget i nettleseren)
 setPersistence(auth, browserLocalPersistence).catch(() => {
   setPersistence(auth, inMemoryPersistence).catch((err) => {
     console.warn("Kunne ikke sette innloggingspersistens:", err);
@@ -46,8 +46,6 @@ try {
     experimentalAutoDetectLongPolling: true
   });
 } catch (error) {
-  console.warn("Klarte ikke å initialisere meke-fane cache, bruker standard Firestore:", error);
-  // Fallback til eksisterende instans eller standard getFirestore
   firestoreDb = getFirestore(app);
 }
 
