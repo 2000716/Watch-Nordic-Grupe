@@ -530,8 +530,11 @@
     const isKidsProfileInput = document.getElementById("isKidsProfile");
     const kontoLink = document.getElementById("kontoLink");
 
-    const standardBilde = "https://static.wixstatic.com/media/fd2fb2_39376e4ee55b460ab7a3ebbfcf35fef7~mv2.png";
-    const barnBilde = "https://static.wixstatic.com/media/fd2fb2_3df40a7e62c545afa3918fc10393284d~mv2.png";
+    // Standard nøytral grå profilikon (SVG) dersom profilbilde ikke er valgt
+    const standardBilde = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='%231a292c'/><circle cx='50' cy='38' r='22' fill='%23708083'/><path d='M 18 88 C 18 68, 32 58, 50 58 C 68 58, 82 68, 82 88 Z' fill='%23708083'/></svg>";
+    
+    // Sett inn bildelenken du ønsker å bruke for barneprofilen her
+    const barnBilde = "https://res.cloudinary.com/ocv4zhpk/image/upload/v1785856036/Marshmellows_edited_omilcb.png"; 
 
     let profiler = [];
     let docRef = null;

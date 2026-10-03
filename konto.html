@@ -136,6 +136,7 @@
       object-fit: cover;
       border: 3px solid var(--border);
       transition: border-color 0.2s, transform 0.2s;
+      background-color: rgba(255, 255, 255, 0.05);
     }
 
     .avatar-wrapper:hover .avatar-img {
@@ -396,7 +397,7 @@
 
   <div class="container">
     
-    <!-- TOPPKORT MED MEGET STØRRE BILDESIRKEL OG BLYANTBOBLE -->
+    <!-- TOPPKORT MED PROFILBILDE -->
     <div class="profile-header">
       <div class="profile-info">
         <h1 id="navnDisplay">Laster...</h1>
@@ -478,12 +479,21 @@
     import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-auth.js";
     import { doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
 
+    // Standard nøytralt profilbilde hvis bilde mangler eller feiler
+    const DEFAULT_AVATAR = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160' viewBox='0 0 24 24' fill='%23a0acae'><path d='M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 4c1.93 0 3.5 1.57 3.5 3.5S13.93 13 12 13s-3.5-1.57-3.5-3.5S10.07 6 12 6zm0 14c-2.03 0-3.8-1.04-4.84-2.6.03-.99 2.02-1.9 4.84-1.9s4.81.91 4.84 1.9C15.8 18.96 14.03 20 12 20z'/></svg>";
+
     const urlParams = new URLSearchParams(window.location.search);
     let aktivProfilIndex = parseInt(urlParams.get('index')) || 0;
 
     const navnDisplay = document.getElementById("navnDisplay");
     const navnView = document.getElementById("navnView");
     const epostView = document.getElementById("epostView");
+    const profilbildeEl = document.getElementById("profilbilde");
+
+    // Sett opp feilhåndtering for profilbilde
+    profilbildeEl.onerror = () => {
+      profilbildeEl.src = DEFAULT_AVATAR;
+    };
 
     // Navn-endring elementer
     const endreNavnKnapp = document.getElementById("endreNavnKnapp");
@@ -581,7 +591,6 @@
     pinToggleBtn.addEventListener("click", async () => {
       if (!profiler[aktivProfilIndex]) return;
 
-      // Hvis koden allerede er aktiv og du trykker på togglen: skru av koden
       if (pinToggleBtn.classList.contains("active")) {
         profiler[aktivProfilIndex].pin = null;
         await oppdaterProfilData();
@@ -589,7 +598,6 @@
         return;
       }
 
-      // Hvis koden skal aktiveres: Åpne feltet for å skrive inn kode
       nyPinInput.value = "";
       editPinBox.classList.remove("hidden");
       nyPinInput.focus();
@@ -641,7 +649,13 @@
       navnDisplay.innerText = gjeldendeProfil.navn;
       navnView.innerText = gjeldendeProfil.navn;
       epostView.innerText = globalEpost;
-      document.getElementById("profilbilde").src = gjeldendeProfil.bilde || "https://via.placeholder.com/160";
+
+      // Sett bilde med fallback
+      if (gjeldendeProfil.bilde && gjeldendeProfil.bilde.trim() !== "") {
+        profilbildeEl.src = gjeldendeProfil.bilde;
+      } else {
+        profilbildeEl.src = DEFAULT_AVATAR;
+      }
 
       const harPin = Boolean(gjeldendeProfil.pin);
       document.getElementById("pinView").innerText = harPin ? "Kode satt" : "Ingen kode satt";

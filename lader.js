@@ -1,71 +1,84 @@
 /* ==========================================
-   OPTIMALISERT LADER.JS (Synkronisert med Firebase)
+   LADER.JS (For vanlige HTML-sider)
    ========================================== */
 
-function skjulLoader() {
-  const loader = document.getElementById("page-loader");
-  if (!loader) return;
+(function () {
+  /**
+   * Finner og venter KUN på at hovedbanneret/hero-bildet på gjeldende HTML-side er klart.
+   */
+  function ventPåBanner() {
+    // 1. Sjekk etter <img> i banner/hero-området
+    const bannerImg = document.querySelector(
+      ".hero img, .banner img, #hero img, img.hero-img, img.banner-img, [data-banner] img"
+    );
 
-  loader.style.pointerEvents = "none";
-  loader.classList.add("fade-out");
+    // 2. Sjekk etter elementer med bakgrunnsbilde (CSS)
+    const bannerBg = document.querySelector(
+      ".hero, .banner, #hero, [data-banner]"
+    );
 
-  window.setTimeout(() => {
-    if (loader && loader.parentNode) {
-      loader.remove();
-    }
-  }, 600); // Gir tid til at CSS fade-out animasjonen kan spilles av
-}
+    const løfter = [];
 
-function initLoaderHåndtering() {
-  const loader = document.getElementById("page-loader");
-  if (!loader) return;
-
-  // Sjekker om dette er en side som henter data fra Firebase (f.eks. har ?navn= i URL-en)
-  const erDynamiskSide = window.location.search.includes("navn=");
-
-  // NØD-FALLBACK: Hvis nettet er ekstremt tregt eller noe krasjer, fjerner vi loaderen etter 8 sekunder uansett.
-  const nodTimeout = window.setTimeout(() => {
-    skjulLoader();
-  }, 8000);
-
-  if (erDynamiskSide) {
-    // 1. Hvis koden allerede har rukket å si at den er ferdig:
-    if (document.body && document.body.classList.contains("loaded")) {
-      window.clearTimeout(nodTimeout);
-      skjulLoader();
-      return;
-    }
-
-    // 2. Hvis ikke, setter vi opp en "vakt" (Observer) som venter på at Firebase blir ferdig
-    const observer = new MutationObserver((mutations) => {
-      mutations.forEach((mutation) => {
-        if (mutation.attributeName === "class" && document.body.classList.contains("loaded")) {
-          window.clearTimeout(nodTimeout);
-          skjulLoader();
-          observer.disconnect(); // Slutter å overvåke når den er ferdig
+    if (bannerImg) {
+      // Hvis bildet ikke allerede er hentet fra nettleserens cache
+      if (!bannerImg.complete || bannerImg.naturalWidth === 0) {
+        løfter.push(
+          new Promise((resolve) => {
+            bannerImg.addEventListener("load", resolve, { once: true });
+            bannerImg.addEventListener("error", resolve, { once: true });
+          })
+        );
+      }
+    } else if (bannerBg) {
+      const bgVal = window.getComputedStyle(bannerBg).backgroundImage;
+      if (bgVal && bgVal.startsWith("url(")) {
+        const match = bgVal.match(/url\((['"]?)(.*?)\1\)/);
+        if (match && match[2]) {
+          løfter.push(
+            new Promise((resolve) => {
+              const tempImg = new Image();
+              tempImg.src = match[2];
+              if (tempImg.complete) return resolve();
+              tempImg.onload = resolve;
+              tempImg.onerror = resolve;
+            })
+          );
         }
-      });
-    });
-
-    if (document.body) {
-      observer.observe(document.body, { attributes: true });
-    } else {
-      document.addEventListener("DOMContentLoaded", () => {
-        observer.observe(document.body, { attributes: true });
-      });
+      }
     }
-  } else {
-    // For vanlige sider (som Hovedside.html) som ikke venter på filmdata
-    window.addEventListener("load", () => {
-      window.clearTimeout(nodTimeout);
-      skjulLoader();
-    });
-  }
-}
 
-// Sørg for at koden alltid kjører
-if (document.readyState === "loading") {
-  document.addEventListener("DOMContentLoaded", initLoaderHåndtering);
-} else {
-  initLoaderHåndtering();
-}
+    // Hvis siden ikke har noe bannerbilde (f.eks. en ren tekstside), fortsett umiddelbart
+    if (løfter.length === 0) {
+      return Promise.resolve();
+    }
+
+    return Promise.all(løfter);
+  }
+
+  function skjulLoader() {
+    const loader = document.getElementById("page-loader");
+    if (loader) {
+      loader.classList.add("fade-out");
+      loader.style.pointerEvents = "none";
+      setTimeout(() => {
+        if (loader && loader.parentNode) {
+          loader.remove();
+        }
+      }, 300);
+    }
+  }
+
+  async function startOpplasting() {
+    // Vent på at kun bannerbildet er lastet
+    await ventPåBanner();
+    // Skjul loaderen umiddelbart
+    skjulLoader();
+  }
+
+  // Start så fort HTML-strukturen er klar
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", startOpplasting);
+  } else {
+    startOpplasting();
+  }
+})();

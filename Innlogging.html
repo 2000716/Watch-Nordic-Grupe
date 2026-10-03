@@ -6,7 +6,10 @@
   <meta name="theme-color" content="#050F11" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self' https: data: blob:; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com; script-src 'self' 'unsafe-inline' https://www.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' data: https: blob:; connect-src 'self' https:; font-src 'self' https://cdnjs.cloudflare.com; object-src 'none'; base-uri 'self'; frame-ancestors 'none';" />
+  
+  <!-- KORRIGERT CSP: Tillater nødvendige oppkoblinger mot Firebase Auth og Firestore -->
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self' https: data: blob:; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com; script-src 'self' 'unsafe-inline' https://www.gstatic.com https://*.firebaseapis.com https://cdnjs.cloudflare.com; img-src 'self' data: https: blob: https://static.wixstatic.com; connect-src 'self' https://*.firebaseauth.com https://*.firestore.googleapis.com https://*.firebaseapis.com https:; font-src 'self' https://cdnjs.cloudflare.com; object-src 'none'; base-uri 'self'; frame-ancestors 'none';" />
+  
   <meta name="referrer-policy" content="strict-origin-when-cross-origin" />
   <title>Innlogging / Registrering | Watch Nordic™</title>
   
@@ -341,7 +344,7 @@
 </head>
 <body>
 
-  <header class="top-nav top-menu">
+  <header class="top-nav">
     <div class="nav-left">
       <a href="index.html" class="watch-logo-svg">
         <img src="https://static.wixstatic.com/media/d9ace9_081ea242211b45a2801873c3067e1205~mv2.png" alt="Watch Nordic">
@@ -435,7 +438,10 @@
   </footer>
 
 <script type="module">
+<<<<<<< HEAD
   // Importerer fra samme firebase-konfigurasjon som app.js benytter
+=======
+>>>>>>> f23cbbf77a2fc5a33d260f1565bb379064a80bdf
   import { auth, db } from "./firebase-oppsett.js";
   import { 
     signInWithEmailAndPassword, 
@@ -445,11 +451,18 @@
     onAuthStateChanged
   } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-auth.js";
   import { doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
+<<<<<<< HEAD
+=======
+
+  // MÅLSIDE ETTER INNLOGGING / REGISTRERING:
+  const MAALSIDE = "hvem-ser-på.html";
+>>>>>>> f23cbbf77a2fc5a33d260f1565bb379064a80bdf
 
   let registreringsmodus = false;
   let naavaarendeSteg = 1;
   let erSendt = false;
 
+  // Henting av HTML-elementer
   const epostInput = document.getElementById("epost");
   const passordInput = document.getElementById("passord");
   const feilmelding = document.getElementById("feilmelding");
@@ -458,22 +471,7 @@
   const submitKnapp = document.getElementById("submitKnapp");
   const changeEmailBtn = document.getElementById("changeEmailBtn");
   const passwordToggle = document.getElementById("passwordToggle");
-  const toggleModeLink = document.getElementById("toggleModeLink");
-
-  // Hjelpefunksjon for lokal lagring slik app.js forventer
-  function tryggLagring(nokkel, verdi) {
-    try {
-      localStorage.setItem(nokkel, typeof verdi === "object" ? JSON.stringify(verdi) : verdi);
-    } catch (e) {
-      console.warn("Kunne ikke lagre i localStorage:", e);
-    }
-  }
-
-  function hentMålUrl() {
-    const urlParams = new URLSearchParams(window.location.search);
-    const redirectParam = urlParams.get("redirect");
-    return redirectParam ? decodeURIComponent(redirectParam) : "hvem-ser-på.html";
-  }
+  const toggleTextContainer = document.getElementById("toggleText");
 
   function settFeilmelding(melding = "") {
     if (feilmelding) feilmelding.textContent = melding;
@@ -491,6 +489,7 @@
     }
   }
 
+  // --- HANDTERING AV HENDELSER ---
   if (epostInput) {
     epostInput.addEventListener("input", () => settFeilmelding(""));
     epostInput.addEventListener("keydown", (e) => {
@@ -529,13 +528,16 @@
     });
   }
 
-  if (toggleModeLink) {
-    toggleModeLink.addEventListener("click", (e) => {
-      e.preventDefault();
-      if (registreringsmodus) {
-        visInnlogging();
-      } else {
-        visRegistrering();
+  // EVENT DELEGATION FOR BYTTE MELLOM INNLOGGING OG REGISTRERING
+  if (toggleTextContainer) {
+    toggleTextContainer.addEventListener("click", (e) => {
+      if (e.target && e.target.id === "toggleModeLink") {
+        e.preventDefault();
+        if (registreringsmodus) {
+          visInnlogging();
+        } else {
+          visRegistrering();
+        }
       }
     });
   }
@@ -607,19 +609,14 @@
     }, 250);
   }
 
-  // Sjekker om bruker allerede er innlogget
+  // Sjekk om bruker allerede er innlogget
   onAuthStateChanged(auth, (user) => {
-    if (user) {
-      tryggLagring("brukerEpost", user.email);
-      tryggLagring("userUid", user.uid);
-      
-      const maalUrl = hentMålUrl();
-      if (window.location.pathname.toLowerCase().includes("innlogging")) {
-        window.location.replace(maalUrl);
-      }
+    if (user && window.location.pathname.toLowerCase().includes("innlogging")) {
+      window.location.replace(MAALSIDE);
     }
   });
 
+  // --- FIREBASE AUTENTISERING & FIRESTORE-OPERASJONER ---
   if (authForm) {
     authForm.addEventListener("submit", async function(event) {
       event.preventDefault(); 
@@ -652,15 +649,13 @@
             navn: navn,
             bilde: "https://static.wixstatic.com/media/fd2fb2_39376e4ee55b460ab7a3ebbfcf35fef7~mv2.png",
             isKids: false,
-            alder: 18,
-            maksAldersgrense: "18"
+            maksAldersgrense: "12"
           }
         ];
 
-        let userCredential;
-
         if (registreringsmodus) {
-          userCredential = await createUserWithEmailAndPassword(auth, epost, passord);
+          // --- REGISTRERING ---
+          const userCredential = await createUserWithEmailAndPassword(auth, epost, passord);
           const user = userCredential.user;
 
           await setDoc(doc(db, "users", user.uid), {
@@ -670,13 +665,11 @@
             sistOppdatert: new Date().toISOString()
           });
 
-          // Synkroniser lokal profil til app.js
-          tryggLagring("brukerProfil", standardProfil[0]);
-          tryggLagring("brukerEpost", epost);
-          tryggLagring("userUid", user.uid);
+          window.location.replace(MAALSIDE);
 
         } else {
-          userCredential = await signInWithEmailAndPassword(auth, epost, passord);
+          // --- INNLOGGING ---
+          const userCredential = await signInWithEmailAndPassword(auth, epost, passord);
           const user = userCredential.user;
 
           const docRef = doc(db, "users", user.uid);
@@ -688,20 +681,10 @@
               profiler: standardProfil,
               sistOppdatert: new Date().toISOString()
             });
-            tryggLagring("brukerProfil", standardProfil[0]);
-          } else {
-            const userData = docSnap.data();
-            if (userData.profiler && userData.profiler.length > 0) {
-              tryggLagring("brukerProfil", userData.profiler[0]);
-            }
           }
 
-          tryggLagring("brukerEpost", epost);
-          tryggLagring("userUid", user.uid);
+          window.location.replace(MAALSIDE);
         }
-
-        window.location.replace(hentMålUrl());
-
       } catch (error) {
         settLaster(false);
         console.error("Auth-feil:", error.code, error.message);
@@ -735,6 +718,7 @@
     });
   }
 
+  // --- BYTT MELLOM INNLOGGING OG REGISTRERING ---
   function visRegistrering() {
     registreringsmodus = true;
     settFeilmelding("");
@@ -757,14 +741,6 @@
       formSubtitle.textContent = (naavaarendeSteg === 1) 
         ? "Skriv inn e-post for å opprette konto" 
         : "Velg et passord for å opprette kontoen";
-    }
-
-    const nyToggleLink = document.getElementById("toggleModeLink");
-    if (nyToggleLink) {
-      nyToggleLink.addEventListener("click", (e) => {
-        e.preventDefault();
-        visInnlogging();
-      });
     }
   }
 
@@ -790,14 +766,6 @@
       formSubtitle.textContent = (naavaarendeSteg === 1) 
         ? "Skriv inn e-postadressen din for å fortsette" 
         : "Skriv inn passordet ditt";
-    }
-
-    const nyToggleLink = document.getElementById("toggleModeLink");
-    if (nyToggleLink) {
-      nyToggleLink.addEventListener("click", (e) => {
-        e.preventDefault();
-        visRegistrering();
-      });
     }
   }
 </script>
