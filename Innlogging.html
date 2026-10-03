@@ -436,15 +436,15 @@
 
 <script type="module">
   // Importerer fra samme firebase-konfigurasjon som app.js benytter
-  import { auth, db } from "./firebase-config.js";
+  import { auth, db } from "./firebase-oppsett.js";
   import { 
     signInWithEmailAndPassword, 
     createUserWithEmailAndPassword,
     setPersistence,
     browserLocalPersistence,
     onAuthStateChanged
-  } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-  import { doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+  } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-auth.js";
+  import { doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
 
   let registreringsmodus = false;
   let naavaarendeSteg = 1;

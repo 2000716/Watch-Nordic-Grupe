@@ -262,7 +262,7 @@
             <p>Logg inn med din Watch Nordic ansatt-e-post og passord:</p>
             <input type="email" id="emailInput" placeholder="E-postadresse...">
             <input type="password" id="passwordInput" placeholder="Passord...">
-            <button id="loginBtn" onclick="simulerInnlogging()"><i class="fas fa-sign-in-alt"></i> Logg inn</button>
+            <button id="loginBtn"><i class="fas fa-sign-in-alt"></i> Logg inn</button>
             <div id="loginErrorMsg" class="app-notification error"></div>
         </div>
 
@@ -576,10 +576,15 @@
         document.getElementById("adminSection")?.classList.add("hidden");
     }
 
-    document.getElementById("loginBtn")?.addEventListener("click", async () => {
-        const email = document.getElementById("emailInput").value.trim();
-        const password = document.getElementById("passwordInput").value;
+    async function simulerInnlogging() {
+        const emailInput = document.getElementById("emailInput");
+        const passwordInput = document.getElementById("passwordInput");
         const errorMsg = document.getElementById("loginErrorMsg");
+
+        if (!emailInput || !passwordInput) return;
+
+        const email = emailInput.value.trim();
+        const password = passwordInput.value;
         if (errorMsg) errorMsg.style.display = "none";
 
         try {
@@ -590,7 +595,11 @@
                 errorMsg.style.display = "block";
             }
         }
-    });
+    }
+
+    window.simulerInnlogging = simulerInnlogging;
+
+    document.getElementById("loginBtn")?.addEventListener("click", simulerInnlogging);
 
     window.byttTab = function(tab) {
         const tabs = ['oversikt', 'filmer', 'serier', 'leggTil'];

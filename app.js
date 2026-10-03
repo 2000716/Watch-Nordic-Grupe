@@ -26,8 +26,9 @@ import {
     "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
 
 
-// Last inn filminfo.js
-import './filminfo.js';
+// Filminfo er valgfri og kan lastes via routeren/HTML-filen.
+// Vi fjerner hard avhengighet til filminfo.js for å unngå kritiske
+// modullasterfeil når filen ikke finnes i prosjektet.
 
 
 // ==========================================
