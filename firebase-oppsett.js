@@ -29,11 +29,25 @@ const app = initializeApp(firebaseConfig);
 // Initialiser og eksporter Autentisering
 export const auth = getAuth(app);
 
-// Sett innloggingspersistens (holder brukeren innlogget i nettleseren)
-setPersistence(auth, browserLocalPersistence).catch(() => {
-  setPersistence(auth, inMemoryPersistence).catch((err) => {
-    console.warn("Kunne ikke sette innloggingspersistens:", err);
-  });
+// Sett innloggingspersistens før Auth-operasjoner starter.
+export const authPersistenceReady = setPersistence(
+  auth,
+  browserLocalPersistence
+).catch(async (localPersistenceError) => {
+  console.warn(
+    "Kunne ikke bruke lokal innloggingspersistens; prøver minnebasert persistens:",
+    localPersistenceError
+  );
+
+  try {
+    await setPersistence(auth, inMemoryPersistence);
+  } catch (memoryPersistenceError) {
+    console.error(
+      "Kunne ikke sette innloggingspersistens:",
+      memoryPersistenceError
+    );
+    throw memoryPersistenceError;
+  }
 });
 
 // Trygg initialisering av Firestore

@@ -439,12 +439,10 @@
 
 <script type="module">
   // Importerer fra samme firebase-konfigurasjon som app.js benytter
-  import { auth, db } from "./firebase-oppsett.js";
+  import { auth, authPersistenceReady, db } from "./firebase-oppsett.js";
   import { 
     signInWithEmailAndPassword, 
     createUserWithEmailAndPassword,
-    setPersistence,
-    browserLocalPersistence,
     onAuthStateChanged
   } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-auth.js";
   import { doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
@@ -636,7 +634,7 @@
       settFeilmelding("Vennligst vent..."); 
 
       try {
-        await setPersistence(auth, browserLocalPersistence);
+        await authPersistenceReady;
 
         const standardProfil = [
           {
