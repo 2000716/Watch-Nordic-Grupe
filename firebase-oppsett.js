@@ -1,17 +1,17 @@
 // Import funksjonene du trenger fra SDK-ene
-import { initializeApp } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-app.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-app.js";
 import { 
   getAuth, 
   setPersistence, 
   browserLocalPersistence, 
   inMemoryPersistence 
-} from "https://www.gstatic.com/firebasejs/11.4.0/firebase-auth.js";
+} from "https://www.gstatic.com/firebasejs/12.15.0/firebase-auth.js";
 import { 
   initializeFirestore, 
   getFirestore,
   persistentLocalCache, 
   persistentMultipleTabManager 
-} from "https://www.gstatic.com/firebasejs/11.4.0/firebase-firestore.js";
+} from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
 
 // Firebase-konfigurasjonen din
 const firebaseConfig = {

@@ -438,10 +438,7 @@
   </footer>
 
 <script type="module">
-<<<<<<< HEAD
   // Importerer fra samme firebase-konfigurasjon som app.js benytter
-=======
->>>>>>> f23cbbf77a2fc5a33d260f1565bb379064a80bdf
   import { auth, db } from "./firebase-oppsett.js";
   import { 
     signInWithEmailAndPassword, 
@@ -451,12 +448,9 @@
     onAuthStateChanged
   } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-auth.js";
   import { doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
-<<<<<<< HEAD
-=======
 
   // MÅLSIDE ETTER INNLOGGING / REGISTRERING:
   const MAALSIDE = "hvem-ser-på.html";
->>>>>>> f23cbbf77a2fc5a33d260f1565bb379064a80bdf
 
   let registreringsmodus = false;
   let naavaarendeSteg = 1;
