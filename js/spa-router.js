@@ -203,14 +203,19 @@ function prefetchRoute(target) {
 }
 
 async function activateView(view, section, navigationId) {
-  if (activeView) {
+  if (activeView && activeView !== view) {
     activeView.container.querySelectorAll("video").forEach(video => video.pause());
     window.dispatchEvent(new Event("spa:leave"));
     window.dispatchEvent(new Event("beforeunload"));
     activeView.bodyClass = document.body.className;
     activeView.bodyStyle = document.body.getAttribute("style") || "";
     activeView.title = document.title;
+    activeView.container.classList.add("is-leaving");
+    const leaveDuration = window.matchMedia("(prefers-reduced-motion: reduce)").matches ? 0 : 190;
+    await new Promise(resolve => window.setTimeout(resolve, leaveDuration));
+    if (navigationId !== latestNavigationId) return;
     activeView.container.remove();
+    activeView = null;
   }
 
   setStyles(templates.get(view.route), view.route);
@@ -220,7 +225,9 @@ async function activateView(view, section, navigationId) {
   else document.body.removeAttribute("style");
 
   root.removeAttribute("data-spa-loading");
-  root.replaceChildren(view.container);
+  if (view.container.parentElement !== root) {
+    root.replaceChildren(view.container);
+  }
   activeView = view;
 
   if (!view.initialized) {

@@ -40,6 +40,7 @@
                 <button id="tabBtnOversikt" class="active" data-spa-click="spa-handler-admin-5"><i class="fas fa-chart-line"></i> Oversikt & Statistikk</button>
                 <button id="tabBtnFilmer" data-spa-click="spa-handler-admin-6"><i class="fas fa-film"></i> Filmliste</button>
                 <button id="tabBtnSerier" data-spa-click="spa-handler-admin-7"><i class="fas fa-tv"></i> Serieliste</button>
+                <button id="tabBtnOppsett" data-spa-click="spa-handler-admin-14"><i class="fas fa-layer-group"></i> Gallerier & sider</button>
                 <button id="tabBtnLeggTil" data-spa-click="spa-handler-admin-8"><i class="fas fa-plus-circle"></i> Legg til Film / Serie</button>
             </div>
 
@@ -130,6 +131,50 @@
                 </table>
             </div>
 
+            <div id="tabOppsett" class="tab-content hidden">
+                <h2>Plattforminnhold</h2>
+                <p>Opprett sjangere, automatiske filmgallerier og menysider uten å endre HTML-koden.</p>
+
+                <div class="management-grid">
+                    <section class="management-card">
+                        <h3>Legg til sjanger</h3>
+                        <label for="genreName">Sjanger</label>
+                        <input id="genreName" type="text" placeholder="For eksempel: Krim">
+                        <button type="button" data-spa-click="spa-handler-admin-15"><i class="fas fa-plus"></i> Opprett sjanger</button>
+                        <div id="genreList" class="management-list"></div>
+                    </section>
+
+                    <section class="management-card">
+                        <h3>Legg til galleri</h3>
+                        <label for="galleryTitle">Navn på galleriet</label>
+                        <input id="galleryTitle" type="text" placeholder="For eksempel: Nordisk krim">
+                        <label for="galleryGenre">Vis sjanger</label>
+                        <select id="galleryGenre"><option value="">Velg sjanger</option></select>
+                        <label for="galleryType">Innholdstype</label>
+                        <select id="galleryType">
+                            <option value="alle">Filmer og serier</option>
+                            <option value="filmer">Kun filmer</option>
+                            <option value="serier">Kun serier</option>
+                        </select>
+                        <label for="galleryLimit">Maksimalt antall titler (1–50)</label>
+                        <input id="galleryLimit" type="number" min="1" max="50" value="20">
+                        <button type="button" data-spa-click="spa-handler-admin-16"><i class="fas fa-plus"></i> Opprett galleri</button>
+                        <div id="galleryList" class="management-list"></div>
+                    </section>
+
+                    <section class="management-card">
+                        <h3>Legg til menyside</h3>
+                        <p>En menyside viser det valgte galleriet som en egen side i hovedmenyen.</p>
+                        <label for="menuPageTitle">Navn på menysiden</label>
+                        <input id="menuPageTitle" type="text" placeholder="For eksempel: Krim">
+                        <label for="menuPageGallery">Galleri</label>
+                        <select id="menuPageGallery"><option value="">Velg galleri</option></select>
+                        <button type="button" data-spa-click="spa-handler-admin-17"><i class="fas fa-plus"></i> Opprett menyside</button>
+                        <div id="menuPageList" class="management-list"></div>
+                    </section>
+                </div>
+            </div>
+
             <!-- TAB 4: LEGG TIL / REDIGER INNHOLD -->
             <div id="tabLeggTil" class="tab-content hidden">
                 <h2 id="skjemaTittelHeading">Legg til ny tittel</h2>
@@ -177,7 +222,8 @@
                                 </div>
                                 <div>
                                     <label class="spa-inline-admin-30">Hovedsjanger:</label>
-                                    <input type="text" id="metaSjanger" placeholder="Grøsser" class="spa-inline-admin-31">
+                                    <input type="text" id="metaSjanger" placeholder="Grøsser" list="availableGenres" class="spa-inline-admin-31">
+                                    <datalist id="availableGenres"></datalist>
                                 </div>
                                 <div>
                                     <label class="spa-inline-admin-32">Varighet / Info:</label>

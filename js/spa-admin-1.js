@@ -1,7 +1,7 @@
 
     import { db, auth } from "../firebase-oppsett.js";
     import { signInWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-auth.js";
-    import { collection, getDocs, doc, getDoc, setDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
+    import { collection, getDocs, doc, getDoc, setDoc, deleteDoc, query, where } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
 
     // Hjelpefunksjon for å unngå XSS-injeksjoner i innerHTML
     function escapeHtml(str) {
@@ -74,7 +74,7 @@
     document.getElementById("loginBtn")?.addEventListener("click", simulerInnlogging);
 
     window.byttTab = function(tab) {
-        const tabs = ['oversikt', 'filmer', 'serier', 'leggTil'];
+        const tabs = ['oversikt', 'filmer', 'serier', 'oppsett', 'leggTil'];
         tabs.forEach(t => {
             const contentEl = document.getElementById(`tab${t.charAt(0).toUpperCase() + t.slice(1)}`);
             const btnEl = document.getElementById(`tabBtn${t.charAt(0).toUpperCase() + t.slice(1)}`);
@@ -90,6 +90,7 @@
         if (tab === 'leggTil' && !document.getElementById("inpId")?.getAttribute("data-redigerer")) {
             nullstillSkjema();
         }
+        if (tab === 'oppsett') lastInnKataloger();
     }
 
     window.byttInnholdsType = function() {
@@ -113,7 +114,212 @@
             document.getElementById("inpId").value = id;
             document.getElementById("inpSubtitleUrl").value = id ? `${id}.VTT` : "";
         }
+    };
+
+    function lagSlug(tekst) {
+        return tekst.trim().toLowerCase()
+            .replace(/æ/g, "ae")
+            .replace(/[øö]/g, "o")
+            .replace(/[åä]/g, "a")
+            .normalize("NFD")
+            .replace(/[\u0300-\u036f]/g, "")
+            .replace(/[^a-z0-9]+/g, "-")
+            .replace(/^-|-$/g, "");
     }
+
+    function leggTilValg(select, id, label) {
+        const option = document.createElement("option");
+        option.value = id;
+        option.textContent = label;
+        select.appendChild(option);
+    }
+
+    function tegnKatalogListe(container, records, type) {
+        if (!container) return;
+        container.replaceChildren();
+
+        records.forEach(record => {
+            const row = document.createElement("div");
+            row.className = "management-list-item";
+            const label = document.createElement("span");
+            label.textContent = record.tittel || record.id;
+            const remove = document.createElement("button");
+            remove.type = "button";
+            remove.dataset.deleteKind = type;
+            remove.dataset.deleteId = record.id;
+            remove.textContent = "Slett";
+            row.append(label, remove);
+            container.appendChild(row);
+        });
+
+        if (records.length === 0) {
+            const empty = document.createElement("p");
+            empty.textContent = "Ingen oppføringer ennå.";
+            container.appendChild(empty);
+        }
+    }
+
+    async function lastInnKataloger(filmerData = [], serierData = []) {
+        try {
+            const [sjangerSnap, galleriSnap, sideSnap] = await Promise.all([
+                getDocs(collection(db, "sjangere")),
+                getDocs(collection(db, "gallerier")),
+                getDocs(collection(db, "menysider"))
+            ]);
+
+            const sjangere = new Map();
+            sjangerSnap.forEach(item => {
+                const data = item.data();
+                if (data.tittel) sjangere.set(item.id, data.tittel);
+            });
+            [...filmerData, ...serierData].forEach(item => {
+                const sjanger = Array.isArray(item.metadata) ? item.metadata[2] : "";
+                if (sjanger) {
+                    const id = lagSlug(sjanger);
+                    if (id && !sjangere.has(id)) sjangere.set(id, sjanger);
+                }
+            });
+
+            const gallerier = galleriSnap.docs.map(item => ({ id: item.id, ...item.data() }))
+                .sort((a, b) => (a.tittel || "").localeCompare(b.tittel || "", "no"));
+            const sider = sideSnap.docs.map(item => ({ id: item.id, ...item.data() }))
+                .sort((a, b) => (a.tittel || "").localeCompare(b.tittel || "", "no"));
+            const sorterteSjangere = [...sjangere.entries()]
+                .map(([id, tittel]) => ({ id, tittel }))
+                .sort((a, b) => a.tittel.localeCompare(b.tittel, "no"));
+
+            const genreSelect = document.getElementById("galleryGenre");
+            const pageGallerySelect = document.getElementById("menuPageGallery");
+            const genreDatalist = document.getElementById("availableGenres");
+            genreSelect?.replaceChildren(new Option("Velg sjanger", ""));
+            pageGallerySelect?.replaceChildren(new Option("Velg galleri", ""));
+            genreDatalist?.replaceChildren();
+
+            sorterteSjangere.forEach(item => {
+                if (genreSelect) leggTilValg(genreSelect, item.tittel, item.tittel);
+                if (genreDatalist) {
+                    const option = document.createElement("option");
+                    option.value = item.tittel;
+                    genreDatalist.appendChild(option);
+                }
+            });
+            gallerier.forEach(item => {
+                if (pageGallerySelect) leggTilValg(pageGallerySelect, item.id, item.tittel || item.id);
+            });
+
+            tegnKatalogListe(document.getElementById("genreList"), sorterteSjangere, "sjanger");
+            tegnKatalogListe(document.getElementById("galleryList"), gallerier, "galleri");
+            tegnKatalogListe(document.getElementById("menuPageList"), sider, "menyside");
+        } catch (err) {
+            console.error("Kunne ikke laste plattforminnhold:", err);
+            visMelding("Kunne ikke laste sjangere, gallerier og menysider: " + err.message, "error");
+        }
+    }
+
+    document.getElementById("tabOppsett")?.addEventListener("click", async event => {
+        const button = event.target.closest("[data-delete-kind]");
+        if (!button) return;
+
+        const kind = button.dataset.deleteKind;
+        const id = button.dataset.deleteId;
+        const labels = { sjanger: "sjangeren", galleri: "galleriet", menyside: "menysiden" };
+        if (!id || !labels[kind] || !confirm(`Vil du slette ${labels[kind]}?`)) return;
+
+        try {
+            if (kind === "galleri") {
+                const linkedPages = await getDocs(query(collection(db, "menysider"), where("galleriId", "==", id)));
+                await Promise.all(linkedPages.docs.map(page => deleteDoc(page.ref)));
+                await deleteDoc(doc(db, "gallerier", id));
+            } else {
+                const collectionName = kind === "sjanger" ? "sjangere" : "menysider";
+                await deleteDoc(doc(db, collectionName, id));
+            }
+            visMelding("Oppføringen ble slettet.", "success");
+            await lastInnKataloger();
+        } catch (err) {
+            console.error("Kunne ikke slette plattforminnhold:", err);
+            visMelding("Feil ved sletting: " + err.message, "error");
+        }
+    });
+
+    window.opprettSjanger = async function() {
+        const field = document.getElementById("genreName");
+        const tittel = field?.value.trim() || "";
+        const id = lagSlug(tittel);
+        if (!tittel || !id) {
+            visMelding("Skriv inn et gyldig sjangernavn.", "error");
+            return;
+        }
+        try {
+            const reference = doc(db, "sjangere", id);
+            if ((await getDoc(reference)).exists()) {
+                visMelding("Denne sjangeren finnes allerede.", "error");
+                return;
+            }
+            await setDoc(reference, { tittel });
+            field.value = "";
+            visMelding(`Sjangeren «${tittel}» ble opprettet.`, "success");
+            await lastInnKataloger();
+        } catch (err) {
+            console.error("Kunne ikke opprette sjanger:", err);
+            visMelding("Feil ved oppretting av sjanger: " + err.message, "error");
+        }
+    };
+
+    window.opprettGalleri = async function() {
+        const tittel = document.getElementById("galleryTitle").value.trim();
+        const sjanger = document.getElementById("galleryGenre").value;
+        const type = document.getElementById("galleryType").value;
+        const limit = Number(document.getElementById("galleryLimit").value);
+        const id = lagSlug(tittel);
+        if (!tittel || !id || !sjanger || !["alle", "filmer", "serier"].includes(type) || !Number.isInteger(limit) || limit < 1 || limit > 50) {
+            visMelding("Fyll ut et navn, en sjanger, innholdstype og en gyldig grense (1–50).", "error");
+            return;
+        }
+        try {
+            const reference = doc(db, "gallerier", id);
+            if ((await getDoc(reference)).exists()) {
+                visMelding("Et galleri med dette navnet finnes allerede.", "error");
+                return;
+            }
+            await setDoc(reference, { tittel, sjanger, type, limit, aktiv: true });
+            document.getElementById("galleryTitle").value = "";
+            visMelding(`Galleriet «${tittel}» ble opprettet.`, "success");
+            await lastInnKataloger();
+        } catch (err) {
+            console.error("Kunne ikke opprette galleri:", err);
+            visMelding("Feil ved oppretting av galleri: " + err.message, "error");
+        }
+    };
+
+    window.opprettMenyside = async function() {
+        const tittel = document.getElementById("menuPageTitle").value.trim();
+        const galleriId = document.getElementById("menuPageGallery").value;
+        const id = lagSlug(tittel);
+        if (!tittel || !id || !galleriId) {
+            visMelding("Skriv inn et navn og velg et galleri for menysiden.", "error");
+            return;
+        }
+        try {
+            const reference = doc(db, "menysider", id);
+            if ((await getDoc(reference)).exists()) {
+                visMelding("En menyside med dette navnet finnes allerede.", "error");
+                return;
+            }
+            if (!(await getDoc(doc(db, "gallerier", galleriId))).exists()) {
+                visMelding("Det valgte galleriet finnes ikke lenger. Last listen på nytt.", "error");
+                await lastInnKataloger();
+                return;
+            }
+            await setDoc(reference, { tittel, galleriId, aktiv: true });
+            document.getElementById("menuPageTitle").value = "";
+            visMelding(`Menysiden «${tittel}» ble opprettet.`, "success");
+            await lastInnKataloger();
+        } catch (err) {
+            console.error("Kunne ikke opprette menyside:", err);
+            visMelding("Feil ved oppretting av menyside: " + err.message, "error");
+        }
+    };
 
     window.leggTilSesong = function(dataSesong = null) {
         const container = document.getElementById("sesongContainer");
@@ -243,6 +449,7 @@
 
         document.getElementById("statTotaltInnhold").textContent = filmerData.length + serierData.length;
         document.getElementById("statAbonnenter").textContent = brukereData.length;
+        await lastInnKataloger(filmerData, serierData);
 
         let aktiveSiste24t = 0;
         const enDognSiden = new Date().getTime() - (24 * 60 * 60 * 1000);

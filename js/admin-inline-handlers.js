@@ -28,5 +28,17 @@ export default {
   },
   "spa-handler-admin-13"(event) {
     window.nullstillSkjema();
+  },
+  "spa-handler-admin-14"(event) {
+    window.byttTab("oppsett");
+  },
+  "spa-handler-admin-15"(event) {
+    window.opprettSjanger();
+  },
+  "spa-handler-admin-16"(event) {
+    window.opprettGalleri();
+  },
+  "spa-handler-admin-17"(event) {
+    window.opprettMenyside();
   }
 };

@@ -44,6 +44,8 @@
 
   let filmer = {};
   let serier = {};
+  let gallerier = {};
+  let menysider = {};
   let registrertBruker = null;
   let heleProfilArrayet = [];
   let unsubscribeProfileListener = null;
@@ -580,6 +582,117 @@
     sjekkOgSkjulSeksjon(seksjonId, galleryId);
   }
 
+  function galleriensInnhold(galleri) {
+    const type = galleri.type || "alle";
+    const kilder = type === "filmer"
+      ? [filmer]
+      : type === "serier"
+        ? [serier]
+        : [filmer, serier];
+    const sjanger = String(galleri.sjanger || "").trim().toLocaleLowerCase("no");
+    const nå = Date.now();
+    const resultater = [];
+
+    kilder.forEach(innhold => {
+      Object.entries(innhold || {}).forEach(([id, item]) => {
+        if (!item) return;
+        const publisering = item.publishDate ? new Date(item.publishDate).getTime() : 0;
+        const utløp = item.expireDate ? new Date(item.expireDate).getTime() : 0;
+        if ((publisering && publisering > nå) || (utløp && utløp <= nå)) return;
+        if (erInnloggetSomBarn && (!erEgnetForBarn(item) || !sjekkAldersgrense(item))) return;
+        const sjangere = Array.isArray(item.metadata) ? item.metadata : [];
+        const match = sjangere.some(verdi => String(verdi).split(",")
+          .some(del => del.trim().toLocaleLowerCase("no") === sjanger));
+        if (sjanger && !match) return;
+        resultater.push({ id, item });
+      });
+    });
+
+    return resultater
+      .sort((a, b) => new Date(b.item.publishDate || 0) - new Date(a.item.publishDate || 0))
+      .slice(0, Math.min(50, Math.max(1, Number(galleri.limit) || 20)));
+  }
+
+  function lagAdministrertGalleri(galleri, galleriId) {
+    const section = document.createElement("section");
+    section.className = "gallery-section managed-gallery-section";
+    section.dataset.galleryId = galleriId;
+    section.id = `managed-gallery-${galleriId}`;
+
+    const heading = document.createElement("h2");
+    heading.textContent = galleri.tittel || galleri.sjanger || "Galleri";
+    section.appendChild(heading);
+
+    const wrapper = document.createElement("div");
+    wrapper.className = "gallery-wrapper";
+    wrapper.innerHTML = `
+      <div class="fade-left"></div>
+      <button class="scroll-button left" type="button" aria-label="Rull til venstre">❮</button>
+      <div class="image-gallery"></div>
+      <button class="scroll-button right" type="button" aria-label="Rull til høyre">❯</button>
+      <div class="fade-right"></div>
+    `;
+    const gallery = wrapper.querySelector(".image-gallery");
+    galleriensInnhold(galleri).forEach(({ id, item }) => {
+      gallery.appendChild(createGalleryItem(id, item));
+    });
+    if (!gallery.children.length) {
+      const empty = document.createElement("p");
+      empty.className = "managed-gallery-empty";
+      empty.textContent = "Det er ingen publiserte titler i dette galleriet ennå.";
+      section.appendChild(empty);
+    }
+
+    section.appendChild(wrapper);
+    return section;
+  }
+
+  function visAdministrerteSider() {
+    const main = document.getElementById("hovedinnhold");
+    if (!main) return;
+
+    main.querySelectorAll(".managed-gallery-section").forEach(section => section.remove());
+    document.querySelectorAll(".nav-links a[data-managed-page]").forEach(link => link.remove());
+
+    const aktiveGallerier = Object.entries(gallerier)
+      .filter(([, galleri]) => galleri && galleri.aktiv !== false)
+      .sort((a, b) => (a[1].rekkefolge || 0) - (b[1].rekkefolge || 0));
+    const aktiveSider = Object.entries(menysider)
+      .filter(([, side]) => side && side.aktiv !== false && side.galleriId);
+    const valgtSideId = new URLSearchParams(window.location.search).get("side");
+    const valgtSide = aktiveSider.find(([id]) => id === valgtSideId)?.[1];
+    let valgtSeksjon = null;
+
+    aktiveGallerier.forEach(([id, galleri]) => {
+      const section = lagAdministrertGalleri(galleri, id);
+      main.appendChild(section);
+      if (valgtSide?.galleriId === id) valgtSeksjon = section;
+    });
+
+    const nav = document.querySelector(".nav-links");
+    if (nav) {
+      aktiveSider.forEach(([id, side]) => {
+        const link = document.createElement("a");
+        link.href = `index.html?side=${encodeURIComponent(id)}#/home`;
+        link.dataset.managedPage = id;
+        link.textContent = side.tittel || id;
+        if (id === valgtSideId) link.setAttribute("aria-current", "page");
+        nav.appendChild(link);
+      });
+    }
+
+    const pageIsAvailable = Boolean(valgtSide && valgtSeksjon);
+    main.querySelectorAll(":scope > section").forEach(section => {
+      section.classList.remove("managed-page-hidden");
+      if (pageIsAvailable && section !== valgtSeksjon) section.classList.add("managed-page-hidden");
+    });
+    document.title = pageIsAvailable
+      ? `${valgtSide.tittel || "Side"} | Watch Nordic™`
+      : "Forsiden | Watch Nordic™";
+    initGalleripiler();
+    oppdaterAlleGalleripiler();
+  }
+
 // ==================== OPTIMALISERT FORTSETT Å SE ==================== //
 function renderContinueWatching() {
   try {
@@ -781,6 +894,8 @@ function renderContinueWatching() {
   async function hentDataFraFirestore() {
     const cacheKeyFilmer = "watch_nordic_filmer_cache";
     const cacheKeySerier = "watch_nordic_serier_cache";
+    const cacheKeyGallerier = "watch_nordic_gallerier_cache";
+    const cacheKeyMenysider = "watch_nordic_menysider_cache";
 
     const lagredeFilmer = localStorage.getItem(cacheKeyFilmer);
     const lagredeSerier = localStorage.getItem(cacheKeySerier);
@@ -788,6 +903,8 @@ function renderContinueWatching() {
     if (lagredeFilmer && lagredeSerier) {
       filmer = sikkerJSONParse(lagredeFilmer, {});
       serier = sikkerJSONParse(lagredeSerier, {});
+      gallerier = sikkerJSONParse(localStorage.getItem(cacheKeyGallerier), {});
+      menysider = sikkerJSONParse(localStorage.getItem(cacheKeyMenysider), {});
       byggSiden();
     }
 
@@ -808,6 +925,23 @@ function renderContinueWatching() {
 
       filmer = nyeFilmer;
       serier = nyeSerier;
+
+      const [galleriResultat, sideResultat] = await Promise.allSettled([
+        getDocs(collection(db, "gallerier")),
+        getDocs(collection(db, "menysider"))
+      ]);
+      if (galleriResultat.status === "fulfilled") {
+        gallerier = Object.fromEntries(galleriResultat.value.docs.map(item => [item.id, item.data()]));
+        localStorage.setItem(cacheKeyGallerier, JSON.stringify(gallerier));
+      } else {
+        console.error("Kunne ikke hente gallerier fra Firestore:", galleriResultat.reason);
+      }
+      if (sideResultat.status === "fulfilled") {
+        menysider = Object.fromEntries(sideResultat.value.docs.map(item => [item.id, item.data()]));
+        localStorage.setItem(cacheKeyMenysider, JSON.stringify(menysider));
+      } else {
+        console.error("Kunne ikke hente menysider fra Firestore:", sideResultat.reason);
+      }
       
       byggSiden();
     } catch (feil) {
@@ -840,6 +974,7 @@ function renderContinueWatching() {
 
       renderContinueWatching();
       oppdaterBanner();
+      visAdministrerteSider();
       initGalleripiler();
       oppdaterAlleGalleripiler();
     } catch (err) {
@@ -847,8 +982,14 @@ function renderContinueWatching() {
     }
   }
 
+  let firstHomeRouteChange = true;
   window.addEventListener("spa:routechange", event => {
     if (event.detail?.route !== "home") return;
+    if (firstHomeRouteChange) {
+      firstHomeRouteChange = false;
+    } else {
+      hentDataFraFirestore();
+    }
     erInnloggetSomBarn = localStorage.getItem("isKids") === "true";
     maksAldersgrense = localStorage.getItem("maksAldersgrense") || "12";
     byggSiden();
