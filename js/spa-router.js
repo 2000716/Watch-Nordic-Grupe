@@ -209,6 +209,7 @@ async function activateView(view, section, navigationId) {
     window.dispatchEvent(new Event("beforeunload"));
     activeView.bodyClass = document.body.className;
     activeView.bodyStyle = document.body.getAttribute("style") || "";
+    activeView.title = document.title;
     activeView.container.remove();
   }
 

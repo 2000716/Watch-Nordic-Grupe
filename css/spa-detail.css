@@ -22,6 +22,18 @@
       flex-direction: column;
     }
 
+    #page-loader.detail-load-error {
+      flex-direction: column !important;
+      gap: 16px;
+      padding: 24px;
+      text-align: center;
+    }
+
+    #page-loader.detail-load-error p {
+      color: #ffffff;
+      margin: 0;
+    }
+
     @media (max-width: 768px) {
       html, body {
         background: #091B1E !important;

@@ -69,6 +69,9 @@
   }
 
   async function startOpplasting() {
+    const detailView = document.querySelector('#spa-root > .spa-view[data-route="detail"]');
+    if (detailView) return;
+
     // Vent på at kun bannerbildet er lastet
     await ventPåBanner();
     // Skjul loaderen umiddelbart

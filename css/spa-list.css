@@ -370,8 +370,22 @@ img {
 
 /* RESPONSIVITET FOR MOBIL */
 @media (max-width: 768px) {
-  .top-nav { padding: 0 20px; height: 70px; }
-  .nav-links { display: none; }
+  .top-nav {
+    height: calc(70px + env(safe-area-inset-top, 0px)) !important;
+    padding: 0 20px;
+  }
+
+  .nav-links {
+    display: none;
+  }
+
+  .nav-search {
+    display: none;
+  }
+
+  .top-nav.scrolled {
+    height: calc(70px + env(safe-area-inset-top, 0px)) !important;
+  }
   
   body, .footer { background: rgb(9, 27, 30) !important; }
 

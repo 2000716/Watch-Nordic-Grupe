@@ -11,6 +11,7 @@
 
 /* Selve toppmenyen (PC / Desktop standard: #050F11) */
 .top-nav {
+  box-sizing: border-box;
   position: fixed;
   top: 0;
   left: 0;
@@ -184,7 +185,9 @@ body.scrolled-y .top-nav {
    ========================================================================== */
 @media (max-width: 768px) {
   .top-nav {
-    padding: 0 20px;
+    height: calc(70px + env(safe-area-inset-top, 0px)) !important;
+    align-items: center;
+    padding: env(safe-area-inset-top, 0px) 16px 0;
     background: linear-gradient(
       to bottom, 
       #091B1E 0%, 
@@ -197,6 +200,7 @@ body.scrolled-y .top-nav {
   /* MOBIL: Ved scrolling (Fast solid stripe av #091B1E) */
   .top-nav.scrolled,
   body.scrolled-y .top-nav {
+    height: calc(70px + env(safe-area-inset-top, 0px)) !important;
     background: #091B1E;
     box-shadow: 0 2px 15px rgba(0, 0, 0, 0.6);
   }
@@ -204,11 +208,21 @@ body.scrolled-y .top-nav {
   .nav-links {
     display: none;
   }
+
+  .nav-right {
+    height: 100%;
+    gap: 10px;
+  }
+
+  .nav-search {
+    display: none;
+  }
 }
 
 @media (max-width: 480px) {
   .top-nav {
-    padding: 0 14px;
+    padding-left: 12px;
+    padding-right: 12px;
   }
 
   .nav-right {
@@ -218,5 +232,18 @@ body.scrolled-y .top-nav {
   .profil-avatar-wrap {
     width: 36px;
     height: 36px;
+  }
+}
+
+@media (display-mode: standalone) and (max-width: 768px) {
+  .top-nav.top-nav {
+    height: calc(70px + env(safe-area-inset-top, 0px)) !important;
+    padding: env(safe-area-inset-top, 0px) 16px 0;
+    background: #091B1E;
+  }
+
+  .top-nav.top-nav.scrolled,
+  body.scrolled-y .top-nav.top-nav {
+    height: calc(70px + env(safe-area-inset-top, 0px)) !important;
   }
 }

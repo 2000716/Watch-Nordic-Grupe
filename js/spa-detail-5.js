@@ -45,6 +45,35 @@
     }
   }
 
+  function isCurrentDetail() {
+    const route = window.location.hash.replace(/^#\/?/, "").split(/[?&]/, 1)[0];
+    return route === "detail" && new URLSearchParams(window.location.search).get("navn") === navn;
+  }
+
+  function hideDetailLoader() {
+    const loader = document.querySelector('#spa-root > .spa-view[data-route="detail"] #page-loader');
+    if (!loader) return;
+    loader.classList.add("fade-out");
+    loader.style.pointerEvents = "none";
+    setTimeout(() => loader.remove(), 300);
+  }
+
+  function showDetailLoadError() {
+    const loader = document.querySelector('#spa-root > .spa-view[data-route="detail"] #page-loader');
+    if (!loader) return;
+
+    const message = document.createElement("p");
+    message.textContent = "Filminformasjonen kunne ikke lastes.";
+
+    const backButton = document.createElement("button");
+    backButton.type = "button";
+    backButton.textContent = "Tilbake til hjem";
+    backButton.addEventListener("click", () => window.spaNavigate("Hovedside.html"));
+
+    loader.classList.add("detail-load-error");
+    loader.replaceChildren(message, backButton);
+  }
+
   async function lastDataFraFirebase() {
     try {
       const params = new URLSearchParams(window.location.search);
@@ -112,7 +141,11 @@
   async function init() {
     await lastDataFraFirebase();
 
-    if (!data) return;
+    if (!isCurrentDetail()) return;
+    if (!data) {
+      showDetailLoadError();
+      return;
+    }
 
     watchBtn = document.getElementById("watchBtn");
     addToListBtn = document.getElementById("addToListBtn");
@@ -296,6 +329,7 @@
     }
 
     document.body.classList.add("loaded");
+    hideDetailLoader();
   }
 
   /* ==========================================
