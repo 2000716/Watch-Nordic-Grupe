@@ -65,6 +65,29 @@ function formatTime(time) {
   return `${m}:${s < 10 ? '0' + s : s}`;
 }
 
+function getDetailReturnUrl(returnUrl, mediaName) {
+  const fallback = `film.html?navn=${encodeURIComponent(mediaName)}`;
+  if (!returnUrl || !mediaName) return fallback;
+
+  try {
+    const url = new URL(returnUrl, window.location.href);
+    if (url.origin !== window.location.origin) return fallback;
+
+    const hashRoute = url.hash.replace(/^#\/?/, "").split(/[?&]/, 1)[0];
+    const file = decodeURIComponent(url.pathname.split("/").pop()).toLowerCase();
+    const isDetailRoute = hashRoute === "detail" || ["film.html", "serie.html", "filminfo.html"].includes(file);
+    const returnName = url.searchParams.get("navn") || url.searchParams.get("id");
+
+    if (isDetailRoute && returnName === mediaName) {
+      return `${url.pathname}${url.search}${url.hash}`;
+    }
+  } catch (error) {
+    console.warn("Ugyldig returadresse fra avspilleren:", error);
+  }
+
+  return fallback;
+}
+
 // --- DOM ELEMENTS CACHE ---
 const elements = {
   ui: safeGetElementById("ui"),
@@ -115,12 +138,9 @@ async function initPlayer() {
   const episode = urlParams.get("episode") || urlParams.get("e");
   const returUrlParam = urlParams.get("returUrl");
 
-  if (returUrlParam) {
-    state.tilbakeUrl = decodeURIComponent(returUrlParam);
-  }
-
   const mediaKlar = await hentMediaData(navn, sesong, episode, returUrlParam);
   if (!mediaKlar) return;
+  state.tilbakeUrl = getDetailReturnUrl(returUrlParam, navn);
 
   oppsettUI();
   oppsettIkoner();

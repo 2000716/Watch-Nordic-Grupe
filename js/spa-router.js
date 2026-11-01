@@ -305,6 +305,15 @@ document.addEventListener("click", event => {
 
   const link = event.target.closest("a[href]");
   if (link && !link.target && !link.hasAttribute("download")) {
+    const rawHref = link.getAttribute("href")?.trim() || "";
+    if (rawHref === "#") {
+      event.preventDefault();
+      return;
+    }
+    if (rawHref.startsWith("#") && !rawHref.startsWith("#/") && !rawHref.startsWith("#film-")) {
+      return;
+    }
+
     const resolved = resolveTarget(link.href);
     if (resolved) {
       event.preventDefault();
