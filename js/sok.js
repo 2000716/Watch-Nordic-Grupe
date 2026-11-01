@@ -21,51 +21,66 @@ function oppdaterMenyProfilVisning(bildeUrl, profilNavn, farge) {
   }
 }
 
-// Rediriger brukere som ikke er innlogget, og synkroniser profilcache.
-onAuthStateChanged(auth, async (user) => {
+let authReady = false;
+let searchLoadPromise = null;
+
+function currentSpaRoute() {
+  return window.location.hash.replace(/^#\/?/, "").split(/[?&]/, 1)[0];
+}
+
+async function initializeSearchForUser(user) {
+  if (currentSpaRoute() !== "search") return;
   if (!user) {
-    const gjeldendeSide = window.location.pathname.split("/").pop();
-    if (gjeldendeSide !== "index.html" && gjeldendeSide !== "") {
-      window.spaNavigate("index.html");
-    }
-  } else {
-    const cachedeProfilerRaw = localStorage.getItem("watch_nordic_profiles_cache");
-    let profiler = [];
+    window.spaNavigate("index.html", { replace: true });
+    return;
+  }
 
-    if (cachedeProfilerRaw) {
-      try {
-        profiler = JSON.parse(cachedeProfilerRaw);
-      } catch(e) {
-        console.error("Feil ved parsing av profil-cache");
-      }
-    }
-
+  const cachedProfilesRaw = localStorage.getItem("watch_nordic_profiles_cache");
+  let profiles = [];
+  if (cachedProfilesRaw) {
     try {
-      const docRef = doc(db, "users", user.uid);
-      const docSnap = await getDoc(docRef);
-      if (docSnap.exists()) {
-        profiler = docSnap.data().profiler || [];
-        localStorage.setItem("watch_nordic_profiles_cache", JSON.stringify(profiler));
-      }
+      profiles = JSON.parse(cachedProfilesRaw);
     } catch (error) {
-      console.error("Feil ved henting av profiler:", error);
+      console.error("Feil ved parsing av profil-cache:", error);
     }
+  }
 
-    const aktivProfilIndex = parseInt(localStorage.getItem("aktivProfilIndex")) || 0;
-    const gjeldendeProfil = profiler[aktivProfilIndex];
-    if (gjeldendeProfil) {
-      const bildeUrl = gjeldendeProfil.bilde || "";
-      const profilNavn = gjeldendeProfil.navn || "";
-      const farge = gjeldendeProfil.farge || "";
-
-      oppdaterMenyProfilVisning(bildeUrl, profilNavn, farge);
-
-      if (bildeUrl) localStorage.setItem("profilbilde", bildeUrl);
-      if (profilNavn) {
-        localStorage.setItem("profilnavn", profilNavn);
-        localStorage.setItem("aktivProfil", profilNavn);
-      }
+  try {
+    const userSnapshot = await getDoc(doc(db, "users", user.uid));
+    if (userSnapshot.exists()) {
+      profiles = userSnapshot.data().profiler || [];
+      localStorage.setItem("watch_nordic_profiles_cache", JSON.stringify(profiles));
     }
+  } catch (error) {
+    console.error("Feil ved henting av profiler:", error);
+  }
+
+  const activeProfileIndex = Number.parseInt(localStorage.getItem("aktivProfilIndex") || "0", 10) || 0;
+  const activeProfile = profiles[activeProfileIndex];
+  if (activeProfile) {
+    const imageUrl = activeProfile.bilde || "";
+    const profileName = activeProfile.navn || "";
+    oppdaterMenyProfilVisning(imageUrl, profileName, activeProfile.farge || "");
+    if (imageUrl) localStorage.setItem("profilbilde", imageUrl);
+    if (profileName) {
+      localStorage.setItem("profilnavn", profileName);
+      localStorage.setItem("aktivProfil", profileName);
+    }
+  }
+
+  if (!searchLoadPromise) searchLoadPromise = loadSearchContent();
+  await searchLoadPromise;
+  renderResults(input.value);
+}
+
+onAuthStateChanged(auth, user => {
+  authReady = true;
+  initializeSearchForUser(user);
+});
+
+window.addEventListener("spa:routechange", event => {
+  if (event.detail?.route === "search" && authReady) {
+    initializeSearchForUser(auth.currentUser);
   }
 });
 
@@ -91,6 +106,7 @@ const resultsGrid = document.getElementById("resultsGrid");
 let allContent = [];
 
 async function loadSearchContent() {
+  allContent = [];
   try {
     const [filmSnapshot, serieSnapshot] = await Promise.all([
       getDocs(collection(db, "filmer")),
@@ -173,5 +189,3 @@ function renderResults(searchTerm = ""){
 input.addEventListener("input", event => {
   renderResults(event.target.value);
 });
-
-loadSearchContent().then(renderResults);

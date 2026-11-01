@@ -164,8 +164,9 @@
 
   // Sjekk om bruker allerede er innlogget
   onAuthStateChanged(auth, (user) => {
-    if (user && window.location.pathname.toLowerCase().includes("innlogging")) {
-      window.location.replace(MAALSIDE);
+    const currentRoute = window.location.hash.replace(/^#\/?/, "").split(/[?&]/, 1)[0];
+    if (user && (currentRoute === "login" || window.location.pathname.toLowerCase().includes("innlogging"))) {
+      window.spaNavigate(MAALSIDE, { replace: true });
     }
   });
 
@@ -218,7 +219,7 @@
             sistOppdatert: new Date().toISOString()
           });
 
-          window.location.replace(MAALSIDE);
+          window.spaNavigate(MAALSIDE, { replace: true });
 
         } else {
           // --- INNLOGGING ---
@@ -236,7 +237,7 @@
             });
           }
 
-          window.location.replace(MAALSIDE);
+          window.spaNavigate(MAALSIDE, { replace: true });
         }
       } catch (error) {
         settLaster(false);

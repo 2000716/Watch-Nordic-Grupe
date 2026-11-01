@@ -10,6 +10,8 @@ const templates = new Map(
 const viewCache = new Map();
 const stylesheetCache = new Map();
 const loadedScripts = new Set();
+const prefetchedAssets = new Set();
+const routesWithParamState = new Set(["detail", "player", "account", "profile-image"]);
 const routeByFile = new Map([
   ["index.html", "welcome"],
   ["innlogging.html", "login"],
@@ -33,6 +35,12 @@ const routeByFile = new Map([
 ]);
 
 let activeView = null;
+let latestNavigationId = 0;
+
+function getViewCacheKey(route, params) {
+  const query = params.toString();
+  return routesWithParamState.has(route) && query ? `${route}?${query}` : route;
+}
 
 function getRouteFromLocation() {
   const hash = window.location.hash.replace(/^#\/?/, "");
@@ -157,7 +165,44 @@ function loadScript(scriptInfo, routeKey) {
   });
 }
 
-async function activateView(view, section) {
+function prefetchRoute(target) {
+  const resolved = resolveTarget(target);
+  if (!resolved) return;
+
+  const template = templates.get(resolved.route);
+  if (!template) return;
+
+  const routeKey = getViewCacheKey(resolved.route, resolved.params);
+  const assets = [];
+
+  for (const marker of template.content.querySelectorAll("link[data-spa-style]")) {
+    assets.push({ href: marker.dataset.href, type: "style" });
+  }
+
+  for (const marker of template.content.querySelectorAll('script[type="application/x-spa-script"]')) {
+    const type = marker.dataset.spaType || "";
+    if (type === "module" && routesWithParamState.has(resolved.route)) continue;
+    let href = marker.dataset.spaSrc;
+    if (type === "module") {
+      href += `${href.includes("?") ? "&" : "?"}spaView=${encodeURIComponent(routeKey)}`;
+    }
+    assets.push({ href, type: type === "module" ? "module" : "script" });
+  }
+
+  for (const asset of assets) {
+    const url = new URL(asset.href, window.location.href);
+    if (url.origin !== window.location.origin || prefetchedAssets.has(url.href)) continue;
+
+    const preload = document.createElement("link");
+    preload.rel = asset.type === "module" ? "modulepreload" : "prefetch";
+    if (asset.type !== "module") preload.as = asset.type;
+    preload.href = url.href;
+    document.head.appendChild(preload);
+    prefetchedAssets.add(url.href);
+  }
+}
+
+async function activateView(view, section, navigationId) {
   if (activeView) {
     activeView.container.querySelectorAll("video").forEach(video => video.pause());
     window.dispatchEvent(new Event("spa:leave"));
@@ -181,10 +226,13 @@ async function activateView(view, section) {
     for (const script of view.scripts) {
       await loadScript(script, view.routeKey);
     }
+    view.initialized = true;
+    if (navigationId !== latestNavigationId) return;
     if (typeof window.initNav === "function") window.initNav();
     document.dispatchEvent(new Event("DOMContentLoaded", { bubbles: true }));
-    view.initialized = true;
   }
+
+  if (navigationId !== latestNavigationId) return;
 
   window.dispatchEvent(new CustomEvent("spa:routechange", {
     detail: { route: view.route, params: new URLSearchParams(window.location.search) }
@@ -204,15 +252,15 @@ async function render(route, params = new URLSearchParams(), section) {
     return;
   }
 
-  const query = params.toString();
-  const routeKey = `${route}?${query}`;
+  const routeKey = getViewCacheKey(route, params);
   let view = viewCache.get(routeKey);
   if (!view) {
     view = createView(route, template, routeKey);
     viewCache.set(routeKey, view);
   }
 
-  await activateView(view, section);
+  const navigationId = ++latestNavigationId;
+  await activateView(view, section, navigationId);
 }
 
 window.spaNavigate = async function(target, options = {}) {
@@ -273,6 +321,15 @@ document.addEventListener("click", event => {
     window.spaNavigate(inlineNavigation[2]);
   }
 }, true);
+
+for (const eventName of ["pointerover", "focusin"]) {
+  document.addEventListener(eventName, event => {
+    const link = event.target.closest("a[href]");
+    if (link && !link.target && !link.hasAttribute("download")) {
+      prefetchRoute(link.href);
+    }
+  }, { passive: true });
+}
 
 window.addEventListener("popstate", () => {
   const { route, params } = getRouteFromLocation();

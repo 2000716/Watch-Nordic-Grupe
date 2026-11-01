@@ -75,9 +75,9 @@
       try {
         if (!user) {
           if (unsubscribeProfileListener) unsubscribeProfileListener();
-          const gjeldendeSide = window.location.pathname.split("/").pop();
-          if (gjeldendeSide !== "index.html" && gjeldendeSide !== "") {
-            window.spaNavigate("index.html");
+          const gjeldendeRoute = window.location.hash.replace(/^#\/?/, "").split(/[?&]/, 1)[0];
+          if (gjeldendeRoute === "home") {
+            window.spaNavigate("index.html", { replace: true });
           }
         } else {
           registrertBruker = user;
@@ -123,8 +123,9 @@
                   if (gammelIsKids !== nyIsKids || gammelMaks !== nyMaks) {
                     localStorage.setItem("isKids", nyIsKids ? "true" : "false");
                     localStorage.setItem("maksAldersgrense", nyMaks);
-                    window.location.reload();
-                    return;
+                    erInnloggetSomBarn = nyIsKids;
+                    maksAldersgrense = nyMaks;
+                    byggSiden();
                   }
                 }
 
@@ -144,8 +145,8 @@
   }
 
   // ==================== ALDERSFILTER & BARNE-PROFIL LOGIKK ==================== //
-  const erInnloggetSomBarn = localStorage.getItem("isKids") === "true";
-  const maksAldersgrense = localStorage.getItem("maksAldersgrense") || "12";
+  let erInnloggetSomBarn = localStorage.getItem("isKids") === "true";
+  let maksAldersgrense = localStorage.getItem("maksAldersgrense") || "12";
 
   function sjekkAldersgrense(item) {
     if (!item || !Array.isArray(item.metadata)) return false;
@@ -845,6 +846,13 @@ function renderContinueWatching() {
       console.error("Feil i byggSiden:", err);
     }
   }
+
+  window.addEventListener("spa:routechange", event => {
+    if (event.detail?.route !== "home") return;
+    erInnloggetSomBarn = localStorage.getItem("isKids") === "true";
+    maksAldersgrense = localStorage.getItem("maksAldersgrense") || "12";
+    byggSiden();
+  });
 
   // Start henting av data
   hentDataFraFirestore();

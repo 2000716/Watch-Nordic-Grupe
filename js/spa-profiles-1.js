@@ -146,11 +146,7 @@
       localStorage.setItem("maksAldersgrense", profil.maksAldersgrense || "12");
 
       kontoLink.href = `konto.html?index=${index}`;
-
-      document.body.style.opacity = "0";
-      setTimeout(() => {
-        window.spaNavigate(`Hovedside.html?index=${index}`);
-      }, 400);
+      window.spaNavigate(`Hovedside.html?index=${index}`);
     }
 
     function velgProfil(index) {
