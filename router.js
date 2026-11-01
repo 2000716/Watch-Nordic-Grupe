@@ -121,6 +121,10 @@ window.byttSide = function(sideId, params = {}) {
     if (aktivLink) {
         aktivLink.classList.add("active");
     }
+
+    window.dispatchEvent(new CustomEvent("sideByttet", {
+        detail: { side: sideId, params }
+    }));
 };
 
 
@@ -137,6 +141,15 @@ function hentRouteFraUrl() {
         return {
             side: "hjem",
             params: {}
+        };
+    }
+
+    if (hash.startsWith("film-")) {
+        return {
+            side: "filminfo",
+            params: {
+                id: new URLSearchParams(`id=${hash.slice(5)}`).get("id")
+            }
         };
     }
 

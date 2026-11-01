@@ -1,0 +1,86 @@
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+}
+
+body{
+  font-family:Arial, sans-serif;
+  background:#091B1E;
+  color:white;
+}
+
+/* ===== LOGO BAR ===== */
+.logo-bar{
+  height:80px;
+  display:flex;
+  align-items:center;
+  justify-content:flex-start;
+  padding-left:40px;
+  background:rgba(9,27,30,0.95);
+}
+
+.watch-logo-text{
+  font-size:28px;
+  font-weight:900;
+  letter-spacing:3px;
+  color:#00FFCC;
+  cursor:pointer;
+  text-shadow:0 0 10px rgba(0,255,204,0.6);
+}
+
+/* ===== HERO ===== */
+.hero{
+  text-align:center;
+  padding:80px 20px 50px;
+  background:linear-gradient(to bottom, rgba(9,27,30,0.9), #091B1E);
+}
+
+.hero h1{
+  font-size:40px;
+  margin-bottom:10px;
+}
+
+.hero p{
+  color:#ccc;
+  font-size:16px;
+}
+
+/* ===== CONTENT ===== */
+.container{
+  max-width:900px;
+  margin:60px auto;
+  padding:0 20px;
+}
+
+.section{
+  margin-bottom:50px;
+}
+
+.section h2{
+  color:#00FFCC;
+  margin-bottom:15px;
+  font-size:22px;
+}
+
+.section p{
+  color:#bbb;
+  line-height:1.6;
+  font-size:15px;
+}
+
+/* ===== FOOTER ===== */
+.footer{
+  margin-top:80px;
+  padding:30px;
+  text-align:center;
+  font-size:13px;
+  color:#888;
+  border-top:1px solid #222;
+}
+
+@media(max-width:768px){
+  .hero h1{
+    font-size:26px;
+  }
+}

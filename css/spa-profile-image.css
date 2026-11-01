@@ -1,0 +1,317 @@
+
+    :root {
+      --bg-dark: #050c0e;
+      --accent: #00FFCC;
+      --muted: #8e9fa2;
+      --circle-gray: #1e2a2e;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background: radial-gradient(circle at top center, #0f2b32 0%, var(--bg-dark) 85%);
+      color: #ffffff;
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      padding: 40px 20px;
+      overflow-x: hidden;
+      user-select: none;
+    }
+
+    .topp-seksjon {
+      text-align: center;
+      margin-top: 15px;
+    }
+
+    h1 {
+      font-size: 2.8rem;
+      font-weight: 900;
+      letter-spacing: -0.5px;
+      color: #ffffff;
+      margin-bottom: 8px;
+    }
+
+    p.subtitle {
+      color: var(--muted);
+      font-size: 1.1rem;
+    }
+
+    /* Karusell-område */
+    .karusell-wrapper {
+      width: 100%;
+      max-width: 1100px;
+      margin: auto;
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    /* Romslig padding på sidene, toppen og bunnen slik at ingenting blir kuttet */
+    .karusell-viewport {
+      width: 100%;
+      overflow: hidden;
+      padding: 110px 40px 70px 40px;
+    }
+
+    .karusell-spor {
+      display: flex;
+      transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+      gap: 50px;
+    }
+
+    /* Avatar-kort */
+    .avatar-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      cursor: pointer;
+      position: relative;
+      min-width: 210px;
+      width: 210px;
+      flex-shrink: 0;
+    }
+
+    /* 3D POP-OUT RAMME STRUKTUR */
+    .avatar-bilde-wrap {
+      width: 210px;
+      height: 210px;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: visible; 
+    }
+
+    /* Mørkegrå sirkelbakgrunn uten glow */
+    .avatar-bg {
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      background-color: var(--circle-gray);
+      border: 3px solid rgba(255, 255, 255, 0.15);
+      transition: all 0.35s cubic-bezier(0.25, 1, 0.5, 1);
+      z-index: 1;
+    }
+
+    /* Sjekkmerke-ikon ved valgt avatar */
+    .valgt-badget {
+      position: absolute;
+      top: 5px;
+      right: 5px;
+      width: 34px;
+      height: 34px;
+      background: var(--active-color, var(--accent));
+      color: #050c0e;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+      z-index: 12;
+      opacity: 0;
+      transform: scale(0.5);
+      transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    /* Karakterbilde */
+    .avatar-bilde {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 50%;
+      z-index: 2;
+      transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+      transform-origin: bottom center;
+    }
+
+    .avatar-bilde.png-karakter {
+      object-fit: contain;
+      border-radius: 0;
+      height: 155%; 
+      bottom: 0;
+      transform: translateY(-20px) scale(1.1);
+    }
+
+    /* LOGO OPPSETT */
+    .film-logo-wrap {
+      position: absolute;
+      bottom: -18px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 10;
+      height: 52px;
+      width: 150px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      pointer-events: none;
+    }
+
+    .film-logo {
+      max-height: 100%;
+      max-width: 100%;
+      object-fit: contain;
+      filter: brightness(0) invert(1);
+      opacity: 0.85;
+      transition: all 0.35s ease;
+    }
+
+    /* Karakternavn under logo */
+    .karakter-navn {
+      margin-top: 28px;
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--muted);
+      letter-spacing: 0.3px;
+      opacity: 0.6;
+      transform: translateY(-5px);
+      transition: all 0.35s ease;
+      text-align: center;
+    }
+
+    /* HOVER TILSTAND */
+    .avatar-item:hover .avatar-bg {
+      background-color: var(--active-color, var(--accent));
+      border-color: #ffffff;
+    }
+
+    .avatar-item:hover .avatar-bilde.png-karakter {
+      transform: translateY(-45px) scale(1.25);
+    }
+
+    .avatar-item:hover .avatar-bilde:not(.png-karakter) {
+      transform: scale(1.08);
+    }
+
+    .avatar-item:hover .film-logo {
+      opacity: 1;
+      transform: scale(1.15);
+    }
+
+    .avatar-item:hover .karakter-navn {
+      color: #ffffff;
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* FREMHEVET / VALGT TILSTAND */
+    .avatar-item.selected .avatar-bg {
+      background-color: var(--active-color, var(--accent));
+      border-color: #ffffff;
+    }
+
+    .avatar-item.selected .avatar-bilde.png-karakter {
+      transform: translateY(-40px) scale(1.22);
+    }
+
+    .avatar-item.selected .avatar-bilde:not(.png-karakter) {
+      transform: scale(1.06);
+    }
+
+    .avatar-item.selected .film-logo {
+      opacity: 1;
+      transform: scale(1.12);
+    }
+
+    .avatar-item.selected .valgt-badget {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    .avatar-item.selected .karakter-navn {
+      color: var(--active-color, var(--accent));
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Navigasjonspiler uten glød - flyttet lenger ut */
+    .nav-pil {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(15, 43, 50, 0.95);
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      color: white;
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.3rem;
+      z-index: 25;
+      backdrop-filter: blur(16px);
+      transition: all 0.25s ease;
+    }
+
+    .nav-pil:hover:not(:disabled) {
+      background: var(--accent);
+      color: #050c0e;
+      border-color: var(--accent);
+      transform: translateY(-50%) scale(1.1);
+    }
+
+    .nav-pil:disabled {
+      opacity: 0.15;
+      cursor: not-allowed;
+      pointer-events: none;
+    }
+
+    /* Flyttet lenger ut på sidene */
+    .pil-venstre { left: -60px; }
+    .pil-hoyre { right: -60px; }
+
+    /* Lagre-knapp helt ren uten glød/skygge */
+    .bunn-seksjon {
+      margin-top: 15px;
+      text-align: center;
+    }
+
+    .lagre-knapp {
+      background: var(--accent);
+      color: #050c0e;
+      padding: 16px 50px;
+      font-size: 1.1rem;
+      font-weight: 800;
+      border: none;
+      border-radius: 999px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      transition: all 0.25s ease;
+      box-shadow: none;
+    }
+
+    .lagre-knapp:hover {
+      background-color: #33ffd6;
+      transform: translateY(-2px);
+      box-shadow: none;
+    }
+
+    @media (max-width: 1200px) {
+      .pil-venstre { left: -15px; }
+      .pil-hoyre { right: -15px; }
+    }
+
+    @media (max-width: 850px) {
+      .karusell-wrapper { max-width: 100%; }
+      .karusell-viewport { padding-left: 20px; padding-right: 20px; }
+      .pil-venstre { left: -5px; }
+      .pil-hoyre { right: -5px; }
+      .karusell-spor { gap: 30px; }
+      .avatar-item { min-width: 170px; width: 170px; }
+      .avatar-bilde-wrap { width: 170px; height: 170px; }
+      .film-logo-wrap { height: 42px; width: 120px; }
+    }
+  

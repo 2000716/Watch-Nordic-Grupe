@@ -1,0 +1,394 @@
+
+/* ==========================================================================
+   1. GLOBALE TILBAKESTILLINGER & BASE STYLES
+   ========================================================================== */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: clamp(14px, 1vw + 10px, 18px);
+  scroll-behavior: smooth;
+}
+
+body {
+  background: #050F11;
+  color: #fff;
+  font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+  letter-spacing: .2px;
+  overflow-x: hidden;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+/* ==========================================================================
+   2. TOPPMENY (MATCHET FILMINFO)
+   ========================================================================== */
+.top-nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 85px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 40px;
+  z-index: 9999;
+  background: linear-gradient(to bottom, 
+    rgba(5, 15, 17, 0.95) 0%, 
+    rgba(5, 15, 17, 0.75) 40%, 
+    rgba(5, 15, 17, 0.3) 75%, 
+    rgba(5, 15, 17, 0) 100%
+  );
+  transition: background 0.4s ease, box-shadow 0.4s ease, height 0.4s ease;
+}
+
+.top-nav.scrolled {
+  height: 70px;
+  background: rgba(5, 15, 17, 0.98);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 2px 15px rgba(0, 0, 0, 0.6);
+}
+
+.nav-left {
+  display: flex;
+  align-items: center;
+  gap: 40px;
+  flex-shrink: 0;
+}
+
+.watch-logo-svg {
+  height: 40px;
+  width: auto;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+}
+
+.watch-logo-svg img {
+  height: 100%;
+  width: auto;
+}
+
+.nav-links {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 30px;
+  white-space: nowrap;
+}
+
+.nav-links a {
+  color: #e0e0e0;
+  text-decoration: none;
+  font-size: 15px;
+  font-weight: 500;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.8);
+  transition: color 0.3s ease;
+}
+
+.nav-links a i {
+  margin-right: 6px;
+  font-size: 16px;
+}
+
+.nav-links a:hover {
+  color: #ffffff;
+}
+
+.nav-links a.active {
+  color: #00FFCC;
+  font-weight: 700;
+}
+
+.nav-right {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  flex-shrink: 0;
+}
+
+.nav-search {
+  color: #e0e0e0;
+  font-size: 18px;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.nav-search:hover {
+  color: #00FFCC;
+}
+
+/* PROFILMENY */
+.profilmeny {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.profil-avatar-wrap {
+  width: 44px;
+  height: 44px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  background-color: #1e2a2e;
+  transition: border-color 0.35s ease, background-color 0.35s ease;
+}
+
+.profil-avatar-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+  display: block;
+  transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.profilmeny:hover .profil-avatar-wrap {
+  background-color: #00FFCC;
+  border-color: #ffffff;
+}
+
+.profilmeny:hover .profil-avatar-img {
+  transform: scale(1.15);
+}
+
+/* ==========================================================================
+   3. INNHOLD OG MIN LISTE RUTENETT
+   ========================================================================== */
+.main-content {
+  flex: 1;
+  padding: 120px 50px 50px;
+  max-width: 1400px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.page-header {
+  margin-bottom: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  padding-bottom: 15px;
+}
+
+.page-header h1 {
+  font-size: 28px;
+  font-weight: 700;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.page-header h1 i {
+  color: #00FFCC;
+}
+
+.list-count {
+  font-size: 14px;
+  color: #8a8a8a;
+}
+
+/* RUTENETT (MATCHET .gallery FRA FILMINFO) */
+.gallery {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  width: 100%;
+}
+
+.movie-card {
+  width: 100%;
+  height: 220px;
+  border-radius: 6px;
+  overflow: hidden;
+  position: relative;
+  cursor: pointer;
+  background: #0c0c0c;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+.movie-card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.movie-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0, 255, 204, 0.2);
+  border-color: rgba(0, 255, 204, 0.4);
+}
+
+.movie-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.95) 0%, rgba(0, 0, 0, 0.3) 60%, transparent 100%);
+  opacity: 0;
+  transition: opacity .3s ease;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 16px;
+}
+
+.movie-card:hover .movie-overlay {
+  opacity: 1;
+}
+
+.movie-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 4px;
+}
+
+.movie-meta {
+  font-size: 12px;
+  color: #00FFCC;
+  display: flex;
+  gap: 10px;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 80px 20px;
+  color: #8a8a8a;
+  grid-column: 1 / -1;
+}
+
+.empty-state i {
+  font-size: 48px;
+  color: rgba(255, 255, 255, 0.2);
+  margin-bottom: 15px;
+}
+
+.empty-state p {
+  font-size: 18px;
+  margin-bottom: 20px;
+}
+
+.browse-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 24px;
+  background: #ffffff;
+  color: #000000;
+  text-decoration: none;
+  font-weight: 600;
+  border-radius: 8px;
+  transition: background-color 0.2s ease;
+}
+
+.browse-btn:hover {
+  background: #00FFCC;
+}
+
+/* ==========================================================================
+   4. FOOTER (EXACT MATCH FILMINFO)
+   ========================================================================== */
+.footer {
+  width: 100%;
+  padding: 70px 80px 35px;
+  margin-top: auto;
+  background: #050F11;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  color: #7d7d7d;
+}
+
+.footer-socials {
+  display: flex;
+  gap: 22px;
+  margin-bottom: 35px;
+}
+
+.footer-socials a {
+  color: #9b9b9b;
+  font-size: 20px;
+  transition: color 0.25s ease, transform 0.25s ease;
+}
+
+.footer-socials a:hover {
+  color: #ffffff;
+  transform: scale(1.08);
+}
+
+.footer-links {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(140px, 1fr));
+  gap: 18px 50px;
+  margin-bottom: 35px;
+}
+
+.footer-links a {
+  color: #8a8a8a;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.5;
+  transition: color 0.2s ease;
+}
+
+.footer-links a:hover { color: #ffffff; }
+
+.footer-copy {
+  font-size: 13px;
+  color: #666;
+  margin-bottom: 8px;
+}
+
+.footer-bottom {
+  max-width: 700px;
+  font-size: 12px;
+  line-height: 1.6;
+  color: #555;
+}
+
+/* RESPONSIVITET FOR MOBIL */
+@media (max-width: 768px) {
+  .top-nav { padding: 0 20px; height: 70px; }
+  .nav-links { display: none; }
+  
+  body, .footer { background: rgb(9, 27, 30) !important; }
+
+  .main-content {
+    padding: 90px 20px 40px;
+  }
+
+  .gallery {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 12px !important;
+  }
+
+  .movie-card {
+    height: 120px !important;
+  }
+
+  .footer { padding: 40px 20px 20px !important; }
+  .footer-links { grid-template-columns: repeat(2, 1fr) !important; gap: 15px !important; }
+}
+  

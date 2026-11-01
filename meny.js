@@ -12,14 +12,25 @@ function initNav() {
     };
   
     const activateLink = () => {
-      const currentPage = window.location.pathname.split('/').pop().toLowerCase();
-      const normalizedCurrent = currentPage || 'hovedside.html';
+      const currentRoute = window.location.hash.match(/^#\/?([^?]+)/)?.[1] || 'welcome';
+      const routeByPage = {
+        'hovedside.html': ['home', 'detail'],
+        'serier.html': ['home'],
+        'film.html': ['home'],
+        'nyheter.html': ['home'],
+        'min-liste.html': ['list'],
+        'søk.html': ['search'],
+        'hvem-ser-på.html': ['profiles']
+      };
   
       navs.forEach((nav) => {
         const links = nav.querySelectorAll('.nav-links a');
         links.forEach((link) => {
           const href = (link.getAttribute('href') || '').split('/').pop().toLowerCase();
-          const isActive = href && (href === normalizedCurrent || (normalizedCurrent === 'hovedside.html' && href === 'hovedside.html'));
+          const routes = routeByPage[href] || [];
+          const isActive = routes.includes(currentRoute) && (
+            currentRoute !== 'home' || href === 'hovedside.html'
+          );
           link.classList.toggle('active', isActive);
         });
       });
@@ -43,6 +54,10 @@ function initNav() {
   activateLink();
     updateNavState();
     oppdaterProfilBilde();
+    if (!window.__watchNordicNavRouteListener) {
+      window.addEventListener('spa:routechange', activateLink);
+      window.__watchNordicNavRouteListener = true;
+    }
   
     let ticking = false;
     window.addEventListener('scroll', () => {

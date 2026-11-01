@@ -1,664 +1,22 @@
 <!DOCTYPE html>
 <html lang="no">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"/>
-  <meta name="theme-color" content="#050F11" />
-  <meta name="apple-mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self' https: data: blob:; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com; script-src 'self' 'unsafe-inline' https://www.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' data: https: blob:; connect-src 'self' https:; font-src 'self' https://cdnjs.cloudflare.com; object-src 'none'; base-uri 'self'; frame-ancestors 'none';" />
-  <meta name="referrer-policy" content="strict-origin-when-cross-origin" />
-  
-  <title>Velkommen | Watch Nordic™</title>
-
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#050F11">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self' https: data: blob:; style-src 'self' 'unsafe-inline' https:; script-src 'self' 'unsafe-inline' https:; img-src 'self' data: https: blob:; media-src 'self' https: blob:; connect-src 'self' https: wss:; font-src 'self' https: data:; object-src 'none'; base-uri 'self';">
   <link rel="manifest" href="manifest.json">
-  <link rel="icon" type="image/png" href="https://static.wixstatic.com/media/d9ace9_95bbe3f5ff4b4aab9314a8d08804344e~mv2.png" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
-  
-  <!-- 🛑 FELLES MENY-STIL -->
-  <link rel="stylesheet" href="meny.css">
-
-  <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    html, body {
-      font-family: Arial, sans-serif;
-      background: #071214;
-      color: #ffffff;
-      overflow-x: hidden;
-    }
-
-    main {
-      width: 100%;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      background: #071214;
-    }
-
-    @media (max-width: 768px) {
-      html, body {
-        background: #071214 !important;
-      }
-    }
-
-    /* ================= TOPP-MENY KNAPPER ================= */
-    .top-menu {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 20px 40px;
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      z-index: 100;
-    }
-
-    .nav-right-buttons {
-      display: flex;
-      gap: 12px;
-      align-items: center;
-    }
-
-    .nav-btn {
-      text-decoration: none;
-      font-size: 14px;
-      font-weight: 700;
-      padding: 10px 20px;
-      border-radius: 999px;
-      transition: 0.3s ease;
-    }
-
-    .nav-btn.login {
-      background: transparent;
-      color: #ffffff;
-      border: 1px solid rgba(255, 255, 255, 0.2);
-    }
-
-    .nav-btn.login:hover {
-      background: rgba(255, 255, 255, 0.08);
-      border-color: rgba(255, 255, 255, 0.4);
-    }
-
-    .nav-btn.register {
-      background: #00FFCC;
-      color: #071214;
-    }
-
-    .nav-btn.register:hover {
-      transform: scale(1.04);
-    }
-
-    /* ================= HERO ================= */
-    .hero {
-      position: relative;
-      height: 100vh;
-      display: flex;
-      align-items: center;
-      overflow: hidden; 
-      background: #071214; 
-    }
-
-    .hero::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(
-        to right,
-        rgba(7,18,20,0.95) 25%,     
-        rgba(7,18,20,0.6) 60%,
-        rgba(7,18,20,0.2) 100%
-      );
-      z-index: 1;
-    }
-
-    .hero::after {
-      content: "";
-      position: absolute;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      height: 120px; 
-      background: linear-gradient(
-        to top,
-        #071214, 
-        transparent
-      );
-      z-index: 1;
-    }
-
-    .hero-content {
-      position: relative;
-      z-index: 2;
-      max-width: 650px;
-      margin-left: 70px;
-    }
-
-    .hero-content h1 {
-      font-size: 72px;
-      line-height: 1.1;
-      margin-bottom: 20px;
-      font-weight: 900;
-      letter-spacing: -1px;
-    }
-
-    .hero-content p {
-      color: #e2e8f0;
-      font-size: 19px;
-      line-height: 1.6;
-      margin-bottom: 35px;
-      max-width: 550px;
-    }
-
-    .hero-buttons {
-      display: flex;
-      gap: 16px;
-      flex-wrap: wrap;
-    }
-
-    .hero-buttons a {
-      text-decoration: none;
-      font-weight: 800;
-      transition: 0.3s ease;
-    }
-
-    .primary-btn {
-      background: #00FFCC;
-      color: #071214;
-      padding: 16px 34px;
-      border-radius: 999px;
-      box-shadow: none;
-    }
-
-    .primary-btn:hover {
-      transform: scale(1.04);
-    }
-
-    /* ================= SECTION ================= */
-    .section {
-      padding: 70px 60px;
-      background: #071214; 
-    }
-
-    .section-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 30px;
-    }
-
-    .section h2 {
-      font-size: 28px;
-      font-weight: 700;
-      color: white;
-    }
-
-    .section span {
-      color: #00FFCC;
-    }
-
-    /* ================= DEVICES ================= */
-    .devices {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 25px;
-    }
-
-    .device {
-      padding: 35px 25px;
-      text-align: center;
-      border-radius: 16px;
-      background: rgba(255,255,255,0.02);
-      border: 1px solid rgba(255,255,255,0.05);
-      transition: 0.3s ease;
-    }
-
-    .device:hover {
-      transform: translateY(-6px);
-      border-color: rgba(0,255,204,0.3);
-      box-shadow: 0 0 25px rgba(0,255,204,0.12);
-    }
-
-    .device i {
-      font-size: 45px;
-      margin-bottom: 18px;
-      color: #00FFCC;
-    }
-
-    .device h3 {
-      margin-bottom: 10px;
-    }
-
-    .device p {
-      color: #bfc9c9;
-      font-size: 14px;
-      line-height: 1.5;
-    }
-
-    /* ================= PLATFORM FEATURES (NY SEKSJON) ================= */
-    .features-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 25px;
-    }
-
-    .feature-card {
-      background: rgba(255, 255, 255, 0.02);
-      border: 1px solid rgba(255, 255, 255, 0.05);
-      padding: 35px 30px;
-      border-radius: 16px;
-      transition: 0.3s ease;
-    }
-
-    .feature-card:hover {
-      border-color: rgba(0, 255, 204, 0.3);
-      background: rgba(255, 255, 255, 0.04);
-    }
-
-    .feature-card i {
-      font-size: 36px;
-      color: #00FFCC;
-      margin-bottom: 20px;
-    }
-
-    .feature-card h3 {
-      font-size: 20px;
-      margin-bottom: 12px;
-      color: #ffffff;
-    }
-
-    .feature-card p {
-      color: #bfc9c9;
-      font-size: 14px;
-      line-height: 1.6;
-    }
-
-    /* ================= FOOTER ================= */
-    .footer {
-      width: 100%;
-      padding: 70px 80px 35px;
-      margin-top: 100px;
-      background: #071214; 
-      display: flex;
-      flex-direction: column;
-      align-items: flex-start;
-      color: #7d7d7d;
-    }
-
-    .footer-socials {
-      display: flex;
-      gap: 22px;
-      margin-bottom: 35px;
-    }
-
-    .footer-socials a {
-      color: #9b9b9b;
-      font-size: 20px;
-      transition: color 0.25s ease, transform 0.25s ease;
-    }
-
-    .footer-socials a:hover {
-      color: #ffffff;
-      transform: scale(1.08);
-    }
-
-    .footer-links {
-      width: 100%;
-      display: grid;
-      grid-template-columns: repeat(4, minmax(140px, 1fr));
-      gap: 18px 50px;
-      margin-bottom: 35px;
-    }
-
-    .footer-links a {
-      color: #8a8a8a;
-      text-decoration: none;
-      font-size: 14px;
-      font-weight: 400;
-      line-height: 1.5;
-      transition: color 0.2s ease;
-    }
-
-    .footer-links a:hover {
-      color: #ffffff;
-    }
-
-    .footer-copy {
-      font-size: 13px;
-      color: #666;
-      margin-bottom: 8px;
-    }
-
-    .footer-bottom {
-      max-width: 700px;
-      font-size: 12px;
-      line-height: 1.6;
-      color: #555;
-    }
-
-    /* ================= HERO POSTER WALL (NETFLIX STANDARD) ================= */
-    .hero-wall {
-      position: absolute;
-      inset: 0;
-      overflow: hidden;
-      z-index: 0;
-      transform:
-        perspective(2000px)
-        rotateY(-20deg)
-        rotateX(2deg)
-        scale(1.2);
-      transform-origin: right center;
-      opacity: 0.65; 
-      -webkit-mask-image: linear-gradient(to bottom, rgba(0,0,0,1) 85%, rgba(0,0,0,0) 100%); 
-      mask-image: linear-gradient(to bottom, rgba(0,0,0,1) 85%, rgba(0,0,0,0) 100%);
-    }
-
-    .wall-row {
-      display: flex;
-      gap: 16px;
-      width: max-content;
-      margin-bottom: 16px;
-      align-items: center;
-    }
-
-    .wall-row img {
-      object-fit: cover;
-      border-radius: 6px;
-      box-shadow: 0 10px 25px rgba(0,0,0,.6);
-      transition: transform 0.3s ease;
-    }
-
-    .wall-row img.horizontal {
-      width: 240px;
-      height: 135px;
-    }
-
-    .wall-row img.vertical {
-      width: 110px;
-      height: 165px;
-    }
-
-    .wall-row img.glow {
-      box-shadow: 0 0 20px rgba(0, 255, 204, 0.45), 0 10px 25px rgba(0,0,0,.6);
-      border: 1px solid rgba(0, 255, 204, 0.3);
-    }
-
-    .row1 { margin-left: 0px; }
-    .row2 { margin-left: -50px; }
-    .row3 { margin-left: -100px; }
-    .row4 { margin-left: -150px; }
-
-    /* ================= COOKIE BANNER ================= */
-    .cookie-banner {
-      position: fixed;
-      bottom: -100%;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 90%;
-      max-width: 850px;
-      background: rgba(7, 18, 20, 0.98); 
-      border: 1px solid rgba(0, 255, 204, 0.2);
-      backdrop-filter: blur(20px);
-      border-radius: 16px;
-      padding: 30px;
-      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.9), 0 0 40px rgba(0, 255, 204, 0.05);
-      z-index: 99999;
-      transition: bottom 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-
-    .cookie-banner.show {
-      bottom: 30px;
-    }
-
-    .cookie-container {
-      display: flex;
-      flex-direction: column;
-      gap: 20px;
-    }
-
-    .cookie-text h3 {
-      font-size: 20px;
-      color: #00FFCC;
-      margin-bottom: 10px;
-      font-weight: 800;
-    }
-
-    .cookie-text p {
-      color: #c9d1d1;
-      font-size: 14px;
-      line-height: 1.6;
-    }
-
-    .cookie-text p a {
-      color: #00FFCC;
-      text-decoration: none;
-    }
-
-    .cookie-text p a:hover {
-      text-decoration: underline;
-    }
-
-    .cookie-options {
-      display: none;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 15px;
-      background: rgba(255, 255, 255, 0.03);
-      padding: 15px;
-      border-radius: 14px;
-      border: 1px solid rgba(255, 255, 255, 0.05);
-    }
-
-    .cookie-option-item {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      font-size: 14px;
-      color: white;
-    }
-
-    .cookie-option-item input {
-      accent-color: #00FFCC;
-      width: 18px;
-      height: 18px;
-      cursor: pointer;
-    }
-
-    .cookie-buttons {
-      display: flex;
-      justify-content: flex-end;
-      gap: 12px;
-      flex-wrap: wrap;
-    }
-
-    .cookie-btn {
-      padding: 12px 24px;
-      border-radius: 999px;
-      font-size: 14px;
-      font-weight: 700;
-      cursor: pointer;
-      border: none;
-      transition: 0.25s ease;
-    }
-
-    .cookie-btn.accept {
-      background: #00FFCC;
-      color: #071214;
-      box-shadow: none;
-    }
-
-    .cookie-btn.accept:hover {
-      transform: translateY(-2px);
-    }
-
-    .cookie-btn.reject {
-      background: rgba(255, 255, 255, 0.06);
-      color: white;
-      border: 1px solid rgba(255, 255, 255, 0.1);
-    }
-
-    .cookie-btn.reject:hover {
-      background: rgba(255, 255, 255, 0.12);
-    }
-
-    .cookie-btn.customize {
-      background: transparent;
-      color: #bfc9c9;
-      text-decoration: underline;
-    }
-
-    .cookie-btn.customize:hover {
-      color: white;
-    }
-
-    /* ================= RESPONSIVE ================= */
-    @media (max-width: 768px) {
-      .top-menu {
-        padding: 15px 20px;
-      }
-
-      .nav-btn {
-        padding: 8px 12px;
-        font-size: 12px;
-      }
-
-      .hero {
-        height: auto;
-        min-height: 95vh;
-        padding-top: 100px;
-        padding-bottom: 60px;
-        text-align: center;
-        justify-content: center;
-      }
-
-      .hero::before {
-        background: radial-gradient(circle, rgba(7,18,20,0.5) 0%, rgba(7,18,20,0.92) 90%);
-      }
-
-      .hero-content {
-        margin: 0 auto;
-        padding: 0 20px;
-        max-width: 100%;
-      }
-
-      .hero-content h1 {
-        font-size: 38px;
-        line-height: 1.2;
-      }
-
-      .hero-content p {
-        font-size: 16px;
-        margin: 0 auto 30px;
-      }
-
-      .hero-wall {
-        opacity: 0.5; 
-        transform: perspective(1000px) rotateY(-15deg) rotateX(5deg) scale(1.3);
-        transform-origin: center center;
-      }
-
-      .wall-row {
-        gap: 12px;
-        margin-bottom: 12px;
-      }
-
-      .wall-row img.horizontal {
-        width: 140px;
-        height: 78px;
-      }
-
-      .wall-row img.vertical {
-        width: 70px;
-        height: 105px;
-      }
-
-      .row1, .row2, .row3, .row4 {
-        margin-left: 0 !important;
-      }
-
-      .hero-buttons {
-        justify-content: center;
-        flex-direction: column;
-        align-items: center;
-        gap: 12px;
-      }
-
-      .primary-btn {
-        width: 100%;
-        max-width: 290px;
-        text-align: center;
-      }
-
-      .section {
-        padding: 50px 20px;
-      }
-
-      .section-header h2 {
-        font-size: 22px;
-      }
-
-      .devices {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 14px;
-      }
-
-      .device {
-        padding: 22px 14px;
-      }
-
-      .device i {
-        font-size: 32px;
-      }
-
-      .footer {
-        padding: 50px 20px 30px;
-        align-items: flex-start;
-      }
-
-      .footer-links {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 16px 20px;
-      }
-
-      .footer-bottom {
-        font-size: 11px;
-        text-align: left;
-      }
-
-      .cookie-banner {
-        width: calc(100% - 20px);
-        padding: 20px;
-      }
-      .cookie-banner.show {
-        bottom: 10px;
-      }
-      .cookie-buttons {
-        flex-direction: column-reverse;
-        width: 100%;
-      }
-      .cookie-btn {
-        width: 100%;
-        text-align: center;
-      }
-    }
-
-    @media (max-width: 420px) {
-      .hero-content h1 {
-        font-size: 30px;
-      }
-
-      .devices {
-        grid-template-columns: 1fr;
-      }
-    }
-  </style>
+  <link rel="stylesheet" href="css/spa-shell.css">
+  <title>Watch Nordic</title>
 </head>
-
 <body>
+  <div id="spa-root"></div>
+<template id="spa-view-welcome" data-route="welcome" data-title="Velkommen | Watch Nordic™" data-body-class="" data-body-style="">
+<link rel="stylesheet" data-spa-style data-href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<link rel="stylesheet" data-spa-style data-href="meny.css">
+<link rel="stylesheet" data-spa-style data-href="css/spa-welcome.css">
+<script type="application/x-spa-script" data-spa-src="js/spa-welcome-1.js" data-spa-type="module"></script>
+
   <!-- 🛑 TOPPMENY MED LOGO OG 2 KNAPPER PÅ HØYRE SIDE -->
   <header class="top-nav top-menu">
     <div class="nav-left">
@@ -817,134 +175,1242 @@
   </footer>
 
   <!-- HENT BILDER FRA FIREBASE -->
-  <script type="module">
-    import { db } from "./firebase-oppsett.js";
-    import { collection, getDocs } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
+  
 
-    const rows = [
-      document.querySelector(".row1"),
-      document.querySelector(".row2"),
-      document.querySelector(".row3"),
-      document.querySelector(".row4")
-    ];
+</template>
+<template id="spa-view-login" data-route="login" data-title="Innlogging / Registrering | Watch Nordic™" data-body-class="" data-body-style="">
+<link rel="stylesheet" data-spa-style data-href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link rel="stylesheet" data-spa-style data-href="css/spa-login.css">
+<script type="application/x-spa-script" data-spa-src="js/spa-login-1.js" data-spa-type="module"></script>
 
-    const CACHE_KEY = "watch_nordic_poster_wall_cache_v4";
-    const CACHE_TIME_KEY = "watch_nordic_poster_wall_time_v4";
-    const ONE_DAY_MS = 24 * 60 * 60 * 1000;
 
-    async function lastInnPosters() {
-      let basePosters = [];
-      const cachedData = localStorage.getItem(CACHE_KEY);
-      const cachedTime = localStorage.getItem(CACHE_TIME_KEY);
-      const now = Date.now();
+  <header class="top-nav">
+    <div class="nav-left">
+      <a href="index.html" class="watch-logo-svg">
+        <img src="https://static.wixstatic.com/media/d9ace9_081ea242211b45a2801873c3067e1205~mv2.png" alt="Watch Nordic">
+      </a>
+    </div>
+  </header>
 
-      if (cachedData && cachedTime && (now - Number(cachedTime) < ONE_DAY_MS)) {
-        try {
-          basePosters = JSON.parse(cachedData);
-        } catch (e) {
-          console.warn("Mellomlager kunne ikke leses, henter fra Firebase i stedet.");
-        }
-      }
+  <!-- SKJEMA-OMRÅDE -->
+  <main class="main-content">
+    <div class="container">
+      <h2 id="formTitle">Logg inn</h2>
+      <p class="subtitle" id="formSubtitle">Skriv inn e-postadressen din for å fortsette</p>
 
-      if (basePosters.length === 0) {
-        try {
-          async function hentFraSamling(samlingNavn) {
-            const snap = await getDocs(collection(db, samlingNavn));
-            snap.forEach(doc => {
-              const data = doc.data();
-              if (data.poster) {
-                basePosters.push({ url: data.poster, type: 'horizontal' });
-              }
-              if (data.posterVertikal) {
-                basePosters.push({ url: data.posterVertikal, type: 'vertical' });
-              }
-            });
-          }
+      <form id="authForm">
+        
+        <!-- TRINN 1: SKRIV INN E-POST -->
+        <div id="steg1" class="step-content">
+          <div class="input-group">
+            <label for="epost">E-postadresse</label>
+            <input type="email" id="epost" placeholder="navn@domene.no" autocomplete="email" required />
+          </div>
+          <button type="button" class="submit-btn" id="nesteKnapp">Neste</button>
+        </div>
 
-          await hentFraSamling("filmer");
-          await hentFraSamling("serier");
+        <!-- TRINN 2: SKRIV INN PASSORD -->
+        <div id="steg2" class="step-content spa-inline-login-1">
+          
+          <div class="selected-email-badge">
+            <span id="visEpostTekst"></span>
+            <button type="button" id="changeEmailBtn">Endre</button>
+          </div>
 
-          if (basePosters.length > 0) {
-            localStorage.setItem(CACHE_KEY, JSON.stringify(basePosters));
-            localStorage.setItem(CACHE_TIME_KEY, now.toString());
-          }
-        } catch (err) {
-          console.error("Feil ved henting av posters fra Firebase:", err);
-        }
-      }
+          <div class="input-group spa-inline-login-2" id="navnGruppe">
+            <label for="navn">Navn</label>
+            <input type="text" id="navn" placeholder="Ditt fulle navn" autocomplete="name" />
+          </div>
 
-      if (basePosters.length > 0) {
-        rows.forEach(row => {
-          if (row) {
-            let rowPosters = [...basePosters];
-            const rowFragment = document.createDocumentFragment();
+          <div class="input-group">
+            <label for="passord">Passord</label>
+            <div class="password-input-wrap">
+              <input type="password" id="passord" placeholder="••••••••" autocomplete="current-password" />
+              <button type="button" class="password-toggle" id="passwordToggle" aria-label="Vis passord">Vis</button>
+            </div>
+            <div class="forgot-text" id="forgotContainer">
+              <a href="Passordfeil.html">Glemt passord?</a>
+            </div>
+          </div>
 
-            for (let i = 0; i < 4; i++) {
-              rowPosters.sort(() => Math.random() - 0.5);
+          <button type="submit" class="submit-btn" id="submitKnapp">Logg inn</button>
+        </div>
 
-              rowPosters.forEach(item => {
-                const img = document.createElement("img");
-                img.src = item.url;
-                img.loading = "lazy";
-                
-                let cssClass = item.type === 'vertical' ? "vertical" : "horizontal";
+        <div class="error" id="feilmelding"></div>
+      </form>
 
-                if (Math.random() < 0.15) {
-                  cssClass += " glow";
-                }
+      <div class="toggle-text" id="toggleText">
+        Er du ikke medlem? <a href="#" id="toggleModeLink">Registrer deg</a>
+      </div>
+    </div>
+  </main>
 
-                img.className = cssClass;
-                rowFragment.appendChild(img);
-              });
-            }
-            row.appendChild(rowFragment);
-          }
-        });
-      }
-    }
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="footer-socials">
+      <a href="https://www.instagram.com/watchnordicoriginals?igsh=aWRvcTJmMWl1NGRp&utm_source=qr" target="_blank" rel="noopener"><i class="fab fa-instagram"></i></a>
+      <a href="https://www.tiktok.com/@watchnordicoriginals" target="_blank" rel="noopener"><i class="fab fa-tiktok"></i></a>
+      <a href="#" target="_blank" rel="noopener"><i class="fab fa-youtube"></i></a>
+    </div>
 
-    lastInnPosters();
+    <div class="footer-links">
+      <a href="om.html">Om Watch Nordic</a>
+      <a href="kontakt.html">Kontakt oss</a>
+      <a href="personvern.html">Personvern</a>
+      <a href="hjelp.html">Hjelpesenter</a>
+      <a href="#">Jobber</a>
+      <a href="#">Investorinformasjon</a>
+      <a href="#">Vilkår</a>
+      <a href="#">Informasjonskapsler</a>
+      <a href="#">Juridisk informasjon</a>
+      <a href="#">Bedriftskonto</a>
+      <a href="#">Gavekort</a>
+      <a href="#">Enheter</a>
+    </div>
 
-    // --- COOKIE LOGIKK ---
-    const cookieBanner = document.getElementById("cookieBanner");
-    const cookieOptions = document.getElementById("cookieOptions");
-    const btnAccept = document.getElementById("btnAccept");
-    const btnReject = document.getElementById("btnReject");
-    const btnCustomize = document.getElementById("btnCustomize");
+    <div class="footer-copy">
+      © 2026 Watch Nordic™
+    </div>
 
-    window.addEventListener("DOMContentLoaded", () => {
-      const cookieConsent = localStorage.getItem("watch_nordic_cookie_consent");
-      if (!cookieConsent) {
-        setTimeout(() => {
-          cookieBanner.classList.add("show");
-        }, 1000);
-      }
-    });
+    <div class="footer-bottom">
+      Alle varemerker fra WATCH NORDIC™, WATCH NORDIC ORIGINALS™ og alle øvrige tilknyttede immaterielle rettigheter tilhører Watch Nordic Group og brukes under lisens av Watch Nordic™. Alle varemerker, logoer, filmer, serier, bilder, design og øvrige tilknyttede immaterielle rettigheter tilhører sine respektive eiere. Alt innhold er beskyttet av opphavsrett og internasjonale varemerkelover. Alle rettigheter forbeholdt.
+    </div>
+  </footer>
 
-    function saveConsent(consentType, details) {
-      localStorage.setItem("watch_nordic_cookie_consent", consentType);
-      localStorage.setItem("watch_nordic_cookie_details", JSON.stringify(details));
-      cookieBanner.classList.remove("show");
-    }
 
-    btnAccept.addEventListener("click", () => {
-      saveConsent("all", { analytics: true, marketing: true });
-    });
 
-    btnReject.addEventListener("click", () => {
-      saveConsent("essential", { analytics: false, marketing: false });
-    });
+</template>
+<template id="spa-view-home" data-route="home" data-title="Forsiden | Watch Nordic™" data-body-class="" data-body-style="">
+<link rel="stylesheet" data-spa-style data-href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<link rel="stylesheet" data-spa-style data-href="meny.css">
+<link rel="stylesheet" data-spa-style data-href="lader.css">
+<link rel="stylesheet" data-spa-style data-href="css/spa-home.css">
+<script type="application/x-spa-script" data-spa-src="meny.js" data-spa-type=""></script>
+<script type="application/x-spa-script" data-spa-src="lader.js" data-spa-type=""></script>
+<script type="application/x-spa-script" data-spa-src="js/spa-home-5.js" data-spa-type="module"></script>
 
-    btnCustomize.addEventListener("click", () => {
-      if (cookieOptions.style.display === "grid") {
-        const analytics = document.getElementById("cookieAnalytics").checked;
-        const marketing = document.getElementById("cookieMarketing").checked;
-        saveConsent("custom", { analytics, marketing });
-      } else {
-        cookieOptions.style.display = "grid";
-        btnCustomize.innerText = "Lagre mine valg";
-      }
-    });
-  </script>
+    
+    <!-- 1. Helside-loader (Ligger direkte under body) -->
+    <div id="page-loader">
+        <div class="spinner"></div>
+    </div>
+
+    <!-- 2. Menyen hentes automatisk inn av HTMX -->
+   <header class="top-nav">
+  <div class="nav-left">
+    <a href="Hovedside.html" 
+       class="watch-logo-svg">
+      <img src="https://res.cloudinary.com/ocv4zhpk/image/upload/v1785855892/d9ace9_081ea242211b45a2801873c3067e1205_mv2_vtfrdn.png" alt="Watch Nordic">
+    </a>
+  </div>
+
+  <nav class="nav-links">
+    <a href="Hovedside.html"><i class="fas fa-house"></i> Hjem</a>
+    <a href="Serier.html"><i class="fas fa-tv"></i> Serier</a>
+    <a href="Film.html"><i class="fas fa-clapperboard"></i> Filmer</a>
+    <a href="Nyheter.html"><i class="fas fa-star"></i> Watch Originals</a>
+    <a href="Min-Liste.html"><i class="fas fa-bookmark"></i> Min Liste</a>
+  </nav>
+
+  <div class="nav-right">
+    <a href="Søk.html" class="nav-search" aria-label="Søk">
+      <i class="fas fa-search"></i>
+    </a>
+
+    <a href="hvem-ser-på.html" class="profilmeny" id="profilmenyLink">
+      <div class="profil-avatar-wrap">
+        <div class="profil-avatar-bg"></div>
+        <img id="menyProfilbilde" src="https://res.cloudinary.com/ocv4zhpk/image/upload/v1785856037/Muffins_profil_100_k1qd4h.png" alt="Profilbilde" class="profil-avatar-img" />
+      </div>
+    </a>
+  </div>
+</header>
+
+    <!-- 3. Hovedinnhold med HTMX-boost for sømløs navigasjon -->
+    <main id="hovedinnhold">
+
+        <section class="hero-banner">
+            <img class="banner-image" id="banner-bilde" src="https://via.placeholder.com/1920x1080" alt="Film Banner" />
+            <video id="banner-video" class="banner-video" playsinline preload="none"></video>
+
+            <div class="banner-content">
+                <img class="film-logo" id="banner-logo" src="https://via.placeholder.com/320x180?text=LOGO" alt="Film Logo" />
+                <p id="banner-beskrivelse">Her kommer filmbeskrivelsen din inn via JavaScript eller ren tekst.</p>
+                <div id="banner-metadata" class="banner-meta">2026 • 16+ • 2t 15m</div>
+                <div class="banner-buttons">
+                    <button class="watch-button" id="banner-se-na">
+                        <i class="fas fa-play"></i> Se nå
+                    </button>
+                    <button class="add-button" id="banner-add" aria-label="Legg til i min liste">
+                        <i class="fas fa-plus"></i>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <section class="gallery-section" id="nye-filmer-seksjon">
+            <h2>Nylig lagt til</h2>
+            <div class="gallery-wrapper">
+                <div class="fade-left"></div>
+                <button class="scroll-button left">❮</button>
+                <div class="image-gallery" id="nye-filmer-galleri">
+                    <a href="Film-detail.html" class="gallery-item"><img src="https://via.placeholder.com/330x175" alt="Film"></a>
+                    <a href="Film-detail.html" class="gallery-item"><img src="https://via.placeholder.com/330x175" alt="Film"></a>
+                    <a href="Film-detail.html" class="gallery-item"><img src="https://via.placeholder.com/330x175" alt="Film"></a>
+                </div>
+                <button class="scroll-button right">❯</button>
+                <div class="fade-right"></div>
+            </div>
+        </section>
+
+        <section class="continue-watching-section spa-inline-home-1" id="fortsett-section">
+            <h2>Fortsett å se</h2>
+            <div class="continue-gallery-wrapper">
+                <div class="fade-left"></div>
+                <button class="scroll-button left" aria-label="Rull til venstre">❮</button>
+                <div class="continue-image-gallery" id="fortsett-galleri"></div>
+                <button class="scroll-button right" aria-label="Rull til høyre">❯</button>
+                <div class="fade-right"></div>
+            </div>
+        </section>
+
+        <section class="gallery-section" id="topp10-seksjon">
+            <h2>Filmtoppen!</h2>
+            <div class="gallery-wrapper">
+                <div class="fade-left"></div>
+                <button class="scroll-button left">❮</button>
+                <div class="top10-gallery" id="topp10-filmer-galleri">
+                    <div class="top10-item">
+                        <img src="https://via.placeholder.com/150x225" alt="Topp 1">
+                        <span class="top10-number">1</span>
+                    </div>
+                    <div class="top10-item">
+                        <img src="https://via.placeholder.com/150x225" alt="Topp 2">
+                        <span class="top10-number">2</span>
+                    </div>
+                </div>
+                <button class="scroll-button right">❯</button>
+                <div class="fade-right"></div>
+            </div>
+        </section> 
+
+        <section class="gallery-section" id="alle-filmer-seksjon">
+            <h2>Filmer</h2>
+            <div class="gallery-wrapper">
+                <div class="fade-left"></div>
+                <button class="scroll-button left">❮</button>
+                <div class="image-gallery" id="filmer-galleri">
+                    <a href="Film-detail.html" class="gallery-item"><img src="https://via.placeholder.com/330x175" alt="Film"></a>
+                    <a href="Film-detail.html" class="gallery-item"><img src="https://via.placeholder.com/330x175" alt="Film"></a>
+                </div>
+                <button class="scroll-button right">❯</button>
+                <div class="fade-right"></div>
+            </div>
+        </section>
+
+        <section class="gallery-section" id="serier-seksjon">
+            <h2>Serier</h2>
+            <div class="gallery-wrapper">
+                <div class="fade-left"></div>
+                <button class="scroll-button left">❮</button>
+                <div class="image-gallery" id="serier-galleri">
+                    <a href="Serie-detail.html" class="gallery-item"><img src="https://via.placeholder.com/330x175" alt="Serie"></a>
+                    <a href="Serie-detail.html" class="gallery-item"><img src="https://via.placeholder.com/330x175" alt="Serie"></a>
+                </div>
+                <button class="scroll-button right">❯</button>
+                <div class="fade-right"></div>
+            </div>
+        </section>
+
+        <section class="gallery-section" id="dokumentar-seksjon">
+            <h2>Dokumentarserier</h2>
+            <div class="gallery-wrapper">
+                <div class="fade-left"></div>
+                <button class="scroll-button left">❮</button>
+                <div class="image-gallery" id="dokumentarserier-galleri">
+                    <a href="Dokumentar-detail.html" class="gallery-item"><img src="https://via.placeholder.com/330x175" alt="Dokumentar"></a>
+                </div>
+                <button class="scroll-button right">❯</button>
+                <div class="fade-right"></div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-socials">
+            <a href="https://www.instagram.com/watchnordicoriginals?igsh=aWRvcTJmMWl1NGRp&utm_source=qr"><i class="fab fa-instagram"></i></a>
+            <a href="https://www.tiktok.com/@watchnordicoriginals"><i class="fab fa-tiktok"></i></a>
+            <a href="#"><i class="fab fa-youtube"></i></a>
+        </div>
+
+        <div class="footer-links">
+            <a href="om.html">Om Watch Nordic</a>
+            <a href="kontakt.html">Kontakt oss</a>
+            <a href="personvern.html">Personvern</a>
+            <a href="hjelp.html">Hjelpesenter</a>
+            <a href="#">Jobber</a>
+            <a href="#">Investorinformasjon</a>
+            <a href="#">Vilkår</a>
+            <a href="#">Informasjonskapsler</a>
+            <a href="#">Juridisk informasjon</a>
+            <a href="#">Bedriftskonto</a>
+            <a href="#">Gavekort</a>
+            <a href="#">Enheter</a>
+        </div>
+
+        <div class="footer-copy">
+            © 2026 Watch Nordic™
+        </div>
+
+        <div class="footer-bottom">
+            Alle varemerker fra WATCH NORDIC™, WATCH NORDIC ORIGINALS™ og alle øvrige tilknyttede immaterielle rettigheter tilhører Watch Nordic Group og brukes under lisens av Watch Nordic™. Alle varemerker, logoer, filmer, serier, bilder, design og øvrige tilknyttede immaterielle rettigheter tilhører sine respektive eiere. Alt innhold er beskyttet av opphavsrett og internasjonale varemerkelover. Alle rettigheter forbeholdt.
+        </div>
+    </footer>
+
+  
+
+    
+    
+
+
+</template>
+<template id="spa-view-search" data-route="search" data-title="Søk | Watch Nordic™" data-body-class="" data-body-style="">
+<link rel="stylesheet" data-spa-style data-href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<link rel="stylesheet" data-spa-style data-href="meny.css">
+<link rel="stylesheet" data-spa-style data-href="css/sok.css">
+<script type="application/x-spa-script" data-spa-src="meny.js" data-spa-type=""></script>
+<script type="application/x-spa-script" data-spa-src="Seriedata.js" data-spa-type=""></script>
+<script type="application/x-spa-script" data-spa-src="js/sok.js" data-spa-type="module"></script>
+
+  <header class="top-nav">
+    <div class="nav-left">
+      <a href="Hovedside.html" class="watch-logo-svg">
+        <img src="https://static.wixstatic.com/media/d9ace9_081ea242211b45a2801873c3067e1205~mv2.png" alt="Watch Nordic">
+      </a>
+    </div>
+
+    <nav class="nav-links">
+      <a href="Hovedside.html" class="active"><i class="fas fa-house"></i> Hjem</a>
+      <a href="Serier.html"><i class="fas fa-tv"></i> Serier</a>
+      <a href="Film.html"><i class="fas fa-clapperboard"></i> Filmer</a>
+      <a href="Nyheter.html"><i class="fas fa-star"></i> Watch Originals</a>
+      <a href="Min-Liste.html"><i class="fas fa-bookmark"></i> Min Liste</a>
+    </nav>
+
+    <div class="nav-right">
+      <a href="Søk.html" class="nav-search" aria-label="Søk">
+        <i class="fas fa-search"></i>
+      </a>
+
+      <a href="hvem-ser-på.html" class="profilmeny" id="profilmenyLink">
+        <div class="profil-avatar-wrap">
+          <div class="profil-avatar-bg"></div>
+          <img id="menyProfilbilde" src="https://via.placeholder.com/100" alt="Profilbilde" class="profil-avatar-img" />
+        </div>
+      </a>
+    </div>
+  </header>
+
+<!-- =========================
+     MAIN
+========================= -->
+
+<main class="search-page">
+
+  <h1 class="search-title">
+    Søk etter filmer og serier
+  </h1>
+
+  <!-- SEARCH -->
+  <div class="search-box">
+    <input
+      type="text"
+      id="searchInput"
+      placeholder="Søk etter filmer, serier, sjangere..."
+    />
+    <i class="fas fa-search"></i>
+  </div>
+
+  <!-- RESULTATER -->
+  <div class="results-grid" id="resultsGrid"></div>
+
+</main>
+
+<footer class="footer">
+
+  <div class="footer-socials">
+    <a href="#"><i class="fab fa-instagram"></i></a>
+    <a href="#"><i class="fab fa-facebook-f"></i></a>
+    <a href="#"><i class="fab fa-youtube"></i></a>
+    <a href="#"><i class="fab fa-x-twitter"></i></a>
+  </div>
+
+  <div class="footer-links">
+    <a href="om.html">Om Watch Nordic</a>
+    <a href="kontakt.html">Kontakt oss</a>
+    <a href="personvern.html">Personvern</a>
+    <a href="hjelp.html">Hjelpesenter</a>
+
+    <a href="#">Jobber</a>
+    <a href="#">Investorinformasjon</a>
+    <a href="#">Vilkår</a>
+    <a href="#">Informasjonskapsler</a>
+
+    <a href="#">Juridisk informasjon</a>
+    <a href="#">Bedriftskonto</a>
+    <a href="#">Gavekort</a>
+    <a href="#">Enheter</a>
+  </div>
+
+  <div class="footer-copy">
+    © 2026 Watch Nordic™
+  </div>
+
+  <div class="footer-bottom">
+      Alle varemerker fra WATCH NORDIC™, WATCH NORDIC ORIGINALS™ og alle øvrige tilknyttede immaterielle rettigheter tilhører Watch Nordic Group og brukes under lisens av Watch Nordic™. Alle varemerker, logoer, filmer, serier, bilder, design og øvrige tilknyttede immaterielle rettigheter tilhører sine respektive eiere. Alt innhold er beskyttet av opphavsrett og internasjonale varemerkelover. Alle rettigheter forbeholdt.
+  </div>
+
+</footer>
+
+
+
+
+
+
+
+</template>
+<template id="spa-view-list" data-route="list" data-title="Min Liste | Watch Nordic™" data-body-class="" data-body-style="">
+<link rel="stylesheet" data-spa-style data-href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<link rel="stylesheet" data-spa-style data-href="css/spa-list.css">
+<script type="application/x-spa-script" data-spa-src="meny.js" data-spa-type=""></script>
+<script type="application/x-spa-script" data-spa-src="js/min-liste.js" data-spa-type="module"></script>
+
+
+  <!-- TOPPMENY -->
+  <header class="top-nav" id="topNav">
+    <div class="nav-left">
+      <a href="Hovedside.html" class="watch-logo-svg">
+        <img src="https://static.wixstatic.com/media/d9ace9_081ea242211b45a2801873c3067e1205~mv2.png" alt="Watch Nordic">
+      </a>
+    </div>
+
+    <nav class="nav-links">
+      <a href="Hovedside.html"><i class="fas fa-house"></i> Hjem</a>
+      <a href="Serier.html"><i class="fas fa-tv"></i> Serier</a>
+      <a href="Film.html"><i class="fas fa-clapperboard"></i> Filmer</a>
+      <a href="Nyheter.html"><i class="fas fa-star"></i> Watch Originals</a>
+      <a href="Min-Liste.html" class="active"><i class="fas fa-bookmark"></i> Min Liste</a>
+    </nav>
+
+    <div class="nav-right">
+      <a href="Søk.html" class="nav-search" aria-label="Søk">
+        <i class="fas fa-search"></i>
+      </a>
+
+      <a href="hvem-ser-på.html" class="profilmeny" id="profilmenyLink">
+        <div class="profil-avatar-wrap">
+          <img id="menyProfilbilde" src="https://via.placeholder.com/100" alt="Profilbilde" class="profil-avatar-img" />
+        </div>
+      </a>
+    </div>
+  </header>
+
+  <!-- HOVEDINNHOLD -->
+  <main class="main-content">
+    <div class="page-header">
+      <h1><i class="fas fa-bookmark"></i> Min Liste</h1>
+      <span class="list-count" id="listCount">0 titler</span>
+    </div>
+
+    <div class="gallery" id="minListeGallery">
+      <!-- Dynamiske kort lastes inn her -->
+    </div>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="footer-socials">
+      <a href="https://www.instagram.com/watchnordicoriginals"><i class="fab fa-instagram"></i></a>
+      <a href="https://www.tiktok.com/@watchnordicoriginals"><i class="fab fa-tiktok"></i></a>
+      <a href="#"><i class="fab fa-youtube"></i></a>
+    </div>
+
+    <div class="footer-links">
+      <a href="om.html">Om Watch Nordic</a>
+      <a href="kontakt.html">Kontakt oss</a>
+      <a href="personvern.html">Personvern</a>
+      <a href="hjelp.html">Hjelpesenter</a>
+      <a href="#">Jobber</a>
+      <a href="#">Investorinformasjon</a>
+      <a href="#">Vilkår</a>
+      <a href="#">Informasjonskapsler</a>
+      <a href="#">Juridisk informasjon</a>
+      <a href="#">Bedriftskonto</a>
+      <a href="#">Gavekort</a>
+      <a href="#">Enheter</a>
+    </div>
+
+    <div class="footer-copy">© 2026 Watch Nordic™</div>
+    <div class="footer-bottom">
+      Alle varemerker fra WATCH NORDIC™, WATCH NORDIC ORIGINALS™ og alle øvrige tilknyttede immaterielle rettigheter tilhører Watch Nordic Group. Alle rettigheter forbeholdt.
+    </div>
+  </footer>
+
+  
+  
+
+</template>
+<template id="spa-view-detail" data-route="detail" data-title="Forsiden | Watch Nordic™" data-body-class="" data-body-style="">
+<link rel="stylesheet" data-spa-style data-href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<link rel="stylesheet" data-spa-style data-href="meny.css">
+<link rel="stylesheet" data-spa-style data-href="lader.css">
+<link rel="stylesheet" data-spa-style data-href="css/spa-detail.css">
+<script type="application/x-spa-script" data-spa-src="meny.js" data-spa-type=""></script>
+<script type="application/x-spa-script" data-spa-src="lader.js" data-spa-type=""></script>
+<script type="application/x-spa-script" data-spa-src="js/spa-detail-5.js" data-spa-type="module"></script>
+
+
+    <!-- 1. Helside-loader (Ligger øverst i body) -->
+    <div id="page-loader">
+        <div class="spinner"></div>
+    </div>
+
+    <!-- 2. Menyelement med HTMX (Plassert én gang, rett før main) -->
+    <header class="top-nav">
+  <div class="nav-left">
+    <a href="Hovedside.html" 
+       class="watch-logo-svg">
+      <img src="https://res.cloudinary.com/ocv4zhpk/image/upload/v1785855892/d9ace9_081ea242211b45a2801873c3067e1205_mv2_vtfrdn.png" alt="Watch Nordic">
+    </a>
+  </div>
+
+  <nav class="nav-links">
+    <a href="Hovedside.html"><i class="fas fa-house"></i> Hjem</a>
+    <a href="Serier.html"><i class="fas fa-tv"></i> Serier</a>
+    <a href="Film.html"><i class="fas fa-clapperboard"></i> Filmer</a>
+    <a href="Nyheter.html"><i class="fas fa-star"></i> Watch Originals</a>
+    <a href="Min-Liste.html"><i class="fas fa-bookmark"></i> Min Liste</a>
+  </nav>
+
+  <div class="nav-right">
+    <a href="Søk.html" class="nav-search" aria-label="Søk">
+      <i class="fas fa-search"></i>
+    </a>
+
+    <a href="hvem-ser-på.html" class="profilmeny" id="profilmenyLink">
+      <div class="profil-avatar-wrap">
+        <div class="profil-avatar-bg"></div>
+        <img id="menyProfilbilde" src="https://res.cloudinary.com/ocv4zhpk/image/upload/v1785856037/Muffins_profil_100_k1qd4h.png" alt="Profilbilde" class="profil-avatar-img" />
+      </div>
+    </a>
+  </div>
+</header>
+
+    <!-- 3. Hovedinnhold -->
+    <main id="hovedinnhold">
+
+        <div class="hero">
+            <img class="background-image" id="backgroundImage" src="" alt="Bakgrunnsbilde" />
+            <video id="trailerVideo" class="background-video" muted playsinline></video>
+
+            <div class="overlay"></div>
+            <div class="bottom-fade"></div>
+
+            <div id="videoControls" class="video-controls">
+                <button id="pauseBtn"><i class="fas fa-pause"></i></button>
+                <button id="soundBtn"><i class="fas fa-volume-mute"></i></button>
+            </div>
+
+            <div class="content-wrapper">
+                <div class="logo-container">
+                    <img class="film-logo" src="" alt="Filmlogo" />
+                </div>
+
+                <div class="left-content">
+                    <div class="text-button-container">
+                        <div class="buttons-column">
+                            <button class="watch-button" id="watchBtn">
+                                <i class="fas fa-play"></i><span> Se nå</span>
+                            </button>
+                            <button class="watch-button" id="addToListBtn">
+                                <i class="fas fa-plus"></i><span> Legg til i Min liste</span>
+                            </button>
+                        </div>
+
+                        <div class="text-container">
+                            <p class="description"></p>
+                            <div class="metadata"></div>
+                            <div class="availability-info" id="availabilityInfo"></div>
+                        </div>
+                        <div class="cast-info"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="recommendations">
+            <h2>Anbefalt til deg</h2>
+            <div class="gallery" id="recommendationGallery"></div>
+        </div>
+
+    </main>
+
+    <footer class="footer">
+        <div class="footer-socials">
+            <a href="https://www.instagram.com/watchnordicoriginals?igsh=aWRvcTJmMWl1NGRp&utm_source=qr"><i class="fab fa-instagram"></i></a>
+            <a href="https://www.tiktok.com/@watchnordicoriginals"><i class="fab fa-tiktok"></i></a>
+            <a href="#"><i class="fab fa-youtube"></i></a>
+        </div>
+
+        <div class="footer-links">
+            <a href="om.html">Om Watch Nordic</a>
+            <a href="kontakt.html">Kontakt oss</a>
+            <a href="personvern.html">Personvern</a>
+            <a href="hjelp.html">Hjelpesenter</a>
+            <a href="#">Jobber</a>
+            <a href="#">Investorinformasjon</a>
+            <a href="#">Vilkår</a>
+            <a href="#">Informasjonskapsler</a>
+            <a href="#">Juridisk informasjon</a>
+            <a href="#">Bedriftskonto</a>
+            <a href="#">Gavekort</a>
+            <a href="#">Enheter</a>
+        </div>
+
+        <div class="footer-copy">
+            © 2026 Watch Nordic™
+        </div>
+
+        <div class="footer-bottom">
+            Alle varemerker fra WATCH NORDIC™, WATCH NORDIC ORIGINALS™ og alle øvrige tilknyttede immaterielle rettigheter tilhører Watch Nordic Group og brukes under lisens av Watch Nordic™. Alle varemerker, logoer, filmer, serier, bilder, design og øvrige tilknyttede immaterielle rettigheter tilhører sine respektive eiere. Alt innhold er beskyttet av opphavsrett og internasjonale varemerkelover. Alle rettigheter forbeholdt.
+        </div>
+    </footer>
+
+  
+
+
+
+
+
+</template>
+<template id="spa-view-player" data-route="player" data-title="Filmvisning" data-body-class="" data-body-style="">
+<link rel="stylesheet" data-spa-style data-href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&amp;display=swap">
+<link rel="stylesheet" data-spa-style data-href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<link rel="stylesheet" data-spa-style data-href="css/spa-player.css">
+<script type="application/x-spa-script" data-spa-src="js/spa-player-1.js" data-spa-type="module"></script>
+
+  
+  <div class="container" id="container">
+  
+  <!-- VIDEOSPILLER -->
+  <div id="videoWrapper">
+    <video id="video" preload="metadata" playsinline>
+      <source src="" type="video/mp4">
+      <track label="Norsk" kind="subtitles" srclang="no" src="" default>
+      Din nettleser støtter ikke videoavspilling.
+    </video>
+  </div>
+
+  <!-- OVERLAYS -->
+  <div class="subtitle-overlay" id="subtitleOverlay"></div>
+  <div class="loading-spinner" id="loadingSpinner"></div>
+
+  <!-- INTRO / OUTRO KNAPPER -->
+  <button id="skipIntroBtn" class="skip-btn">
+    <i class="fa-solid fa-forward spa-inline-player-1"></i> Hopp over intro
+  </button>
+
+  <button id="skipOutroBtn" class="skip-btn">
+    Neste episode <i class="fa-solid fa-forward spa-inline-player-2"></i>
+  </button>
+
+  <!-- AUTOPLAY OVERLAY (OPPDATERT MED STRUKTUR FOR JS) -->
+  <div id="autoplayOverlay">
+    <div class="autoplay-content">
+      <img id="autoplayLogo" class="autoplay-serie-logo spa-inline-player-3" alt="Serie Logo">
+      
+      <div class="autoplay-episode-meta">
+        <span id="autoplayEpTag" class="autoplay-ep-tag"></span>
+        <span id="autoplayEpTitle" class="autoplay-ep-title"></span>
+      </div>
+      
+      <p id="autoplayEpDesc" class="autoplay-ep-desc"></p>
+      
+      <div class="autoplay-action-row">
+        <button id="autoplayPlayNextBtn" class="autoplay-btn">
+          <i class="fa-solid fa-play"></i> Spill nå
+        </button>
+        <button id="autoplayCancelBtn" class="autoplay-btn">Avbryt</button>
+        
+        <div class="autoplay-circle-timer">
+          <svg class="timer-svg" viewBox="0 0 36 36">
+            <path class="timer-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+            <path id="timerProgress" class="timer-progress" stroke-dasharray="100, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+          </svg>
+          <div id="autoplayCountdown" class="timer-number">8</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- RESUME DIALOG -->
+  <div id="resumeOverlay" class="resume-overlay">
+    <div class="resume-box">
+      <p>Vil du fortsette der du slapp?</p>
+      <div class="resume-buttons">
+        <button id="continueBtn">Fortsett</button>
+        <button id="restartBtn">Start på nytt</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- HOVED-UI -->
+  <div class="ui" id="ui">
+    
+    <div class="top-bar">
+      <div class="top-bar-left">
+        <a href="#" class="back-button" id="backButton">
+          <i class="fa-solid fa-chevron-left spa-inline-player-4"></i>
+        </a>
+        <div class="movie-title">Laster tittel...</div>
+      </div>
+      
+      <div class="volume-container">
+        <button class="btn" id="muteBtn" title="Lyd av/på">
+          <i class="fa-solid fa-volume-high spa-inline-player-5"></i>
+        </button>
+        <div class="volume-slider-wrapper">
+          <input type="range" class="volume-slider spa-inline-player-6" id="volumeSlider" min="0" max="1" step="0.05" value="1">
+        </div>
+      </div>
+    </div>
+
+    <div class="progress-container">
+      <div class="progress" id="progress">
+        <div class="progress-filled" id="progressFilled"></div>
+        <div class="thumb" id="thumb"></div>
+      </div>
+    </div>
+
+    <div class="preview-box" id="previewBox">
+      <img id="previewImage" src="" alt="Forhåndsvisning">
+      <div class="preview-time" id="previewTime">00:00</div>
+    </div>
+
+    <span class="time-display" id="timeDisplay">00:00</span>
+
+    <div class="controls">
+      <div class="left-controls"></div>
+
+      <div class="center-controls">
+        <button class="btn" id="rewindBtn" title="10 sekunder tilbake">
+          <i class="fa-solid fa-rotate-left spa-inline-player-7"></i>
+        </button>
+        <button class="btn" id="playPauseBtn" title="Spill / Pause">
+          <i class="fa-solid fa-play spa-inline-player-8"></i>
+        </button>
+        <button class="btn" id="forwardBtn" title="10 sekunder frem">
+          <i class="fa-solid fa-rotate-right spa-inline-player-9"></i>
+        </button>
+      </div>
+
+      <div class="right-controls">
+        <button id="nextEpisodeBtn" class="btn">
+          Neste <i class="fa-solid fa-forward spa-inline-player-10"></i>
+        </button>
+        
+        <button class="btn" id="captionsBtn" title="Undertekster og lydspråk">
+          <i class="fa-solid fa-closed-captioning spa-inline-player-11"></i>
+        </button>
+        <button class="btn" id="fullscreenBtn" title="Fullskjerm">
+          <i class="fa-solid fa-expand spa-inline-player-12"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- MENY FOR LYD OG UNDERTEKSTER -->
+    <div class="caption-menu" id="captionMenu">
+      <div class="caption-menu-header">
+        <h3>Lyd og undertekster</h3>
+        <button class="caption-menu-close" id="closeCaptionMenuBtn" aria-label="Lukk">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+      
+      <div class="caption-menu-grid">
+        <div class="caption-column">
+          <div class="caption-column-title">Lyd</div>
+          <div class="caption-track-list" id="audioTracks">
+            <!-- Dynamisk innhold -->
+          </div>
+        </div>
+
+        <div class="caption-column">
+          <div class="caption-column-title">Undertekster</div>
+          <div class="caption-track-list" id="subtitleTracks">
+            <!-- Dynamisk innhold -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+  </div>
+</div>
+
+
+</template>
+<template id="spa-view-account" data-route="account" data-title="Min Konto | Watch Nordic™" data-body-class="" data-body-style="">
+<link rel="stylesheet" data-spa-style data-href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<link rel="stylesheet" data-spa-style data-href="css/spa-account.css">
+<script type="application/x-spa-script" data-spa-src="js/spa-account-1.js" data-spa-type="module"></script>
+
+
+  <header>
+    <div class="logo-container">
+      <img src="https://static.wixstatic.com/media/d9ace9_081ea242211b45a2801873c3067e1205~mv2.png" alt="Watch Nordic Logo" class="logo-image">
+    </div>
+    <div class="nav-btns">
+      <button id="navHovedsideBtn"><i class="fa-solid fa-house"></i> <span>Hovedside</span></button>
+      <button class="logout-btn" id="navLoggUtBtn"><i class="fa-solid fa-right-from-bracket"></i> <span>Logg Ut</span></button>
+    </div>
+  </header>
+
+  <div class="container">
+    
+    <!-- TOPPKORT MED PROFILBILDE -->
+    <div class="profile-header">
+      <div class="profile-info">
+        <h1 id="navnDisplay">Laster...</h1>
+        <p>Aktiv profil</p>
+      </div>
+
+      <div class="avatar-wrapper" id="avatarContainer" title="Klikk for å endre profilbilde">
+        <img id="profilbilde" class="avatar-img" src="" alt="Profilbilde">
+        <div class="edit-badge"><i class="fa-solid fa-pencil"></i></div>
+      </div>
+    </div>
+
+    <section class="content">
+      <h2><i class="fa-solid fa-user"></i> Kontoinformasjon</h2>
+      <div class="card">
+        <div class="row">
+          <div class="info-block">
+            <div class="label">Profilnavn</div>
+            <div class="value" id="navnView">Laster...</div>
+            <div id="editNavnBox" class="edit-box hidden">
+              <input type="text" id="nyttNavnInput" placeholder="Nytt navn">
+              <button class="btn-save" id="lagreNavnBtn">Lagre</button>
+              <button class="btn-cancel" id="avbrytNavnBtn">Avbryt</button>
+            </div>
+          </div>
+          <button class="edit-trigger" id="endreNavnKnapp">Endre</button>
+        </div>
+        
+        <div class="row">
+          <div class="info-block">
+            <div class="label">E-postadresse (Konto)</div>
+            <div class="value" id="epostView">Laster...</div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="info-block">
+            <div class="label">Inngangskode</div>
+            <div class="value" id="pinView">Laster...</div>
+
+            <div class="pin-toggle-wrap">
+              <button type="button" class="pin-toggle" id="pinToggleBtn" aria-pressed="false">
+                <span class="pin-toggle-thumb"></span>
+                <span class="pin-toggle-text">Kode av</span>
+              </button>
+            </div>
+
+            <div id="editPinBox" class="edit-box hidden">
+              <input type="password" id="nyPinInput" placeholder="Skriv ny kode">
+              <button class="btn-save" id="lagrePinBtn">Lagre</button>
+              <button class="btn-cancel" id="avbrytPinBtn">Avbryt</button>
+            </div>
+            <div class="pin-hint">Slå på for å aktivere eller deaktivere koden.</div>
+          </div>
+        </div>
+      </div>
+
+      <h2><i class="fa-solid fa-tv"></i> Enheter</h2>
+      <div class="card">
+        <div class="row">
+          <div class="info-block">
+            <div class="label">Aktiv økt</div>
+            <div class="value">Nettleser (Norge)</div>
+          </div>
+          <button class="edit-trigger" id="loggutAlleBtn">Logg ut alle enheter</button>
+        </div>
+      </div>
+
+      <div class="delete-container">
+        <button class="delete-btn" id="sletteKnapp"><i class="fa-solid fa-trash-can"></i> Slett profil permanent</button>
+      </div>
+    </section>
+  </div>
+
+  <footer>© 2026 Watch Nordic Group AS. Alle rettigheter forbeholdt.</footer>
+
+  
+
+</template>
+<template id="spa-view-profiles" data-route="profiles" data-title="Hvem ser på? | Watch Nordic™" data-body-class="" data-body-style="">
+<link rel="stylesheet" data-spa-style data-href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<link rel="stylesheet" data-spa-style data-href="css/spa-profiles.css">
+<script type="application/x-spa-script" data-spa-src="js/spa-profiles-1.js" data-spa-type="module"></script>
+
+
+  <div class="top-bar">
+    <img src="https://static.wixstatic.com/media/d9ace9_081ea242211b45a2801873c3067e1205~mv2.png" alt="Logo" class="logo-img">
+    <a href="konto.html?index=0" class="account-btn" id="kontoLink">
+      <i class="fa-solid fa-gear"></i> Konto
+    </a>
+  </div>
+
+  <div class="container">
+    <h1>Hvem ser på?</h1>
+    <div class="profiles" id="profiles"></div>
+  </div>
+
+  <div class="modal" id="addProfileModal">
+    <div class="modal-content">
+      <h2>Opprett ny profil</h2>
+      <input type="text" id="newProfileName" placeholder="Skriv profilnavn..." maxlength="15">
+      
+      <label class="checkbox-container">
+        <input type="checkbox" id="isKidsProfile">
+        Dette er en barneprofil
+      </label>
+
+      <div class="modal-actions">
+        <button class="btn-create" id="btnCreateProfile">Opprett profil</button>
+        <button class="btn-close" id="btnCloseModal">Avbryt</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="pin-modal" id="pinModal">
+    <div class="pin-modal-content">
+      <h2>Skriv koden</h2>
+      <p class="pin-profile-name" id="pinProfileName">Profil</p>
+      <input type="password" id="pinInput" class="pin-input" maxlength="4" inputmode="numeric" readonly>
+
+      <div class="pin-keypad">
+        <button type="button" class="pin-key" data-value="1">1</button>
+        <button type="button" class="pin-key" data-value="2">2</button>
+        <button type="button" class="pin-key" data-value="3">3</button>
+        <button type="button" class="pin-key" data-value="4">4</button>
+        <button type="button" class="pin-key" data-value="5">5</button>
+        <button type="button" class="pin-key" data-value="6">6</button>
+        <button type="button" class="pin-key" data-value="7">7</button>
+        <button type="button" class="pin-key" data-value="8">8</button>
+        <button type="button" class="pin-key" data-value="9">9</button>
+        <button type="button" class="pin-key is-danger" id="pinKeyClear">Slett</button>
+        <button type="button" class="pin-key" data-value="0">0</button>
+        <button type="button" class="pin-key is-action" id="pinKeyBack">Tilbake</button>
+      </div>
+
+      <div class="pin-actions">
+        <button class="btn-create" id="btnConfirmPin">Bekreft</button>
+        <button class="btn-close" id="btnClosePin">Avbryt</button>
+      </div>
+      <div class="pin-error" id="pinError"></div>
+    </div>
+  </div>
+
+  
+
+</template>
+<template id="spa-view-profile-image" data-route="profile-image" data-title="Velg Profilbilde | Watch Nordic™" data-body-class="" data-body-style="">
+<link rel="stylesheet" data-spa-style data-href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<link rel="stylesheet" data-spa-style data-href="css/spa-profile-image.css">
+<script type="application/x-spa-script" data-spa-src="js/spa-profile-image-1.js" data-spa-type="module"></script>
+
+
+<div class="topp-seksjon">
+  <h1>Velg Profilbilde</h1>
+  <p class="subtitle">Finn din favorittkarakter</p>
+</div>
+
+<div class="karusell-wrapper">
+  <button class="nav-pil pil-venstre" id="pil-venstre" data-spa-click="spa-handler-profile-image-1" aria-label="Forrige">
+    <i class="fa-solid fa-chevron-left"></i>
+  </button>
+  
+  <div class="karusell-viewport" id="viewport">
+    <div class="karusell-spor" id="karusell-spor">
+      <!-- Bildene genereres dynamisk via JS -->
+    </div>
+  </div>
+
+  <button class="nav-pil pil-hoyre" id="pil-hoyre" data-spa-click="spa-handler-profile-image-2" aria-label="Neste">
+    <i class="fa-solid fa-chevron-right"></i>
+  </button>
+</div>
+
+<div class="bunn-seksjon">
+  <button class="lagre-knapp" data-spa-click="spa-handler-profile-image-3">
+    <i class="fa-solid fa-check"></i> Lagre og fortsett
+  </button>
+</div>
+
+
+
+
+</template>
+
+<template id="spa-view-about" data-route="about" data-title="Om oss | Watch Nordic™" data-body-class="" data-body-style="">
+<link rel="stylesheet" data-spa-style data-href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<link rel="stylesheet" data-spa-style data-href="css/om.css">
+
+
+<!-- LOGO -->
+<div class="logo-bar">
+  <div class="watch-logo-text" data-spa-click="spa-handler-about-14">
+    WATCH
+  </div>
+</div>
+
+<!-- HERO -->
+<section class="hero">
+  <h1>Om Watch Nordic</h1>
+  <p>Watch Nordic™ er en moderne strømmetjeneste laget for deg som elsker kvalitetsinnhold – når som helst, hvor som helst.</p>
+</section>
+
+<div class="container">
+
+  <!-- HVEM ER VI -->
+  <div class="section">
+    <h2>Hvem er vi?</h2>
+    <p>
+      Watch Nordic ble startet med en enkel visjon: å gi nordiske seere tilgang til filmer og serier i høy kvalitet,
+      uten kompliserte løsninger. Vi kombinerer teknologi, design og underholdning for å skape en sømløs
+      streamingopplevelse.
+    </p>
+  </div>
+
+  <!-- VÅR MISJON -->
+  <div class="section">
+    <h2>Vår misjon</h2>
+    <p>
+      Vår misjon er å gjøre underholdning tilgjengelig for alle. Vi jobber kontinuerlig med å forbedre
+      plattformen vår slik at du får raskere lasting, bedre anbefalinger og en mer personlig opplevelse.
+    </p>
+  </div>
+
+    <!-- Rettigheter og Opphavsrett -->
+  <div class="section">
+    <h2>Rettigheter og Opphavsrett</h2>
+    <p>
+     Watch Nordic er en strømmeplattform som fokuserer på å fremme skapernes rettigheter, samtidig som den tilbyr underholdning av høy kvalitet. Plattformen forvalter rettighetene til Watch Nordic Originals, inkludert opphavsretten til egne produserte filmer og serier.
+     I tillegg legger Watch Nordic vekt på bruk av filmer med fri tilgang, som såkalte public domain-verk og innhold med Creative Commons-lisenser, for eksempel fra Blender Studio®, samt eldre filmer som ikke lenger er beskyttet av opphavsrett.
+    </p>
+  </div>
+
+      <!--samarbeidspartnere-->
+  <div class="section">
+    <h2>Samarbeidspartnere</h2>
+    <p>
+    Watch Nordic er åpne for samarbeid med studioer, enkeltpersoner og organisasjoner, særlig innen forvaltning og bruk av materiale til dokumentarer, serier og filmproduksjoner. </p>
+  </div>
+
+  <!-- VERDIER -->
+  <div class="section">
+    <h2>Våre verdier</h2>
+
+    <div class="grid">
+
+      <div class="card">
+        <i class="fas fa-star"></i>
+        <h3>Kvalitet</h3>
+        <p>Vi leverer kun innhold og teknologi vi selv er stolte av.</p>
+      </div>
+
+      <div class="card">
+        <i class="fas fa-users"></i>
+        <h3>Brukerfokus</h3>
+        <p>Alt vi bygger starter med brukeropplevelsen.</p>
+      </div>
+
+      <div class="card">
+        <i class="fas fa-lock"></i>
+        <h3>Sikkerhet</h3>
+        <p>Dine data og din konto er alltid trygge hos oss.</p>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+<footer class="footer">
+© 2026 Watch Nordic™ – Om oss
+</footer>
+
+
+</template>
+<template id="spa-view-contact" data-route="contact" data-title="Hjelpesenter | Watch Nordic™" data-body-class="" data-body-style="">
+<link rel="stylesheet" data-spa-style data-href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<link rel="stylesheet" data-spa-style data-href="css/kontakt.css">
+
+
+<!-- LOGO BAR -->
+<div class="logo-bar">
+  <div class="watch-logo-text" data-spa-click="spa-handler-contact-15">
+    WATCH
+  </div>
+</div>
+
+<!-- HERO -->
+<section class="hero">
+  <h1>Hjelpesenter</h1>
+  <p>Vi er her for å hjelpe deg – kontakt oss på den måten som passer best.</p>
+</section>
+
+<div class="container">
+
+  <!-- KONTAKT ALTERNATIVER -->
+  <div class="grid">
+
+    <div class="card">
+      <i class="fas fa-envelope"></i>
+      <h3>E-post</h3>
+      <p>Send oss en e-post og vi svarer innen 24 timer.</p>
+    </div>
+
+    <div class="card">
+      <i class="fas fa-phone"></i>
+      <h3>Telefon</h3>
+      <p>Ring oss på <strong></strong><br>Åpent 08:00–22:00</p>
+    </div>
+
+    <div class="card">
+      <i class="fas fa-comments"></i>
+      <h3>Live chat</h3>
+      <p>Chat med oss direkte via kundeservice.</p>
+    </div>
+
+    <div class="card">
+      <i class="fas fa-credit-card"></i>
+      <h3>Betaling</h3>
+      <p>Problemer med abonnement eller betaling?</p>
+    </div>
+
+    <div class="card">
+      <i class="fas fa-user-shield"></i>
+      <h3>Konto</h3>
+      <p>Hjelp med innlogging eller passord.</p>
+    </div>
+
+    <div class="card">
+      <i class="fas fa-tv"></i>
+      <h3>Teknisk hjelp</h3>
+      <p>Streamingproblemer eller avspillingsfeil.</p>
+    </div>
+
+  </div>
+
+  <!-- DIREKTE EPOST -->
+  <div class="email-section">
+    <h2>Send oss en e-post</h2>
+    <p>Har du spørsmål eller tilbakemeldinger?</p>
+    <br>
+    <a class="email-link" href="mailto:support@watchnordic.no">
+      support@watchnordic.no
+    </a>
+  </div>
+
+</div>
+
+<footer class="footer">
+© 2026 Watch Nordic™ – Kundeservice og brukerstøtte
+</footer>
+
+
+</template>
+<template id="spa-view-privacy" data-route="privacy" data-title="Personvernerklæring | Watch Nordic™" data-body-class="" data-body-style="">
+<link rel="stylesheet" data-spa-style data-href="css/personvern.css">
+
+
+<!-- LOGO -->
+<div class="logo-bar">
+  <div class="watch-logo-text" data-spa-click="spa-handler-privacy-16">
+    WATCH
+  </div>
+</div>
+
+<!-- HERO -->
+<section class="hero">
+  <h1>Personvernerklæring</h1>
+  <p>Sist oppdatert: 2026</p>
+</section>
+
+<div class="container">
+
+  <div class="section">
+    <h2>1. Hvilke opplysninger vi samler inn</h2>
+    <p>
+      Når du bruker Watch Nordic™, kan vi samle inn informasjon som navn, e-postadresse,
+      betalingsinformasjon, IP-adresse og bruksmønster. Dette hjelper oss med å levere
+      en bedre og mer personlig tjeneste.
+    </p>
+  </div>
+
+  <div class="section">
+    <h2>2. Hvordan vi bruker informasjonen</h2>
+    <p>
+      Vi bruker informasjonen til å administrere din konto, forbedre tjenesten,
+      gi kundestøtte og sende viktige oppdateringer. Vi selger aldri dine personopplysninger
+      til tredjeparter.
+    </p>
+  </div>
+
+  <div class="section">
+    <h2>3. Informasjonskapsler (cookies)</h2>
+    <p>
+      Watch Nordic bruker cookies for å forbedre brukeropplevelsen,
+      analysere trafikk og tilpasse innhold. Du kan selv kontrollere
+      cookie-innstillinger i nettleseren din.
+    </p>
+  </div>
+
+  <div class="section">
+    <h2>4. Datasikkerhet</h2>
+    <p>
+      Vi tar sikkerhet på alvor og bruker moderne sikkerhetstiltak
+      for å beskytte dine data mot uautorisert tilgang.
+    </p>
+  </div>
+
+  <div class="section">
+    <h2>5. Dine rettigheter</h2>
+    <p>
+      Du har rett til innsyn, retting eller sletting av dine personopplysninger.
+      For forespørsler kan du kontakte oss via hjelpesenteret.
+    </p>
+  </div>
+
+  <div class="section">
+    <h2>6. Kontakt oss</h2>
+    <p>
+      Har du spørsmål om personvern? Kontakt oss på:
+      <br><br>
+      <strong>support@watchnordic.no</strong>
+    </p>
+  </div>
+
+</div>
+
+<footer class="footer">
+© 2026 Watch Nordic™ – Personvernerklæring
+</footer>
+
+
+</template>
+  <script type="module" src="js/spa-router.js"></script>
 </body>
 </html>

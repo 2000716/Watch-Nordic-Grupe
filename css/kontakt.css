@@ -1,0 +1,129 @@
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+}
+
+body{
+  font-family:Arial, sans-serif;
+  background:#091B1E;
+  color:white;
+}
+
+/* ===== LOGO ØVERST (INGEN MENY) ===== */
+.logo-bar{
+  height:80px;
+  display:flex;
+  align-items:center;
+  justify-content:flex-start;
+  padding-left:40px;
+  background:rgba(9,27,30,0.95);
+}
+
+.watch-logo-text{
+  font-size:28px;
+  font-weight:900;
+  letter-spacing:3px;
+  color:#00FFCC;
+  cursor:pointer;
+  text-shadow:0 0 10px rgba(0,255,204,0.6);
+}
+
+/* ===== HERO ===== */
+.hero{
+  text-align:center;
+  padding:70px 20px 40px;
+  background:linear-gradient(to bottom, rgba(9,27,30,0.9), #091B1E);
+}
+
+.hero h1{
+  font-size:40px;
+  margin-bottom:10px;
+}
+
+.hero p{
+  color:#ccc;
+  font-size:18px;
+}
+
+/* ===== KONTAKT KORT ===== */
+.container{
+  max-width:1100px;
+  margin:50px auto;
+  padding:0 20px;
+}
+
+.grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit, minmax(250px, 1fr));
+  gap:25px;
+}
+
+.card{
+  background:#0f2a2f;
+  padding:30px;
+  border-radius:12px;
+  text-align:center;
+  transition:0.3s ease;
+  cursor:pointer;
+}
+
+.card:hover{
+  transform:translateY(-5px);
+  box-shadow:0 10px 25px rgba(0,0,0,0.5);
+}
+
+.card i{
+  font-size:30px;
+  margin-bottom:15px;
+  color:#00FFCC;
+}
+
+.card h3{
+  margin-bottom:10px;
+}
+
+.card p{
+  font-size:14px;
+  color:#bbb;
+}
+
+/* ===== EPOST SEKSJON ===== */
+.email-section{
+  margin-top:60px;
+  background:#0f2a2f;
+  padding:40px;
+  border-radius:12px;
+}
+
+.email-section h2{
+  margin-bottom:20px;
+  color:#00FFCC;
+}
+
+.email-link{
+  font-size:18px;
+  color:#00FFCC;
+  text-decoration:none;
+  font-weight:bold;
+}
+
+.email-link:hover{
+  text-decoration:underline;
+}
+
+/* ===== FOOTER ===== */
+.footer{
+  margin-top:80px;
+  padding:30px;
+  text-align:center;
+  font-size:13px;
+  color:#888;
+  border-top:1px solid #222;
+}
+
+@media(max-width:768px){
+  .hero h1{
+    font-size:26px;
+  }
+}
